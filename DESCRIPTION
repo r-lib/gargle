@@ -10,8 +10,12 @@ Description: Utilities to take some of the pain out of dealing with
     includes functions and classes handling common credential types, as
     well as hooks for library authors looking to make auth easier for
     their users.
-Depends: R (>= 3.1.0)
+Depends:
+    R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
-Imports: httr
-Suggests: testthat
+Imports:
+    httr
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
