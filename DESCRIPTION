@@ -4,6 +4,7 @@ Version: 0.0.0.9000
 Authors@R: c(
     person("Jennifer", "Bryan", role=c("aut", "cre"), email = "jenny@stat.ubc.ca"),
     person("Craig", "Citro", role=c("aut", "cre"), email = "craigcitro@google.com"),
+    person("Google Inc", role="cph")
     )
 Description: Utilities to take some of the pain out of dealing with
     authentication and authorization for Google services and APIs. This
