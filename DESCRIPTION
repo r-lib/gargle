@@ -2,7 +2,7 @@ Package: gauth
 Title: Easier Auth for Google Services
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Jennifer", "Bryan", role=c("aut", "cre"), email = "jenny@stat.ubc.ca"),
+    person("Jennifer", "Bryan", role=c("aut"), email = "jenny@stat.ubc.ca"),
     person("Craig", "Citro", role=c("aut", "cre"), email = "craigcitro@google.com"),
     person("Google Inc", role="cph")
     )
