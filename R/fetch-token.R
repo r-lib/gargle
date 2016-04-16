@@ -9,9 +9,9 @@ fetch_token <- function(scopes, ...) {
   for (f in gauth_env$credential_functions) {
     token <- NULL
     # TODO(craigcitro): Expose error handling and/or silencing here.
-    try(
+    try({
       token <- f(scopes, ...)
-    )
+    })
     if (!is.null(token)) {
       return(token)
     }
