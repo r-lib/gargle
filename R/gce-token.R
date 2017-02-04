@@ -52,6 +52,7 @@ detect_gce <- function() {
   !(inherits(response, 'try-error') %||% httr::http_error(response))
 }
 
+#' @export
 list_service_accounts <- function() {
   accounts <- gce_metadata_request('instance/service-accounts')  %>%
     httr::content('text', encoding = 'utf8') %>%

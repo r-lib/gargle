@@ -15,7 +15,8 @@ Depends:
 License: MIT + file LICENSE
 LazyData: true
 Imports:
-    httr
+    httr,
+    magrittr
 Suggests:
     testthat
 RoxygenNote: 6.0.0
