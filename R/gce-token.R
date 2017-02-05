@@ -52,6 +52,9 @@ detect_gce <- function() {
   !(inherits(response, 'try-error') %||% httr::http_error(response))
 }
 
+#' List all service accounts available on this GCE instance.
+#'
+#' @return A list of service account names.
 #' @export
 list_service_accounts <- function() {
   accounts <- gce_metadata_request('instance/service-accounts')  %>%
@@ -80,7 +83,8 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #'
 #' @param scopes List of scopes required for the returned token.
 #' @param service_account Name of the GCE service account to use (defaults to \code{default})
-#' @return A \ref{GceToken} or \code{NULL}.
+#' @param ... Additional arguments passed to all credentials functions.
+#' @return A \code{\link{GceToken}} or \code{NULL}.
 #' @export
 get_gce_credentials <- function(scopes, service_account = 'default', ...) {
   if (!detect_gce()) {

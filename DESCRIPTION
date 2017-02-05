@@ -16,7 +16,8 @@ License: MIT + file LICENSE
 LazyData: true
 Imports:
     httr,
-    magrittr
+    magrittr,
+    stringr
 Suggests:
     testthat
-RoxygenNote: 6.0.0
+RoxygenNote: 5.0.1

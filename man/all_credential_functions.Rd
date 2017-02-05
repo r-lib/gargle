@@ -16,3 +16,4 @@ Get the list of all credential functions.
 Other registration: \code{\link{add_credential_function}},
   \code{\link{set_credential_functions}}
 }
+

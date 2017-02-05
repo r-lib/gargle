@@ -10,10 +10,13 @@ get_gce_credentials(scopes, service_account = "default", ...)
 \item{scopes}{List of scopes required for the returned token.}
 
 \item{service_account}{Name of the GCE service account to use (defaults to \code{default})}
+
+\item{...}{Additional arguments passed to all credentials functions.}
 }
 \value{
-A \ref{GceToken} or \code{NULL}.
+A \code{\link{GceToken}} or \code{NULL}.
 }
 \description{
 Create a token for use on Google Compute Engine for the given scopes, if possible.
 }
+
