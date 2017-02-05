@@ -1,3 +1,6 @@
+# Don't warn about . in pipelines.
+utils::globalVariables(".")
+
 #' GceToken is a token for use only on Google Compute Engine instances.
 #'
 #' This class uses the metadata service available on GCE VMs to fetch access tokens.
@@ -55,7 +58,6 @@ detect_gce <- function() {
 #' List all service accounts available on this GCE instance.
 #'
 #' @return A list of service account names.
-#' @export
 list_service_accounts <- function() {
   accounts <- gce_metadata_request('instance/service-accounts')  %>%
     httr::content('text', encoding = 'utf8') %>%

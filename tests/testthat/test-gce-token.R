@@ -14,6 +14,6 @@ test_that('Can list service accounts', {
 
   testthat::with_mock(
     `gauth::gce_metadata_request` = request_mock,
-    expect_equal(service_accounts, gauth::list_service_accounts())
+    expect_equal(service_accounts, gauth:::list_service_accounts())
   )
 })
