@@ -1,6 +1,3 @@
-# Don't warn about . in pipelines.
-utils::globalVariables(".")
-
 #' GceToken is a token for use only on Google Compute Engine instances.
 #'
 #' This class uses the metadata service available on GCE VMs to fetch access tokens.
@@ -21,12 +18,17 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   revoke = function() {}
 ))
 
-gce_metadata_request <- function(path, stop_on_error = TRUE) {
-  use_ip = getOption('gauth.gce.use_ip', FALSE)
-  root_url = 'http://metadata.google.internal/'
+gce_metadata_url <- function() {
+  use_ip <- getOption('gauth.gce.use_ip', FALSE)
+  root_url <- Sys.getenv('GCE_METADATA_URL', 'metadata.google.internal')
   if (use_ip) {
-    root_url = 'http://169.254.169.254/'
+    root_url <- Sys.getenv('GCE_METADATA_IP', '169.254.169.254')
   }
+  paste0('http://', root_url, '/')
+}
+
+gce_metadata_request <- function(path, stop_on_error = TRUE) {
+  root_url <- gce_metadata_url()
   # TODO(craigcitro): Add options to ignore proxies.
   path <- stringr::str_replace(path, pattern = '^/', replacement = '')
   url <- paste0(root_url, 'computeMetadata/v1/', path)
@@ -61,18 +63,16 @@ detect_gce <- function() {
 list_service_accounts <- function() {
   accounts <- gce_metadata_request('instance/service-accounts')  %>%
     httr::content('text', encoding = 'utf8') %>%
-    strsplit('/\n', fixed = TRUE) %>%
-    .[[1]]
-  accounts
+    strsplit('/\n', fixed = TRUE)
+  accounts[[1]]
 }
 
 get_instance_scopes <- function(service_account) {
   path <- paste0('instance/service-accounts/', service_account, 'scopes')
   scopes <- gce_metadata_request(path) %>%
     httr::content('text') %>%
-    strsplit('\n', fixed = TRUE) %>%
-    .[[1]]
-  scopes
+    strsplit('\n', fixed = TRUE)
+  scopes[[1]]
 }
 
 fetch_access_token <- function(scopes, service_account, ...) {
