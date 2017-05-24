@@ -16,4 +16,3 @@ Note that this implicitly adds \code{f} to the \emph{end} of the list.
 Other registration: \code{\link{all_credential_functions}},
   \code{\link{set_credential_functions}}
 }
-

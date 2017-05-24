@@ -17,4 +17,3 @@ A \code{\link[httr]{Token}} or \code{NULL}.
 \description{
 Fetch a token for the given scopes.
 }
-

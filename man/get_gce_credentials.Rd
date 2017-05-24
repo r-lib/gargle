@@ -19,4 +19,3 @@ A \code{\link{GceToken}} or \code{NULL}.
 \description{
 Create a token for use on Google Compute Engine for the given scopes, if possible.
 }
-

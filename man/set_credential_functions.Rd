@@ -16,4 +16,3 @@ Set the list of all credential functions.
 Other registration: \code{\link{add_credential_function}},
   \code{\link{all_credential_functions}}
 }
-

@@ -12,4 +12,3 @@ A list of service account names.
 \description{
 List all service accounts available on this GCE instance.
 }
-
