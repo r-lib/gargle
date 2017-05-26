@@ -10,6 +10,8 @@ get_service_account_credentials(scopes, path = "", ...)
 \item{scopes}{List of scopes required for the returned token.}
 
 \item{path}{Path to the downloaded JSON file}
+
+\item{...}{Additional arguments (ignored)}
 }
 \value{
 A \code{httr::TokenServiceAccount} or \code{NULL}.

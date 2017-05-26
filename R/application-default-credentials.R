@@ -19,6 +19,7 @@ get_application_default_credentials_path <- function() {
 #' Fetch the Application Default Credentials.
 #'
 #' @param scopes List of scopes required for the returned token.
+#' @param ... Additional arguments (ignored)
 #' @export
 get_application_default_credentials <- function(scopes, ...) {
   # In general, application default credentials only include the cloud-platform

@@ -10,6 +10,8 @@ get_travis_credentials(scopes, path = "", ...)
 \item{scopes}{List of scopes required for the returned token.}
 
 \item{path}{Path to the decrypted travis service account.}
+
+\item{...}{Additional arguments (ignored)}
 }
 \description{
 Create credentials from a service account token stored by travis.

@@ -3,6 +3,7 @@
 #'
 #' @param scopes List of scopes required for the returned token.
 #' @param path Path to the downloaded JSON file
+#' @param ... Additional arguments (ignored)
 #' @return A \code{httr::TokenServiceAccount} or \code{NULL}.
 #' @export
 get_service_account_credentials <- function(scopes, path = "", ...) {

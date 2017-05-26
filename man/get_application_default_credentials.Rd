@@ -8,6 +8,8 @@ get_application_default_credentials(scopes, ...)
 }
 \arguments{
 \item{scopes}{List of scopes required for the returned token.}
+
+\item{...}{Additional arguments (ignored)}
 }
 \description{
 Fetch the Application Default Credentials.
