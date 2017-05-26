@@ -66,3 +66,13 @@ set_credential_functions <- function(ls) {
   gauth_env$credential_functions <- ls
   invisible(NULL)
 }
+
+#' Set the default credential functions.
+#' @export
+set_default_credential_functions <- function() {
+  add_credential_function(get_user_oauth2_credentials)
+  add_credential_function(get_gce_credentials)
+  add_credential_function(get_application_default_credentials)
+  add_credential_function(get_travis_credentials)
+  add_credential_function(get_service_account_credentials)
+}
