@@ -94,6 +94,14 @@ get_gce_credentials <- function(scopes, service_account = 'default', ...) {
   if (!detect_gce()) {
     return(NULL)
   }
+  instance_scopes <- get_instance_scopes(service_account = service_account)
+  # We add a special case for the cloud-platform -> bigquery scope implication.
+  if ('https://www.googleapis.com/auth/cloud-platform' %in% instance_scopes) {
+    instance_scopes <- c('https://www.googleapis.com/auth/bigquery', instance_scopes)
+  }
+  if (!all(scopes %in% instance_scopes)) {
+    return(NULL)
+  }
   credentials <- fetch_access_token(scopes, service_account = service_account)
   params <- list(
     as_header = TRUE,
