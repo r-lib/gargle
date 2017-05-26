@@ -4,7 +4,7 @@
 \alias{get_service_account_credentials}
 \title{Create a token for a Google service account.}
 \usage{
-get_service_account_credentials(scopes, path, ...)
+get_service_account_credentials(scopes, path = "", ...)
 }
 \arguments{
 \item{scopes}{List of scopes required for the returned token.}
