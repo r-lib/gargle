@@ -2,10 +2,13 @@
 % Please edit documentation in R/application-default-credentials.R
 \name{get_application_default_credentials}
 \alias{get_application_default_credentials}
-\title{Fetch the ADC.}
+\title{Fetch the Application Default Credentials.}
 \usage{
 get_application_default_credentials(scopes, ...)
 }
+\arguments{
+\item{scopes}{List of scopes required for the returned token.}
+}
 \description{
-Fetch the ADC.
+Fetch the Application Default Credentials.
 }

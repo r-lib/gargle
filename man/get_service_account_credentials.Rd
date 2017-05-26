@@ -12,7 +12,7 @@ get_service_account_credentials(scopes, path = "", ...)
 \item{path}{Path to the downloaded JSON file}
 }
 \value{
-A \code{\link{httr::TokenServiceAccount}} or \code{NULL}.
+A \code{httr::TokenServiceAccount} or \code{NULL}.
 }
 \description{
 Create a token for a Google service account.

@@ -6,6 +6,11 @@
 \usage{
 get_user_oauth2_credentials(scopes, oauth_app = NULL, ...)
 }
+\arguments{
+\item{scopes}{List of scopes required for the returned token.}
+
+\item{oauth_app}{\code{httr::oauth_app} to use for this token fetch. (Optional.)}
+}
 \description{
 Create a token for a user via the browser flow.
 }

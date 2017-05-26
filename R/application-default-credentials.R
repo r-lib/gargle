@@ -16,7 +16,9 @@ get_application_default_credentials_path <- function() {
   file.path(root, "application_default_credentials.json")
 }
 
-#' Fetch the ADC.
+#' Fetch the Application Default Credentials.
+#'
+#' @param scopes List of scopes required for the returned token.
 #' @export
 get_application_default_credentials <- function(scopes, ...) {
   # In general, application default credentials only include the cloud-platform

@@ -16,6 +16,7 @@ License: MIT + file LICENSE
 LazyData: true
 Imports:
     httr,
+    jsonlite,
     magrittr
 Suggests:
     testthat
