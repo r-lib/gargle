@@ -1,17 +1,16 @@
-Package: gauth
+Package: gargle
 Title: Easier Auth for Google Services
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Craig", "Citro", role=c("aut", "cre"), email = "craigcitro@google.com"),
-    person("Google Inc", role="cph")
+    person("Craig", "Citro", , "craigcitro@google.com", c("aut", "cre")),
+    person("Google Inc", role = "cph"),
+    person("RStudio", role = "cph")
     )
 Description: Utilities to take some of the pain out of dealing with
     authentication and authorization for Google services and APIs. This
     includes functions and classes handling common credential types, as
     well as hooks for library authors looking to make auth easier for
     their users.
-Depends:
-    R (>= 3.1.0)
 License: MIT + file LICENSE
 LazyData: true
 Imports:

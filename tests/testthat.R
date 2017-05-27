@@ -1,4 +1,4 @@
 library(testthat)
-library(gauth)
+library(gargle)
 
-test_check("gauth")
+test_check("gargle")
