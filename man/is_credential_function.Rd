@@ -12,7 +12,7 @@ is_credential_function(f)
 \description{
 In the abstract, a credential fetching function is any function which takes a
 set of scopes and any number of additional arguments, and returns either a
-valid \code{\link[httr]{Token}} or \code{NULL}.
+valid \code{\link[httr:Token]{httr::Token()}} or \code{NULL}.
 }
 \details{
 Here we say that a function is valid if its first argument is named

@@ -1,7 +1,7 @@
 
 #' Create a token for a user via the browser flow.
 #' @param scopes List of scopes required for the returned token.
-#' @param oauth_app \code{httr::oauth_app} to use for this token fetch. (Optional.)
+#' @param oauth_app `httr::oauth_app` to use for this token fetch. (Optional.)
 #' @param ... Additional arguments (ignored)
 #' @export
 get_user_oauth2_credentials <- function(scopes, oauth_app = NULL, ...) {

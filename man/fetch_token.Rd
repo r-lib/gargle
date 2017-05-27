@@ -12,7 +12,7 @@ fetch_token(scopes, ...)
 \item{...}{Additional arguments passed to all credentials functions.}
 }
 \value{
-A \code{\link[httr]{Token}} or \code{NULL}.
+A \code{\link[httr:Token]{httr::Token()}} or \code{NULL}.
 }
 \description{
 Fetch a token for the given scopes.

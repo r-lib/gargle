@@ -4,10 +4,8 @@
 #' list of credentials functions to try.
 #'
 #' This environment contains:
-#' \itemize{
-#'   \item \code{$credential_functions} is the ordered list of credential
+#' * `$credential_functions` is the ordered list of credential
 #'     methods to use when trying to fetch credentials.
-#' }
 #'
 #' @format An environment.
 #' @keywords internal
@@ -18,10 +16,10 @@ gauth_env$credential_functions <- list()
 #'
 #' In the abstract, a credential fetching function is any function which takes a
 #' set of scopes and any number of additional arguments, and returns either a
-#' valid \code{\link[httr]{Token}} or \code{NULL}.
+#' valid [httr::Token()] or `NULL`.
 #'
 #' Here we say that a function is valid if its first argument is named
-#' \code{scopes}, and it includes \code{...} as an argument, since it's
+#' `scopes`, and it includes `...` as an argument, since it's
 #' difficult to actually check the behavior of the function.
 #'
 #' @param f A function to check.
@@ -36,7 +34,7 @@ is_credential_function <- function(f) {
 
 #' Add a new credential fetching function.
 #'
-#' Note that this implicitly adds \code{f} to the \emph{end} of the list.
+#' Note that this implicitly adds `f` to the \emph{end} of the list.
 #'
 #' @param f A function with the right signature.
 #' @family registration

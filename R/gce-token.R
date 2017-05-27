@@ -86,9 +86,9 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #' Create a token for use on Google Compute Engine for the given scopes, if possible.
 #'
 #' @param scopes List of scopes required for the returned token.
-#' @param service_account Name of the GCE service account to use (defaults to \code{default})
+#' @param service_account Name of the GCE service account to use (defaults to `default`)
 #' @param ... Additional arguments passed to all credentials functions.
-#' @return A \code{\link{GceToken}} or \code{NULL}.
+#' @return A [GceToken()] or `NULL`.
 #' @export
 get_gce_credentials <- function(scopes, service_account = 'default', ...) {
   if (!detect_gce()) {

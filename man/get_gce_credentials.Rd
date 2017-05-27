@@ -14,7 +14,7 @@ get_gce_credentials(scopes, service_account = "default", ...)
 \item{...}{Additional arguments passed to all credentials functions.}
 }
 \value{
-A \code{\link{GceToken}} or \code{NULL}.
+A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 }
 \description{
 Create a token for use on Google Compute Engine for the given scopes, if possible.
