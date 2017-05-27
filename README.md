@@ -1,6 +1,13 @@
-# gauth: Authentication for Google APIs (without all the agonizing pain)
+# gargle 
 
-[![Build Status](https://travis-ci.org/ropenscilabs/gauth.svg?branch=master)](https://travis-ci.org/ropenscilabs/gauth)
-[![codecov.io](https://codecov.io/github/ropenscilabs/gauth/coverage.svg?branch=master)](https://codecov.io/github/ropenscilabs/gauth?branch=master)
+[![Build Status](https://travis-ci.org/r-pkgs/gargle.svg?branch=master)](https://travis-ci.org/r-pkgs/gargle)
+[![codecov.io](https://codecov.io/github/r-pkgs/gargle/coverage.svg?branch=master)](https://codecov.io/github/r-pkgs/gargle?branch=master)
 
-README coming soon to a repo near you!
+`gargle` provides a collection of common utilities for users looking to call
+Google (HTTP) APIs from R.
+
+## Authentication for Google APIs (without all the agonizing pain)
+
+## HTTP helpers
+
+https://github.com/ropensci/unconf17/issues/85
