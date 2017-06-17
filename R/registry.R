@@ -9,7 +9,7 @@
 #'
 #' @format An environment.
 #' @keywords internal
-gargle_env <- new.env()
+gargle_env <- new.env(parent = emptyenv())
 gargle_env$credential_functions <- list()
 
 #' Check that f is a viable credential fetching function.
