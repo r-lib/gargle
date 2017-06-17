@@ -5,12 +5,16 @@
 #' @param ... Additional arguments (ignored)
 #' @export
 get_user_oauth2_credentials <- function(scopes, oauth_app = NULL, ...) {
-  
-  endpoint <- httr::oauth_endpoints("google")
-  app <- httr::oauth_app("google",
-                         "465736758727.apps.googleusercontent.com",
-                         "fJbIIyoIag0oA6p114lwsV2r")
-  token <- httr::oauth2.0_token(endpoint = endpoint, app = app, scope = scopes,
-                                  use_oob = FALSE)
+
+  app <- httr::oauth_app(
+    "google",
+    key = "603366585132-nku3fbd298ma3925l12o2hq0cc1v8u11.apps.googleusercontent.com",
+    secret = "as_N12yfWLRL9RMz5nVpgCZt"
+  )
+  token <- httr::oauth2.0_token(
+    endpoint = httr::oauth_endpoints("google"),
+    app = app,
+    scope = scopes
+  )
   token
 }
