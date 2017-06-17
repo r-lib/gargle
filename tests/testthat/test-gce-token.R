@@ -24,7 +24,7 @@ test_that('GCE metadata env vars are respected', {
     Sys.setenv(GCE_METADATA_URL = 'fake.url')
     expect_equal('http://fake.url/', gce_metadata_url())
 
-    options(gauth.gce.use_ip = TRUE)
+    options(gargle.gce.use_ip = TRUE)
     expect_equal('http://169.254.169.254/', gce_metadata_url())
     Sys.setenv(GCE_METADATA_IP='1.2.3.4')
     expect_equal('http://1.2.3.4/', gce_metadata_url())
@@ -33,7 +33,7 @@ test_that('GCE metadata env vars are respected', {
     # be set in tests.
     Sys.unsetenv('GCE_METADATA_IP')
     Sys.unsetenv('GCE_METADATA_URL')
-    options(gauth.gce.use_ip = NULL)
+    options(gargle.gce.use_ip = NULL)
   })
 })
 

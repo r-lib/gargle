@@ -1,4 +1,4 @@
-#' Environment used for gauth global state.
+#' Environment used for gargle global state.
 #'
 #' Unfortunately, we're stuck having at least some state, in order to maintain a
 #' list of credentials functions to try.
@@ -9,8 +9,8 @@
 #'
 #' @format An environment.
 #' @keywords internal
-gauth_env <- new.env()
-gauth_env$credential_functions <- list()
+gargle_env <- new.env()
+gargle_env$credential_functions <- list()
 
 #' Check that f is a viable credential fetching function.
 #'
@@ -41,7 +41,7 @@ is_credential_function <- function(f) {
 #' @export
 add_credential_function <- function(f) {
   stopifnot(is_credential_function(f))
-  gauth_env$credential_functions <- c(f, gauth_env$credential_functions)
+  gargle_env$credential_functions <- c(f, gargle_env$credential_functions)
   invisible(NULL)
 }
 
@@ -51,7 +51,7 @@ add_credential_function <- function(f) {
 #' @family registration
 #' @export
 all_credential_functions <- function() {
-  gauth_env$credential_functions
+  gargle_env$credential_functions
 }
 
 #' Set the list of all credential functions.
@@ -61,7 +61,7 @@ all_credential_functions <- function() {
 #' @export
 set_credential_functions <- function(ls) {
   stopifnot(all(vapply(ls, is_credential_function, TRUE)))
-  gauth_env$credential_functions <- ls
+  gargle_env$credential_functions <- ls
   invisible(NULL)
 }
 

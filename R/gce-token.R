@@ -19,7 +19,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
 ))
 
 gce_metadata_url <- function() {
-  use_ip <- getOption('gauth.gce.use_ip', FALSE)
+  use_ip <- getOption('gargle.gce.use_ip', FALSE)
   root_url <- Sys.getenv('GCE_METADATA_URL', 'metadata.google.internal')
   if (use_ip) {
     root_url <- Sys.getenv('GCE_METADATA_IP', '169.254.169.254')
@@ -34,7 +34,7 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
     path <- substring(path, 2)
   }
   url <- paste0(root_url, 'computeMetadata/v1/', path)
-  timeout <- getOption('gauth.gce.timeout', default = 0.8)
+  timeout <- getOption('gargle.gce.timeout', default = 0.8)
   response <- try({
     httr::with_config(httr::timeout(timeout), {
       httr::GET(url, httr::add_headers('Metadata-Flavor' = 'Google'))
