@@ -14,5 +14,6 @@ Note that this implicitly adds \code{f} to the \emph{front} of the list.
 }
 \seealso{
 Other registration: \code{\link{all_credential_functions}},
+  \code{\link{clear_credential_functions}},
   \code{\link{set_credential_functions}}
 }

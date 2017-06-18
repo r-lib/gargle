@@ -17,7 +17,7 @@ test_that("We recognize the right credential functions", {
 })
 
 test_that("We can register new credential functions", {
-  on.exit(set_credential_functions(list()))
+  on.exit(clear_credential_functions())
 
   add_credential_function(creds_one)
   expect_equal(1, length(all_credential_functions()))
@@ -25,7 +25,7 @@ test_that("We can register new credential functions", {
   add_credential_function(creds_two)
   expect_equal(2, length(all_credential_functions()))
 
-  set_credential_functions(list())
+  clear_credential_functions()
   expect_equal(0, length(all_credential_functions()))
 
   for (i in 1:5) {

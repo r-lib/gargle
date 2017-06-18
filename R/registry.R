@@ -65,6 +65,15 @@ set_credential_functions <- function(ls) {
   invisible(NULL)
 }
 
+#' Clear the list of credential functions.
+#'
+#' @family registration
+#' @export
+clear_credential_functions <- function() {
+  gargle_env$credential_functions <- list()
+  invisible(NULL)
+}
+
 #' Set the default credential functions.
 #' @export
 set_default_credential_functions <- function() {
