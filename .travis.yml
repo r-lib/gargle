@@ -1,12 +1,13 @@
 language: r
 cache: packages
+dist: trusty
+sudo: false
 
 matrix:
   include:
     - os: linux
       r: oldrel
     - os: linux
-      dist: trusty
       env: R_CODECOV=true
       r: release
     - os: linux
