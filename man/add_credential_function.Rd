@@ -7,7 +7,7 @@
 add_credential_function(f)
 }
 \arguments{
-\item{f}{A function with the right signature.}
+\item{f}{A function with the right signature. See \code{\link[=is_credential_function]{is_credential_function()}}.}
 }
 \description{
 Note that this implicitly adds \code{f} to the \emph{end} of the list.

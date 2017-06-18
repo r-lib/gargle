@@ -34,9 +34,9 @@ is_credential_function <- function(f) {
 
 #' Add a new credential fetching function.
 #'
-#' Note that this implicitly adds `f` to the \emph{end} of the list.
+#' Note that this implicitly adds `f` to the *end* of the list.
 #'
-#' @param f A function with the right signature.
+#' @param f A function with the right signature. See [is_credential_function()].
 #' @family registration
 #' @export
 add_credential_function <- function(f) {
