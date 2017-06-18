@@ -10,7 +10,7 @@ add_credential_function(f)
 \item{f}{A function with the right signature. See \code{\link[=is_credential_function]{is_credential_function()}}.}
 }
 \description{
-Note that this implicitly adds \code{f} to the \emph{end} of the list.
+Note that this implicitly adds \code{f} to the \emph{front} of the list.
 }
 \seealso{
 Other registration: \code{\link{all_credential_functions}},
