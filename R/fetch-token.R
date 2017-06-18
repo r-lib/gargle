@@ -11,7 +11,7 @@ fetch_token <- function(scopes, ...) {
     # TODO(craigcitro): Expose error handling and/or silencing here.
     try({
       token <- f(scopes, ...)
-    })
+    }, silent = TRUE)
     if (!is.null(token)) {
       return(token)
     }

@@ -52,7 +52,6 @@ test_that("We keep looking for credentials on error", {
   add_credential_function(creds_always)
   add_credential_function(creds_failure)
 
-  options(show.error.messages = FALSE)
   expect_equal(1, fetch_token(c()))
-  options(show.error.messages = TRUE)
+
 })
