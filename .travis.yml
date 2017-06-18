@@ -1,7 +1,23 @@
 language: r
+cache: packages
 
-r_github_packages:
-  - jimhester/covr
+matrix:
+  include:
+    - os: linux
+      r: oldrel
+    - os: linux
+      dist: trusty
+      env: R_CODECOV=true
+      r: release
+    - os: linux
+      r: devel
+
+warnings_are_errors: true
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
