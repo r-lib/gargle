@@ -4,3 +4,4 @@
 ^\.httr-oauth$
 ^scratch\.R$
 ^appveyor\.yml$
+^codecov\.yml$
