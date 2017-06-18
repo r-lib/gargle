@@ -42,6 +42,9 @@ is_credential_function <- function(f) {
 add_credential_function <- function(f) {
   stopifnot(is_credential_function(f))
   gargle_env$credential_functions <- c(f, gargle_env$credential_functions)
+  if (is.symbol(substitute(f))) {
+    names(gargle_env$credential_functions)[1] <- deparse(substitute(f))
+  }
   invisible(NULL)
 }
 

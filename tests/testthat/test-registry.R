@@ -18,6 +18,7 @@ test_that("We recognize the right credential functions", {
 
 test_that("We can register new credential functions", {
   on.exit(clear_credential_functions())
+  clear_credential_functions()
 
   add_credential_function(creds_one)
   expect_equal(1, length(all_credential_functions()))
@@ -35,4 +36,15 @@ test_that("We can register new credential functions", {
 
   set_credential_functions(list(creds_two))
   expect_equal(1, length(all_credential_functions()))
+})
+
+test_that("We name / don't name credential functions, as appropriate", {
+  on.exit(clear_credential_functions())
+  clear_credential_functions()
+
+  add_credential_function(creds_one)
+  add_credential_function(function(scopes, ...) {})
+
+  expect_identical(names(all_credential_functions()), c("", "creds_one"))
+
 })
