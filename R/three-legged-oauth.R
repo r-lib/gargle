@@ -14,7 +14,8 @@ get_user_oauth2_credentials <- function(scopes, oauth_app = NULL, ...) {
   token <- httr::oauth2.0_token(
     endpoint = httr::oauth_endpoints("google"),
     app = app,
-    scope = scopes
+    scope = scopes,
+    use_oob = FALSE
   )
   token
 }
