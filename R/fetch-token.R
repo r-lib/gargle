@@ -9,9 +9,10 @@ fetch_token <- function(scopes, ...) {
   for (f in gargle_env$credential_functions) {
     token <- NULL
     # TODO(craigcitro): Expose error handling and/or silencing here.
-    try({
-      token <- f(scopes, ...)
-    }, silent = TRUE)
+    token <- tryCatch(
+      f(scopes, ...),
+      error = function(e) NULL
+    )
     if (!is.null(token)) {
       return(token)
     }
