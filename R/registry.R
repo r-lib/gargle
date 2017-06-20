@@ -36,15 +36,23 @@ is_credential_function <- function(f) {
 #'
 #' Note that this implicitly adds `f` to the *front* of the list.
 #'
-#' @param f A function with the right signature. See [is_credential_function()].
+#' @param ... One or more functions with the right signature. See
+#'   [is_credential_function()].
 #' @family registration
 #' @export
-add_credential_function <- function(f) {
-  stopifnot(is_credential_function(f))
-  gargle_env$credential_functions <- c(f, gargle_env$credential_functions)
-  if (is.symbol(substitute(f))) {
-    names(gargle_env$credential_functions)[1] <- deparse(substitute(f))
+#' @examples
+#' creds_one <- function(scopes, ...) {}
+#' add_credential_function(creds_one)
+#' add_credential_function(one = creds_one)
+#' add_credential_function(one = creds_one, two = creds_one)
+#' add_credential_function(one = creds_one, creds_one)
+add_credential_function <- function(...) {
+  dots <- list(...)
+  ok <- vapply(dots, is_credential_function, logical(1))
+  if (any(!ok)) {
+    stop("Invalid credential fetching function", call. = FALSE)
   }
+  gargle_env$credential_functions <- c(dots, gargle_env$credential_functions)
   invisible(NULL)
 }
 
@@ -80,9 +88,9 @@ clear_credential_functions <- function() {
 #' Set the default credential functions.
 #' @export
 set_default_credential_functions <- function() {
-  add_credential_function(get_user_oauth2_credentials)
-  add_credential_function(get_gce_credentials)
-  add_credential_function(get_application_default_credentials)
-  add_credential_function(get_travis_credentials)
-  add_credential_function(get_service_account_credentials)
+  add_credential_function(user_oath2 = get_user_oauth2_credentials)
+  add_credential_function(gce = get_gce_credentials)
+  add_credential_function(application_default = get_application_default_credentials)
+  add_credential_function(travis = get_travis_credentials)
+  add_credential_function(service_acount = get_service_account_credentials)
 }

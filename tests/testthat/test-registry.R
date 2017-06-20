@@ -38,13 +38,24 @@ test_that("We can register new credential functions", {
   expect_equal(1, length(all_credential_functions()))
 })
 
-test_that("We name / don't name credential functions, as appropriate", {
+test_that("We capture credential function names when possible", {
   on.exit(clear_credential_functions())
   clear_credential_functions()
 
+  add_credential_function(a = creds_one)
+  add_credential_function(b = function(scopes, ...) {})
   add_credential_function(creds_one)
   add_credential_function(function(scopes, ...) {})
+  expect_identical(names(all_credential_functions()), c("", "", "b", "a"))
 
-  expect_identical(names(all_credential_functions()), c("", "creds_one"))
+  clear_credential_functions()
+
+  add_credential_function(
+    function(scopes, ...) {},
+    creds_one,
+    b = function(scopes, ...) {},
+    a = creds_one
+  )
+  expect_identical(names(all_credential_functions()), c("", "", "b", "a"))
 
 })
