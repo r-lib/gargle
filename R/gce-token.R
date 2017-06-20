@@ -90,7 +90,7 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #' @param ... Additional arguments passed to all credentials functions.
 #' @return A [GceToken()] or `NULL`.
 #' @export
-get_gce_credentials <- function(scopes, service_account = 'default', ...) {
+credentials_gce <- function(scopes, service_account = 'default', ...) {
   if (!detect_gce()) {
     return(NULL)
   }

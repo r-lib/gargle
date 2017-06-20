@@ -1,5 +1,5 @@
 
-get_application_default_credentials_path <- function() {
+credentials_app_default_path <- function() {
   if (nzchar(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
     return(path.expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
   }
@@ -21,10 +21,10 @@ get_application_default_credentials_path <- function() {
 #' @param scopes List of scopes required for the returned token.
 #' @param ... Additional arguments (ignored)
 #' @export
-get_application_default_credentials <- function(scopes, ...) {
+credentials_app_default <- function(scopes, ...) {
   # In general, application default credentials only include the cloud-platform
   # scope.
-  path <- get_application_default_credentials_path()
+  path <- credentials_app_default_path()
   if (!file.exists(path)) {
     return(NULL)
   }
@@ -60,6 +60,6 @@ get_application_default_credentials <- function(scopes, ...) {
     token$refresh()
     token
   } else {
-    get_service_account_credentials(scopes, path)
+    credentials_service_account(scopes, path)
   }
 }
