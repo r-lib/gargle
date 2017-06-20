@@ -6,7 +6,7 @@
 #' @param ... Additional arguments (ignored)
 #' @return A `httr::TokenServiceAccount` or `NULL`.
 #' @export
-get_service_account_credentials <- function(scopes, path = "", ...) {
+credentials_service_account <- function(scopes, path = "", ...) {
   if (!endsWith(path, ".json")) {
     stop("Path must end in .json")
   }
