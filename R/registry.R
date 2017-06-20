@@ -48,10 +48,7 @@ is_credential_function <- function(f) {
 #' add_credential_function(one = creds_one, creds_one)
 add_credential_function <- function(...) {
   dots <- list(...)
-  ok <- vapply(dots, is_credential_function, logical(1))
-  if (any(!ok)) {
-    stop("Invalid credential fetching function", call. = FALSE)
-  }
+  stopifnot(all(vapply(dots, is_credential_function, TRUE)))
   gargle_env$credential_functions <- c(dots, gargle_env$credential_functions)
   invisible(NULL)
 }
