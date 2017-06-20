@@ -20,6 +20,13 @@ add_credential_function(one = creds_one)
 add_credential_function(one = creds_one, two = creds_one)
 add_credential_function(one = creds_one, creds_one)
 }
+\examples{
+creds_one <- function(scopes, ...) {}
+add_credential_function(creds_one)
+add_credential_function(one = creds_one)
+add_credential_function(one = creds_one, two = creds_one)
+add_credential_function(one = creds_one, creds_one)
+}
 \seealso{
 Other registration: \code{\link{all_credential_functions}},
   \code{\link{clear_credential_functions}},
