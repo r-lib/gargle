@@ -6,7 +6,7 @@
 #' @name fetch_token
 #' @export
 fetch_token <- function(scopes, ...) {
-  for (f in gargle_env$credential_functions) {
+  for (f in gargle_env$credfuns) {
     token <- NULL
     # TODO(craigcitro): Expose error handling and/or silencing here.
     token <- tryCatch(
