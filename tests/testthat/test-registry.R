@@ -11,9 +11,9 @@ test_that("We recognize the right credential functions", {
   invalid_one <- function(scope, ...) {}
   invalid_two <- function(scopes, arg1, arg2 = "optional") {}
   invalid_three <- 17
-  expect_false(gargle:::is_credfun(invalid_one))
-  expect_false(gargle:::is_credfun(invalid_two))
-  expect_false(gargle:::is_credfun(invalid_three))
+  expect_false(is_credfun(invalid_one))
+  expect_false(is_credfun(invalid_two))
+  expect_false(is_credfun(invalid_three))
 })
 
 test_that("We can register new credential functions", {
