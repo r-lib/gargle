@@ -34,7 +34,7 @@ is_credential_function <- function(f) {
 
 #' Add a new credential fetching function.
 #'
-#' Note that this implicitly adds `f` to the *front* of the list.
+#' Function(s) are added to the *front* of the list.
 #'
 #' @param ... One or more functions with the right signature. See
 #'   [is_credential_function()].

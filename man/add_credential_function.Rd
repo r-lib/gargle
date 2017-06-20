@@ -11,7 +11,7 @@ add_credential_function(...)
 \code{\link[=is_credential_function]{is_credential_function()}}.}
 }
 \description{
-Note that this implicitly adds \code{f} to the \emph{front} of the list.
+Function(s) are added to the \emph{front} of the list.
 }
 \examples{
 creds_one <- function(scopes, ...) {}
