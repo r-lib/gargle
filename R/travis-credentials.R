@@ -5,7 +5,7 @@
 #' @param path Path to the decrypted travis service account.
 #' @param ... Additional arguments (ignored)
 #' @export
-get_travis_credentials <- function(scopes, path = "", ...) {
+credentials_travis <- function(scopes, path = "", ...) {
   if (Sys.getenv('TRAVIS') != 'true') {
     return(NULL)
   }
@@ -13,5 +13,5 @@ get_travis_credentials <- function(scopes, path = "", ...) {
     return(NULL)
   }
 
-  get_service_account_credentials(scopes, path)
+  credentials_service_account(scopes, path)
 }

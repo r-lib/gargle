@@ -5,3 +5,4 @@
 ^scratch\.R$
 ^appveyor\.yml$
 ^codecov\.yml$
+^gargle.*json$

@@ -1,3 +1,3 @@
 .onLoad <- function(lib, pkg) {
-  set_default_credential_functions()
+  cred_funs_set_default()
 }

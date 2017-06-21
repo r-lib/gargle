@@ -4,7 +4,7 @@
 #' @param oauth_app `httr::oauth_app` to use for this token fetch. (Optional.)
 #' @param ... Additional arguments (ignored)
 #' @export
-get_user_oauth2_credentials <- function(scopes, oauth_app = NULL, ...) {
+credentials_user_oauth2 <- function(scopes, oauth_app = NULL, ...) {
 
   app <- httr::oauth_app(
     "google",
