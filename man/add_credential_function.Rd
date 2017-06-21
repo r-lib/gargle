@@ -4,15 +4,24 @@
 \alias{add_credential_function}
 \title{Add a new credential fetching function.}
 \usage{
-add_credential_function(f)
+add_credential_function(...)
 }
 \arguments{
-\item{f}{A function with the right signature. See \code{\link[=is_credential_function]{is_credential_function()}}.}
+\item{...}{One or more functions with the right signature. See
+\code{\link[=is_credential_function]{is_credential_function()}}.}
 }
 \description{
-Note that this implicitly adds \code{f} to the \emph{end} of the list.
+Function(s) are added to the \emph{front} of the list.
+}
+\examples{
+creds_one <- function(scopes, ...) {}
+add_credential_function(creds_one)
+add_credential_function(one = creds_one)
+add_credential_function(one = creds_one, two = creds_one)
+add_credential_function(one = creds_one, creds_one)
 }
 \seealso{
 Other registration: \code{\link{all_credential_functions}},
+  \code{\link{clear_credential_functions}},
   \code{\link{set_credential_functions}}
 }
