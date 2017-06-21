@@ -11,34 +11,34 @@ creds_maybe <- function(scopes, arg1 = "", ...) {
 }
 
 test_that("Basic token fetching works", {
-  on.exit(credfuns_clear())
+  on.exit(cred_funs_clear())
 
-  credfuns_add(creds_always)
+  cred_funs_add(creds_always)
   expect_equal(1, token_fetch(c()))
 
-  credfuns_add(creds_never)
+  cred_funs_add(creds_never)
   expect_equal(1, token_fetch(c()))
 })
 
 test_that("We fetch tokens in order", {
-  on.exit(credfuns_clear())
+  on.exit(cred_funs_clear())
 
-  credfuns_add(creds_always)
-  credfuns_add(creds_maybe)
+  cred_funs_add(creds_always)
+  cred_funs_add(creds_maybe)
 
   expect_equal(1, token_fetch(c()))
   expect_equal(2, token_fetch(c(), arg1 = "abc"))
 
-  credfuns_set(list(creds_always, creds_maybe))
+  cred_funs_set(list(creds_always, creds_maybe))
 
   expect_equal(1, token_fetch(c()))
   expect_equal(1, token_fetch(c(), arg1 = "abc"))
 })
 
 test_that("We sometimes return no token", {
-  on.exit(credfuns_clear())
+  on.exit(cred_funs_clear())
 
-  credfuns_add(creds_never)
+  cred_funs_add(creds_never)
   expect_null(token_fetch(c()))
 })
 
@@ -47,10 +47,10 @@ test_that("We don't need any registered functions", {
 })
 
 test_that("We keep looking for credentials on error", {
-  on.exit(credfuns_clear())
+  on.exit(cred_funs_clear())
 
-  credfuns_add(creds_always)
-  credfuns_add(creds_failure)
+  cred_funs_add(creds_always)
+  cred_funs_add(creds_failure)
 
   expect_equal(1, token_fetch(c()))
 

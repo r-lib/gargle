@@ -15,7 +15,7 @@ list of credentials functions to try.
 \details{
 This environment contains:
 \itemize{
-\item \code{$credfuns} is the ordered list of credential methods to use when trying
+\item \code{$cred_funs} is the ordered list of credential methods to use when trying
 to fetch credentials.
 }
 }

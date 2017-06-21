@@ -4,13 +4,13 @@
 #' list of credentials functions to try.
 #'
 #' This environment contains:
-#' * `$credfuns` is the ordered list of credential methods to use when trying
+#' * `$cred_funs` is the ordered list of credential methods to use when trying
 #'   to fetch credentials.
 #'
 #' @format An environment.
 #' @keywords internal
 gargle_env <- new.env(parent = emptyenv())
-gargle_env$credfuns <- list()
+gargle_env$cred_funs <- list()
 
 #' Check that f is a viable credential fetching function.
 #'
@@ -24,7 +24,7 @@ gargle_env$credfuns <- list()
 #'
 #' @param f A function to check.
 #' @keywords internal
-is_credfun <- function(f) {
+is_cred_fun <- function(f) {
   if (!is.function(f)) {
     return(FALSE)
   }
@@ -37,19 +37,19 @@ is_credfun <- function(f) {
 #' Function(s) are added to the *front* of the list.
 #'
 #' @param ... One or more functions with the right signature. See
-#'   [is_credfun()].
+#'   [is_cred_fun()].
 #' @family registration
 #' @export
 #' @examples
 #' creds_one <- function(scopes, ...) {}
-#' credfuns_add(creds_one)
-#' credfuns_add(one = creds_one)
-#' credfuns_add(one = creds_one, two = creds_one)
-#' credfuns_add(one = creds_one, creds_one)
-credfuns_add <- function(...) {
+#' cred_funs_add(creds_one)
+#' cred_funs_add(one = creds_one)
+#' cred_funs_add(one = creds_one, two = creds_one)
+#' cred_funs_add(one = creds_one, creds_one)
+cred_funs_add <- function(...) {
   dots <- list(...)
-  stopifnot(all(vapply(dots, is_credfun, TRUE)))
-  gargle_env$credfuns <- c(dots, gargle_env$credfuns)
+  stopifnot(all(vapply(dots, is_cred_fun, TRUE)))
+  gargle_env$cred_funs <- c(dots, gargle_env$cred_funs)
   invisible(NULL)
 }
 
@@ -58,8 +58,8 @@ credfuns_add <- function(...) {
 #' @return A list of credential functions.
 #' @family registration
 #' @export
-credfuns_list <- function() {
-  gargle_env$credfuns
+cred_funs_list <- function() {
+  gargle_env$cred_funs
 }
 
 #' Set the list of all credential functions.
@@ -67,9 +67,9 @@ credfuns_list <- function() {
 #' @param ls A list of credential functions.
 #' @family registration
 #' @export
-credfuns_set <- function(ls) {
-  stopifnot(all(vapply(ls, is_credfun, TRUE)))
-  gargle_env$credfuns <- ls
+cred_funs_set <- function(ls) {
+  stopifnot(all(vapply(ls, is_cred_fun, TRUE)))
+  gargle_env$cred_funs <- ls
   invisible(NULL)
 }
 
@@ -77,17 +77,17 @@ credfuns_set <- function(ls) {
 #'
 #' @family registration
 #' @export
-credfuns_clear <- function() {
-  gargle_env$credfuns <- list()
+cred_funs_clear <- function() {
+  gargle_env$cred_funs <- list()
   invisible(NULL)
 }
 
 #' Set the default credential functions.
 #' @export
-credfuns_set_default <- function() {
-  credfuns_add(user_oath2 = credentials_user_oauth2)
-  credfuns_add(gce = credentials_gce)
-  credfuns_add(application_default = credentials_app_default)
-  credfuns_add(travis =  credentials_travis)
-  credfuns_add(service_acount = credentials_service_account)
+cred_funs_set_default <- function() {
+  cred_funs_add(user_oath2 = credentials_user_oauth2)
+  cred_funs_add(gce = credentials_gce)
+  cred_funs_add(application_default = credentials_app_default)
+  cred_funs_add(travis =  credentials_travis)
+  cred_funs_add(service_acount = credentials_service_account)
 }
