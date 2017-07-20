@@ -4,12 +4,17 @@
 \alias{credentials_user_oauth2}
 \title{Create a token for a user via the browser flow.}
 \usage{
-credentials_user_oauth2(scopes, oauth_app = NULL, ...)
+credentials_user_oauth2(scopes, app, cache = getOption("httr_oauth_cache"),
+  ...)
 }
 \arguments{
-\item{scopes}{List of scopes required for the returned token.}
+\item{app}{An OAuth consumer application, created by
+\code{\link{oauth_app}}}
 
-\item{oauth_app}{\code{httr::oauth_app} to use for this token fetch. (Optional.)}
+\item{cache}{A logical value or a string. \code{TRUE} means to cache
+using the default cache file \code{.httr-oauth}, \code{FALSE} means
+don't cache, and \code{NA} means to guess using some sensible heuristics.
+A string mean use the specified path as the cache file.}
 
 \item{...}{Additional arguments (ignored)}
 }
