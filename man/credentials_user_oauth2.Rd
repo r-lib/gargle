@@ -8,13 +8,14 @@ credentials_user_oauth2(scopes, app, cache = getOption("httr_oauth_cache"),
   ...)
 }
 \arguments{
-\item{app}{An OAuth consumer application, created by
-\code{\link{oauth_app}}}
+\item{scopes}{a character vector of scopes to request.}
 
-\item{cache}{A logical value or a string. \code{TRUE} means to cache
-using the default cache file \code{.httr-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics.
-A string mean use the specified path as the cache file.}
+\item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}}
+
+\item{cache}{A logical value or a string. \code{TRUE} means to cache using the
+default cache file \code{.httr-oauth}, \code{FALSE} means don't cache, and \code{NA} means
+to guess using some sensible heuristics. A string means use the specified
+path as the cache file.}
 
 \item{...}{Additional arguments (ignored)}
 }

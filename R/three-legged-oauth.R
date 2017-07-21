@@ -1,6 +1,11 @@
 
 #' Create a token for a user via the browser flow.
-#' @inheritParams httr::oauth2.0_token
+#' @param scopes a character vector of scopes to request.
+#' @param app An OAuth consumer application, created by [httr::oauth_app()]
+#' @param cache A logical value or a string. `TRUE` means to cache using the
+#'   default cache file `.httr-oauth`, `FALSE` means don't cache, and `NA` means
+#'   to guess using some sensible heuristics. A string means use the specified
+#'   path as the cache file.
 #' @param ... Additional arguments (ignored)
 #' @export
 credentials_user_oauth2 <- function(scopes,
