@@ -4,27 +4,42 @@
 \alias{credentials_user_oauth2}
 \title{Create a token for a user via the browser flow.}
 \usage{
-credentials_user_oauth2(scopes, app = gargle_app(),
-  cache = getOption("httr_oauth_cache"), ...)
+credentials_user_oauth2(scopes, app = gargle_app(), ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
-\item{cache}{A logical value or a string. \code{TRUE} means to cache using the
-default cache file, \code{.httr-oauth}. \code{FALSE} means don't cache, and \code{NA}
-means to guess using some sensible heuristics. A string means use the
-specified path as the cache file.}
-
-\item{...}{Additional arguments (ignored)}
+\item{...}{Arguments passed on to \code{httr::oauth2.0_token}
+\describe{
+  \item{user_params}{Named list holding endpoint specific parameters to pass to
+the server when posting the request for obtaining or refreshing the
+access token.}
+  \item{type}{content type used to override incorrect server response}
+  \item{use_oob}{if FALSE, use a local webserver for the OAuth dance.
+Otherwise, provide a URL to the user and prompt for a validation
+code. Defaults to the of the \code{"httr_oob_default"} default,
+or \code{TRUE} if \code{httpuv} is not installed.}
+  \item{as_header}{If \code{TRUE}, the default, configures the token to add
+itself to the bearer header of subsequent requests. If \code{FALSE},
+configures the token to add itself as a url parameter of subsequent
+requests.}
+  \item{use_basic_auth}{if \code{TRUE} use http basic authentication to
+retrieve the token. Some authorization servers require this.
+If \code{FALSE}, the default, retrieve the token by including the
+app key and secret in the request body.}
+  \item{cache}{A logical value or a string. \code{TRUE} means to cache
+using the default cache file \code{.httr-oauth}, \code{FALSE} means
+don't cache, and \code{NA} means to guess using some sensible heuristics.
+A string mean use the specified path as the cache file.}
+}}
 }
 \description{
 Create a token for a user via the browser flow.
 }
 \examples{
 \dontrun{
-## credentials_user_oauth2() is one of the functions token_fetch() will try
-token_fetch("https://www.googleapis.com/auth/drive")
+credentials_user_oauth2("https://www.googleapis.com/auth/drive")
 }
 }
