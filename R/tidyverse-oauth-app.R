@@ -1,15 +1,14 @@
 #' Oauth app for tidyverse packages
 #'
 #' Returns an OAuth app for use in tidyverse packages, e.g., googledrive,
-#' googlesheets, bigrquery. Developers of other packages should create their own
-#' [Cloud Platform Project](https://support.google.com/cloud/answer/6158853) in
-#' the [Google Developers Console](https://console.developers.google.com) and
-#' obtain their own client ID and secret. These can then be used with
-#' [httr::oauth_app()].
+#' googlesheets, bigrquery. Please don't use this app directly in non-tidyverse
+#' projects.
+#'
+#' @seealso For a default app to use while getting to know gargle and
+#'   instructions on how to make your own app, see [gargle_app()].
 #'
 #' @return An OAuth consumer application, produced by [httr::oauth_app()].
 #' @export
-#'
 #' @examples
 #' tidyverse_app()
 tidyverse_app <- function() {

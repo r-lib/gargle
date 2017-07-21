@@ -4,8 +4,8 @@
 \alias{credentials_user_oauth2}
 \title{Create a token for a user via the browser flow.}
 \usage{
-credentials_user_oauth2(scopes, app, cache = getOption("httr_oauth_cache"),
-  ...)
+credentials_user_oauth2(scopes, app = gargle_app(),
+  cache = getOption("httr_oauth_cache"), ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request.}
@@ -24,14 +24,7 @@ Create a token for a user via the browser flow.
 }
 \examples{
 \dontrun{
-scope <- "https://www.googleapis.com/auth/drive"
-app <- httr::oauth_app(
-  appname = "my_awesome_app",
-  key = "keykeykeykeykeykey",
-  secret = "secretsecretsecret"
-)
-
 ## credentials_user_oauth2() is one of the functions token_fetch() will try
-token_fetch(scope, app = app)
+token_fetch("https://www.googleapis.com/auth/drive")
 }
 }

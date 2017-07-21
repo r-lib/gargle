@@ -11,12 +11,13 @@ An OAuth consumer application, produced by \code{\link[httr:oauth_app]{httr::oau
 }
 \description{
 Returns an OAuth app for use in tidyverse packages, e.g., googledrive,
-googlesheets, bigrquery. Developers of other packages should create their own
-\href{https://support.google.com/cloud/answer/6158853}{Cloud Platform Project} in
-the \href{https://console.developers.google.com}{Google Developers Console} and
-obtain their own client ID and secret. These can then be used with
-\code{\link[httr:oauth_app]{httr::oauth_app()}}.
+googlesheets, bigrquery. Please don't use this app directly in non-tidyverse
+projects.
 }
 \examples{
 tidyverse_app()
+}
+\seealso{
+For a default app to use while getting to know gargle and
+instructions on how to make your own app, see \code{\link[=gargle_app]{gargle_app()}}.
 }
