@@ -1,9 +1,9 @@
 
 #' Create a token for a user via the browser flow.
-#' @param scopes a character vector of scopes to request.
-#' @param app An OAuth consumer application, created by [httr::oauth_app()]
+#' @param scopes A character vector of scopes to request.
+#' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param cache A logical value or a string. `TRUE` means to cache using the
-#'   default cache file `.httr-oauth`, `FALSE` means don't cache, and `NA` means
+#'   default cache file `.httr-oauth`. `FALSE` means don't cache, and `NA` means
 #'   to guess using some sensible heuristics. A string means use the specified
 #'   path as the cache file.
 #' @param ... Additional arguments (ignored)
