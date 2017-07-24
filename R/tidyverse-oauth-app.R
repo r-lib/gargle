@@ -1,4 +1,4 @@
-#' Oauth app for tidyverse packages
+#' OAuth app for tidyverse packages
 #'
 #' Returns an OAuth app for use in tidyverse packages, e.g., googledrive,
 #' googlesheets, bigrquery. Please don't use this app directly in non-tidyverse

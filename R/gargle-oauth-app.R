@@ -1,4 +1,4 @@
-#' Oauth app for demonstration purposes
+#' OAuth app for demonstration purposes
 #'
 #' Returns an OAuth app that we default to in [credentials_user_oauth2()]. This
 #' makes it easy to test drive gargle before obtaining your own client ID and

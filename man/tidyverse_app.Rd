@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidyverse-oauth-app.R
 \name{tidyverse_app}
 \alias{tidyverse_app}
-\title{Oauth app for tidyverse packages}
+\title{OAuth app for tidyverse packages}
 \usage{
 tidyverse_app()
 }

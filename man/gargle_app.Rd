@@ -2,7 +2,7 @@
 % Please edit documentation in R/gargle-oauth-app.R
 \name{gargle_app}
 \alias{gargle_app}
-\title{Oauth app for demonstration purposes}
+\title{OAuth app for demonstration purposes}
 \usage{
 gargle_app()
 }
