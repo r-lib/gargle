@@ -8,6 +8,7 @@
 #'   instructions on how to make your own app, see [gargle_app()].
 #'
 #' @return An OAuth consumer application, produced by [httr::oauth_app()].
+#' @keywords internal
 #' @export
 #' @examples
 #' tidyverse_app()
