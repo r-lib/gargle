@@ -6,6 +6,7 @@
 #' @param ... Additional arguments (ignored)
 #' @export
 credentials_travis <- function(scopes, path = "", ...) {
+  message("trying credentials_travis")
   if (Sys.getenv('TRAVIS') != 'true') {
     return(NULL)
   }

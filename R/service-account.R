@@ -7,6 +7,7 @@
 #' @return A `httr::TokenServiceAccount` or `NULL`.
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
+  message("trying credentials_service account")
   if (!endsWith(path, ".json")) {
     stop("Path must end in .json")
   }
