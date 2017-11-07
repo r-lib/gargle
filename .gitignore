@@ -4,3 +4,4 @@
 .httr-oauth
 scratch.R
 gargle-*.json
+*.key

@@ -33,6 +33,13 @@ app key and secret in the request body.}
 using the default cache file \code{.httr-oauth}, \code{FALSE} means
 don't cache, and \code{NA} means to guess using some sensible heuristics.
 A string mean use the specified path as the cache file.}
+  \item{config_init}{Additional configuration settings sent to
+\code{\link{POST}}, e.g. \code{\link{user_agent}}.}
+  \item{client_credentials}{Default to \code{FALSE}. Set to \code{TRUE} to use
+\emph{Client Credentials Grant} instead of \emph{Authorization
+Code Grant}. See \url{https://tools.ietf.org/html/rfc6749#section-4.4}.}
+  \item{credentials}{Advanced use only: allows you to completely customise
+token generation.}
 }}
 }
 \description{

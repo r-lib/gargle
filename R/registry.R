@@ -7,6 +7,7 @@
 #' * `$cred_funs` is the ordered list of credential methods to use when trying
 #'   to fetch credentials.
 #'
+#' @noRd
 #' @format An environment.
 #' @keywords internal
 gargle_env <- new.env(parent = emptyenv())
