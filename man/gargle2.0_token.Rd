@@ -7,7 +7,7 @@
 gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
   user_params = NULL, type = NULL,
   use_oob = getOption("httr_oob_default"), credentials = NULL,
-  cache = getOption("httr_oauth_cache"))
+  cache = getOption("httr_oauth_cache"), ...)
 }
 \arguments{
 \item{email}{Email address}
@@ -35,6 +35,9 @@ token generation.}
 using the default cache file \code{.httr-oauth}, \code{FALSE} means
 don't cache, and \code{NA} means to guess using some sensible heuristics.
 A string mean use the specified path as the cache file.}
+
+\item{...}{Arguments intended for use by non-OAuth2 credential functions. Not
+used.}
 }
 \value{
 A Gargle token

@@ -2,6 +2,8 @@
 #'
 #' @param email Email address
 #' @inheritParams httr::oauth2.0_token
+#' @param ... Arguments intended for use by non-OAuth2 credential functions. Not
+#'   used.
 #' @return A Gargle token
 #' @export
 gargle2.0_token <- function(email = NULL,
@@ -13,7 +15,7 @@ gargle2.0_token <- function(email = NULL,
                             use_oob = getOption("httr_oob_default"),
                             ## params end
                             credentials = NULL,
-                            cache = getOption("httr_oauth_cache")) {
+                            cache = getOption("httr_oauth_cache"), ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
