@@ -12,11 +12,19 @@ credentials_service_account <- function(scopes, path = "", ...) {
     stop("Path must end in .json")
   }
   info <- jsonlite::fromJSON(path)
-  token <- httr::TokenServiceAccount$new(NULL, info, list(scope = scopes))
+  token <- httr::TokenServiceAccount$new(
+    endpoint = NULL,
+    secrets = info,
+    ## TODO(jennybc) Is is really true I can't add the "email" scope here?
+    params = list(scope = scopes)
+  )
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
+    ## TODO(jennybc) this needs to be baked into the sub-classed service token
+    ## object, once such exists
+    message("email: ", info[["client_email"]])
     token
   }
 }
