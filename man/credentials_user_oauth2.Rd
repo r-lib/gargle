@@ -47,14 +47,16 @@ Create a token for a user via the browser flow.
 }
 \examples{
 \dontrun{
-scope <- "https://www.googleapis.com/auth/drive"
+## Drive scope, built-in gargle demo app
+scopes <- "https://www.googleapis.com/auth/drive"
+credentials_user_oauth2(scopes, app = gargle_app())
+
+## bring your own app
 app <- httr::oauth_app(
   appname = "my_awesome_app",
   key = "keykeykeykeykeykey",
   secret = "secretsecretsecret"
 )
-
-## credentials_user_oauth2() is one of the functions token_fetch() will try
-token_fetch(scope, app = app)
+credentials_user_oauth2(scopes, app)
 }
 }
