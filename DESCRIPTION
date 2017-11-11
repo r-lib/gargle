@@ -14,6 +14,7 @@ Description: Utilities to take some of the pain out of dealing with
 License: MIT + file LICENSE
 LazyData: true
 Imports:
+    debugme,
     httr,
     jsonlite,
     magrittr

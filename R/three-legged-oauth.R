@@ -21,7 +21,7 @@
 credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
                                     ...) {
-  message("trying credentials_user_oauth2")
+  "!DEBUG trying credentials_user_oauth2"
   gargle2.0_token(
     app = app,
     scope = scopes,

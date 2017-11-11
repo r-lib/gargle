@@ -62,7 +62,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         credentials = NULL,
                         params = list(),
                         cache_path = getOption("httr_oauth_cache")) {
-    message("gargle initialize\n")
+    "!DEBUG Gargle2.0 initialize"
     stopifnot(
       httr:::is.oauth_endpoint(endpoint) || !is.null(credentials),
       httr:::is.oauth_app(app),
@@ -86,7 +86,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (self$load_from_cache()) {
       self
     } else {
-      message("no matching token in the cache\n")
+      "!DEBUG no matching token in the cache"
       self$init_credentials()
       self$email <- get_email(self) %||% NA_character_
       self$cache()
@@ -94,9 +94,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   print = function(...) {
     cat("<Token (via gargle)>\n", sep = "")
-    #print(self$endpoint) ## this is TMI IMO
+    # print(self$endpoint) ## this is TMI IMO
+    # also, it's boring --> always google for us
     cat("  <oauth_endpoint> google\n", sep = "")
-    #print(self$app) ## this is TMI IMO
+    # print(self$app) ## this is TMI IMO
     cat("       <oauth_app> ", self$app$appname, "\n", sep = "")
     cat("           <email> ", self$email, "\n", sep = "")
     ## TODO(jennybc) turn this into a helper or sg
@@ -130,6 +131,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
 
     # for compatibility with digest::digest()
     msg <- paste(openssl::md5(msg[-(1:14)]), collapse = "")
+
     # append the email
     paste(msg, self$email, sep = "-")
   },
@@ -137,11 +139,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (is.null(self$cache_path)) return(FALSE)
 
     if (is.null(self$email)) {
-      message("searching the cache for matches on endpoint,app,scopes")
+      "!DEBUG searching cache for matches on endpoint + app + scopes"
       cached <- fetch_matching_tokens(self$hash(), self$cache_path)
     } else {
-      message("searching the cache for matches on endpoint,app,scopes")
-      message("and email: ", self$email)
+      "!DEBUG searching cache for matches on endpoint + app + scopes + email: `sQuote(self$email)`"
       cached <- httr:::fetch_cached_token(self$hash(), self$cache_path)
     }
 
@@ -166,11 +167,11 @@ fetch_matching_tokens <- function(hash, cache_path) {
   tokens <- tokens[matches]
 
   if (length(tokens) == 1) {
-    message("Using a token cached for ", sQuote(extract_email(names(tokens))), "\n")
+    "!DEBUG Using a token cached for `extract_email(names(tokens))`"
     return(tokens[[1]])
   }
-  ## TODO(jennybc) what if not interactive? just use first match?
 
+  ## TODO(jennybc) if not interactive? just use first match? now I just give up
   if (!interactive()) {
     message("Multiple cached tokens exist. Unclear which to use.")
     return(NULL)
@@ -188,10 +189,7 @@ fetch_matching_tokens <- function(hash, cache_path) {
 
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d-jenny@rstudio.com
-## mask_email() returns this:
-## 2a46e6750476326f7085ebdab4ad103d
-## and extract_email() returns this:
-## jenny@rstudio.com
+## ^ mask_email() returns this ^    ^ extract_email() returns this ^
 mask_email <- function(x) sub("^([^-]*).*", "\\1", x)
 extract_email <- function(x) sub(".*-([^-]*)$", "\\1", x)
 

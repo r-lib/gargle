@@ -5,14 +5,16 @@
 #' @return A [httr::Token()] or `NULL`.
 #' @export
 token_fetch <- function(scopes, ...) {
-  message("in token_fetch()")
+  "!DEBUG in token_fetch()"
   for (f in gargle_env$cred_funs) {
     token <- NULL
     # TODO(craigcitro): Expose error handling and/or silencing here.
     token <- tryCatch(
       f(scopes, ...),
       #error = function(e) NULL
-      error = function(e) {print(e$message); NULL}
+      error = function(e) {
+        "!DEBUG `e$message`"
+        NULL}
     )
     if (!is.null(token)) {
       return(token)
