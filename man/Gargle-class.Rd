@@ -15,12 +15,6 @@ objects should be created through the constructor function
 \code{\link[=gargle2.0_token]{gargle2.0_token()}}. In the base Token2.0 class, tokens are cached based on
 endpoint, app, and scopes. For this subclass, the identifier or key is
 expanded to include the email address associated with the token. This makes
-it easier to work with Google APIs using multiple accounts
+it easier to work with Google APIs using multiple accounts.
 }
-\section{Scopes}{
- The \code{"email"} scope is added if not already present. This is
-needed to retrieve the email address associated with the token. This is
-considered a "low value" scope and does not appear on the consent screen.
-}
-
 \keyword{internal}

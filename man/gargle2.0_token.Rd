@@ -10,7 +10,11 @@ gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
   cache = getOption("httr_oauth_cache"), ...)
 }
 \arguments{
-\item{email}{Email address}
+\item{email}{Optional. Allows user to target a specific Google identity. If
+specified, this is used only for token lookup, i.e. to determine if a
+suitable token is already available in the cache. The email associated with
+a token when it's cached is determined from the token itself, not from this
+argument.}
 
 \item{app}{An OAuth consumer application, created by
 \code{\link{oauth_app}}}
@@ -36,12 +40,16 @@ using the default cache file \code{.httr-oauth}, \code{FALSE} means
 don't cache, and \code{NA} means to guess using some sensible heuristics.
 A string mean use the specified path as the cache file.}
 
-\item{...}{Arguments intended for use by non-OAuth2 credential functions. Not
-used.}
+\item{...}{Absorbs arguments intended for use by non-OAuth2 credential
+functions. Not used.}
 }
 \value{
-A Gargle token
+An object of class \code{\link{Gargle2.0}}, either new or loaded from the
+cache.
 }
 \description{
-Generate a Gargle token
+Constructor function for objects of class \code{\link{Gargle2.0}}. The \code{"email"} scope
+is always added if not already present. This is needed to retrieve the email
+address associated with the token. This is considered a "low value" scope and
+does not appear on the consent screen.
 }

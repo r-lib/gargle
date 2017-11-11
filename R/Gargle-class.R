@@ -1,10 +1,20 @@
 #' Generate a Gargle token
 #'
-#' @param email Email address
+#' Constructor function for objects of class [`Gargle2.0`]. The `"email"` scope
+#' is always added if not already present. This is needed to retrieve the email
+#' address associated with the token. This is considered a "low value" scope and
+#' does not appear on the consent screen.
+#'
+#' @param email Optional. Allows user to target a specific Google identity. If
+#'   specified, this is used only for token lookup, i.e. to determine if a
+#'   suitable token is already available in the cache. The email associated with
+#'   a token when it's cached is determined from the token itself, not from this
+#'   argument.
 #' @inheritParams httr::oauth2.0_token
-#' @param ... Arguments intended for use by non-OAuth2 credential functions. Not
-#'   used.
-#' @return A Gargle token
+#' @param ... Absorbs arguments intended for use by non-OAuth2 credential
+#'   functions. Not used.
+#' @return An object of class [`Gargle2.0`], either new or loaded from the
+#'   cache.
 #' @export
 gargle2.0_token <- function(email = NULL,
                             app = gargle_app(),
@@ -43,11 +53,7 @@ gargle2.0_token <- function(email = NULL,
 #' [gargle2.0_token()]. In the base Token2.0 class, tokens are cached based on
 #' endpoint, app, and scopes. For this subclass, the identifier or key is
 #' expanded to include the email address associated with the token. This makes
-#' it easier to work with Google APIs using multiple accounts
-#'
-#' @section Scopes: The `"email"` scope is added if not already present. This is
-#'   needed to retrieve the email address associated with the token. This is
-#'   considered a "low value" scope and does not appear on the consent screen.
+#' it easier to work with Google APIs using multiple accounts.
 #'
 #' @docType class
 #' @keywords internal
