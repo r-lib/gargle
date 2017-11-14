@@ -120,7 +120,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     )
     cat(
       "                   (expires in ",
-      self$credentials$expires_in / 60,
+      ceiling(self$credentials$expires_in / 60),
       " mins)", "\n", sep = ""
     )
     cat("---\n")
