@@ -1,6 +1,6 @@
 #' Generate a Gargle token
 #'
-#' Constructor function for objects of class [`Gargle2.0`]. The `"email"` scope
+#' Constructor function for objects of class [Gargle2.0]. The `"email"` scope
 #' is always added if not already present. This is needed to retrieve the email
 #' address associated with the token. This is considered a "low value" scope and
 #' does not appear on the consent screen.
@@ -13,7 +13,7 @@
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by non-OAuth2 credential
 #'   functions. Not used.
-#' @return An object of class [`Gargle2.0`], either new or loaded from the
+#' @return An object of class [Gargle2.0], either new or loaded from the
 #'   cache.
 #' @export
 gargle2.0_token <- function(email = NULL,

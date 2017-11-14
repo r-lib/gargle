@@ -44,11 +44,11 @@ A string mean use the specified path as the cache file.}
 functions. Not used.}
 }
 \value{
-An object of class \code{\link{Gargle2.0}}, either new or loaded from the
+An object of class \link{Gargle2.0}, either new or loaded from the
 cache.
 }
 \description{
-Constructor function for objects of class \code{\link{Gargle2.0}}. The \code{"email"} scope
+Constructor function for objects of class \link{Gargle2.0}. The \code{"email"} scope
 is always added if not already present. This is needed to retrieve the email
 address associated with the token. This is considered a "low value" scope and
 does not appear on the consent screen.
