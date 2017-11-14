@@ -31,14 +31,14 @@ gargle2.0_token <- function(email = NULL,
     user_params = user_params,
     type = type,
     use_oob = use_oob,
-    as_header = TRUE,                           # hard-wired, ok?
-    use_basic_auth = FALSE,                     # hard-wired, ok?
+    as_header = TRUE,
+    use_basic_auth = FALSE,
     config_init = list(),
-    client_credentials = FALSE                  # hard-wired, ok?
+    client_credentials = FALSE
   )
   Gargle2.0$new(
     email = email,
-    endpoint = httr::oauth_endpoints("google"), # hard-wired, ok?
+    endpoint = httr::oauth_endpoints("google"),
     app = app,
     params = params,
     credentials = credentials,
