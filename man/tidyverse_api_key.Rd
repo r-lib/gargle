@@ -13,7 +13,7 @@ A Google API key
 Returns an API key for use in tidyverse packages, e.g., googledrive,
 googlesheets, bigrquery. Please don't use this API key in non-tidyverse
 projects. For a default API key to use while getting to know gargle and
-instructions on how to make your own app, see \code{\link[=gargle_api_key]{gargle_api_key()}}.
+instructions on how to get your own key, see \code{\link[=gargle_api_key]{gargle_api_key()}}.
 }
 \examples{
 tidyverse_api_key()

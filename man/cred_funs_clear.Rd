@@ -13,3 +13,4 @@ Clear the list of credential functions.
 Other registration: \code{\link{cred_funs_add}},
   \code{\link{cred_funs_list}}, \code{\link{cred_funs_set}}
 }
+\concept{registration}

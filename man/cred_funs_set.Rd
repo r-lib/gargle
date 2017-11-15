@@ -17,3 +17,4 @@ Other registration: \code{\link{cred_funs_add}},
   \code{\link{cred_funs_clear}},
   \code{\link{cred_funs_list}}
 }
+\concept{registration}

@@ -24,3 +24,4 @@ cred_funs_add(one = creds_one, creds_one)
 Other registration: \code{\link{cred_funs_clear}},
   \code{\link{cred_funs_list}}, \code{\link{cred_funs_set}}
 }
+\concept{registration}

@@ -24,6 +24,7 @@
 #'   type = "restaurant",
 #'   key = gargle_api_key()
 #' )
-#' res <- url %>% httr::build_url() %>% httr::GET() %>% httr::content()
+#' url <- httr::build_url(url)
+#' res <- httr::content(httr::GET(url))
 #' vapply(res$results, function(x) x$name, character(1))
 gargle_api_key <- function() "AIzaSyDXicV6oK4vR948PUAvlyr7QhkNwCoQ0cA"

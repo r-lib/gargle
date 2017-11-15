@@ -13,8 +13,8 @@ A Google API key
 Returns an API key for use when test driving gargle. Some API requests for
 public resources do not require authorization, in which case the request can
 be sent with an API key in lieu of a token. If you want to get your own API
-key, setup a new project in \href{https://console.developers.google.com}{Google DevelopersConsole}, enable the APIs of interest,
-and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up APIkeys}.
+key, setup a new project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of interest,
+and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
 }
 \examples{
 ## see the key
@@ -29,7 +29,8 @@ url$query <- list(
   type = "restaurant",
   key = gargle_api_key()
 )
-res <- url \%>\% httr::build_url() \%>\% httr::GET() \%>\% httr::content()
+url <- httr::build_url(url)
+res <- httr::content(httr::GET(url))
 vapply(res$results, function(x) x$name, character(1))
 }
 \keyword{internal}
