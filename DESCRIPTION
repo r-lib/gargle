@@ -3,6 +3,7 @@ Title: Easier Auth for Google Services
 Version: 0.0.0.9000
 Authors@R: c(
     person("Craig", "Citro", , "craigcitro@google.com", c("aut", "cre")),
+    person("Jennifer", "Bryan", , "jenny@rstudio.com", "aut"),
     person("Google Inc", role = "cph"),
     person("RStudio", role = "cph")
     )
@@ -14,6 +15,7 @@ Description: Utilities to take some of the pain out of dealing with
 License: MIT + file LICENSE
 LazyData: true
 Imports:
+    debugme,
     httr,
     jsonlite,
     magrittr

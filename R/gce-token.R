@@ -91,6 +91,7 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #' @return A [GceToken()] or `NULL`.
 #' @export
 credentials_gce <- function(scopes, service_account = 'default', ...) {
+  "!DEBUG trying credentials_gce"
   if (!detect_gce()) {
     return(NULL)
   }

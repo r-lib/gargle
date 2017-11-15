@@ -6,16 +6,25 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' credentials_user_oauth2("https://www.googleapis.com/auth/drive")
+#' ## Drive scope, built-in gargle demo app
+#' scopes <- "https://www.googleapis.com/auth/drive"
+#' credentials_user_oauth2(scopes, app = gargle_app())
+#'
+#' ## bring your own app
+#' app <- httr::oauth_app(
+#'   appname = "my_awesome_app",
+#'   key = "keykeykeykeykeykey",
+#'   secret = "secretsecretsecret"
+#' )
+#' credentials_user_oauth2(scopes, app)
 #' }
 credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
                                     ...) {
-  token <- httr::oauth2.0_token(
-    endpoint = httr::oauth_endpoints("google"),
+  "!DEBUG trying credentials_user_oauth2"
+  gargle2.0_token(
     app = app,
     scope = scopes,
     ...
   )
-  token
 }

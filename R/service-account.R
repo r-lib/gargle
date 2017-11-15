@@ -1,4 +1,3 @@
-
 #' Create a token for a Google service account.
 #'
 #' @param scopes List of scopes required for the returned token.
@@ -7,15 +6,21 @@
 #' @return A `httr::TokenServiceAccount` or `NULL`.
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
+  "!DEBUG trying credentials_service account"
   if (!endsWith(path, ".json")) {
     stop("Path must end in .json")
   }
   info <- jsonlite::fromJSON(path)
-  token <- httr::TokenServiceAccount$new(NULL, info, list(scope = scopes))
+  token <- httr::TokenServiceAccount$new(
+    endpoint = NULL,
+    secrets = info,
+    params = list(scope = scopes)
+  )
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
+    message("email: ", info[["client_email"]])
     token
   }
 }
