@@ -22,10 +22,10 @@ gargle2.0_token <- function(email = NULL,
                             scope = NULL,
                             user_params = NULL,
                             type = NULL,
-                            use_oob = getOption("httr_oob_default"),
+                            use_oob = getOption("gargle.oob_default"),
                             ## params end
                             credentials = NULL,
-                            cache = getOption("httr_oauth_cache"), ...) {
+                            cache = getOption("gargle.oauth_cache"), ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
@@ -67,7 +67,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         app = gargle_app(),
                         credentials = NULL,
                         params = list(),
-                        cache_path = getOption("httr_oauth_cache")) {
+                        cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
     stopifnot(
       httr:::is.oauth_endpoint(endpoint) || !is.null(credentials),
