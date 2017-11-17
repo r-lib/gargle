@@ -70,8 +70,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
     stopifnot(
-      httr:::is.oauth_endpoint(endpoint) || !is.null(credentials),
-      httr:::is.oauth_app(app),
+      is.oauth_endpoint(endpoint) || !is.null(credentials),
+      is.oauth_app(app),
       is.list(params)
     )
 
@@ -80,7 +80,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$endpoint <- endpoint
     params$scope <- add_email_scope(params$scope)
     self$params <- params
-    self$cache_path <- httr:::use_cache(cache_path)
+    self$cache_path <- use_cache(cache_path)
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
@@ -149,7 +149,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       cached <- fetch_matching_tokens(self$hash(), self$cache_path)
     } else {
       "!DEBUG searching cache for matches on endpoint + app + scopes + email: `sQuote(self$email)`"
-      cached <- httr:::fetch_cached_token(self$hash(), self$cache_path)
+      cached <- fetch_cached_token(self$hash(), self$cache_path)
     }
 
     if (is.null(cached)) return(FALSE)
@@ -165,7 +165,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
 fetch_matching_tokens <- function(hash, cache_path) {
   if (is.null(cache_path)) return(NULL)
 
-  tokens <- httr:::load_cache(cache_path)
+  "!DEBUG `cache_path`"
+  tokens <- load_cache(cache_path)
   matches <- mask_email(names(tokens)) == mask_email(hash)
 
   if (!any(matches)) return(NULL)

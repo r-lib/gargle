@@ -22,6 +22,9 @@ credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
                                     ...) {
   "!DEBUG trying credentials_user_oauth2"
+  if (missing(scopes)) {
+    scopes <- "email"
+  }
   gargle2.0_token(
     app = app,
     scope = scopes,
