@@ -119,6 +119,39 @@ fetch_cached_token <- function(hash, cache_path) {
   tokens$token[[match(hash, tokens$hash)]]
 }
 
+
+fetch_matching_tokens <- function(hash, cache_path) {
+  if (is.null(cache_path)) return(NULL)
+
+  "!DEBUG `cache_path`"
+  tokens <- load_cache(cache_path)
+  matches <- mask_email(tokens$hash) == mask_email(hash)
+
+  if (!any(matches)) return(NULL)
+
+  tokens <- tokens[matches, ]
+
+  if (nrow(tokens) == 1) {
+    "!DEBUG Using a token cached for `extract_email(names(tokens))`"
+    return(tokens$token[[1]])
+  }
+
+  ## TODO(jennybc) if not interactive? just use first match? now I just give up
+  if (!interactive()) {
+    message("Multiple cached tokens exist. Unclear which to use.")
+    return(NULL)
+  }
+
+  emails <- extract_email(tokens$hash)
+  cat("Multiple cached tokens exist. Pick the one you want to use.\n")
+  cat("Or enter '0' to obtain a new token.")
+  this_one <- utils::menu(emails)
+
+  if (this_one == 0) return(NULL)
+
+  tokens$token[[this_one]]
+}
+
 # remove_cached_token <- function(token) {
 #   if (is.null(token$cache_path)) return()
 #
@@ -136,3 +169,22 @@ load_cache <- function(cache_path) {
 }
 
 file_size <- function(x) file.info(x, extra_cols = FALSE)$size
+
+## for this token hash:
+## 2a46e6750476326f7085ebdab4ad103d-jenny@rstudio.com
+## ^ mask_email() returns this ^    ^ extract_email() returns this ^
+mask_email <- function(x) sub("^([^-]*).*", "\\1", x)
+extract_email <- function(x) sub(".*-([^-]*)$", "\\1", x)
+
+add_email_scope <- function(scope = NULL) {
+  scope <- scope %||% character()
+  if (any(scope == "email")) {
+    scope
+  } else {
+    c(scope, "email")
+  }
+}
+
+normalize_scopes <- function(x) {
+  stats::setNames(sort(unique(x)), NULL)
+}
