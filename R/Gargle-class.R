@@ -141,11 +141,17 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     # append the email
     paste(msg, self$email, sep = "-")
   },
+  cache = function(path = self$cache_path) {
+    "!DEBUG cache a token"
+    cache_token(self, path)
+    self
+  },
   load_from_cache = function() {
     if (is.null(self$cache_path)) return(FALSE)
 
     if (is.null(self$email)) {
       "!DEBUG searching cache for matches on endpoint + app + scopes"
+      "!DEBUG cache_path is `sQuote(self$cache_path)`"
       cached <- fetch_matching_tokens(self$hash(), self$cache_path)
     } else {
       "!DEBUG searching cache for matches on endpoint + app + scopes + email: `sQuote(self$email)`"
@@ -167,15 +173,15 @@ fetch_matching_tokens <- function(hash, cache_path) {
 
   "!DEBUG `cache_path`"
   tokens <- load_cache(cache_path)
-  matches <- mask_email(names(tokens)) == mask_email(hash)
+  matches <- mask_email(tokens$hash) == mask_email(hash)
 
   if (!any(matches)) return(NULL)
 
-  tokens <- tokens[matches]
+  tokens <- tokens[matches, ]
 
-  if (length(tokens) == 1) {
+  if (nrow(tokens) == 1) {
     "!DEBUG Using a token cached for `extract_email(names(tokens))`"
-    return(tokens[[1]])
+    return(tokens$token[[1]])
   }
 
   ## TODO(jennybc) if not interactive? just use first match? now I just give up
@@ -184,14 +190,14 @@ fetch_matching_tokens <- function(hash, cache_path) {
     return(NULL)
   }
 
-  emails <- extract_email(names(tokens))
+  emails <- extract_email(tokens$hash)
   cat("Multiple cached tokens exist. Pick the one you want to use.\n")
   cat("Or enter '0' to obtain a new token.")
   this_one <- utils::menu(emails)
 
   if (this_one == 0) return(NULL)
 
-  tokens[[this_one]]
+  tokens$token[[this_one]]
 }
 
 ## for this token hash:

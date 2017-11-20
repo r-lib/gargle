@@ -14,11 +14,12 @@ Description: Utilities to take some of the pain out of dealing with
     their users.
 License: MIT + file LICENSE
 LazyData: true
-Imports:
+Imports: 
     debugme,
     httr,
     jsonlite,
-    magrittr
+    magrittr,
+    tibble
 Suggests:
     testthat
 RoxygenNote: 6.0.1.9000

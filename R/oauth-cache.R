@@ -84,18 +84,39 @@ create_cache <- function(path = gargle_cache_path()) {
   TRUE
 }
 
-# cache_token <- function(token, cache_path) {
-#   if (is.null(cache_path)) return()
-#
-#   tokens <- load_cache(cache_path)
-#   tokens[[token$hash()]] <- token
-#   saveRDS(tokens, cache_path)
-# }
+cache_token <- function(token, cache_path) {
+  "!DEBUG cache_token"
+  if (is.null(cache_path)) return()
+
+  tokens <- load_cache(cache_path)
+  tokens <- insert_token(tokens, token)
+  saveRDS(tokens, cache_path)
+}
+
+insert_token <- function(df, new) {
+  "!DEBUG insert_token"
+  if (length(df) == 0 || nrow(df) == 0) {
+    return(entibble(new))
+  }
+
+  df <- df[df$hash != new$hash(), ]
+  df[nrow(df) + 1, ] <- entibble(new)
+  df
+}
+
+entibble <- function(token) {
+  "!DEBUG entibble"
+  tibble::tibble(
+    hash = token$hash(),
+    token = list(token)
+  )
+}
 
 fetch_cached_token <- function(hash, cache_path) {
   if (is.null(cache_path)) return()
 
-  load_cache(cache_path)[[hash]]
+  tokens <- load_cache(cache_path)
+  tokens$token[[match(hash, tokens$hash)]]
 }
 
 # remove_cached_token <- function(token) {
