@@ -38,7 +38,6 @@ gargle2.0_token <- function(email = NULL,
   )
   Gargle2.0$new(
     email = email,
-    endpoint = httr::oauth_endpoints("google"),
     app = app,
     params = params,
     credentials = credentials,
@@ -63,21 +62,16 @@ gargle2.0_token <- function(email = NULL,
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   email = NA_character_,
   initialize = function(email = NULL,
-                        endpoint =  httr::oauth_endpoints("google"),
                         app = gargle_app(),
                         credentials = NULL,
                         params = list(),
                         cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
-    stopifnot(
-      is.oauth_endpoint(endpoint) || !is.null(credentials),
-      is.oauth_app(app),
-      is.list(params)
-    )
+    stopifnot(is.oauth_app(app), is.list(params))
 
     self$email <- email
     self$app <- app
-    self$endpoint <- endpoint
+    self$endpoint <- httr::oauth_endpoints("google")
     params$scope <- add_email_scope(params$scope)
     self$params <- params
     self$cache_path <- use_cache(cache_path)
