@@ -76,7 +76,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$email <- email
     self$app <- app
     self$endpoint <- httr::oauth_endpoints("google")
-    params$scope <- add_email_scope(params$scope)
+    params$scope <- normalize_scopes(add_email_scope(params$scope))
     self$params <- params
     self$cache_path <- cache_establish(cache_path)
 
@@ -119,16 +119,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat("---\n")
   },
   hash = function() {
-    # endpoint = which site = always google for us
-    # app = client identification = often tidyverse (or gargle) app
-    # params = scope <- this truly varies across client packages
-    msg <- rhash(list(
-      self$endpoint,
-      self$app,
-      normalize_scopes(self$params$scope)
-    ))
-
-    # append the email
+    msg <- rhash(list(self$endpoint, self$app, self$params$scope))
     paste(msg, self$email, sep = "-")
   },
   cache = function() {
