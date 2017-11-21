@@ -67,14 +67,18 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         params = list(),
                         cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
-    stopifnot(is.oauth_app(app), is.list(params))
+    stopifnot(
+      is.null(email) || is_string(email),
+      is.oauth_app(app),
+      is.list(params)
+    )
 
     self$email <- email
     self$app <- app
     self$endpoint <- httr::oauth_endpoints("google")
     params$scope <- add_email_scope(params$scope)
     self$params <- params
-    self$cache_path <- use_cache(cache_path)
+    self$cache_path <- cache_establish(cache_path)
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests

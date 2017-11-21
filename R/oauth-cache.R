@@ -2,11 +2,11 @@
 ## nothing there is exported, so to make desired changes to oauth caching
 ## I have to copy and mutate here
 
-gargle_cache_path <- function() {
+cache_gargle <- function() {
   "~/.R/gargle/gargle-oauth"
 }
 
-use_cache <- function(cache = getOption("gargle.oauth_cache")) {
+cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (length(cache) != 1) {
     stop("cache should be length 1 vector", call. = FALSE)
   }
@@ -14,10 +14,10 @@ use_cache <- function(cache = getOption("gargle.oauth_cache")) {
     stop("Cache must either be logical or string (file path)")
   }
 
-  # If missing, see if it's ok to use one, and cache the results of
-  # that check in a global option.
+  # If NA, get permission to use cache file and store results of that check in
+  # global option.
   if (is.na(cache)) {
-    cache <- can_use_cache()
+    cache <- cache_ok()
     options("gargle.oauth_cache" = cache)
   }
   ## cache is now TRUE, FALSE or path
@@ -27,20 +27,20 @@ use_cache <- function(cache = getOption("gargle.oauth_cache")) {
   }
 
   if (isTRUE(cache)) {
-    cache <- gargle_cache_path()
+    cache <- cache_gargle()
   }
 
   if (!file.exists(cache)) {
-    create_cache(cache)
+    cache_create(cache)
   }
   return(cache)
 }
 
-can_use_cache <- function(path = gargle_cache_path()) {
-  file.exists(path) || should_cache(path)
+cache_ok <- function(path = cache_gargle()) {
+  file.exists(path) || cache_allowed(path)
 }
 
-should_cache <- function(path = gargle_cache_path()) {
+cache_allowed <- function(path = cache_gargle()) {
   if (!interactive()) return(FALSE)
 
   cat("Use a local file ('", path, "'), to cache OAuth access credentials ",
@@ -48,7 +48,7 @@ should_cache <- function(path = gargle_cache_path()) {
   utils::menu(c("Yes", "No")) == 1
 }
 
-create_cache <- function(path = gargle_cache_path()) {
+cache_create <- function(path = cache_gargle()) {
 
   cache_parent <- dirname(path)
   if (!dir.exists(cache_parent)) {
@@ -65,7 +65,6 @@ create_cache <- function(path = gargle_cache_path()) {
   # Protect cache as much as possible
   Sys.chmod(path, "0600")
 
-  ## TODO(jennybc): this only looks in exact directory of cache path, not up
   desc <- file.path(cache_parent, "DESCRIPTION")
   if (file.exists(desc)) {
     add_line(
@@ -88,7 +87,7 @@ cache_token <- function(token, cache_path) {
   "!DEBUG cache_token"
   if (is.null(cache_path)) return()
 
-  tokens <- load_cache(cache_path)
+  tokens <- cache_load(cache_path)
   tokens <- insert_token(tokens, token)
   saveRDS(tokens, cache_path)
 }
@@ -115,7 +114,7 @@ entibble <- function(token) {
 fetch_cached_token <- function(hash, cache_path) {
   if (is.null(cache_path)) return()
 
-  tokens <- load_cache(cache_path)
+  tokens <- cache_load(cache_path)
   tokens$token[[match(hash, tokens$hash)]]
 }
 
@@ -124,7 +123,7 @@ fetch_matching_tokens <- function(hash, cache_path) {
   if (is.null(cache_path)) return(NULL)
 
   "!DEBUG `cache_path`"
-  tokens <- load_cache(cache_path)
+  tokens <- cache_load(cache_path)
   matches <- mask_email(tokens$hash) == mask_email(hash)
 
   if (!any(matches)) return(NULL)
@@ -155,12 +154,12 @@ fetch_matching_tokens <- function(hash, cache_path) {
 # remove_cached_token <- function(token) {
 #   if (is.null(token$cache_path)) return()
 #
-#   tokens <- load_cache(token$cache_path)
+#   tokens <- cache_load(token$cache_path)
 #   tokens[[token$hash()]] <- NULL
 #   saveRDS(tokens, token$cache_path)
 # }
 
-load_cache <- function(cache_path) {
+cache_load <- function(cache_path) {
   if (!file.exists(cache_path) || file_size(cache_path) == 0) {
     list()
   } else {
