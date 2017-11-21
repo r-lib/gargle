@@ -139,9 +139,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     # append the email
     paste(msg, self$email, sep = "-")
   },
-  cache = function(path = self$cache_path) {
+  cache = function() {
     "!DEBUG cache a token"
-    cache_token(self, path)
+    cache_token(self)
     self
   },
   load_from_cache = function() {

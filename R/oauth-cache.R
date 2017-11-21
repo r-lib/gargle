@@ -22,9 +22,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   }
   ## cache is now TRUE, FALSE or path
 
-  if (isFALSE(cache)) {
-    return(NULL)
-  }
+  if (isFALSE(cache)) return()
 
   if (isTRUE(cache)) {
     cache <- cache_gargle()
@@ -83,13 +81,13 @@ cache_create <- function(path = cache_gargle()) {
   TRUE
 }
 
-cache_token <- function(token, cache_path) {
+cache_token <- function(token) {
   "!DEBUG cache_token"
-  if (is.null(cache_path)) return()
+  if (is.null(token$cache_path)) return()
 
-  tokens <- cache_load(cache_path)
+  tokens <- cache_load(token$cache_path)
   tokens <- insert_token(tokens, token)
-  saveRDS(tokens, cache_path)
+  saveRDS(tokens, token$cache_path)
 }
 
 insert_token <- function(df, new) {
@@ -120,13 +118,13 @@ fetch_cached_token <- function(hash, cache_path) {
 
 
 fetch_matching_tokens <- function(hash, cache_path) {
-  if (is.null(cache_path)) return(NULL)
+  if (is.null(cache_path)) return()
 
   "!DEBUG `cache_path`"
   tokens <- cache_load(cache_path)
   matches <- mask_email(tokens$hash) == mask_email(hash)
 
-  if (!any(matches)) return(NULL)
+  if (!any(matches)) return()
 
   tokens <- tokens[matches, ]
 
@@ -135,10 +133,8 @@ fetch_matching_tokens <- function(hash, cache_path) {
     return(tokens$token[[1]])
   }
 
-  ## TODO(jennybc) if not interactive? just use first match? now I just give up
   if (!interactive()) {
-    message("Multiple cached tokens exist. Unclear which to use.")
-    return(NULL)
+    stop("Multiple cached tokens exist. Unclear which to use.")
   }
 
   emails <- extract_email(tokens$hash)
@@ -146,7 +142,7 @@ fetch_matching_tokens <- function(hash, cache_path) {
   cat("Or enter '0' to obtain a new token.")
   this_one <- utils::menu(emails)
 
-  if (this_one == 0) return(NULL)
+  if (this_one == 0) return()
 
   tokens$token[[this_one]]
 }
