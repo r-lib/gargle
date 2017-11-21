@@ -127,14 +127,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     # endpoint = which site = always google for us
     # app = client identification = often tidyverse (or gargle) app
     # params = scope <- this truly varies across client packages
-    msg <- serialize(list(
+    msg <- rhash(list(
       self$endpoint,
       self$app,
       normalize_scopes(self$params$scope)
-    ), NULL)
-
-    # for compatibility with digest::digest()
-    msg <- paste(openssl::md5(msg[-(1:14)]), collapse = "")
+    ))
 
     # append the email
     paste(msg, self$email, sep = "-")
