@@ -116,11 +116,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       paste0(names(self$credentials), collapse = ", "),
       "\n", sep = ""
     )
-    cat(
-      "                   (expires in ",
-      ceiling(self$credentials$expires_in / 60),
-      " mins)", "\n", sep = ""
-    )
     cat("---\n")
   },
   hash = function() {
