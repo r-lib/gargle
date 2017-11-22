@@ -185,12 +185,6 @@ cache_load <- function(cache_path) {
 
 file_size <- function(x) file.info(x, extra_cols = FALSE)$size
 
-## for this token hash:
-## 2a46e6750476326f7085ebdab4ad103d-jenny@rstudio.com
-## ^ mask_email() returns this ^    ^ extract_email() returns this ^
-mask_email <- function(x) sub("^([^-]*).*", "\\1", x)
-extract_email <- function(x) sub(".*-([^-]*)$", "\\1", x)
-
 add_email_scope <- function(scope = NULL) {
   scope <- scope %||% character()
   if (any(scope == "email")) {
