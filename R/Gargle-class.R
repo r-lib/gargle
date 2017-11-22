@@ -125,7 +125,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   cache = function() {
     "!DEBUG cache a token"
-    cache_token(self)
+    token_cache(self)
     self
   },
   load_from_cache = function() {

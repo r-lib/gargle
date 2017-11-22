@@ -81,8 +81,8 @@ cache_create <- function(path = cache_gargle()) {
   TRUE
 }
 
-cache_token <- function(token) {
-  "!DEBUG cache_token"
+token_cache <- function(token) {
+  "!DEBUG token_cache"
   if (is.null(token$cache_path)) return()
 
   tokens <- cache_load(token$cache_path)
