@@ -99,10 +99,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   print = function(...) {
     cat("<Token (via gargle)>\n", sep = "")
-    # print(self$endpoint) ## this is TMI IMO
-    # also, it's boring --> always google for us
     cat("  <oauth_endpoint> google\n", sep = "")
-    # print(self$app) ## this is TMI IMO
     cat("       <oauth_app> ", self$app$appname, "\n", sep = "")
     cat("           <email> ", self$email, "\n", sep = "")
     ## TODO(jennybc) turn this into a helper or sg
@@ -120,7 +117,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat("---\n")
   },
   hash = function() {
-    msg <- rhash(list(self$endpoint, self$app, self$params$scope))
+    ## TODO(jennybc) I no longer include endpoint here, ok?
+    ## why not? because always google for us
+    ## why worry? because differs from httr default behavior
+    msg <- rhash(list(self$app, self$params$scope))
     paste(msg, self$email, sep = "_")
   },
   cache = function() {

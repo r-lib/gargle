@@ -87,25 +87,19 @@ token_cache <- function(token) {
 
   tokens <- cache_load(token$cache_path)
   tokens <- token_upsert(tokens, token)
-  "!DEBUG Cache has been loaded"
   saveRDS(tokens, token$cache_path)
 }
 
-token_upsert <- function(df, new) {
+token_upsert <- function(tokens, token) {
   "!DEBUG token_upsert"
-  if (length(df) == 0 || nrow(df) == 0) {
-    return(entibble(new))
-  }
+  if (length(tokens) == 0 || nrow(tokens) == 0) return(entibble(token))
 
-  m <- match(
-    new$hash(), # endpoint, app, scopes, email
-    vapply(df$token, function(x) x$hash(), character(1))
-  )
+  m <- token_match(tokens, token)
   if (!is.na(m)) {
-    df <- df[-1 * m, ]
+    tokens <- tokens[-m, ]
   }
-  df[nrow(df) + 1, ] <- entibble(new)
-  df
+  tokens[nrow(tokens) + 1, ] <- entibble(token)
+  tokens
 }
 
 entibble <- function(token) {
@@ -125,11 +119,7 @@ fetch_cached_token <- function(token) {
   "!DEBUG Cache has been loaded"
   if(length(tokens) == 0 || nrow(tokens) == 0) return()
 
-  ## look for exact match
-  m <- match(
-    token$hash(), # endpoint, app, scopes, email
-    vapply(tokens$token, function(x) x$hash(), character(1))
-  )
+  m <- token_match(tokens, token)
   if (!is.na(m)) {
     return(tokens$token[[m]])
   }
@@ -148,19 +138,15 @@ fetch_cached_token <- function(token) {
 
   if (nrow(tokens) == 0) return()
 
-  if (nrow(tokens) == 1) {
-    "!DEBUG One suitable token found"
-    return(tokens$token[[1]])
-  }
+  if (nrow(tokens) == 1) return(tokens$token[[1]])
 
   if (!interactive()) {
     stop("Multiple cached tokens exist. Unclear which to use.")
   }
 
-  emails <- tokens$email
   cat("Multiple cached tokens exist. Pick the one you want to use.\n")
   cat("Or enter '0' to obtain a new token.")
-  this_one <- utils::menu(emails)
+  this_one <- utils::menu(tokens$email)
 
   if (this_one == 0) return()
 
@@ -208,5 +194,14 @@ rhash_app <- function(app) {
     app$appname,
     rhash(app[c("secret", "key", "redirect_uri")]),
     sep = "_"
+  )
+}
+
+# finds location of exact match based on fields consulted by the $hash() method
+# e.g., endpoint, app, scopes, email
+token_match <- function(existing, candidate) {
+  match(
+    candidate$hash(),
+    vapply(existing$token, function(x) x$hash(), character(1))
   )
 }
