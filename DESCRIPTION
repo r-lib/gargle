@@ -21,8 +21,11 @@ Imports:
     magrittr,
     openssl,
     tibble
-Suggests:
+Suggests: 
+    covr,
     testthat
 RoxygenNote: 6.0.1.9000
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
+Depends: 
+    R (>= 3.1)
