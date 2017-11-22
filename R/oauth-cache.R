@@ -86,17 +86,24 @@ cache_token <- function(token) {
   if (is.null(token$cache_path)) return()
 
   tokens <- cache_load(token$cache_path)
-  tokens <- insert_token(tokens, token)
+  tokens <- token_upsert(tokens, token)
+  "!DEBUG Cache has been loaded"
   saveRDS(tokens, token$cache_path)
 }
 
-insert_token <- function(df, new) {
-  "!DEBUG insert_token"
+token_upsert <- function(df, new) {
+  "!DEBUG token_upsert"
   if (length(df) == 0 || nrow(df) == 0) {
     return(entibble(new))
   }
 
-  df <- df[df$hash != new$hash(), ]
+  m <- match(
+    new$hash(), # endpoint, app, scopes, email
+    vapply(df$token, function(x) x$hash(), character(1))
+  )
+  if (!is.na(m)) {
+    df <- df[-1 * m, ]
+  }
   df[nrow(df) + 1, ] <- entibble(new)
   df
 }
@@ -104,32 +111,45 @@ insert_token <- function(df, new) {
 entibble <- function(token) {
   "!DEBUG entibble"
   tibble::tibble(
-    hash = token$hash(),
+    email = token$email,
+    app_hash = rhash_app(token$app),
+    scopes = list(token$params$scope),
     token = list(token)
   )
 }
 
-fetch_cached_token <- function(hash, cache_path) {
-  if (is.null(cache_path)) return()
+fetch_cached_token <- function(token) {
+  if (is.null(token$cache_path)) return()
 
-  tokens <- cache_load(cache_path)
-  tokens$token[[match(hash, tokens$hash)]]
-}
+  tokens <- cache_load(token$cache_path)
+  "!DEBUG Cache has been loaded"
+  if(length(tokens) == 0 || nrow(tokens) == 0) return()
 
+  ## look for exact match
+  m <- match(
+    token$hash(), # endpoint, app, scopes, email
+    vapply(tokens$token, function(x) x$hash(), character(1))
+  )
+  if (!is.na(m)) {
+    return(tokens$token[[m]])
+  }
+  "!DEBUG No exact match"
 
-fetch_matching_tokens <- function(hash, cache_path) {
-  if (is.null(cache_path)) return()
+  m_email <- if (is.null(token$email)) {
+    TRUE
+  } else {
+    tokens$email == token$email
+  }
+  m_app <- tokens$app_hash == rhash_app(token$app)
+  m_scopes <- scope_ok(tokens$scopes, token$params$scope)
+  m <- m_email & m_app & m_scopes
 
-  "!DEBUG `cache_path`"
-  tokens <- cache_load(cache_path)
-  matches <- mask_email(tokens$hash) == mask_email(hash)
+  tokens <- tokens[m, ]
 
-  if (!any(matches)) return()
-
-  tokens <- tokens[matches, ]
+  if (nrow(tokens) == 0) return()
 
   if (nrow(tokens) == 1) {
-    "!DEBUG Using a token cached for `extract_email(names(tokens))`"
+    "!DEBUG One suitable token found"
     return(tokens$token[[1]])
   }
 
@@ -137,7 +157,7 @@ fetch_matching_tokens <- function(hash, cache_path) {
     stop("Multiple cached tokens exist. Unclear which to use.")
   }
 
-  emails <- extract_email(tokens$hash)
+  emails <- tokens$email
   cat("Multiple cached tokens exist. Pick the one you want to use.\n")
   cat("Or enter '0' to obtain a new token.")
   this_one <- utils::menu(emails)
@@ -182,4 +202,17 @@ add_email_scope <- function(scope = NULL) {
 
 normalize_scopes <- function(x) {
   stats::setNames(sort(unique(x)), NULL)
+}
+
+scope_ok <- function(have, need) {
+  vapply(have, function(x) all(need %in% x), logical(1))
+}
+
+rhash_app <- function(app) {
+  stopifnot(is.oauth_app(app))
+  paste(
+    app$appname,
+    rhash(app[c("secret", "key", "redirect_uri")]),
+    sep = "_"
+  )
 }

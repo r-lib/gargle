@@ -121,7 +121,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   hash = function() {
     msg <- rhash(list(self$endpoint, self$app, self$params$scope))
-    paste(msg, self$email, sep = "-")
+    paste(msg, self$email, sep = "_")
   },
   cache = function() {
     "!DEBUG cache a token"
@@ -131,15 +131,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   load_from_cache = function() {
     if (is.null(self$cache_path)) return(FALSE)
 
-    if (is.null(self$email)) {
-      "!DEBUG searching cache for matches on endpoint + app + scopes"
-      "!DEBUG cache_path is `sQuote(self$cache_path)`"
-      cached <- fetch_matching_tokens(self$hash(), self$cache_path)
-    } else {
-      "!DEBUG searching cache for matches on endpoint + app + scopes + email: `sQuote(self$email)`"
-      cached <- fetch_cached_token(self$hash(), self$cache_path)
-    }
-
+    "!DEBUG consulting the cache"
+    cached <- fetch_cached_token(self)
     if (is.null(cached)) return(FALSE)
 
     self$app <- cached$app
