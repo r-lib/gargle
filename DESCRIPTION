@@ -19,6 +19,7 @@ Imports:
     httr,
     jsonlite,
     magrittr,
+    openssl,
     tibble
 Suggests:
     testthat
