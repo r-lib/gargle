@@ -19,3 +19,7 @@ test_that("add_email_scope() works", {
     c("whatever", "email")
   )
 })
+
+test_that("rhash() produces same hash across platforms and R versions", {
+ expect_identical(rhash(iris), "ff575c261c949d073b2895b05d1097c3")
+})
