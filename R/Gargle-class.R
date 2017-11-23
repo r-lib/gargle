@@ -25,7 +25,7 @@ gargle2.0_token <- function(email = NULL,
                             use_oob = getOption("gargle.oob_default"),
                             ## params end
                             credentials = NULL,
-                            cache = if (is.null(credentials)) getOption("gargle.oob_default") else FALSE, ...) {
+                            cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else FALSE, ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
