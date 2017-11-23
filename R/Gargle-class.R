@@ -41,7 +41,7 @@ gargle2.0_token <- function(email = NULL,
     app = app,
     params = params,
     credentials = credentials,
-    cache_path = if (is.null(credentials)) cache else FALSE
+    cache_path = cache
   )
 }
 
@@ -84,7 +84,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
       self$credentials <- credentials
-      return(self)
+      self$email <- self$email %||% NA_character_
+      self$cache()
     }
 
     # Are credentials cached already?
