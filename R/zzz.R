@@ -10,5 +10,7 @@
   toset <- !(names(op.gargle) %in% names(op))
   if(any(toset)) options(op.gargle[toset])
 
+  backports::import(pkg, c("dir.exists", "file.size", "startsWith", "endsWith"))
+
   invisible()
 }
