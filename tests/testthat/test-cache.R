@@ -30,7 +30,7 @@ test_that("token_upsert() updates token already in cache", {
 })
 
 test_that("token_match() retrieves an exact hash match", {
-  tc <- tempfile("cache-")
+  withr::local_tempfile("tc", pattern = "cache-")
 
   fauxen_a <- gargle2.0_token(
     email = "a",
@@ -43,7 +43,7 @@ test_that("token_match() retrieves an exact hash match", {
 })
 
 test_that("token_match() returns a single multi match", {
-  tc <- tempfile("cache-")
+  withr::local_tempfile("tc", pattern = "cache-")
 
   fauxen_a <- gargle2.0_token(
     email = "a",
@@ -56,7 +56,7 @@ test_that("token_match() returns a single multi match", {
 })
 
 test_that("token_match() fails for >1 multi match, if non-interactive", {
-  tc <- tempfile("cache-")
+  withr::local_tempfile("tc", pattern = "cache-")
 
   fauxen_a <- gargle2.0_token(
     email = "a",
@@ -77,7 +77,7 @@ test_that("token_match() fails for >1 multi match, if non-interactive", {
 })
 
 test_that("token_match() works with normalized scopes, uses 'set' mentality ", {
-  tc <- tempfile("cache-")
+  withr::local_tempfile("tc", pattern = "cache-")
 
   fauxen_a <- gargle2.0_token(
     email = "a",
