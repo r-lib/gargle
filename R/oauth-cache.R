@@ -1,6 +1,5 @@
-## see oauth-cache.R in httr
-## nothing there is exported, so to make desired changes to oauth caching
-## I have to copy and mutate here
+## this file has its origins in oauth-cache.R in httr
+## nothing there is exported, so copied over, then it evolved
 
 cache_gargle <- function() {
   "~/.R/gargle/gargle-oauth"
@@ -17,7 +16,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   # If NA, get permission to use cache file and store results of that check in
   # global option.
   if (is.na(cache)) {
-    cache <- cache_ok()
+    cache <- cache_available()
     options("gargle.oauth_cache" = cache)
   }
   ## cache is now TRUE, FALSE or path
@@ -34,7 +33,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   return(cache)
 }
 
-cache_ok <- function(path = cache_gargle()) {
+cache_available <- function(path = cache_gargle()) {
   file.exists(path) || cache_allowed(path)
 }
 
@@ -60,7 +59,7 @@ cache_create <- function(path = cache_gargle()) {
 
   "!DEBUG cache exists: `path`"
 
-  # Protect cache as much as possible
+  ## owner can read and write, but not execute; no one else can do anything
   Sys.chmod(path, "0600")
 
   desc <- file.path(cache_parent, "DESCRIPTION")
@@ -94,7 +93,7 @@ token_upsert <- function(tokens, token) {
   "!DEBUG token_upsert"
   if (length(tokens) == 0 || nrow(tokens) == 0) return(entibble(token))
 
-  m <- token_match(tokens, token)
+  m <- token_hash_match(tokens, token)
   if (!is.na(m)) {
     tokens <- tokens[-m, ]
   }
@@ -112,47 +111,63 @@ entibble <- function(token) {
   )
 }
 
-fetch_cached_token <- function(token) {
+token_from_cache <- function(token) {
   if (is.null(token$cache_path)) return()
-
   tokens <- cache_load(token$cache_path)
-  "!DEBUG Cache has been loaded"
   if(length(tokens) == 0 || nrow(tokens) == 0) return()
 
-  m <- token_match(tokens, token)
+  token_match(tokens, token)
+}
+
+token_match <- function(existing, candidate) {
+  m <- token_hash_match(existing, candidate)
   if (!is.na(m)) {
-    return(tokens$token[[m]])
+    return(existing$token[[m]])
   }
-  "!DEBUG No exact match"
 
-  m_email <- if (is.null(token$email)) {
-    TRUE
-  } else {
-    tokens$email == token$email
-  }
-  m_app <- tokens$app_hash == rhash_app(token$app)
-  m_scopes <- scope_ok(tokens$scopes, token$params$scope)
-  m <- m_email & m_app & m_scopes
+  m <- token_multi_match(existing, candidate)
+  existing <- existing[m, ]
 
-  tokens <- tokens[m, ]
-
-  if (nrow(tokens) == 0) return()
-
-  if (nrow(tokens) == 1) return(tokens$token[[1]])
-
+  if (nrow(existing) == 0) return()
+  if (nrow(existing) == 1) return(existing$token[[1]])
   if (!interactive()) {
     stop("Multiple cached tokens exist. Unclear which to use.")
   }
 
   cat("Multiple cached tokens exist. Pick the one you want to use.\n")
   cat("Or enter '0' to obtain a new token.")
-  this_one <- utils::menu(tokens$email)
+  this_one <- utils::menu(existing$email)
 
   if (this_one == 0) return()
 
-  tokens$token[[this_one]]
+  existing$token[[this_one]]
 }
 
+# find location of exact match based on value returned by the $hash() method
+token_hash_match <- function(existing, candidate) {
+  match(
+    candidate$hash(),
+    vapply(existing$token, function(x) x$hash(), character(1))
+  )
+}
+
+# find locations of existing tokens that match candidate wrt
+#   * email, iff candidate specifies email (otherwise, ignore email)
+#   * OAuth app
+#   * scopes, in this sense: candidate scopes are included in scopes of
+#     existing token (which may, in fact, have more)
+token_multi_match <- function(existing, candidate) {
+  m_email <- if (is.null(candidate$email)) {
+    TRUE
+  } else {
+    existing$email == candidate$email
+  }
+  m_app <- existing$app_hash == rhash_app(candidate$app)
+  m_scopes <- scope_ok(existing$scopes, candidate$params$scope)
+  which(m_email & m_app & m_scopes)
+}
+
+## TODO(jennybc): until we expose inspection, I don't see how this is useful
 # remove_cached_token <- function(token) {
 #   if (is.null(token$cache_path)) return()
 #
@@ -197,11 +212,3 @@ rhash_app <- function(app) {
   )
 }
 
-# finds location of exact match based on fields consulted by the $hash() method
-# e.g., endpoint, app, scopes, email
-token_match <- function(existing, candidate) {
-  match(
-    candidate$hash(),
-    vapply(existing$token, function(x) x$hash(), character(1))
-  )
-}

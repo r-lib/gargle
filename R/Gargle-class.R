@@ -131,8 +131,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   load_from_cache = function() {
     if (is.null(self$cache_path)) return(FALSE)
 
-    "!DEBUG consulting the cache"
-    cached <- fetch_cached_token(self)
+    cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
     self$app <- cached$app
@@ -140,4 +139,5 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$credentials <- cached$credentials
     self$params <- cached$params
     TRUE
-  }))
+  }
+))
