@@ -25,7 +25,7 @@ gargle2.0_token <- function(email = NULL,
                             use_oob = getOption("gargle.oob_default"),
                             ## params end
                             credentials = NULL,
-                            cache = getOption("gargle.oauth_cache"), ...) {
+                            cache = if (is.null(credentials)) getOption("gargle.oob_default") else FALSE, ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
@@ -82,10 +82,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$cache_path <- cache_establish(cache_path)
 
     if (!is.null(credentials)) {
+      "!DEBUG credentials provided directly"
       # Use credentials created elsewhere - usually for tests
       self$credentials <- credentials
       self$email <- self$email %||% NA_character_
-      self$cache()
+      return(self$cache())
     }
 
     # Are credentials cached already?

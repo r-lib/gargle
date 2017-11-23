@@ -7,7 +7,8 @@
 gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
   user_params = NULL, type = NULL,
   use_oob = getOption("gargle.oob_default"), credentials = NULL,
-  cache = getOption("gargle.oauth_cache"), ...)
+  cache = if (is.null(credentials)) getOption("gargle.oob_default") else
+  FALSE, ...)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If
