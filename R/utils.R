@@ -36,3 +36,7 @@ rhash <- function(obj) {
   msg <- serialize(obj, connection = NULL, ascii = FALSE)[-(1:14)]
   paste(openssl::md5(msg), collapse = "")
 }
+
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}

@@ -130,7 +130,7 @@ token_match <- function(existing, candidate) {
 
   if (nrow(existing) == 0) return()
   if (nrow(existing) == 1) return(existing$token[[1]])
-  if (!interactive()) {
+  if (!interactive() || !is_testing()) {
     stop("Multiple cached tokens exist. Unclear which to use.")
   }
 
