@@ -2,7 +2,7 @@
 % Please edit documentation in R/three-legged-oauth.R
 \name{credentials_user_oauth2}
 \alias{credentials_user_oauth2}
-\title{Create a token for a user via the browser flow.}
+\title{Get an OAuth token for a user}
 \usage{
 credentials_user_oauth2(scopes, app = gargle_app(), ...)
 }
@@ -11,39 +11,47 @@ credentials_user_oauth2(scopes, app = gargle_app(), ...)
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
-\item{...}{Arguments passed on to \code{httr::oauth2.0_token}
+\item{...}{Arguments passed on to \code{gargle2.0_token}
 \describe{
+  \item{email}{Optional. Allows user to target a specific Google identity. If
+specified, this is used only for token lookup, i.e. to determine if a
+suitable token is already available in the cache. The email associated with
+a token when it's cached is determined from the token itself, not from this
+argument. Use \code{NA} to match nothing and force the OAuth dance in the
+browser.}
+  \item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
+Otherwise, provide a URL to the user and prompt for a validation code.
+Defaults to the option "gargle.oob_default" or \code{TRUE} if httpuv is not
+installed.}
+  \item{cache}{A logical value or a string. \code{TRUE} means to cache using the
+default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
+don't cache, and \code{NA} means to guess using some sensible heuristics. A
+string means use the specified path as the cache file.}
   \item{user_params}{Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the
 access token.}
   \item{type}{content type used to override incorrect server response}
-  \item{use_oob}{if FALSE, use a local webserver for the OAuth dance.
-Otherwise, provide a URL to the user and prompt for a validation
-code. Defaults to the of the \code{"httr_oob_default"} default,
-or \code{TRUE} if \code{httpuv} is not installed.}
-  \item{as_header}{If \code{TRUE}, the default, configures the token to add
-itself to the bearer header of subsequent requests. If \code{FALSE},
-configures the token to add itself as a url parameter of subsequent
-requests.}
-  \item{use_basic_auth}{if \code{TRUE} use http basic authentication to
-retrieve the token. Some authorization servers require this.
-If \code{FALSE}, the default, retrieve the token by including the
-app key and secret in the request body.}
-  \item{cache}{A logical value or a string. \code{TRUE} means to cache
-using the default cache file \code{.httr-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics.
-A string mean use the specified path as the cache file.}
-  \item{config_init}{Additional configuration settings sent to
-\code{\link{POST}}, e.g. \code{\link{user_agent}}.}
-  \item{client_credentials}{Default to \code{FALSE}. Set to \code{TRUE} to use
-\emph{Client Credentials Grant} instead of \emph{Authorization
-Code Grant}. See \url{https://tools.ietf.org/html/rfc6749#section-4.4}.}
   \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
 }}
 }
 \description{
-Create a token for a user via the browser flow.
+Consults the token cache for a suitable OAuth token and, if
+unsuccessful, gets a token via the browser flow. A cached token is suitable
+if it's compatible with the user's request in this sense:
+\itemize{
+\item OAuth app must be same.
+\item Scopes. This is a check for inclusion, not exact equality.
+\item Email, if provided, must be same.
+}
+
+If multiple suitable tokens are found, user is presented with a
+chooser. Therefore, in a non-interactive setting, it's important to
+uniquely identify the token, by providing the \code{"email"}, or by making sure
+only one suitable token will be found in the cache. Non-interactive use
+also suggests it might be time to use a \link[=credentials_service_account]{service account
+token}. This is a wrapper around
+\code{\link[=gargle2.0_token]{gargle2.0_token()}}.
 }
 \examples{
 \dontrun{
