@@ -110,23 +110,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
   },
   print = function(...) {
-    cat("<Token (via gargle)>\n", sep = "")
-    cat("  <oauth_endpoint> google\n", sep = "")
-    cat("       <oauth_app> ", self$app$appname, "\n", sep = "")
-    cat("           <email> ", self$email, "\n", sep = "")
-    ## TODO(jennybc) turn this into a helper or sg
-    scopes <- gsub("/$", "", gsub("(.*)/(.+$)", "...\\2", self$params$scope))
-    cat(
-      "          <scopes> ",
-      paste0(scopes, collapse = ", "),
-      "\n", sep = ""
-    )
-    cat(
-      "     <credentials> ",
-      paste0(names(self$credentials), collapse = ", "),
-      "\n", sep = ""
-    )
-    cat("---\n")
+    cat_line("<Token (via gargle)>")
+    cat_line("  <oauth_endpoint> google")
+    cat_line("       <oauth_app> ", self$app$appname)
+    cat_line("           <email> ", self$email)
+    cat_line("          <scopes> ", commapse(base_scope(self$params$scope)))
+    cat_line("     <credentials> ", commapse(names(self$credentials)))
+    cat_line("---")
   },
   hash = function() {
     ## TODO(jennybc) I no longer include endpoint here, ok?

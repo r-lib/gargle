@@ -40,3 +40,13 @@ rhash <- function(obj) {
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
+
+## in the spirit of basename(), but for Google scopes
+## for printing purposes
+base_scope <- function(x) {
+  gsub("/$", "", gsub("(.*)/(.+$)", "...\\2", x))
+}
+
+commapse <- function(...) paste0(..., collapse = ", ")
+
+cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
