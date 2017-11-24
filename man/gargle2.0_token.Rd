@@ -2,12 +2,12 @@
 % Please edit documentation in R/Gargle-class.R
 \name{gargle2.0_token}
 \alias{gargle2.0_token}
-\title{Generate a Gargle token}
+\title{Generate a gargle token}
 \usage{
 gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
   user_params = NULL, type = NULL,
   use_oob = getOption("gargle.oob_default"), credentials = NULL,
-  cache = if (is.null(credentials)) getOption("gargle.oob_default") else
+  cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else
   FALSE, ...)
 }
 \arguments{
@@ -15,12 +15,16 @@ gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
 specified, this is used only for token lookup, i.e. to determine if a
 suitable token is already available in the cache. The email associated with
 a token when it's cached is determined from the token itself, not from this
-argument.}
+argument. Use \code{NA} to match nothing and force the OAuth dance in the
+browser.}
 
 \item{app}{An OAuth consumer application, created by
 \code{\link{oauth_app}}}
 
-\item{scope}{a character vector of scopes to request.}
+\item{scope}{A character vector of scopes to request. The \code{"email"} scope is
+always added if not already present. This is needed to retrieve the email
+address associated with the token. This is considered a low value scope and
+does not appear on the consent screen.}
 
 \item{user_params}{Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the
@@ -28,18 +32,18 @@ access token.}
 
 \item{type}{content type used to override incorrect server response}
 
-\item{use_oob}{if FALSE, use a local webserver for the OAuth dance.
-Otherwise, provide a URL to the user and prompt for a validation
-code. Defaults to the of the \code{"httr_oob_default"} default,
-or \code{TRUE} if \code{httpuv} is not installed.}
+\item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
+Otherwise, provide a URL to the user and prompt for a validation code.
+Defaults to the option "gargle.oob_default" default or \code{TRUE} if httpuv is
+not installed.}
 
 \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
 
-\item{cache}{A logical value or a string. \code{TRUE} means to cache
-using the default cache file \code{.httr-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics.
-A string mean use the specified path as the cache file.}
+\item{cache}{A logical value or a string. \code{TRUE} means to cache using the
+default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
+don't cache, and \code{NA} means to guess using some sensible heuristics. A
+string means use the specified path as the cache file.}
 
 \item{...}{Absorbs arguments intended for use by non-OAuth2 credential
 functions. Not used.}
@@ -49,8 +53,5 @@ An object of class \link{Gargle2.0}, either new or loaded from the
 cache.
 }
 \description{
-Constructor function for objects of class \link{Gargle2.0}. The \code{"email"} scope
-is always added if not already present. This is needed to retrieve the email
-address associated with the token. This is considered a "low value" scope and
-does not appear on the consent screen.
+Constructor function for objects of class \link{Gargle2.0}.
 }

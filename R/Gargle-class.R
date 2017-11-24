@@ -1,15 +1,25 @@
-#' Generate a Gargle token
+#' Generate a gargle token
 #'
-#' Constructor function for objects of class [Gargle2.0]. The `"email"` scope
-#' is always added if not already present. This is needed to retrieve the email
-#' address associated with the token. This is considered a "low value" scope and
-#' does not appear on the consent screen.
+#' Constructor function for objects of class [Gargle2.0].
 #'
 #' @param email Optional. Allows user to target a specific Google identity. If
 #'   specified, this is used only for token lookup, i.e. to determine if a
 #'   suitable token is already available in the cache. The email associated with
 #'   a token when it's cached is determined from the token itself, not from this
-#'   argument.
+#'   argument. Use `NA` to match nothing and force the OAuth dance in the
+#'   browser.
+#' @param scope A character vector of scopes to request. The `"email"` scope is
+#'   always added if not already present. This is needed to retrieve the email
+#'   address associated with the token. This is considered a low value scope and
+#'   does not appear on the consent screen.
+#' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
+#'   Otherwise, provide a URL to the user and prompt for a validation code.
+#'   Defaults to the option "gargle.oob_default" default or `TRUE` if httpuv is
+#'   not installed.
+#' @param cache A logical value or a string. `TRUE` means to cache using the
+#'   default user-level cache file, `~/.R/gargle/gargle-oauth`, `FALSE` means
+#'   don't cache, and `NA` means to guess using some sensible heuristics. A
+#'   string means use the specified path as the cache file.
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by non-OAuth2 credential
 #'   functions. Not used.
@@ -68,7 +78,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
     stopifnot(
-      is.null(email) || is_string(email),
+      is.null(email) || is.na(email) || is_string(email),
       is.oauth_app(app),
       is.list(params)
     )
