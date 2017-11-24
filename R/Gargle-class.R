@@ -14,8 +14,8 @@
 #'   does not appear on the consent screen.
 #' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
 #'   Otherwise, provide a URL to the user and prompt for a validation code.
-#'   Defaults to the option "gargle.oob_default" default or `TRUE` if httpuv is
-#'   not installed.
+#'   Defaults to the option "gargle.oob_default" or `TRUE` if httpuv is not
+#'   installed.
 #' @param cache A logical value or a string. `TRUE` means to cache using the
 #'   default user-level cache file, `~/.R/gargle/gargle-oauth`, `FALSE` means
 #'   don't cache, and `NA` means to guess using some sensible heuristics. A
@@ -23,8 +23,7 @@
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by non-OAuth2 credential
 #'   functions. Not used.
-#' @return An object of class [Gargle2.0], either new or loaded from the
-#'   cache.
+#' @return An object of class [Gargle2.0], either new or loaded from the cache.
 #' @export
 gargle2.0_token <- function(email = NULL,
                             app = gargle_app(),

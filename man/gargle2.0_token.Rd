@@ -34,8 +34,8 @@ access token.}
 
 \item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
 Otherwise, provide a URL to the user and prompt for a validation code.
-Defaults to the option "gargle.oob_default" default or \code{TRUE} if httpuv is
-not installed.}
+Defaults to the option "gargle.oob_default" or \code{TRUE} if httpuv is not
+installed.}
 
 \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
@@ -49,8 +49,7 @@ string means use the specified path as the cache file.}
 functions. Not used.}
 }
 \value{
-An object of class \link{Gargle2.0}, either new or loaded from the
-cache.
+An object of class \link{Gargle2.0}, either new or loaded from the cache.
 }
 \description{
 Constructor function for objects of class \link{Gargle2.0}.

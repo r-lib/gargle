@@ -21,8 +21,8 @@ argument. Use \code{NA} to match nothing and force the OAuth dance in the
 browser.}
   \item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
 Otherwise, provide a URL to the user and prompt for a validation code.
-Defaults to the option "gargle.oob_default" default or \code{TRUE} if httpuv is
-not installed.}
+Defaults to the option "gargle.oob_default" or \code{TRUE} if httpuv is not
+installed.}
   \item{cache}{A logical value or a string. \code{TRUE} means to cache using the
 default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
 don't cache, and \code{NA} means to guess using some sensible heuristics. A
@@ -37,20 +37,21 @@ token generation.}
 }
 \description{
 Consults the token cache for a suitable OAuth token and, if
-unsuccessful, gets a token via the browser flow. A cached token is deemed
-"suitable" if it's compatible with the user's request in this sense:
+unsuccessful, gets a token via the browser flow. A cached token is suitable
+if it's compatible with the user's request in this sense:
 \itemize{
-\item Same OAuth app.
+\item OAuth app must be same.
 \item Scopes. This is a check for inclusion, not exact equality.
-\item (Optionally) Email.
+\item Email, if provided, must be same.
 }
 
 If multiple suitable tokens are found, user is presented with a
 chooser. Therefore, in a non-interactive setting, it's important to
 uniquely identify the token, by providing the \code{"email"}, or by making sure
-only one suitable token will be found. Non-interactive use also suggests it
-might be time to use a \link[=credentials_service_account]{service account
-token}.
+only one suitable token will be found in the cache. Non-interactive use
+also suggests it might be time to use a \link[=credentials_service_account]{service account
+token}. This is a wrapper around
+\code{\link[=gargle2.0_token]{gargle2.0_token()}}.
 }
 \examples{
 \dontrun{
