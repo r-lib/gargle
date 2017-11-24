@@ -119,9 +119,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat_line("---")
   },
   hash = function() {
-    ## TODO(jennybc) I no longer include endpoint here, ok?
-    ## why not? because always google for us
-    ## why worry? because differs from httr default behavior
     msg <- rhash(list(self$app, self$params$scope))
     paste(msg, self$email, sep = "_")
   },
