@@ -23,6 +23,7 @@ Depends:
 Imports: 
     backports (>= 1.1.0),
     debugme,
+    glue (>= 1.1.0),
     httr,
     jsonlite,
     magrittr
