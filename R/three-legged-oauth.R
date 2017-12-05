@@ -7,13 +7,12 @@
 #'   * Scopes. This is a check for inclusion, not exact equality.
 #'   * Email, if provided, must be same.
 #'
-#' @description If multiple suitable tokens are found, user is presented with a
-#'   chooser. Therefore, in a non-interactive setting, it's important to
-#'   uniquely identify the token, by providing the `"email"`, or by making sure
-#'   only one suitable token will be found in the cache. Non-interactive use
-#'   also suggests it might be time to use a [service account
-#'   token][credentials_service_account]. This is a wrapper around
-#'   [gargle2.0_token()].
+#' If multiple suitable tokens are found, user is presented with a chooser.
+#' Therefore, in a non-interactive setting, it's important to uniquely identify
+#' the token, by providing the `"email"`, or by making sure only one suitable
+#' token will be found in the cache. Non-interactive use also suggests it might
+#' be time to use a [service account token][credentials_service_account]. This
+#' is a wrapper around [gargle2.0_token()].
 #'
 #' @param scopes A character vector of scopes to request.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].

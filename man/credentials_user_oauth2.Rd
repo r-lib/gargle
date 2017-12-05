@@ -45,13 +45,12 @@ if it's compatible with the user's request in this sense:
 \item Email, if provided, must be same.
 }
 
-If multiple suitable tokens are found, user is presented with a
-chooser. Therefore, in a non-interactive setting, it's important to
-uniquely identify the token, by providing the \code{"email"}, or by making sure
-only one suitable token will be found in the cache. Non-interactive use
-also suggests it might be time to use a \link[=credentials_service_account]{service account
-token}. This is a wrapper around
-\code{\link[=gargle2.0_token]{gargle2.0_token()}}.
+If multiple suitable tokens are found, user is presented with a chooser.
+Therefore, in a non-interactive setting, it's important to uniquely identify
+the token, by providing the \code{"email"}, or by making sure only one suitable
+token will be found in the cache. Non-interactive use also suggests it might
+be time to use a \link[=credentials_service_account]{service account token}. This
+is a wrapper around \code{\link[=gargle2.0_token]{gargle2.0_token()}}.
 }
 \examples{
 \dontrun{
