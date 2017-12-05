@@ -185,12 +185,7 @@ cache_load <- function(cache_path) {
 }
 
 add_email_scope <- function(scope = NULL) {
-  scope <- scope %||% character()
-  if (any(scope == "email")) {
-    scope
-  } else {
-    c(scope, "email")
-  }
+  scope <- union(scope %||% character(), "email")
 }
 
 normalize_scopes <- function(x) {
