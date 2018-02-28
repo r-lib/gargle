@@ -7,3 +7,4 @@
 ^codecov\.yml$
 ^gargle.*json$
 ^.*\.key$
+^LICENSE\.md$
