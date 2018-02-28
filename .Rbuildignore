@@ -8,3 +8,4 @@
 ^gargle.*json$
 ^.*\.key$
 ^LICENSE\.md$
+^\.github$
