@@ -1,24 +1,16 @@
-language: r
-cache: packages
-dist: trusty
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
 sudo: false
+cache: packages
 
-matrix:
-  include:
-    - os: linux
-      r: oldrel
-    - os: linux
-      env: R_CODECOV=true
-      r: release
-    - os: linux
-      r: devel
+r:
+- 3.1
+- 3.2
+- oldrel
+- release
+- devel
 
-warnings_are_errors: true
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
-
+# Only report coverage for the release version
 after_success:
-  - if [[ "${R_CODECOV}" ]]; then R -e 'covr::codecov()'; fi
+  - test $TRAVIS_R_VERSION_STRING = 'release' && Rscript -e 'covr::codecov()'
