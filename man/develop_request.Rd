@@ -130,4 +130,7 @@ req <- build_request(
 req
 }
 }
+\seealso{
+Other requests and responses: \code{\link{make_request}}
+}
 \concept{requests and responses}
