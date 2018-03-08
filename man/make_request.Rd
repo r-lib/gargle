@@ -4,14 +4,16 @@
 \alias{make_request}
 \title{Make a Google API request}
 \usage{
-make_request(x, ..., ua = gargle_ua())
+make_request(x, ..., user_agent = gargle_user_agent())
 }
 \arguments{
 \item{x}{List. Holding the components for an HTTP request, presumably created
-with \code{\link[=generate_request]{generate_request()}} or \code{\link[=build_request]{build_request()}}. Should contain the
-\code{method} and \code{url}. If present, \code{body} and \code{token} are used.}
+with \code{\link[=develop_request]{develop_request()}} or \code{\link[=build_request]{build_request()}}. Must contain the a \code{method}
+and \code{url}. If present, \code{body} and \code{token} are used.}
 
 \item{...}{Optional arguments passed through to the HTTP method.}
+
+\item{user_agent}{A user agent string, prepared by \code{\link[httr:user_agent]{httr::user_agent()}}.}
 }
 \value{
 Object of class \code{response} from \link{httr}.
@@ -20,7 +22,7 @@ Object of class \code{response} from \link{httr}.
 Intended primarily for internal use in client packages that provide
 high-level wrappers for users. \code{make_request()} does very little: calls an
 HTTP method, only adding a user agent. Typically the input is created with
-\code{\link[=build_request]{build_request()}} and the output is processed with \code{\link[=process_response]{process_response()}}.
+\code{\link[=build_request]{build_request()}} and the output is processed with \code{process_response()}.
 }
 \seealso{
 Other requests and responses: \code{\link{develop_request}}
