@@ -12,6 +12,8 @@ commapse <- function(...) paste0(..., collapse = ", ")
 
 cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
 
+bt <- function(x) encodeString(x, quote = "`")
+
 stop_glue <- function(..., .sep = "", .envir = parent.frame(),
                       call. = FALSE, .domain = NULL) {
   stop(

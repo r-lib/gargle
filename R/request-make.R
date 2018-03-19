@@ -18,13 +18,16 @@
 #' @export
 #' @family requests and responses
 request_make <- function(x, ..., user_agent = gargle_user_agent()) {
-  method <- list(
-    "GET" = httr::GET,
-    "POST" = httr::POST,
-    "PATCH" = httr::PATCH,
-    "PUT" = httr::PUT,
-    "DELETE" = httr::DELETE
-  )[[x$method]]
+  stopifnot(is.character(x$method))
+  method <- switch(
+    x$method,
+    GET = httr::GET,
+    POST = httr::POST,
+    PATCH = httr::PATCH,
+    PUT = httr::PUT,
+    DELETE = httr::DELETE,
+    stop_glue("Not a recognized HTTP method: {bt(m)}", m = x$method)
+  )
   method(
     url = x$url,
     body = x$body,
