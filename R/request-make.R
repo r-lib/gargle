@@ -1,12 +1,12 @@
 #' Make a Google API request
 #'
 #' Intended primarily for internal use in client packages that provide
-#' high-level wrappers for users. `make_request()` does very little: calls an
+#' high-level wrappers for users. `request_make()` does very little: calls an
 #' HTTP method, only adding a user agent. Typically the input is created with
-#' [build_request()] and the output is processed with `process_response()`.
+#' [request_build()] and the output is processed with `process_response()`.
 #'
 #' @param x List. Holding the components for an HTTP request, presumably created
-#'   with [develop_request()] or [build_request()]. Must contain the a `method`
+#'   with [request_develop()] or [request_build()]. Must contain the a `method`
 #'   and `url`. If present, `body` and `token` are used.
 #' @param user_agent A user agent string, prepared by [httr::user_agent()].
 #' @param ... Optional arguments passed through to the HTTP method.
@@ -14,7 +14,7 @@
 #' @return Object of class `response` from [httr].
 #' @export
 #' @family requests and responses
-make_request <- function(x, ..., user_agent = gargle_user_agent()) {
+request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   method <- list(
     "GET" = httr::GET,
     "POST" = httr::POST,

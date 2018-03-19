@@ -4,16 +4,17 @@
 #' high-level wrappers for users.
 #'
 #' @param endpoint List of information about the target endpoint. Presumably
-#' prepared from the [Discovery
-#' Document](https://developers.google.com/discovery/v1/getting_started#background-resources) for the target API.
+#'   prepared from the [Discovery
+#'   Document](https://developers.google.com/discovery/v1/getting_started#background-resources)
+#'   for the target API.
 #' @param params Named list. Values destined for URL substitution, the query,
-#' or, for `develop_request()` only, the body.
+#'   or, for `request_develop()` only, the body.
 #' @param base_url Character.
 #' @param method Character. An HTTP verb, such as `GET` or `POST`.
 #' @param path Character. Path to the resource, not including API's `base_url`.
-#' Examples: `drive/v3/about` or `drive/v3/files/{fileId}`. If `path` includes
-#' variables inside curly brackets, these are substituted using named parameters
-#' found in `params` by `build_request()`.
+#'   Examples: `drive/v3/about` or `drive/v3/files/{fileId}`. If `path` includes
+#'   variables inside curly brackets, these are substituted using named
+#'   parameters found in `params` by `request_build()`.
 #' @param body List. Values to send in the API request body.
 #' @param key API key. Needed for requests that don't contain a token. For more,
 #'   see Google's document [Credentials, access, security, and
@@ -23,7 +24,7 @@
 #' @param token Token, ready for inclusion in a request, i.e. prepared with
 #'   [httr::config()].
 #'
-#' @section develop_request():
+#' @section request_develop():
 #'
 #' Combines user input (`params`) with information about an API endpoint.
 #' `endpoint` should contain these components:
@@ -35,13 +36,13 @@
 #'      parameters. In the return value, body parameters are separated from
 #'      those destined for path substitution or the query.
 #'
-#' The return value is typically used as input to `build_request()`.
+#' The return value is typically used as input to `request_build()`.
 #'
-#' @section build_request():
+#' @section request_build():
 #'
 #' Builds a request, in a purely mechanical sense. This function does nothing
 #' specific to any particular Google API or endpoint.
-#'   - Use with the output of `develop_request()` or with hand-crafted input.
+#'   - Use with the output of `request_develop()` or with hand-crafted input.
 #'   - `params` are used for variable substitution in `path`. Unused `params`
 #'     become the query.
 #'   - Adds an API key to the query iff `token = NULL` and removes the API key
@@ -54,15 +55,15 @@
 #' Document](https://www.googleapis.com/discovery/v1/apis/drive/v3/rest),
 #' exposed via `googledrive::drive_endpoints()`. An element from such a list is
 #' the expected input for `endpoint`. `googledrive::generate_request()` is a
-#' wrapper around `develop_request()` and `build_request()` that inserts a
+#' wrapper around `request_develop()` and `request_build()` that inserts a
 #' googledrive-managed API key and some logic about Team Drives. All user-facing
 #' functions use `googledrive::generate_request()` under the hood.
 #'
 #' @return
-#' `develop_request()`: `list()` with components `method`, `path`, `params`,
+#' `request_develop()`: `list()` with components `method`, `path`, `params`,
 #' `body`, and `base_url`.
 #'
-#' `build_request()`: `list()` with components `method`, `path`
+#' `request_build()`: `list()` with components `method`, `path`
 #' (post-substitution), `query` (the input `params` not used in URL
 #' substitution), `body`, `token`, `url` (the full URL, post-substitution,
 #' including the query).
@@ -73,7 +74,7 @@
 #' \dontrun{
 #' ## Example with a prepared endpoint
 #' ept <- googledrive::drive_endpoints("drive.files.update")[[1]]
-#' req <- develop_request(
+#' req <- request_develop(
 #'   ept,
 #'   params = list(
 #'     fileId = "abc",
@@ -83,7 +84,7 @@
 #' )
 #' req
 #'
-#' req <- build_request(
+#' req <- request_build(
 #'   method = req$method,
 #'   path = req$path,
 #'   params = req$params,
@@ -95,7 +96,7 @@
 #' ## Example with no previous knowledge of the endpoint
 #' ## List a file's comments
 #' ## https://developers.google.com/drive/v3/reference/comments/list
-#' req <- build_request(
+#' req <- request_build(
 #'   method = "GET",
 #'   path = "drive/v3/files/{fileId}/comments",
 #'   params = list(
@@ -106,7 +107,7 @@
 #' )
 #' req
 #' }
-develop_request <- function(endpoint,
+request_develop <- function(endpoint,
                             params = list(),
                             base_url = "https://www.googleapis.com") {
   check_params(params, endpoint$parameters)
@@ -121,9 +122,9 @@ develop_request <- function(endpoint,
   )
 }
 
-#' @rdname develop_request
+#' @rdname request_develop
 #' @export
-build_request <- function(method = "GET",
+request_build <- function(method = "GET",
                           path = "",
                           params = list(),
                           body = list(),
