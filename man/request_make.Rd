@@ -7,13 +7,16 @@
 request_make(x, ..., user_agent = gargle_user_agent())
 }
 \arguments{
-\item{x}{List. Holding the components for an HTTP request, presumably created
-with \code{\link[=request_develop]{request_develop()}} or \code{\link[=request_build]{request_build()}}. Must contain the a \code{method}
-and \code{url}. If present, \code{body} and \code{token} are used.}
+\item{x}{List. Holds the components for an HTTP request, presumably created
+with \code{\link[=request_develop]{request_develop()}} or \code{\link[=request_build]{request_build()}}. Must contain a \code{method} and
+\code{url}. If present, \code{body} and \code{token} are used.}
 
 \item{...}{Optional arguments passed through to the HTTP method.}
 
-\item{user_agent}{A user agent string, prepared by \code{\link[httr:user_agent]{httr::user_agent()}}.}
+\item{user_agent}{A user agent string, prepared by \code{\link[httr:user_agent]{httr::user_agent()}}. When
+in doubt, a client package should have an internal function that extends
+\code{gargle_user_agent()} by prepending its return value with the client
+package's name and version.}
 }
 \value{
 Object of class \code{response} from \link{httr}.
