@@ -24,7 +24,7 @@
 #' @param token Token, ready for inclusion in a request, i.e. prepared with
 #'   [httr::config()].
 #'
-#' @section request_develop():
+#' @section `request_develop()`:
 #'
 #' Combines user input (`params`) with information about an API endpoint.
 #' `endpoint` should contain these components:
@@ -38,7 +38,7 @@
 #'
 #' The return value is typically used as input to `request_build()`.
 #'
-#' @section request_build():
+#' @section `request_build()`:
 #'
 #' Builds a request, in a purely mechanical sense. This function does nothing
 #' specific to any particular Google API or endpoint.

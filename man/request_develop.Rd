@@ -51,7 +51,7 @@ including the query).
 Intended primarily for internal use in client packages that provide
 high-level wrappers for users.
 }
-\section{request_develop()}{
+\section{\code{request_develop()}}{
 
 
 Combines user input (\code{params}) with information about an API endpoint.
@@ -69,7 +69,7 @@ those destined for path substitution or the query.
 The return value is typically used as input to \code{request_build()}.
 }
 
-\section{request_build()}{
+\section{\code{request_build()}}{
 
 
 Builds a request, in a purely mechanical sense. This function does nothing
