@@ -152,11 +152,7 @@ request_build <- function(method = "GET",
   out$url <- httr::modify_url(
     url = base_url,
     path = out$path,
-    ## prevent a trailing `?` or `?=` when the query is trivial, e.g. list() or
-    ## contains a single element which is NULL
-    ## https://github.com/r-lib/httr/issues/451
-    ## could simply use out$query this if required httr >= 1.3.1
-    query = if (length(unlist(out$query)) == 0) NULL else out$query
+    query = out$query
   )
   out
 }
