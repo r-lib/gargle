@@ -143,16 +143,13 @@ request_build <- function(method = "GET",
 
   out <- list(
     method = method,
-    path = glue::glue_data(params$matched, path),
-    query = params$unmatched,
+    url = httr::modify_url(
+      url = base_url,
+      path = glue::glue_data(params$matched, path),
+      query = params$unmatched
+    ),
     body = body,
     token = token
-  )
-
-  out$url <- httr::modify_url(
-    url = base_url,
-    path = out$path,
-    query = out$query
   )
   out
 }
