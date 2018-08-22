@@ -8,8 +8,9 @@
 request_develop(endpoint, params = list(),
   base_url = "https://www.googleapis.com")
 
-request_build(method = "GET", path = "", params = list(), body = list(),
-  token = NULL, key = NULL, base_url = "https://www.googleapis.com")
+request_build(method = "GET", path = "", params = list(),
+  body = list(), token = NULL, key = NULL,
+  base_url = "https://www.googleapis.com")
 }
 \arguments{
 \item{endpoint}{List of information about the target endpoint. Presumably
