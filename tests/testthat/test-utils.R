@@ -21,7 +21,12 @@ test_that("add_email_scope() works", {
 })
 
 test_that("rhash() produces same hash across platforms and R versions", {
- expect_identical(rhash(iris), "d3c5d071001b61a9f6131d3004fd0988")
+  iris_hash <- if (getRversion() < 3.5) {
+    "ff575c261c949d073b2895b05d1097c3"
+  } else {
+    "d3c5d071001b61a9f6131d3004fd0988"
+  }
+  expect_identical(rhash(iris), iris_hash)
 })
 
 test_that("base_scope() extracts the last scope part", {
