@@ -20,7 +20,8 @@ test_that("add_email_scope() works", {
   )
 })
 
-test_that("rhash() produces same hash across platforms and R versions", {
+test_that("rhash() produces same hash across platforms within R version", {
+  skip_if(getRversion() > 3.5)
   iris_hash <- if (getRversion() < 3.5) {
     "ff575c261c949d073b2895b05d1097c3"
   } else {
