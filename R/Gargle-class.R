@@ -110,12 +110,12 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     scopes <- gsub("/$", "", gsub("(.*)/(.+$)", "...\\2", self$params$scope))
     cat(
       "          <scopes> ",
-      paste0(scopes, collapse = ", "),
+      commapse(scopes),
       "\n", sep = ""
     )
     cat(
       "     <credentials> ",
-      paste0(names(self$credentials), collapse = ", "),
+      commapse(names(self$credentials)),
       "\n", sep = ""
     )
     cat(
