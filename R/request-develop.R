@@ -145,7 +145,7 @@ request_build <- function(method = "GET",
     method = method,
     url = httr::modify_url(
       url = base_url,
-      path = glue::glue_data(params$matched, path),
+      path = glue_data(params$matched, path),
       query = params$unmatched
     ),
     body = body,
