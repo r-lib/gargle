@@ -82,12 +82,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is.list(params)
     )
 
-
-    self$email <- email
-    self$app <- app
-    params$scope <- normalize_scopes(add_email_scope(params$scope))
-    self$params <- params
     self$endpoint   <- gargle_outh_endpoint()
+    self$email      <- email
+    self$app        <- app
+    params$scope    <- normalize_scopes(add_email_scope(params$scope))
+    self$params     <- params
     self$cache_path <- cache_establish(cache_path)
 
     if (!is.null(credentials)) {
@@ -132,11 +131,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
-    self$app <- cached$app
-    self$email <- cached$email
     self$endpoint    <- cached$endpoint
+    self$email       <- cached$email
+    self$app         <- cached$app
     self$credentials <- cached$credentials
-    self$params <- cached$params
+    self$params      <- cached$params
     TRUE
   }
 ))
