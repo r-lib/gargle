@@ -1,13 +1,14 @@
 ## this file has its origins in oauth-cache.R in httr
 ## nothing there is exported, so copied over, then it evolved
 
-cache_gargle <- function() {
-  "~/.R/gargle/gargle-oauth"
-}
+# cache --------------------------------------------------------------
 
+gargle_default_oauth_cache_path <- "~/.R/gargle/gargle-oauth"
+
+## this is the cache setup interface for the Gargle2.0 class
 cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (length(cache) != 1) {
-    stop("cache should be length 1 vector", call. = FALSE)
+    stop("Cache should be length 1 vector", call. = FALSE)
   }
   if (!is.logical(cache) && !is.character(cache)) {
     stop("Cache must either be logical or string (file path)")
@@ -16,7 +17,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   # If NA, get permission to use cache file and store results of that check in
   # global option.
   if (is.na(cache)) {
-    cache <- cache_available()
+    cache <- cache_available(gargle_default_oauth_cache_path)
     options("gargle.oauth_cache" = cache)
   }
   ## cache is now TRUE, FALSE or path
@@ -24,20 +25,21 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (isFALSE(cache)) return()
 
   if (isTRUE(cache)) {
-    cache <- cache_gargle()
+    cache <- gargle_default_oauth_cache_path
   }
 
   if (!file.exists(cache)) {
     cache_create(cache)
   }
+
   return(cache)
 }
 
-cache_available <- function(path = cache_gargle()) {
+cache_available <- function(path) {
   file.exists(path) || cache_allowed(path)
 }
 
-cache_allowed <- function(path = cache_gargle()) {
+cache_allowed <- function(path) {
   if (!interactive()) return(FALSE)
 
   cat("Use a local file ('", path, "'), to cache OAuth access credentials ",
@@ -45,7 +47,7 @@ cache_allowed <- function(path = cache_gargle()) {
   utils::menu(c("Yes", "No")) == 1
 }
 
-cache_create <- function(path = cache_gargle()) {
+cache_create <- function(path) {
 
   cache_parent <- dirname(path)
   if (!dir.exists(cache_parent)) {
@@ -80,108 +82,125 @@ cache_create <- function(path = cache_gargle()) {
   TRUE
 }
 
-token_cache <- function(token) {
+cache_load <- function(path) {
+  if (!file.exists(path) || file.size(path) == 0) {
+    list()
+  } else {
+    ## TODO(jennybc) check that names are the long hash
+    readRDS(path)
+  }
+}
+
+## useful to jennybc during development
+cache_show <- function(path = NULL) {
+  path <- path %||% getOption("gargle.oauth_cache")
+  if (is.na(path)) {
+    path <- gargle_default_oauth_cache_path
+  }
+  if (!file.exists(path)) {
+    message("No cache found.")
+    return()
+  }
+  if (file.size(path) == 0) {
+    message("Cache is empty.")
+    return(list())
+  }
+  cache_load(path)
+}
+
+# retrieve and insert tokens from cache -----------------------------------
+
+## these two functions provide the "current token <--> token cache" interface
+## for the Gargle2.0 class
+token_from_cache <- function(candidate) {
+  "!DEBUG in token_from_cache"
+  if (is.null(candidate$cache_path)) return()
+
+  existing <- cache_load(candidate$cache_path)
+  if(length(existing) == 0) return()
+
+  "!DEBUG in token_from_cache, cache exists and is nonempty"
+  token_match(candidate, existing)
+}
+
+token_into_cache <- function(candidate) {
   "!DEBUG token_cache"
-  if (is.null(token$cache_path)) return()
+  if (is.null(candidate$cache_path)) return()
 
-  tokens <- cache_load(token$cache_path)
-  tokens <- token_upsert(tokens, token)
-  saveRDS(tokens, token$cache_path)
+  existing <- cache_load(candidate$cache_path)
+  existing <- token_upsert(candidate, existing)
+  saveRDS(existing, candidate$cache_path)
 }
 
-token_upsert <- function(tokens, token) {
-  "!DEBUG token_upsert"
-  if (length(tokens) == 0 || nrow(tokens) == 0) return(entibble(token))
+# tokens in relation to each other ----------------------------------------
 
-  m <- token_hash_match(tokens, token)
+## these functions have no knowledge of how tokens are stored on disk
+## they work with a candidate token and a list of existing tokens
+token_match <- function(candidate, existing) {
+  "!DEBUG in token_match"
+  m <- token_hash_match(candidate, existing)
   if (!is.na(m)) {
-    tokens <- tokens[-m, ]
+    "!DEBUG match found on full hash"
+    return(existing[[m]])
   }
-  tokens[nrow(tokens) + 1, ] <- entibble(token)
-  tokens
-}
+  "!DEBUG no match on full hash"
 
-entibble <- function(token) {
-  "!DEBUG entibble"
-  tibble::tibble(
-    email = token$email,
-    app_hash = rhash_app(token$app),
-    scopes = list(token$params$scope),
-    token = list(token)
-  )
-}
-
-token_from_cache <- function(token) {
-  if (is.null(token$cache_path)) return()
-  tokens <- cache_load(token$cache_path)
-  if(length(tokens) == 0 || nrow(tokens) == 0) return()
-
-  token_match(tokens, token)
-}
-
-token_match <- function(existing, candidate) {
-  m <- token_hash_match(existing, candidate)
-  if (!is.na(m)) {
-    return(existing$token[[m]])
+  if (!is.null(candidate$email)) {
+    "!DEBUG email specified, so can't match on short hash"
+    return()
   }
 
-  m <- token_multi_match(existing, candidate)
-  existing <- existing[m, ]
+  m <- token_hash_short_match(candidate, existing)
 
-  if (nrow(existing) == 0) return()
-  if (nrow(existing) == 1) return(existing$token[[1]])
+  if (length(m) == 0 || is.na(m)) {
+    "!DEBUG no match on short hash"
+    return()
+  }
+
+  if (length(existing) == 1) {
+    "!DEBUG unique match on short hash"
+    return(existing[[m]])
+  }
+
   if (!interactive() || is_testing()) {
-    stop("Multiple cached tokens exist. Unclear which to use.")
+    stop("Multiple cached tokens exist. Unclear which to use.", call. = FALSE)
   }
 
-  cat("Multiple cached tokens exist. Pick the one you want to use.\n")
-  cat("Or enter '0' to obtain a new token.")
-  this_one <- utils::menu(existing$email)
+  existing <- existing[m]
+  emails <- vapply(existing, function(x) x$email, character(1))
+  cat("Multiple cached tokens are available.\n")
+  cat("Pick the Google account you wish to use or enter '0' to obtain a new token.")
+  this_one <- utils::menu(emails)
 
   if (this_one == 0) return()
 
-  existing$token[[this_one]]
+  existing[[this_one]]
 }
 
-# find location of exact match based on value returned by the $hash() method
-token_hash_match <- function(existing, candidate) {
-  match(
-    candidate$hash(),
-    vapply(existing$token, function(x) x$hash(), character(1))
-  )
+token_hash_match <- function(candidate, existing) {
+  "!DEBUG candidate hash = `candidate$hash()`"
+  "!DEBUG existing hashes = `names(existing)`"
+  match(candidate$hash(), names(existing))
 }
 
-# find locations of existing tokens that match candidate wrt
-#   * email, iff candidate specifies email (otherwise, ignore email)
-#   * OAuth app
-#   * scopes, in this sense: candidate scopes are included in scopes of
-#     existing token (which may, in fact, have more)
-token_multi_match <- function(existing, candidate) {
-  m_email <- if (is.null(candidate$email)) {
-    TRUE
-  } else {
-    existing$email == candidate$email
+token_hash_short_match <- function(candidate, existing) {
+  "!DEBUG candidate short hash = `candidate$hash_short()`"
+  "!DEBUG existing hashes = `names(existing)`"
+  matches <- mask_email(names(existing)) %in% candidate$hash_short()
+  if (all(!matches)) NA else which(matches)
+}
+
+token_upsert <- function(candidate, existing) {
+  "!DEBUG token_upsert"
+  m <- which(names(existing) == candidate$hash())
+  if (length(m) > 0) {
+    existing[[m]] <- NULL
   }
-  m_app <- existing$app_hash == rhash_app(candidate$app)
-  m_scopes <- scope_ok(existing$scopes, candidate$params$scope)
-  which(m_email & m_app & m_scopes)
-}
 
-## TODO(jennybc): until we expose inspection, I don't see how this is useful
-# remove_cached_token <- function(token) {
-#   if (is.null(token$cache_path)) return()
-#
-#   tokens <- cache_load(token$cache_path)
-#   tokens[[token$hash()]] <- NULL
-#   saveRDS(tokens, token$cache_path)
-# }
-
-cache_load <- function(cache_path) {
-  if (!file.exists(cache_path) || file.size(cache_path) == 0) {
-    list()
-  } else {
-    readRDS(cache_path)
-  }
+  m <- length(existing) + 1
+  existing[[m]] <- candidate
+  names(existing)[[m]] <- candidate$hash()
+  existing
 }
 
 add_email_scope <- function(scope = NULL) {
@@ -192,15 +211,8 @@ normalize_scopes <- function(x) {
   stats::setNames(sort(unique(x)), NULL)
 }
 
-scope_ok <- function(have, need) {
-  vapply(have, function(x) all(need %in% x), logical(1))
-}
-
-rhash_app <- function(app) {
-  stopifnot(is.oauth_app(app))
-  paste(
-    app$appname,
-    rhash(app[c("secret", "key", "redirect_uri")]),
-    sep = "_"
-  )
-}
+## for this token hash:
+## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
+## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
+mask_email    <- function(x) sub("^([^_]*)_.*", "\\1", x)
+extract_email <- function(x) sub(".*_([^-]*)$", "\\1", x)

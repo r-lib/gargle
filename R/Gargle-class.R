@@ -90,10 +90,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$cache_path <- cache_establish(cache_path)
 
     if (!is.null(credentials)) {
-      "!DEBUG credentials provided directly"
       # Use credentials created elsewhere - usually for tests
+      "!DEBUG credentials provided directly"
       self$credentials <- credentials
-      self$email <- self$email %||% NA_character_
+      #self$email <- self$email %||% "EMAIL"
       return(self$cache())
     }
 
@@ -102,9 +102,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       self
     } else {
       "!DEBUG no matching token in the cache"
-      self$init_credentials()
-      self$email <- get_email(self) %||% NA_character_
-      self$cache()
+      "!DEBUG returning current self"
+      self
+      # self$init_credentials()
+      # self$email <- get_email(self) %||% NA_character_
+      # self$cache()
     }
   },
   print = function(...) {
@@ -116,21 +118,25 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat_line("     <credentials> ", commapse(names(self$credentials)))
     cat_line("---")
   },
+  hash_short = function() {
+    rhash(list(self$endpoint, self$app, self$params$scope))
+  },
   hash = function() {
-    msg <- rhash(list(self$endpoint, self$app, self$params$scope))
-    paste(msg, self$email, sep = "_")
+    paste(self$hash_short(), self$email, sep = "_")
   },
   cache = function() {
-    "!DEBUG cache a token"
-    token_cache(self)
+    "!DEBUG put token into cache"
+    token_into_cache(self)
     self
   },
   load_from_cache = function() {
+    "!DEBUG load token from cache"
     if (is.null(self$cache_path)) return(FALSE)
 
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
+    "!DEBUG match found in the cache"
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
     self$app         <- cached$app
