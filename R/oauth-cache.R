@@ -203,14 +203,6 @@ token_upsert <- function(candidate, existing) {
   existing
 }
 
-add_email_scope <- function(scope = NULL) {
-  scope <- union(scope %||% character(), "email")
-}
-
-normalize_scopes <- function(x) {
-  stats::setNames(sort(unique(x)), NULL)
-}
-
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^

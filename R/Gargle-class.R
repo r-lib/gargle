@@ -145,3 +145,11 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     TRUE
   }
 ))
+
+normalize_scopes <- function(x) {
+  stats::setNames(sort(unique(x)), NULL)
+}
+
+add_email_scope <- function(scope = NULL) {
+  scope <- union(scope %||% character(), "email")
+}
