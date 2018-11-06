@@ -1,5 +1,55 @@
 context("test-cache.R")
 
+# cache_establish ---------------------------------------------------------
+
+test_that("cache_establish() insists on sensible input", {
+  expect_error(
+    cache_establish(letters[1:2]),
+    "should be length 1"
+  )
+  expect_error(
+    cache_establish(1),
+    "logical or string"
+  )
+  expect_error(
+    cache_establish(list(1)),
+    "logical or string"
+  )
+})
+
+test_that("`cache = TRUE` defers to default file path", {
+  expect_identical(cache_establish(TRUE), gargle_default_oauth_cache_path)
+})
+
+test_that("`cache = FALSE` does nothing", {
+  expect_null(cache_establish(FALSE))
+})
+
+test_that("`cache = <filepath>` creates cache file, recursively", {
+  tmpfile <- file.path(tempfile(), "foo", "bar")
+  on.exit(unlink(tmpfile, recursive = TRUE))
+
+  cache_establish(tmpfile)
+  expect_true(file.exists(tmpfile))
+})
+
+test_that("`cache = <filepath>` add new cache file to relevant 'ignores'", {
+  tmpproj <- tempfile()
+  on.exit(unlink(tmpproj, recursive = TRUE))
+  dir.create(tmpproj)
+  writeLines("", file.path(tmpproj, "DESCRIPTION"))
+  writeLines("", file.path(tmpproj, ".gitignore"))
+  cache_establish(file.path(tmpproj, "oauth-cache"))
+  expect_match(readLines(file.path(tmpproj, ".gitignore")), "oauth-cache$")
+  expect_match(
+    readLines(file.path(tmpproj, ".Rbuildignore")),
+    "oauth-cache$",
+    fixed = TRUE
+  )
+})
+
+# token handling ----------------------------------------------------------
+
 test_that("token_upsert() adds novel tokens", {
   fauxen_a <- gargle2.0_token(
     email = "a",
