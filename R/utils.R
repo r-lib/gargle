@@ -90,14 +90,6 @@ add_line <- function(path, line, quiet = FALSE) {
   TRUE
 }
 
-rhash <- function(obj) {
-  # first 14 bytes are serialization header
-  # skip them to allow hash comparison "across platforms and some R versions"
-  # see digest::digest() help and source for more background
-  msg <- serialize(obj, connection = NULL, ascii = FALSE)[-(1:14)]
-  paste(openssl::md5(msg), collapse = "")
-}
-
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }

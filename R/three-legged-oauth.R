@@ -36,6 +36,7 @@ credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
                                     ...) {
   "!DEBUG trying credentials_user_oauth2"
+  ## TODO(jennyb): hadley says "Just put in args?" re: this handling of scopes
   if (missing(scopes)) {
     scopes <- "email"
   }

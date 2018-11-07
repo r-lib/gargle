@@ -115,11 +115,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat_line("     <credentials> ", commapse(names(self$credentials)))
     cat_line("---")
   },
-  hash_short = function() {
-    rhash(list(self$endpoint, self$app, self$params$scope))
-  },
   hash = function() {
-    paste(self$hash_short(), self$email, sep = "_")
+    paste(super$hash(), self$email, sep = "_")
   },
   cache = function() {
     "!DEBUG put token into cache"

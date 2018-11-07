@@ -212,9 +212,9 @@ token_hash_match <- function(candidate, existing) {
 }
 
 token_hash_short_match <- function(candidate, existing) {
-  "!DEBUG candidate short hash = `candidate$hash_short()`"
+  "!DEBUG candidate short hash = `mask_email(candidate$hash())`"
   "!DEBUG existing short hashes = `mask_email(names(existing))`"
-  match2(candidate$hash_short(), mask_email(names(existing)))
+  match2(mask_email(candidate$hash()), mask_email(names(existing)))
 }
 
 token_upsert <- function(candidate, existing) {
