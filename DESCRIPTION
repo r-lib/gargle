@@ -40,8 +40,6 @@ Suggests:
     covr,
     testthat,
     withr
-Remotes: 
-    hadley/testthat
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
