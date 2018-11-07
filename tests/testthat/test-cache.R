@@ -1,6 +1,6 @@
 context("test-cache.R")
 
-# cache_establish ---------------------------------------------------------
+# cache_establish (interface) ------------------------------------------------
 
 test_that("cache_establish() insists on sensible input", {
   expect_error(
@@ -48,38 +48,70 @@ test_that("`cache = <filepath>` add new cache file to relevant 'ignores'", {
   )
 })
 
-# token handling ----------------------------------------------------------
+# token into and out of cache ---------------------------------------------
+test_that("token_from_cache() returns NULL when caching turned off", {
+  fauxen <- gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = FALSE
+  )
+  expect_null(token_from_cache(fauxen) )
+})
+
+test_that("token_into_cache(), token_from_cache() roundtrip", {
+  cache_file <- tempfile()
+  on.exit(file.remove(cache_file))
+  file.create(cache_file)
+
+  ## this calls token_into_cache()
+  token_in <- gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = cache_file
+  )
+
+  ## this calls token_from_cache()
+  token_out <- gargle2.0_token(
+    email = "a@example.org",
+    cache = cache_file
+  )
+
+  expect_same_token(token_in, token_out)
+  expect_identical(token_out$credentials, list(a = 1))
+})
+
+# tokens in relation to each other ----------------------------------------
 
 test_that("token_upsert() adds novel tokens", {
   fauxen_a <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     credentials = list(a = 1),
     cache = FALSE
   )
   cache <- token_upsert(fauxen_a, list())
 
-  expect_identical(cache[[1]], fauxen_a)
+  expect_same_token(cache[[1]], fauxen_a)
   expect_named(cache, fauxen_a$hash())
 
   fauxen_b <- gargle2.0_token(
-    email = "b",
+    email = "b@example.org",
     credentials = list(a = 1),
     cache = FALSE
   )
   cache <- token_upsert(fauxen_b, cache)
 
-  expect_identical(cache[[2]], fauxen_b)
+  expect_same_token(cache[[2]], fauxen_b)
   expect_named(cache, c(fauxen_a$hash(), fauxen_b$hash()))
 })
 
 test_that("token_upsert() updates pre-existng, matching token", {
   fauxen_a <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     credentials = list(a = 1),
     cache = FALSE
   )
   fauxen_b <- gargle2.0_token(
-    email = "b",
+    email = "b@example.org",
     credentials = list(a = 1),
     cache = FALSE
   )
@@ -87,19 +119,19 @@ test_that("token_upsert() updates pre-existng, matching token", {
   cache <- token_upsert(fauxen_b, cache)
 
   fauxen_b_update <- gargle2.0_token(
-    email = "b",
+    email = "b@example.org",
     credentials = list(a = 2),
     cache = FALSE
   )
   cache <- token_upsert(fauxen_b_update, cache)
 
-  i <- which(vapply(cache, function(t) t$email, character(1)) == "b")
+  i <- which(vapply(cache, function(t) t$email, character(1)) == "b@example.org")
   expect_identical(cache[[i]][["credentials"]], list(a = 2))
 })
 
 test_that("token_match() retrieves a unique, exact hash match", {
   fauxen_a <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     scope = "a",
     credentials = list(a = 1),
     cache = FALSE
@@ -107,18 +139,18 @@ test_that("token_match() retrieves a unique, exact hash match", {
   cache <- token_upsert(fauxen_a, list())
 
   fauxen_a2 <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     scope = "a",
     credentials = list(a = 2),
     cache = FALSE
   )
 
-  expect_equal(fauxen_a, token_match(fauxen_a2, cache))
+  expect_same_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
 test_that("token_match() retrieves a unique, exact short hash match", {
   fauxen_a <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     scope = "a",
     credentials = list(a = 1),
     cache = FALSE
@@ -131,18 +163,18 @@ test_that("token_match() retrieves a unique, exact short hash match", {
     cache = FALSE
   )
 
-  expect_equal(fauxen_a, token_match(fauxen_a2, cache))
+  expect_same_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
 test_that("token_match() fails for >1 short hash match, if non-interactive", {
   fauxen_a <- gargle2.0_token(
-    email = "a",
+    email = "a@example.org",
     scope = "a",
     credentials = list(a = 1),
     cache = FALSE
   )
   fauxen_b <- gargle2.0_token(
-    email = "b",
+    email = "b@example.org",
     scope = "a",
     credentials = list(b = 1),
     cache = FALSE
@@ -159,5 +191,26 @@ test_that("token_match() fails for >1 short hash match, if non-interactive", {
   expect_error(
     token_match(fauxen_c, cache),
     "Multiple cached tokens"
+  )
+})
+
+# helpers -----------------------------------------------------------
+
+test_that("match2() works", {
+  expect_identical(match2("a", c("a", "b", "a")), c(1L, 3L))
+  expect_identical(match2("b", c("a", "b", "a")), 2L)
+  expect_true(is.na(match2("c", c("a", "b", "a"))))
+})
+
+test_that("mask_email() works", {
+  hash <- "2a46e6750476326f7085ebdab4ad103d"
+  expect_identical(
+    mask_email(c(
+      "2a46e6750476326f7085ebdab4ad103d_jenny@example.com",
+      "2a46e6750476326f7085ebdab4ad103d_NA",
+      "2a46e6750476326f7085ebdab4ad103d_",
+      "2a46e6750476326f7085ebdab4ad103d_FIRST_LAST@example.com"
+    )),
+    rep_len(hash, 4)
   )
 })

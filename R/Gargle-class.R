@@ -93,7 +93,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       # Use credentials created elsewhere - usually for tests
       "!DEBUG credentials provided directly"
       self$credentials <- credentials
-      #self$email <- self$email %||% "EMAIL"
       return(self$cache())
     }
 

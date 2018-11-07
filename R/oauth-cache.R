@@ -14,8 +14,9 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
     stop("Cache must either be logical or string (file path)")
   }
 
-  # If NA, get permission to use cache file and store results of that check in
-  # global option.
+  # If NA, propose default cache file
+  # request permission to create it, if doesn't exist yet
+  # store result of that ask (TRUE or FALSE) in the option
   if (is.na(cache)) {
     cache <- cache_available(gargle_default_oauth_cache_path)
     options("gargle.oauth_cache" = cache)
@@ -31,6 +32,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (!file.exists(cache)) {
     cache_create(cache)
   }
+  ## cache is now NULL or path to a file that exists (possibly empty)
 
   return(cache)
 }
@@ -82,17 +84,35 @@ cache_create <- function(path) {
   TRUE
 }
 
-cache_load <- function(path) {
-  if (!file.exists(path) || file.size(path) == 0) {
+cache_read <- function(path) {
+  if (file.size(path) == 0) {
     list()
   } else {
-    ## TODO(jennybc) check that names are the long hash
-    readRDS(path)
+    validate_token_list(readRDS(path))
   }
 }
 
+cache_write <- function(tokens, path) {
+  saveRDS(tokens, path)
+}
+
+validate_token_list <- function(existing) {
+  hashes <- vapply(existing, function(x) x$hash(), character(1), USE.NAMES = FALSE)
+  nms <- names(existing)
+
+  if (!identical(nms, hashes)) {
+    stop("Token names do not match their hash!", call. = FALSE)
+  }
+
+  if (anyDuplicated(nms)) {
+    stop("Duplicate tokens!, call. = FALSE")
+  }
+
+  existing
+}
+
 ## useful to jennybc during development
-cache_show <- function(path = NULL) {
+cache_show <- function(path = NULL) { # nocov start
   path <- path %||% getOption("gargle.oauth_cache")
   if (is.na(path)) {
     path <- gargle_default_oauth_cache_path
@@ -105,8 +125,8 @@ cache_show <- function(path = NULL) {
     message("Cache is empty.")
     return(list())
   }
-  cache_load(path)
-}
+  readRDS(path)
+} # nocov end
 
 # retrieve and insert tokens from cache -----------------------------------
 
@@ -114,22 +134,30 @@ cache_show <- function(path = NULL) {
 ## for the Gargle2.0 class
 token_from_cache <- function(candidate) {
   "!DEBUG in token_from_cache"
-  if (is.null(candidate$cache_path)) return()
+  cache_path <- candidate$cache_path
 
-  existing <- cache_load(candidate$cache_path)
-  if(length(existing) == 0) return()
+  if (is.null(cache_path)) {
+    "!DEBUG in token_from_cache, no cache"
+    return()
+  }
 
-  "!DEBUG in token_from_cache, cache exists and is nonempty"
-  token_match(candidate, existing)
+  "!DEBUG in token_from_cache, searching the cache"
+  token_match(candidate, cache_read(cache_path))
 }
 
 token_into_cache <- function(candidate) {
-  "!DEBUG token_cache"
-  if (is.null(candidate$cache_path)) return()
+  "!DEBUG in token_into_cache"
+  cache_path <- candidate$cache_path
 
-  existing <- cache_load(candidate$cache_path)
+  if (is.null(cache_path)) {
+    "!DEBUG in token_into_cache, but there is no cache"
+    return()
+  }
+
+  "!DEBUG in token_into_cache, upserting"
+  existing <- cache_read(cache_path)
   existing <- token_upsert(candidate, existing)
-  saveRDS(existing, candidate$cache_path)
+  cache_write(existing, cache_path)
 }
 
 # tokens in relation to each other ----------------------------------------
@@ -169,7 +197,7 @@ token_match <- function(candidate, existing) {
   existing <- existing[m]
   emails <- vapply(existing, function(x) x$email, character(1))
   cat("Multiple cached tokens are available.\n")
-  cat("Pick the Google account you wish to use or enter '0' to obtain a new token.")
+  cat("Pick the account you wish to use or enter '0' to obtain a new token.")
   this_one <- utils::menu(emails)
 
   if (this_one == 0) return()
@@ -180,20 +208,19 @@ token_match <- function(candidate, existing) {
 token_hash_match <- function(candidate, existing) {
   "!DEBUG candidate hash = `candidate$hash()`"
   "!DEBUG existing hashes = `names(existing)`"
-  match(candidate$hash(), names(existing))
+  match2(candidate$hash(), names(existing))
 }
 
 token_hash_short_match <- function(candidate, existing) {
   "!DEBUG candidate short hash = `candidate$hash_short()`"
-  "!DEBUG existing hashes = `names(existing)`"
-  matches <- mask_email(names(existing)) %in% candidate$hash_short()
-  if (all(!matches)) NA else which(matches)
+  "!DEBUG existing short hashes = `mask_email(names(existing))`"
+  match2(candidate$hash_short(), mask_email(names(existing)))
 }
 
 token_upsert <- function(candidate, existing) {
   "!DEBUG token_upsert"
-  m <- which(names(existing) == candidate$hash())
-  if (length(m) > 0) {
+  m <- match2(candidate$hash(), names(existing))
+  if (!is.na(m) && length(m) > 0) {
     existing[[m]] <- NULL
   }
 
@@ -206,5 +233,13 @@ token_upsert <- function(candidate, existing) {
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
-mask_email    <- function(x) sub("^([^_]*)_.*", "\\1", x)
-extract_email <- function(x) sub(".*_([^-]*)$", "\\1", x)
+mask_email    <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
+
+## match() but return location of all matches
+match2 <- function(needle, haystack) {
+  matches <- which(haystack == needle)
+  if (length(matches) == 0) {
+    matches <- NA
+  }
+  matches
+}
