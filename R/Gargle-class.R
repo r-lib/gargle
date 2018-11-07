@@ -101,11 +101,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       self
     } else {
       "!DEBUG no matching token in the cache"
-      "!DEBUG returning current self"
-      self
-      # self$init_credentials()
-      # self$email <- get_email(self) %||% NA_character_
-      # self$cache()
+      self$init_credentials()
+      self$email <- get_email(self) %||% NA_character_
+      self$cache()
     }
   },
   print = function(...) {
