@@ -19,3 +19,30 @@ test_that("add_email_scope() works", {
     c("whatever", "email")
   )
 })
+
+test_that("rhash() produces same hash across platforms within R version", {
+  skip_if(getRversion() > 3.5)
+  iris_hash <- if (getRversion() < 3.5) {
+    "ff575c261c949d073b2895b05d1097c3"
+  } else {
+    "d3c5d071001b61a9f6131d3004fd0988"
+  }
+  expect_identical(rhash(iris), iris_hash)
+})
+
+test_that("base_scope() extracts the last scope part", {
+  scopes <- c(
+    "email",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.modify",
+    "https://www.googleapis.com/auth/gmail.compose",
+    "https://mail.google.com/"
+  )
+  out <- base_scope(scopes)
+  expect_identical(
+    out,
+    c("email", "...drive", "...gmail.readonly", "...gmail.modify",
+      "...gmail.compose", "...mail.google.com")
+  )
+})

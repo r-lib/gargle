@@ -1,21 +1,29 @@
 Package: gargle
 Title: Easier Auth for Google Services
 Version: 0.0.0.9000
-Authors@R: c(
-    person("Craig", "Citro", , "craigcitro@google.com", c("aut", "cre")),
-    person("Jennifer", "Bryan", , "jenny@rstudio.com", role = "aut",
-      comment = c(ORCID = "0000-0002-6983-2759")
-    ),
-    person("Hadley", "Wickham", , "hadley@rstudio.com", role = "ctb", 
-      comment = c(ORCID = "0000-0003-4757-117X")
-    ),
-    person("Google Inc", role = "cph"),
-    person("RStudio", role = c("cph", "fnd"))
-    )
-Description: Utilities to take some of the pain out of dealing with
-    authentication and authorization for Google services and APIs. This
-    includes functions and classes handling common credential types, as
-    well as hooks for library authors looking to make auth easier for
+Authors@R: 
+    c(person(given = "Craig",
+             family = "Citro",
+             role = c("aut", "cre"),
+             email = "craigcitro@google.com"),
+      person(given = "Jennifer",
+             family = "Bryan",
+             role = "aut",
+             email = "jenny@rstudio.com",
+             comment = c(ORCID = "0000-0002-6983-2759")),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "ctb",
+             email = "hadley@rstudio.com",
+             comment = c(ORCID = "0000-0003-4757-117X")),
+      person(given = "Google Inc",
+             role = "cph"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")))
+Description: Utilities to take some of the pain out of dealing
+    with authentication and authorization for Google services and APIs.
+    This includes functions and classes handling common credential types,
+    as well as hooks for library authors looking to make auth easier for
     their users.
 License: MIT + file LICENSE
 Depends: 

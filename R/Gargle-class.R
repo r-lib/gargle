@@ -1,20 +1,29 @@
-#' Generate a Gargle token
+#' Generate a gargle token
 #'
-#' Constructor function for objects of class [Gargle2.0]. The `"email"` scope
-#' is always added if not already present. This is needed to retrieve the email
-#' address associated with the token. This is considered a "low value" scope and
-#' does not appear on the consent screen.
+#' Constructor function for objects of class [Gargle2.0].
 #'
 #' @param email Optional. Allows user to target a specific Google identity. If
 #'   specified, this is used only for token lookup, i.e. to determine if a
 #'   suitable token is already available in the cache. The email associated with
 #'   a token when it's cached is determined from the token itself, not from this
-#'   argument.
+#'   argument. Use `NA` to match nothing and force the OAuth dance in the
+#'   browser.
+#' @param scope A character vector of scopes to request. The `"email"` scope is
+#'   always added if not already present. This is needed to retrieve the email
+#'   address associated with the token. This is considered a low value scope and
+#'   does not appear on the consent screen.
+#' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
+#'   Otherwise, provide a URL to the user and prompt for a validation code.
+#'   Defaults to the option "gargle.oob_default" or `TRUE` if httpuv is not
+#'   installed.
+#' @param cache A logical value or a string. `TRUE` means to cache using the
+#'   default user-level cache file, `~/.R/gargle/gargle-oauth`, `FALSE` means
+#'   don't cache, and `NA` means to guess using some sensible heuristics. A
+#'   string means use the specified path as the cache file.
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by non-OAuth2 credential
 #'   functions. Not used.
-#' @return An object of class [Gargle2.0], either new or loaded from the
-#'   cache.
+#' @return An object of class [Gargle2.0], either new or loaded from the cache.
 #' @export
 gargle2.0_token <- function(email = NULL,
                             app = gargle_app(),
@@ -22,10 +31,10 @@ gargle2.0_token <- function(email = NULL,
                             scope = NULL,
                             user_params = NULL,
                             type = NULL,
-                            use_oob = getOption("httr_oob_default"),
+                            use_oob = getOption("gargle.oob_default"),
                             ## params end
                             credentials = NULL,
-                            cache = getOption("httr_oauth_cache"), ...) {
+                            cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else FALSE, ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
@@ -38,11 +47,10 @@ gargle2.0_token <- function(email = NULL,
   )
   Gargle2.0$new(
     email = email,
-    endpoint = httr::oauth_endpoints("google"),
     app = app,
     params = params,
     credentials = credentials,
-    cache_path = if (is.null(credentials)) cache else FALSE
+    cache_path = cache
   )
 }
 
@@ -63,29 +71,29 @@ gargle2.0_token <- function(email = NULL,
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   email = NA_character_,
   initialize = function(email = NULL,
-                        endpoint =  httr::oauth_endpoints("google"),
                         app = gargle_app(),
                         credentials = NULL,
                         params = list(),
-                        cache_path = getOption("httr_oauth_cache")) {
+                        cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
     stopifnot(
-      httr:::is.oauth_endpoint(endpoint) || !is.null(credentials),
-      httr:::is.oauth_app(app),
+      is.null(email) || is.na(email) || is_string(email),
+      is.oauth_app(app),
       is.list(params)
     )
 
-    self$email <- email
-    self$app <- app
-    self$endpoint <- endpoint
-    params$scope <- add_email_scope(params$scope)
-    self$params <- params
-    self$cache_path <- httr:::use_cache(cache_path)
+    self$endpoint   <- gargle_outh_endpoint()
+    self$email      <- email
+    self$app        <- app
+    params$scope    <- normalize_scopes(add_email_scope(params$scope))
+    self$params     <- params
+    self$cache_path <- cache_establish(cache_path)
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
+      "!DEBUG credentials provided directly"
       self$credentials <- credentials
-      return(self)
+      return(self$cache())
     }
 
     # Are credentials cached already?
@@ -99,115 +107,43 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
   },
   print = function(...) {
-    cat("<Token (via gargle)>\n", sep = "")
-    # print(self$endpoint) ## this is TMI IMO
-    # also, it's boring --> always google for us
-    cat("  <oauth_endpoint> google\n", sep = "")
-    # print(self$app) ## this is TMI IMO
-    cat("       <oauth_app> ", self$app$appname, "\n", sep = "")
-    cat("           <email> ", self$email, "\n", sep = "")
-    ## TODO(jennybc) turn this into a helper or sg
-    scopes <- gsub("/$", "", gsub("(.*)/(.+$)", "...\\2", self$params$scope))
-    cat(
-      "          <scopes> ",
-      commapse(scopes),
-      "\n", sep = ""
-    )
-    cat(
-      "     <credentials> ",
-      commapse(names(self$credentials)),
-      "\n", sep = ""
-    )
-    cat(
-      "                   (expires in ",
-      ceiling(self$credentials$expires_in / 60),
-      " mins)", "\n", sep = ""
-    )
-    cat("---\n")
+    cat_line("<Token (via gargle)>")
+    cat_line("  <oauth_endpoint> google")
+    cat_line("       <oauth_app> ", self$app$appname)
+    cat_line("           <email> ", self$email)
+    cat_line("          <scopes> ", commapse(base_scope(self$params$scope)))
+    cat_line("     <credentials> ", commapse(names(self$credentials)))
+    cat_line("---")
   },
   hash = function() {
-    # endpoint = which site = always google for us
-    # app = client identification = often tidyverse (or gargle) app
-    # params = scope <- this truly varies across client packages
-    msg <- serialize(list(
-      self$endpoint,
-      self$app,
-      normalize_scopes(self$params$scope)
-    ), NULL)
-
-    # for compatibility with digest::digest()
-    msg <- paste(openssl::md5(msg[-(1:14)]), collapse = "")
-
-    # append the email
-    paste(msg, self$email, sep = "-")
+    paste(super$hash(), self$email, sep = "_")
+  },
+  cache = function() {
+    "!DEBUG put token into cache"
+    token_into_cache(self)
+    self
   },
   load_from_cache = function() {
+    "!DEBUG load token from cache"
     if (is.null(self$cache_path)) return(FALSE)
 
-    if (is.null(self$email)) {
-      "!DEBUG searching cache for matches on endpoint + app + scopes"
-      cached <- fetch_matching_tokens(self$hash(), self$cache_path)
-    } else {
-      "!DEBUG searching cache for matches on endpoint + app + scopes + email: `sQuote(self$email)`"
-      cached <- httr:::fetch_cached_token(self$hash(), self$cache_path)
-    }
-
+    cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
-    self$endpoint <- cached$endpoint
-    self$app <- cached$app
-    self$email <- cached$email
+    "!DEBUG match found in the cache"
+    self$endpoint    <- cached$endpoint
+    self$email       <- cached$email
+    self$app         <- cached$app
     self$credentials <- cached$credentials
-    self$params <- cached$params
+    self$params      <- cached$params
     TRUE
-  }))
-
-fetch_matching_tokens <- function(hash, cache_path) {
-  if (is.null(cache_path)) return(NULL)
-
-  tokens <- httr:::load_cache(cache_path)
-  matches <- mask_email(names(tokens)) == mask_email(hash)
-
-  if (!any(matches)) return(NULL)
-
-  tokens <- tokens[matches]
-
-  if (length(tokens) == 1) {
-    "!DEBUG Using a token cached for `extract_email(names(tokens))`"
-    return(tokens[[1]])
   }
-
-  ## TODO(jennybc) if not interactive? just use first match? now I just give up
-  if (!interactive()) {
-    message("Multiple cached tokens exist. Unclear which to use.")
-    return(NULL)
-  }
-
-  emails <- extract_email(names(tokens))
-  cat("Multiple cached tokens exist. Pick the one you want to use.\n")
-  cat("Or enter '0' to obtain a new token.")
-  this_one <- utils::menu(emails)
-
-  if (this_one == 0) return(NULL)
-
-  tokens[[this_one]]
-}
-
-## for this token hash:
-## 2a46e6750476326f7085ebdab4ad103d-jenny@rstudio.com
-## ^ mask_email() returns this ^    ^ extract_email() returns this ^
-mask_email <- function(x) sub("^([^-]*).*", "\\1", x)
-extract_email <- function(x) sub(".*-([^-]*)$", "\\1", x)
-
-add_email_scope <- function(scope = NULL) {
-  scope <- scope %||% character()
-  if (any(scope == "email")) {
-    scope
-  } else {
-    c(scope, "email")
-  }
-}
+))
 
 normalize_scopes <- function(x) {
   stats::setNames(sort(unique(x)), NULL)
+}
+
+add_email_scope <- function(scope = NULL) {
+  scope <- union(scope %||% character(), "email")
 }
