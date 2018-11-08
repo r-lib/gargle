@@ -40,6 +40,7 @@ request_make <- function(x, ..., user_agent = gargle_user_agent()) {
 gargle_user_agent <- function() {
   httr::user_agent(paste0(
     "gargle/", utils::packageVersion("gargle"), " ",
+    "(GPN:RStudio; )", " ",
     "httr/", utils::packageVersion("httr")
   ))
 }
