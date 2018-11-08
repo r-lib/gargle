@@ -114,7 +114,7 @@ validate_token_list <- function(existing) {
 ## useful to jennybc during development
 cache_show <- function(path = NULL) { # nocov start
   path <- path %||% getOption("gargle.oauth_cache")
-  if (is.na(path)) {
+  if (is.na(path) || isTRUE(path)) {
     path <- gargle_default_oauth_cache_path
   }
   if (!file.exists(path)) {
