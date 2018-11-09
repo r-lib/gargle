@@ -1,4 +1,4 @@
-expect_same_token <- function(object, expected) {
+expect_gargle2.0_token <- function(object, expected) {
   expect_identical(object$cache_path, expected$cache_path)
   expect_identical(  object$endpoint,   expected$endpoint)
   expect_identical(     object$email,      expected$email)

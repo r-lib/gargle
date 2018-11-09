@@ -76,7 +76,7 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
     cache = cache_file
   )
 
-  expect_same_token(token_in, token_out)
+  expect_gargle2.0_token(token_in, token_out)
   expect_identical(token_out$credentials, list(a = 1))
 })
 
@@ -90,7 +90,7 @@ test_that("token_upsert() adds novel tokens", {
   )
   cache <- token_upsert(fauxen_a, list())
 
-  expect_same_token(cache[[1]], fauxen_a)
+  expect_gargle2.0_token(cache[[1]], fauxen_a)
   expect_named(cache, fauxen_a$hash())
 
   fauxen_b <- gargle2.0_token(
@@ -100,7 +100,7 @@ test_that("token_upsert() adds novel tokens", {
   )
   cache <- token_upsert(fauxen_b, cache)
 
-  expect_same_token(cache[[2]], fauxen_b)
+  expect_gargle2.0_token(cache[[2]], fauxen_b)
   expect_named(cache, c(fauxen_a$hash(), fauxen_b$hash()))
 })
 
@@ -145,7 +145,7 @@ test_that("token_match() retrieves a unique, exact hash match", {
     cache = FALSE
   )
 
-  expect_same_token(fauxen_a, token_match(fauxen_a2, cache))
+  expect_gargle2.0_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
 test_that("token_match() retrieves a unique, exact short hash match", {
@@ -163,7 +163,7 @@ test_that("token_match() retrieves a unique, exact short hash match", {
     cache = FALSE
   )
 
-  expect_same_token(fauxen_a, token_match(fauxen_a2, cache))
+  expect_gargle2.0_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
 test_that("token_match() fails for >1 short hash match, if non-interactive", {
