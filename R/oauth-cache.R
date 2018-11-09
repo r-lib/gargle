@@ -11,12 +11,12 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
     stop("Cache should be length 1 vector", call. = FALSE)
   }
   if (!is.logical(cache) && !is.character(cache)) {
-    stop("Cache must either be logical or string (file path)")
+    stop("Cache must either be logical or string (file path)", call. = FALSE)
   }
 
   # If NA, propose default cache file
-  # request permission to create it, if doesn't exist yet
-  # store result of that ask (TRUE or FALSE) in the option
+  # Request user's permission to create it, if doesn't exist yet.
+  # Store result of that ask (TRUE or FALSE) in the option for the session.
   if (is.na(cache)) {
     cache <- cache_available(gargle_default_oauth_cache_path)
     options("gargle.oauth_cache" = cache)
@@ -72,6 +72,7 @@ cache_create <- function(path) {
       file.path(cache_parent, ".Rbuildignore"),
       paste0("^", gsub("\\.", "\\\\.", path), "$")
     )
+    message("Adding cache file to .Rbuildignore")
   }
   git <- file.path(cache_parent, c(".gitignore", ".git"))
   if (any(file.exists(git))) {
@@ -79,6 +80,7 @@ cache_create <- function(path) {
       file.path(cache_parent, ".gitignore"),
       path
     )
+    message("Adding cache file to .gitignore")
   }
 
   TRUE

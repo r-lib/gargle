@@ -59,9 +59,11 @@ gargle2.0_token <- function(email = NULL,
 #' This is based on the [Token2.0][httr::Token] class provided in httr. These
 #' objects should be created through the constructor function
 #' [gargle2.0_token()]. In the base Token2.0 class, tokens are cached based on
-#' endpoint, app, and scopes. For this subclass, the identifier or key is
-#' expanded to include the email address associated with the token. This makes
-#' it easier to work with Google APIs using multiple accounts.
+#' endpoint, app, and scopes. For the `Gargle2.0` subclass, the identifier or
+#' key is expanded to include the email address associated with the token. This
+#' makes it easier to work with Google APIs with multiple identities. The
+#' default location for the token cache is also different: it's now
+#' `"~/.R/gargle/gargle-oauth"` instead of `./.httr-oauth`.
 #'
 #' @docType class
 #' @keywords internal
