@@ -116,7 +116,7 @@ validate_token_list <- function(existing) {
 ## useful to jennybc during development
 cache_show <- function(path = NULL) { # nocov start
   path <- path %||% getOption("gargle.oauth_cache")
-  if (is.na(path) || isTRUE(path)) {
+  if (is.null(path) || is.na(path) || isTRUE(path)) {
     path <- gargle_default_oauth_cache_path
   }
   if (!file.exists(path)) {
@@ -127,6 +127,7 @@ cache_show <- function(path = NULL) { # nocov start
     message("Cache is empty.")
     return(list())
   }
+  message("Reading from cache in '", path, "'")
   readRDS(path)
 } # nocov end
 
@@ -175,31 +176,37 @@ token_match <- function(candidate, existing) {
   }
   "!DEBUG no match on full hash"
 
-  if (!is.null(candidate$email)) {
-    "!DEBUG email specified, so can't match on short hash"
+  if (!is.null(candidate$email) && !isTRUE(candidate$email)) {
+    "!DEBUG not attempting to match on short hash"
     return()
   }
 
   m <- token_hash_short_match(candidate, existing)
+  existing <- existing[m]
 
-  if (length(m) == 0 || is.na(m)) {
+  if (anyNA(existing)) {
     "!DEBUG no match on short hash"
     return()
   }
 
-  if (length(existing) == 1) {
-    "!DEBUG unique match on short hash"
-    return(existing[[m]])
+  if (length(existing) == 1 && isTRUE(candidate$email)) {
+    "!DEBUG unique match on short hash & email auto-discovery authorized"
+    existing <- existing[[1]]
+    message("Using cached token for ", existing$email)
+    return(existing)
+  }
+  ## we need user to OK our discovery or pick from multiple emails
+
+  if (!interactive()) {
+    stop(
+      "Suitable cached token(s) exist, but user confirmation is required.",
+      call. = FALSE
+    )
   }
 
-  if (!interactive() || is_testing()) {
-    stop("Multiple cached tokens exist. Unclear which to use.", call. = FALSE)
-  }
-
-  existing <- existing[m]
   emails <- vapply(existing, function(x) x$email, character(1))
-  cat("Multiple cached tokens are available.\n")
-  cat("Pick the account you wish to use or enter '0' to obtain a new token.")
+  cat("Suitable cached token(s) available.\n")
+  cat("Pick the account to use or enter '0' to obtain a new token.")
   this_one <- utils::menu(emails)
 
   if (this_one == 0) return()
@@ -223,6 +230,7 @@ token_upsert <- function(candidate, existing) {
   "!DEBUG token_upsert"
   m <- match2(candidate$hash(), names(existing))
   if (!is.na(m) && length(m) > 0) {
+    "!DEBUG replacing a token for `existing[[m]]$email`"
     existing[[m]] <- NULL
   }
 

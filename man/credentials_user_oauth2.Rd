@@ -17,8 +17,10 @@ credentials_user_oauth2(scopes, app = gargle_app(), ...)
 specified, this is used only for token lookup, i.e. to determine if a
 suitable token is already available in the cache. The email associated with
 a token when it's cached is determined from the token itself, not from this
-argument. Use \code{NA} to match nothing and force the OAuth dance in the
-browser.}
+argument. Use \code{NA} or \code{FALSE} to match nothing and force the OAuth dance in
+the browser. Use \code{TRUE} to allow email auto-discovery, if a suitable token
+is found in the cache. Define the option \code{gargle.oauth_email} to set a
+personal default.}
   \item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
 Otherwise, provide a URL to the user and prompt for a validation code.
 Defaults to the option "gargle.oob_default" or \code{TRUE} if httpuv is not
