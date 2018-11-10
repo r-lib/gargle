@@ -1,16 +1,16 @@
 Package: gargle
-Title: Easier Auth for Google Services
+Title: Easier Access to Google Services from R
 Version: 0.0.0.9000
 Authors@R: 
-    c(person(given = "Craig",
-             family = "Citro",
-             role = c("aut", "cre"),
-             email = "craigcitro@google.com"),
-      person(given = "Jennifer",
+    c(person(given = "Jennifer",
              family = "Bryan",
-             role = "aut",
+             role = c("aut", "cre"),
              email = "jenny@rstudio.com",
              comment = c(ORCID = "0000-0002-6983-2759")),
+    person(given = "Craig",
+             family = "Citro",
+             role = "aut",
+             email = "craigcitro@google.com"),
       person(given = "Hadley",
              family = "Wickham",
              role = "ctb",
@@ -20,11 +20,10 @@ Authors@R:
              role = "cph"),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: Utilities to take some of the pain out of dealing
-    with authentication and authorization for Google services and APIs.
-    This includes functions and classes handling common credential types,
-    as well as hooks for library authors looking to make auth easier for
-    their users.
+Description: Utilities to take some of the pain out of working with Google
+    services and APIs. This includes functions and classes for handling common
+    credential types and for streamlining the preparation of HTTP requests,
+    based on the API specs provided in its Discovery Document.
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.1)
