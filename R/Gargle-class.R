@@ -6,8 +6,10 @@
 #'   specified, this is used only for token lookup, i.e. to determine if a
 #'   suitable token is already available in the cache. The email associated with
 #'   a token when it's cached is determined from the token itself, not from this
-#'   argument. Use `NA` to match nothing and force the OAuth dance in the
-#'   browser.
+#'   argument. Use `NA` or `FALSE` to match nothing and force the OAuth dance in
+#'   the browser. Use `TRUE` to allow email auto-discovery, if a suitable token
+#'   is found in the cache. Define the option `gargle.oauth_email` to set a
+#'   personal default.
 #' @param scope A character vector of scopes to request. The `"email"` scope is
 #'   always added if not already present. This is needed to retrieve the email
 #'   address associated with the token. This is considered a low value scope and
@@ -25,7 +27,7 @@
 #'   functions. Not used.
 #' @return An object of class [Gargle2.0], either new or loaded from the cache.
 #' @export
-gargle2.0_token <- function(email = NULL,
+gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
                             app = gargle_app(),
                             ## params start
                             scope = NULL,
@@ -72,14 +74,15 @@ gargle2.0_token <- function(email = NULL,
 #' @name Gargle-class
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   email = NA_character_,
-  initialize = function(email = NULL,
+  initialize = function(email = getOption("gargle.oauth_email"),
                         app = gargle_app(),
                         credentials = NULL,
                         params = list(),
                         cache_path = getOption("gargle.oauth_cache")) {
     "!DEBUG Gargle2.0 initialize"
     stopifnot(
-      is.null(email) || is.na(email) || is_string(email),
+      is.null(email) || is_string(email) ||
+        isTRUE(email) || isFALSE(email) || is.na(email),
       is.oauth_app(app),
       is.list(params)
     )

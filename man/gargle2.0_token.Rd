@@ -4,19 +4,21 @@
 \alias{gargle2.0_token}
 \title{Generate a gargle token}
 \usage{
-gargle2.0_token(email = NULL, app = gargle_app(), scope = NULL,
-  user_params = NULL, type = NULL,
-  use_oob = getOption("gargle.oob_default"), credentials = NULL,
-  cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else
-  FALSE, ...)
+gargle2.0_token(email = getOption("gargle.oauth_email"),
+  app = gargle_app(), scope = NULL, user_params = NULL,
+  type = NULL, use_oob = getOption("gargle.oob_default"),
+  credentials = NULL, cache = if (is.null(credentials))
+  getOption("gargle.oauth_cache") else FALSE, ...)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If
 specified, this is used only for token lookup, i.e. to determine if a
 suitable token is already available in the cache. The email associated with
 a token when it's cached is determined from the token itself, not from this
-argument. Use \code{NA} to match nothing and force the OAuth dance in the
-browser.}
+argument. Use \code{NA} or \code{FALSE} to match nothing and force the OAuth dance in
+the browser. Use \code{TRUE} to allow email auto-discovery, if a suitable token
+is found in the cache. Define the option \code{gargle.oauth_email} to set a
+personal default.}
 
 \item{app}{An OAuth consumer application, created by
 \code{\link{oauth_app}}}

@@ -148,7 +148,7 @@ test_that("token_match() retrieves a unique, exact hash match", {
   expect_gargle2.0_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
-test_that("token_match() retrieves a unique, exact short hash match", {
+test_that("token_match() handling of a unique, exact short hash match", {
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
     scope = "a",
@@ -163,6 +163,12 @@ test_that("token_match() retrieves a unique, exact short hash match", {
     cache = FALSE
   )
 
+  expect_error(
+    token_match(fauxen_a2, cache),
+    "user confirmation is required"
+  )
+
+  fauxen_a2$email <- TRUE
   expect_gargle2.0_token(fauxen_a, token_match(fauxen_a2, cache))
 })
 
@@ -190,7 +196,7 @@ test_that("token_match() fails for >1 short hash match, if non-interactive", {
 
   expect_error(
     token_match(fauxen_c, cache),
-    "Multiple cached tokens"
+    "user confirmation is required"
   )
 })
 
