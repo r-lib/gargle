@@ -10,6 +10,8 @@
 #'   the browser. Use `TRUE` to allow email auto-discovery, if a suitable token
 #'   is found in the cache. Define the option `gargle.oauth_email` to set a
 #'   personal default.
+#' @param app An OAuth consumer application, created by [httr::oauth_app()].
+#' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request. The `"email"` scope is
 #'   always added if not already present. This is needed to retrieve the email
 #'   address associated with the token. This is considered a low value scope and
@@ -29,6 +31,7 @@
 #' @export
 gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
                             app = gargle_app(),
+                            package = "gargle",
                             ## params start
                             scope = NULL,
                             user_params = NULL,
@@ -50,6 +53,7 @@ gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
   Gargle2.0$new(
     email = email,
     app = app,
+    package = package,
     params = params,
     credentials = credentials,
     cache_path = cache
@@ -73,9 +77,11 @@ gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
 #' @export
 #' @name Gargle-class
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
-  email = NA_character_,
+  email = NULL,
+  package = NULL,
   initialize = function(email = getOption("gargle.oauth_email"),
                         app = gargle_app(),
+                        package = "gargle",
                         credentials = NULL,
                         params = list(),
                         cache_path = getOption("gargle.oauth_cache")) {
@@ -84,12 +90,14 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is.null(email) || is_string(email) ||
         isTRUE(email) || isFALSE(email) || is.na(email),
       is.oauth_app(app),
+      is_string(package),
       is.list(params)
     )
 
     self$endpoint   <- gargle_outh_endpoint()
     self$email      <- email
     self$app        <- app
+    self$package    <- package
     params$scope    <- normalize_scopes(add_email_scope(params$scope))
     self$params     <- params
     self$cache_path <- cache_establish(cache_path)
