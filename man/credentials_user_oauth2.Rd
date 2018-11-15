@@ -4,12 +4,15 @@
 \alias{credentials_user_oauth2}
 \title{Get an OAuth token for a user}
 \usage{
-credentials_user_oauth2(scopes, app = gargle_app(), ...)
+credentials_user_oauth2(scopes, app = gargle_app(), package = "gargle",
+  ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+
+\item{package}{Name of the package requesting a token. Used in messages.}
 
 \item{...}{Arguments passed on to \code{gargle2.0_token}
 \describe{
@@ -43,16 +46,16 @@ unsuccessful, gets a token via the browser flow. A cached token is suitable
 if it's compatible with the user's request in this sense:
 \itemize{
 \item OAuth app must be same.
-\item Scopes. This is a check for inclusion, not exact equality.
+\item Scopes must be same.
 \item Email, if provided, must be same.
 }
 
-If multiple suitable tokens are found, user is presented with a chooser.
-Therefore, in a non-interactive setting, it's important to uniquely identify
-the token, by providing the \code{"email"}, or by making sure only one suitable
-token will be found in the cache. Non-interactive use also suggests it might
-be time to use a \link[=credentials_service_account]{service account token}. This
-is a wrapper around \code{\link[=gargle2.0_token]{gargle2.0_token()}}.
+gargle is very conservative about using OAuth tokens discovered in the user's
+cache and will generally seek interactive confirmation. Therefore, in a
+non-interactive setting, it's important to explicitly specify the \code{"email"}
+of the target account or to explicitly authorize automatic discovery. See
+\code{\link[=gargle2.0_token]{gargle2.0_token()}}, which this function wraps, for more. Non-interactive use
+also suggests it might be time to use a \link[=credentials_service_account]{service account token}.
 }
 \examples{
 \dontrun{

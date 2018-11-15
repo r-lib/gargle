@@ -5,10 +5,11 @@
 \title{Generate a gargle token}
 \usage{
 gargle2.0_token(email = getOption("gargle.oauth_email"),
-  app = gargle_app(), scope = NULL, user_params = NULL,
-  type = NULL, use_oob = getOption("gargle.oob_default"),
-  credentials = NULL, cache = if (is.null(credentials))
-  getOption("gargle.oauth_cache") else FALSE, ...)
+  app = gargle_app(), package = "gargle", scope = NULL,
+  user_params = NULL, type = NULL,
+  use_oob = getOption("gargle.oob_default"), credentials = NULL,
+  cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else
+  FALSE, ...)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If
@@ -20,8 +21,9 @@ the browser. Use \code{TRUE} to allow email auto-discovery, if a suitable token
 is found in the cache. Define the option \code{gargle.oauth_email} to set a
 personal default.}
 
-\item{app}{An OAuth consumer application, created by
-\code{\link{oauth_app}}}
+\item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+
+\item{package}{Name of the package requesting a token. Used in messages.}
 
 \item{scope}{A character vector of scopes to request. The \code{"email"} scope is
 always added if not already present. This is needed to retrieve the email

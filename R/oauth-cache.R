@@ -192,7 +192,10 @@ token_match <- function(candidate, existing) {
   if (length(existing) == 1 && isTRUE(candidate$email)) {
     "!DEBUG unique match on short hash & email auto-discovery authorized"
     existing <- existing[[1]]
-    message("Using cached token for ", existing$email)
+    message(
+      "The ", candidate$package, " package is using a cached token for ",
+      existing$email, "."
+    )
     return(existing)
   }
   ## we need user to OK our discovery or pick from multiple emails
@@ -205,8 +208,9 @@ token_match <- function(candidate, existing) {
   }
 
   emails <- vapply(existing, function(x) x$email, character(1))
-  cat("Suitable cached token(s) available.\n")
-  cat("Pick the account to use or enter '0' to obtain a new token.")
+  cat("The", candidate$package, "package is requesting access to your Google account.\n")
+  cat("Select a pre-authorised account or enter '0' to obtain a new token.\n")
+  cat("Press Esc/Ctrl + C to abort.\n")
   this_one <- utils::menu(emails)
 
   if (this_one == 0) return()

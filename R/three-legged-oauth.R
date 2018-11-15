@@ -4,19 +4,21 @@
 #'   unsuccessful, gets a token via the browser flow. A cached token is suitable
 #'   if it's compatible with the user's request in this sense:
 #'   * OAuth app must be same.
-#'   * Scopes. This is a check for inclusion, not exact equality.
+#'   * Scopes must be same.
 #'   * Email, if provided, must be same.
 #'
-#' If multiple suitable tokens are found, user is presented with a chooser.
-#' Therefore, in a non-interactive setting, it's important to uniquely identify
-#' the token, by providing the `"email"`, or by making sure only one suitable
-#' token will be found in the cache. Non-interactive use also suggests it might
-#' be time to use a [service account token][credentials_service_account]. This
-#' is a wrapper around [gargle2.0_token()].
+#' gargle is very conservative about using OAuth tokens discovered in the user's
+#' cache and will generally seek interactive confirmation. Therefore, in a
+#' non-interactive setting, it's important to explicitly specify the `"email"`
+#' of the target account or to explicitly authorize automatic discovery. See
+#' [gargle2.0_token()], which this function wraps, for more. Non-interactive use
+#' also suggests it might be time to use a [service account
+#' token][credentials_service_account].
 #'
 #' @param scopes A character vector of scopes to request.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
-#' @inheritDotParams gargle2.0_token -scope -app
+#' @param package Name of the package requesting a token. Used in messages.
+#' @inheritDotParams gargle2.0_token -scope -app -package
 #' @export
 #' @examples
 #' \dontrun{
@@ -34,6 +36,7 @@
 #' }
 credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
+                                    package = "gargle",
                                     ...) {
   "!DEBUG trying credentials_user_oauth2"
   ## TODO(jennyb): hadley says "Just put in args?" re: this handling of scopes
@@ -43,6 +46,7 @@ credentials_user_oauth2 <- function(scopes,
   gargle2.0_token(
     app = app,
     scope = scopes,
+    package = package,
     ...
   )
 }
