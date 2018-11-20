@@ -1,7 +1,7 @@
 #' Create an OAuth app from JSON
 #'
 #' Essentially a wrapper around [httr::oauth_app()] that extracts client id (aka
-#' key) and secret from the JSON download from [Google Developers
+#' key) and secret from JSON downloaded from [Google Developers
 #' Console](https://console.developers.google.com). If no `appname` is given,
 #' the `"project_id"` from the JSON is used.
 #'

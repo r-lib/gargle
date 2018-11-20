@@ -15,7 +15,7 @@ provide a consistent way of storing secrets in environment variables.}
 }
 \description{
 Essentially a wrapper around \code{\link[httr:oauth_app]{httr::oauth_app()}} that extracts client id (aka
-key) and secret from the JSON download from \href{https://console.developers.google.com}{Google Developers Console}. If no \code{appname} is given,
+key) and secret from JSON downloaded from \href{https://console.developers.google.com}{Google Developers Console}. If no \code{appname} is given,
 the \code{"project_id"} from the JSON is used.
 }
 \examples{

@@ -122,7 +122,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   print = function(...) {
     cat_line("<Token (via gargle)>")
     cat_line("  <oauth_endpoint> google")
-    cat_line("       <oauth_app> ", self$app$appname)
+    cat_line("             <app> ", self$app$appname)
     cat_line("           <email> ", self$email)
     cat_line("          <scopes> ", commapse(base_scope(self$params$scope)))
     cat_line("     <credentials> ", commapse(names(self$credentials)))
