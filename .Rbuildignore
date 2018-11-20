@@ -1,3 +1,4 @@
+^internal$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$

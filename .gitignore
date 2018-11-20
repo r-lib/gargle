@@ -1,7 +1,7 @@
+internal
 .Rproj.user
 .Rhistory
 .RData
 .httr-oauth
 scratch.R
 gargle-*.json
-*.key
