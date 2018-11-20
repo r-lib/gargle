@@ -14,6 +14,24 @@ cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
 
 bt <- function(x) encodeString(x, quote = "`")
 
+## obscure the middle bit of (sensitive?) strings with '...'
+## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
+obfuscate <- function(x, first = 6, last = 4) {
+  nc <- nchar(x)
+  ellipsize <- nc > first + last
+  out <- x
+  out[ellipsize] <-
+    paste0(
+      substr(x[ellipsize], start = 1, stop = first),
+      "...",
+      substr(x[ellipsize],
+        start = nc[ellipsize] - last + 1,
+        stop = nc[ellipsize]
+      )
+    )
+  out
+}
+
 stop_glue <- function(..., .sep = "", .envir = parent.frame(),
                       call. = FALSE, .domain = NULL) {
   stop(
