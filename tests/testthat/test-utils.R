@@ -36,3 +36,23 @@ test_that("base_scope() extracts the last scope part", {
       "...gmail.compose", "...mail.google.com")
   )
 })
+
+test_that("obfuscate() works", {
+  x <- c("123", "12345", "123456789")
+  expect_identical(
+    obfuscate(x, first = 1, last = 1),
+    c("1...3", "1...5", "1...9")
+  )
+  expect_identical(
+    obfuscate(x, first = 2, last = 1),
+    c("123", "12...5", "12...9")
+  )
+  expect_identical(
+    obfuscate(x, first = 4, last = 1),
+    c("123", "12345", "1234...9")
+  )
+  expect_identical(
+    obfuscate(x, first = 3, last = 3),
+    c("123", "12345", "123...789")
+  )
+})
