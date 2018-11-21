@@ -200,6 +200,31 @@ test_that("token_match() fails for >1 short hash match, if non-interactive", {
   )
 })
 
+test_that("token_match() returns NULL if no match", {
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    scope = "a",
+    credentials = list(a = 1),
+    cache = FALSE
+  )
+  fauxen_b <- gargle2.0_token(
+    email = "b@example.org",
+    scope = "a",
+    credentials = list(b = 1),
+    cache = FALSE
+  )
+  cache <- token_upsert(fauxen_a, list())
+  cache <- token_upsert(fauxen_b, cache)
+
+  fauxen_c <- gargle2.0_token(
+    scope = "z",
+    credentials = list(c = 1),
+    cache = FALSE
+  )
+
+  expect_null(token_match(fauxen_c, cache))
+})
+
 # helpers -----------------------------------------------------------
 
 test_that("match2() works", {

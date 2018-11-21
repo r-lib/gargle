@@ -182,12 +182,11 @@ token_match <- function(candidate, existing) {
   }
 
   m <- token_hash_short_match(candidate, existing)
-  existing <- existing[m]
-
-  if (anyNA(existing)) {
+  if (anyNA(m)) {
     "!DEBUG no match on short hash"
     return()
   }
+  existing <- existing[m]
 
   if (length(existing) == 1 && isTRUE(candidate$email)) {
     "!DEBUG unique match on short hash & email auto-discovery authorized"
