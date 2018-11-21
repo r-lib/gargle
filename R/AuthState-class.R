@@ -26,20 +26,24 @@
 #' @export
 #' @name AuthState-class
 AuthState <- R6::R6Class("AuthState", list(
+  package = NULL,
   app = NULL,
   api_key = NULL,
   auth_active = NULL,
   cred = NULL,
-  initialize = function(app,
+  initialize = function(package = NA_character_,
+                        app,
                         api_key,
                         auth_active,
                         cred = NULL) {
     "!DEBUG AuthState initialize"
     stopifnot(
+      is_string(package),
       is.oauth_app(app),
       is.null(api_key) || is_string(api_key),
       isTRUE(auth_active) || isFALSE(auth_active)
     )
+    self$package     <- package
     self$app         <- app
     self$api_key     <- api_key
     self$auth_active <- auth_active
@@ -48,6 +52,7 @@ AuthState <- R6::R6Class("AuthState", list(
   },
   print = function(...) {
     cat_line("<AuthState (via gargle)>")
+    cat_line("         <package> ", self$package)
     cat_line("             <app> ", self$app$appname)
     cat_line("         <api_key> ", obfuscate(self$api_key))
     cat_line("     <auth_active> ", self$auth_active)
