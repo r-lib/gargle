@@ -50,3 +50,35 @@ credentials_user_oauth2 <- function(scopes,
     ...
   )
 }
+
+#' Check that token appears to be legitimate
+#'
+#' @param x A token.
+#' @param verbose Logical.
+#'
+#' @keywords internal
+#' @export
+is_legit_token <- function(x, verbose = FALSE) {
+  if (!inherits(x, "Token2.0")) {
+    if (verbose) message("Not a Token2.0 object.")
+    return(FALSE)
+  }
+
+  if ("invalid_client" %in% unlist(x$credentials)) {
+    # shouldn't happen if id and secret are good
+    if (verbose) {
+      message("Authorization error. Please check client_id and client_secret.")
+    }
+    return(FALSE)
+  }
+
+  if ("invalid_request" %in% unlist(x$credentials)) {
+    # in past, this could happen if user clicks "Cancel" or "Deny" instead of
+    # "Accept" when OAuth2 flow kicks to browser ... but httr now catches this
+    if (verbose) message("Authorization error. No access token obtained.")
+    return(FALSE)
+  }
+
+  TRUE
+}
+
