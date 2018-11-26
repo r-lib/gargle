@@ -7,9 +7,9 @@ render_lines <- function(..., .data) {
   )
 }
 
-# PACKAGE_auth() ----------------------------------------------------------
+# PREFIX_auth() ----------------------------------------------------------
 
-PACKAGE_auth_description <- function(.data = list(
+PREFIX_auth_description <- function(.data = list(
   PACKAGE    = "PACKAGE",
   YOUR_STUFF = "YOUR STUFF",
   PRODUCT    = "A GOOGLE PRODUCT"
@@ -28,7 +28,7 @@ PACKAGE_auth_description <- function(.data = list(
   )
 }
 
-PACKAGE_auth_details <- function(.data = list(
+PREFIX_auth_details <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 )) {
@@ -53,13 +53,13 @@ PACKAGE_auth_details <- function(.data = list(
   )
 }
 
-PACKAGE_auth_params_email <- function() {
+PREFIX_auth_params_email <- function() {
   "@param email Optional; email address associated with the desired Google user."
 }
-PACKAGE_auth_params_path <- function() {
+PREFIX_auth_params_path <- function() {
   "@param path Optional; path to the downloaded JSON file for a service token."
 }
-PACKAGE_auth_params_scopes <- function(.data = list(
+PREFIX_auth_params_scopes <- function(.data = list(
   SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes"
 )) {
   render_lines(
@@ -68,13 +68,13 @@ PACKAGE_auth_params_scopes <- function(.data = list(
     .data = .data
   )
 }
-PACKAGE_auth_params_cache_use_oob <- function() {
+PREFIX_auth_params_cache_use_oob <- function() {
   "@inheritParams gargle::gargle2.0_token"
 }
 
-# PACKAGE_deauth() ----------------------------------------------------------
+# PREFIX_deauth() ----------------------------------------------------------
 
-PACKAGE_deauth_description <- function(.data = list(
+PREFIX_deauth_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 )) {
@@ -91,9 +91,9 @@ PACKAGE_deauth_description <- function(.data = list(
   )
 }
 
-# PACKAGE_token() ----------------------------------------------------------
+# PREFIX_token() ----------------------------------------------------------
 
-PACKAGE_token_description <- function(.data = list(
+PREFIX_token_description <- function(.data = list(
   API    = "GOOGLE API",
   PREFIX = "PREFIX"
 )) {
@@ -110,13 +110,13 @@ PACKAGE_token_description <- function(.data = list(
   )
 }
 
-PACKAGE_token_return <- function() {
+PREFIX_token_return <- function() {
   "@return A `request` object (an S3 class provided by [httr][httr::httr])."
 }
 
-# PACKAGE_auth_config() -------------------------------------------------------
+# PREFIX_auth_config() -------------------------------------------------------
 
-PACKAGE_auth_config_description <- function(.data = list(
+PREFIX_auth_config_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 )) {
@@ -148,7 +148,7 @@ PACKAGE_auth_config_description <- function(.data = list(
   )
 }
 
-PACKAGE_auth_config_params <- function() {
+PREFIX_auth_config_params <- function() {
   c(
     "@param app OAuth app. Defaults to a tidyverse app.",
     "@param api_key API key. Defaults to a tidyverse key. Necessary in order",
@@ -157,7 +157,7 @@ PACKAGE_auth_config_params <- function() {
   )
 }
 
-PACKAGE_auth_config_return <- function(.data = list(
+PREFIX_auth_config_return <- function(.data = list(
   PREFIX = "PREFIX"
 )) {
   render_lines(
