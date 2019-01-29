@@ -63,24 +63,22 @@ detect_gce <- function() {
 #'
 #' @return A list of service account names.
 list_service_accounts <- function() {
-  accounts <- gce_metadata_request('instance/service-accounts')  %>%
-    httr::content('text', encoding = 'utf8') %>%
-    strsplit('/\n', fixed = TRUE)
-  accounts[[1]]
+  accounts <- gce_metadata_request('instance/service-accounts')
+  ct <- httr::content(accounts, as = 'text', encoding = 'utf8')
+  strsplit(ct, split = '/\n', fixed = TRUE)[[1]]
 }
 
 get_instance_scopes <- function(service_account) {
   path <- paste0('instance/service-accounts/', service_account, 'scopes')
-  scopes <- gce_metadata_request(path) %>%
-    httr::content('text') %>%
-    strsplit('\n', fixed = TRUE)
-  scopes[[1]]
+  scopes <- gce_metadata_request(path)
+  ct <- httr::content(scopes, as = 'text')
+  strsplit(ct, split = '\n', fixed = TRUE)[[1]]
 }
 
 fetch_access_token <- function(scopes, service_account, ...) {
   path <- paste0('instance/service-accounts/', service_account, '/token')
-  response <- gce_metadata_request(path) %>% httr::content('parsed', 'application/json')
-  response
+  response <- gce_metadata_request(path)
+  httr::content(response, as = 'parsed', 'application/json')
 }
 
 #' Create a token for use on Google Compute Engine for the given scopes, if possible.

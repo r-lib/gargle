@@ -3,7 +3,6 @@
 }
 
 #' @importFrom glue glue glue_data glue_collapse
-#' @importFrom magrittr %>%
 NULL
 
 is_string <- function(x) is.character(x) && length(x) == 1
