@@ -137,11 +137,11 @@ base_scope <- function(x) {
 #' \dontrun{
 #' googledrive::drive_mime_type(expose())
 #' googledrive::drive_fields(expose())
-#'
+#' 
 #' is_expose(expose())
 #' is_expose("nope")
 #' }
-
+#' 
 #' @export
 #' @rdname expose
 expose <- function() structure(list(), class = "expose")

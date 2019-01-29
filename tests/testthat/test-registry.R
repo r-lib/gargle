@@ -57,5 +57,4 @@ test_that("We capture credential function names when possible", {
     a = creds_one
   )
   expect_identical(names(cred_funs_list()), c("", "", "b", "a"))
-
 })

@@ -17,7 +17,6 @@ test_that("request_develop() errors if required parameter is missing", {
       params = list(b = list())
     ),
     "Required parameter\\(s\\) are missing:\na"
-
   )
 })
 

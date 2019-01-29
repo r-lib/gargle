@@ -55,7 +55,7 @@ test_that("token_from_cache() returns NULL when caching turned off", {
     credentials = list(a = 1),
     cache = FALSE
   )
-  expect_null(token_from_cache(fauxen) )
+  expect_null(token_from_cache(fauxen))
 })
 
 test_that("token_into_cache(), token_from_cache() roundtrip", {

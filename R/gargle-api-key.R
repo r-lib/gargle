@@ -14,7 +14,7 @@
 #' @examples
 #' ## see the key
 #' gargle_api_key()
-#'
+#' 
 #' ## use the key with the Places API (explicitly enabled for this key)
 #' ## gets restaurants close to a location in Vancouver, BC
 #' url <- httr::parse_url("https://maps.googleapis.com/maps/api/place/nearbysearch/json")

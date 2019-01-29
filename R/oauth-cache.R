@@ -44,13 +44,15 @@ cache_available <- function(path) {
 cache_allowed <- function(path) {
   if (!interactive()) return(FALSE)
 
-  cat("Use a local file ('", path, "'), to cache OAuth access credentials ",
-      "between R sessions?\n", sep = "")
+  cat(
+    "Use a local file ('", path, "'), to cache OAuth access credentials ",
+    "between R sessions?\n",
+    sep = ""
+  )
   utils::menu(c("Yes", "No")) == 1
 }
 
 cache_create <- function(path) {
-
   cache_parent <- dirname(path)
   if (!dir.exists(cache_parent)) {
     dir.create(cache_parent, recursive = TRUE)
@@ -246,7 +248,7 @@ token_upsert <- function(candidate, existing) {
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
-mask_email    <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
+mask_email <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
 
 ## match() but return location of all matches
 match2 <- function(needle, haystack) {

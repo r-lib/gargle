@@ -16,7 +16,6 @@
 #' }
 oauth_app_from_json <- function(path,
                                 appname = NULL) {
-
   stopifnot(is_string(path), is.null(appname) || is_string(appname))
 
   info <- jsonlite::read_json(path)

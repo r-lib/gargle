@@ -83,7 +83,7 @@
 #'   )
 #' )
 #' req
-#'
+#' 
 #' req <- request_build(
 #'   method = req$method,
 #'   path = req$path,
@@ -92,7 +92,7 @@
 #'   token = "PRETEND_I_AM_A_TOKEN"
 #' )
 #' req
-#'
+#' 
 #' ## Example with no previous knowledge of the endpoint
 #' ## List a file's comments
 #' ## https://developers.google.com/drive/v3/reference/comments/list
@@ -131,7 +131,6 @@ request_build <- function(method = "GET",
                           token = NULL,
                           key = NULL,
                           base_url = "https://www.googleapis.com") {
-
   params <- partition_params(params, extract_path_names(path))
 
   ## send a token or a key, but never both

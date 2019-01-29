@@ -38,17 +38,17 @@ credentials_app_default <- function(scopes, ...) {
     # be *implied* by the cloud-platform scope, which is hard to validate;
     # instead, we just approximate.
     valid_scopes <- c(
-      'https://www.googleapis.com/auth/bigquery',
-      'https://www.googleapis.com/auth/bigquery',
-      'https://www.googleapis.com/auth/cloud-platform',
-      'https://www.googleapis.com/auth/cloud-platform.readonly'
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/bigquery",
+      "https://www.googleapis.com/auth/cloud-platform",
+      "https://www.googleapis.com/auth/cloud-platform.readonly"
     )
     if (!all(scopes %in% valid_scopes)) {
       return(NULL)
     }
     endpoint <- httr::oauth_endpoints("google")
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
-    scope <- 'https://www.googleapis.com/auth/cloud.platform'
+    scope <- "https://www.googleapis.com/auth/cloud.platform"
     token <- httr::Token2.0$new(
         endpoint = endpoint,
         app = app,

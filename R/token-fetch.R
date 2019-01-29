@@ -11,10 +11,11 @@ token_fetch <- function(scopes, ...) {
     # TODO(craigcitro): Expose error handling and/or silencing here.
     token <- tryCatch(
       f(scopes, ...),
-      #error = function(e) NULL
+      # error = function(e) NULL
       error = function(e) {
         "!DEBUG `e$message`"
-        NULL}
+        NULL
+      }
     )
     if (!is.null(token)) {
       return(token)

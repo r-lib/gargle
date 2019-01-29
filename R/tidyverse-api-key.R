@@ -11,4 +11,3 @@
 #' @examples
 #' tidyverse_api_key()
 tidyverse_api_key <- function() "AIzaSyCJ-oYJlNhbPDJySWsbR_B7QqzNz5EthTg"
-

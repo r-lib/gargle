@@ -17,7 +17,7 @@ credentials_service_account <- function(scopes, path = "", ...) {
     params = list(scope = scopes)
   )
   if (is.null(token$credentials$access_token) ||
-      !nzchar(token$credentials$access_token)) {
+    !nzchar(token$credentials$access_token)) {
     NULL
   } else {
     message("email: ", info[["client_email"]])

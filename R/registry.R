@@ -89,6 +89,6 @@ cred_funs_set_default <- function() {
   cred_funs_add(user_oath2 = credentials_user_oauth2)
   cred_funs_add(gce = credentials_gce)
   cred_funs_add(application_default = credentials_app_default)
-  cred_funs_add(travis =  credentials_travis)
+  cred_funs_add(travis = credentials_travis)
   cred_funs_add(service_acount = credentials_service_account)
 }

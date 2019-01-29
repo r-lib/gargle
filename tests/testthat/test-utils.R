@@ -32,8 +32,10 @@ test_that("base_scope() extracts the last scope part", {
   out <- base_scope(scopes)
   expect_identical(
     out,
-    c("email", "...drive", "...gmail.readonly", "...gmail.modify",
-      "...gmail.compose", "...mail.google.com")
+    c(
+      "email", "...drive", "...gmail.readonly", "...gmail.modify",
+      "...gmail.compose", "...mail.google.com"
+    )
   )
 })
 

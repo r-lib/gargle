@@ -7,7 +7,7 @@
 #' @export
 credentials_travis <- function(scopes, path = "", ...) {
   "!DEBUG trying credentials_travis"
-  if (Sys.getenv('TRAVIS') != 'true') {
+  if (Sys.getenv("TRAVIS") != "true") {
     return(NULL)
   }
   if (!nzchar(path)) {

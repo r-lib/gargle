@@ -53,5 +53,4 @@ test_that("We keep looking for credentials on error", {
   cred_funs_add(creds_failure)
 
   expect_equal(1, token_fetch(c()))
-
 })
