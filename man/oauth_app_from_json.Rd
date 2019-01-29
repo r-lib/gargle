@@ -9,9 +9,8 @@ oauth_app_from_json(path, appname = NULL)
 \arguments{
 \item{path}{Path to the JSON file.}
 
-\item{appname}{name of the application.  This is not used for OAuth, but
-is used to make it easier to identify different applications and
-provide a consistent way of storing secrets in environment variables.}
+\item{appname}{name of the application.  This is not used for OAuth, but is
+used to make it easier to identify different applications.}
 }
 \description{
 Essentially a wrapper around \code{\link[httr:oauth_app]{httr::oauth_app()}} that extracts client id (aka
