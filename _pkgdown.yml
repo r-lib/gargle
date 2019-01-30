@@ -9,6 +9,10 @@ navbar:
   left:
   - icon: fa-home fa-lg
     href: index.html
+  - text: Articles
+    menu:
+    - text: How to use gargle for auth in a client package
+      href: articles/gargle-auth-in-client-package.html
   - text: Reference
     href: reference/index.html
   - text: News
