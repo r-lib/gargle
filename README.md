@@ -8,11 +8,5 @@
 `gargle` provides a collection of common utilities for users looking to call
 Google (HTTP) APIs from R.
 
-## Authentication for Google APIs (without all the agonizing pain)
-
-## HTTP helpers
-
-https://github.com/ropensci/unconf17/issues/85
-
 Please note that this project is released with a [Contributor Code of Conduct](.github/CODE_OF_CONDUCT.md).
 By participating in this project you agree to abide by its terms.

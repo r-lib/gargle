@@ -1,0 +1,18 @@
+url: https://gargle.r-lib.org
+
+authors:
+  Jennifer Bryan:
+    href: https://jennybryan.org
+
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  - text: News
+    href: news/index.html
+
+development:
+  mode: auto
