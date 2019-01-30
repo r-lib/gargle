@@ -23,13 +23,15 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   }
   ## cache is now TRUE, FALSE or path
 
-  if (isFALSE(cache)) return()
+  if (isFALSE(cache)) {
+    return()
+  }
 
   if (isTRUE(cache)) {
     cache <- gargle_default_oauth_cache_path
   }
 
-  if (!file.exists(cache)) {
+  if (!file_exists(cache)) {
     cache_create(cache)
   }
   ## cache is now NULL or path to a file that exists (possibly empty)
@@ -38,7 +40,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
 }
 
 cache_available <- function(path) {
-  file.exists(path) || cache_allowed(path)
+  file_exists(path) || cache_allowed(path)
 }
 
 cache_allowed <- function(path) {
@@ -53,33 +55,31 @@ cache_allowed <- function(path) {
 }
 
 cache_create <- function(path) {
-  cache_parent <- dirname(path)
-  if (!dir.exists(cache_parent)) {
-    dir.create(cache_parent, recursive = TRUE)
-  }
+  cache_parent <- path_dir(path)
+  dir_create(cache_parent, recursive = TRUE)
 
-  file.create(path, showWarnings = FALSE)
-  if (!file.exists(path)) {
+  file_create(path)
+  if (!file_exists(path)) {
     stop("Failed to create local cache ('", path, "')", call. = FALSE)
   }
 
   "!DEBUG cache exists: `path`"
 
   ## owner can read and write, but not execute; no one else can do anything
-  Sys.chmod(path, "0600")
+  file_chmod(path, "0600")
 
-  desc <- file.path(cache_parent, "DESCRIPTION")
-  if (file.exists(desc)) {
+  desc <- path(cache_parent, "DESCRIPTION")
+  if (file_exists(desc)) {
     add_line(
-      file.path(cache_parent, ".Rbuildignore"),
+      path(cache_parent, ".Rbuildignore"),
       paste0("^", gsub("\\.", "\\\\.", path), "$")
     )
     message("Adding cache file to .Rbuildignore")
   }
-  git <- file.path(cache_parent, c(".gitignore", ".git"))
-  if (any(file.exists(git))) {
+  git <- path(cache_parent, c(".gitignore", ".git"))
+  if (any(file_exists(git))) {
     add_line(
-      file.path(cache_parent, ".gitignore"),
+      path(cache_parent, ".gitignore"),
       path
     )
     message("Adding cache file to .gitignore")
@@ -89,10 +89,10 @@ cache_create <- function(path) {
 }
 
 cache_read <- function(path) {
-  if (file.size(path) == 0) {
-    list()
-  } else {
+  if (file_info(path)[[1, "size"]] > 0) {
     validate_token_list(readRDS(path))
+  } else {
+    list()
   }
 }
 
@@ -121,11 +121,11 @@ cache_show <- function(path = NULL) { # nocov start
   if (is.null(path) || is.na(path) || isTRUE(path)) {
     path <- gargle_default_oauth_cache_path
   }
-  if (!file.exists(path)) {
+  if (!file_exists(path)) {
     message("No cache found.")
     return()
   }
-  if (file.size(path) == 0) {
+  if (file_info(path)[[1, "size"]] <= 0) {
     message("Cache is empty.")
     return(list())
   }

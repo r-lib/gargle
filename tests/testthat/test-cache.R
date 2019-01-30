@@ -26,23 +26,23 @@ test_that("`cache = FALSE` does nothing", {
 })
 
 test_that("`cache = <filepath>` creates cache file, recursively", {
-  tmpfile <- file.path(tempfile(), "foo", "bar")
-  on.exit(unlink(tmpfile, recursive = TRUE))
+  tmpfile <- path_temp("foo", "bar")
+  on.exit(file_delete(tmpfile))
 
   cache_establish(tmpfile)
-  expect_true(file.exists(tmpfile))
+  expect_true(file_exists(tmpfile))
 })
 
 test_that("`cache = <filepath>` add new cache file to relevant 'ignores'", {
-  tmpproj <- tempfile()
-  on.exit(unlink(tmpproj, recursive = TRUE))
-  dir.create(tmpproj)
-  writeLines("", file.path(tmpproj, "DESCRIPTION"))
-  writeLines("", file.path(tmpproj, ".gitignore"))
-  cache_establish(file.path(tmpproj, "oauth-cache"))
-  expect_match(readLines(file.path(tmpproj, ".gitignore")), "oauth-cache$")
+  tmpproj <- file_temp()
+  on.exit(dir_delete(tmpproj))
+  dir_create(tmpproj)
+  writeLines("", path(tmpproj, "DESCRIPTION"))
+  writeLines("", path(tmpproj, ".gitignore"))
+  cache_establish(path(tmpproj, "oauth-cache"))
+  expect_match(readLines(path(tmpproj, ".gitignore")), "oauth-cache$")
   expect_match(
-    readLines(file.path(tmpproj, ".Rbuildignore")),
+    readLines(path(tmpproj, ".Rbuildignore")),
     "oauth-cache$",
     fixed = TRUE
   )
@@ -59,9 +59,9 @@ test_that("token_from_cache() returns NULL when caching turned off", {
 })
 
 test_that("token_into_cache(), token_from_cache() roundtrip", {
-  cache_file <- tempfile()
-  on.exit(file.remove(cache_file))
-  file.create(cache_file)
+  cache_file <- file_temp()
+  on.exit(file_delete(cache_file))
+  file_create(cache_file)
 
   ## this calls token_into_cache()
   token_in <- gargle2.0_token(

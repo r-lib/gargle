@@ -1,19 +1,18 @@
-
 credentials_app_default_path <- function() {
   if (nzchar(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
-    return(path.expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
+    return(path_expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
   }
 
-  root <- ""
+  pth <- "application_default_credentials.json"
   if (nzchar(Sys.getenv("CLOUDSDK_CONFIG"))) {
-    root <- Sys.getenv("CLOUDSDK_CONFIG")
-  } else if (Sys.info()["sysname"] == "windows") {
-    appdata <- Sys.getenv("APPDATA", file.path(Sys.getenv("SystemDrive", "C:"), "\\"))
-    root <- file.path(appdata, "gcloud")
+    pth <- c(Sys.getenv("CLOUDSDK_CONFIG"), pth)
+  } else if (is_windows()) {
+    appdata <- Sys.getenv("APPDATA", Sys.getenv("SystemDrive", "C:"))
+    pth <- c(appdata, "gcloud", pth)
   } else {
-    root <- path.expand(file.path("~", ".config", "gcloud"))
+    pth <- path_home(".config", "gcloud")
   }
-  file.path(root, "application_default_credentials.json")
+  path_join(pth)
 }
 
 #' Fetch the Application Default Credentials.
@@ -25,7 +24,7 @@ credentials_app_default <- function(scopes, ...) {
   # In general, application default credentials only include the cloud-platform
   # scope.
   path <- credentials_app_default_path()
-  if (!file.exists(path)) {
+  if (!file_exists(path)) {
     return(NULL)
   }
 

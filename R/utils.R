@@ -2,9 +2,6 @@
   if (length(a) > 0) a else b
 }
 
-#' @importFrom glue glue glue_data glue_collapse
-NULL
-
 is_string <- function(x) is.character(x) && length(x) == 1
 
 commapse <- function(...) paste0(..., collapse = ", ")
@@ -12,6 +9,10 @@ commapse <- function(...) paste0(..., collapse = ", ")
 cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
 
 bt <- function(x) encodeString(x, quote = "`")
+
+is_windows <- function() {
+  tolower(Sys.info()[["sysname"]]) == "windows"
+}
 
 ## obscure the middle bit of (sensitive?) strings with '...'
 ## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
@@ -92,7 +93,7 @@ is.oauth_app <- function(x) inherits(x, "oauth_app")
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")
 
 add_line <- function(path, line, quiet = FALSE) {
-  if (file.exists(path)) {
+  if (file_exists(path)) {
     lines <- readLines(path, warn = FALSE)
     lines <- lines[lines != ""]
   } else {
@@ -137,11 +138,11 @@ base_scope <- function(x) {
 #' \dontrun{
 #' googledrive::drive_mime_type(expose())
 #' googledrive::drive_fields(expose())
-#' 
+#'
 #' is_expose(expose())
 #' is_expose("nope")
 #' }
-#' 
+#'
 #' @export
 #' @rdname expose
 expose <- function() structure(list(), class = "expose")
