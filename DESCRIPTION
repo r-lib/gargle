@@ -7,7 +7,7 @@ Authors@R:
              role = c("aut", "cre"),
              email = "jenny@rstudio.com",
              comment = c(ORCID = "0000-0002-6983-2759")),
-    person(given = "Craig",
+      person(given = "Craig",
              family = "Citro",
              role = "aut",
              email = "craigcitro@google.com"),
@@ -20,10 +20,11 @@ Authors@R:
              role = "cph"),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: Utilities to take some of the pain out of working with Google
-    services and APIs. This includes functions and classes for handling common
-    credential types and for streamlining the preparation of HTTP requests,
-    based on the API specs provided in its Discovery Document.
+Description: Utilities to take some of the pain out of working
+    with Google services and APIs. This includes functions and classes for
+    handling common credential types and for streamlining the preparation
+    of HTTP requests, based on the API specs provided in its Discovery
+    Document.
 License: MIT + file LICENSE
 Depends: 
     R (>= 3.1)
@@ -35,7 +36,11 @@ Imports:
     jsonlite
 Suggests: 
     covr,
+    knitr,
+    rmarkdown,
     testthat
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

@@ -1,0 +1,99 @@
+---
+title: "How to use gargle for auth in a client package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to use gargle for auth in a client package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+*In case it's not obvious, this is very much a draft.*
+
+Describing the setup in the dev version of [googledrive](https://googledrive.tidyverse.org), which can serve as a demo.
+
+## Overview
+
+  1. Create an internal `gargle::AuthClass` object to hold auth state, probably in `R/aaa.R`.
+  1. Define standard functions for the auth interface between gargle and your package, somewhere such as `R/YOURPKG_auth.R`. Example: [tidyverse/googledrive/R/drive_auth.R](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R)
+  1. Use the functions `YOURPKG_api_key()` and `YOURPKG_token()` (defined in the standard auth interface) to insert an API key or token in your package's requests.
+  1. You or your user can take greater control of auth via `YOURPKG_auth_config()`, `YOURPKG_auth()`, and `YOURPKG_deauth()` (defined in the standard auth interface).
+
+## Initialize package auth state
+
+In `R/aaa.R`, create an internal object `.auth` to hold googledrive's auth state:
+
+```{r eval = FALSE}
+.auth <- gargle::AuthState$new(
+  package     = "googledrive",
+  app         = gargle::tidyverse_app(),
+  api_key     = gargle::tidyverse_api_key(),
+  auth_active = TRUE,
+  cred        = NULL
+)
+```
+
+This state is initialized when googledrive is loaded and is updated during the session. The `.auth` object lives in the googledrive namespace. It's an instance of the `AuthState` R6 class provided by gargle.
+
+Review of `.auth`'s fields:
+
+  * `package`. It just seems like a good idea to record package name.
+  * `app`. The OAuth app. Most client packages will ship with a default app, for the sake of usability.
+    - The googledrive package delegates back to a default tidyverse app provided by gargle. Only packages maintained within the [`tidyverse`](https://github.com/tidyverse) or [`r-lib`](https://github.com/r-lib) GitHub organizations should use this app.
+    - Other packages should substitute their default app here.
+  * `api_key`. An API key is necessary to send anonymous requests for public resources, i.e., it's generally sent with requests that lack a token.
+    - See description above of the `app` for reasons to ship with a working default and the appropriate usage of the tidyverse key.
+  * `auth_active`. When `TRUE`, googledrive makes authorized requests on behalf of an authenticated user and sends a token. When `FALSE`, googledrive sends an API key and no token.
+  * `cred` holds the current credential.
+    
+## Getting that first token
+
+I'm focusing on early use, by the naive user, with the OAuth flow. When the user first calls a googledrive function, a Drive request is generated with `googledrive::request_generate(..., key = NULL, token = drive_token())`. 
+
+In the body, the API key is set like so:
+
+```{r eval = FALSE}
+params$key <- key %||% params$key %||% drive_api_key()
+```
+
+The ability to pass the key directly or as a query parameter is only available to those using googledrive's low-level API. This is not exposed in high-level functions, where the current auth config is always used. In this case, the key will be obtained from the config but, ultimately, will not matter, since we're going to get a token and we never send both.
+
+Here's the definition of `drive_token()`:
+
+```{r}
+drive_token <- function() {
+  if (isFALSE(.auth$auth_active)) {
+    return(NULL)
+  }
+  if (is.null(.auth$cred)) {
+    drive_auth()
+  }
+  httr::config(token = .auth$cred)
+}
+```
+
+By default, auth is active, so this will result in a call to `drive_auth()` to obtain a credential, which is then cached in `.auth$cred` for the remainder of the session.
+    
+## Auth interface
+
+The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in `R/drive_auth.R`. That is a good template for how to use gargle to manage auth in a client packages. In addition, the docs for these gargle-backed functions is generated automatically from standard information in the gargle package.
+
+  * `drive_token()` retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is `NULL`, `drive_auth()` is called. If `auth_active` is `FALSE`, `NULL` is returned; client packages should be designed to fall back to including an API key in affected HTTP requests.
+  * `drive_auth()` ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets `auth_active` to `TRUE`, if necessary.
+  * `drive_deauth()` sets `auth_active` to `FALSE`.
+  * `drive_oauth_app()` returns `.auth$app`.
+  * `drive_api_key()` returns `.auth$key`.
+
+## De-activating auth
+
+`drive_deauth()` can be used at any time to enter a de-authorized state, during which requests are sent out with an API key and no token. This is a great way to eliminate any friction re: auth if there's no need for it, i.e. if all requests are for resources that are world readable or available to anyone who knows how to ask for it. This should be exploited whenever possible in non-interactive settings or where user interaction is indirect, such as via Shiny.
+
+## BYOAoK = Bring Your Own App or Key
+
+Advanced users can use their own OAuth app or API key. `drive_auth_config()` lives in `R/drive_auth()` and it provides the ability to see or modify the current `app` and `api_key`. Recall that `drive_oauth_app()` and `drive_api_key()` also exist for targetted, read-only access.
