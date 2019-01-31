@@ -5,15 +5,15 @@ context("test-cache.R")
 test_that("cache_establish() insists on sensible input", {
   expect_error(
     cache_establish(letters[1:2]),
-    "should be length 1"
+    "must have length 1"
   )
   expect_error(
     cache_establish(1),
-    "logical or string"
+    "logical or character"
   )
   expect_error(
     cache_establish(list(1)),
-    "logical or string"
+    "logical or character"
   )
 })
 

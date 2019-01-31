@@ -7,8 +7,8 @@
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
   "!DEBUG trying credentials_service account"
-  if (!endsWith(path, ".json")) {
-    stop("Path must end in .json")
+  if (path_ext(path) != "json") {
+    stop_glue("{bt('path')} must have extension {sq('json')}, not {sq(path_ext(path))}.")
   }
   info <- jsonlite::fromJSON(path)
   token <- httr::TokenServiceAccount$new(

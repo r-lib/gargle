@@ -8,10 +8,13 @@ gargle_default_oauth_cache_path <- path_home(".R", "gargle", "gargle-oauth")
 ## this is the cache setup interface for the Gargle2.0 class
 cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (length(cache) != 1) {
-    stop("Cache should be length 1 vector", call. = FALSE)
+    stop_glue("{bt('cache')} must have length 1, not {length(cache)}.")
   }
   if (!is.logical(cache) && !is.character(cache)) {
-    stop("Cache must either be logical or string (file path)", call. = FALSE)
+    stop_glue_data(
+      list(x = glue_collapse(class(cache), sep = "/")),
+      "{bt('cache')} must be logical or character, not of class {sq(x)}."
+    )
   }
 
   # If NA, propose default cache file

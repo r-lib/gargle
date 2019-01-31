@@ -9,6 +9,7 @@ commapse <- function(...) paste0(..., collapse = ", ")
 cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
 
 bt <- function(x) encodeString(x, quote = "`")
+sq <- function(x) encodeString(x, quote = "'")
 
 is_windows <- function() {
   tolower(Sys.info()[["sysname"]]) == "windows"
