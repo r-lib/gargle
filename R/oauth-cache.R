@@ -3,7 +3,7 @@
 
 # cache --------------------------------------------------------------
 
-gargle_default_oauth_cache_path <- "~/.R/gargle/gargle-oauth"
+gargle_default_oauth_cache_path <- path_home(".R", "gargle", "gargle-oauth")
 
 ## this is the cache setup interface for the Gargle2.0 class
 cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
