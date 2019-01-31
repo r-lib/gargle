@@ -94,6 +94,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is.list(params)
     )
 
+    if (isTRUE(email)) {
+      email <- "*"
+    }
+    if (isFALSE(email) || isNA(email)) {
+      email <- NULL
+    }
+
     self$endpoint   <- gargle_outh_endpoint()
     self$email      <- email
     self$app        <- app

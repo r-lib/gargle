@@ -17,7 +17,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
     )
   }
 
-  # If NA, propose default cache file
+  # If NA, propose default cache folder.
   # Request user's permission to create it, if doesn't exist yet.
   # Store result of that ask (TRUE or FALSE) in the option for the session.
   if (is.na(cache)) {
@@ -33,51 +33,43 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   if (isTRUE(cache)) {
     cache <- gargle_default_oauth_cache_path
   }
+  ## cache is now a path
 
-  if (!file_exists(cache)) {
+  if (!dir_exists(cache)) {
     cache_create(cache)
   }
-  ## cache is now NULL or path to a file that exists (possibly empty)
 
   return(cache)
 }
 
 cache_available <- function(path) {
-  file_exists(path) || cache_allowed(path)
+  dir_exists(path) || cache_allowed(path)
 }
 
 cache_allowed <- function(path) {
-  if (!interactive()) return(FALSE)
+  if (!interactive()) {
+    return(FALSE)
+  }
 
-  cat(
-    "Use a local file ('", path, "'), to cache OAuth access credentials ",
-    "between R sessions?\n",
-    sep = ""
+  cat_glue(
+    "Is it OK to cache OAuth access credentials in the folder {sq(path)} ",
+    "between R sessions?"
   )
   utils::menu(c("Yes", "No")) == 1
 }
 
 cache_create <- function(path) {
-  cache_parent <- path_dir(path)
-  dir_create(cache_parent, recursive = TRUE)
-
-  file_create(path)
-  if (!file_exists(path)) {
-    stop("Failed to create local cache ('", path, "')", call. = FALSE)
-  }
-
+  ## owner (and only owner) can read, write, execute
+  dir_create(path, recursive = TRUE, mode = "0700")
   "!DEBUG cache exists: `path`"
 
-  ## owner can read and write, but not execute; no one else can do anything
-  file_chmod(path, "0600")
-
+  cache_parent <- path_dir(path)
   desc <- path(cache_parent, "DESCRIPTION")
   if (file_exists(desc)) {
     add_line(
       path(cache_parent, ".Rbuildignore"),
       paste0("^", gsub("\\.", "\\\\.", path), "$")
     )
-    message("Adding cache file to .Rbuildignore")
   }
   git <- path(cache_parent, c(".gitignore", ".git"))
   if (any(file_exists(git))) {
@@ -85,37 +77,44 @@ cache_create <- function(path) {
       path(cache_parent, ".gitignore"),
       path
     )
-    message("Adding cache file to .gitignore")
   }
 
   TRUE
 }
 
-cache_read <- function(path) {
-  if (file_is_empty(path)) {
-    list()
-  } else {
-    validate_token_list(readRDS(path))
-  }
+cache_ls <- function(path) {
+  l <- lapply(dir_ls(path), readRDS)
+  l <- stats::setNames(l, path_file(names(l)))
+  validate_token_list(l)
+  names(l)
 }
 
-cache_write <- function(tokens, path) {
-  saveRDS(tokens, path)
-}
-
-validate_token_list <- function(existing) {
-  hashes <- vapply(existing, function(x) x$hash(), character(1), USE.NAMES = FALSE)
-  nms <- names(existing)
+validate_token_list <- function(tokens) {
+  hashes <- vapply(tokens, function(x) x$hash(), character(1), USE.NAMES = FALSE)
+  nms <- names(tokens)
 
   if (!identical(nms, hashes)) {
-    stop("Token names do not match their hash!", call. = FALSE)
+    mismatches <- nms != hashes
+    msg <- c(
+      "Cache contains tokens with names the do not match their hash:",
+      glue("
+        * Token stored as {sq(nms[mismatches])}
+              but hash is {sq(hashes[mismatches])}
+      ")
+    )
+    stop_collapse(msg)
   }
 
   if (anyDuplicated(nms)) {
-    stop("Duplicate tokens!, call. = FALSE")
+    dupes <- unique(nms[duplicated(nms)])
+    msg <- c(
+      "Cache contains duplicated tokens:",
+      paste0("* ", dupes)
+    )
+    stop_collapse(msg)
   }
 
-  existing
+  tokens
 }
 
 ## useful to jennybc during development
@@ -150,7 +149,13 @@ token_from_cache <- function(candidate) {
   }
 
   "!DEBUG in token_from_cache, searching the cache"
-  token_match(candidate, cache_read(cache_path))
+  existing <- cache_ls(cache_path)
+  this_one <- token_match(candidate$hash(), existing)
+  if (is.null(this_one)) {
+    NULL
+  } else {
+    readRDS(path(cache_path, this_one))
+  }
 }
 
 token_into_cache <- function(candidate) {
@@ -162,96 +167,79 @@ token_into_cache <- function(candidate) {
     return()
   }
 
-  "!DEBUG in token_into_cache, upserting"
-  existing <- cache_read(cache_path)
-  existing <- token_upsert(candidate, existing)
-  cache_write(existing, cache_path)
+  "!DEBUG in token_into_cache, writing"
+  saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
-# tokens in relation to each other ----------------------------------------
-
-## these functions have no knowledge of how tokens are stored on disk
-## they work with a candidate token and a list of existing tokens
+# helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
 token_match <- function(candidate, existing) {
-  "!DEBUG in token_match"
-  m <- token_hash_match(candidate, existing)
-  if (!is.na(m)) {
-    "!DEBUG match found on full hash"
-    return(existing[[m]])
-  }
-  "!DEBUG no match on full hash"
-
-  if (!is.null(candidate$email) && !isTRUE(candidate$email)) {
-    "!DEBUG not attempting to match on short hash"
+  if (length(existing) == 0) {
     return()
   }
 
-  m <- token_hash_short_match(candidate, existing)
+  candidate_email <- extract_email(candidate)
+  ## examples of possible values:
+  ## 'blah@example.org' an actual email
+  ## '*'                permission to use an email we find in the cache
+  ## ''                 no email and no instructions
+
+  ## if we have no instructions, we need user permission to consult the cache
+  if (empty_string(candidate_email) && !interactive()) {
+    return()
+  }
+
+  m <- match2(candidate, existing)
+  if (!is.na(m)) {
+    return(existing[[m]])
+  }
+
+  ## if email was specified and no full match, we're done
+  if (!empty_string(candidate_email) && candidate_email != "*") {
+    return()
+  }
+  ## possible scenarios:
+  ## candidate_email is '*'
+  ## candidate_email is '' and session is interactive
+
+  ## match on the short hash
+  m <- match2(mask_email(candidate), mask_email(existing))
   if (anyNA(m)) {
-    "!DEBUG no match on short hash"
     return()
   }
   existing <- existing[m]
 
-  if (length(existing) == 1 && isTRUE(candidate$email)) {
-    "!DEBUG unique match on short hash & email auto-discovery authorized"
-    existing <- existing[[1]]
-    message(
-      "The ", candidate$package, " package is using a cached token for ",
-      existing$email, "."
-    )
+  if (length(existing) == 1 && candidate_email == "*") {
+    message_glue("Using a cached token for {extract_email(existing)}.")
     return(existing)
   }
   ## we need user to OK our discovery or pick from multiple emails
 
   if (!interactive()) {
-    stop(
-      "Suitable cached token(s) exist, but user confirmation is required.",
-      call. = FALSE
+    stop_glue(
+      "Suitable cached tokens exist, but user confirmation is required."
     )
   }
 
-  emails <- vapply(existing, function(x) x$email, character(1))
-  cat("The", candidate$package, "package is requesting access to your Google account.\n")
-  cat("Select a pre-authorised account or enter '0' to obtain a new token.\n")
-  cat("Press Esc/Ctrl + C to abort.\n")
-  this_one <- utils::menu(emails)
+  emails <- extract_email(existing)
+  cat_glue(
+    "The PACKAGE package is requesting access to your Google account.",
+    "Select a pre-authorised account or enter '0' to obtain a new token.",
+    "Press Esc/Ctrl + C to abort."
+  )
+  choice <- utils::menu(emails)
 
-  if (this_one == 0) return()
-
-  existing[[this_one]]
-}
-
-token_hash_match <- function(candidate, existing) {
-  "!DEBUG candidate hash = `candidate$hash()`"
-  "!DEBUG existing hashes = `names(existing)`"
-  match2(candidate$hash(), names(existing))
-}
-
-token_hash_short_match <- function(candidate, existing) {
-  "!DEBUG candidate short hash = `mask_email(candidate$hash())`"
-  "!DEBUG existing short hashes = `mask_email(names(existing))`"
-  match2(mask_email(candidate$hash()), mask_email(names(existing)))
-}
-
-token_upsert <- function(candidate, existing) {
-  "!DEBUG token_upsert"
-  m <- match2(candidate$hash(), names(existing))
-  if (!is.na(m) && length(m) > 0) {
-    "!DEBUG replacing a token for `existing[[m]]$email`"
-    existing[[m]] <- NULL
+  if (choice == 0) {
+    NULL
+  } else {
+    existing[[choice]]
   }
-
-  m <- length(existing) + 1
-  existing[[m]] <- candidate
-  names(existing)[[m]] <- candidate$hash()
-  existing
 }
 
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
-mask_email <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
+mask_email    <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
+extract_email <- function(x) sub("^[0-9a-f]+_(.*)", "\\1", x)
 
 ## match() but return location of all matches
 match2 <- function(needle, haystack) {

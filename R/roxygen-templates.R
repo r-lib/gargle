@@ -20,7 +20,7 @@ PREFIX_auth_description <- function(.data = list(
     "you are directed to a web browser, asked to sign in to your Google",
     "account, and to grant <<PACKAGE>> permission to operate on your behalf",
     "with <<PRODUCT>>. By default, these user credentials are cached in a",
-    "file below your home directory, `~/.R/gargle/gargle-oauth`, from where",
+    "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
     "tokens are less likely to be synced to the cloud by accident.",
