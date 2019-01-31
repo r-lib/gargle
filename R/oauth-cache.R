@@ -92,10 +92,10 @@ cache_create <- function(path) {
 }
 
 cache_read <- function(path) {
-  if (file_info(path)[[1, "size"]] > 0) {
-    validate_token_list(readRDS(path))
-  } else {
+  if (file_is_empty(path)) {
     list()
+  } else {
+    validate_token_list(readRDS(path))
   }
 }
 
@@ -128,7 +128,7 @@ cache_show <- function(path = NULL) { # nocov start
     message("No cache found.")
     return()
   }
-  if (file_info(path)[[1, "size"]] <= 0) {
+  if (file_is_empty(path)) {
     message("Cache is empty.")
     return(list())
   }

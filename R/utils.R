@@ -15,6 +15,11 @@ is_windows <- function() {
   tolower(Sys.info()[["sysname"]]) == "windows"
 }
 
+file_is_empty <- function(path) {
+  stopifnot(is_string(path))
+  file.info(path)$size == 0
+}
+
 ## obscure the middle bit of (sensitive?) strings with '...'
 ## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
 obfuscate <- function(x, first = 6, last = 4) {
