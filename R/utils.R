@@ -4,6 +4,11 @@
 
 is_string <- function(x) is.character(x) && length(x) == 1
 
+empty_string <- function(x) {
+  stopifnot(is.character(x))
+  !nzchar(x)
+}
+
 commapse <- function(...) paste0(..., collapse = ", ")
 
 cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
@@ -92,7 +97,16 @@ message_glue_data <- function(..., .sep = "", .envir = parent.frame(),
 
 message_collapse <- function(x) message(glue_collapse(x, sep = "\n"))
 
+cat_glue <- function(..., .sep = "", .envir = parent.frame()) {
+  cat(glue(..., .sep = .sep, .envir = .envir), sep = "\n")
+}
+
+cat_glue_data <- function(..., .sep = "", .envir = parent.frame()) {
+  cat(glue_data(..., .sep = .sep, .envir = .envir), sep = "\n")
+}
+
 isFALSE <- function(x) identical(x, FALSE)
+isNA <- function(x) length(x) == 1 && is.na(x)
 
 is.oauth_app <- function(x) inherits(x, "oauth_app")
 
