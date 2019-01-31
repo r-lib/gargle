@@ -32,7 +32,7 @@ gce_metadata_url <- function() {
 gce_metadata_request <- function(path, stop_on_error = TRUE) {
   root_url <- gce_metadata_url()
   # TODO(craigcitro): Add options to ignore proxies.
-  if (startsWith(path, "/")) {
+  if (grepl("^/", path)) {
     path <- substring(path, 2)
   }
   url <- paste0(root_url, "computeMetadata/v1/", path)
