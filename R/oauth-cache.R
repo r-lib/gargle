@@ -3,7 +3,9 @@
 
 # cache --------------------------------------------------------------
 
-gargle_default_oauth_cache_path <- path_home(".R", "gargle", "gargle-oauth")
+gargle_default_oauth_cache_path <- function() {
+  path_home(".R", "gargle", "gargle-oauth")
+}
 
 ## this is the cache setup interface for the Gargle2.0 class
 cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
@@ -21,7 +23,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   # Request user's permission to create it, if doesn't exist yet.
   # Store result of that ask (TRUE or FALSE) in the option for the session.
   if (is.na(cache)) {
-    cache <- cache_available(gargle_default_oauth_cache_path)
+    cache <- cache_available(gargle_default_oauth_cache_path())
     options("gargle.oauth_cache" = cache)
   }
   ## cache is now TRUE, FALSE or path
@@ -31,7 +33,7 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
   }
 
   if (isTRUE(cache)) {
-    cache <- gargle_default_oauth_cache_path
+    cache <- gargle_default_oauth_cache_path()
   }
   ## cache is now a path
 
@@ -121,7 +123,7 @@ validate_token_list <- function(tokens) {
 cache_show <- function(path = NULL) { # nocov start
   path <- path %||% getOption("gargle.oauth_cache")
   if (is.null(path) || is.na(path) || isTRUE(path)) {
-    path <- gargle_default_oauth_cache_path
+    path <- gargle_default_oauth_cache_path()
   }
   if (!file_exists(path)) {
     message("No cache found.")
