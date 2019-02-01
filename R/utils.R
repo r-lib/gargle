@@ -118,6 +118,10 @@ is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
 
+interactive <- function() {
+  base::interactive() && !is_testing()
+}
+
 ## in the spirit of basename(), but for Google scopes
 ## for printing purposes
 base_scope <- function(x) {
