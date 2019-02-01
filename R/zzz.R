@@ -1,4 +1,4 @@
-.onLoad <- function(lib, pkg) {
+.onLoad <- function(lib, pkg) { # nocov start
   cred_funs_set_default()
   debugme::debugme()
 
@@ -11,4 +11,4 @@
   if (any(toset)) options(op.gargle[toset])
 
   invisible()
-}
+} # nocov end

@@ -1,4 +1,4 @@
-render_lines <- function(..., .data) {
+render_lines <- function(..., .data) { # nocov start
   vapply(
     X = c(...),
     FUN = function(line) glue_data(.x = .data, line, .open = "<<", .close = ">>"),
@@ -167,4 +167,4 @@ PREFIX_auth_config_return <- function(.data = list(
     "[httr::oauth_app()].",
     .data = .data
   )
-}
+} # nocov end
