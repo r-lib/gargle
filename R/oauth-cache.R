@@ -19,9 +19,9 @@ cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
     )
   }
 
-  # If NA, propose default cache folder.
+  # If NA, consider default cache folder.
   # Request user's permission to create it, if doesn't exist yet.
-  # Store result of that ask (TRUE or FALSE) in the option for the session.
+  # Store outcome of this mission (TRUE or FALSE) in the option for the session.
   if (is.na(cache)) {
     cache <- cache_available(gargle_default_oauth_cache_path())
     options("gargle.oauth_cache" = cache)

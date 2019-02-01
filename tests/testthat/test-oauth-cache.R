@@ -1,6 +1,6 @@
 context("test-cache.R")
 
-# cache_establish (interface) ------------------------------------------------
+# cache_establish ------------------------------------------------------------
 
 test_that("cache_establish() insists on sensible input", {
   expect_error(
@@ -17,12 +17,24 @@ test_that("cache_establish() insists on sensible input", {
   )
 })
 
-test_that("`cache = TRUE` defers to default file path", {
-  expect_identical(cache_establish(TRUE), gargle_default_oauth_cache_path)
+test_that("`cache = TRUE` defers to default cache path", {
+  with_mock(
+    ## we don't want to actually initialize a cache
+    `gargle:::cache_create` = function(path) NULL,
+    expect_identical(cache_establish(TRUE), gargle_default_oauth_cache_path())
+  )
 })
 
 test_that("`cache = FALSE` does nothing", {
   expect_null(cache_establish(FALSE))
+})
+
+test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
+  with_mock(
+    `gargle:::gargle_default_oauth_cache_path` = function() file_temp(),
+    `gargle:::cache_allowed` = function(path) FALSE,
+    expect_identical(cache_establish(NA), cache_establish(FALSE))
+  )
 })
 
 test_that("`cache = <filepath>` creates cache folder, recursively", {
@@ -46,6 +58,26 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
     "oauth-cache$",
     fixed = TRUE
   )
+})
+
+test_that("default is to consult and write the oauth cache option", {
+  withr::with_options(
+    list(gargle.oauth_cache = NA),
+    with_mock(
+      `gargle:::gargle_default_oauth_cache_path` = function() file_temp(),
+      `gargle:::cache_allowed` = function(path) FALSE, {
+        expect_identical(getOption("gargle.oauth_cache"), NA)
+        cache_establish()
+        expect_false(getOption("gargle.oauth_cache"))
+      }
+    )
+  )
+})
+
+# cache_allowed() ---------------------------------------------------------
+
+test_that("cache_allowed() returns false when non-interactive (or testing)", {
+  expect_false(cache_allowed(getwd()))
 })
 
 # token into and out of cache ---------------------------------------------
