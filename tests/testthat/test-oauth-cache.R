@@ -156,3 +156,15 @@ test_that("mask_email() works", {
     rep_len(hash, 4)
   )
 })
+
+test_that("extract_email() works", {
+  expect_identical(extract_email("abc123_a"), "a")
+  expect_identical(extract_email("abc123_b@example.com"), "b@example.com")
+  expect_identical(extract_email("abc123_"), "")
+  expect_identical(extract_email("abc123_FIRST_LAST@a.com"), "FIRST_LAST@a.com")
+})
+
+test_that("hash_paths() works", {
+  x <- c("aa_bb_cc", "a.md", "b.rds", "c.txt", "dd123_e@example.org")
+  expect_identical(hash_paths(x), x[c(1, 5)])
+})
