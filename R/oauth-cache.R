@@ -101,7 +101,7 @@ validate_token_list <- function(tokens) {
   if (!identical(nms, hashes)) {
     mismatches <- nms != hashes
     msg <- c(
-      "Cache contains tokens with names the do not match their hash:",
+      "Cache contains tokens with names that do not match their hash:",
       glue("
         * Token stored as {sq(nms[mismatches])}
               but hash is {sq(hashes[mismatches])}

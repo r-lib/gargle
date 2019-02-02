@@ -80,6 +80,40 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
   expect_false(cache_allowed(getwd()))
 })
 
+# validate_token_list() ------------------------------------------------------
+test_that("validate_token_list() errors if putative hash != actual hash", {
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = FALSE
+  )
+  fauxen_b <- gargle2.0_token(
+    email = "b@example.org",
+    credentials = list(b = 1),
+    cache = FALSE
+  )
+  l <- list(fauxen_b, fauxen_a)
+  names(l) <- c(fauxen_a$hash(), fauxen_b$hash())
+  expect_error(
+    validate_token_list(l),
+    "do not match their hash"
+  )
+})
+
+test_that("validate_token_list() errors on duplicated hashes", {
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = FALSE
+  )
+  l <- list(fauxen_a, fauxen_a)
+  names(l) <- rep(fauxen_a$hash(), 2)
+  expect_error(
+    validate_token_list(l),
+    "duplicated"
+  )
+})
+
 # token into and out of cache ---------------------------------------------
 test_that("token_from_cache() returns NULL when caching turned off", {
   fauxen <- gargle2.0_token(
@@ -110,6 +144,37 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
 
   expect_gargle2.0_token(token_in, token_out)
   expect_identical(token_out$credentials, list(a = 1))
+})
+
+test_that("token_from_cache(), 1 or >1 short hash matches", {
+  cache_folder <- file_temp()
+  on.exit(dir_delete(cache_folder))
+  dir_create(cache_folder)
+
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = cache_folder
+  )
+
+  one_match <- gargle2.0_token(
+    email = TRUE,
+    cache = cache_folder
+  )
+  expect_gargle2.0_token(fauxen_a, one_match)
+
+  fauxen_b <- gargle2.0_token(
+    email = "b@example.org",
+    credentials = list(b = 1),
+    cache = cache_folder
+  )
+  expect_error(
+    gargle2.0_token(
+      email = TRUE,
+      cache = cache_folder
+    ),
+    "user confirmation is required"
+  )
 })
 
 # token_match() ----------------------------------------
