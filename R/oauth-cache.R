@@ -1,7 +1,7 @@
 ## this file has its origins in oauth-cache.R in httr
 ## nothing there is exported, so copied over, then it evolved
 
-# cache --------------------------------------------------------------
+# cache setup, loading, validation --------------------------------------------
 
 gargle_default_oauth_cache_path <- function() {
   path_home(".R", "gargle", "gargle-oauth")
@@ -63,7 +63,6 @@ cache_allowed <- function(path) {
 cache_create <- function(path) {
   ## owner (and only owner) can read, write, execute
   dir_create(path, recursive = TRUE, mode = "0700")
-  "!DEBUG cache exists: `path`"
 
   cache_parent <- path_dir(path)
   desc <- path(cache_parent, "DESCRIPTION")
@@ -85,13 +84,16 @@ cache_create <- function(path) {
 }
 
 cache_ls <- function(path) {
+  tokens <- cache_load(path)
+  validate_token_list(tokens)
+  names(tokens)
+}
+
+cache_load <- function(path) {
   files <- as.character(dir_ls(path))
   files <- hash_paths(files)
   names(files) <- path_file(files)
-
-  tokens <- lapply(files, readRDS)
-  validate_token_list(tokens)
-  names(tokens)
+  lapply(files, readRDS)
 }
 
 validate_token_list <- function(tokens) {
@@ -128,16 +130,12 @@ cache_show <- function(path = NULL) { # nocov start
   if (is.null(path) || is.na(path) || isTRUE(path)) {
     path <- gargle_default_oauth_cache_path()
   }
-  if (!file_exists(path)) {
-    message("No cache found.")
-    return()
+  if (!dir_exists(path)) {
+    message_glue("There is no cache dir at {sq(path)}")
+    return(invisible())
   }
-  if (file_is_empty(path)) {
-    message("Cache is empty.")
-    return(list())
-  }
-  message("Reading from cache in '", path, "'")
-  readRDS(path)
+  message_glue("Reading from cache in {sq(path)}")
+  cache_load(path)
 } # nocov end
 
 # retrieve and insert tokens from cache -----------------------------------
@@ -145,15 +143,12 @@ cache_show <- function(path = NULL) { # nocov start
 ## these two functions provide the "current token <--> token cache" interface
 ## for the Gargle2.0 class
 token_from_cache <- function(candidate) {
-  "!DEBUG in token_from_cache"
   cache_path <- candidate$cache_path
 
   if (is.null(cache_path)) {
-    "!DEBUG in token_from_cache, no cache"
     return()
   }
 
-  "!DEBUG in token_from_cache, searching the cache"
   existing <- cache_ls(cache_path)
   this_one <- token_match(candidate$hash(), existing)
   if (is.null(this_one)) {
@@ -164,15 +159,10 @@ token_from_cache <- function(candidate) {
 }
 
 token_into_cache <- function(candidate) {
-  "!DEBUG in token_into_cache"
   cache_path <- candidate$cache_path
-
   if (is.null(cache_path)) {
-    "!DEBUG in token_into_cache, but there is no cache"
     return()
   }
-
-  "!DEBUG in token_into_cache, writing"
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
@@ -241,7 +231,7 @@ token_match <- function(candidate, existing) {
 }
 
 ## for this token hash:
-## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
+## 2a46e6750476326f7085ebdab4ad103d_jenny@example.org
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
 hash_regex <- "^([0-9a-f]+)_(.*?)$"
 mask_email    <- function(x) sub(hash_regex, "\\1", x)
