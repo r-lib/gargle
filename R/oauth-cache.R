@@ -85,10 +85,13 @@ cache_create <- function(path) {
 }
 
 cache_ls <- function(path) {
-  l <- lapply(dir_ls(path), readRDS)
-  l <- stats::setNames(l, path_file(names(l)))
-  validate_token_list(l)
-  names(l)
+  files <- as.character(dir_ls(path))
+  files <- hash_paths(files)
+  names(files) <- path_file(files)
+
+  tokens <- lapply(files, readRDS)
+  validate_token_list(tokens)
+  names(tokens)
 }
 
 validate_token_list <- function(tokens) {
@@ -240,8 +243,10 @@ token_match <- function(candidate, existing) {
 ## for this token hash:
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@rstudio.com
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
-mask_email    <- function(x) sub("^([0-9a-f]+)_.*", "\\1", x)
-extract_email <- function(x) sub("^[0-9a-f]+_(.*)", "\\1", x)
+hash_regex <- "^([0-9a-f]+)_(.*?)$"
+mask_email    <- function(x) sub(hash_regex, "\\1", x)
+extract_email <- function(x) sub(hash_regex, "\\2", x)
+hash_paths <- function(x) x[grep(hash_regex, path_file(x))]
 
 ## match() but return location of all matches
 match2 <- function(needle, haystack) {
