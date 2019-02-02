@@ -150,7 +150,7 @@ token_from_cache <- function(candidate) {
   }
 
   existing <- cache_ls(cache_path)
-  this_one <- token_match(candidate$hash(), existing)
+  this_one <- token_match(candidate$hash(), existing, package = candidate$package)
   if (is.null(this_one)) {
     NULL
   } else {
@@ -167,7 +167,7 @@ token_into_cache <- function(candidate) {
 }
 
 # helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
-token_match <- function(candidate, existing) {
+token_match <- function(candidate, existing, package = "gargle") {
   if (length(existing) == 0) {
     return()
   }
@@ -204,7 +204,10 @@ token_match <- function(candidate, existing) {
   existing <- existing[m]
 
   if (length(existing) == 1 && candidate_email == "*") {
-    message_glue("Using a cached token for {extract_email(existing)}.")
+    message_glue(
+      "The {package} package is using a cached token for \\
+      {extract_email(existing)}."
+    )
     return(existing)
   }
   ## we need user to OK our discovery or pick from multiple emails
@@ -217,7 +220,7 @@ token_match <- function(candidate, existing) {
 
   emails <- extract_email(existing)
   cat_glue(
-    "The PACKAGE package is requesting access to your Google account.",
+    "The {package} package is requesting access to your Google account.",
     "Select a pre-authorised account or enter '0' to obtain a new token.",
     "Press Esc/Ctrl + C to abort."
   )
