@@ -84,16 +84,15 @@ cache_create <- function(path) {
 }
 
 cache_ls <- function(path) {
-  tokens <- cache_load(path)
-  validate_token_list(tokens)
-  names(tokens)
+  names(cache_load(path))
 }
 
 cache_load <- function(path) {
   files <- as.character(dir_ls(path))
   files <- hash_paths(files)
   names(files) <- path_file(files)
-  lapply(files, readRDS)
+  tokens <- lapply(files, readRDS)
+  validate_token_list(tokens)
 }
 
 validate_token_list <- function(tokens) {
