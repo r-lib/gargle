@@ -1,3 +1,4 @@
+data-raw/*.json
 docs/
 inst/doc
 internal
