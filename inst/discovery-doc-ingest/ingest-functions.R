@@ -82,11 +82,11 @@ read_discovery_document <- function(path) {
 #'
 #' @param dd List representing a Discovery Document
 #'
-#' @return a list with one element per method
+#' @return a named list with one element per method
 #' @examples
 #' drive <- "data-raw/drive-v3_2019-02-07.json"
 #' dd <- read_discovery_document(drive)
-#' e <- get_raw_methods(dd)
+#' ee <- get_raw_methods(dd)
 get_raw_methods <- function(dd) {
   dd %>%
     pluck("resources") %>%
@@ -95,23 +95,45 @@ get_raw_methods <- function(dd) {
     set_names(map_chr(., "id"))
 }
 
-groom_methods <- function(methods, dd) {
-  methods <- map(methods, modify_in, "path", ~ fs::path(dd$servicePath, .x))
+#' Groom method properties
+#'
+#' Tweak raw method properties to make them more useful to us downstream:
+#'
+#'   * Prepend the API's `servicePath` to `path`s.
+#'   * Remove the constant stem `"https://www.googleapis.com/auth/"` from
+#'     scopes and collapse multiple scopes into one comma-separated string.
+#'   * Elevate any `$ref` part of `request` or `response` to be the actual
+#'     data for `request` or `response`.
+#'   * Reorder the properties so they appear in a predictable order. However,
+#'     we do not turn missing properties into explicitly missing properties,
+#'     i.e. we don't guarantee all methods have the same properties.
+#'
+#' We don't touch the `parameters` list here, because it needs enough work to
+#' justify having separate functions for that.
+#'
+#' @param methods A named list of raw methods, from [get_raw_methods()]
+#' @param dd A discover document as a list, from [read_discovery_document()]
+#'
+#' @return A named list of "less raw" methods
+#' @examples
+groom_properties <- function(method, dd) {
+  method$path <- fs::path(dd$servicePath, method$path)
 
   condense_scopes <- function(scopes) {
     scopes %>%
       str_remove("https://www.googleapis.com/auth/") %>%
       str_c(collapse = ", ")
   }
-  methods <- map(methods, modify_in, "scopes", condense_scopes)
+  method$scopes <- condense_scopes(method$scopes)
 
   ## I am currently ignoring the fact that `request` sometimes has both
   ## a `$ref` and a `parameterName` part in the original JSON
-  elevate_ref <- function(m, .where) {
-    modify_if(m, ~has_name(.x, .where), ~modify_in(.x, .where, ~.x$`$ref`))
+  if (has_name(method, "request")) {
+    method$request <- method$request$`$ref`
   }
-  methods <- elevate_ref(methods, "request")
-  methods <- elevate_ref(methods, "response")
+  if (has_name(method, "response")) {
+    method$response <- method$response$`$ref`
+  }
 
   # all of the properties in the RestMethod schema, in order of usefulness
   property_names <- c(
@@ -122,10 +144,7 @@ groom_methods <- function(methods, dd) {
     "etagRequired", "parameterOrder", "supportsSubscription"
   )
 
-  reorder_properties <- function(m) {
-    m[intersect(property_names, names(m))]
-  }
-  map(methods, reorder_properties)
+  method[intersect(property_names, names(method))]
 }
 
 add_schema_params <- function(method, dd) {
