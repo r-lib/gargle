@@ -83,7 +83,7 @@
 #'   )
 #' )
 #' req
-#' 
+#'
 #' req <- request_build(
 #'   method = req$method,
 #'   path = req$path,
@@ -92,7 +92,7 @@
 #'   token = "PRETEND_I_AM_A_TOKEN"
 #' )
 #' req
-#' 
+#'
 #' ## Example with no previous knowledge of the endpoint
 #' ## List a file's comments
 #' ## https://developers.google.com/drive/v3/reference/comments/list
@@ -114,7 +114,7 @@ request_develop <- function(endpoint,
   body_params <- Filter(function(x) x$location == "body", endpoint$parameters)
   params <- partition_params(params, names(body_params))
   list(
-    method = endpoint$method,
+    method = endpoint$httpMethod,
     path = endpoint$path,
     params = params$unmatched,
     body = params$matched,
