@@ -10,6 +10,16 @@ source(fs::path(ddi_dir, "ingest-functions.R"))
 x <- download_discovery_document("discovery:v1")
 ee <- read_discovery_document(x)
 
+# api-wide parameters
+ap <- ee %>%
+  pluck("parameters") %>%
+  enframe(name = "property", value = "info") %>%
+  mutate(info = map(info, enframe)) %>%
+  unnest() %>%
+  spread(key = name, value = value, convert = TRUE) %>%
+  select(property, type, description, everything()) %>%
+  write_csv(fs::path(ddi_dir, "api-wide-parameters.csv"))
+
 # properties of a method
 mp <- ee %>%
   pluck("schemas", "RestMethod", "properties") %>%
@@ -17,7 +27,7 @@ mp <- ee %>%
   mutate(info = map(info, enframe)) %>%
   unnest() %>%
   spread(key = name, value = value, convert = TRUE) %>%
-  select(property, type, description, everything) %>%
+  select(property, type, description, everything()) %>%
   write_csv(fs::path(ddi_dir, "method-properties.csv"))
 
 # properties of a parameter of a method
@@ -51,12 +61,18 @@ make_humane_table <- function(df) {
     glue::glue_data("{property} {type} {description}")
 }
 
+make_humane_table(ap) %>%
+  write_lines(fs::path(ddi_dir, "api-wide-parameters-humane.txt"))
+
 make_humane_table(mp) %>%
   write_lines(fs::path(ddi_dir, "method-properties-humane.txt"))
 
 make_humane_table(pp) %>%
   write_lines(fs::path(ddi_dir, "parameter-properties-humane.txt"))
 
+write_lines(mp$property, fs::path(ddi_dir, "api-wide-parameter-names.txt"))
+
 write_lines(mp$property, fs::path(ddi_dir, "method-property-names.txt"))
 
 write_lines(pp$property, fs::path(ddi_dir, "parameter-property-names.txt"))
+
