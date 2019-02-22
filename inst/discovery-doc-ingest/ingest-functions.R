@@ -112,10 +112,9 @@ get_raw_methods <- function(dd) {
 #' justify having separate functions for that.
 #'
 #' @param methods A named list of raw methods, from [get_raw_methods()]
-#' @param dd A discover document as a list, from [read_discovery_document()]
+#' @param dd A Discovery Document as a list, from [read_discovery_document()]
 #'
 #' @return A named list of "less raw" methods
-#' @examples
 groom_properties <- function(method, dd) {
   method$path <- fs::path(dd$servicePath, method$path)
 
@@ -147,6 +146,35 @@ groom_properties <- function(method, dd) {
   method[intersect(property_names, names(method))]
 }
 
+#' Expand schema placeholders
+#'
+#' Adds the properties associated with a `request` schema to a method's
+#' parameter list.
+#'
+#' Some methods can send an instance of a API resource in the body of a request.
+#' This is indicated by the presence of a schema in the method's `request`
+#' property. For example, the `drive.files.copy` method permits a "Files
+#' resource" in the request body. This is how you convey the desired `name` of
+#' the new copy.
+#'
+#' In practice, this means you can drop such metadata in the body. That is, you
+#' don't actually have to label this explicitly as having `kind = drive#file`
+#' (although that would probably be more proper!), nor do you have to include
+#' all the possible pieces of metadata that constitute a "Files resource". Just
+#' specify the bits that you need to.
+#'
+#' https://developers.google.com/drive/api/v3/reference/files/copy
+#' https://developers.google.com/drive/api/v3/reference/files#resource
+#'
+#' This function consults the method's `request` and, if it holds a schema, the
+#' schema metadata is appended to the method's existing parameters. This way our
+#' request building functions recognize the keys and know that such info belongs
+#' in the body (vs. the url or the query).
+#'
+#' @param method A single method
+#' @param dd A Discovery Document as a list, from [read_discovery_document()]
+#'
+#' @return The input method, but with a potentially expanded parameter list.
 add_schema_params <- function(method, dd) {
   req <- pluck(method, "request")
   if (is.null(req)) {
@@ -162,8 +190,20 @@ add_schema_params <- function(method, dd) {
   method
 }
 
+#' Add API-wide parameters
+#'
+#' Certain parameters are sensible for any request to a specific API and,
+#' indeed, are usually common across APIs. Examples are "fields", "key", and
+#' "oauth_token". This function appends these parameters to a method's parameter
+#' list. Yes, this means some info is repeated in all methods, but this way our
+#' methods are more self-contained and our request building functions can be
+#' simpler.
+#'
+#' @param method A single method
+#' @param dd A Discovery Document as a list, from [read_discovery_document()]
+#'
+#' @return The input method, but with an expanded parameter list.
 add_global_params <- function(method, dd) {
   method[["parameters"]] <- c(method[["parameters"]], dd[["parameters"]])
   method
 }
-
