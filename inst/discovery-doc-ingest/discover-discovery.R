@@ -60,7 +60,3 @@ make_humane_table(pp) %>%
 write_lines(mp$property, fs::path(ddi_dir, "method-property-names.txt"))
 
 write_lines(pp$property, fs::path(ddi_dir, "parameter-property-names.txt"))
-
-
-
-
