@@ -13,6 +13,8 @@ navbar:
     menu:
     - text: How to use gargle for auth in a client package
       href: articles/gargle-auth-in-client-package.html
+    - text: Discovery Document Ingest
+      href: articles/discovery-document-ingest.html
   - text: Reference
     href: reference/index.html
   - text: News
