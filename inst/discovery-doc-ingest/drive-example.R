@@ -41,7 +41,11 @@ methods <- mediafy("drive.files.create", methods)
 attr(.endpoints, "base_url") <- dd$rootUrl
 ## View(.endpoints)
 
+# usually you would execute this from *within* the target package,
+# but I cannot do so in this example
+# please excuse the shenanigans to temporarily target the googledrive project
 usethis::with_project(
   "~/rrr/googledrive",
+  # line below is the important one!
   usethis::use_data(.endpoints, internal = TRUE, overwrite = TRUE)
 )
