@@ -85,9 +85,9 @@
     <loc>https://gargle.r-lib.org/reference/token_fetch.html</loc>
   </url>
   <url>
-    <loc>https://gargle.r-lib.org/articles/discovery-document-ingest.html</loc>
+    <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
   </url>
   <url>
-    <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
+    <loc>https://gargle.r-lib.org/articles/request-helper-functions.html</loc>
   </url>
 </urlset>
