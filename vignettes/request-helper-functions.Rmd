@@ -1,8 +1,8 @@
 ---
-title: "Discovery Document Ingest"
+title: "Request Helper Functions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Discovery Document Ingest}
+  %\VignetteIndexEntry{Request Helper Functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,6 +14,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+This vignette explains the purpose and usage of:
+
+  * `request_develop(endpoint, params, base_url)`
+  * `request_build(method, path, params, body, token, key, base_url)`
+  * `request_make(x, ..., user_agent)`
+  
+The target audience is someone writing an R package to wrap a Google API.
+
 ```{r setup}
 library(gargle)
 ```
@@ -22,7 +30,7 @@ library(gargle)
 
 Why would the developer of a Google-API-wrapping package care about the request helpers in gargle?
 
-You can write less code and safer code, in return for a modest investment in studying your target API. That is the "Discovery Document Ingest" from the title of this vignette.
+You can write less code and safer code, in return for a modest investment in studying your target API. That is done by ingesting the API's so-called Discovery Document.
 
 Hundreds of Google APIs -- the ones addressed by the [API Discovery Service](https://developers.google.com/discovery/) -- share a great deal of behaviour. By ingesting the metadata provided by this service, you can use gargle's request helpers to exploit this shared data and logic, while also decreasing the chance that you and your users will submit ill-formed requests.
 
@@ -43,6 +51,8 @@ gargle facilitates this design for API-wrapping packages:
     - Your package exports thin wrapper functions around gargle's helpers to form and make HTTP requests, that inject package-specific logic and data, such as an API key and user agent. This is for power users and yourself.
   * High-level, task-oriented, user-facing functions that constitute the main interface of your package.
     - These functions convert user input into the form required by the API and pass it along to your low-level interface functions.
+    
+Later, specific examples are given, using the googledrive package.
 
 ## gargle's HTTP request helpers
 
@@ -68,7 +78,11 @@ gargle provides support for creating and sending HTTP requests via these functio
 
 `request_make(x, ..., user_agent)`: actually makes the HTTP request.
 
-  * Consults `x$method` to determine which `httr::VERB()` to call, then calls it with the rest of `x` and `...` passed as arguments.
+  * Typically consumes the output of `request_build()`, although that is not
+    required. However, if you have enough info to form a `request_make()`
+    request, you would probably just make the `httr::VERB()` call yourself.
+  * Consults `x$method` to determine which `httr::VERB()` to call, then calls it
+    with the rest of `x`, `...`, and `user_agent` passed as arguments.
   
 They are usually called in the above order, though they don't have to be used that way. It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.
   
