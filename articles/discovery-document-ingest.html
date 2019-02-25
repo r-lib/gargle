@@ -94,37 +94,66 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a></code></pre></div>
-<p>gargle provides support for creating and making HTTP requests via these functions:</p>
-<ul>
-<li>
-<code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>: a.k.a. “The Smart One”. This function processes the info in <code>params</code> relative to detailed knowledge about the <code>endpoint</code>, derived from an API Discovery Document.</li>
-<li>
-<code><a href="../reference/request_develop.html">request_build(method, path, params, body, token, key, base_url)</a></code>: a.k.a. The Dumb One". This function does purely mechanical operations to finalize a request.</li>
-<li>
-<code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code>: Consults <code>x$method</code> to determine which <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code> and <code>...</code> passed as arguments.</li>
-</ul>
-<p>They are usually called in the above order, though they don’t have to be used that way.</p>
-<p>It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.</p>
-<div id="what-the-payoff" class="section level2">
+<div id="why-use-gargles-request-helpers" class="section level2">
 <h2 class="hasAnchor">
-<a href="#what-the-payoff" class="anchor"></a>What the payoff?</h2>
+<a href="#why-use-gargles-request-helpers" class="anchor"></a>Why use gargle’s request helpers?</h2>
 <p>Why would the developer of a Google-API-wrapping package care about the request helpers in gargle?</p>
-<p>You can get some safety and concision in your code, for a modest investment.</p>
-<p>Hundreds of Google APIs – the ones addressed by the <a href="https://developers.google.com/discovery/">API Discovery Service</a> – have a lot of shared behaviour. By ingesting the metadata provided by this service, you can maintain less code in your package, while also decreasing the chance that you and your users submit ill-formed requests.</p>
-<p>The request helpers in gargle check the combined inputs from user and developer against API metadata:</p>
+<p>You can write less code and safer code, in return for a modest investment in studying your target API. That is the “Discovery Document Ingest” from the title of this vignette.</p>
+<p>Hundreds of Google APIs – the ones addressed by the <a href="https://developers.google.com/discovery/">API Discovery Service</a> – share a great deal of behaviour. By ingesting the metadata provided by this service, you can use gargle’s request helpers to exploit this shared data and logic, while also decreasing the chance that you and your users will submit ill-formed requests.</p>
+<p>The request helpers in gargle check the combined inputs from user and developer against suitably prepared API metadata:</p>
 <ul>
 <li>If required parameters are missing, an error is thrown.</li>
 <li>If unrecognized parameters are submitted, an error is thrown.</li>
 <li>Parameters are automatically placed in their correct location: URL substitution, query, or body.</li>
 <li><em>Is there something else you care about? It is possible to do more, but it would help to have concrete requests.</em></li>
 </ul>
-<p>Google provides <a href="https://developers.google.com/api-client-library/">API libraries for several languages</a>, including Java, Go, Python, JavaScript, Ruby and more (but not R). However, note that all of these machine-generated libraries are based on the API Discovery Service. It is the <a href="https://developers.google.com/discovery/v1/using#build">official recommendation</a> to use the Discovery Document when building client libraries. The gargle package aims to implement this in a way that is idiomatic for R and its developers.</p>
+<p>Google provides <a href="https://developers.google.com/api-client-library/">API libraries for several languages</a>, including Java, Go, Python, JavaScript, Ruby and more (but not R). All of these libraries are machine-generated from the metadata provided by the API Discovery Service. It is the <a href="https://developers.google.com/discovery/v1/using#build">official recommendation</a> to use the Discovery Document when building client libraries. The gargle package aims to implement key parts of this strategy, in a way that is also idiomatic for R and its developers.</p>
+</div>
+<div id="high-level-design-pattern" class="section level2">
+<h2 class="hasAnchor">
+<a href="#high-level-design-pattern" class="anchor"></a>High-level design pattern</h2>
+<p>gargle facilitates this design for API-wrapping packages:</p>
+<ul>
+<li>A machine-assisted low-level interface driven by the Discovery Document:
+<ul>
+<li>Your package exports thin wrapper functions around gargle’s helpers to form and make HTTP requests, that inject package-specific logic and data, such as an API key and user agent. This is for power users and yourself.</li>
+</ul>
+</li>
+<li>High-level, task-oriented, user-facing functions that constitute the main interface of your package.
+<ul>
+<li>These functions convert user input into the form required by the API and pass it along to your low-level interface functions.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="gargles-http-request-helpers" class="section level2">
+<h2 class="hasAnchor">
+<a href="#gargles-http-request-helpers" class="anchor"></a>gargle’s HTTP request helpers</h2>
+<p>gargle provides support for creating and sending HTTP requests via these functions:</p>
+<p><code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>: a.k.a. The Smart One.</p>
+<ul>
+<li>Processes the info in <code>params</code> relative to detailed knowledge about the <code>endpoint</code>, derived from an API Discovery Document.</li>
+<li>Checks for required and unrecognized parameters.</li>
+<li>Peels off <code>params</code> destined for the body into their own part.</li>
+<li>Returns request data in a form that anticipates the <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> call that is on the horizon.</li>
+</ul>
+<p><code><a href="../reference/request_develop.html">request_build(method, path, params, body, token, key, base_url)</a></code>: a.k.a. The Dumb One.</p>
+<ul>
+<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_develop()</a></code>, although that is not required. It can be called directly to enjoy a few luxuries even when making one-off API calls in the absence of an ingested Discovery Document.</li>
+<li>Integrates <code>params</code> into a URL via substitution and the query string.</li>
+<li>Sends either an API key or an OAuth token, but it provides no default values or logic for either.</li>
+</ul>
+<p><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code>: actually makes the HTTP request.</p>
+<ul>
+<li>Consults <code>x$method</code> to determine which <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code> and <code>...</code> passed as arguments.</li>
+</ul>
+<p>They are usually called in the above order, though they don’t have to be used that way. It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.</p>
 </div>
 <div id="discovery-documents" class="section level2">
 <h2 class="hasAnchor">
 <a href="#discovery-documents" class="anchor"></a>Discovery Documents</h2>
 <p>Google’s <a href="https://developers.google.com/discovery/">API Discovery Service</a> “provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs”. We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle’s request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.</p>
-<p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. These files are located here:</p>
+<p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can file these files in the gargle installation like so:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">ddi_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"discovery-doc-ingest"</span>, <span class="dt">package =</span> <span class="st">"gargle"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(ddi_dir)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;  [1] "api-wide-parameter-names.txt"    "api-wide-parameters-humane.txt" </span></a>
@@ -140,7 +169,7 @@
 <li>
 <code>drive-example.R</code> uses those functions to ingest metadata on the Drive v3 API and store it as an internal data object for use in <a href="https://googledrive.tidyverse.org">googledrive</a>.</li>
 </ul>
-<p>The remaining files present some analysis of the Discovery Document for the Discovery API itself (very meta!) and write some files we consult for reference.</p>
+<p>The remaining files present an analysis of the Discovery Document for the Discovery API itself (very meta!) and write files that are useful for reference. Several are included at the end of this vignette.</p>
 <p>Why aren’t the ingest functions exported by gargle? First, we regard this as functionality that is needed at development time, not install or run time. This is something you’ll do every few months, probably associated with preparing a release of a wrapper package. Second, the packages that are useful for wrangling JSON and lists are not existing dependencies of gargle, so putting these function in gargle would require some unappealing compromises.</p>
 </div>
 <div id="method-or-endpoint-data" class="section level2">
@@ -158,10 +187,10 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">.endpoints[[<span class="st">"drive.files.create"</span>]]</a></code></pre></div>
 <p>That info can be passed along to <code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
 </div>
-<div id="helpers-to-create-requests" class="section level2">
+<div id="design-suggestion-forming-requests" class="section level2">
 <h2 class="hasAnchor">
-<a href="#helpers-to-create-requests" class="anchor"></a>Helpers to create requests</h2>
-<p>Here’s the model we used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
+<a href="#design-suggestion-forming-requests" class="anchor"></a>Design suggestion: forming requests</h2>
+<p>Here’s the model used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">request_generate &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">endpoint =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">character</a></span>(),</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">                             <span class="dt">params =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(),</a>
@@ -192,9 +221,9 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <p><code>key</code> and <code>token</code> refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. This is also where we enforce the rule that we always send exactly <strong>one</strong> of <code>key</code> and <code>token</code>.</p>
 <p><code>googledrive::request_generate()</code> takes care of everything specific to the Drive API and the user’s input and task. Then it uses <code><a href="../reference/request_develop.html">gargle::request_develop()</a></code> followed by <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> to finish preparing the request.</p>
 </div>
-<div id="helper-to-make-requests" class="section level2">
+<div id="design-suggestion-making-requests" class="section level2">
 <h2 class="hasAnchor">
-<a href="#helper-to-make-requests" class="anchor"></a>Helper to make requests</h2>
+<a href="#design-suggestion-making-requests" class="anchor"></a>Design suggestion: making requests</h2>
 <p>The output of <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> specifies an HTTP request.</p>
 <p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute it.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># gargle::</span></a>
@@ -224,6 +253,105 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a class="sourceLine" id="cb7-3" data-line-number="3">  gargle<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gargle/topics/request_make">request_make</a></span>(x, ..., <span class="dt">user_agent =</span> <span class="kw">drive_ua</span>())</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">}</a></code></pre></div>
 </div>
+<div id="reference" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reference" class="anchor"></a>Reference</h2>
+<p><em>derived from the Discovery Document for the Discovery Service</em></p>
+<p>Properties of an endpoint</p>
+<pre><code>description             string  Description of this method.
+etagRequired            boolean Whether this method requires an ETag to be
+                                specified. The ETag is sent as an HTTP If-
+                                Match or If-None-Match header.
+httpMethod              string  HTTP method used by this method.
+id                      string  A unique ID for this method. This property
+                                can be used to match methods between
+                                different versions of Discovery.
+mediaUpload             object  Media upload parameters.
+parameterOrder          array   Ordered list of required parameters, serves
+                                as a hint to clients on how to structure
+                                their method signatures. The array is ordered
+                                such that the "most-significant" parameter
+                                appears first.
+parameters              object  Details for all parameters in this method.
+path                    string  The URI path of this REST method. Should
+                                be used in conjunction with the basePath
+                                property at the api-level.
+request                 object  The schema for the request.
+response                object  The schema for the response.
+scopes                  array   OAuth 2.0 scopes applicable to this method.
+supportsMediaDownload   boolean Whether this method supports media downloads.
+supportsMediaUpload     boolean Whether this method supports media uploads.
+supportsSubscription    boolean Whether this method supports subscriptions.
+useMediaDownloadService boolean Indicates that downloads from this method
+                                should use the download service URL (i.e.
+                                "/download"). Only applies if the method
+                                supports media download.</code></pre>
+<p>API-wide endpoint parameters (taken from Discovery API but, empirically, are shared with other APIs):</p>
+<pre><code>alt         string  Data format for the response.
+fields      string  Selector specifying which fields to include
+                    in a partial response.
+key         string  API key. Your API key identifies your project
+                    and provides you with API access, quota, and
+                    reports. Required unless you provide an OAuth
+                    2.0 token.
+oauth_token string  OAuth 2.0 token for the current user.
+prettyPrint boolean Returns response with indentations and line
+                    breaks.
+quotaUser   string  An opaque string that represents a user
+                    for quota purposes. Must not exceed 40
+                    characters.
+userIp      string  Deprecated. Please use quotaUser instead.</code></pre>
+<p>Properties of an endpoint parameters:</p>
+<pre><code>$ref                 string  A reference to another schema. The value of
+                             this property is the "id" of another schema.
+additionalProperties NULL    If this is a schema for an object, this
+                             property is the schema for any additional
+                             properties with dynamic keys on this object.
+annotations          object  Additional information about this property.
+default              string  The default value of this property (if one
+                             exists).
+description          string  A description of this object.
+enum                 array   Values this parameter may take (if it is an
+                             enum).
+enumDescriptions     array   The descriptions for the enums. Each position
+                             maps to the corresponding value in the "enum"
+                             array.
+format               string  An additional regular expression or key that
+                             helps constrain the value. For more details
+                             see: http://tools.ietf.org/html/draft-zyp-
+                             json-schema-03#section-5.23
+id                   string  Unique identifier for this schema.
+items                NULL    If this is a schema for an array, this
+                             property is the schema for each element in
+                             the array.
+location             string  Whether this parameter goes in the query or
+                             the path for REST requests.
+maximum              string  The maximum value of this parameter.
+minimum              string  The minimum value of this parameter.
+pattern              string  The regular expression this parameter must
+                             conform to. Uses Java 6 regex format: http://
+                             docs.oracle.com/javase/6/docs/api/java/util/
+                             regex/Pattern.html
+properties           object  If this is a schema for an object, list the
+                             schema for each property of this object.
+readOnly             boolean The value is read-only, generated by the
+                             service. The value cannot be modified by the
+                             client. If the value is included in a POST,
+                             PUT, or PATCH request, it is ignored by the
+                             service.
+repeated             boolean Whether this parameter may appear multiple
+                             times.
+required             boolean Whether the parameter is required.
+type                 string  The value type for this schema. A list
+                             of values can be found here: http://
+                             tools.ietf.org/html/draft-zyp-json-
+                             schema-03#section-5.1
+variant              object  In a variant data type, the value of
+                             one property is used to determine how to
+                             interpret the entire entity. Its value must
+                             exist in a map of descriminant values to
+                             schema names.</code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -231,11 +359,14 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#what-the-payoff">What the payoff?</a></li>
+<li><a href="#why-use-gargles-request-helpers">Why use gargle’s request helpers?</a></li>
+      <li><a href="#high-level-design-pattern">High-level design pattern</a></li>
+      <li><a href="#gargles-http-request-helpers">gargle’s HTTP request helpers</a></li>
       <li><a href="#discovery-documents">Discovery Documents</a></li>
       <li><a href="#method-or-endpoint-data">Method (or endpoint) data</a></li>
-      <li><a href="#helpers-to-create-requests">Helpers to create requests</a></li>
-      <li><a href="#helper-to-make-requests">Helper to make requests</a></li>
+      <li><a href="#design-suggestion-forming-requests">Design suggestion: forming requests</a></li>
+      <li><a href="#design-suggestion-making-requests">Design suggestion: making requests</a></li>
+      <li><a href="#reference">Reference</a></li>
       </ul>
 </div>
       </div>
