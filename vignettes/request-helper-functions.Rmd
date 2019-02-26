@@ -90,7 +90,7 @@ They are usually called in the above order, though they don't have to be used th
 
 Google's [API Discovery Service](https://developers.google.com/discovery/) "provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs". We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle's request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.
 
-The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can file these files in the gargle installation like so:
+The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can find these files in the gargle installation like so:
 
 ```{r}
 ddi_dir <- system.file("discovery-doc-ingest", package = "gargle")
