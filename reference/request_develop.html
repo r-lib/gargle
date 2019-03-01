@@ -142,14 +142,16 @@ high-level wrappers for users.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>endpoint</th>
-      <td><p>List of information about the target endpoint. Presumably
-prepared from the <a href='https://developers.google.com/discovery/v1/getting_started#background-resources'>Discovery Document</a>
+      <td><p>List of information about the target endpoint or, in
+Google's vocabulary, the target "method". Presumably prepared from the
+<a href='https://developers.google.com/discovery/v1/getting_started#background-resources'>Discovery Document</a>
 for the target API.</p></td>
     </tr>
     <tr>
       <th>params</th>
       <td><p>Named list. Values destined for URL substitution, the query,
-or, for <code>request_develop()</code> only, the body.</p></td>
+or, for <code>request_develop()</code> only, the body. For <code>request_build()</code>, body
+parameters must be passed via the <code>body</code> argument.</p></td>
     </tr>
     <tr>
       <th>base_url</th>
@@ -161,10 +163,11 @@ or, for <code>request_develop()</code> only, the body.</p></td>
     </tr>
     <tr>
       <th>path</th>
-      <td><p>Character. Path to the resource, not including API's <code>base_url</code>.
-Examples: <code>drive/v3/about</code> or <code>drive/v3/files/{fileId}</code>. If <code>path</code> includes
-variables inside curly brackets, these are substituted using named
-parameters found in <code>params</code> by <code>request_build()</code>.</p></td>
+      <td><p>Character. Path to the resource, not including the API's
+<code>base_url</code>. Examples: <code>drive/v3/about</code> or <code>drive/v3/files/{fileId}</code>. The
+<code>path</code> can be a template, i.e. it can include variables inside curly
+brackets, such as <code>{fileId}</code> in the example. Such variables are substituted
+by <code>request_build()</code>, using named parameters found in <code>params</code>.</p></td>
     </tr>
     <tr>
       <th>body</th>
@@ -214,8 +217,9 @@ those destined for path substitution or the query.</p></li>
     <p>Builds a request, in a purely mechanical sense. This function does nothing
 specific to any particular Google API or endpoint.</p><ul>
 <li><p>Use with the output of <code>request_develop()</code> or with hand-crafted input.</p></li>
-<li><p><code>params</code> are used for variable substitution in <code>path</code>. Unused <code>params</code>
-become the query.</p></li>
+<li><p><code>params</code> are used for variable substitution in <code>path</code>. Leftover <code>params</code>
+that are not bound by the <code>path</code> template automatically become HTTP
+query parameters.</p></li>
 <li><p>Adds an API key to the query iff <code>token = NULL</code> and removes the API key
 otherwise. Client packages should generally pass their own API key in, but
 note that <code><a href='gargle_api_key.html'>gargle_api_key()</a></code> is available for small-scale experimentation.</p></li>
