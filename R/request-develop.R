@@ -3,18 +3,21 @@
 #' Intended primarily for internal use in client packages that provide
 #' high-level wrappers for users.
 #'
-#' @param endpoint List of information about the target endpoint. Presumably
-#'   prepared from the [Discovery
+#' @param endpoint List of information about the target endpoint or, in
+#'   Google's vocabulary, the target "method". Presumably prepared from the
+#'   [Discovery
 #'   Document](https://developers.google.com/discovery/v1/getting_started#background-resources)
 #'   for the target API.
 #' @param params Named list. Values destined for URL substitution, the query,
-#'   or, for `request_develop()` only, the body.
+#'   or, for `request_develop()` only, the body. For `request_build()`, body
+#'   parameters must be passed via the `body` argument.
 #' @param base_url Character.
 #' @param method Character. An HTTP verb, such as `GET` or `POST`.
-#' @param path Character. Path to the resource, not including API's `base_url`.
-#'   Examples: `drive/v3/about` or `drive/v3/files/{fileId}`. If `path` includes
-#'   variables inside curly brackets, these are substituted using named
-#'   parameters found in `params` by `request_build()`.
+#' @param path Character. Path to the resource, not including the API's
+#'   `base_url`. Examples: `drive/v3/about` or `drive/v3/files/{fileId}`. The
+#'   `path` can be a template, i.e. it can include variables inside curly
+#'   brackets, such as `{fileId}` in the example. Such variables are substituted
+#'   by `request_build()`, using named parameters found in `params`.
 #' @param body List. Values to send in the API request body.
 #' @param key API key. Needed for requests that don't contain a token. For more,
 #'   see Google's document [Credentials, access, security, and
@@ -43,8 +46,9 @@
 #' Builds a request, in a purely mechanical sense. This function does nothing
 #' specific to any particular Google API or endpoint.
 #'   - Use with the output of `request_develop()` or with hand-crafted input.
-#'   - `params` are used for variable substitution in `path`. Unused `params`
-#'     become the query.
+#'   - `params` are used for variable substitution in `path`. Leftover `params`
+#'     that are not bound by the `path` template automatically become HTTP
+#'     query parameters.
 #'   - Adds an API key to the query iff `token = NULL` and removes the API key
 #'   otherwise. Client packages should generally pass their own API key in, but
 #'   note that [gargle_api_key()] is available for small-scale experimentation.

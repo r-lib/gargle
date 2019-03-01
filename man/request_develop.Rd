@@ -13,21 +13,24 @@ request_build(method = "GET", path = "", params = list(),
   base_url = "https://www.googleapis.com")
 }
 \arguments{
-\item{endpoint}{List of information about the target endpoint. Presumably
-prepared from the \href{https://developers.google.com/discovery/v1/getting_started#background-resources}{Discovery Document}
+\item{endpoint}{List of information about the target endpoint or, in
+Google's vocabulary, the target "method". Presumably prepared from the
+\href{https://developers.google.com/discovery/v1/getting_started#background-resources}{Discovery Document}
 for the target API.}
 
 \item{params}{Named list. Values destined for URL substitution, the query,
-or, for \code{request_develop()} only, the body.}
+or, for \code{request_develop()} only, the body. For \code{request_build()}, body
+parameters must be passed via the \code{body} argument.}
 
 \item{base_url}{Character.}
 
 \item{method}{Character. An HTTP verb, such as \code{GET} or \code{POST}.}
 
-\item{path}{Character. Path to the resource, not including API's \code{base_url}.
-Examples: \code{drive/v3/about} or \code{drive/v3/files/{fileId}}. If \code{path} includes
-variables inside curly brackets, these are substituted using named
-parameters found in \code{params} by \code{request_build()}.}
+\item{path}{Character. Path to the resource, not including the API's
+\code{base_url}. Examples: \code{drive/v3/about} or \code{drive/v3/files/{fileId}}. The
+\code{path} can be a template, i.e. it can include variables inside curly
+brackets, such as \code{{fileId}} in the example. Such variables are substituted
+by \code{request_build()}, using named parameters found in \code{params}.}
 
 \item{body}{List. Values to send in the API request body.}
 
@@ -77,8 +80,9 @@ Builds a request, in a purely mechanical sense. This function does nothing
 specific to any particular Google API or endpoint.
 \itemize{
 \item Use with the output of \code{request_develop()} or with hand-crafted input.
-\item \code{params} are used for variable substitution in \code{path}. Unused \code{params}
-become the query.
+\item \code{params} are used for variable substitution in \code{path}. Leftover \code{params}
+that are not bound by the \code{path} template automatically become HTTP
+query parameters.
 \item Adds an API key to the query iff \code{token = NULL} and removes the API key
 otherwise. Client packages should generally pass their own API key in, but
 note that \code{\link[=gargle_api_key]{gargle_api_key()}} is available for small-scale experimentation.
