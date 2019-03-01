@@ -7,14 +7,13 @@
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
   "!DEBUG trying credentials_service account"
-  if (path_ext(path) != "json") {
-    stop_glue("{bt('path')} must have extension {sq('json')}, not {sq(path_ext(path))}.")
-  }
   info <- jsonlite::fromJSON(path)
-  token <- httr::TokenServiceAccount$new(
-    endpoint = NULL,
+  token <- httr::oauth_service_token(
+    ## FIXME: not sure endpoint is truly necessary, but httr thinks it is.
+    ## https://github.com/r-lib/httr/issues/576
+    endpoint = gargle_outh_endpoint(),
     secrets = info,
-    params = list(scope = scopes)
+    scope = scopes
   )
   if (is.null(token$credentials$access_token) ||
     !nzchar(token$credentials$access_token)) {
