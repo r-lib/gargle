@@ -43,7 +43,7 @@ PREFIX_auth_details <- function(.data = list(
     "    also force <<PACKAGE>> to switch from one identity to another. If",
     "    there's no cached token for the email, this triggers a return to the",
     "    browser to choose the identity and give consent.",
-    "  * Load a service account token (as opposed to OAuth).",
+    "  * Use a service account token.",
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
     "",
@@ -119,7 +119,7 @@ PREFIX_token_return <- function() {
 PREFIX_auth_config_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
-)) {
+), .deauth_possible = TRUE) {
   render_lines(
     "@description",
     "These functions give the user more control over auth than what is",
@@ -136,6 +136,9 @@ PREFIX_auth_config_description <- function(.data = list(
     "     your client ID and secret via [httr::oauth_app()] or provide a path",
     "     to the JSON file containing same, which you can download from",
     "     [Google Developers Console](https://console.developers.google.com).",
+    .data = .data
+  )
+  if (.deauth_possible) { render_lines(
     "   * The API key. If <<PACKAGE>> is deauthorized via",
     "     [<<PREFIX>>_deauth()], all requests will be sent with an API key in",
     "     lieu of a token. If you want to provide your own API key, setup a",
@@ -145,19 +148,28 @@ PREFIX_auth_config_description <- function(.data = list(
     "`<<PREFIX>>_api_key()` and `<<PREFIX>>_oauth_app()` retrieve the",
     " currently configured API key and OAuth app, respectively.",
     .data = .data
-  )
+  )} else { render_lines(
+    "",
+    "`<<PREFIX>>_oauth_app()` retrieves the currently configured OAuth app.",
+    .data = .data
+  )}
 }
 
-PREFIX_auth_config_params <- function() {
+PREFIX_auth_config_params_except_key <- function() {
   c(
     "@param app OAuth app. Defaults to a tidyverse app.",
-    "@param api_key API key. Defaults to a tidyverse key. Necessary in order",
-    "  to make unauthorized \"token-free\" requests for public resources.",
     "@inheritParams gargle::oauth_app_from_json"
   )
 }
 
-PREFIX_auth_config_return <- function(.data = list(
+PREFIX_auth_config_params_key <- function() {
+  c(
+    "@param api_key API key. Defaults to a tidyverse key. Necessary in order",
+    "  to make unauthorized \"token-free\" requests for public resources."
+  )
+}
+
+PREFIX_auth_config_return_with_key <- function(.data = list(
   PREFIX = "PREFIX"
 )) {
   render_lines(
@@ -165,6 +177,17 @@ PREFIX_auth_config_return <- function(.data = list(
     "which is defined in the gargle package. `<<PREFIX>>_api_key()`: the",
     "current API key. `<<PREFIX>>_oauth_app()`: the current",
     "[httr::oauth_app()].",
+    .data = .data
+  )
+}
+
+PREFIX_auth_config_return_without_key <- function(.data = list(
+  PREFIX = "PREFIX"
+)) {
+  render_lines(
+    "@return `<<PREFIX>>_auth_config()`: An object of R6 class `AuthState`,",
+    "which is defined in the gargle package. `<<PREFIX>>_oauth_app()`: the ",
+    "current [httr::oauth_app()].",
     .data = .data
   )
 } # nocov end
