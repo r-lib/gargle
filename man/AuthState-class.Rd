@@ -10,17 +10,17 @@
 AuthState
 }
 \arguments{
-\item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+\item{app}{An OAuth consumer application, as produced by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
-\item{api_key}{API key. Necessary in order to make unauthorized "token-free"
-requests for public resources. Can be set to \code{NULL} if all requests will be
-authorized, i.e. they will include a token.}
+\item{api_key}{API key (a string). Necessary in order to make unauthorized
+"token-free" requests for public resources. Can be \code{NULL} if all requests
+will be authorized, i.e. they will include a token.}
 
 \item{auth_active}{Logical. \code{TRUE} means requests should include a token (and
-not an API key). \code{FALSE} means requests should include an API key (and not
-a token).}
+probably not an API key). \code{FALSE} means requests should include an API key
+(and probably not a token).}
 
-\item{cred}{A configured token.}
+\item{cred}{A token, as produced by \code{\link[httr:oauth2.0_token]{httr::oauth2.0_token()}}.}
 }
 \description{
 An \code{AuthState} object manages an authorization state, presumably on behalf of
@@ -28,12 +28,20 @@ a client package that makes requests to a Google API. This state is
 incorporated into the package's requests for tokens and controls the
 inclusion of tokens in requests to the target API:
 \itemize{
-\item \code{app} and \code{api_key} identify the package to Google APIs as an
-"application".
-\item \code{auth_active} reflects whether requests are authorized by an
+\item \code{api_key} is the simplest way to associate a request with a specific
+Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
+A few calls to certain APIs, e.g. reading a public Sheet, can succeed
+with an API key, but this is the exception.
+\item \code{app} is an OAuth app associated with a specific Google Cloud Platform
+\href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
+This is used in the OAuth flow, in which an authenticated user authorizes
+the app to access or manipulate data on their behalf.
+\item \code{auth_active} reflects whether outgoing requests will be authorized by an
 authenticated user or are unauthorized requests for public resources.
-\item \code{cred} is a configured token, ready to send in requests. If
-\code{auth_active = FALSE}, this should be \code{NULL}.
+These two states correspond to sending a request with a token versus an
+API key, respectively.
+\item \code{cred} is where the current token is cached within a session, once one
+has been fetched.
 }
 }
-\keyword{internal}
+\keyword{datasets}

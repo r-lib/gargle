@@ -4,24 +4,31 @@
 #' a client package that makes requests to a Google API. This state is
 #' incorporated into the package's requests for tokens and controls the
 #' inclusion of tokens in requests to the target API:
-#'   * `app` and `api_key` identify the package to Google APIs as an
-#'     "application".
-#'   * `auth_active` reflects whether requests are authorized by an
+#'   * `api_key` is the simplest way to associate a request with a specific
+#'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
+#'     A few calls to certain APIs, e.g. reading a public Sheet, can succeed
+#'     with an API key, but this is the exception.
+#'   * `app` is an OAuth app associated with a specific Google Cloud Platform
+#'     [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
+#'     This is used in the OAuth flow, in which an authenticated user authorizes
+#'     the app to access or manipulate data on their behalf.
+#'   * `auth_active` reflects whether outgoing requests will be authorized by an
 #'     authenticated user or are unauthorized requests for public resources.
-#'   * `cred` is a configured token, ready to send in requests. If
-#'     `auth_active = FALSE`, this should be `NULL`.
+#'     These two states correspond to sending a request with a token versus an
+#'     API key, respectively.
+#'   * `cred` is where the current token is cached within a session, once one
+#'     has been fetched.
 #'
-#' @param app An OAuth consumer application, created by [httr::oauth_app()].
-#' @param api_key API key. Necessary in order to make unauthorized "token-free"
-#'   requests for public resources. Can be set to `NULL` if all requests will be
-#'   authorized, i.e. they will include a token.
+#' @param app An OAuth consumer application, as produced by [httr::oauth_app()].
+#' @param api_key API key (a string). Necessary in order to make unauthorized
+#'   "token-free" requests for public resources. Can be `NULL` if all requests
+#'   will be authorized, i.e. they will include a token.
 #' @param auth_active Logical. `TRUE` means requests should include a token (and
-#'   not an API key). `FALSE` means requests should include an API key (and not
-#'   a token).
-#' @param cred A configured token.
+#'   probably not an API key). `FALSE` means requests should include an API key
+#'   (and probably not a token).
+#' @param cred A token, as produced by [httr::oauth2.0_token()].
 #'
 #' @docType class
-#' @keywords internal
 #' @format An R6 class object.
 #' @export
 #' @name AuthState-class
@@ -77,5 +84,15 @@ AuthState <- R6::R6Class("AuthState", list(
   set_cred = function(cred) {
     self$cred <- cred
     invisible(self)
+  },
+  clear_cred = function() {
+    self$set_cred(NULL)
+  },
+  get_cred = function() {
+    self$cred
+  },
+  has_cred = function() {
+    ## FIXME(jennybc): how should this interact with auth_active? should it?
+    !is.null(self$cred)
   }
 ))
