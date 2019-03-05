@@ -1,6 +1,39 @@
+#' Create an AuthState
+#'
+#' Constructor function for objects of class [AuthState].
+#'
+#' @param package Package name, an optional string. The associated package will
+#'   generally by implied by the namespace within which the `AuthState` is
+#'   defined. But it's possible to record the package name explicitly and
+#'   seems like a good practice.
+#' @param app An OAuth consumer application, as produced by [httr::oauth_app()].
+#' @param api_key API key (a string). Necessary in order to make unauthorized
+#'   "token-free" requests for public resources. Can be `NULL` if all requests
+#'   will be authorized, i.e. they will include a token.
+#' @param auth_active Logical. `TRUE` means requests should include a token (and
+#'   probably not an API key). `FALSE` means requests should include an API key
+#'   (and probably not a token).
+#'
+#' @return An object of class [AuthState].
+#' @export
+## FIXME(jennybc): Analogous functions for the Gargle2.0 class default to the
+## gargle oauth app. Should we do same in both places? If so, which way?
+## Default to gargle app or have no default?
+init_AuthState <- function(package = NA_character_,
+                           app,
+                           api_key,
+                           auth_active) {
+  AuthState$new(
+    package = package,
+    app = app,
+    api_key,
+    auth_active = auth_active
+  )
+}
+
 #' Authorization state
 #'
-#' An `AuthState` object manages an authorization state, presumably on behalf of
+#' An `AuthState` object manages an authorization state, typically on behalf of
 #' a client package that makes requests to a Google API. This state is
 #' incorporated into the package's requests for tokens and controls the
 #' inclusion of tokens in requests to the target API:
@@ -17,16 +50,9 @@
 #'     These two states correspond to sending a request with a token versus an
 #'     API key, respectively.
 #'   * `cred` is where the current token is cached within a session, once one
-#'     has been fetched.
-#'
-#' @param app An OAuth consumer application, as produced by [httr::oauth_app()].
-#' @param api_key API key (a string). Necessary in order to make unauthorized
-#'   "token-free" requests for public resources. Can be `NULL` if all requests
-#'   will be authorized, i.e. they will include a token.
-#' @param auth_active Logical. `TRUE` means requests should include a token (and
-#'   probably not an API key). `FALSE` means requests should include an API key
-#'   (and probably not a token).
-#' @param cred A token, as produced by [httr::oauth2.0_token()].
+#'     has been fetched. This is a token produced by [httr::oauth2.0_token()].
+#' An `AuthState` should be created through the constructor function
+#' [init_AuthState()].
 #'
 #' @docType class
 #' @format An R6 class object.

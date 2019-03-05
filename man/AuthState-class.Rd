@@ -9,21 +9,8 @@
 \usage{
 AuthState
 }
-\arguments{
-\item{app}{An OAuth consumer application, as produced by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
-
-\item{api_key}{API key (a string). Necessary in order to make unauthorized
-"token-free" requests for public resources. Can be \code{NULL} if all requests
-will be authorized, i.e. they will include a token.}
-
-\item{auth_active}{Logical. \code{TRUE} means requests should include a token (and
-probably not an API key). \code{FALSE} means requests should include an API key
-(and probably not a token).}
-
-\item{cred}{A token, as produced by \code{\link[httr:oauth2.0_token]{httr::oauth2.0_token()}}.}
-}
 \description{
-An \code{AuthState} object manages an authorization state, presumably on behalf of
+An \code{AuthState} object manages an authorization state, typically on behalf of
 a client package that makes requests to a Google API. This state is
 incorporated into the package's requests for tokens and controls the
 inclusion of tokens in requests to the target API:
@@ -41,7 +28,9 @@ authenticated user or are unauthorized requests for public resources.
 These two states correspond to sending a request with a token versus an
 API key, respectively.
 \item \code{cred} is where the current token is cached within a session, once one
-has been fetched.
+has been fetched. This is a token produced by \code{\link[httr:oauth2.0_token]{httr::oauth2.0_token()}}.
+An \code{AuthState} should be created through the constructor function
+\code{\link[=init_AuthState]{init_AuthState()}}.
 }
 }
 \keyword{datasets}
