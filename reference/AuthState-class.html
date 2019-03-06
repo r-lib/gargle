@@ -32,16 +32,26 @@
 
 <meta property="og:title" content="Authorization state — AuthState-class" />
 
-<meta property="og:description" content="An AuthState object manages an authorization state, presumably on behalf of
+<meta property="og:description" content="An AuthState object manages an authorization state, typically on behalf of
 a client package that makes requests to a Google API. This state is
 incorporated into the package's requests for tokens and controls the
 inclusion of tokens in requests to the target API:
-app and api_key identify the package to Google APIs as an
-&quot;application&quot;.
-auth_active reflects whether requests are authorized by an
+api_key is the simplest way to associate a request with a specific
+Google Cloud Platform project.
+A few calls to certain APIs, e.g. reading a public Sheet, can succeed
+with an API key, but this is the exception.
+app is an OAuth app associated with a specific Google Cloud Platform
+project.
+This is used in the OAuth flow, in which an authenticated user authorizes
+the app to access or manipulate data on their behalf.
+auth_active reflects whether outgoing requests will be authorized by an
 authenticated user or are unauthorized requests for public resources.
-cred is a configured token, ready to send in requests. If
-auth_active = FALSE, this should be NULL.
+These two states correspond to sending a request with a token versus an
+API key, respectively.
+cred is where the current token is cached within a session, once one
+has been fetched. This is a token produced by httr::oauth2.0_token().
+An AuthState should be created through the constructor function
+init_AuthState().
 " />
 <meta name="twitter:card" content="summary" />
 
@@ -73,7 +83,7 @@ auth_active = FALSE, this should be NULL.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9003</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9004</span>
       </span>
     </div>
 
@@ -134,47 +144,32 @@ auth_active = FALSE, this should be NULL.
 
     <div class="ref-description">
     
-    <p>An <code>AuthState</code> object manages an authorization state, presumably on behalf of
+    <p>An <code>AuthState</code> object manages an authorization state, typically on behalf of
 a client package that makes requests to a Google API. This state is
 incorporated into the package's requests for tokens and controls the
 inclusion of tokens in requests to the target API:</p><ul>
-<li><p><code>app</code> and <code>api_key</code> identify the package to Google APIs as an
-"application".</p></li>
-<li><p><code>auth_active</code> reflects whether requests are authorized by an
-authenticated user or are unauthorized requests for public resources.</p></li>
-<li><p><code>cred</code> is a configured token, ready to send in requests. If
-<code>auth_active = FALSE</code>, this should be <code>NULL</code>.</p></li>
+<li><p><code>api_key</code> is the simplest way to associate a request with a specific
+Google Cloud Platform <a href='https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects'>project</a>.
+A few calls to certain APIs, e.g. reading a public Sheet, can succeed
+with an API key, but this is the exception.</p></li>
+<li><p><code>app</code> is an OAuth app associated with a specific Google Cloud Platform
+<a href='https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects'>project</a>.
+This is used in the OAuth flow, in which an authenticated user authorizes
+the app to access or manipulate data on their behalf.</p></li>
+<li><p><code>auth_active</code> reflects whether outgoing requests will be authorized by an
+authenticated user or are unauthorized requests for public resources.
+These two states correspond to sending a request with a token versus an
+API key, respectively.</p></li>
+<li><p><code>cred</code> is where the current token is cached within a session, once one
+has been fetched. This is a token produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth2.0_token'>httr::oauth2.0_token()</a></code>.
+An <code>AuthState</code> should be created through the constructor function
+<code><a href='init_AuthState.html'>init_AuthState()</a></code>.</p></li>
 </ul>
     
     </div>
 
     <pre class="usage"><span class='no'>AuthState</span></pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>app</th>
-      <td><p>An OAuth consumer application, created by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>api_key</th>
-      <td><p>API key. Necessary in order to make unauthorized "token-free"
-requests for public resources. Can be set to <code>NULL</code> if all requests will be
-authorized, i.e. they will include a token.</p></td>
-    </tr>
-    <tr>
-      <th>auth_active</th>
-      <td><p>Logical. <code>TRUE</code> means requests should include a token (and
-not an API key). <code>FALSE</code> means requests should include an API key (and not
-a token).</p></td>
-    </tr>
-    <tr>
-      <th>cred</th>
-      <td><p>A configured token.</p></td>
-    </tr>
-    </table>
-    
+        
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An R6 class object.</p>
@@ -184,7 +179,6 @@ a token).</p></td>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#format">Format</a></li>
           </ul>
