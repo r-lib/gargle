@@ -4,7 +4,12 @@ test_that("we are pedantic about inputs when creating AuthState", {
   app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
 
   expect_error(
-    init_AuthState(package = NULL, app = app),
+    init_AuthState(
+      package = NULL,
+      app = app,
+      api_key = "API_KEY",
+      auth_active = TRUE
+    ),
     'is_string(package) is not TRUE',
     fixed = TRUE
   )
