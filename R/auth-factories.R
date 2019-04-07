@@ -57,6 +57,7 @@ make_auth <- function(
   # Set the default scopes.
   formals(auth_function)$scopes <- scopes
 
+  environment(auth_function) <- parent.frame(1)
   auth_function
 }
 
@@ -70,8 +71,10 @@ make_auth <- function(
 #' @examples
 #' drive_deauth <- make_deauth()
 make_deauth <- function() {
-  function() {
+  deauth_function <- function() {
     .auth$set_auth_active(FALSE)
     return(invisible())
   }
+  environment(deauth_function) <- parent.frame(1)
+  deauth_function
 }
