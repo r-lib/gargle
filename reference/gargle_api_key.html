@@ -157,9 +157,8 @@ and follow the instructions in <a href='https://support.google.com/googleapi/ans
 )
 <span class='no'>url</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/parse_url'>build_url</a></span>(<span class='no'>url</span>)
 <span class='no'>res</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/content'>content</a></span>(<span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></span>(<span class='no'>url</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>vapply</a></span>(<span class='no'>res</span>$<span class='no'>results</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>name</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] "The Naam"                    "The Oakwood Canadian Bistro"
-#&gt; [3] "Healthy Noodle House"        "Tapatio Mexican Cafe &amp; Bar" 
-#&gt; [5] "FreshFast"                  </div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/lapply'>vapply</a></span>(<span class='no'>res</span>$<span class='no'>results</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>name</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>1</span>))</div><div class='output co'>#&gt; [1] "The Naam"                   "Healthy Noodle House"      
+#&gt; [3] "Tapatio Mexican Cafe &amp; Bar" "FreshFast"                 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
