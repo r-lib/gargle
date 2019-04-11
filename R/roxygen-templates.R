@@ -7,6 +7,11 @@ render_lines <- function(..., .data) { # nocov start
   )
 }
 
+## FIXME(jennybc): find a place for this
+#' @section API console:
+#' To manage your google projects, use the API console:
+#' \url{https://console.cloud.google.com/}
+
 # PREFIX_auth() ----------------------------------------------------------
 
 PREFIX_auth_description <- function(.data = list(
@@ -120,7 +125,7 @@ PREFIX_auth_config_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 ), .deauth_possible = TRUE) {
-  render_lines(
+  lines <- c(
     "@description",
     "These functions give the user more control over auth than what is",
     "possible with [<<PREFIX>>_auth()]. Learn more in Google's documentation:",
@@ -135,10 +140,10 @@ PREFIX_auth_config_description <- function(.data = list(
     "     to obtain your own client ID and secret. Either make an app from",
     "     your client ID and secret via [httr::oauth_app()] or provide a path",
     "     to the JSON file containing same, which you can download from",
-    "     [Google Developers Console](https://console.developers.google.com).",
-    .data = .data
+    "     [Google Developers Console](https://console.developers.google.com)."
   )
-  if (.deauth_possible) { render_lines(
+  if (.deauth_possible) {
+    lines <- append(lines, c(
     "   * The API key. If <<PACKAGE>> is deauthorized via",
     "     [<<PREFIX>>_deauth()], all requests will be sent with an API key in",
     "     lieu of a token. If you want to provide your own API key, setup a",
@@ -146,13 +151,15 @@ PREFIX_auth_config_description <- function(.data = list(
     "     [Setting up API keys](https://support.google.com/googleapi/answer/6158862).",
     "",
     "`<<PREFIX>>_api_key()` and `<<PREFIX>>_oauth_app()` retrieve the",
-    " currently configured API key and OAuth app, respectively.",
-    .data = .data
-  )} else { render_lines(
+    " currently configured API key and OAuth app, respectively."
+    ))
+  } else {
+    lines <- append(lines, c(
     "",
-    "`<<PREFIX>>_oauth_app()` retrieves the currently configured OAuth app.",
-    .data = .data
-  )}
+    "`<<PREFIX>>_oauth_app()` retrieves the currently configured OAuth app."
+    ))
+  }
+  render_lines(lines, .data = .data)
 }
 
 PREFIX_auth_config_params_except_key <- function() {
