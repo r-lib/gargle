@@ -29,7 +29,7 @@ License: MIT + file LICENSE
 URL: https://github.com/r-lib/gargle
 BugReports: https://github.com/r-lib/gargle/issues
 Depends: 
-    R (>= 3.1)
+    R (>= 3.2)
 Imports: 
     debugme,
     fs (>= 1.2.0),
