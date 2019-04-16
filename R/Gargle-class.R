@@ -3,13 +3,14 @@
 #' Constructor function for objects of class [Gargle2.0].
 #'
 #' @param email Optional. Allows user to target a specific Google identity. If
-#'   specified, this is used only for token lookup, i.e. to determine if a
-#'   suitable token is already available in the cache. The email associated with
-#'   a token when it's cached is determined from the token itself, not from this
-#'   argument. Use `NA` or `FALSE` to match nothing and force the OAuth dance in
-#'   the browser. Use `TRUE` to allow email auto-discovery, if a suitable token
-#'   is found in the cache. Define the option `gargle.oauth_email` to set a
-#'   personal default.
+#'   specified, this is used for token lookup, i.e. to determine if a suitable
+#'   token is already available in the cache. If no such token is found, `email`
+#'   is used to pre-select the targetted Google identity in the OAuth chooser.
+#'   Note, however, that the email associated with a token when it's cached is
+#'   always determined from the token itself, never from this argument. Use `NA`
+#'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
+#'   `TRUE` to allow email auto-discovery, if a suitable token is found in the
+#'   cache. Define the option `gargle.oauth_email` to set a personal default.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request. The `"email"` scope is
@@ -18,7 +19,7 @@
 #'   does not appear on the consent screen.
 #' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
 #'   Otherwise, provide a URL to the user and prompt for a validation code.
-#'   Defaults to the option "gargle.oob_default" or `TRUE` if httpuv is not
+#'   Defaults to the option `gargle.oob_default` or `TRUE` if httpuv is not
 #'   installed.
 #' @param cache A logical value or a string. `TRUE` means to cache using the
 #'   default user-level cache file, `~/.R/gargle/gargle-oauth`, `FALSE` means
@@ -100,12 +101,16 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (isFALSE(email) || isNA(email)) {
       email <- NULL
     }
+    ## https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
+    ## optional hint for the auth server to pre-fill the email box
+    login_hint <- if (is_string(email) && email != "*") email
 
     self$endpoint   <- gargle_outh_endpoint()
     self$email      <- email
     self$app        <- app
     self$package    <- package
     params$scope    <- normalize_scopes(add_email_scope(params$scope))
+    params$query_authorize_extra <- list(login_hint = login_hint)
     self$params     <- params
     self$cache_path <- cache_establish(cache_path)
 
