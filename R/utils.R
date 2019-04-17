@@ -1,7 +1,3 @@
-"%||%" <- function(a, b) {
-  if (length(a) > 0) a else b
-}
-
 is_string <- function(x) is.character(x) && length(x) == 1
 
 empty_string <- function(x) {

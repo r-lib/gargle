@@ -1,6 +1,7 @@
 #' @keywords internal
 #' @import fs
 #' @importFrom glue glue glue_data glue_collapse
+#' @importFrom rlang %||%
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage
