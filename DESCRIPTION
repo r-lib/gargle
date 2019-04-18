@@ -42,6 +42,7 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
+    sodium,
     testthat
 VignetteBuilder: 
     knitr
