@@ -201,6 +201,40 @@ test_that("token_match() fails for >1 short hash match, if non-interactive", {
   expect_null(token_match(candidate, existing))
 })
 
+# situation report ----------------------------------------------------------
+
+test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
+  expect_output(
+    cache <- gargle_oauth_sitrep(cache = FALSE),
+    "No"
+  )
+  expect_null(cache)
+})
+
+test_that("gargle_oauth_sitrep() reports on specified cache", {
+  tmp_cache <- file_temp()
+  on.exit(dir_delete(tmp_cache))
+  dir_create(tmp_cache)
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
+  )
+  gargle2.0_token(
+    email = "b@example.org",
+    credentials = list(b = 2),
+    cache = tmp_cache
+  )
+
+  expect_output(
+    out <- gargle_oauth_sitrep(tmp_cache),
+    "2 tokens found"
+  )
+  expect_is(out, "data.frame")
+  expect_identical(nrow(out), 2L)
+})
+
 # helpers -----------------------------------------------------------
 
 test_that("match2() works", {

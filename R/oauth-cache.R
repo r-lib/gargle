@@ -250,3 +250,71 @@ match2 <- function(needle, haystack) {
   }
   matches
 }
+
+
+# gargle situation report -------------------------------------------------
+
+#' OAuth token situation report
+#'
+#' Get a human-oriented overview of the existing gargle OAuth tokens:
+#'   * Filepath of the current cache
+#'   * Number of tokens found there
+#'   * Compact summary of the associated
+#'     - Email = Google identity
+#'     - OAuth app (actually, just its nickname)
+#'     - Scopes
+#'     - Hash (actually, just the first 7 characters)
+#' Mostly useful for the development of gargle and client packages.
+#'
+#' @inheritParams gargle2.0_token
+#'
+#' @return A data frame with one row per cached token, invisibly.
+#' @export
+#'
+#' @examples
+#' gargle_oauth_sitrep()
+gargle_oauth_sitrep <- function(cache = NULL) {
+  withr::with_options(
+    # I do not want to actively trigger cache establishment
+    list(rlang_interactive = FALSE),
+    path <- cache_establish(cache)
+  )
+  if (is.null(path)) {
+    cat_line("No gargle OAuth cache has been established.")
+    return(invisible())
+  }
+
+  cat_glue("gargle OAuth cache path:\n{path}")
+  cat_line()
+  tokens <- cache_load(path)
+  cat_glue("{length(tokens)} tokens found")
+  cat_line()
+
+  nms   <- names(tokens)
+  hash  <- mask_email(nms)
+  email <- extract_email(nms)
+  app   <- vapply(tokens, function(t) t$app$appname, "", USE.NAMES = FALSE)
+  scope <- lapply(tokens, function(t) t$params$scope)
+  scope <- lapply(scope, function(s) s[s != "email"])
+  scope <- vapply(scope, function(s) commapse(base_scope(s)), FUN.VALUE = "")
+
+  df <- data.frame(
+    email, app, scope, hash, hash... = obfuscate(hash, first = 7, last = 0),
+    stringsAsFactors = FALSE, row.names = NULL
+  )
+
+  format_transformer <- function(text, envir) {
+    res <- eval(parse(text = text, keep.source = FALSE), envir)
+    res <- format(c(text, res))
+    c(res[1], strrep("-", nchar(res[1])), res[-1])
+  }
+
+  cat_glue_data(
+    df,
+    "{email} {app} {scope} {hash...}",
+    .transformer = format_transformer
+  )
+
+  df$hash... <- NULL
+  invisible(df)
+}
