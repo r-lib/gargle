@@ -6,12 +6,12 @@ expect_gargle2.0_token <- function(object, expected) {
   expect_identical(    object$params,     expected$params)
 }
 
-## call during interactive test development to fake being "in tests" and thereby
-## cause in-house interactive() to return FALSE
-test_mode <- function() {
-  before <- Sys.getenv("TESTTHAT")
-  after <- if (before == "true") "false" else "true"
-  Sys.setenv(TESTTHAT = after)
-  cat("TESTTHAT:", before, "-->", after, "\n")
+## useful during interactive test development to toggle the
+## rlang_interactive escape hatch in gargle:::interactive()
+interactive_mode <- function() {
+  before <- getOption("rlang_interactive", default = TRUE)
+  after <- if (before) FALSE else TRUE
+  options(rlang_interactive = after)
+  cat("rlang_interactive:", before, "-->", after, "\n")
   invisible()
 }
