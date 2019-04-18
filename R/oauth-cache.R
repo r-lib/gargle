@@ -306,7 +306,12 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   format_transformer <- function(text, envir) {
     res <- eval(parse(text = text, keep.source = FALSE), envir)
     res <- format(c(text, res))
-    c(res[1], strrep("-", nchar(res[1])), res[-1])
+    c(
+      res[1],
+      # R 3.2 does not have strrep()
+      paste(rep.int("_", nchar(res[1])), collapse = ""),
+      res[-1]
+    )
   }
 
   cat_glue_data(
