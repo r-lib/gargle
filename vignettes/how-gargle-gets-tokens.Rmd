@@ -1,0 +1,45 @@
+---
+title: "How gargle gets tokens"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How gargle gets tokens}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+DRAFT DRAFT DRAFT DRAFT
+
+This vignette explains the purpose and usage of `token_fetch()` and the functions it subsequently calls, in an effort to secure a token for use in requests.
+  
+The target audience is someone writing an R package to wrap a Google API. It is expected that those developers provide regular end-users with a friendlier and more automatic workflow that usually "just works". We describe some design patterns that are working well in existing packages.
+
+```{r setup}
+library(gargle)
+```
+
+## `token_fetch()`
+
+`token_fetch()` is gargle's primary function for getting a token. The goal is make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with `token_fetch()` only in some indirect way, mediated through an API wrapper package.
+
+The signature of `token_fetch()` is very simple and, therefore, not very informative:
+
+```{r, eval = FALSE}
+token_fetch(scopes, ...)
+```
+
+Under the hood, `token_fetch()` calls a sequence of much more specific token-getters, each wrapped in a `tryCatch()` and returning `NULL` if unsuccessful. The only formal argument these getters have in common is `scopes`, with the rest being passed via `...`.
+
+This gives a sense of the token getters and reflects the order in which they are called:
+
+```{r}
+names(gargle:::gargle_env$cred_funs)
+```
+
+MORE TO COME
