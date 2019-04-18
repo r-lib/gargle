@@ -8,7 +8,9 @@ gargle_default_oauth_cache_path <- function() {
 }
 
 ## this is the cache setup interface for the Gargle2.0 class
-cache_establish <- function(cache = getOption("gargle.oauth_cache")) {
+## returns NULL or cache path
+cache_establish <- function(cache = NULL) {
+  cache <- cache %||% getOption("gargle.oauth_cache")
   if (length(cache) != 1) {
     stop_glue("{bt('cache')} must have length 1, not {length(cache)}.")
   }
