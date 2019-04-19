@@ -8,6 +8,7 @@
 credentials_service_account <- function(scopes, path = "", ...) {
   "!DEBUG trying credentials_service account"
   info <- jsonlite::fromJSON(path)
+  scopes <- normalize_scopes(add_email_scope(scopes))
   token <- httr::oauth_service_token(
     ## FIXME: not sure endpoint is truly necessary, but httr thinks it is.
     ## https://github.com/r-lib/httr/issues/576
@@ -19,6 +20,7 @@ credentials_service_account <- function(scopes, path = "", ...) {
     !nzchar(token$credentials$access_token)) {
     NULL
   } else {
+    ## TODO: remove this message when a chatty / debug / dry run mode exists
     message("email: ", info[["client_email"]])
     token
   }
