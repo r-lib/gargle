@@ -141,6 +141,15 @@ base_scope <- function(x) {
   gsub("/$", "", gsub("(.*)/(.+$)", "...\\2", x))
 }
 
+normalize_scopes <- function(x) {
+  stats::setNames(sort(unique(x)), NULL)
+}
+
+add_email_scope <- function(scope = NULL) {
+  url <- "https://www.googleapis.com/auth/userinfo.email"
+  union(scope %||% character(), url)
+}
+
 #' An expose object
 #'
 #' `expose()` returns a sentinel object, similar in spirit to `NULL`, that tells

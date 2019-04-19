@@ -8,21 +8,22 @@ test_that("%||% works", {
 })
 
 test_that("add_email_scope() works", {
-  expect_identical(add_email_scope(), "email")
-  expect_identical(add_email_scope("email"), "email")
+  email_url <- add_email_scope()
+  expect_length(email_url, 1)
+  expect_identical(add_email_scope(email_url), email_url)
   expect_identical(
     add_email_scope("whatever"),
-    c("whatever", "email")
+    c("whatever", email_url)
   )
   expect_equivalent(
     add_email_scope(c("whatever" = "whatever")),
-    c("whatever", "email")
+    c("whatever", email_url)
   )
 })
 
 test_that("base_scope() extracts the last scope part", {
   scopes <- c(
-    "email",
+    "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/drive",
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.modify",
@@ -33,7 +34,7 @@ test_that("base_scope() extracts the last scope part", {
   expect_identical(
     out,
     c(
-      "email", "...drive", "...gmail.readonly", "...gmail.modify",
+      "...userinfo.email", "...drive", "...gmail.readonly", "...gmail.modify",
       "...gmail.compose", "...mail.google.com"
     )
   )
