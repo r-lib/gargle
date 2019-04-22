@@ -274,6 +274,7 @@ match2 <- function(needle, haystack) {
 #' @examples
 #' gargle_oauth_sitrep()
 gargle_oauth_sitrep <- function(cache = NULL) {
+  withr::local_options(list(gargle_quiet = FALSE))
   withr::with_options(
     # I do not want to actively trigger cache establishment
     list(rlang_interactive = FALSE),
