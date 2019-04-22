@@ -17,11 +17,11 @@ credentials_service_account <- function(scopes, path = "", ...) {
     scope = scopes
   )
   if (is.null(token$credentials$access_token) ||
-    !nzchar(token$credentials$access_token)) {
+      !nzchar(token$credentials$access_token)) {
     NULL
   } else {
     ## TODO: remove this message when a chatty / debug / dry run mode exists
-    message("email: ", info[["client_email"]])
+    message("email: ", get_email(token))
     token
   }
 }
