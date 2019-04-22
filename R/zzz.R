@@ -1,6 +1,5 @@
 .onLoad <- function(lib, pkg) { # nocov start
   cred_funs_set_default()
-  debugme::debugme()
 
   op <- options()
   op.gargle <- list(

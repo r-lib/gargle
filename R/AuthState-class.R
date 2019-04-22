@@ -69,7 +69,7 @@ AuthState <- R6::R6Class("AuthState", list(
                         api_key,
                         auth_active,
                         cred = NULL) {
-    "!DEBUG AuthState initialize"
+    cat_line("initializing AuthState")
     stopifnot(
       is_string(package),
       is.oauth_app(app),

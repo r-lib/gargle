@@ -6,7 +6,7 @@
 #' @return A `httr::TokenServiceAccount` or `NULL`.
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
-  "!DEBUG trying credentials_service account"
+  cat_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path)
   scopes <- normalize_scopes(add_email_scope(scopes))
   token <- httr::oauth_service_token(
@@ -20,8 +20,7 @@ credentials_service_account <- function(scopes, path = "", ...) {
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    ## TODO: remove this message when a chatty / debug / dry run mode exists
-    message("email: ", get_email(token))
+    cat_line("email: ", get_email(token))
     token
   }
 }

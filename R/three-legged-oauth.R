@@ -25,7 +25,7 @@
 #' ## Drive scope, built-in gargle demo app
 #' scopes <- "https://www.googleapis.com/auth/drive"
 #' credentials_user_oauth2(scopes, app = gargle_app())
-#' 
+#'
 #' ## bring your own app
 #' app <- httr::oauth_app(
 #'   appname = "my_awesome_app",
@@ -38,7 +38,7 @@ credentials_user_oauth2 <- function(scopes,
                                     app = gargle_app(),
                                     package = "gargle",
                                     ...) {
-  "!DEBUG trying credentials_user_oauth2"
+  cat_line("trying credentials_user_oauth2()")
   ## TODO(jennyb): hadley says "Just put in args?" re: this handling of scopes
   if (missing(scopes)) {
     scopes <- "email"
