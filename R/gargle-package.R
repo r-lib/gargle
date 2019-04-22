@@ -9,3 +9,8 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+#' Options consulted by gargle
+#'
+#' @name gargle-options
+NULL

@@ -1,6 +1,16 @@
+#' @rdname gargle-options
+#' @export
+#' @section `gargle_quiet`:
+#' `gargle_quiet()` returns the option named "gargle_quiet", which defaults to
+#' `TRUE`. Set this option to `FALSE` to see more info about gargle's
+#' activities, which can be helpful for troubleshooting.
+gargle_quiet <- function() {
+  getOption("gargle_quiet", default = TRUE)
+}
+
 # All UI output must eventually go through cat_line() so that it
 # can be silenced / activated with 'gargle_quiet'.
-cat_line <- function(..., quiet = getOption("gargle_quiet", default = TRUE)) {
+cat_line <- function(..., quiet = gargle_quiet()) {
   if (quiet) {
     return(invisible())
   }
