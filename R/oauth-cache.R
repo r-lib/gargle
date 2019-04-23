@@ -221,8 +221,8 @@ token_match <- function(candidate, existing, package = "gargle") {
 
   emails <- extract_email(existing)
   cat_glue(
-    "The {package} package is requesting access to your Google account.",
-    "Select a pre-authorised account or enter '0' to obtain a new token.",
+    "The {package} package is requesting access to your Google account. ",
+    "Select a pre-authorised account or enter '0' to obtain a new token. ",
     "Press Esc/Ctrl + C to abort."
   )
   choice <- utils::menu(emails)
