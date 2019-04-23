@@ -4,6 +4,13 @@ language: R
 sudo: false
 cache: packages
 
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+    - libsodium-dev
+
 matrix:
   include:
     - r: devel
