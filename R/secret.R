@@ -48,36 +48,41 @@
 #       path = rawToChar(secret_read("gargle", "gargle-testing.json"))
 #     )
 #     get_userinfo(token)
+#
+# Links:
+# https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html
+# https://cran.r-project.org/web/packages/sodium/vignettes/intro.html
 
 # Setup support for the NAME=PASSWORD envvar ----------------------------------
 
-## secret_pw_name("gargle") --> "GARGLE_PASSWORD"
+# secret_pw_name("gargle") --> "GARGLE_PASSWORD"
 secret_pw_name <- function(package) {
   paste0(toupper(package), "_PASSWORD")
 }
 
+# secret_pw_gen() --> "9AkKLa50wf1zHNCnHiQWeFLDoch9MYJHmPNnIVYZgSUt0Emwgi"
 secret_pw_gen <- function() {
   x <- sample(c(letters, LETTERS, 0:9), 50, replace = TRUE)
   paste0(x, collapse = "")
 }
 
-secret_pw_try <- function(package) {
-  envvar <- secret_pw_name(package)
-  Sys.getenv(envvar, "")
-}
-
+# secret_pw_exists("gargle") --> TRUE or FALSE
 secret_pw_exists <- function(package) {
-  !identical(secret_pw_try(package), "")
+  pw_name <- secret_pw_name(package)
+  pw <- Sys.getenv(pw_name, "")
+  !identical(pw, "")
 }
 
+# secret_pw_get("gargle") --> error or key-ified PASSWORD =
+#                             hash of charToRaw(PASSWORD)
 secret_pw_get <- function(package) {
-  env <- secret_pw_name(package)
-  pass <- Sys.getenv(env, "")
-  if (identical(pass, "")) {
-    stop_glue("Envvar {sq(env)} not defined")
+  pw_name <- secret_pw_name(package)
+  pw <- Sys.getenv(pw_name, "")
+  if (identical(pw, "")) {
+    stop_glue("Envvar {sq(pw_name)} is not defined")
   }
 
-  sodium::sha256(charToRaw(pass))
+  sodium::sha256(charToRaw(pw))
 }
 
 # Store and retrieve encrypted data -------------------------------------------
@@ -86,28 +91,30 @@ secret_can_decrypt <- function(package) {
   requireNamespace("sodium", quietly = TRUE) && secret_pw_exists(package)
 }
 
-secret_write <- function(package, name, data) {
-  #if (inherits(data, "connection")) {
-    data <- readBin(data, "raw", file.size(data))
-  #} else if (is.character(data)) {
-  #  data <- charToRaw(data)
-  #}
-
-  secret <- fs::path("inst", "secret")
-  if (!fs::dir_exists(secret)) {
-    fs::dir_create(secret)
+# input should either be a filepath or a raw vector
+secret_write <- function(package, name, input) {
+  if (is.character(input)) {
+    data <- readBin(input, "raw", file.size(input))
+  } else if (!is.raw(input)) {
+    bad_class <- glue::glue_collapse(class(input), sep = "/")
+    stop_glue(
+      "{bt(input)} must be a filepath or a raw vector, not {bad_class}"
+    )
   }
-  dst <- fs::path(secret, name)
+
+  destdir <- fs::path("inst", "secret")
+  fs::dir_create(destdir)
+  destpath <- fs::path(destdir, name)
 
   enc <- sodium::data_encrypt(
-    data,
+    msg = input,
     key = secret_pw_get(package),
     nonce = secret_nonce()
   )
   attr(enc, "nonce") <- NULL
-  writeBin(enc, dst)
+  writeBin(enc, destpath)
 
-  invisible(dst)
+  invisible(destpath)
 }
 
 # Generated with sodium::bin2hex(sodium::random(24)). AFAICT nonces are
@@ -117,7 +124,6 @@ secret_nonce <- function() {
 }
 
 secret_path <- function(package, name) {
-  stopifnot(is_string(name))
   fs::path_package(package, "secret", name)
 }
 
@@ -130,5 +136,9 @@ secret_read <- function(package, name) {
   path <- secret_path(package, name)
   raw <- readBin(path, "raw", file.size(path))
 
-  sodium::data_decrypt(raw, key = secret_pw_get(package), nonce = secret_nonce())
+  sodium::data_decrypt(
+    bin = raw,
+    key = secret_pw_get(package),
+    nonce = secret_nonce()
+  )
 }
