@@ -5,13 +5,6 @@ empty_string <- function(x) {
   !nzchar(x)
 }
 
-commapse <- function(...) paste0(..., collapse = ", ")
-
-cat_line <- function(...) cat(paste0(..., "\n"), sep = "")
-
-bt <- function(x) encodeString(x, quote = "`")
-sq <- function(x) encodeString(x, quote = "'")
-
 is_windows <- function() {
   tolower(Sys.info()[["sysname"]]) == "windows"
 }
@@ -21,87 +14,8 @@ file_is_empty <- function(path) {
   file.info(path)$size == 0
 }
 
-## obscure the middle bit of (sensitive?) strings with '...'
-## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
-obfuscate <- function(x, first = 6, last = 4) {
-  nc <- nchar(x)
-  ellipsize <- nc > first + last
-  out <- x
-  out[ellipsize] <-
-    paste0(
-      substr(x[ellipsize], start = 1, stop = first),
-      "...",
-      substr(x[ellipsize],
-        start = nc[ellipsize] - last + 1,
-        stop = nc[ellipsize]
-      )
-    )
-  out
-}
-
-stop_glue <- function(..., .sep = "", .envir = parent.frame(),
-                      call. = FALSE, .domain = NULL) {
-  stop(
-    glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
-  )
-}
-
-stop_glue_data <- function(..., .sep = "", .envir = parent.frame(),
-                           call. = FALSE, .domain = NULL) {
-  stop(
-    glue_data(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
-  )
-}
-
-stop_collapse <- function(x) stop(glue_collapse(x, sep = "\n"), call. = FALSE)
-
-warning_glue <- function(..., .sep = "", .envir = parent.frame(),
-                         call. = FALSE, .domain = NULL) {
-  warning(
-    glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
-  )
-}
-
-warning_glue_data <- function(..., .sep = "", .envir = parent.frame(),
-                              call. = FALSE, .domain = NULL) {
-  warning(
-    glue_data(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
-  )
-}
-
-warning_collapse <- function(x) warning(glue_collapse(x, sep = "\n"))
-
-message_glue <- function(..., .sep = "", .envir = parent.frame(),
-                         .domain = NULL, .appendLF = TRUE) {
-  message(
-    glue(..., .sep = .sep, .envir = .envir),
-    domain = .domain, appendLF = .appendLF
-  )
-}
-
-message_glue_data <- function(..., .sep = "", .envir = parent.frame(),
-                              .domain = NULL) {
-  message(
-    glue_data(..., .sep = .sep, .envir = .envir),
-    domain = .domain
-  )
-}
-
-message_collapse <- function(x) message(glue_collapse(x, sep = "\n"))
-
-cat_glue <- function(..., .sep = "", .envir = parent.frame()) {
-  cat(glue(..., .sep = .sep, .envir = .envir), sep = "\n")
-}
-
-cat_glue_data <- function(..., .sep = "", .envir = parent.frame()) {
-  cat(glue_data(..., .sep = .sep, .envir = .envir), sep = "\n")
-}
-
 isFALSE <- function(x) identical(x, FALSE)
+
 isNA <- function(x) length(x) == 1 && is.na(x)
 
 is.oauth_app <- function(x) inherits(x, "oauth_app")

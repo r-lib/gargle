@@ -21,6 +21,7 @@ credentials_app_default_path <- function() {
 #' @param ... Additional arguments (ignored)
 #' @export
 credentials_app_default <- function(scopes, ...) {
+  cat_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform
   # scope.
   path <- credentials_app_default_path()
