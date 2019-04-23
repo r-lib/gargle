@@ -13,8 +13,6 @@ addons:
 
 matrix:
   include:
-    - r: devel
-      env: GARGLE_PASSWORD=''
     - r: release
       after_success:
       - Rscript -e 'covr::codecov()'
@@ -24,6 +22,10 @@ matrix:
         provider: script
         script: Rscript -e 'pkgdown::deploy_site_github(verbose = TRUE)'
         skip_cleanup: true
+    - r: release
+      env: GARGLE_PASSWORD=''
+    - r: devel
+      env: GARGLE_PASSWORD=''
     - r: oldrel
       env: GARGLE_PASSWORD=''
     - r: 3.3
