@@ -55,6 +55,9 @@
     <li>
       <a href="../../articles/request-helper-functions.html">Request Helper Functions</a>
     </li>
+    <li>
+      <a href="../../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -150,14 +153,14 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(pw &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_pw_gen</span>())</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "dVzd3mf7Bj1Xr7hkX3baxum0GhyKf7RaBzunYsR3jUAcQsYzrh"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "ppTnMqGUp3yJEHZoIfUagL0LTOqCTIGvtmNca2qZqQ5oqo2C3D"</span></a></code></pre></div>
 </div>
 <div id="define-env-var-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-env-var-in--renviron" class="anchor"></a>Define env var in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<p>GARGLE_PASSWORD=dVzd3mf7Bj1Xr7hkX3baxum0GhyKf7RaBzunYsR3jUAcQsYzrh</p>
+<p>GARGLE_PASSWORD=ppTnMqGUp3yJEHZoIfUagL0LTOqCTIGvtmNca2qZqQ5oqo2C3D</p>
 <p><code>usethis::edit_r_environ()</code> can help create or open this file. We recommend using the user-level <code>.Renviron</code>, as opposed to project-level, for the usual reason that this makes it less likely you will share sensitive information by mistake. Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://www.rdocumentation.org/packages/base/topics/readRenviron">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
 <div id="provide-env-var-to-other-services" class="section level3">
