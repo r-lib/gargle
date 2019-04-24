@@ -103,7 +103,7 @@ Alternatively, you can use the Travis command line interface to configure the en
 On R-hub, send this env var in your calls to `check()` and friends:
 
 ```
-rhub::check(env_vars = Sys.getenv(secret_pw_name("gargle"), names = TRUE))
+rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))
 ```
 
 ### Encrypt the secret file
