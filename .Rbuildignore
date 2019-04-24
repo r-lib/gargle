@@ -10,7 +10,6 @@
 ^scratch\.R$
 ^appveyor\.yml$
 ^codecov\.yml$
-^gargle.*json$
 ^.*\.key$
 ^LICENSE\.md$
 ^\.github$
