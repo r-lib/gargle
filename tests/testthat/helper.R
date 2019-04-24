@@ -15,3 +15,13 @@ interactive_mode <- function() {
   cat("rlang_interactive:", before, "-->", after, "\n")
   invisible()
 }
+
+skip_if_no_auth <- function() {
+  testthat::skip_if_not(
+    secret_can_decrypt("gargle"),
+    "Authentication not available")
+}
+
+expect_error_free <- function(...) {
+  expect_error(..., regexp = NA)
+}
