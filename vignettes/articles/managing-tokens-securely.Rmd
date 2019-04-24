@@ -205,3 +205,7 @@ Vignettes of the sodium package, especially the parts relating to symmetric encr
 
   * <https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html>
   * <https://cran.r-project.org/web/packages/sodium/vignettes/intro.html>
+  
+The [cypher](https://ropensci.github.io/cyphr/) package, which offers high-level functions that smooth over, for example, the frictions identified above:
+
+  * <https://ropensci.github.io/cyphr/>
