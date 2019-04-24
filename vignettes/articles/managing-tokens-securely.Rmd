@@ -44,10 +44,6 @@ The approach I'll take in this article is to call these functions via `:::`.
 
 We go ahead and attach gargle in the normal way, which makes the exported functions readily available.
 
-```{r setup}
-library(gargle)
-```
-
 ## Overview of the approach
 
   * Generate a random PASSWORD and give it a self-documenting name, e.g. `GARGLE_PASSWORD`.
@@ -127,7 +123,7 @@ Example of a call to `secret_write()`, where `gargle-testing.json` is a JSON
 file downloaded for a service account managed via the [Google API / Cloud Platform console](https://console.cloud.google.com/project).
 
 ```{r eval = FALSE}
-secret_write(
+gargle:::secret_write(
   package = "gargle",
   name = "gargle-testing.json",
   data = "~/.R/gargle/gargle-testing.json"
