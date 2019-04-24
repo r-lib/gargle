@@ -32,7 +32,7 @@ This is based on an approach originally worked out in [bigrquery](https://bigrqu
 
 ## Accessing the `secret_*()` functions
 
-gargle's approach to managing test tokens is implemented through several functions that all start with the `secret_` prefix. These functions are not (currently?) exported. This may seem odd, since others might want to use these functions. But note they are only needed during setup or at test time. This sort of usage is compatible with others calling internal gargle functions and possibly inlining a version of one or two test helpers.
+gargle's approach to managing test tokens is implemented through several functions that all start with the `secret_` prefix. These functions are not (currently?) exported. This may seem odd, since others might want to use these functions. But note they are only needed during setup or at test time. This sort of usage is compatible with others calling internal gargle functions and possibly inlining a version of a couple test helpers.
 
 One way to make the `secret_*()` functions available for local experimentation is to call `devtools::load_all()`, which exposes all internal objects in a package:
 
@@ -50,7 +50,7 @@ The approach I'll take in this article is to call these functions via `:::`.
     service account token. This is presumably stored *outside* your package.
   * Use the PASSWORD to apply a method for symmetric encryption to the target
     file.
-  * Store the encrypted file in a predictable place *within* your package.
+  * Store the encrypted file in a designated location *within* your package.
   * Store or pass the PASSWORD as an environment variable everywhere you'll need
     to decrypt the secret.
     - Check that the platform has support for keeping the PASSWORD concealed.
@@ -171,13 +171,13 @@ skip_if_no_auth <- function() {
 }
 ```
 
-`has_access_cred()` is a bigrquery function that returns `TRUE` if a token is available and `FALSE` otherwise. By including this at the start of tests that require auth, you arrange for your package to fail gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
+`has_access_cred()` is a bigrquery function that returns `TRUE` if a token is available and `FALSE` otherwise. By including this at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
 
 In bigrquery, `skip_if_no_auth()` is defined below `R/` but it is arguably more common to see such a definition in a file like `tests/testthat/helper.R`.
 
 *gargle's usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it's not featured here.*
 
-### Known friction
+### Known sources of friction
 
 Once you dig into the `secret_*()` family, you will notice there are two recurring sources of friction:
 
