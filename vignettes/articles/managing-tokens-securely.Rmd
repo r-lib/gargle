@@ -44,23 +44,23 @@ The approach I'll take in this article is to call these functions via `:::`.
 
 ## Overview of the approach
 
-  * Generate a random PASSWORD and give it a self-documenting name, e.g. `GARGLE_PASSWORD`.
-    Store as an environment variable.
-  * Identify a secret file of interest, such as the JSON representing a
-    service account token. This is presumably stored *outside* your package.
-  * Use the PASSWORD to apply a method for symmetric encryption to the target
-    file.
-  * Store the encrypted file in a designated location *within* your package.
-  * Store or pass the PASSWORD as an environment variable everywhere you'll need
-    to decrypt the secret.
-    - Check that the platform has support for keeping the PASSWORD concealed.
-    - Make sure you don't do anything in your own code that would dump it to,
-      e.g., a log file.
-  * Rig your tests to determine if the key is available and, therefore,
-    whether decryption is going to be possible.
-    - If "no", carry on gracefully with any tests that don't require auth.
-    - If "yes", decrypt the secret and put the associated token into force
-      globally for the test run or on an "as needed" basis in individual tests.
+  1. Generate a random PASSWORD and give it a self-documenting name, e.g.
+     `GARGLE_PASSWORD`. Store as an environment variable.
+  1. Identify a secret file of interest, such as the JSON representing a
+     service account token. This is presumably stored *outside* your package.
+  1. Use the PASSWORD to apply a method for symmetric encryption to the target
+     file. Store the resulting encrypted file in a designated location *within*
+     your package.
+  1. Store or pass the PASSWORD as an environment variable everywhere you'll
+     need to decrypt the secret.
+     - Check that the platform has support for keeping the PASSWORD concealed.
+     - Make sure you don't do anything in your own code that would dump it to,
+       e.g., a log file.
+  1. Rig your tests to determine if the key is available and, therefore,
+     whether decryption is going to be possible.
+     - If "no", carry on gracefully with any tests that don't require auth.
+     - If "yes", decrypt the secret and put the associated token into force
+       globally for the test run or on an "as needed" basis in individual tests.
 
 ## Annotated code-through
 
@@ -81,39 +81,43 @@ In real life, you should keep the output of `secret_pw_gen()` to yourself! We re
 (pw <- gargle:::secret_pw_gen())
 ```
 
-### Define env var in `.Renviron`
+### Define environment variable in `.Renviron`
 
 Combine the name and value to form a line like this in your user-level `.Renviron` file:
 
-```{r, echo = FALSE, results = "asis"}
+```{r, echo = FALSE, comment = NA}
 cat(paste0(pw_name, "=", pw), sep = "\n")
 ```
 
-`usethis::edit_r_environ()` can help create or open this file. We recommend using the user-level `.Renviron`, as opposed to project-level, for the usual reason  that this makes it less likely you will share sensitive information by mistake. Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R or call `readRenviron("~/.Renviron")` for the newly defined environment variable to take effect.
+`usethis::edit_r_environ()` can help create or open this file. We **strongly recommend** using the user-level `.Renviron`, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If don't take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in `.gitignore`. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.
 
-### Provide env var to other services
+Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R or call `readRenviron("~/.Renviron")` for the newly defined environment variable to take effect.
+
+### Provide environment variable to other services
 
 #### Travis-CI
 
-Define the env var in your repo settings via the browser UI:
+Define the environment variable in your repo settings via the browser UI:
 
 <https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings>
 
-Alternatively, you can use the Travis command line interface to configure the env var or even define an encrypted env var in `.travis.yml`. In any case, remember that private env vars are not available to pull requests, which is another reason to carry on gracefully when token decryption is not possible (see below).
+Alternatively, you can use the Travis command line interface to configure the environment variable or even define an encrypted environment variable in `.travis.yml`.
+
+Regardless of how you define it, remember that private environment variables are not available to external pull requests, which is another reason to carry on gracefully when token decryption is not possible (see below).
 
 #### AppVeyor
 
-Define the env var in the Environment page of your repo's Settings. Make sure to request variable encryption and to click "Save" at the bottom. In the General page, you probably want to check "Enable secure variables in Pull Requests from the same repository only" and, again, explicitly "Save".
+Define the environment variable in the Environment page of your repo's Settings. Make sure to request variable encryption and to click "Save" at the bottom. In the General page, you probably want to check "Enable secure variables in Pull Requests from the same repository only" and, again, explicitly "Save".
 
 As with Travis, it is also possible to encrypt the password using your AppVeyor account's public key and inline the value in `appveyor.yml`. There is a helpful web UI for that does the encryption and generates the lines to add to your config:
 
 <https://ci.appveyor.com/tools/encrypt>
 
-This can also be found as *Settings > Encrypt YAML*.
+This can also be found via *Settings > Encrypt YAML*.
 
 #### R-hub
 
-Send the env var in your calls to `check()` and friends:
+Send the environment variable in your calls to `check()` and friends:
 
 ```
 rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))
@@ -124,33 +128,56 @@ rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRU
 `secret_write()` takes 3 arguments:
 
   * `package` name. Processed through `secret_pw_name()` in order to retrieve
-    the PASSWORD from an appropriately named env var.
+    the PASSWORD from an appropriately named environment variable.
   * `name` of the encrypted file to write. The location is below `inst/secret`
     in the source of `package`.
   * `data`, either a file path to the unencrypted secret file or the data to
-    be encrypted as a raw vector. In the case of a secret file, it should
-    normally be stored outside your package, to decrease the chance of
-    accidental leakage.
+    be encrypted as a raw vector. In the case of a secret file, we **strongly
+    recommend** that its primary home on your local computer is outside
+    your package and, generally, outside of any folder that syncs regularly to
+    a remote, e.g. GitHub or DropBox. This decreases the chance of accidental
+    leakage.
 
 Example of a call to `secret_write()`, where `gargle-testing.json` is a JSON
-file downloaded for a service account managed via the [Google API / Cloud Platform console](https://console.cloud.google.com/project).
+file downloaded for a service account managed via the [Google API / Cloud Platform console](https://console.cloud.google.com/project):
 
 ```{r eval = FALSE}
 gargle:::secret_write(
   package = "gargle",
   name = "gargle-testing.json",
-  data = "~/.R/gargle/gargle-testing.json"
+  data = "a/very/private/local/folder/gargle-testing.json"
 )
 ```
+
+This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle-testing.json` in the current working directory, which is presumably the top-level directory of gargle's source. This encrypted file *should* be commited and pushed.
 
 ### Test setup
 
 Now you need to rig your tests or their setup around this encrypted token. You need to plan for two scenarios:
 
-  * Decryption is not going to work. Either because the Suggested [sodium](https://cran.r-project.org/web/packages/sodium/index.html) package is not available or (much more likely) because the env var that represents the key is not available.
+  * Decryption is going to work. This is where you actually get to test package functionality against the target API.
+  * Decryption is not going to work. Either because the Suggested [sodium](https://cran.r-project.org/web/packages/sodium/index.html) package is not available or (much more likely) because the environment variable that represents the key is not available.
     - This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.
     - This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor. 
-  * Decryption is going to work. This is where you actually get to test package functionality against the target API.
+    - We recommend that you actively check your package under these conditions,
+      so that you discover problems before CRAN or your contributors do. Here's
+      a simplified excerpt from `.travis.yml` where the main `r: release`
+      build accesses `GARGLE_PASSWORD` implicitly as an encrypted environment
+      variable, but `R CMD check` runs for the other builds with
+      `GARGLE_PASSWORD` unset:
+      
+      ``` yaml
+      matrix:
+        include:
+          - r: release
+            # <stuff about code coverage, pkgdown build & deploy, etc.>
+          - r: release
+            env: GARGLE_PASSWORD=''
+          - r: devel
+            env: GARGLE_PASSWORD=''
+          - r: oldrel
+            env: GARGLE_PASSWORD=''
+      ```
 
 In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from bigrquery's `tests/testthat/setup-auth.R` file:
 
@@ -206,6 +233,6 @@ Vignettes of the sodium package, especially the parts relating to symmetric encr
   * <https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html>
   * <https://cran.r-project.org/web/packages/sodium/vignettes/intro.html>
   
-The [cypher](https://ropensci.github.io/cyphr/) package, which offers high-level functions that smooth over, for example, the frictions identified above:
+The [cyphr](https://ropensci.github.io/cyphr/) package, which offers high-level functions that smooth over the frictions identified above:
 
   * <https://ropensci.github.io/cyphr/>
