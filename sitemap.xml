@@ -97,6 +97,9 @@
     <loc>https://gargle.r-lib.org/reference/token_fetch.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
   </url>
   <url>
