@@ -217,7 +217,7 @@ Functions useful for these conversions:
   * `charToRaw()` / `rawToChar()`
   * `sodium::data_encrypt()` / `sodium::data_decrypt`
 
-### Resources
+## Resources
 
 bigrquery, where this approach was first worked out:
 
