@@ -93,13 +93,27 @@ cat(paste0(pw_name, "=", pw), sep = "\n")
 
 ### Provide env var to other services
 
-On Travis-CI, define this env var in your repo settings via the browser UI:
+#### Travis-CI
 
-https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings
+Define the env var in your repo settings via the browser UI:
+
+<https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings>
 
 Alternatively, you can use the Travis command line interface to configure the env var or even define an encrypted env var in `.travis.yml`. In any case, remember that private env vars are not available to pull requests, which is another reason to carry on gracefully when token decryption is not possible (see below).
 
-On R-hub, send this env var in your calls to `check()` and friends:
+#### AppVeyor
+
+Define the env var in the Environment page of your repo's Settings. Make sure to request variable encryption and to click "Save" at the bottom. In the General page, you probably want to check "Enable secure variables in Pull Requests from the same repository only" and, again, explicitly "Save".
+
+As with Travis, it is also possible to encrypt the password using your AppVeyor account's public key and inline the value in `appveyor.yml`. There is a helpful web UI for that does the encryption and generates the lines to add to your config:
+
+<https://ci.appveyor.com/tools/encrypt>
+
+This can also be found as *Settings > Encrypt YAML*.
+
+#### R-hub
+
+Send the env var in your calls to `check()` and friends:
 
 ```
 rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))
