@@ -89,7 +89,7 @@ Combine the name and value to form a line like this in your user-level `.Renviro
 cat(paste0(pw_name, "=", pw), sep = "\n")
 ```
 
-`usethis::edit_r_environ()` can help create or open this file. We recommend using the user-level `.Renviron`, as opposed to project-level, for the usual reason  that this makes it less likely you will share sensitive information by mistake. Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R for the newly defined environment variable to take effect.
+`usethis::edit_r_environ()` can help create or open this file. We recommend using the user-level `.Renviron`, as opposed to project-level, for the usual reason  that this makes it less likely you will share sensitive information by mistake. Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R or call `readRenviron("~/.Renviron")` for the newly defined environment variable to take effect.
 
 ### Provide env var to other services
 
