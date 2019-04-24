@@ -68,7 +68,8 @@ We go ahead and attach gargle in the normal way, which makes the exported functi
 
 ### Generate a name for the PASSWORD
 
-We believe this should record the associated package. `secret_pw_name()` does this.
+`secret_pw_name()` creates a name of the form "PACKAGE_PASSWORD", a convention
+baked into the `secret_*()` family of functions.
 
 ```{r}
 (pw_name <- gargle:::secret_pw_name("gargle"))
