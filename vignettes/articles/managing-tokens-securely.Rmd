@@ -145,7 +145,7 @@ file downloaded for a service account managed via the [Google API / Cloud Platfo
 gargle:::secret_write(
   package = "gargle",
   name = "gargle-testing.json",
-  data = "a/very/private/local/folder/gargle-testing.json"
+  input = "a/very/private/local/folder/gargle-testing.json"
 )
 ```
 

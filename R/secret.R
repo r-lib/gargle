@@ -39,7 +39,7 @@ secret_can_decrypt <- function(package) {
 # input should either be a filepath or a raw vector
 secret_write <- function(package, name, input) {
   if (is.character(input)) {
-    data <- readBin(input, "raw", file.size(input))
+    input <- readBin(input, "raw", file.size(input))
   } else if (!is.raw(input)) {
     bad_class <- glue::glue_collapse(class(input), sep = "/")
     stop_glue(
