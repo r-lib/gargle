@@ -188,7 +188,7 @@ if (secret_can_decrypt("bigrquery")) {
 }
 ```
 
-Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. bigrquery also defines such functions internally and that is what's being called in the code above. `bq_auth()` is a function specific to bigrquery that loads a token for use downstream (in multiple tests, in this case).
+Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. bigrquery also defines such functions internally and that is what's being called in the code above. `bq_auth()` is a function specific to bigrquery that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that's very favorable for our workflow. We'll come back to this below.
 
 But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here's the one from bigrquery:
 
