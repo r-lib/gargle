@@ -31,6 +31,8 @@ matrix:
       env: GARGLE_PASSWORD=''
     - r: oldrel
       env: GARGLE_PASSWORD=''
+    - r: 3.4
+      env: GARGLE_PASSWORD=''
     - r: 3.3
       env: GARGLE_PASSWORD=''
     - r: 3.2
