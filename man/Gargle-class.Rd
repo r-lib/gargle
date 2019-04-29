@@ -10,8 +10,8 @@
 Gargle2.0
 }
 \description{
-This is based on the \link[httr:Token]{Token2.0} class provided in httr. These
-objects should be created through the constructor function
+This is based on the \link[httr:Token-class]{Token2.0} class provided in httr.
+These objects should be created through the constructor function
 \code{\link[=gargle2.0_token]{gargle2.0_token()}}. In the base Token2.0 class, tokens are cached based on
 endpoint, app, and scopes. For the \code{Gargle2.0} subclass, the identifier or
 key is expanded to include the email address associated with the token. This

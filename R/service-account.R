@@ -3,7 +3,7 @@
 #' @param scopes List of scopes required for the returned token.
 #' @param path Path to the downloaded JSON file
 #' @param ... Additional arguments (ignored)
-#' @return A `httr::TokenServiceAccount` or `NULL`.
+#' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
   cat_line("trying credentials_service_account()")

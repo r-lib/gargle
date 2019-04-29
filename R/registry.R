@@ -17,7 +17,7 @@ gargle_env$cred_funs <- list()
 #'
 #' In the abstract, a credential fetching function is any function which takes a
 #' set of scopes and any number of additional arguments, and returns either a
-#' valid [httr::Token()] or `NULL`.
+#' valid [`httr::Token`][httr::Token-class] or `NULL`.
 #'
 #' Here we say that a function is valid if its first argument is named
 #' `scopes`, and it includes `...` as an argument, since it's

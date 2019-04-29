@@ -2,7 +2,7 @@
 #'
 #' @param scopes A list of scopes this token is authorized for.
 #' @param ... Additional arguments passed to all credentials functions.
-#' @return A [httr::Token()] or `NULL`.
+#' @return A [`httr::Token`][httr::Token-class] or `NULL`.
 #' @export
 token_fetch <- function(scopes, ...) {
   cat_line("trying token_fetch()")

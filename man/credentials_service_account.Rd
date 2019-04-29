@@ -14,7 +14,7 @@ credentials_service_account(scopes, path = "", ...)
 \item{...}{Additional arguments (ignored)}
 }
 \value{
-A \code{httr::TokenServiceAccount} or \code{NULL}.
+A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 Create a token for a Google service account.
