@@ -90,6 +90,7 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #'
 #' @return A [GceToken()] or `NULL`.
 #' @export
+#' @family credential functions
 credentials_gce <- function(scopes, service_account = "default", ...) {
   cat_line("trying credentials_gce()")
   if (!detect_gce()) {

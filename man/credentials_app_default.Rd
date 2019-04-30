@@ -20,3 +20,11 @@ considered a low value scope and does not appear on the consent screen.}
 \description{
 Fetch the Application Default Credentials
 }
+\seealso{
+Other credential functions: \code{\link{credentials_gce}},
+  \code{\link{credentials_service_account}},
+  \code{\link{credentials_travis}},
+  \code{\link{credentials_user_oauth2}},
+  \code{\link{token_fetch}}
+}
+\concept{credential functions}

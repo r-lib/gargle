@@ -27,3 +27,11 @@ A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 \description{
 Get a token for a Google service account
 }
+\seealso{
+Other credential functions: \code{\link{credentials_app_default}},
+  \code{\link{credentials_gce}},
+  \code{\link{credentials_travis}},
+  \code{\link{credentials_user_oauth2}},
+  \code{\link{token_fetch}}
+}
+\concept{credential functions}

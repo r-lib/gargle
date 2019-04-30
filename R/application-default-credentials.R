@@ -19,6 +19,7 @@ credentials_app_default_path <- function() {
 #'
 #' @inheritParams token_fetch
 #' @export
+#' @family credential functions
 credentials_app_default <- function(scopes, ...) {
   cat_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform

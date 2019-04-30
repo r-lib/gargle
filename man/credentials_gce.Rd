@@ -25,3 +25,11 @@ A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 \description{
 Get a token for Google Compute Engine
 }
+\seealso{
+Other credential functions: \code{\link{credentials_app_default}},
+  \code{\link{credentials_service_account}},
+  \code{\link{credentials_travis}},
+  \code{\link{credentials_user_oauth2}},
+  \code{\link{token_fetch}}
+}
+\concept{credential functions}

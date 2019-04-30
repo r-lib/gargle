@@ -6,6 +6,7 @@
 #'   string).
 #'
 #' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
+#' @family credential functions
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {
   cat_line("trying credentials_service_account()")

@@ -3,6 +3,7 @@
 #'
 #' @inheritParams token_fetch
 #' @param path Path to the decrypted travis service account.
+#' @family credential functions
 #' @export
 credentials_travis <- function(scopes, path = "", ...) {
   cat_line("trying credentials_travis()")

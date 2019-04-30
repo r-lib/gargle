@@ -26,7 +26,9 @@
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @inheritDotParams gargle2.0_token -scope -app -package
+#'
 #' @export
+#' @family credential functions
 #' @examples
 #' \dontrun{
 #' ## Drive scope, built-in gargle demo app
