@@ -17,12 +17,14 @@
 #'
 #' @param scopes A character vector of scopes to request. Pick from those listed
 #'   in [OAuth 2.0 Scopes for Google
-#'   APIs](https://developers.google.com/identity/protocols/googlescopes). For
-#'   certain token flows, the `"https://www.googleapis.com/auth/userinfo.email"`
-#'   scope may be added, if not already present. This grants permission to view
-#'   the email address associated with a token; gargle uses this to index cached
-#'   OAuth tokens. This grants no permission to view or send email. It is
-#'   considered a low value scope and does not appear on the consent screen.
+#'   APIs](https://developers.google.com/identity/protocols/googlescopes).
+#'
+#'   For certain token flows, the
+#'   `"https://www.googleapis.com/auth/userinfo.email"` scope is unconditionally
+#'   included. This grants permission to retrieve the email address associated
+#'   with a token; gargle uses this to index cached OAuth tokens. This grants no
+#'   permission to view or send email. It is considered a low value scope and
+#'   does not appear on the consent screen.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @inheritDotParams gargle2.0_token -scope -app -package
@@ -44,15 +46,11 @@
 #' )
 #' credentials_user_oauth2(scopes, app)
 #' }
-credentials_user_oauth2 <- function(scopes,
+credentials_user_oauth2 <- function(scopes = "https://www.googleapis.com/auth/userinfo.email",
                                     app = gargle_app(),
                                     package = "gargle",
                                     ...) {
   cat_line("trying credentials_user_oauth2()")
-  ## TODO(jennyb): hadley says "Just put in args?" re: this handling of scopes
-  if (missing(scopes)) {
-    scopes <- "email"
-  }
   gargle2.0_token(
     app = app,
     scope = scopes,

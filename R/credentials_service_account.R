@@ -15,9 +15,13 @@
 #'   path = "/path/to/your/service-account.json"
 #' )
 #' }
-credentials_service_account <- function(scopes, path = "", ...) {
+credentials_service_account <- function(scopes = "https://www.googleapis.com/auth/userinfo.email",
+                                        path = "",
+                                        ...) {
   cat_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path)
+  # I add email scope explicitly, where as I don't need to in
+  # credentials_user_oauth2(), because it's done in Gargle2.0$new().
   scopes <- normalize_scopes(add_email_scope(scopes))
   token <- httr::oauth_service_token(
     ## FIXME: not sure endpoint is truly necessary, but httr thinks it is.
@@ -30,7 +34,7 @@ credentials_service_account <- function(scopes, path = "", ...) {
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    cat_line("email: ", get_email(token))
+    cat_line("service account email: ", get_email(token))
     token
   }
 }

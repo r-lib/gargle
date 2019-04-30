@@ -4,16 +4,20 @@
 \alias{credentials_service_account}
 \title{Get a token for a Google service account}
 \usage{
-credentials_service_account(scopes, path = "", ...)
+
+  credentials_service_account(scopes = "https://www.googleapis.com/auth/userinfo.email",
+  path = "", ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
-in \href{https://developers.google.com/identity/protocols/googlescopes}{OAuth 2.0 Scopes for Google APIs}. For
-certain token flows, the \code{"https://www.googleapis.com/auth/userinfo.email"}
-scope may be added, if not already present. This grants permission to view
-the email address associated with a token; gargle uses this to index cached
-OAuth tokens. This grants no permission to view or send email. It is
-considered a low value scope and does not appear on the consent screen.}
+in \href{https://developers.google.com/identity/protocols/googlescopes}{OAuth 2.0 Scopes for Google APIs}.
+
+For certain token flows, the
+\code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
+included. This grants permission to retrieve the email address associated
+with a token; gargle uses this to index cached OAuth tokens. This grants no
+permission to view or send email. It is considered a low value scope and
+does not appear on the consent screen.}
 
 \item{path}{JSON identifying the service account, in one of the forms
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
