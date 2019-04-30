@@ -3,7 +3,7 @@
 #' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credential functions.
 #'
-#' @return A [`httr::Token`][httr::Token-class] or `NULL`.
+#' @return An [`httr::Token`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
 token_fetch <- function(scopes, ...) {

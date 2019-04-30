@@ -18,7 +18,7 @@ considered a low value scope and does not appear on the consent screen.}
 \item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
-A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or a
+An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
 \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
 }
 \description{

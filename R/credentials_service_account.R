@@ -5,7 +5,7 @@
 #'   supported for the `txt` argument of [jsonlite::fromJSON()] (typically, a
 #'   file path or JSON string).
 #'
-#' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
+#' @return An [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
 #' @examples

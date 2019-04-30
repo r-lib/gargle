@@ -22,7 +22,7 @@ file path or JSON string).}
 \item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
-A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 Get a token for a Google service account

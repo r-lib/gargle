@@ -20,7 +20,7 @@ considered a low value scope and does not appear on the consent screen.}
 \item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
-A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 Create credentials from a service account token stored by travis.
