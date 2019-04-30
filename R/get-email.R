@@ -48,13 +48,13 @@
 #' \dontrun{
 #' # with service account token
 #' t <- token_fetch(
-#'   scope = "https://www.googleapis.com/auth/drive",
-#'   path = "path/to/service/account/token/blah-blah-blah.json"
+#'   scopes = "https://www.googleapis.com/auth/drive",
+#'   path   = "path/to/service/account/token/blah-blah-blah.json"
 #' )
 #' # or with an OAuth token
 #' t <- token_fetch(
-#'   scope = "https://www.googleapis.com/auth/drive",
-#'   email = "janedoe@example.com"
+#'   scopes = "https://www.googleapis.com/auth/drive",
+#'   email  = "janedoe@example.com"
 #' )
 #' get_userinfo(t)
 #' get_email(t)

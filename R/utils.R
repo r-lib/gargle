@@ -59,9 +59,9 @@ normalize_scopes <- function(x) {
   stats::setNames(sort(unique(x)), NULL)
 }
 
-add_email_scope <- function(scope = NULL) {
+add_email_scope <- function(scopes = NULL) {
   url <- "https://www.googleapis.com/auth/userinfo.email"
-  union(scope %||% character(), url)
+  union(scopes %||% character(), url)
 }
 
 #' An expose object
