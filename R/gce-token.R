@@ -1,6 +1,7 @@
 #' GceToken is a token for use only on Google Compute Engine instances.
 #'
-#' This class uses the metadata service available on GCE VMs to fetch access tokens.
+#' This class uses the metadata service available on GCE VMs to fetch access
+#' tokens.
 #' @export
 GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   print = function(...) {
@@ -89,8 +90,8 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #' @param service_account Name of the GCE service account to use.
 #'
 #' @return A [GceToken()] or `NULL`.
-#' @export
 #' @family credential functions
+#' @export
 credentials_gce <- function(scopes, service_account = "default", ...) {
   cat_line("trying credentials_gce()")
   if (!detect_gce()) {

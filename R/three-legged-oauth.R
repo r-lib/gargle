@@ -27,8 +27,9 @@
 #' @param package Name of the package requesting a token. Used in messages.
 #' @inheritDotParams gargle2.0_token -scope -app -package
 #'
-#' @export
+#' @return A [Gargle2.0] token.
 #' @family credential functions
+#' @export
 #' @examples
 #' \dontrun{
 #' ## Drive scope, built-in gargle demo app

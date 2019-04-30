@@ -9,6 +9,7 @@
 GceToken
 }
 \description{
-This class uses the metadata service available on GCE VMs to fetch access tokens.
+This class uses the metadata service available on GCE VMs to fetch access
+tokens.
 }
 \keyword{datasets}

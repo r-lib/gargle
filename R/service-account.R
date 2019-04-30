@@ -2,12 +2,19 @@
 #'
 #' @inheritParams token_fetch
 #' @param path JSON identifying the service account, in one of the forms
-#'   supported by [jsonlite::fromJSON()] (typically, a file path or JSON
-#'   string).
+#'   supported for the `txt` argument of [jsonlite::fromJSON()] (typically, a
+#'   file path or JSON string).
 #'
 #' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
+#' @examples
+#' \dontrun{
+#' token <- credentials_service_account(
+#'   scopes = "https://www.googleapis.com/auth/userinfo.email",
+#'   path = "/path/to/your/service-account.json"
+#' )
+#' }
 credentials_service_account <- function(scopes, path = "", ...) {
   cat_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path)

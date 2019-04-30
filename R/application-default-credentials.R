@@ -17,9 +17,16 @@ credentials_app_default_path <- function() {
 
 #' Fetch the Application Default Credentials
 #'
+#' FIXME: say something about the path searched and/or export that helper.
+#'
 #' @inheritParams token_fetch
-#' @export
+#'
+#' @return A [`httr::TokenServiceAccount`][httr::Token-class] or a
+#'   [`httr::Token`][httr::Token-class] or `NULL`.
+
+#' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @family credential functions
+#' @export
 credentials_app_default <- function(scopes, ...) {
   cat_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform

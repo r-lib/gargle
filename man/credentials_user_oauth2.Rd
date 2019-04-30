@@ -47,6 +47,9 @@ access token.}
 token generation.}
 }}
 }
+\value{
+A \link{Gargle2.0} token.
+}
 \description{
 Consults the token cache for a suitable OAuth token and, if
 unsuccessful, gets a token via the browser flow. A cached token is suitable

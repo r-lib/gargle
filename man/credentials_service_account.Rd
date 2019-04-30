@@ -16,8 +16,8 @@ OAuth tokens. This grants no permission to view or send email. It is
 considered a low value scope and does not appear on the consent screen.}
 
 \item{path}{JSON identifying the service account, in one of the forms
-supported by \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON
-string).}
+supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
+file path or JSON string).}
 
 \item{...}{Additional arguments passed to all credentials functions.}
 }
@@ -26,6 +26,14 @@ A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 Get a token for a Google service account
+}
+\examples{
+\dontrun{
+token <- credentials_service_account(
+  scopes = "https://www.googleapis.com/auth/userinfo.email",
+  path = "/path/to/your/service-account.json"
+)
+}
 }
 \seealso{
 Other credential functions: \code{\link{credentials_app_default}},

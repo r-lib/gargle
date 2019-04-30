@@ -17,8 +17,14 @@ considered a low value scope and does not appear on the consent screen.}
 
 \item{...}{Additional arguments passed to all credentials functions.}
 }
+\value{
+A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or a
+\code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
+
+A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
+}
 \description{
-Fetch the Application Default Credentials
+FIXME: say something about the path searched and/or export that helper.
 }
 \seealso{
 Other credential functions: \code{\link{credentials_gce}},
