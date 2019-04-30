@@ -165,13 +165,13 @@ token.</p>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># with service account token</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span>(
-  <span class='kw'>scope</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"path/to/service/account/token/blah-blah-blah.json"</span>
+  <span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
+  <span class='kw'>path</span>   <span class='kw'>=</span> <span class='st'>"path/to/service/account/token/blah-blah-blah.json"</span>
 )
 <span class='co'># or with an OAuth token</span>
 <span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span>(
-  <span class='kw'>scope</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='st'>"janedoe@example.com"</span>
+  <span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
+  <span class='kw'>email</span>  <span class='kw'>=</span> <span class='st'>"janedoe@example.com"</span>
 )
 <span class='fu'>get_userinfo</span>(<span class='no'>t</span>)
 <span class='fu'>get_email</span>(<span class='no'>t</span>)
