@@ -2,7 +2,7 @@
 % Please edit documentation in R/registry.R
 \name{cred_funs_list}
 \alias{cred_funs_list}
-\title{Get the list of all credential functions.}
+\title{List the registered credential functions}
 \usage{
 cred_funs_list()
 }
@@ -10,7 +10,7 @@ cred_funs_list()
 A list of credential functions.
 }
 \description{
-Get the list of all credential functions.
+List the registered credential functions
 }
 \seealso{
 Other registration: \code{\link{cred_funs_add}},

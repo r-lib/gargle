@@ -2,7 +2,7 @@
 % Please edit documentation in R/registry.R
 \name{cred_funs_add}
 \alias{cred_funs_add}
-\title{Add a new credential fetching function.}
+\title{Register a new credential fetching function}
 \usage{
 cred_funs_add(...)
 }
@@ -11,7 +11,11 @@ cred_funs_add(...)
 \code{\link[=is_cred_fun]{is_cred_fun()}}.}
 }
 \description{
-Function(s) are added to the \emph{front} of the list.
+Function(s) are added to the \emph{front} of the list. So:
+\itemize{
+\item "First registered, last tried."
+\item "Last registered, first tried."
+}
 }
 \examples{
 creds_one <- function(scopes, ...) {}

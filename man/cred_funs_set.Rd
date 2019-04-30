@@ -2,7 +2,7 @@
 % Please edit documentation in R/registry.R
 \name{cred_funs_set}
 \alias{cred_funs_set}
-\title{Set the list of all credential functions.}
+\title{Register a list of credential fetching functions}
 \usage{
 cred_funs_set(ls)
 }
@@ -10,7 +10,7 @@ cred_funs_set(ls)
 \item{ls}{A list of credential functions.}
 }
 \description{
-Set the list of all credential functions.
+Register a list of credential fetching functions
 }
 \seealso{
 Other registration: \code{\link{cred_funs_add}},

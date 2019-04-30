@@ -2,7 +2,7 @@
 % Please edit documentation in R/registry.R
 \name{is_cred_fun}
 \alias{is_cred_fun}
-\title{Check that f is a viable credential fetching function.}
+\title{Check that f is a viable credential fetching function}
 \usage{
 is_cred_fun(f)
 }
@@ -15,8 +15,8 @@ set of scopes and any number of additional arguments, and returns either a
 valid \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
 }
 \details{
-Here we say that a function is valid if its first argument is named
-\code{scopes}, and it includes \code{...} as an argument, since it's
-difficult to actually check the behavior of the function.
+Here we say that a function is valid if its first argument is named \code{scopes},
+and it includes \code{...} as an argument, since it's difficult to actually check
+the behavior of the function.
 }
 \keyword{internal}

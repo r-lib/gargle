@@ -2,12 +2,12 @@
 % Please edit documentation in R/registry.R
 \name{cred_funs_clear}
 \alias{cred_funs_clear}
-\title{Clear the list of credential functions.}
+\title{Clear the credential function registry}
 \usage{
 cred_funs_clear()
 }
 \description{
-Clear the list of credential functions.
+Clear the credential function registry
 }
 \seealso{
 Other registration: \code{\link{cred_funs_add}},

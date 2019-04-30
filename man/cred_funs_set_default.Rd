@@ -2,10 +2,10 @@
 % Please edit documentation in R/registry.R
 \name{cred_funs_set_default}
 \alias{cred_funs_set_default}
-\title{Set the default credential functions.}
+\title{Set the default credential functions}
 \usage{
 cred_funs_set_default()
 }
 \description{
-Set the default credential functions.
+Set the default credential functions
 }
