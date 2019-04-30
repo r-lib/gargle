@@ -41,7 +41,7 @@ is_cred_fun <- function(f) {
 #'
 #' @param ... One or more functions with the right signature. See
 #'   [is_cred_fun()].
-#' @family registration
+#' @family registry management
 #' @export
 #' @examples
 #' creds_one <- function(scopes, ...) {}
@@ -59,7 +59,7 @@ cred_funs_add <- function(...) {
 #' List the registered credential functions
 #'
 #' @return A list of credential functions.
-#' @family registration
+#' @family registry management
 #' @export
 cred_funs_list <- function() {
   gargle_env$cred_funs
@@ -68,7 +68,7 @@ cred_funs_list <- function() {
 #' Register a list of credential fetching functions
 #'
 #' @param ls A list of credential functions.
-#' @family registration
+#' @family registry management
 #' @export
 cred_funs_set <- function(ls) {
   stopifnot(all(vapply(ls, is_cred_fun, TRUE)))
@@ -78,7 +78,7 @@ cred_funs_set <- function(ls) {
 
 #' Clear the credential function registry
 #'
-#' @family registration
+#' @family registry management
 #' @export
 cred_funs_clear <- function() {
   gargle_env$cred_funs <- list()
