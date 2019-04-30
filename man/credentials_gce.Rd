@@ -17,7 +17,7 @@ considered a low value scope and does not appear on the consent screen.}
 
 \item{service_account}{Name of the GCE service account to use.}
 
-\item{...}{Additional arguments passed to all credentials functions.}
+\item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
 A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.

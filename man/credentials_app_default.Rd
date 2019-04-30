@@ -15,7 +15,7 @@ the email address associated with a token; gargle uses this to index cached
 OAuth tokens. This grants no permission to view or send email. It is
 considered a low value scope and does not appear on the consent screen.}
 
-\item{...}{Additional arguments passed to all credentials functions.}
+\item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
 A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or a

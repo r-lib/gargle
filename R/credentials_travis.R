@@ -3,6 +3,8 @@
 #'
 #' @inheritParams token_fetch
 #' @param path Path to the decrypted travis service account.
+#'
+#' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
 credentials_travis <- function(scopes, path = "", ...) {

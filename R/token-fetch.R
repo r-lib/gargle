@@ -1,7 +1,7 @@
 #' Fetch a token for the given scopes.
 #'
 #' @inheritParams credentials_user_oauth2
-#' @param ... Additional arguments passed to all credentials functions.
+#' @param ... Additional arguments passed to all credential functions.
 #'
 #' @return A [`httr::Token`][httr::Token-class] or `NULL`.
 #' @family credential functions

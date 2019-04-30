@@ -17,7 +17,10 @@ considered a low value scope and does not appear on the consent screen.}
 
 \item{path}{Path to the decrypted travis service account.}
 
-\item{...}{Additional arguments passed to all credentials functions.}
+\item{...}{Additional arguments passed to all credential functions.}
+}
+\value{
+A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 Create credentials from a service account token stored by travis.

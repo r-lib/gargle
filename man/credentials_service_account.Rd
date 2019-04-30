@@ -19,7 +19,7 @@ considered a low value scope and does not appear on the consent screen.}
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
 file path or JSON string).}
 
-\item{...}{Additional arguments passed to all credentials functions.}
+\item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
 A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
