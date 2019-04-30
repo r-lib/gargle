@@ -17,7 +17,7 @@ considered a low value scope and does not appear on the consent screen.}
 
 \item{path}{Path to the decrypted travis service account.}
 
-\item{...}{Additional arguments (ignored)}
+\item{...}{Additional arguments passed to all credentials functions.}
 }
 \description{
 Create credentials from a service account token stored by travis.

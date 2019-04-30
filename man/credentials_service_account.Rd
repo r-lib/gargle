@@ -2,7 +2,7 @@
 % Please edit documentation in R/service-account.R
 \name{credentials_service_account}
 \alias{credentials_service_account}
-\title{Create a token for a Google service account.}
+\title{Get a token for a Google service account}
 \usage{
 credentials_service_account(scopes, path = "", ...)
 }
@@ -15,13 +15,15 @@ the email address associated with a token; gargle uses this to index cached
 OAuth tokens. This grants no permission to view or send email. It is
 considered a low value scope and does not appear on the consent screen.}
 
-\item{path}{Path to the downloaded JSON file}
+\item{path}{JSON identifying the service account, in one of the forms
+supported by \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON
+string).}
 
-\item{...}{Additional arguments (ignored)}
+\item{...}{Additional arguments passed to all credentials functions.}
 }
 \value{
 A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
-Create a token for a Google service account.
+Get a token for a Google service account
 }

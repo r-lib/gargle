@@ -1,8 +1,10 @@
-#' Create a token for a Google service account.
+#' Get a token for a Google service account
 #'
-#' @inheritParams credentials_user_oauth2
-#' @param path Path to the downloaded JSON file
-#' @param ... Additional arguments (ignored)
+#' @inheritParams token_fetch
+#' @param path JSON identifying the service account, in one of the forms
+#'   supported by [jsonlite::fromJSON()] (typically, a file path or JSON
+#'   string).
+#'
 #' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @export
 credentials_service_account <- function(scopes, path = "", ...) {

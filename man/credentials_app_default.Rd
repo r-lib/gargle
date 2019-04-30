@@ -2,7 +2,7 @@
 % Please edit documentation in R/application-default-credentials.R
 \name{credentials_app_default}
 \alias{credentials_app_default}
-\title{Fetch the Application Default Credentials.}
+\title{Fetch the Application Default Credentials}
 \usage{
 credentials_app_default(scopes, ...)
 }
@@ -15,8 +15,8 @@ the email address associated with a token; gargle uses this to index cached
 OAuth tokens. This grants no permission to view or send email. It is
 considered a low value scope and does not appear on the consent screen.}
 
-\item{...}{Additional arguments (ignored)}
+\item{...}{Additional arguments passed to all credentials functions.}
 }
 \description{
-Fetch the Application Default Credentials.
+Fetch the Application Default Credentials
 }

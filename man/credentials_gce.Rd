@@ -2,7 +2,7 @@
 % Please edit documentation in R/gce-token.R
 \name{credentials_gce}
 \alias{credentials_gce}
-\title{Create a token for use on Google Compute Engine for the given scopes, if possible.}
+\title{Get a token for Google Compute Engine}
 \usage{
 credentials_gce(scopes, service_account = "default", ...)
 }
@@ -15,7 +15,7 @@ the email address associated with a token; gargle uses this to index cached
 OAuth tokens. This grants no permission to view or send email. It is
 considered a low value scope and does not appear on the consent screen.}
 
-\item{service_account}{Name of the GCE service account to use (defaults to \code{default})}
+\item{service_account}{Name of the GCE service account to use.}
 
 \item{...}{Additional arguments passed to all credentials functions.}
 }
@@ -23,5 +23,5 @@ considered a low value scope and does not appear on the consent screen.}
 A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 }
 \description{
-Create a token for use on Google Compute Engine for the given scopes, if possible.
+Get a token for Google Compute Engine
 }

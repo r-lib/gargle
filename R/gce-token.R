@@ -83,11 +83,11 @@ fetch_access_token <- function(scopes, service_account, ...) {
   httr::content(response, as = "parsed", "application/json")
 }
 
-#' Create a token for use on Google Compute Engine for the given scopes, if possible.
+#' Get a token for Google Compute Engine
 #'
-#' @inheritParams credentials_user_oauth2
-#' @param service_account Name of the GCE service account to use (defaults to `default`)
-#' @param ... Additional arguments passed to all credentials functions.
+#' @inheritParams token_fetch
+#' @param service_account Name of the GCE service account to use.
+#'
 #' @return A [GceToken()] or `NULL`.
 #' @export
 credentials_gce <- function(scopes, service_account = "default", ...) {

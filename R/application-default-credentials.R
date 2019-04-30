@@ -15,10 +15,9 @@ credentials_app_default_path <- function() {
   path_join(pth)
 }
 
-#' Fetch the Application Default Credentials.
+#' Fetch the Application Default Credentials
 #'
-#' @inheritParams credentials_user_oauth2
-#' @param ... Additional arguments (ignored)
+#' @inheritParams token_fetch
 #' @export
 credentials_app_default <- function(scopes, ...) {
   cat_line("trying credentials_app_default()")
