@@ -20,8 +20,6 @@ considered a low value scope and does not appear on the consent screen.}
 \value{
 A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or a
 \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
-
-A \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
 FIXME: say something about the path searched and/or export that helper.
