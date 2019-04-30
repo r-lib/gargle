@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a new credential fetching function. — cred_funs_add • gargle</title>
+<title>Register a new credential fetching function — cred_funs_add • gargle</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Add a new credential fetching function. — cred_funs_add" />
+<meta property="og:title" content="Register a new credential fetching function — cred_funs_add" />
 
-<meta property="og:description" content="Function(s) are added to the front of the list." />
+<meta property="og:description" content="Function(s) are added to the front of the list. So:
+&quot;First registered, last tried.&quot;
+&quot;Last registered, first tried.&quot;
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,14 +123,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a new credential fetching function.</h1>
+    <h1>Register a new credential fetching function</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/registry.R'><code>R/registry.R</code></a></small>
     <div class="hidden name"><code>cred_funs_add.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Function(s) are added to the <em>front</em> of the list.</p>
+    <p>Function(s) are added to the <em>front</em> of the list. So:</p><ul>
+<li><p>"First registered, last tried."</p></li>
+<li><p>"Last registered, first tried."</p></li>
+</ul>
     
     </div>
 
