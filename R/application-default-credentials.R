@@ -17,7 +17,7 @@ credentials_app_default_path <- function() {
 
 #' Fetch the Application Default Credentials.
 #'
-#' @param scopes List of scopes required for the returned token.
+#' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments (ignored)
 #' @export
 credentials_app_default <- function(scopes, ...) {

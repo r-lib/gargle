@@ -1,6 +1,6 @@
 #' Fetch a token for the given scopes.
 #'
-#' @param scopes A list of scopes this token is authorized for.
+#' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credentials functions.
 #' @return A [`httr::Token`][httr::Token-class] or `NULL`.
 #' @export

@@ -1,6 +1,6 @@
 #' Create a token for a Google service account.
 #'
-#' @param scopes List of scopes required for the returned token.
+#' @inheritParams credentials_user_oauth2
 #' @param path Path to the downloaded JSON file
 #' @param ... Additional arguments (ignored)
 #' @return A [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.

@@ -13,10 +13,7 @@
 #'   cache. Define the option `gargle.oauth_email` to set a personal default.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
-#' @param scope A character vector of scopes to request. The `"email"` scope is
-#'   always added if not already present. This is needed to retrieve the email
-#'   address associated with the token. This is considered a low value scope and
-#'   does not appear on the consent screen.
+#' @param scope A character vector of scopes to request.
 #' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
 #'   Otherwise, provide a URL to the user and prompt for a validation code.
 #'   Defaults to the option `gargle.oob_default` or `TRUE` if httpuv is not

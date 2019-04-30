@@ -26,10 +26,7 @@ cache. Define the option \code{gargle.oauth_email} to set a personal default.}
 
 \item{package}{Name of the package requesting a token. Used in messages.}
 
-\item{scope}{A character vector of scopes to request. The \code{"email"} scope is
-always added if not already present. This is needed to retrieve the email
-address associated with the token. This is considered a low value scope and
-does not appear on the consent screen.}
+\item{scope}{A character vector of scopes to request.}
 
 \item{user_params}{Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the

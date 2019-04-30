@@ -1,7 +1,7 @@
 
 #' Create credentials from a service account token stored by travis.
 #'
-#' @param scopes List of scopes required for the returned token.
+#' @inheritParams credentials_user_oauth2
 #' @param path Path to the decrypted travis service account.
 #' @param ... Additional arguments (ignored)
 #' @export

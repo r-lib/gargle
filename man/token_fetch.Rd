@@ -7,7 +7,13 @@
 token_fetch(scopes, ...)
 }
 \arguments{
-\item{scopes}{A list of scopes this token is authorized for.}
+\item{scopes}{A character vector of scopes to request. Pick from those listed
+in \href{https://developers.google.com/identity/protocols/googlescopes}{OAuth 2.0 Scopes for Google APIs}. For
+certain token flows, the \code{"https://www.googleapis.com/auth/userinfo.email"}
+scope may be added, if not already present. This grants permission to view
+the email address associated with a token; gargle uses this to index cached
+OAuth tokens. This grants no permission to view or send email. It is
+considered a low value scope and does not appear on the consent screen.}
 
 \item{...}{Additional arguments passed to all credentials functions.}
 }
