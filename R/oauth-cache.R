@@ -93,12 +93,12 @@ cache_load <- function(path) {
   files <- as.character(dir_ls(path))
   files <- hash_paths(files)
   names(files) <- path_file(files)
-  tokens <- lapply(files, readRDS)
+  tokens <- map(files, readRDS)
   validate_token_list(tokens)
 }
 
 validate_token_list <- function(tokens) {
-  hashes <- vapply(tokens, function(x) x$hash(), character(1), USE.NAMES = FALSE)
+  hashes <- unname(map_chr(tokens, function(t) t$hash()))
   nms <- names(tokens)
 
   if (!identical(nms, hashes)) {
@@ -291,16 +291,17 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   cat_glue("{length(tokens)} tokens found")
   cat_line()
 
-  nms   <- names(tokens)
-  hash  <- mask_email(nms)
-  email <- extract_email(nms)
-  app   <- vapply(tokens, function(t) t$app$appname, "", USE.NAMES = FALSE)
-  scope <- lapply(tokens, function(t) t$params$scope)
-  scope <- lapply(scope, function(s) s[s != "email"])
-  scope <- vapply(scope, function(s) commapse(base_scope(s)), FUN.VALUE = "")
+  nms    <- names(tokens)
+  hash   <- mask_email(nms)
+  email  <- extract_email(nms)
+  app    <- map_chr(tokens, function(t) t$app$appname)
+  scopes <- map(tokens, function(t) t$params$scope)
+  email_scope <- "https://www.googleapis.com/auth/userinfo.email"
+  scopes <- map(scopes, function(s) s[s != email_scope])
+  scopes <- map_chr(scopes, function(s) commapse(base_scope(s)))
 
   df <- data.frame(
-    email, app, scope, hash, hash... = obfuscate(hash, first = 7, last = 0),
+    email, app, scopes, hash, hash... = obfuscate(hash, first = 7, last = 0),
     stringsAsFactors = FALSE, row.names = NULL
   )
 
@@ -317,7 +318,7 @@ gargle_oauth_sitrep <- function(cache = NULL) {
 
   cat_glue_data(
     df,
-    "{email} {app} {scope} {hash...}",
+    "{email} {app} {scopes} {hash...}",
     .transformer = format_transformer
   )
 

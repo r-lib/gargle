@@ -51,7 +51,7 @@ is_cred_fun <- function(f) {
 #' cred_funs_add(one = creds_one, creds_one)
 cred_funs_add <- function(...) {
   dots <- list(...)
-  stopifnot(all(vapply(dots, is_cred_fun, TRUE)))
+  stopifnot(all(map_lgl(dots, is_cred_fun)))
   gargle_env$cred_funs <- c(dots, gargle_env$cred_funs)
   invisible()
 }
@@ -71,7 +71,7 @@ cred_funs_list <- function() {
 #' @family registry management
 #' @export
 cred_funs_set <- function(ls) {
-  stopifnot(all(vapply(ls, is_cred_fun, TRUE)))
+  stopifnot(all(map_lgl(ls, is_cred_fun)))
   gargle_env$cred_funs <- ls
   invisible()
 }
