@@ -1,12 +1,3 @@
-render_lines <- function(..., .data) { # nocov start
-  vapply(
-    X = c(...),
-    FUN = function(line) glue_data(.x = .data, line, .open = "<<", .close = ">>"),
-    FUN.VALUE = character(1),
-    USE.NAMES = FALSE
-  )
-}
-
 ## FIXME(jennybc): find a place for this
 #' @section API console:
 #' To manage your google projects, use the API console:

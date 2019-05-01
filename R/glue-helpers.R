@@ -1,3 +1,12 @@
+render_lines <- function(..., .data) { # nocov start
+  vapply(
+    X = c(...),
+    FUN = function(line) glue_data(.x = .data, line, .open = "<<", .close = ">>"),
+    FUN.VALUE = character(1),
+    USE.NAMES = FALSE
+  )
+}
+
 stop_glue <- function(..., .sep = "", .envir = parent.frame(),
                       call. = FALSE, .domain = NULL) {
   stop(
