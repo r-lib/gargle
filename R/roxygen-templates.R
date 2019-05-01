@@ -1,3 +1,5 @@
+# nocov start
+
 ## FIXME(jennybc): find a place for this
 #' @section API console:
 #' To manage your google projects, use the API console:
@@ -10,43 +12,41 @@ PREFIX_auth_description <- function(.data = list(
   YOUR_STUFF = "YOUR STUFF",
   PRODUCT    = "A GOOGLE PRODUCT"
 )) {
-  render_lines(
+  glue_data_lines(c(
     "@description",
-    "Authorize <<PACKAGE>> to view and manage <<YOUR_STUFF>>. By default,",
+    "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. By default,",
     "you are directed to a web browser, asked to sign in to your Google",
-    "account, and to grant <<PACKAGE>> permission to operate on your behalf",
-    "with <<PRODUCT>>. By default, these user credentials are cached in a",
+    "account, and to grant {PACKAGE} permission to operate on your behalf",
+    "with {PRODUCT}. By default, these user credentials are cached in a",
     "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
-    "tokens are less likely to be synced to the cloud by accident.",
-    .data = .data
-  )
+    "tokens are less likely to be synced to the cloud by accident."
+  ), .data = .data)
 }
 
 PREFIX_auth_details <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 )) {
-  render_lines(
+  glue_data_lines(c(
     "@details",
-    "Most users, most of the time, do not need to call `<<PREFIX>>_auth()`",
+    "Most users, most of the time, do not need to call `{PREFIX}_auth()`",
     "explicitly -- it is triggered by the first action that requires",
     "authorization. Even when called, the default arguments often suffice.",
     "However, when necessary, this function allows the user to explicitly:",
     "  * Declare which Google identity to use, via an email address. If there",
     "    are multiple cached tokens, this can clarify which one to use. It can",
-    "    also force <<PACKAGE>> to switch from one identity to another. If",
+    "    also force {PACKAGE} to switch from one identity to another. If",
     "    there's no cached token for the email, this triggers a return to the",
     "    browser to choose the identity and give consent.",
     "  * Use a service account token.",
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
     "",
-    "For even deeper control over auth, use [<<PREFIX>>_auth_config()] to use",
-    "your own OAuth app or API key.",
-    .data = .data
-  )
+    "For even deeper control over auth, use [{PREFIX}_auth_config()] to use",
+    "your own OAuth app or API key."
+  ), .data = .data)
 }
 
 PREFIX_auth_params_email <- function() {
@@ -58,11 +58,10 @@ PREFIX_auth_params_path <- function() {
 PREFIX_auth_params_scopes <- function(.data = list(
   SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes"
 )) {
-  render_lines(
+  glue_data_lines(c(
     "@param scopes Optional; scope(s) to use. See your choices at",
-    "[OAuth 2.0 Scopes for Google APIs](<<SCOPES_LINK>>).",
-    .data = .data
-  )
+    "[OAuth 2.0 Scopes for Google APIs]({SCOPES_LINK})."
+  ), .data = .data)
 }
 PREFIX_auth_params_cache_use_oob <- function() {
   "@inheritParams gargle::gargle2.0_token"
@@ -74,17 +73,16 @@ PREFIX_deauth_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 )) {
-  render_lines(
+  glue_data_lines(c(
     "@description",
-    "Put <<PACKAGE>> into a de-authorized state. Instead of sending a token,",
-    "<<PACKAGE>> will send its API key. This can be used to access public",
+    "Put {PACKAGE} into a de-authorized state. Instead of sending a token,",
+    "{PACKAGE} will send its API key. This can be used to access public",
     "files for which no Google sign-in is required. This is handy for using",
-    "<<PACKAGE>> in a non-interactive setting to make requests that do not",
+    "{PACKAGE} in a non-interactive setting to make requests that do not",
     "require a token. It will prevent the attempt to obtain a token",
     "interactively in the browser. A built-in API key is used by default or",
-    "the user can configure their own via [<<PREFIX>>_auth_config()].",
-    .data = .data
-  )
+    "the user can configure their own via [{PREFIX}_auth_config()]."
+  ), .data = .data)
 }
 
 # PREFIX_token() ----------------------------------------------------------
@@ -93,17 +91,16 @@ PREFIX_token_description <- function(.data = list(
   API    = "GOOGLE API",
   PREFIX = "PREFIX"
 )) {
-  render_lines(
+  glue_data_lines(c(
     "@description",
-    "For internal use or for those programming around the <<API>>.",
+    "For internal use or for those programming around the {API}.",
     "Returns a token pre-processed with [httr::config()]. Most users",
     "do not need to handle tokens \"by hand\" or, even if they need some",
-    "control, [<<PREFIX>>_auth()] is what they need. If there is no current",
-    "token, [<<PREFIX>>_auth()] is called to either load from cache or",
+    "control, [{PREFIX}_auth()] is what they need. If there is no current",
+    "token, [{PREFIX}_auth()] is called to either load from cache or",
     "initiate OAuth2.0 flow. If auth has been deactivated via",
-    "[<<PREFIX>>_auth_config()], `<<PREFIX>>_token()` returns `NULL`.",
-    .data = .data
-  )
+    "[{PREFIX}_auth_config()], `{PREFIX}_token()` returns `NULL`."
+  ), .data = .data)
 }
 
 PREFIX_token_return <- function() {
@@ -119,11 +116,11 @@ PREFIX_auth_config_description <- function(.data = list(
   lines <- c(
     "@description",
     "These functions give the user more control over auth than what is",
-    "possible with [<<PREFIX>>_auth()]. Learn more in Google's documentation:",
+    "possible with [{PREFIX}_auth()]. Learn more in Google's documentation:",
     "[Credentials, access, security, and",
     "identity](https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279)",
     "and [Using OAuth 2.0 for Installed Applications](https://developers.google.com/identity/protocols/OAuth2InstalledApp).",
-    "`<<PREFIX>>_auth_config()` gives control of:",
+    "`{PREFIX}_auth_config()` gives control of:",
     "   * The OAuth app. If you want to use your own app, setup a new project",
     "     in [Google Developers Console](https://console.developers.google.com).",
     "     Follow the instructions in [OAuth 2.0 for Mobile & Desktop",
@@ -135,22 +132,22 @@ PREFIX_auth_config_description <- function(.data = list(
   )
   if (.deauth_possible) {
     lines <- append(lines, c(
-    "   * The API key. If <<PACKAGE>> is deauthorized via",
-    "     [<<PREFIX>>_deauth()], all requests will be sent with an API key in",
+    "   * The API key. If {PACKAGE} is deauthorized via",
+    "     [{PREFIX}_deauth()], all requests will be sent with an API key in",
     "     lieu of a token. If you want to provide your own API key, setup a",
     "     project as described above and follow the instructions in",
     "     [Setting up API keys](https://support.google.com/googleapi/answer/6158862).",
     "",
-    "`<<PREFIX>>_api_key()` and `<<PREFIX>>_oauth_app()` retrieve the",
+    "`{PREFIX}_api_key()` and `{PREFIX}_oauth_app()` retrieve the",
     " currently configured API key and OAuth app, respectively."
     ))
   } else {
     lines <- append(lines, c(
     "",
-    "`<<PREFIX>>_oauth_app()` retrieves the currently configured OAuth app."
+    "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth app."
     ))
   }
-  render_lines(lines, .data = .data)
+  glue_data_lines(lines, .data = .data)
 }
 
 PREFIX_auth_config_params_except_key <- function() {
@@ -170,22 +167,20 @@ PREFIX_auth_config_params_key <- function() {
 PREFIX_auth_config_return_with_key <- function(.data = list(
   PREFIX = "PREFIX"
 )) {
-  render_lines(
-    "@return `<<PREFIX>>_auth_config()`: An object of R6 class `AuthState`,",
-    "which is defined in the gargle package. `<<PREFIX>>_api_key()`: the",
-    "current API key. `<<PREFIX>>_oauth_app()`: the current",
-    "[httr::oauth_app()].",
-    .data = .data
-  )
+  glue_data_lines(c(
+    "@return `{PREFIX}_auth_config()`: An object of R6 class `AuthState`,",
+    "which is defined in the gargle package. `{PREFIX}_api_key()`: the",
+    "current API key. `{PREFIX}_oauth_app()`: the current",
+    "[httr::oauth_app()]."
+  ), .data = .data)
 }
 
 PREFIX_auth_config_return_without_key <- function(.data = list(
   PREFIX = "PREFIX"
 )) {
-  render_lines(
-    "@return `<<PREFIX>>_auth_config()`: An object of R6 class `AuthState`,",
-    "which is defined in the gargle package. `<<PREFIX>>_oauth_app()`: the ",
-    "current [httr::oauth_app()].",
-    .data = .data
-  )
+  glue_data_lines(c(
+    "@return `{PREFIX}_auth_config()`: An object of R6 class `AuthState`,",
+    "which is defined in the gargle package. `{PREFIX}_oauth_app()`: the ",
+    "current [httr::oauth_app()]."
+  ), .data = .data)
 } # nocov end
