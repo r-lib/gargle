@@ -19,7 +19,8 @@ interactive_mode <- function() {
 skip_if_no_auth <- function() {
   testthat::skip_if_not(
     secret_can_decrypt("gargle"),
-    "Authentication not available")
+    "Authentication not available"
+  )
 }
 
 expect_error_free <- function(...) {
