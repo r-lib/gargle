@@ -12,7 +12,7 @@ gargle_default_oauth_cache_path <- function() {
 cache_establish <- function(cache = NULL) {
   cache <- cache %||% getOption("gargle.oauth_cache")
   if (length(cache) != 1) {
-    stop_glue("{bt('cache')} must have length 1, not {length(cache)}.")
+    abort(glue("{bt('cache')} must have length 1, not {length(cache)}."))
   }
   if (!is.logical(cache) && !is.character(cache)) {
     bad_class <- glue_collapse(class(cache), sep = "/")
@@ -110,18 +110,16 @@ validate_token_list <- function(tokens) {
               but hash is {sq(hashes[mismatches])}
       ")
     )
-    msg <- glue_collapse(msg, sep = "\n")
-    stop_glue(msg)
+    abort(glue_collapse(msg, sep = "\n"))
   }
 
   if (anyDuplicated(nms)) {
     dupes <- unique(nms[duplicated(nms)])
     msg <- c(
       "Cache contains duplicated tokens:",
-      paste0("* ", dupes)
+      paste0("  * ", dupes)
     )
-    msg <- glue_collapse(msg, sep = "\n")
-    stop_glue(msg)
+    abort(glue_collapse(msg, sep = "\n"))
   }
 
   tokens
