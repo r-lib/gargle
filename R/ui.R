@@ -48,3 +48,16 @@ obfuscate <- function(x, first = 6, last = 4) {
     )
   out
 }
+
+glue_lines <- function(lines, ..., .env = parent.frame()) {
+  # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
+  g <- function(line) glue(line, ..., .envir = .env)
+  map_chr(lines, g)
+}
+
+glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
+  # work around name collision of `.x` of map_chr() vs. of glue_data()
+  # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
+  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .env)
+  map_chr(lines, gd)
+}
