@@ -125,20 +125,6 @@ validate_token_list <- function(tokens) {
   tokens
 }
 
-## useful to jennybc during development
-cache_show <- function(path = NULL) { # nocov start
-  path <- path %||% getOption("gargle.oauth_cache")
-  if (is.null(path) || is.na(path) || isTRUE(path)) {
-    path <- gargle_default_oauth_cache_path()
-  }
-  if (!dir_exists(path)) {
-    message_glue("There is no cache dir at {sq(path)}")
-    return(invisible())
-  }
-  message_glue("Reading from cache in {sq(path)}")
-  cache_load(path)
-} # nocov end
-
 # retrieve and insert tokens from cache -----------------------------------
 
 ## these two functions provide the "current token <--> token cache" interface
