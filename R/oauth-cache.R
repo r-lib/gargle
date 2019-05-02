@@ -15,9 +15,9 @@ cache_establish <- function(cache = NULL) {
     stop_glue("{bt('cache')} must have length 1, not {length(cache)}.")
   }
   if (!is.logical(cache) && !is.character(cache)) {
-    stop_glue_data(
-      list(x = glue_collapse(class(cache), sep = "/")),
-      "{bt('cache')} must be logical or character, not of class {sq(x)}."
+    bad_class <- glue_collapse(class(cache), sep = "/")
+    stop_glue(
+      "{bt('cache')} must be logical or character, not of class {sq(bad_class)}."
     )
   }
 
@@ -110,7 +110,8 @@ validate_token_list <- function(tokens) {
               but hash is {sq(hashes[mismatches])}
       ")
     )
-    stop_collapse(msg)
+    msg <- glue_collapse(msg, sep = "\n")
+    stop_glue(msg)
   }
 
   if (anyDuplicated(nms)) {
@@ -119,7 +120,8 @@ validate_token_list <- function(tokens) {
       "Cache contains duplicated tokens:",
       paste0("* ", dupes)
     )
-    stop_collapse(msg)
+    msg <- glue_collapse(msg, sep = "\n")
+    stop_glue(msg)
   }
 
   tokens
@@ -191,7 +193,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   existing <- existing[m]
 
   if (length(existing) == 1 && candidate_email == "*") {
-    message_glue(
+    cat_glue(
       "The {package} package is using a cached token for \\
       {extract_email(existing)}."
     )

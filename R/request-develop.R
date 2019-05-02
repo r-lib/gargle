@@ -164,16 +164,20 @@ check_params <- function(provided, spec) {
   required <- Filter(function(x) isTRUE(x$required), spec)
   missing <- setdiff(names(required), names(provided))
   if (length(missing)) {
-    stop_collapse(
-      c("Required parameter(s) are missing:", missing)
+    msg <- glue_collapse(
+      c("Required parameter(s) are missing:", missing),
+      sep = "\n"
     )
+    stop_glue(msg)
   }
 
   unknown <- setdiff(names(provided), names(spec))
   if (length(unknown)) {
-    stop_collapse(
-      c("These parameters are not recognized for this endpoint:", unknown)
+    msg <- glue_collapse(
+      c("These parameters are not recognized for this endpoint:", unknown),
+      sep = "\n"
     )
+    stop_glue(msg)
   }
 
   invisible(provided)
