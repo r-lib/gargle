@@ -19,12 +19,19 @@ cat_line <- function(..., quiet = gargle_quiet()) {
   cat(lines, sep = "")
 }
 
-cat_glue <- function(..., .sep = "", .envir = parent.frame()) {
-  cat(glue(..., .sep = .sep, .envir = .envir), sep = "\n")
+glue_lines <- function(lines, ..., .env = parent.frame()) {
+  # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
+  # plus: I've only got compat-purrr here, so I have to write a function
+  g <- function(line) glue(line, ..., .envir = .env)
+  map_chr(lines, g)
 }
 
-cat_glue_data <- function(..., .sep = "", .envir = parent.frame()) {
-  cat(glue_data(..., .sep = .sep, .envir = .envir), sep = "\n")
+glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
+  # work around name collision of `.x` of map_chr() vs. of glue_data()
+  # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
+  # plus: I've only got compat-purrr here, so I have to write a function
+  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .env)
+  map_chr(lines, gd)
 }
 
 commapse <- function(...) paste0(..., collapse = ", ")
@@ -47,17 +54,4 @@ obfuscate <- function(x, first = 6, last = 4) {
       )
     )
   out
-}
-
-glue_lines <- function(lines, ..., .env = parent.frame()) {
-  # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
-  g <- function(line) glue(line, ..., .envir = .env)
-  map_chr(lines, g)
-}
-
-glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
-  # work around name collision of `.x` of map_chr() vs. of glue_data()
-  # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
-  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .env)
-  map_chr(lines, gd)
 }

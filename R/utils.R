@@ -31,7 +31,7 @@ add_line <- function(path, line, quiet = FALSE) {
   }
 
   if (line %in% lines) return(TRUE)
-  if (!quiet) message("Adding ", line, " to ", path)
+  cat_line("Adding ", line, " to ", path)
 
   lines <- c(lines, line)
   writeLines(lines, path)

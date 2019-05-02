@@ -55,10 +55,10 @@ cache_allowed <- function(path) {
     return(FALSE)
   }
 
-  cat_glue(
+  cat_line(glue(
     "Is it OK to cache OAuth access credentials in the folder {sq(path)} ",
     "between R sessions?"
-  )
+  ))
   utils::menu(c("Yes", "No")) == 1
 }
 
@@ -193,10 +193,9 @@ token_match <- function(candidate, existing, package = "gargle") {
   existing <- existing[m]
 
   if (length(existing) == 1 && candidate_email == "*") {
-    cat_glue(
-      "The {package} package is using a cached token for \\
-      {extract_email(existing)}."
-    )
+    cat_line(glue(
+      "The {package} package is using a cached token for {extract_email(existing)}."
+    ))
     return(existing)
   }
   ## we need user to OK our discovery or pick from multiple emails
@@ -208,11 +207,11 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
 
   emails <- extract_email(existing)
-  cat_glue(
+  cat_line(glue(
     "The {package} package is requesting access to your Google account. ",
     "Select a pre-authorised account or enter '0' to obtain a new token. ",
     "Press Esc/Ctrl + C to abort."
-  )
+  ))
   choice <- utils::menu(emails)
 
   if (choice == 0) {
@@ -273,10 +272,11 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     return(invisible())
   }
 
-  cat_glue("gargle OAuth cache path:\n{path}")
+  cat_line("gargle OAuth cache path:")
+  cat_line(path)
   cat_line()
   tokens <- cache_load(path)
-  cat_glue("{length(tokens)} tokens found")
+  cat_line(glue("{length(tokens)} tokens found"))
   cat_line()
 
   nms    <- names(tokens)
@@ -304,11 +304,11 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     )
   }
 
-  cat_glue_data(
+  cat_line(glue_data(
     df,
     "{email} {app} {scopes} {hash...}",
     .transformer = format_transformer
-  )
+  ))
 
   df$hash... <- NULL
   invisible(df)
