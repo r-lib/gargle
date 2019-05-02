@@ -44,10 +44,7 @@ secret_write <- function(package, name, input) {
   if (is.character(input)) {
     input <- readBin(input, "raw", file.size(input))
   } else if (!is.raw(input)) {
-    bad_class <- glue_collapse(class(input), sep = "/")
-    stop_glue(
-      "{bt(input)} must be a filepath or a raw vector, not {bad_class}"
-    )
+    stop_bad_class(input, c("character", "raw"))
   }
 
   destdir <- fs::path("inst", "secret")

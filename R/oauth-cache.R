@@ -15,10 +15,7 @@ cache_establish <- function(cache = NULL) {
     abort(glue("{bt('cache')} must have length 1, not {length(cache)}."))
   }
   if (!is.logical(cache) && !is.character(cache)) {
-    bad_class <- glue_collapse(class(cache), sep = "/")
-    stop_glue(
-      "{bt('cache')} must be logical or character, not of class {sq(bad_class)}."
-    )
+    stop_bad_class(cache, c("logical", "character"))
   }
 
   # If NA, consider default cache folder.

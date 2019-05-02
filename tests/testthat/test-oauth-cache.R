@@ -9,11 +9,11 @@ test_that("cache_establish() insists on sensible input", {
   )
   expect_error(
     cache_establish(1),
-    "logical or character"
+    class = "gargle_error_bad_class"
   )
   expect_error(
     cache_establish(list(1)),
-    "logical or character"
+    class = "gargle_error_bad_class"
   )
 })
 
