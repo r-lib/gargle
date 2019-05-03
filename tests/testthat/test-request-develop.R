@@ -6,7 +6,7 @@ test_that("request_develop() errors for unrecognized parameters", {
       endpoint = list(parameters = list(a = list())),
       params = list(b = list(), c = list())
     ),
-    "These parameters are not recognized for this endpoint:\nb\nc"
+    class = "gargle_error_bad_params"
   )
 })
 
@@ -16,7 +16,7 @@ test_that("request_develop() errors if required parameter is missing", {
       endpoint = list(parameters = list(a = list(required = TRUE))),
       params = list(b = list())
     ),
-    "Required parameter\\(s\\) are missing:\na"
+    class = "gargle_error_bad_params"
   )
 })
 

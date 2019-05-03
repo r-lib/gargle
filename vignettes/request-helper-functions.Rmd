@@ -181,12 +181,12 @@ request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
   method <- switch(
     x$method,
-    GET = httr::GET,
-    POST = httr::POST,
-    PATCH = httr::PATCH,
-    PUT = httr::PUT,
+    GET    = httr::GET,
+    POST   = httr::POST,
+    PATCH  = httr::PATCH,
+    PUT    = httr::PUT,
     DELETE = httr::DELETE,
-    stop_glue("Not a recognized HTTP method: {bt(m)}", m = x$method)
+    abort(glue("Not a recognized HTTP method: {bt(x$method)}"))
   )
   method(
     url = x$url,
