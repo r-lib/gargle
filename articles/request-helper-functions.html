@@ -243,12 +243,12 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stopifnot">stopifnot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">is.character</a></span>(x<span class="op">$</span>method))</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">  method &lt;-<span class="st"> </span><span class="cf">switch</span>(</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">    x<span class="op">$</span>method,</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">    <span class="dt">GET =</span> httr<span class="op">::</span>GET,</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">    <span class="dt">POST =</span> httr<span class="op">::</span>POST,</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">    <span class="dt">PATCH =</span> httr<span class="op">::</span>PATCH,</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">    <span class="dt">PUT =</span> httr<span class="op">::</span>PUT,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">    <span class="dt">GET    =</span> httr<span class="op">::</span>GET,</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">    <span class="dt">POST   =</span> httr<span class="op">::</span>POST,</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">    <span class="dt">PATCH  =</span> httr<span class="op">::</span>PATCH,</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">    <span class="dt">PUT    =</span> httr<span class="op">::</span>PUT,</a>
 <a class="sourceLine" id="cb6-10" data-line-number="10">    <span class="dt">DELETE =</span> httr<span class="op">::</span>DELETE,</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">    <span class="kw">stop_glue</span>(<span class="st">"Not a recognized HTTP method: {bt(m)}"</span>, <span class="dt">m =</span> x<span class="op">$</span>method)</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">    <span class="kw">abort</span>(<span class="kw">glue</span>(<span class="st">"Not a recognized HTTP method: {bt(x$method)}"</span>))</a>
 <a class="sourceLine" id="cb6-12" data-line-number="12">  )</a>
 <a class="sourceLine" id="cb6-13" data-line-number="13">  <span class="kw">method</span>(</a>
 <a class="sourceLine" id="cb6-14" data-line-number="14">    <span class="dt">url =</span> x<span class="op">$</span>url,</a>
