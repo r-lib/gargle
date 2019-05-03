@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generate a gargle token — gargle2.0_token • gargle</title>
+<title>Options consulted by gargle — gargle_options • gargle</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,20 @@
 
 
 
-<meta property="og:title" content="Generate a gargle token — gargle2.0_token" />
+<meta property="og:title" content="Options consulted by gargle — gargle_options" />
 
-<meta property="og:description" content="Constructor function for objects of class Gargle2.0." />
+<meta property="og:description" content="Wrapper functions around options consulted by gargle, which provide:
+A place to hang documentation.
+The mechanism for setting a default.
+" />
+
+<meta property="og:description" content="If the built-in defaults don't suit you, set one or more of these options.
+Typically, this is done in the .Rprofile startup file, with code along
+these lines:options(
+  gargle_oauth_email = &quot;jane@example.com&quot;,
+  gargle_oauth_cache = &quot;/path/to/folder/that/does/not/sync/to/cloud&quot;
+)
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,96 +131,92 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generate a gargle token</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/Gargle-class.R'><code>R/Gargle-class.R</code></a></small>
-    <div class="hidden name"><code>gargle2.0_token.Rd</code></div>
+    <h1>Options consulted by gargle</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/gargle-package.R'><code>R/gargle-package.R</code></a>, <a href='https://github.com/r-lib/gargle/blob/master/R/ui.R'><code>R/ui.R</code></a></small>
+    <div class="hidden name"><code>gargle_options.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Constructor function for objects of class <a href='Gargle-class.html'>Gargle2.0</a>.</p>
+    <p>Wrapper functions around options consulted by gargle, which provide:</p><ul>
+<li><p>A place to hang documentation.</p></li>
+<li><p>The mechanism for setting a default.</p></li>
+</ul>
+
+    <p>If the built-in defaults don't suit you, set one or more of these options.
+Typically, this is done in the <code>.Rprofile</code> startup file, with code along
+these lines:</p><pre>options(
+  gargle_oauth_email = "jane@example.com",
+  gargle_oauth_cache = "/path/to/folder/that/does/not/sync/to/cloud"
+)
+</pre>
     
     </div>
 
-    <pre class="usage"><span class='fu'>gargle2.0_token</span>(<span class='kw'>email</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_email</a></span>(), <span class='kw'>app</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span>(),
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"gargle"</span>, <span class='kw'>scope</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>user_params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>use_oob</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oob_default</a></span>(), <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cache</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/NULL'>is.null</a></span>(<span class='no'>credentials</span>)) <span class='fu'><a href='gargle_options.html'>gargle_oauth_cache</a></span>() <span class='kw'>else</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>email</th>
-      <td><p>Optional. Allows user to target a specific Google identity. If
-specified, this is used for token lookup, i.e. to determine if a suitable
-token is already available in the cache. If no such token is found, <code>email</code>
-is used to pre-select the targetted Google identity in the OAuth chooser.
-Note, however, that the email associated with a token when it's cached is
-always determined from the token itself, never from this argument. Use <code>NA</code>
-or <code>FALSE</code> to match nothing and force the OAuth dance in the browser. Use
-<code>TRUE</code> to allow email auto-discovery, if exactly one matching token is
-found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by <code><a href='gargle_options.html'>gargle_oauth_email()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>app</th>
-      <td><p>An OAuth consumer application, created by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>package</th>
-      <td><p>Name of the package requesting a token. Used in messages.</p></td>
-    </tr>
-    <tr>
-      <th>scope</th>
-      <td><p>A character vector of scopes to request.</p></td>
-    </tr>
-    <tr>
-      <th>user_params</th>
-      <td><p>Named list holding endpoint specific parameters to pass to
-the server when posting the request for obtaining or refreshing the
-access token.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>content type used to override incorrect server response</p></td>
-    </tr>
-    <tr>
-      <th>use_oob</th>
-      <td><p>Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-<code><a href='gargle_options.html'>gargle_oob_default()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>credentials</th>
-      <td><p>Advanced use only: allows you to completely customise
-token generation.</p></td>
-    </tr>
-    <tr>
-      <th>cache</th>
-      <td><p>Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via <code><a href='gargle_options.html'>gargle_oauth_cache()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Absorbs arguments intended for use by other credential functions.
-Not used.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>gargle_oauth_email</span>()
 
-    <p>An object of class <a href='Gargle-class.html'>Gargle2.0</a>, either new or loaded from the cache.</p>
+<span class='fu'>gargle_oob_default</span>()
+
+<span class='fu'>gargle_oauth_cache</span>()
+
+<span class='fu'>gargle_quiet</span>()</pre>
+        
+    <h2 class="hasAnchor" id="gargle-oauth-email"><a class="anchor" href="#gargle-oauth-email"></a><code>gargle_oauth_email</code></h2>
+
+    
+    <p><code>gargle_oauth_email()</code> returns the option named "gargle_oauth_email", which
+is undefined by default. If set, this option should be one of:</p><ul>
+<li><p>An actual email address corresponding to your preferred Google identity.
+Example:<code>janedoe@gmail.com</code>.</p></li>
+<li><p><code>TRUE</code> to allow email and OAuth token auto-discovery, if exactly one
+suitable token is found in the cache.</p></li>
+<li><p><code>FALSE</code> or <code>NA</code> to force the OAuth dance in the browser.</p></li>
+</ul>
+    
+    <h2 class="hasAnchor" id="gargle-oob-default"><a class="anchor" href="#gargle-oob-default"></a><code>gargle_oob_default</code></h2>
+
+    
+    <p><code>gargle_oob_default()</code> returns the option named "gargle_oob_default",
+defaulting to <code>FALSE</code>. This controls whether to prefer "out of band"
+authentication. This is ultimately passed to <code><a href='https://www.rdocumentation.org/packages/httr/topics/init_oauth2.0'>httr::init_oauth2.0()</a></code> as
+<code>use_oob</code>. If <code>FALSE</code> (and httpuv is installed), a local webserver is used
+for the OAuth dance. Otherwise, user gets a URL and prompt for a validation
+code.</p>
+    
+    <h2 class="hasAnchor" id="gargle-oauth-cache"><a class="anchor" href="#gargle-oauth-cache"></a><code>gargle_oauth_cache</code></h2>
+
+    
+    <p><code>gargle_oauth_cache()</code> returns the option named "gargle_oauth_cache",
+defaulting to <code>NA</code>. If defined, the option must be set to a logical value or
+a string. <code>TRUE</code> means to cache using the default user-level cache file,
+<code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means don't cache, and <code>NA</code> means to
+guess using some sensible heuristics.</p>
+    
+    <h2 class="hasAnchor" id="gargle-quiet"><a class="anchor" href="#gargle-quiet"></a><code>gargle_quiet</code></h2>
+
+    
+    <p><code>gargle_quiet()</code> returns the option named "gargle_quiet", which defaults to
+<code>TRUE</code>. Set this option to <code>FALSE</code> to see more info about gargle's
+activities, which can be helpful for troubleshooting.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>gargle_oauth_email</span>()</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'>gargle_oob_default</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_oauth_cache</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_quiet</span>()</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-          </ul>
+      <li><a href="#gargle-oauth-email"><code>gargle_oauth_email</code></a></li>
+
+      <li><a href="#gargle-oob-default"><code>gargle_oob_default</code></a></li>
+
+      <li><a href="#gargle-oauth-cache"><code>gargle_oauth_cache</code></a></li>
+
+      <li><a href="#gargle-quiet"><code>gargle_quiet</code></a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

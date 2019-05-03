@@ -158,10 +158,8 @@ Mostly useful for the development of gargle and client packages.</p></li>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>cache</th>
-      <td><p>A logical value or a string. <code>TRUE</code> means to cache using the
-default user-level cache file, <code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means
-don't cache, and <code>NA</code> means to guess using some sensible heuristics. A
-string means use the specified path as the cache file.</p></td>
+      <td><p>Specifies the OAuth token cache. Defaults to the option named
+"gargle_oauth_cache", retrieved via <code><a href='gargle_options.html'>gargle_oauth_cache()</a></code>.</p></td>
     </tr>
     </table>
     
