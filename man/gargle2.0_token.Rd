@@ -4,12 +4,10 @@
 \alias{gargle2.0_token}
 \title{Generate a gargle token}
 \usage{
-gargle2.0_token(email = getOption("gargle.oauth_email"),
-  app = gargle_app(), package = "gargle", scope = NULL,
-  user_params = NULL, type = NULL,
-  use_oob = getOption("gargle.oob_default"), credentials = NULL,
-  cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else
-  FALSE, ...)
+gargle2.0_token(email = gargle_oauth_email(), app = gargle_app(),
+  package = "gargle", scope = NULL, user_params = NULL,
+  type = NULL, use_oob = gargle_oob_default(), credentials = NULL,
+  cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE, ...)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If
@@ -19,8 +17,9 @@ is used to pre-select the targetted Google identity in the OAuth chooser.
 Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
-\code{TRUE} to allow email auto-discovery, if a suitable token is found in the
-cache. Define the option \code{gargle.oauth_email} to set a personal default.}
+\code{TRUE} to allow email auto-discovery, if exactly one matching token is
+found in the cache. Defaults to the option named "gargle_oauth_email",
+retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
@@ -34,21 +33,18 @@ access token.}
 
 \item{type}{content type used to override incorrect server response}
 
-\item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
-Otherwise, provide a URL to the user and prompt for a validation code.
-Defaults to the option \code{gargle.oob_default} or \code{TRUE} if httpuv is not
-installed.}
+\item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
+the option named "gargle_oob_default", retrieved via
+\code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
 
 \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
 
-\item{cache}{A logical value or a string. \code{TRUE} means to cache using the
-default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics. A
-string means use the specified path as the cache file.}
+\item{cache}{Specifies the OAuth token cache. Defaults to the option named
+"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 
-\item{...}{Absorbs arguments intended for use by non-OAuth2 credential
-functions. Not used.}
+\item{...}{Absorbs arguments intended for use by other credential functions.
+Not used.}
 }
 \value{
 An object of class \link{Gargle2.0}, either new or loaded from the cache.

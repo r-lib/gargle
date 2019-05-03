@@ -1,4 +1,4 @@
-#' @rdname gargle-options
+#' @rdname gargle_options
 #' @export
 #' @section `gargle_quiet`:
 #' `gargle_quiet()` returns the option named "gargle_quiet", which defaults to
