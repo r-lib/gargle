@@ -5,6 +5,27 @@
 #' To manage your google projects, use the API console:
 #' \url{https://console.cloud.google.com/}
 
+# example of data client package needs to provide -----------------------------
+
+# a client package should define a list like this and pass it to the functions
+# below, to provide data to populate the templates
+
+# see googledrive/R/drive_auth.R for an example
+# this is an exhaustive list of the pieces of data required by the templates
+
+gargle_lookup_table <- list(
+  PACKAGE     = "googledrive",
+  YOUR_STUFF  = "your Drive files",
+  PRODUCT     = "Google Drive",
+  API         = "Drive API",
+  PREFIX      = "drive",
+  # Unless your package belongs to the tidyverse GitHub org, DO NOT default
+  # to the tidyverse app. DO NOT default to the gargle demo app.
+  # Ship an app with your package and repeat package name here.
+  AUTH_CONFIG_SOURCE = "tidyverse",
+  SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes#drivev3"
+)
+
 # PREFIX_auth() ----------------------------------------------------------
 
 PREFIX_auth_description <- function(.data = list(
@@ -152,15 +173,15 @@ PREFIX_auth_config_description <- function(.data = list(
 
 PREFIX_auth_config_params_except_key <- function() {
   c(
-    "@param app OAuth app. Defaults to a tidyverse app.",
+    "@param app OAuth app. Defaults to a {AUTH_CONFIG_SOURCE} app.",
     "@inheritParams gargle::oauth_app_from_json"
   )
 }
 
 PREFIX_auth_config_params_key <- function() {
   c(
-    "@param api_key API key. Defaults to a tidyverse key. Necessary in order",
-    "  to make unauthorized \"token-free\" requests for public resources."
+    "@param api_key API key. Defaults to a {AUTH_CONFIG_SOURCE} key. Necessary in",
+    "  order to make unauthorized \"token-free\" requests for public resources."
   )
 }
 
