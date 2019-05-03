@@ -173,7 +173,7 @@ test_that("token_from_cache(), 1 or >1 short hash matches", {
       email = TRUE,
       cache = cache_folder
     ),
-    "user confirmation is required"
+    class = "gargle_error_need_user_interaction"
   )
 })
 

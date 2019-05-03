@@ -20,3 +20,10 @@ stop_bad_class <- function(object, expected_class) {
     expected_class = expected_class
   )
 }
+
+stop_need_user_interaction <- function(message) {
+  abort(
+    "gargle_error_need_user_interaction",
+    message = message
+  )
+}

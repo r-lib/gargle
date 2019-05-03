@@ -196,7 +196,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   ## we need user to OK our discovery or pick from multiple emails
 
   if (!interactive()) {
-    stop_glue(
+    stop_need_user_interaction(
       "Suitable cached tokens exist, but user confirmation is required."
     )
   }
