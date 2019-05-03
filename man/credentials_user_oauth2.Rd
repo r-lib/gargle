@@ -32,16 +32,14 @@ is used to pre-select the targetted Google identity in the OAuth chooser.
 Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
-\code{TRUE} to allow email auto-discovery, if a suitable token is found in the
-cache. Define the option \code{gargle.oauth_email} to set a personal default.}
-  \item{use_oob}{If \code{FALSE}, use a local webserver for the OAuth dance.
-Otherwise, provide a URL to the user and prompt for a validation code.
-Defaults to the option \code{gargle.oob_default} or \code{TRUE} if httpuv is not
-installed.}
-  \item{cache}{A logical value or a string. \code{TRUE} means to cache using the
-default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics. A
-string means use the specified path as the cache file.}
+\code{TRUE} to allow email auto-discovery, if exactly one matching token is
+found in the cache. Defaults to the option named "gargle_oauth_email",
+retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
+  \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
+the option named "gargle_oob_default", retrieved via
+\code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
+  \item{cache}{Specifies the OAuth token cache. Defaults to the option named
+"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
   \item{user_params}{Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the
 access token.}

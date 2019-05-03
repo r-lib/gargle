@@ -62,13 +62,13 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
 
 test_that("default is to consult and write the oauth cache option", {
   withr::with_options(
-    list(gargle.oauth_cache = NA),
+    list(gargle_oauth_cache = NA),
     with_mock(
       `gargle:::gargle_default_oauth_cache_path` = function() file_temp(),
       `gargle:::cache_allowed` = function(path) FALSE, {
-        expect_identical(getOption("gargle.oauth_cache"), NA)
+        expect_identical(getOption("gargle_oauth_cache"), NA)
         cache_establish()
-        expect_false(getOption("gargle.oauth_cache"))
+        expect_false(getOption("gargle_oauth_cache"))
       }
     )
   )

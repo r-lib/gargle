@@ -15,7 +15,7 @@ test_that("email is ingested correctly", {
 test_that("email can be set in option", {
   fauxen_email <- function(email = NULL) {
     withr::with_options(
-      list(gargle.oauth_email = email),
+      list(gargle_oauth_email = email),
       gargle2.0_token(credentials = list(a = 1))$email
     )
   }

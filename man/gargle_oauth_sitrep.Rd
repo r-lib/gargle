@@ -7,10 +7,8 @@
 gargle_oauth_sitrep(cache = NULL)
 }
 \arguments{
-\item{cache}{A logical value or a string. \code{TRUE} means to cache using the
-default user-level cache file, \code{~/.R/gargle/gargle-oauth}, \code{FALSE} means
-don't cache, and \code{NA} means to guess using some sensible heuristics. A
-string means use the specified path as the cache file.}
+\item{cache}{Specifies the OAuth token cache. Defaults to the option named
+"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 }
 \value{
 A data frame with one row per cached token, invisibly.

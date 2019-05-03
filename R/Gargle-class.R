@@ -9,35 +9,33 @@
 #'   Note, however, that the email associated with a token when it's cached is
 #'   always determined from the token itself, never from this argument. Use `NA`
 #'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
-#'   `TRUE` to allow email auto-discovery, if a suitable token is found in the
-#'   cache. Define the option `gargle.oauth_email` to set a personal default.
+#'   `TRUE` to allow email auto-discovery, if exactly one matching token is
+#'   found in the cache. Defaults to the option named "gargle_oauth_email",
+#'   retrieved by [gargle_oauth_email()].
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
-#' @param use_oob If `FALSE`, use a local webserver for the OAuth dance.
-#'   Otherwise, provide a URL to the user and prompt for a validation code.
-#'   Defaults to the option `gargle.oob_default` or `TRUE` if httpuv is not
-#'   installed.
-#' @param cache A logical value or a string. `TRUE` means to cache using the
-#'   default user-level cache file, `~/.R/gargle/gargle-oauth`, `FALSE` means
-#'   don't cache, and `NA` means to guess using some sensible heuristics. A
-#'   string means use the specified path as the cache file.
+#' @param use_oob Whether to prefer "out of band" authentication. Defaults to
+#'   the option named "gargle_oob_default", retrieved via
+#'   [gargle_oob_default()].
+#' @param cache Specifies the OAuth token cache. Defaults to the option named
+#'   "gargle_oauth_cache", retrieved via [gargle_oauth_cache()].
 #' @inheritParams httr::oauth2.0_token
-#' @param ... Absorbs arguments intended for use by non-OAuth2 credential
-#'   functions. Not used.
+#' @param ... Absorbs arguments intended for use by other credential functions.
+#'   Not used.
 #' @return An object of class [Gargle2.0], either new or loaded from the cache.
 #' @export
-gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
+gargle2.0_token <- function(email = gargle_oauth_email(),
                             app = gargle_app(),
                             package = "gargle",
                             ## params start
                             scope = NULL,
                             user_params = NULL,
                             type = NULL,
-                            use_oob = getOption("gargle.oob_default"),
+                            use_oob = gargle_oob_default(),
                             ## params end
                             credentials = NULL,
-                            cache = if (is.null(credentials)) getOption("gargle.oauth_cache") else FALSE, ...) {
+                            cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE, ...) {
   params <- list(
     scope = scope,
     user_params = user_params,
@@ -77,12 +75,12 @@ gargle2.0_token <- function(email = getOption("gargle.oauth_email"),
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   email = NULL,
   package = NULL,
-  initialize = function(email = getOption("gargle.oauth_email"),
+  initialize = function(email = gargle_oauth_email(),
                         app = gargle_app(),
                         package = "gargle",
                         credentials = NULL,
                         params = list(),
-                        cache_path = getOption("gargle.oauth_cache")) {
+                        cache_path = gargle_oauth_cache()) {
     cat_line("Gargle2.0 initialize")
     stopifnot(
       is.null(email) || is_string(email) ||
