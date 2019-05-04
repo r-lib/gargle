@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch a token for the given scopes. — token_fetch • gargle</title>
+<title>Fetch a token for the given scopes — token_fetch • gargle</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Fetch a token for the given scopes. — token_fetch" />
+<meta property="og:title" content="Fetch a token for the given scopes — token_fetch" />
 
-<meta property="og:description" content="Fetch a token for the given scopes." />
+<meta property="og:description" content="This is a rather magical function that calls a series of concrete
+credential-fetching functions, each wrapped in a tryCatch().
+token_fetch() keeps trying until it succeeds or there are no more functions
+to try. Use cred_funs_list() to see the current registry, in order." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,18 +123,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch a token for the given scopes.</h1>
+    <h1>Fetch a token for the given scopes</h1>
     <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/token-fetch.R'><code>R/token-fetch.R</code></a></small>
     <div class="hidden name"><code>token_fetch.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Fetch a token for the given scopes.</p>
+    <p>This is a rather magical function that calls a series of concrete
+credential-fetching functions, each wrapped in a <code><a href='https://www.rdocumentation.org/packages/base/topics/conditions'>tryCatch()</a></code>.
+<code>token_fetch()</code> keeps trying until it succeeds or there are no more functions
+to try. Use <code><a href='cred_funs_list.html'>cred_funs_list()</a></code> to see the current registry, in order.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>token_fetch</span>(<span class='no'>scopes</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>token_fetch</span>(<span class='kw'>scopes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

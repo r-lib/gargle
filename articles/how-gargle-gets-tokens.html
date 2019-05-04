@@ -110,8 +110,8 @@
 <p>Under the hood, <code><a href="../reference/token_fetch.html">token_fetch()</a></code> calls a sequence of much more specific token-getters, each wrapped in a <code><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch()</a></code> and returning <code>NULL</code> if unsuccessful. The only formal argument these getters have in common is <code>scopes</code>, with the rest being passed via <code>...</code>.</p>
 <p>This gives a sense of the token getters and reflects the order in which they are called:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(gargle<span class="op">:::</span>gargle_env<span class="op">$</span>cred_funs)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "service_acount"      "application_default" "gce"                </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [4] "user_oath2"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "credentials_service_account" "credentials_app_default"    </span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_user_oauth2"</span></a></code></pre></div>
 <p>MORE TO COME</p>
 </div>
   </div>
