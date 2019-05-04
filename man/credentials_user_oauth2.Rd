@@ -4,9 +4,8 @@
 \alias{credentials_user_oauth2}
 \title{Get an OAuth token for a user}
 \usage{
-
-  credentials_user_oauth2(scopes = "https://www.googleapis.com/auth/userinfo.email",
-  app = gargle_app(), package = "gargle", ...)
+credentials_user_oauth2(scopes = NULL, app = gargle_app(),
+  package = "gargle", ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed

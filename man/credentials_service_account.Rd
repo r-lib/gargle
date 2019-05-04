@@ -4,9 +4,7 @@
 \alias{credentials_service_account}
 \title{Get a token for a Google service account}
 \usage{
-
-  credentials_service_account(scopes = "https://www.googleapis.com/auth/userinfo.email",
-  path = "", ...)
+credentials_service_account(scopes = NULL, path = "", ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed

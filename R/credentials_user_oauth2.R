@@ -46,7 +46,7 @@
 #' )
 #' credentials_user_oauth2(scopes, app)
 #' }
-credentials_user_oauth2 <- function(scopes = "https://www.googleapis.com/auth/userinfo.email",
+credentials_user_oauth2 <- function(scopes = NULL,
                                     app = gargle_app(),
                                     package = "gargle",
                                     ...) {

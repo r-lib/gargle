@@ -60,6 +60,7 @@ normalize_scopes <- function(x) {
 }
 
 add_email_scope <- function(scopes = NULL) {
+  cat_line("adding 'userinfo.email' scope")
   url <- "https://www.googleapis.com/auth/userinfo.email"
   union(scopes %||% character(), url)
 }

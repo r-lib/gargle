@@ -25,7 +25,7 @@ credentials_app_default_path <- function() {
 #'   [`httr::Token`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
-credentials_app_default <- function(scopes, ...) {
+credentials_app_default <- function(scopes = NULL, ...) {
   cat_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform
   # scope.
@@ -48,7 +48,7 @@ credentials_app_default <- function(scopes, ...) {
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/cloud-platform.readonly"
     )
-    if (!all(scopes %in% valid_scopes)) {
+    if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
       return(NULL)
     }
     endpoint <- httr::oauth_endpoints("google")

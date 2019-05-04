@@ -6,13 +6,12 @@
 #' @return An [`httr::Token`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
-token_fetch <- function(scopes, ...) {
+token_fetch <- function(scopes = NULL, ...) {
   cat_line("trying token_fetch()")
   for (f in gargle_env$cred_funs) {
     token <- NULL
     token <- tryCatch(
       f(scopes, ...),
-      # error = function(e) NULL
       error = function(e) {
         cat_line("Error: ", e$message)
         NULL

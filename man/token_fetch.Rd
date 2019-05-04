@@ -4,7 +4,7 @@
 \alias{token_fetch}
 \title{Fetch a token for the given scopes.}
 \usage{
-token_fetch(scopes, ...)
+token_fetch(scopes = NULL, ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed

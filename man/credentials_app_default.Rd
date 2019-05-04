@@ -4,7 +4,7 @@
 \alias{credentials_app_default}
 \title{Fetch the Application Default Credentials}
 \usage{
-credentials_app_default(scopes, ...)
+credentials_app_default(scopes = NULL, ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed

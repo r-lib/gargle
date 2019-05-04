@@ -92,9 +92,9 @@ fetch_access_token <- function(scopes, service_account, ...) {
 #' @return A [GceToken()] or `NULL`.
 #' @family credential functions
 #' @export
-credentials_gce <- function(scopes, service_account = "default", ...) {
+credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
   cat_line("trying credentials_gce()")
-  if (!detect_gce()) {
+  if (!detect_gce() || is.null(scopes)) {
     return(NULL)
   }
   instance_scopes <- get_instance_scopes(service_account = service_account)

@@ -15,12 +15,12 @@
 #'   path = "/path/to/your/service-account.json"
 #' )
 #' }
-credentials_service_account <- function(scopes = "https://www.googleapis.com/auth/userinfo.email",
+credentials_service_account <- function(scopes = NULL,
                                         path = "",
                                         ...) {
   cat_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path)
-  # I add email scope explicitly, where as I don't need to in
+  # I add email scope explicitly, whereas I don't need to do so in
   # credentials_user_oauth2(), because it's done in Gargle2.0$new().
   scopes <- normalize_scopes(add_email_scope(scopes))
   token <- httr::oauth_service_token(
