@@ -88,8 +88,8 @@ cred_funs_clear <- function() {
 #' Set the default credential functions
 #' @export
 cred_funs_set_default <- function() {
-  cred_funs_add(user_oath2 = credentials_user_oauth2)
-  cred_funs_add(gce = credentials_gce)
-  cred_funs_add(application_default = credentials_app_default)
-  cred_funs_add(service_acount = credentials_service_account)
+  cred_funs_add(credentials_user_oauth2     = credentials_user_oauth2)
+  cred_funs_add(credentials_gce             = credentials_gce)
+  cred_funs_add(credentials_app_default     = credentials_app_default)
+  cred_funs_add(credentials_service_account = credentials_service_account)
 }

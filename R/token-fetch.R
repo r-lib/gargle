@@ -1,4 +1,9 @@
-#' Fetch a token for the given scopes.
+#' Fetch a token for the given scopes
+#'
+#' This is a rather magical function that calls a series of concrete
+#' credential-fetching functions, each wrapped in a `tryCatch()`.
+#' `token_fetch()` keeps trying until it succeeds or there are no more functions
+#' to try. Use [cred_funs_list()] to see the current registry, in order.
 #'
 #' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credential functions.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/token-fetch.R
 \name{token_fetch}
 \alias{token_fetch}
-\title{Fetch a token for the given scopes.}
+\title{Fetch a token for the given scopes}
 \usage{
 token_fetch(scopes = NULL, ...)
 }
@@ -23,7 +23,10 @@ does not appear on the consent screen.}
 An \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
 }
 \description{
-Fetch a token for the given scopes.
+This is a rather magical function that calls a series of concrete
+credential-fetching functions, each wrapped in a \code{tryCatch()}.
+\code{token_fetch()} keeps trying until it succeeds or there are no more functions
+to try. Use \code{\link[=cred_funs_list]{cred_funs_list()}} to see the current registry, in order.
 }
 \seealso{
 Other credential functions: \code{\link{credentials_app_default}},
