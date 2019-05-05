@@ -22,7 +22,7 @@ stop_need_user_interaction <- function(message) {
 
 stop_bad_params <- function(names, reason) {
   message <- glue_collapse(
-    c("These parameters are {reason}:", names),
+    c(glue("These parameters are {reason}:"), names),
     sep = "\n"
   )
   abort(
