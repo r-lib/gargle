@@ -25,9 +25,10 @@ Object of class \code{response} from \link{httr}.
 Intended primarily for internal use in client packages that provide
 high-level wrappers for users. \code{request_make()} does very little: calls an
 HTTP method, only adding a user agent. Typically the input is created with
-\code{\link[=request_build]{request_build()}} and the output is processed with \code{process_response()}.
+\code{\link[=request_build]{request_build()}} and the output is processed with \code{\link[=response_process]{response_process()}}.
 }
 \seealso{
-Other requests and responses: \code{\link{request_develop}}
+Other requests and responses: \code{\link{request_develop}},
+  \code{\link{response_process}}
 }
 \concept{requests and responses}

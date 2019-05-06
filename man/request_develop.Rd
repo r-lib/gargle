@@ -137,6 +137,7 @@ req
 }
 }
 \seealso{
-Other requests and responses: \code{\link{request_make}}
+Other requests and responses: \code{\link{request_make}},
+  \code{\link{response_process}}
 }
 \concept{requests and responses}

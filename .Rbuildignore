@@ -13,3 +13,4 @@
 ^.*\.key$
 ^LICENSE\.md$
 ^\.github$
+^README\.Rmd$

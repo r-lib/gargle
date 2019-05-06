@@ -3,7 +3,7 @@ context("oauth-app")
 test_that("oauth app from JSON", {
   oa <- oauth_app_from_json(
     test_path(
-      "test-files", "client_secret_123.googleusercontent.com.json"
+      "fixtures", "client_secret_123.googleusercontent.com.json"
     )
   )
   expect_s3_class(oa, "oauth_app")

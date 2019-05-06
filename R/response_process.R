@@ -1,0 +1,183 @@
+#' Process a Google API response
+#'
+#' @description
+#' Intended primarily for internal use in client packages that provide
+#' high-level wrappers for users. Typically applied as the final step in this
+#' sequence of calls:
+#'   * Request prepared with [request_build()].
+#'   * Request made with [request_make()].
+#'   * Response processed with [response_process()].
+#'
+#' `response_process()` also catches HTTP errors and throws them with as much
+#' detail as possible, i.e. the intent is to forward all specifics returned by
+#' the API.
+#'
+#' @details
+#' A redacted version of the `resp` input is returned in the condition (auth
+#' tokens are removed). Use functions such as `rlang::last_error()` or
+#' `rlang::catch_cnd()` to capture the condition and do a more detailed forensic
+#' examination.
+#'
+#' @param resp Object of class `response` from [httr].
+#' @param raw Logical. Whether to return parsed content (`FALSE`) or in `raw`
+#'   form.
+#'
+#' @return The content of the request.
+#' @family requests and responses
+#' @export
+response_process <- function(resp, raw = FALSE) {
+  if (httr::status_code(resp) == 204) {
+    return(TRUE)
+  }
+
+  check_response(resp)
+  content <- httr::content(resp, as = "raw")
+
+  if (raw) {
+    content
+  } else {
+    jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+  }
+}
+
+check_response <- function(resp) {
+  code <- httr::status_code(resp)
+  # code could be in 100s, 200s, 300s, 400s, 500s
+
+  if (code < 200 || (code >= 300 && code < 400)) {
+    message <- c(
+      httr::http_status(resp)$message,
+      "  * HTTP status codes in the 100s and 300s are unexpected."
+    )
+    stop_request_failed(resp, message = message)
+  }
+  # code could be in 200s, 400s, 500s
+
+  if (code >= 200 && code < 300) {
+    check_for_json(resp)
+    return()
+  }
+  # code could be: 400-499, 500-599
+
+  google_error(resp)
+}
+
+stop_request_failed <- function(resp, ..., message = NULL, .subclass = NULL) {
+  code <- httr::status_code(resp)
+  class <- c(.subclass, glue("http_error_{code}"), "gargle_error_request_failed")
+
+  message <- message %||% httr::http_status(resp)$message
+  if (length(message) > 1) {
+    message <- glue_collapse(message, sep = "\n")
+  }
+
+  rlang::abort(
+    message,
+    .subclass = class,
+    code = code,
+    resp = redact_response(resp),
+    ...
+  )
+}
+
+check_for_json <- function(resp) {
+  type <- httr::http_type(resp)
+  if (!grepl("^application/json", type)) {
+    stop_need_json(resp)
+  }
+  invisible(resp)
+}
+
+stop_need_json <- function(resp) {
+  type <- httr::http_type(resp)
+  message <- c(
+    httr::http_status(resp)$message,
+    glue("  * Non-JSON content type: {type}")
+  )
+  stop_request_failed(
+    resp,
+    message = message,
+    text = httr::content(resp, as = "text")
+  )
+}
+
+google_error <- function(resp) {
+  check_for_json(resp)
+
+  code    <- httr::status_code(resp)
+  type    <- httr::http_type(resp)
+  content <- httr::content(resp, as = "raw")
+  content <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+
+  error <- content[["error"]]
+  if(is.null(error)) {
+    # developed from test fixture from tokeninfo endpoint
+    message <- c(
+      httr::http_status(resp)$message,
+      glue("  * {content$error_description}")
+    )
+  } else {
+    errors <- error[["errors"]]
+    if (is.null(errors)) {
+      # developed from test fixture from "sheets.spreadsheets.get" endpoint
+      status <- httr::http_status(resp)
+      rpc <- rpc_description(error$status)
+      message <- c(
+        glue("{status$category}: ({error$code}) {error$status}"),
+        glue("  * {rpc}"),
+        glue("  * {error$message}")
+      )
+    } else {
+      # developed from test fixture from "drive.files.get" endpoint
+      errors <- unlist(errors)
+      message <- c(
+        httr::http_status(resp)$message,
+        glue("  * {format(names(errors), justify = 'right')}: {errors}")
+      )
+    }
+  }
+  stop_request_failed(resp, message = message)
+}
+
+redact_response <- function(resp) {
+  resp$request$auth_token <- "<REDACTED>"
+  resp$request$headers["Authorization"] <- "<REDACTED>"
+  resp
+}
+
+rpc_description <- function(rpc) {
+  m <- match(rpc, oops$RPC)
+  if (is.na(m)) {
+    NULL
+  } else {
+    oops$Description[[m]]
+  }
+}
+
+# https://cloud.google.com/apis/design/errors
+# @craigcitro says:
+# "... a published description of how new APIs do errors, which includes the
+# canonical error codes and http mappings. This view of errors is ... what ...
+# APIs will ultimately converge on"
+# https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
+oops <- read.csv(text = trimws(c('
+  HTTP,                   RPC,  Description
+   200,                  "OK", "No error."
+   400,    "INVALID_ARGUMENT", "Client specified an invalid argument. Check error message and error details for more information."
+   400, "FAILED_PRECONDITION", "Request can not be executed in the current system state, such as deleting a non-empty directory."
+   400,        "OUT_OF_RANGE", "Client specified an invalid range."
+   401,     "UNAUTHENTICATED", "Request not authenticated due to missing, invalid, or expired OAuth token."
+   403,   "PERMISSION_DENIED", "Client does not have sufficient permission. This can happen because the OAuth token does not have the right scopes, the client doesn\'t have permission, or the API has not been enabled for the client project."
+   404,           "NOT_FOUND", "A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting."
+   409,             "ABORTED", "Concurrency conflict, such as read-modify-write conflict."
+   409,      "ALREADY_EXISTS", "The resource that a client tried to create already exists."
+   429,  "RESOURCE_EXHAUSTED", "Either out of resource quota or reaching rate limiting. The client should look for google.rpc.QuotaFailure error detail for more information."
+   499,           "CANCELLED", "Request cancelled by the client."
+   500,           "DATA_LOSS", "Unrecoverable data loss or data corruption. The client should report the error to the user."
+   500,             "UNKNOWN", "Unknown server error. Typically a server bug."
+   500,            "INTERNAL", "Internal server error. Typically a server bug."
+   501,     "NOT_IMPLEMENTED", "API method not implemented by the server."
+   503,         "UNAVAILABLE", "Service unavailable. Typically the server is down."
+   504,   "DEADLINE_EXCEEDED", "Request deadline exceeded. This will happen only if the caller sets a deadline that is shorter than the method\'s default deadline (i.e. requested deadline is not enough for the server to process the request) and the request did not finish within the deadline."
+                         ')),
+                 stringsAsFactors = FALSE, strip.white = TRUE)
