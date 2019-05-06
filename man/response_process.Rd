@@ -25,9 +25,17 @@ sequence of calls:
 \item Response processed with \code{\link[=response_process]{response_process()}}.
 }
 
-\code{response_process()} also catches HTTP errors and throws them with as much
-detail as possible, i.e. the intent is to forward all specifics returned by
-the API.
+All that's needed for a successful request is to parse the JSON extracted via
+\code{httr::content()}. Therefore, the main point of \code{response_process()} is to
+handle less happy outcomes:
+\itemize{
+\item Status code in the 100s (information) or 300s (redirection). These are
+unexpected.
+\item Non-JSON content type, such as HTML.
+\item Status codes in the 400s (client error) and 500s (server error). The
+structure of the error payload varies across Google APIs and we try to
+create a useful message for all variants we know about.
+}
 }
 \details{
 A redacted version of the \code{resp} input is returned in the condition (auth

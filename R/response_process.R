@@ -8,9 +8,16 @@
 #'   * Request made with [request_make()].
 #'   * Response processed with [response_process()].
 #'
-#' `response_process()` also catches HTTP errors and throws them with as much
-#' detail as possible, i.e. the intent is to forward all specifics returned by
-#' the API.
+#' All that's needed for a successful request is to parse the JSON extracted via
+#' `httr::content()`. Therefore, the main point of `response_process()` is to
+#' handle less happy outcomes:
+#'   * Status code in the 100s (information) or 300s (redirection). These are
+#'     unexpected.
+#'   * Non-JSON content type, such as HTML.
+#'   * Status codes in the 400s (client error) and 500s (server error). The
+#'     structure of the error payload varies across Google APIs and we try to
+#'     create a useful message for all variants we know about.
+
 #'
 #' @details
 #' A redacted version of the `resp` input is returned in the condition (auth
