@@ -219,8 +219,8 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a class="sourceLine" id="cb5-14" data-line-number="14">    params<span class="op">$</span>supportsTeamDrives &lt;-<span class="st"> </span><span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15">  }</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17">  req &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gargle/topics/request_develop">request_develop</a></span>(<span class="dt">endpoint =</span> ept, <span class="dt">params =</span> params)</a>
-<a class="sourceLine" id="cb5-18" data-line-number="18">  gargle<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gargle/topics/request_develop">request_build</a></span>(</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">  req &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/request_develop.html">request_develop</a></span>(<span class="dt">endpoint =</span> ept, <span class="dt">params =</span> params)</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">  gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/request_develop.html">request_build</a></span>(</a>
 <a class="sourceLine" id="cb5-19" data-line-number="19">    <span class="dt">path =</span> req<span class="op">$</span>path,</a>
 <a class="sourceLine" id="cb5-20" data-line-number="20">    <span class="dt">method =</span> req<span class="op">$</span>method,</a>
 <a class="sourceLine" id="cb5-21" data-line-number="21">    <span class="dt">params =</span> req<span class="op">$</span>params,</a>
@@ -262,7 +262,7 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <p>In googledrive we have a thin wrapper around this that injects the googledrive user agent:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">request_make &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">  gargle<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gargle/topics/request_make">request_make</a></span>(x, ..., <span class="dt">user_agent =</span> <span class="kw">drive_ua</span>())</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">  gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/request_make.html">request_make</a></span>(x, ..., <span class="dt">user_agent =</span> <span class="kw">drive_ua</span>())</a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">}</a></code></pre></div>
 </div>
 <div id="reference" class="section level2">
