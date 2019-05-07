@@ -117,7 +117,7 @@ google_error <- function(resp) {
   content <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
 
   error <- content[["error"]]
-  if(is.null(error)) {
+  if (is.null(error)) {
     # developed from test fixture from tokeninfo endpoint
     message <- c(
       httr::http_status(resp)$message,
