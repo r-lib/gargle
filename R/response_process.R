@@ -17,7 +17,6 @@
 #'   * Status codes in the 400s (client error) and 500s (server error). The
 #'     structure of the error payload varies across Google APIs and we try to
 #'     create a useful message for all variants we know about.
-
 #'
 #' @details
 #' A redacted version of the `resp` input is returned in the condition (auth
@@ -26,97 +25,68 @@
 #' examination.
 #'
 #' @param resp Object of class `response` from [httr].
-#' @param raw Logical. Whether to return parsed content (`FALSE`) or in `raw`
-#'   form.
+#' @param error_message Function that produces an informative error message from
+#'   the primary input, `resp`. It should return a character vector. Since
+#'   Google APIs generally return JSON, this function should use
+#'   `response_as_json()`.
 #'
 #' @return The content of the request.
 #' @family requests and responses
 #' @export
-response_process <- function(resp, raw = FALSE) {
-  if (httr::status_code(resp) == 204) {
-    return(TRUE)
-  }
-
-  check_response(resp)
-  content <- httr::content(resp, as = "raw")
-
-  if (raw) {
-    content
-  } else {
-    jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
-  }
-}
-
-check_response <- function(resp) {
+response_process <- function(resp, error_message = gargle_error_message) {
   code <- httr::status_code(resp)
-  # code could be in 100s, 200s, 300s, 400s, 500s
-
-  if (code < 200 || (code >= 300 && code < 400)) {
-    message <- c(
-      httr::http_status(resp)$message,
-      "  * HTTP status codes in the 100s and 300s are unexpected."
-    )
-    stop_request_failed(resp, message = message)
-  }
-  # code could be in 200s, 400s, 500s
 
   if (code >= 200 && code < 300) {
-    check_for_json(resp)
-    return()
+    if (code == 204) {
+      # HTTP status: No content
+      TRUE
+    } else {
+      response_as_json(resp)
+    }
+  } else {
+    stop_request_failed(error_message(resp), resp)
   }
-  # code could be: 400-499, 500-599
-
-  google_error(resp)
 }
 
-stop_request_failed <- function(resp, ..., message = NULL, .subclass = NULL) {
-  code <- httr::status_code(resp)
-  class <- c(.subclass, glue("http_error_{code}"), "gargle_error_request_failed")
+#' @export
+#' @rdname response_process
+response_as_json <- function(resp) {
+  check_for_json(resp)
 
-  message <- message %||% httr::http_status(resp)$message
-  if (length(message) > 1) {
-    message <- glue_collapse(message, sep = "\n")
-  }
-
-  rlang::abort(
-    message,
-    .subclass = class,
-    code = code,
-    resp = redact_response(resp),
-    ...
-  )
+  content <- httr::content(resp, type = "raw")
+  jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
 }
 
 check_for_json <- function(resp) {
   type <- httr::http_type(resp)
-  if (!grepl("^application/json", type)) {
-    stop_need_json(resp)
+  if (grepl("^application/json", type)) {
+    return(invisible(resp))
   }
-  invisible(resp)
+
+  content <- httr::content(resp, as = "text")
+  message <- glue_lines(c(
+    "Expected content type 'application/json' not {sq(type)}.",
+    "{obfuscate(content, first = 197, last = 0)}"
+  ))
+
+  stop_request_failed(message, resp)
 }
 
-stop_need_json <- function(resp) {
-  type <- httr::http_type(resp)
-  message <- c(
-    httr::http_status(resp)$message,
-    glue("  * Non-JSON content type: {type}")
-  )
-  stop_request_failed(
-    resp,
-    message = message,
-    text = httr::content(resp, as = "text")
+stop_request_failed <- function(message, resp) {
+  rlang::abort(
+    glue_collapse(message, sep = "\n"),
+    .subclass = "gargle_error_request_failed",
+    resp = redact_response(resp),
   )
 }
 
-google_error <- function(resp) {
-  check_for_json(resp)
-
-  code    <- httr::status_code(resp)
-  type    <- httr::http_type(resp)
-  content <- httr::content(resp, as = "raw")
-  content <- jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
-
+#' @export
+#' @rdname response_process
+gargle_error_message <- function(resp) {
+  content <- response_as_json(resp)
   error <- content[["error"]]
+
+  # Handle variety of error messages returned by different google APIs
   if (is.null(error)) {
     # developed from test fixture from tokeninfo endpoint
     message <- c(
@@ -143,7 +113,7 @@ google_error <- function(resp) {
       )
     }
   }
-  stop_request_failed(resp, message = message)
+  message
 }
 
 redact_response <- function(resp) {
