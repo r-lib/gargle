@@ -3,7 +3,7 @@
 \docType{data}
 \name{GceToken}
 \alias{GceToken}
-\title{GceToken is a token for use only on Google Compute Engine instances.}
+\title{Token for use on Google Compute Engine instances}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 GceToken

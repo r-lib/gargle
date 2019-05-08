@@ -1,4 +1,45 @@
-#' GceToken is a token for use only on Google Compute Engine instances.
+#' Get a token for Google Compute Engine
+#'
+#' Uses the metadata service available on GCE VMs to fetch an access token.
+#'
+#' @inheritParams token_fetch
+#' @param service_account Name of the GCE service account to use.
+#'
+#' @seealso <https://cloud.google.com/compute/docs/storing-retrieving-metadata>
+#'
+#' @return A [GceToken()] or `NULL`.
+#' @family credential functions
+#' @export
+credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
+  cat_line("trying credentials_gce()")
+  if (!detect_gce() || is.null(scopes)) {
+    return(NULL)
+  }
+  instance_scopes <- get_instance_scopes(service_account = service_account)
+  # We add a special case for the cloud-platform -> bigquery scope implication.
+  if ("https://www.googleapis.com/auth/cloud-platform" %in% instance_scopes) {
+    instance_scopes <- c("https://www.googleapis.com/auth/bigquery", instance_scopes)
+  }
+  if (!all(scopes %in% instance_scopes)) {
+    return(NULL)
+  }
+  credentials <- fetch_access_token(scopes, service_account = service_account)
+  params <- list(
+    as_header = TRUE,
+    scope = scopes,
+    service_account = service_account
+  )
+  token <- GceToken$new(credentials = credentials, params = params)
+  token$refresh()
+  if (is.null(token$credentials$access_token) ||
+      !nzchar(token$credentials$access_token)) {
+    NULL
+  } else {
+    token
+  }
+}
+
+#' Token for use on Google Compute Engine instances
 #'
 #' This class uses the metadata service available on GCE VMs to fetch access
 #' tokens.
@@ -82,41 +123,4 @@ fetch_access_token <- function(scopes, service_account, ...) {
   path <- paste0("instance/service-accounts/", service_account, "/token")
   response <- gce_metadata_request(path)
   httr::content(response, as = "parsed", "application/json")
-}
-
-#' Get a token for Google Compute Engine
-#'
-#' @inheritParams token_fetch
-#' @param service_account Name of the GCE service account to use.
-#'
-#' @return A [GceToken()] or `NULL`.
-#' @family credential functions
-#' @export
-credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
-  cat_line("trying credentials_gce()")
-  if (!detect_gce() || is.null(scopes)) {
-    return(NULL)
-  }
-  instance_scopes <- get_instance_scopes(service_account = service_account)
-  # We add a special case for the cloud-platform -> bigquery scope implication.
-  if ("https://www.googleapis.com/auth/cloud-platform" %in% instance_scopes) {
-    instance_scopes <- c("https://www.googleapis.com/auth/bigquery", instance_scopes)
-  }
-  if (!all(scopes %in% instance_scopes)) {
-    return(NULL)
-  }
-  credentials <- fetch_access_token(scopes, service_account = service_account)
-  params <- list(
-    as_header = TRUE,
-    scope = scopes,
-    service_account = service_account
-  )
-  token <- GceToken$new(credentials = credentials, params = params)
-  token$refresh()
-  if (is.null(token$credentials$access_token) ||
-    !nzchar(token$credentials$access_token)) {
-    NULL
-  } else {
-    token
-  }
 }

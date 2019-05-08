@@ -25,9 +25,11 @@ does not appear on the consent screen.}
 A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 }
 \description{
-Get a token for Google Compute Engine
+Uses the metadata service available on GCE VMs to fetch an access token.
 }
 \seealso{
+\url{https://cloud.google.com/compute/docs/storing-retrieving-metadata}
+
 Other credential functions: \code{\link{credentials_app_default}},
   \code{\link{credentials_service_account}},
   \code{\link{credentials_user_oauth2}},
