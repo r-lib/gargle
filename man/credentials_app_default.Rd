@@ -2,7 +2,7 @@
 % Please edit documentation in R/credentials_app_default.R
 \name{credentials_app_default}
 \alias{credentials_app_default}
-\title{Fetch the Application Default Credentials}
+\title{Load Application Default Credentials}
 \usage{
 credentials_app_default(scopes = NULL, ...)
 }

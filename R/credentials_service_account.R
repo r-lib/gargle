@@ -1,4 +1,4 @@
-#' Get a token for a Google service account
+#' Load a service account token
 #'
 #' @inheritParams token_fetch
 #' @param path JSON identifying the service account, in one of the forms

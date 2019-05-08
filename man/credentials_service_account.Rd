@@ -2,7 +2,7 @@
 % Please edit documentation in R/credentials_service_account.R
 \name{credentials_service_account}
 \alias{credentials_service_account}
-\title{Get a token for a Google service account}
+\title{Load a service account token}
 \usage{
 credentials_service_account(scopes = NULL, path = "", ...)
 }
@@ -27,7 +27,7 @@ file path or JSON string).}
 An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 }
 \description{
-Get a token for a Google service account
+Load a service account token
 }
 \examples{
 \dontrun{

@@ -1,4 +1,4 @@
-#' Fetch the Application Default Credentials
+#' Load Application Default Credentials
 #'
 #' Loads credentials from a file identified via a search strategy known as
 #' Application Default Credentials (ADC). The hope is to make auth "just work"

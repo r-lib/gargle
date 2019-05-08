@@ -24,3 +24,36 @@ navbar:
 
 development:
   mode: auto
+
+reference:
+  - title: "Fetching credentials"
+    desc: >
+      Load an existing token or obtain a new one
+    contents:
+      - token_fetch
+      - starts_with("credentials")
+      - gargle_oauth_sitrep
+      - starts_with("cred_funs")
+  - title: "Requests and responses"
+    desc: >
+      Helpers for forming HTTP requests and processing the response
+    contents:
+      - starts_with("request")
+      - starts_with("response")
+  - title: "Classes"
+    desc: >
+      Classes to represent a token or auth state and their constructors
+    contents:
+      - Gargle2.0
+      - gargle2.0_token
+      - GceToken
+      - AuthState
+      - init_AuthState
+  - title: "Options"
+    contents:
+      - gargle_options
+  - title: "Demo assets"
+    desc: >
+      Assets to aid experimentation during development (not for production use!)
+    contents:
+      - gargle_app
