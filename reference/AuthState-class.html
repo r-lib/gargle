@@ -49,7 +49,11 @@ authenticated user or are unauthorized requests for public resources.
 These two states correspond to sending a request with a token versus an
 API key, respectively.
 cred is where the current token is cached within a session, once one
-has been fetched. This is a token produced by httr::oauth2.0_token().
+has been fetched. It is generally assumed to be an instance of
+httr::TokenServiceAccount or
+httr::Token2.0 (or a subclass thereof), probably
+obtained via token_fetch() (or one of its constituent credential
+fetching functions).
 An AuthState should be created through the constructor function
 init_AuthState().
 " />
@@ -164,7 +168,11 @@ authenticated user or are unauthorized requests for public resources.
 These two states correspond to sending a request with a token versus an
 API key, respectively.</p></li>
 <li><p><code>cred</code> is where the current token is cached within a session, once one
-has been fetched. This is a token produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth2.0_token'>httr::oauth2.0_token()</a></code>.
+has been fetched. It is generally assumed to be an instance of
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/Token-class'>httr::TokenServiceAccount</a></code> or
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/Token-class'>httr::Token2.0</a></code> (or a subclass thereof), probably
+obtained via <code><a href='token_fetch.html'>token_fetch()</a></code> (or one of its constituent credential
+fetching functions).
 An <code>AuthState</code> should be created through the constructor function
 <code><a href='init_AuthState.html'>init_AuthState()</a></code>.</p></li>
 </ul>
