@@ -20,17 +20,20 @@ and follow the instructions in \href{https://support.google.com/googleapi/answer
 ## see the key
 gargle_api_key()
 
-## use the key with the Places API (explicitly enabled for this key)
-## gets restaurants close to a location in Vancouver, BC
-url <- httr::parse_url("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
-url$query <- list(
-  location = "49.268682,-123.167117",
-  radius = 100,
-  type = "restaurant",
-  key = gargle_api_key()
+# use the key with the Places API (explicitly enabled for this key)
+# gets restaurants close to a location in Vancouver, BC
+req <- request_build(
+  method = "GET",
+  path = "maps/api/place/nearbysearch/json",
+  params = list(
+    location = "49.268682,-123.167117",
+    radius = 100,
+    type = "restaurant"
+  ),
+  key = gargle_api_key(),
+  base_url = "https://maps.googleapis.com"
 )
-url <- httr::build_url(url)
-res <- httr::content(httr::GET(url))
-vapply(res$results, function(x) x$name, character(1))
+resp <- request_make(req)
+out <- response_process(resp)
+vapply(out$results, function(x) x$name, character(1))
 }
-\keyword{internal}
