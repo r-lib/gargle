@@ -22,7 +22,7 @@ credentials_app_default_path <- function() {
 #' @inheritParams token_fetch
 #'
 #' @return An [`httr::TokenServiceAccount`][httr::Token-class] or an
-#'   [`httr::Token`][httr::Token-class] or `NULL`.
+#'   [`httr::Token2.0`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
 credentials_app_default <- function(scopes = NULL, ...) {

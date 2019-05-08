@@ -28,7 +28,11 @@ authenticated user or are unauthorized requests for public resources.
 These two states correspond to sending a request with a token versus an
 API key, respectively.
 \item \code{cred} is where the current token is cached within a session, once one
-has been fetched. This is a token produced by \code{\link[httr:oauth2.0_token]{httr::oauth2.0_token()}}.
+has been fetched. It is generally assumed to be an instance of
+\code{\link[httr:Token-class]{httr::TokenServiceAccount}} or
+\code{\link[httr:Token-class]{httr::Token2.0}} (or a subclass thereof), probably
+obtained via \code{\link[=token_fetch]{token_fetch()}} (or one of its constituent credential
+fetching functions).
 An \code{AuthState} should be created through the constructor function
 \code{\link[=init_AuthState]{init_AuthState()}}.
 }

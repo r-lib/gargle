@@ -21,7 +21,7 @@ does not appear on the consent screen.}
 }
 \value{
 An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
-\code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
+\code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 }
 \description{
 FIXME: say something about the path searched and/or export that helper.

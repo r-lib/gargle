@@ -4,17 +4,16 @@
 \name{gargle-package}
 \alias{gargle}
 \alias{gargle-package}
-\title{gargle: Easier Access to Google Services from R}
+\title{gargle: Utilities for Working with Google APIs from R}
 \description{
-Utilities to take some of the pain out of working
-    with Google services and APIs. This includes functions and classes for
-    handling common credential types and for streamlining the preparation
-    of HTTP requests, based on the API specs provided in its Discovery
-    Document.
+Utilities to take some of the pain out of working with Google APIs.
+    This includes functions and classes for handling common credential types and
+    for preparing, executing, and processing HTTP requests.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://gargle.r-lib.org}
   \item \url{https://github.com/r-lib/gargle}
   \item Report bugs at \url{https://github.com/r-lib/gargle/issues}
 }
@@ -26,11 +25,11 @@ Useful links:
 Authors:
 \itemize{
   \item Craig Citro \email{craigcitro@google.com}
+  \item Hadley Wickham \email{hadley@rstudio.com} (0000-0003-4757-117X)
 }
 
 Other contributors:
 \itemize{
-  \item Hadley Wickham \email{hadley@rstudio.com} (0000-0003-4757-117X) [contributor]
   \item Google Inc [copyright holder]
   \item RStudio [copyright holder, funder]
 }

@@ -50,7 +50,11 @@ init_AuthState <- function(package = NA_character_,
 #'     These two states correspond to sending a request with a token versus an
 #'     API key, respectively.
 #'   * `cred` is where the current token is cached within a session, once one
-#'     has been fetched. This is a token produced by [httr::oauth2.0_token()].
+#'     has been fetched. It is generally assumed to be an instance of
+#'     [`httr::TokenServiceAccount`][httr::Token-class] or
+#'     [`httr::Token2.0`][httr::Token-class] (or a subclass thereof), probably
+#'     obtained via [token_fetch()] (or one of its constituent credential
+#'     fetching functions).
 #' An `AuthState` should be created through the constructor function
 #' [init_AuthState()].
 #'
