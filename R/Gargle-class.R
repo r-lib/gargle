@@ -127,6 +127,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
   },
   print = function(...) {
+    withr::local_options(list(gargle_quiet = FALSE))
     cat_line("<Token (via gargle)>")
     cat_line("  <oauth_endpoint> google")
     cat_line("             <app> ", self$app$appname)

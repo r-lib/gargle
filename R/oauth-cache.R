@@ -201,6 +201,7 @@ token_match <- function(candidate, existing, package = "gargle") {
     )
   }
 
+  withr::local_options(list(gargle_quiet = FALSE))
   emails <- extract_email(existing)
   cat_line(glue(
     "The {package} package is requesting access to your Google account. ",
