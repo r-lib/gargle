@@ -61,7 +61,7 @@ cache_allowed <- function(path) {
 
 cache_create <- function(path) {
   ## owner (and only owner) can read, write, execute
-  dir_create(path, recursive = TRUE, mode = "0700")
+  dir_create(path, recurse = TRUE, mode = "0700")
 
   cache_parent <- path_dir(path)
   desc <- path(cache_parent, "DESCRIPTION")
