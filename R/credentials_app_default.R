@@ -1,27 +1,19 @@
-credentials_app_default_path <- function() {
-  if (nzchar(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
-    return(path_expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
-  }
-
-  pth <- "application_default_credentials.json"
-  if (nzchar(Sys.getenv("CLOUDSDK_CONFIG"))) {
-    pth <- c(Sys.getenv("CLOUDSDK_CONFIG"), pth)
-  } else if (is_windows()) {
-    appdata <- Sys.getenv("APPDATA", Sys.getenv("SystemDrive", "C:"))
-    pth <- c(appdata, "gcloud", pth)
-  } else {
-    pth <- path_home(".config", "gcloud")
-  }
-  path_join(pth)
-}
-
 #' Fetch the Application Default Credentials
 #'
-#' Loads credentials from a file using the strategy known as Application
-#' Default Credentials (ADC). These are the paths consulted, in order:
-#'   * The value of the GOOGLE_APPLICATION_CREDENTIALS environment variable.
-#'   * A file named `application_default_credentials.json` written to a location
-#'     consulted by Google Cloud SDK.
+#' Loads credentials from a file identified via a search strategy known as
+#' Application Default Credentials (ADC). The hope is to make auth "just work"
+#' for someone working on Google-provided infrastructure or who has used Google
+#' tooling to get started. An ordered sequence of paths is consulted, which we
+#' describe here, with some abuse of notation. ALL_CAPS represents the value of
+#' an environment variable.
+#' ```
+#' GOOGLE_APPLICATION_CREDENTIALS
+#' CLOUDSDK_CONFIG/application_default_credentials.json
+#' (APPDATA %||% SystemDrive %||% C:)\gcloud\application_default_credentials.json (Windows)
+#' ~/.config/gcloud/application_default_credentials.json (not Windows)
+#' ```
+#' If the above search successfully identifies a JSON file, it is parsed and
+#' ingested either as a service account token or a user OAuth2 credential.
 #'
 #' @inheritParams token_fetch
 #'
@@ -43,6 +35,7 @@ credentials_app_default <- function(scopes = NULL, ...) {
   if (!file_exists(path)) {
     return(NULL)
   }
+  cat_line("file exists at ADC path: ", path)
 
   # The JSON file stored on disk can be either a user credential or a service
   # account.
@@ -61,6 +54,7 @@ credentials_app_default <- function(scopes = NULL, ...) {
     if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
       return(NULL)
     }
+    cat_line("ADC cred type: authorized_user")
     endpoint <- httr::oauth_endpoints("google")
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
     scope <- "https://www.googleapis.com/auth/cloud.platform"
@@ -75,6 +69,24 @@ credentials_app_default <- function(scopes = NULL, ...) {
     token$refresh()
     token
   } else {
+    cat_line("ADC cred type: service_account")
     credentials_service_account(scopes, path)
   }
+}
+
+credentials_app_default_path <- function() {
+  if (nzchar(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS"))) {
+    return(path_expand(Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")))
+  }
+
+  pth <- "application_default_credentials.json"
+  if (nzchar(Sys.getenv("CLOUDSDK_CONFIG"))) {
+    pth <- c(Sys.getenv("CLOUDSDK_CONFIG"), pth)
+  } else if (is_windows()) {
+    appdata <- Sys.getenv("APPDATA", Sys.getenv("SystemDrive", "C:"))
+    pth <- c(appdata, "gcloud", pth)
+  } else {
+    pth <- path_home(".config", "gcloud")
+  }
+  path_join(pth)
 }

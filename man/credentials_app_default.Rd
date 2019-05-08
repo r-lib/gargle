@@ -24,13 +24,19 @@ An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
 \code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 }
 \description{
-Loads credentials from a file using the strategy known as "Application
-Default Credentials (ADC). These are the paths consulted, in order:
-\itemize{
-\item The value of the GOOGLE_APPLICATION_CREDENTIALS environment variable.
-\item A file named \code{application_default_credentials.json} written to a location
-consulted by Google Cloud SDK.
+Loads credentials from a file identified via a search strategy known as
+Application Default Credentials (ADC). The hope is to make auth "just work"
+for someone working on Google-provided infrastructure or who has used Google
+tooling to get started. An ordered sequence of paths is consulted, which we
+describe here, with some abuse of notation. ALL_CAPS represents the value of
+an environment variable.\preformatted{GOOGLE_APPLICATION_CREDENTIALS
+CLOUDSDK_CONFIG/application_default_credentials.json
+(APPDATA \%||\% SystemDrive \%||\% C:)\gcloud\application_default_credentials.json (Windows)
+~/.config/gcloud/application_default_credentials.json (not Windows)
 }
+
+If the above search successfully identifies a JSON file, it is parsed and
+ingested either as a service account token or a user OAuth2 credential.
 }
 \seealso{
 \url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
