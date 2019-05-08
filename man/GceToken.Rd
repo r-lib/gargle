@@ -10,6 +10,6 @@ GceToken
 }
 \description{
 This class uses the metadata service available on GCE VMs to fetch access
-tokens.
+tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentials_gce()}} instead.
 }
 \keyword{datasets}
