@@ -10,9 +10,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Utilities for Working with Google APIs from R">
-<meta property="og:description" content="Utilities to take some of the pain out of working with Google APIs.
-    This includes functions and classes for handling common credential types and
-    for preparing, executing, and processing HTTP requests.">
+<meta property="og:description" content="Utilities to take some of the pain out of working
+    with Google APIs.  This includes functions and classes for handling
+    common credential types and for preparing, executing, and processing
+    HTTP requests.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -20,7 +21,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -86,13 +87,65 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
+    
+
+    
+    
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="gargle" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#gargle" class="anchor"></a>gargle</h1></div>
+<!-- badges: start -->
 
-<p>gargle provides a collection of common utilities for users looking to call Google (HTTP) APIs from R.</p>
-<p>Please note that the gargle project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>The goal of gargle is to take some of the agonizing pain out of working with Google APIs. This includes functions and classes for handling common credential types and for preparing, executing, and processing HTTP requests.</p>
+<p>The target user of gargle is an <em>R package author</em> who is wrapping a Google API. It aims to play roughly the same role as <a href="https://developers.google.com/api-client-library/">Google’s official client libraries</a>, but for R. gargle may also be useful to useRs making direct calls to Google APIs, who are prepared to navigate the details of low-level API access.</p>
+<p>gargle’s functionality falls into two main domains:</p>
+<ul>
+<li>
+<strong>Auth.</strong> The <code><a href="reference/token_fetch.html">token_fetch()</a></code> function calls a series of concrete credential-fetching functions to obtain a valid access token (or it quietly dies trying).
+<ul>
+<li>This covers explicit service accounts, application default credentials, Google Compute Engine, and the standard OAuth2 browser flow.</li>
+<li>gargle offers the <code>Gargle2.0</code> class, which extends <code><a href="https://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token2.0</a></code>. It is the default class for user OAuth 2.0 credentials. There are two main differences from <code><a href="https://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token2.0</a></code>: greater emphasis on the user’s email (e.g. Google identity) and default token caching is at the user level.</li>
+</ul>
+</li>
+<li>
+<strong>Requests and responses</strong>. A family of functions helps to prepare HTTP requests, (possibly with reference to an API spec derived from a Discovery Document), make requests, and process the response.</li>
+</ul>
+<p>See the <a href="https://gargle.r-lib.org/articles/">articles</a> for holistic advice on how to use gargle.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>You can install the released version of gargle from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"gargle"</span>)</a></code></pre></div>
+<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"r-lib/gargle"</span>)</a></code></pre></div>
+</div>
+<div id="basic-usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#basic-usage" class="anchor"></a>Basic usage</h2>
+<p>gargle is a low-level package and does not do anything visibly exciting on its own. But here’s a bit of usage in an interactive scenario where a user confirms they want to use a specific Google identity and loads an OAuth2 token.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">token &lt;-<span class="st"> </span><span class="kw"><a href="reference/token_fetch.html">token_fetch</a></span>()</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; The gargle package is requesting access to your Google account. Select a</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; pre-authorised account or enter '0' to obtain a new token. Press</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Esc/Ctrl + C to abort.</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 1: janedoe@gmail.com</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Selection: 1</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">token</a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; &lt;Token (via gargle)&gt;</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;   &lt;oauth_endpoint&gt; google</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;              &lt;app&gt; gargle-demo</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;            &lt;email&gt; janedoe@gmail.com</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></a></code></pre></div>
+<p>Please note that the ‘gargle’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
 </div>
   </div>
 
@@ -127,7 +180,7 @@
 </ul>
 </div>
 
-  <div class="dev-status">
+      <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/r-lib/gargle"><img src="https://travis-ci.org/r-lib/gargle.svg?branch=master" alt="Build Status"></a></li>
@@ -137,7 +190,9 @@
 </ul>
 </div>
 </div>
+
 </div>
+
 
       <footer><div class="copyright">
   <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
