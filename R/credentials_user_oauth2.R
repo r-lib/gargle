@@ -58,34 +58,3 @@ credentials_user_oauth2 <- function(scopes = NULL,
     ...
   )
 }
-
-#' Check that token appears to be legitimate
-#'
-#' @param x A token.
-#' @param verbose Logical.
-#'
-#' @keywords internal
-#' @export
-is_legit_token <- function(x, verbose = FALSE) {
-  # FIXME: `verbose` is no longer used but leaving it until I do
-  # https://github.com/r-lib/gargle/issues/74
-  if (!inherits(x, "Token2.0")) {
-    cat_line("Not a Token2.0 object.")
-    return(FALSE)
-  }
-
-  if ("invalid_client" %in% unlist(x$credentials)) {
-    # shouldn't happen if id and secret are good
-    cat_line("Authorization error. Please check client_id and client_secret.")
-    return(FALSE)
-  }
-
-  if ("invalid_request" %in% unlist(x$credentials)) {
-    # in past, this could happen if user clicks "Cancel" or "Deny" instead of
-    # "Accept" when OAuth2 flow kicks to browser ... but httr now catches this
-    cat_line("Authorization error. No access token obtained.")
-    return(FALSE)
-  }
-
-  TRUE
-}
