@@ -34,6 +34,7 @@ reference:
       - starts_with("credentials")
       - gargle_oauth_sitrep
       - starts_with("cred_funs")
+      - oauth_app_from_json
   - title: "Requests and responses"
     desc: >
       Helpers for forming HTTP requests and processing the response
@@ -57,3 +58,4 @@ reference:
       Assets to aid experimentation during development (not for production use!)
     contents:
       - gargle_app
+      - gargle_api_key
