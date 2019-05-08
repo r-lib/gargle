@@ -24,9 +24,19 @@ An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
 \code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 }
 \description{
-FIXME: say something about the path searched and/or export that helper.
+Loads credentials from a file using the strategy known as "Application
+Default Credentials (ADC). These are the paths consulted, in order:
+\itemize{
+\item The value of the GOOGLE_APPLICATION_CREDENTIALS environment variable.
+\item A file named \code{application_default_credentials.json} written to a location
+consulted by Google Cloud SDK.
+}
 }
 \seealso{
+\url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
+
+\url{https://cloud.google.com/sdk/docs/}
+
 Other credential functions: \code{\link{credentials_gce}},
   \code{\link{credentials_service_account}},
   \code{\link{credentials_user_oauth2}},

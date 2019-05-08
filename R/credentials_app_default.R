@@ -17,9 +17,19 @@ credentials_app_default_path <- function() {
 
 #' Fetch the Application Default Credentials
 #'
-#' FIXME: say something about the path searched and/or export that helper.
+#' Loads credentials from a file using the strategy known as Application
+#' Default Credentials (ADC). These are the paths consulted, in order:
+#'   * The value of the GOOGLE_APPLICATION_CREDENTIALS environment variable.
+#'   * A file named `application_default_credentials.json` written to a location
+#'     consulted by Google Cloud SDK.
 #'
 #' @inheritParams token_fetch
+#'
+#' @seealso
+#'
+#' <https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application>
+#'
+#' <https://cloud.google.com/sdk/docs/>
 #'
 #' @return An [`httr::TokenServiceAccount`][httr::Token-class] or an
 #'   [`httr::Token2.0`][httr::Token-class] or `NULL`.
