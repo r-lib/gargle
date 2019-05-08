@@ -1,9 +1,9 @@
 #' Process a Google API response
 #'
 #' @description
-#' Intended primarily for internal use in client packages that provide
-#' high-level wrappers for users. Typically applied as the final step in this
-#' sequence of calls:
+#' `response_process()` is intended primarily for internal use in client
+#' packages that provide high-level wrappers for users. Typically applied as the
+#' final step in this sequence of calls:
 #'   * Request prepared with [request_build()].
 #'   * Request made with [request_make()].
 #'   * Response processed with [response_process()].
@@ -11,26 +11,31 @@
 #' All that's needed for a successful request is to parse the JSON extracted via
 #' `httr::content()`. Therefore, the main point of `response_process()` is to
 #' handle less happy outcomes:
-#'   * Status code in the 100s (information) or 300s (redirection). These are
-#'     unexpected.
-#'   * Non-JSON content type, such as HTML.
 #'   * Status codes in the 400s (client error) and 500s (server error). The
 #'     structure of the error payload varies across Google APIs and we try to
 #'     create a useful message for all variants we know about.
+#'   * Non-JSON content type, such as HTML.
+#'   * Status code in the 100s (information) or 300s (redirection). These are
+#'     unexpected.
 #'
 #' @details
-#' A redacted version of the `resp` input is returned in the condition (auth
-#' tokens are removed). Use functions such as `rlang::last_error()` or
-#' `rlang::catch_cnd()` to capture the condition and do a more detailed forensic
-#' examination.
+#' If `process_response()` results in an error, a redacted version of the `resp`
+#' input is returned in the condition (auth tokens are removed). Use functions
+#' such as `rlang::last_error()` or `rlang::catch_cnd()` to capture the
+#' condition and do a more detailed forensic examination.
+#'
+#' The `response_as_json()` helper is exported only as an aid to maintainers who
+#' wish to use their own `error_message` function, instead of gargle's built-in
+#' `gargle_error_message()`. When implementing a custom `error_message`
+#' function, call `response_as_json()` immediately on the input in order to
+#' inherit gargle's handling of non-JSON input.
 #'
 #' @param resp Object of class `response` from [httr].
 #' @param error_message Function that produces an informative error message from
-#'   the primary input, `resp`. It should return a character vector. Since
-#'   Google APIs generally return JSON, this function should use
-#'   `response_as_json()`.
+#'   the primary input, `resp`. It must return a character vector.
 #'
-#' @return The content of the request.
+#' @return The content of the request, as a list. An HTTP status code of 204 (No
+#'   content) is a special case returning `TRUE`.
 #' @family requests and responses
 #' @export
 response_process <- function(resp, error_message = gargle_error_message) {
