@@ -131,22 +131,46 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-fetching-credentials" class="hasAnchor"><a href="#section-fetching-credentials" class="anchor"></a>Fetching credentials</h2>
+          <p class="section-desc"><p>Load an existing token or obtain a new one</p></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="AuthState-class.html">AuthState</a></code> </p>
+          <p><code><a href="token_fetch.html">token_fetch()</a></code> </p>
         </td>
-        <td><p>Authorization state</p></td>
+        <td><p>Fetch a token for the given scopes</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="GceToken.html">GceToken</a></code> </p>
+          <p><code><a href="credentials_app_default.html">credentials_app_default()</a></code> </p>
         </td>
-        <td><p>Token for use on Google Compute Engine instances</p></td>
+        <td><p>Load Application Default Credentials</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="credentials_gce.html">credentials_gce()</a></code> </p>
+        </td>
+        <td><p>Get a token for Google Compute Engine</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="credentials_service_account.html">credentials_service_account()</a></code> </p>
+        </td>
+        <td><p>Load a service account token</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="credentials_user_oauth2.html">credentials_user_oauth2()</a></code> </p>
+        </td>
+        <td><p>Get an OAuth token for a user</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> </p>
+        </td>
+        <td><p>OAuth token situation report</p></td>
       </tr><tr>
         
         <td>
@@ -177,79 +201,15 @@
           <p><code><a href="cred_funs_set_default.html">cred_funs_set_default()</a></code> </p>
         </td>
         <td><p>Set the default credential functions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="credentials_app_default.html">credentials_app_default()</a></code> </p>
-        </td>
-        <td><p>Fetch the Application Default Credentials</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="credentials_gce.html">credentials_gce()</a></code> </p>
-        </td>
-        <td><p>Get a token for Google Compute Engine</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="credentials_service_account.html">credentials_service_account()</a></code> </p>
-        </td>
-        <td><p>Get a token for a Google service account</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="credentials_user_oauth2.html">credentials_user_oauth2()</a></code> </p>
-        </td>
-        <td><p>Get an OAuth token for a user</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="expose.html">expose()</a></code> <code><a href="expose.html">is_expose()</a></code> </p>
-        </td>
-        <td><p>An expose object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gargle2.0_token.html">gargle2.0_token()</a></code> </p>
-        </td>
-        <td><p>Generate a gargle token</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gargle_app.html">gargle_app()</a></code> </p>
-        </td>
-        <td><p>OAuth app for demonstration purposes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> </p>
-        </td>
-        <td><p>OAuth token situation report</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gargle_options.html">gargle_oauth_email()</a></code> <code><a href="gargle_options.html">gargle_oob_default()</a></code> <code><a href="gargle_options.html">gargle_oauth_cache()</a></code> <code><a href="gargle_options.html">gargle_quiet()</a></code> </p>
-        </td>
-        <td><p>Options consulted by gargle</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="init_AuthState.html">init_AuthState()</a></code> </p>
-        </td>
-        <td><p>Create an AuthState</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="list_service_accounts.html">list_service_accounts()</a></code> </p>
-        </td>
-        <td><p>List all service accounts available on this GCE instance.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="oauth_app_from_json.html">oauth_app_from_json()</a></code> </p>
-        </td>
-        <td><p>Create an OAuth app from JSON</p></td>
-      </tr><tr>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-requests-and-responses" class="hasAnchor"><a href="#section-requests-and-responses" class="anchor"></a>Requests and responses</h2>
+          <p class="section-desc"><p>Helpers for forming HTTP requests and processing the response</p></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="request_develop.html">request_develop()</a></code> <code><a href="request_develop.html">request_build()</a></code> </p>
@@ -267,12 +227,72 @@
           <p><code><a href="response_process.html">response_process()</a></code> <code><a href="response_process.html">response_as_json()</a></code> <code><a href="response_process.html">gargle_error_message()</a></code> </p>
         </td>
         <td><p>Process a Google API response</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-classes" class="hasAnchor"><a href="#section-classes" class="anchor"></a>Classes</h2>
+          <p class="section-desc"><p>Classes to represent a token or auth state and their constructors</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="Gargle-class.html">Gargle2.0</a></code> </p>
+        </td>
+        <td><p>OAuth2 token objects specific to Google APIs</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="token_fetch.html">token_fetch()</a></code> </p>
+          <p><code><a href="gargle2.0_token.html">gargle2.0_token()</a></code> </p>
         </td>
-        <td><p>Fetch a token for the given scopes</p></td>
+        <td><p>Generate a gargle token</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="GceToken.html">GceToken</a></code> </p>
+        </td>
+        <td><p>Token for use on Google Compute Engine instances</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="AuthState-class.html">AuthState</a></code> </p>
+        </td>
+        <td><p>Authorization state</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="init_AuthState.html">init_AuthState()</a></code> </p>
+        </td>
+        <td><p>Create an AuthState</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-options" class="hasAnchor"><a href="#section-options" class="anchor"></a>Options</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="gargle_options.html">gargle_oauth_email()</a></code> <code><a href="gargle_options.html">gargle_oob_default()</a></code> <code><a href="gargle_options.html">gargle_oauth_cache()</a></code> <code><a href="gargle_options.html">gargle_quiet()</a></code> </p>
+        </td>
+        <td><p>Options consulted by gargle</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-demo-assets" class="hasAnchor"><a href="#section-demo-assets" class="anchor"></a>Demo assets</h2>
+          <p class="section-desc"><p>Assets to aid experimentation during development (not for production use!)</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="gargle_app.html">gargle_app()</a></code> </p>
+        </td>
+        <td><p>OAuth app for demonstration purposes</p></td>
       </tr>
     </tbody>
     </table>
@@ -281,7 +301,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-fetching-credentials">Fetching credentials</a></li>
+      <li><a href="#section-requests-and-responses">Requests and responses</a></li>
+      <li><a href="#section-classes">Classes</a></li>
+      <li><a href="#section-options">Options</a></li>
+      <li><a href="#section-demo-assets">Demo assets</a></li>
     </ul>
   </div>
 </div>
