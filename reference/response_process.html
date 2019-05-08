@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>OAuth2 token objects specific to Google APIs — Gargle-class • gargle</title>
+<title>Process a Google API response — response_process • gargle</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,16 +30,26 @@
 
 
 
-<meta property="og:title" content="OAuth2 token objects specific to Google APIs — Gargle-class" />
+<meta property="og:title" content="Process a Google API response — response_process" />
 
-<meta property="og:description" content="This is based on the Token2.0 class provided in httr.
-These objects should be created through the constructor function
-gargle2.0_token(). In the base Token2.0 class, tokens are cached based on
-endpoint, app, and scopes. For the Gargle2.0 subclass, the identifier or
-key is expanded to include the email address associated with the token. This
-makes it easier to work with Google APIs with multiple identities. The
-default location for the token cache is also different: it's now
-&quot;~/.R/gargle/gargle-oauth&quot; instead of ./.httr-oauth." />
+<meta property="og:description" content="response_process() is intended primarily for internal use in client
+packages that provide high-level wrappers for users. Typically applied as the
+final step in this sequence of calls:
+Request prepared with request_build().
+Request made with request_make().
+Response processed with response_process().
+" />
+
+<meta property="og:description" content="All that's needed for a successful request is to parse the JSON extracted via
+httr::content(). Therefore, the main point of response_process() is to
+handle less happy outcomes:
+Status codes in the 400s (client error) and 500s (server error). The
+structure of the error payload varies across Google APIs and we try to
+create a useful message for all variants we know about.
+Non-JSON content type, such as HTML.
+Status code in the 100s (information) or 300s (redirection). These are
+unexpected.
+" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -127,37 +137,88 @@ default location for the token cache is also different: it's now
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>OAuth2 token objects specific to Google APIs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/Gargle-class.R'><code>R/Gargle-class.R</code></a></small>
-    <div class="hidden name"><code>Gargle-class.Rd</code></div>
+    <h1>Process a Google API response</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/response_process.R'><code>R/response_process.R</code></a></small>
+    <div class="hidden name"><code>response_process.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This is based on the <a href='https://www.rdocumentation.org/packages/httr/topics/Token-class'>Token2.0</a> class provided in httr.
-These objects should be created through the constructor function
-<code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code>. In the base Token2.0 class, tokens are cached based on
-endpoint, app, and scopes. For the <code>Gargle2.0</code> subclass, the identifier or
-key is expanded to include the email address associated with the token. This
-makes it easier to work with Google APIs with multiple identities. The
-default location for the token cache is also different: it's now
-<code>"~/.R/gargle/gargle-oauth"</code> instead of <code>./.httr-oauth</code>.</p>
+    <p><code>response_process()</code> is intended primarily for internal use in client
+packages that provide high-level wrappers for users. Typically applied as the
+final step in this sequence of calls:</p><ul>
+<li><p>Request prepared with <code><a href='request_develop.html'>request_build()</a></code>.</p></li>
+<li><p>Request made with <code><a href='request_make.html'>request_make()</a></code>.</p></li>
+<li><p>Response processed with <code>response_process()</code>.</p></li>
+</ul>
+
+    <p>All that's needed for a successful request is to parse the JSON extracted via
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/content'>httr::content()</a></code>. Therefore, the main point of <code>response_process()</code> is to
+handle less happy outcomes:</p><ul>
+<li><p>Status codes in the 400s (client error) and 500s (server error). The
+structure of the error payload varies across Google APIs and we try to
+create a useful message for all variants we know about.</p></li>
+<li><p>Non-JSON content type, such as HTML.</p></li>
+<li><p>Status code in the 100s (information) or 300s (redirection). These are
+unexpected.</p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='no'>Gargle2.0</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <pre class="usage"><span class='fu'>response_process</span>(<span class='no'>resp</span>, <span class='kw'>error_message</span> <span class='kw'>=</span> <span class='no'>gargle_error_message</span>)
 
-    <p>An R6 class object.</p>
+<span class='fu'>response_as_json</span>(<span class='no'>resp</span>)
+
+<span class='fu'>gargle_error_message</span>(<span class='no'>resp</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>resp</th>
+      <td><p>Object of class <code>response</code> from httr.</p></td>
+    </tr>
+    <tr>
+      <th>error_message</th>
+      <td><p>Function that produces an informative error message from
+the primary input, <code>resp</code>. It must return a character vector.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The content of the request, as a list. An HTTP status code of 204 (No
+content) is a special case returning <code>TRUE</code>.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If <code>process_response()</code> results in an error, a redacted version of the <code>resp</code>
+input is returned in the condition (auth tokens are removed). Use functions
+such as <code><a href='https://rlang.r-lib.org/reference/last_error.html'>rlang::last_error()</a></code> or <code><a href='https://rlang.r-lib.org/reference/catch_cnd.html'>rlang::catch_cnd()</a></code> to capture the
+condition and do a more detailed forensic examination.</p>
+<p>The <code>response_as_json()</code> helper is exported only as an aid to maintainers who
+wish to use their own <code>error_message</code> function, instead of gargle's built-in
+<code>gargle_error_message()</code>. When implementing a custom <code>error_message</code>
+function, call <code>response_as_json()</code> immediately on the input in order to
+inherit gargle's handling of non-JSON input.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other requests and responses: <code><a href='request_develop.html'>request_develop</a></code>,
+  <code><a href='request_make.html'>request_make</a></code></p></div>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>
