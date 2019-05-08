@@ -90,6 +90,33 @@ token
 #>      <credentials> access_token, expires_in, refresh_token, scope, ...
 ```
 
+Here’s an example of using request and response helpers to make a
+one-off request to the [Places
+API](https://developers.google.com/places/web-service/intro). We’ll find
+the restaurants in a certain part of Vancouver, BC.
+
+``` r
+library(gargle)
+
+req <- request_build(
+  method = "GET",
+  path = "maps/api/place/nearbysearch/json",
+  params = list(
+    location = "49.268682,-123.167117",
+    radius = 100,
+    type = "restaurant"
+  ),
+  key = gargle_api_key(),
+  base_url = "https://maps.googleapis.com"
+)
+resp <- request_make(req)
+out <- response_process(resp)
+vapply(out$results, function(x) x$name, character(1))
+#> [1] "The Naam"                    "The Oakwood Canadian Bistro"
+#> [3] "Healthy Noodle House"        "Tapatio Mexican Cafe & Bar" 
+#> [5] "FreshFast"
+```
+
 Please note that the ‘gargle’ project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
