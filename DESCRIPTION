@@ -1,6 +1,6 @@
 Package: gargle
 Title: Easier Access to Google Services from R
-Version: 0.0.0.9006
+Version: 0.0.0.9007
 Authors@R: 
     c(person(given = "Jennifer",
              family = "Bryan",
@@ -13,7 +13,7 @@ Authors@R:
              email = "craigcitro@google.com"),
       person(given = "Hadley",
              family = "Wickham",
-             role = "ctb",
+             role = "aut",
              email = "hadley@rstudio.com",
              comment = c(ORCID = "0000-0003-4757-117X")),
       person(given = "Google Inc",

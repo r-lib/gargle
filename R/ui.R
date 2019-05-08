@@ -38,9 +38,9 @@ commapse <- function(...) paste0(..., collapse = ", ")
 bt <- function(x) encodeString(x, quote = "`")
 sq <- function(x) encodeString(x, quote = "'")
 
-## obscure the middle bit of (sensitive?) strings with '...'
+## obscure part of (sensitive?) strings with '...'
 ## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
-obfuscate <- function(x, first = 6, last = 4) {
+obfuscate <- function(x, first = 7, last = 0) {
   nc <- nchar(x)
   ellipsize <- nc > first + last
   out <- x

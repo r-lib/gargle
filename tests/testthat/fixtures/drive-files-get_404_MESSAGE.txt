@@ -1,0 +1,6 @@
+Client error: (404) Not Found
+  *       domain: global
+  *       reason: notFound
+  *      message: File not found: NOPE_NOT_A_GOOD_ID.
+  * locationType: parameter
+  *     location: fileId

@@ -1,0 +1,3 @@
+Client error: (400) INVALID_ARGUMENT
+  * Client specified an invalid argument. Check error message and error details for more information.
+  * Unable to parse range: NOPE!A5:F15

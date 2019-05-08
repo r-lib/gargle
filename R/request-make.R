@@ -3,7 +3,7 @@
 #' Intended primarily for internal use in client packages that provide
 #' high-level wrappers for users. `request_make()` does very little: calls an
 #' HTTP method, only adding a user agent. Typically the input is created with
-#' [request_build()] and the output is processed with `process_response()`.
+#' [request_build()] and the output is processed with [response_process()].
 #'
 #' @param x List. Holds the components for an HTTP request, presumably created
 #'   with [request_develop()] or [request_build()]. Must contain a `method` and
