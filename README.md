@@ -18,12 +18,12 @@ with Google APIs. This includes functions and classes for handling
 common credential types and for preparing, executing, and processing
 HTTP requests.
 
-The target user of gargle is an *R package author* who is wrapping a
-Google API. It aims to play roughly the same role as [Google’s official
-client libraries](https://developers.google.com/api-client-library/),
-but for R. gargle may also be useful to useRs making direct calls to
-Google APIs, who are prepared to navigate the details of low-level API
-access.
+The target user of gargle is an *R package author* who is wrapping one
+of the ~250 Google APIs listed in the [APIs Explorer](APIs%20Explorer).
+gargle aims to play roughly the same role as [Google’s official client
+libraries](https://developers.google.com/api-client-library/), but for
+R. gargle may also be useful to useRs making direct calls to Google
+APIs, who are prepared to navigate the details of low-level API access.
 
 gargle’s functionality falls into two main domains:
 
