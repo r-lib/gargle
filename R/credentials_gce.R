@@ -104,9 +104,9 @@ detect_gce <- function() {
   !(inherits(response, "try-error") %||% httr::http_error(response))
 }
 
-#' List all service accounts available on this GCE instance.
-#'
-#' @return A list of service account names.
+# List all service accounts available on this GCE instance.
+#
+# @return A list of service account names.
 list_service_accounts <- function() {
   accounts <- gce_metadata_request("instance/service-accounts")
   ct <- httr::content(accounts, as = "text", encoding = "utf8")
