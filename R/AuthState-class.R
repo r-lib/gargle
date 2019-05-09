@@ -88,6 +88,7 @@ AuthState <- R6::R6Class("AuthState", list(
     self
   },
   print = function(...) {
+    withr::local_options(list(gargle_quiet = FALSE))
     cat_line("<AuthState (via gargle)>")
     cat_line("         <package> ", self$package)
     cat_line("             <app> ", self$app$appname)
