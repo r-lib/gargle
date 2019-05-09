@@ -14,3 +14,4 @@
 ^LICENSE\.md$
 ^\.github$
 ^README\.Rmd$
+^cran-comments\.md$
