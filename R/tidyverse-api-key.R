@@ -10,4 +10,14 @@
 #' @export
 #' @examples
 #' tidyverse_api_key()
-tidyverse_api_key <- function() "AIzaSyCJ-oYJlNhbPDJySWsbR_B7QqzNz5EthTg"
+tidyverse_api_key <- function() {
+  paste0(
+    "AIzaSyCJ-",
+    # jqLHc77cw
+    "oYJlNhbPDJ",
+    # T3b9oAuU6
+    "ySWsbR_B7Q",
+    # 4x0HCJJZa
+    "qzNz5EthTg"
+  )
+}

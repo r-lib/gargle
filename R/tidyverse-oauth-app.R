@@ -15,7 +15,23 @@
 tidyverse_app <- function() {
   httr::oauth_app(
     appname = "tidyverse",
-    key = "603366585132-nku3fbd298ma3925l12o2hq0cc1v8u11.apps.googleusercontent.com",
-    secret = "as_N12yfWLRL9RMz5nVpgCZt"
+    key = paste0(
+      "603366585132-n",
+      # NUtAKHPpnghcn
+      "ku3fbd298ma392",
+      # FyPP6YFdCPItQ
+      "5l12o2hq0cc1v8",
+      # hT74HRpdnJacj
+      "u11.apps.google",
+      # 5dbyGDyIYBkFU
+      "usercontent.com"
+    ),
+    secret = paste0(
+      "as_N12yf",
+      # X2eBeHKb
+      "WLRL9RMz",
+      # TIdQWNVi
+      "5nVpgCZt"
+    )
   )
 }

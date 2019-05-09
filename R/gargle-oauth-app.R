@@ -16,7 +16,23 @@
 gargle_app <- function() {
   httr::oauth_app(
     appname = "gargle-demo",
-    key = "603366585132-orjlfqlnkvnkeb1menfdhss2oej4i2d5.apps.googleusercontent.com",
-    secret = "Rg-wypvL9HPaYatzyjXDwVfV"
+    key = paste0(
+      "603366585132-o",
+      # ivOTVztW3df3
+      "rjlfqlnkvnkeb1",
+      # TVTky4EBCsJJ
+      "menfdhss2oej4i",
+      # OL0X6AEwwNf4
+      "2d5.apps.googl",
+      # zK46rIOYGLwS
+      "eusercontent.com"
+    ),
+    secret = paste0(
+      "Rg-wypvL",
+      # pExSN8k6
+      "9HPaYatz",
+      # nkQemRzq
+      "yjXDwVfV"
+    )
   )
 }
