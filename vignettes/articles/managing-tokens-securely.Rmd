@@ -149,7 +149,7 @@ gargle:::secret_write(
 )
 ```
 
-This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle-testing.json` in the current working directory, which is presumably the top-level directory of gargle's source. This encrypted file *should* be commited and pushed.
+This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle-testing.json` in the current working directory, which is presumably the top-level directory of gargle's source. This encrypted file *should* be committed and pushed.
 
 ### Test setup
 
