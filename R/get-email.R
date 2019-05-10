@@ -44,6 +44,7 @@
 #'
 #' @return User info or user's email
 #' @keywords internal
+#' @noRd
 #' @examples
 #' \dontrun{
 #' # with service account token
@@ -76,7 +77,6 @@ get_userinfo <- function(token) {
   res
 }
 
-#' @rdname get_userinfo
 # Assumes the token was obtained with userinfo.email scope.
 # This is true of all gargle-mediated tokens, by definition.
 get_email <- function(token) {
