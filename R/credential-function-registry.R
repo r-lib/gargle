@@ -61,6 +61,8 @@ cred_funs_add <- function(...) {
 #' @return A list of credential functions.
 #' @family registry management
 #' @export
+#' @examples
+#' names(cred_funs_list())
 cred_funs_list <- function() {
   gargle_env$cred_funs
 }

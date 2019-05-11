@@ -12,6 +12,9 @@ A list of credential functions.
 \description{
 List the registered credential functions
 }
+\examples{
+names(cred_funs_list())
+}
 \seealso{
 Other registry management: \code{\link{cred_funs_add}},
   \code{\link{cred_funs_clear}},
