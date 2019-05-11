@@ -99,7 +99,6 @@
 
     
     
-<p><strong>DRAFT!</strong></p>
 <p>Testing presents special challenges for packages that wrap an API. Here we tackle one of those problems: how to deal with auth in a non-interactive setting on a remote machine. This affects gargle itself and will affect any client package that relies on gargle for auth.</p>
 <p>This article documents the token management approach taken in gargle. We wanted it to be relatively easy to have a secret, such as an auth token, that we can:</p>
 <ul>
@@ -155,15 +154,15 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(pw &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_pw_gen</span>())</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "lrsudVw7F2JitoHbgj9sFqI9ZStHoruEYtzBnIukl3nHmZXPDw"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "j8qEwJctxn4LPq1Ddljf29b24jXZgY0vkoEFWenoNg4MyCYlYA"</span></a></code></pre></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=lrsudVw7F2JitoHbgj9sFqI9ZStHoruEYtzBnIukl3nHmZXPDw</code></pre>
-<p><code>usethis::edit_r_environ()</code> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
+<pre><code>GARGLE_PASSWORD=j8qEwJctxn4LPq1Ddljf29b24jXZgY0vkoEFWenoNg4MyCYlYA</code></pre>
+<p><code>usethis::edit_r_environ()</code> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://www.rdocumentation.org/packages/base/topics/readRenviron">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
 <div id="provide-environment-variable-to-other-services" class="section level3">
@@ -188,7 +187,7 @@
 <div id="r-hub" class="section level4">
 <h4 class="hasAnchor">
 <a href="#r-hub" class="anchor"></a>R-hub</h4>
-<p>Send the environment variable in your calls to <code><a href="https://www.rdocumentation.org/packages/utils/topics/PkgUtils">check()</a></code> and friends:</p>
+<p>Send the environment variable in your calls to <code>rhub::check()</code> and friends:</p>
 <pre><code>rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))</code></pre>
 </div>
 </div>
@@ -210,7 +209,7 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="dt">name =</span> <span class="st">"gargle-testing.json"</span>,</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">input =</span> <span class="st">"a/very/private/local/folder/gargle-testing.json"</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">)</a></code></pre></div>
-<p>This writes an encrypted version of <code>gargle-testing.json</code> to <code>inst/secret/gargle-testing.json</code> in the current working directory, which is presumably the top-level directory of gargle’s source. This encrypted file <em>should</em> be committed and pushed.</p>
+<p>This writes an encrypted version of <code>gargle-testing.json</code> to <code>inst/secret/gargle-testing.json</code> relative to the current working directory, which is presumably the top-level directory of gargle’s source. This encrypted file <em>should</em> be committed and pushed.</p>
 </div>
 <div id="test-setup" class="section level3">
 <h3 class="hasAnchor">
@@ -223,7 +222,7 @@
 <li>This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.</li>
 <li>This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor.</li>
 <li>
-<p>We recommend that you actively check your package under these conditions, so that you discover problems before CRAN or your contributors do. Here’s a simplified excerpt from <code>.travis.yml</code> where the main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code> implicitly as an encrypted environment variable, but <code>R CMD check</code> runs for the other builds with <code>GARGLE_PASSWORD</code> unset:</p>
+<p>We recommend that you actively check your package under these conditions, so that you discover problems before CRAN or your contributors do. Here’s a simplified excerpt from <code>.travis.yml</code> where the main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code> implicitly as an encrypted environment variable, but <code>R CMD check</code> runs for the other builds with <code>GARGLE_PASSWORD</code> explicitly unset:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">matrix:</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="fu">include:</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">r:</span><span class="at"> release</span></a>
@@ -238,18 +237,24 @@
 </ul>
 </li>
 </ul>
-<p>In a wrapper package, you could determine decrypt-ability at the start of the test run. Here’s representative code from bigrquery’s <code>tests/testthat/setup-auth.R</code> file:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="cf">if</span> (<span class="kw">secret_can_decrypt</span>(<span class="st">"bigrquery"</span>)) {</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  json &lt;-<span class="st"> </span><span class="kw">secret_read</span>(<span class="st">"bigrquery"</span>, <span class="st">"service-token.json"</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="kw">bq_auth</span>(<span class="dt">path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rawConversion">rawToChar</a></span>(json))</a>
+<p>In a wrapper package, you could determine decrypt-ability at the start of the test run. Here’s representative code from googledrive’s <code>tests/testthat/helper.R</code> file (<em>applies to dev version of googledrive</em>), but something similar can be seen in bigrquery and googlesheets4:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="cf">if</span> (gargle<span class="op">:::</span><span class="kw">secret_can_decrypt</span>(<span class="st">"googledrive"</span>)) {</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  json &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_read</span>(<span class="st">"googledrive"</span>, <span class="st">"googledrive-testing.json"</span>)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="kw">drive_auth</span>(<span class="dt">path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rawConversion">rawToChar</a></span>(json))</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">}</a></code></pre></div>
-<p>Versions of <code>secret_can_decrypt()</code> and <code>secret_read()</code> are defined here in gargle. bigrquery also defines such functions internally and that is what’s being called in the code above. <code>bq_auth()</code> is a function specific to bigrquery that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that’s very favorable for our workflow. We’ll come back to this below.</p>
-<p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here’s the one from bigrquery:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">skip_if_no_auth &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">has_access_cred</span>(), <span class="st">"Authentication not available"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">}</a></code></pre></div>
-<p><code>has_access_cred()</code> is a bigrquery function that returns <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By including this at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.</p>
-<p>In bigrquery, <code>skip_if_no_auth()</code> is defined below <code>R/</code> but it is arguably more common to see such a definition in a file like <code>tests/testthat/helper.R</code>.</p>
+<p>Versions of <code>secret_can_decrypt()</code> and <code>secret_read()</code> are defined here in gargle. <code>drive_auth()</code> is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that’s very favorable for our workflow. We’ll come back to this below.</p>
+<p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here are the test skippers from googledrive and bigrquery:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># googledrive</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">skip_if_no_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">have_token</span>(), <span class="st">"No Drive token"</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co"># bigrquery</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">skip_if_no_auth &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">has_access_cred</span>(), <span class="st">"Authentication not available"</span>)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">}</a></code></pre></div>
+<p><code>googledrive::have_token()</code> and <code>bigrquery::has_access_cred()</code> are package-specific functions that return <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.</p>
+<p>In bigrquery, <code>skip_if_no_auth()</code> is defined below <code>R/</code> but it is arguably more common to see such a definition in a file like <code>tests/testthat/helper.R</code>, which is where it’s defined in googledrive.</p>
 <p><em>gargle’s usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it’s not featured here.</em></p>
 </div>
 <div id="known-sources-of-friction" class="section level3">
@@ -282,6 +287,13 @@
 <li><a href="https://github.com/r-dbi/bigrquery/blob/master/R/secret.R"><code>bigrquery/R/secret.R</code></a></li>
 <li><a href="https://github.com/r-dbi/bigrquery/blob/master/tests/testthat/setup-auth.R"><code>bigrquery/tests/testthat/setup-auth.R</code></a></li>
 </ul>
+<p>googledrive, where this approach was implemented more recently and which leans more heavily on gargle:</p>
+<ul>
+<li>Testing setup: <a href="https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R"><code>googledrive/tests/testthat/helper.R</code></a>
+</li>
+<li>Setup chunk of a pkgdown article that is rendered and deployed from Travis-CI: <a href="https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29"><code>vignettes/articles/multiple-files.Rmd#L10-L29</code></a>
+</li>
+</ul>
 <p>“Managing secrets” vignette of httr:</p>
 <ul>
 <li><a href="https://httr.r-lib.org/articles/secrets.html" class="uri">https://httr.r-lib.org/articles/secrets.html</a></li>
@@ -291,7 +303,7 @@
 <li><a href="https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html" class="uri">https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html</a></li>
 <li><a href="https://cran.r-project.org/web/packages/sodium/vignettes/intro.html" class="uri">https://cran.r-project.org/web/packages/sodium/vignettes/intro.html</a></li>
 </ul>
-<p>The <a href="https://ropensci.github.io/cyphr/">cyphr</a> package, which offers high-level functions that smooth over the frictions identified above:</p>
+<p>The <a href="https://ropensci.github.io/cyphr/">cyphr</a> package, which smooths over frictions like those identified above relating to “file vs. object?” and “character vs. raw?”:</p>
 <ul>
 <li><a href="https://ropensci.github.io/cyphr/" class="uri">https://ropensci.github.io/cyphr/</a></li>
 </ul>
