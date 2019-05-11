@@ -33,17 +33,17 @@ is_cred_fun <- function(f) {
   args[1] == "scopes" && args[length(args)] == "..."
 }
 
-#' Register a new credential fetching function
+#' Credential function registry
 #'
-#' Function(s) are added to the *front* of the list. So:
-#'   * "First registered, last tried."
-#'   * "Last registered, first tried."
+#' Functions to query or manipulate the registry of credential functions
+#' consulted by [token_fetch()].
 #'
-#' @param ... One or more functions with the right signature. See
-#'   [is_cred_fun()].
-#' @family registry management
-#' @export
+#' @name cred_funs
+#' @seealso [token_fetch()], which is where the registry is actually used.
+#' @return A list of credential functions of `NULL`.
 #' @examples
+#' names(cred_funs_list())
+#'
 #' creds_one <- function(scopes, ...) {}
 #' cred_funs_add(creds_one)
 #' cred_funs_add(one = creds_one)
@@ -51,8 +51,24 @@ is_cred_fun <- function(f) {
 #' cred_funs_add(one = creds_one, creds_one)
 #'
 #' # undo all of the above and return to default
-#' cred_funs_clear()
 #' cred_funs_set_default()
+NULL
+
+#' @describeIn cred_funs Get the list of registered credential functions.
+#' @export
+cred_funs_list <- function() {
+  gargle_env$cred_funs
+}
+
+#' @describeIn cred_funs Register one or more new credential fetching functions.
+#'   Function(s) are added to the *front* of the list. So:
+#'
+#'     * "First registered, last tried."
+#'     * "Last registered, first tried."
+#'
+#' @param ... One or more functions with the right signature. See
+#'   [is_cred_fun()].
+#' @export
 cred_funs_add <- function(...) {
   dots <- list(...)
   stopifnot(all(map_lgl(dots, is_cred_fun)))
@@ -60,21 +76,10 @@ cred_funs_add <- function(...) {
   invisible()
 }
 
-#' List the registered credential functions
-#'
-#' @return A list of credential functions.
-#' @family registry management
-#' @export
-#' @examples
-#' names(cred_funs_list())
-cred_funs_list <- function() {
-  gargle_env$cred_funs
-}
 
-#' Register a list of credential fetching functions
+#' @describeIn cred_funs Register a list of credential fetching functions.
 #'
 #' @param ls A list of credential functions.
-#' @family registry management
 #' @export
 cred_funs_set <- function(ls) {
   stopifnot(all(map_lgl(ls, is_cred_fun)))
@@ -82,18 +87,17 @@ cred_funs_set <- function(ls) {
   invisible()
 }
 
-#' Clear the credential function registry
-#'
-#' @family registry management
+#' @describeIn cred_funs Clear the credential function registry.
 #' @export
 cred_funs_clear <- function() {
   gargle_env$cred_funs <- list()
   invisible()
 }
 
-#' Set the default credential functions
+#' @describeIn cred_funs Reset the registry to the gargle default.
 #' @export
 cred_funs_set_default <- function() {
+  cred_funs_clear()
   cred_funs_add(credentials_user_oauth2     = credentials_user_oauth2)
   cred_funs_add(credentials_gce             = credentials_gce)
   cred_funs_add(credentials_app_default     = credentials_app_default)
