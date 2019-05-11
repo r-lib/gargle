@@ -14,8 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-**DRAFT!**
-
 Testing presents special challenges for packages that wrap an API. Here we tackle one of those problems: how to deal with auth in a non-interactive setting on a remote machine. This affects gargle itself and will affect any client package that relies on gargle for auth.
 
 This article documents the token management approach taken in gargle. We wanted it to be relatively easy to have a secret, such as an auth token, that we can:
@@ -89,7 +87,7 @@ Combine the name and value to form a line like this in your user-level `.Renviro
 cat(paste0(pw_name, "=", pw), sep = "\n")
 ```
 
-`usethis::edit_r_environ()` can help create or open this file. We **strongly recommend** using the user-level `.Renviron`, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If don't take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in `.gitignore`. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.
+`usethis::edit_r_environ()` can help create or open this file. We **strongly recommend** using the user-level `.Renviron`, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don't take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in `.gitignore`. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.
 
 Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R or call `readRenviron("~/.Renviron")` for the newly defined environment variable to take effect.
 
@@ -117,7 +115,7 @@ This can also be found via *Settings > Encrypt YAML*.
 
 #### R-hub
 
-Send the environment variable in your calls to `check()` and friends:
+Send the environment variable in your calls to `rhub::check()` and friends:
 
 ```
 rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))
@@ -149,7 +147,7 @@ gargle:::secret_write(
 )
 ```
 
-This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle-testing.json` in the current working directory, which is presumably the top-level directory of gargle's source. This encrypted file *should* be committed and pushed.
+This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle-testing.json` relative to the current working directory, which is presumably the top-level directory of gargle's source. This encrypted file *should* be committed and pushed.
 
 ### Test setup
 
@@ -164,7 +162,7 @@ Now you need to rig your tests or their setup around this encrypted token. You n
       a simplified excerpt from `.travis.yml` where the main `r: release`
       build accesses `GARGLE_PASSWORD` implicitly as an encrypted environment
       variable, but `R CMD check` runs for the other builds with
-      `GARGLE_PASSWORD` unset:
+      `GARGLE_PASSWORD` explicitly unset:
       
       ``` yaml
       matrix:
@@ -179,28 +177,34 @@ Now you need to rig your tests or their setup around this encrypted token. You n
             env: GARGLE_PASSWORD=''
       ```
 
-In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from bigrquery's `tests/testthat/setup-auth.R` file:
+In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from googledrive's `tests/testthat/helper.R` file (*applies to dev version of googledrive*), but something similar can be seen in bigrquery and googlesheets4:
 
 ```{r eval = FALSE}
-if (secret_can_decrypt("bigrquery")) {
-  json <- secret_read("bigrquery", "service-token.json")
-  bq_auth(path = rawToChar(json))
+if (gargle:::secret_can_decrypt("googledrive")) {
+  json <- gargle:::secret_read("googledrive", "googledrive-testing.json")
+  drive_auth(path = rawToChar(json))
 }
 ```
 
-Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. bigrquery also defines such functions internally and that is what's being called in the code above. `bq_auth()` is a function specific to bigrquery that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that's very favorable for our workflow. We'll come back to this below.
+Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. `drive_auth()` is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that's very favorable for our workflow. We'll come back to this below.
 
-But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here's the one from bigrquery:
+But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here are the test skippers from googledrive and bigrquery:
 
 ```{r eval = FALSE}
+# googledrive
+skip_if_no_token <- function() {
+  testthat::skip_if_not(have_token(), "No Drive token")
+}
+
+# bigrquery
 skip_if_no_auth <- function() {
   testthat::skip_if_not(has_access_cred(), "Authentication not available")
 }
 ```
 
-`has_access_cred()` is a bigrquery function that returns `TRUE` if a token is available and `FALSE` otherwise. By including this at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
+`googledrive::have_token()` and `bigrquery::has_access_cred()` are package-specific functions that return `TRUE` if a token is available and `FALSE` otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
 
-In bigrquery, `skip_if_no_auth()` is defined below `R/` but it is arguably more common to see such a definition in a file like `tests/testthat/helper.R`.
+In bigrquery, `skip_if_no_auth()` is defined below `R/` but it is arguably more common to see such a definition in a file like `tests/testthat/helper.R`, which is where it's defined in googledrive.
 
 *gargle's usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it's not featured here.*
 
@@ -223,6 +227,11 @@ bigrquery, where this approach was first worked out:
 
   * [`bigrquery/R/secret.R`](https://github.com/r-dbi/bigrquery/blob/master/R/secret.R)
   * [`bigrquery/tests/testthat/setup-auth.R`](https://github.com/r-dbi/bigrquery/blob/master/tests/testthat/setup-auth.R)
+  
+googledrive, where this approach was implemented more recently and which leans more heavily on gargle:
+
+  * Testing setup: [`googledrive/tests/testthat/helper.R`](https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R)
+  * Setup chunk of a pkgdown article that is rendered and deployed from Travis-CI: [`vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
 
 "Managing secrets" vignette of httr:
 
@@ -233,6 +242,6 @@ Vignettes of the sodium package, especially the parts relating to symmetric encr
   * <https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html>
   * <https://cran.r-project.org/web/packages/sodium/vignettes/intro.html>
   
-The [cyphr](https://ropensci.github.io/cyphr/) package, which offers high-level functions that smooth over the frictions identified above:
+The [cyphr](https://ropensci.github.io/cyphr/) package, which smooths over frictions like those identified above relating to "file vs. object?" and "character vs. raw?":
 
   * <https://ropensci.github.io/cyphr/>
