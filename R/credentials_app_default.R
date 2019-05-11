@@ -3,14 +3,17 @@
 #' Loads credentials from a file identified via a search strategy known as
 #' Application Default Credentials (ADC). The hope is to make auth "just work"
 #' for someone working on Google-provided infrastructure or who has used Google
-#' tooling to get started. An ordered sequence of paths is consulted, which we
-#' describe here, with some abuse of notation. ALL_CAPS represents the value of
-#' an environment variable.
+#' tooling to get started. A sequence of paths is consulted, which we describe
+#' here, with some abuse of notation. ALL_CAPS represents the value of an
+#' environment variable and `%||%` is used in the spirit of a [null coalescing
+#' operator](https://en.wikipedia.org/wiki/Null_coalescing_operator).
 #' ```
 #' GOOGLE_APPLICATION_CREDENTIALS
 #' CLOUDSDK_CONFIG/application_default_credentials.json
-#' (APPDATA %||% SystemDrive %||% C:)\gcloud\application_default_credentials.json (Windows)
-#' ~/.config/gcloud/application_default_credentials.json (not Windows)
+#' # on Windows:
+#' (APPDATA %||% SystemDrive %||% C:)\gcloud\application_default_credentials.json
+#' # on not-Windows:
+#' ~/.config/gcloud/application_default_credentials.json
 #' ```
 #' If the above search successfully identifies a JSON file, it is parsed and
 #' ingested either as a service account token or a user OAuth2 credential.
