@@ -26,7 +26,7 @@ cred_funs_set_default()
 \item{ls}{A list of credential functions.}
 }
 \value{
-A list of credential functions of \code{NULL}.
+A list of credential functions or \code{NULL}.
 }
 \description{
 Functions to query or manipulate the registry of credential functions

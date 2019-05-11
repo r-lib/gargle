@@ -40,7 +40,7 @@ is_cred_fun <- function(f) {
 #'
 #' @name cred_funs
 #' @seealso [token_fetch()], which is where the registry is actually used.
-#' @return A list of credential functions of `NULL`.
+#' @return A list of credential functions or `NULL`.
 #' @examples
 #' names(cred_funs_list())
 #'
