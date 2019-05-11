@@ -49,6 +49,10 @@ is_cred_fun <- function(f) {
 #' cred_funs_add(one = creds_one)
 #' cred_funs_add(one = creds_one, two = creds_one)
 #' cred_funs_add(one = creds_one, creds_one)
+#'
+#' # undo all of the above and return to default
+#' cred_funs_clear()
+#' cred_funs_set_default()
 cred_funs_add <- function(...) {
   dots <- list(...)
   stopifnot(all(map_lgl(dots, is_cred_fun)))

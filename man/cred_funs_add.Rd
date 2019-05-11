@@ -23,6 +23,10 @@ cred_funs_add(creds_one)
 cred_funs_add(one = creds_one)
 cred_funs_add(one = creds_one, two = creds_one)
 cred_funs_add(one = creds_one, creds_one)
+
+# undo all of the above and return to default
+cred_funs_clear()
+cred_funs_set_default()
 }
 \seealso{
 Other registry management: \code{\link{cred_funs_clear}},
