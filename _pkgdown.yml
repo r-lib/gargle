@@ -11,6 +11,8 @@ navbar:
     href: index.html
   - text: Articles
     menu:
+    - text: How gargle gets tokens
+      href: articles/how-gargle-gets-tokens.html
     - text: How to use gargle for auth in a client package
       href: articles/gargle-auth-in-client-package.html
     - text: Request Helper Functions
