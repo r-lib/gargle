@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fetch a token for the given scopes — token_fetch • gargle</title>
+<title>Credential function registry — cred_funs • gargle</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,12 +30,10 @@
 
 
 
-<meta property="og:title" content="Fetch a token for the given scopes — token_fetch" />
+<meta property="og:title" content="Credential function registry — cred_funs" />
 
-<meta property="og:description" content="This is a rather magical function that calls a series of concrete
-credential-fetching functions, each wrapped in a tryCatch().
-token_fetch() keeps trying until it succeeds or there are no more functions
-to try. Use cred_funs_list() to see the current registry, in order." />
+<meta property="og:description" content="Functions to query or manipulate the registry of credential functions
+consulted by token_fetch()." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,54 +124,75 @@ to try. Use cred_funs_list() to see the current registry, in order." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fetch a token for the given scopes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/token-fetch.R'><code>R/token-fetch.R</code></a></small>
-    <div class="hidden name"><code>token_fetch.Rd</code></div>
+    <h1>Credential function registry</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/credential-function-registry.R'><code>R/credential-function-registry.R</code></a></small>
+    <div class="hidden name"><code>cred_funs.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This is a rather magical function that calls a series of concrete
-credential-fetching functions, each wrapped in a <code><a href='https://www.rdocumentation.org/packages/base/topics/conditions'>tryCatch()</a></code>.
-<code>token_fetch()</code> keeps trying until it succeeds or there are no more functions
-to try. Use <code><a href='cred_funs.html'>cred_funs_list()</a></code> to see the current registry, in order.</p>
+    <p>Functions to query or manipulate the registry of credential functions
+consulted by <code><a href='token_fetch.html'>token_fetch()</a></code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>token_fetch</span>(<span class='kw'>scopes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>cred_funs_list</span>()
+
+<span class='fu'>cred_funs_add</span>(<span class='no'>...</span>)
+
+<span class='fu'>cred_funs_set</span>(<span class='no'>ls</span>)
+
+<span class='fu'>cred_funs_clear</span>()
+
+<span class='fu'>cred_funs_set_default</span>()</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>scopes</th>
-      <td><p>A character vector of scopes to request. Pick from those listed
-in <a href='https://developers.google.com/identity/protocols/googlescopes'>OAuth 2.0 Scopes for Google APIs</a>.</p>
-<p>For certain token flows, the
-<code>"https://www.googleapis.com/auth/userinfo.email"</code> scope is unconditionally
-included. This grants permission to retrieve the email address associated
-with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.</p></td>
+      <th>...</th>
+      <td><p>One or more functions with the right signature. See
+<code><a href='is_cred_fun.html'>is_cred_fun()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Additional arguments passed to all credential functions.</p></td>
+      <th>ls</th>
+      <td><p>A list of credential functions.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An <code><a href='https://www.rdocumentation.org/packages/httr/topics/Token-class'>httr::Token</a></code> or <code>NULL</code>.</p>
+    <p>A list of credential functions of <code>NULL</code>.</p>
+    
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>cred_funs_list</code>: Get the list of registered credential functions.</p></li>
+<li><p><code>cred_funs_add</code>: Register one or more new credential fetching functions.
+Function(s) are added to the <em>front</em> of the list. So:</p><pre>* "First registered, last tried."
+* "Last registered, first tried."
+</pre></li>
+<li><p><code>cred_funs_set</code>: Register a list of credential fetching functions.</p></li>
+<li><p><code>cred_funs_clear</code>: Clear the credential function registry.</p></li>
+<li><p><code>cred_funs_set_default</code>: Reset the registry to the gargle default.</p></li>
+</ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other credential functions: <code><a href='credentials_app_default.html'>credentials_app_default</a></code>,
-  <code><a href='credentials_gce.html'>credentials_gce</a></code>,
-  <code><a href='credentials_service_account.html'>credentials_service_account</a></code>,
-  <code><a href='credentials_user_oauth2.html'>credentials_user_oauth2</a></code></p></div>
+    <div class='dont-index'><p><code><a href='token_fetch.html'>token_fetch()</a></code>, which is where the registry is actually used.</p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='fu'>cred_funs_list</span>())</div><div class='output co'>#&gt; [1] "credentials_service_account" "credentials_app_default"    
+#&gt; [3] "credentials_gce"             "credentials_user_oauth2"    </div><div class='input'>
+<span class='no'>creds_one</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>scopes</span>, <span class='no'>...</span>) {}
+<span class='fu'>cred_funs_add</span>(<span class='no'>creds_one</span>)
+<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>)
+<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>, <span class='kw'>two</span> <span class='kw'>=</span> <span class='no'>creds_one</span>)
+<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>, <span class='no'>creds_one</span>)
+
+<span class='co'># undo all of the above and return to default</span>
+<span class='fu'>cred_funs_set_default</span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -182,8 +201,12 @@ does not appear on the consent screen.</p></td>
       
       <li><a href="#value">Value</a></li>
 
+      <li><a href="#functions">Functions</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
