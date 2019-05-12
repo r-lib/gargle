@@ -23,7 +23,7 @@ The target audience is someone who works directly with a Google API. These peopl
     either because the wrapper does not exist or there's a reason to avoid the
     dependency.
 
-`token_fetch()` is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests. It can be very nice for users if wrapper packages assume this responsibility, as opposed to forcing users to explicitly acquire and manage their tokens. We give some design suggestions here and cover this in more depth in [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
+`token_fetch()` is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests. It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens. We give a few design suggestions here and cover this in more depth in [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
 
 ```{r setup}
 library(gargle)
@@ -31,7 +31,7 @@ library(gargle)
 
 ## `token_fetch()`
 
-`token_fetch()` is a rather magical function for getting a token. The goal is to make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with `token_fetch()` only in an indirect way, mediated through an API wrapper package. That is not because the interface of `token_fetch()` is unfriendly -- it's very flexible! The objective of `token_fetch()` is to allow package developers to not worry about all the different ways of getting a token.
+`token_fetch()` is a rather magical function for getting a token. The goal is to make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with `token_fetch()` only in an indirect way, mediated through an API wrapper package. That is not because the interface of `token_fetch()` is unfriendly -- it's very flexible! The objective of `token_fetch()` is to allow package developers to take responsibility for *managing* the user's token, without having to implement all the different ways of *obtaining* that token in the first place.
 
 The signature of `token_fetch()` is very simple and, therefore, not very informative:
 
@@ -109,7 +109,7 @@ CLOUDSDK_CONFIG/application_default_credentials.json
 ```
 
 If the above search successfully identifies a JSON file, it is parsed and
-ingested either as a service account token or an OAuth2 user credential. In the case of an OAuth2 credential, the requested `scopes` must also meet certain criteria. Note that this will NOT work for OAuth2 credentials initiated by gargle. The storage of OAuth2 user credentials as JSON is unique to certain Google tools -- possibly just the [`gcloud` CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) -- and should probably be regarded as deprecated.  It is probably best to use ADC with a service account. If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+ingested either as a service account token or an OAuth2 user credential. In the case of an OAuth2 credential, the requested `scopes` must also meet certain criteria. Note that this will NOT work for OAuth2 credentials initiated by gargle, which are stored on disk in `.rds` files. The storage of OAuth2 user credentials as JSON is unique to certain Google tools -- possibly just the [`gcloud` CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) -- and should probably be regarded as deprecated.  It is recommended to use ADC with a service account. If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
 
 The main takeaway lesson:
 
@@ -183,6 +183,8 @@ credentials_user_oauth2(
 )
 ```
 
+See [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html) for design ideas for a function like `THINGY_auth()`.
+
 What happens tomorrow or next week? Do we make this user go through the browser dance again? How do we get to that happy place where we don't bug them constantly about auth?
 
 First, we define "suitable", i.e. what it means to find a matching token in the cache. `credentials_user_oauth2()` is a thin wrapper around `gargle2.0_token()` which is the constructor for the `gargle::Gargle2.0` class used to hold an OAuth2 token. And that call might look something like this (simplified for communication purposes):
@@ -211,7 +213,7 @@ abort.
 Selection: 3
 ```
 
-If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing tokens), we head to the browser to initiate OAuth2 flow *de novo*.
+If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow *de novo*.
 
 A user can reduce the need for interaction by passing the target `email` to `thingy_auth()`:
 
@@ -219,7 +221,7 @@ A user can reduce the need for interaction by passing the target `email` to `thi
 drive_auth(email = "janedoe_work@gmail.com")
 ```
 
-or by setting the `gargle_oauth_email` to a specific identity or to `TRUE`. A value of `TRUE` means that gargle is allowed to use a matching token whenever there is exactly one match.
+or by specifying same in the `gargle_oauth_email` option. A value of `email = TRUE`, passed directly or via the option, is an alternative strategy: `TRUE` means that gargle is allowed to use a matching token whenever there is exactly one match.
 
 The elevated status of `email` for `gargle::Gargle2.0` tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs. This is one of the main motivations for `gargle::Gargle2.0`, which extends `httr::Token2.0`. The `gargle::Gargle2.0` class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via `gargle_oauth_cache()` and the output looks something like this:
 

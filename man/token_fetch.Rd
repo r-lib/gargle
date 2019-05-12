@@ -26,7 +26,9 @@ An \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
 This is a rather magical function that calls a series of concrete
 credential-fetching functions, each wrapped in a \code{tryCatch()}.
 \code{token_fetch()} keeps trying until it succeeds or there are no more functions
-to try. Use \code{\link[=cred_funs_list]{cred_funs_list()}} to see the current registry, in order.
+to try. Use \code{\link[=cred_funs_list]{cred_funs_list()}} to see the current registry, in order. See the
+vignette \href{https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html}{How gargle gets tokens} for a
+full description of \code{token_fetch()}.
 }
 \seealso{
 Other credential functions: \code{\link{credentials_app_default}},

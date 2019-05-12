@@ -3,7 +3,10 @@
 #' This is a rather magical function that calls a series of concrete
 #' credential-fetching functions, each wrapped in a `tryCatch()`.
 #' `token_fetch()` keeps trying until it succeeds or there are no more functions
-#' to try. Use [cred_funs_list()] to see the current registry, in order.
+#' to try. Use [cred_funs_list()] to see the current registry, in order. See the
+#' vignette [How gargle gets
+#' tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) for a
+#' full description of `token_fetch()`.
 #'
 #' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credential functions.
