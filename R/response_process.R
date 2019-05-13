@@ -38,6 +38,31 @@
 #'   content) is a special case returning `TRUE`.
 #' @family requests and responses
 #' @export
+#' @examples
+#' \dontrun{
+#' # get an OAuth2 token with 'userinfo.email' scope
+#' token <- token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
+#'
+#' # see the email associated with this token
+#' req <- gargle::request_build(
+#'   method = "GET",
+#'   path = "v1/userinfo",
+#'   token = token,
+#'   base_url = "https://openidconnect.googleapis.com"
+#' )
+#' resp <- gargle::request_make(req)
+#' response_process(resp)
+#'
+#' # make a bad request (this token has incorrect scope)
+#' req <- gargle::request_build(
+#'   method = "GET",
+#'   path = "fitness/v1/users/{userId}/dataSources",
+#'   token = token,
+#'   params = list(userId = 12345)
+#' )
+#' resp <- gargle::request_make(req)
+#' response_process(resp)
+#' }
 response_process <- function(resp, error_message = gargle_error_message) {
   code <- httr::status_code(resp)
 

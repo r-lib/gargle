@@ -27,6 +27,16 @@ high-level wrappers for users. \code{request_make()} does very little: calls an
 HTTP method, only adding a user agent. Typically the input is created with
 \code{\link[=request_build]{request_build()}} and the output is processed with \code{\link[=response_process]{response_process()}}.
 }
+\examples{
+\dontrun{
+req <- gargle::request_build(
+  method = "GET",
+  path = "path/to/the/resource",
+  token = "PRETEND_I_AM_TOKEN"
+)
+gargle::request_make(req)
+}
+}
 \seealso{
 Other requests and responses: \code{\link{request_develop}},
   \code{\link{response_process}}

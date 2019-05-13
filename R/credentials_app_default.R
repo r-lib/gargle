@@ -30,6 +30,10 @@
 #'   [`httr::Token2.0`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
+#' @examples
+#' \dontrun{
+#' credentials_app_default()
+#' }
 credentials_app_default <- function(scopes = NULL, ...) {
   cat_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform

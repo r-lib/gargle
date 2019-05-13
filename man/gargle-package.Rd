@@ -4,12 +4,12 @@
 \name{gargle-package}
 \alias{gargle}
 \alias{gargle-package}
-\title{gargle: Utilities for Working with Google APIs from R}
+\title{gargle: Utilities for Working with Google APIs}
 \description{
 Utilities to take some of the pain out of working
-    with Google APIs.  This includes functions and classes for handling
-    common credential types and for preparing, executing, and processing
-    HTTP requests.
+    with Google APIs <https://developers.google.com/apis-explorer>.  This
+    includes functions and classes for handling common credential types
+    and for preparing, executing, and processing HTTP requests.
 }
 \seealso{
 Useful links:

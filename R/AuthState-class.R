@@ -16,6 +16,13 @@
 #'
 #' @return An object of class [AuthState].
 #' @export
+#' @examples
+#' init_AuthState(
+#'   package = "mypkg",
+#'   app = gargle_app(),
+#'   api_key = gargle_api_key(),
+#'   auth_active = TRUE
+#' )
 ## FIXME(jennybc): Analogous functions for the Gargle2.0 class default to the
 ## gargle oauth app. Should we do same in both places? If so, which way?
 ## Default to gargle app or have no default?

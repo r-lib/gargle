@@ -17,6 +17,7 @@ key, setup a new project in \href{https://console.developers.google.com}{Google 
 and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
 }
 \examples{
+\dontrun{
 ## see the key
 gargle_api_key()
 
@@ -36,4 +37,5 @@ req <- request_build(
 resp <- request_make(req)
 out <- response_process(resp)
 vapply(out$results, function(x) x$name, character(1))
+}
 }

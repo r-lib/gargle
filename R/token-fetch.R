@@ -14,6 +14,10 @@
 #' @return An [`httr::Token`][httr::Token-class] or `NULL`.
 #' @family credential functions
 #' @export
+#' @examples
+#' \dontrun{
+#' token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
+#' }
 token_fetch <- function(scopes = NULL, ...) {
   cat_line("trying token_fetch()")
   for (f in gargle_env$cred_funs) {

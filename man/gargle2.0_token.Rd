@@ -52,3 +52,8 @@ An object of class \link{Gargle2.0}, either new or loaded from the cache.
 \description{
 Constructor function for objects of class \link{Gargle2.0}.
 }
+\examples{
+\dontrun{
+gargle2.0_token()
+}
+}

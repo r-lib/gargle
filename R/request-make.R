@@ -17,6 +17,15 @@
 #' @return Object of class `response` from [httr].
 #' @export
 #' @family requests and responses
+#' @examples
+#' \dontrun{
+#' req <- gargle::request_build(
+#'   method = "GET",
+#'   path = "path/to/the/resource",
+#'   token = "PRETEND_I_AM_TOKEN"
+#' )
+#' gargle::request_make(req)
+#' }
 request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
   method <- switch(

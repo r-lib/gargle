@@ -11,6 +11,7 @@
 #' @return A Google API key
 #' @export
 #' @examples
+#' \dontrun{
 #' ## see the key
 #' gargle_api_key()
 #'
@@ -30,6 +31,7 @@
 #' resp <- request_make(req)
 #' out <- response_process(resp)
 #' vapply(out$results, function(x) x$name, character(1))
+#' }
 gargle_api_key <- function() {
   paste0(
     "AIzaSyDXic",

@@ -10,6 +10,10 @@
 #' @return A [GceToken()] or `NULL`.
 #' @family credential functions
 #' @export
+#' @examples
+#' \dontrun{
+#' credentials_gce()
+#' }
 credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
   cat_line("trying credentials_gce()")
   if (!detect_gce() || is.null(scopes)) {

@@ -28,3 +28,11 @@ An object of class \link{AuthState}.
 \description{
 Constructor function for objects of class \link{AuthState}.
 }
+\examples{
+init_AuthState(
+  package = "mypkg",
+  app = gargle_app(),
+  api_key = gargle_api_key(),
+  auth_active = TRUE
+)
+}

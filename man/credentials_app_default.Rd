@@ -40,6 +40,11 @@ CLOUDSDK_CONFIG/application_default_credentials.json
 If the above search successfully identifies a JSON file, it is parsed and
 ingested either as a service account token or a user OAuth2 credential.
 }
+\examples{
+\dontrun{
+credentials_app_default()
+}
+}
 \seealso{
 \url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
 

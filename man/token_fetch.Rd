@@ -30,6 +30,11 @@ to try. Use \code{\link[=cred_funs_list]{cred_funs_list()}} to see the current r
 vignette \href{https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html}{How gargle gets tokens} for a
 full description of \code{token_fetch()}.
 }
+\examples{
+\dontrun{
+token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
+}
+}
 \seealso{
 Other credential functions: \code{\link{credentials_app_default}},
   \code{\link{credentials_gce}},

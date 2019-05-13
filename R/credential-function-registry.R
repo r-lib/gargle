@@ -25,6 +25,9 @@ gargle_env$cred_funs <- list()
 #'
 #' @param f A function to check.
 #' @keywords internal
+#' @example
+#' f <- function(scopes, ...) {}
+#' is_cred_fun(f)
 is_cred_fun <- function(f) {
   if (!is.function(f)) {
     return(FALSE)

@@ -27,6 +27,11 @@ A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 \description{
 Uses the metadata service available on GCE VMs to fetch an access token.
 }
+\examples{
+\dontrun{
+credentials_gce()
+}
+}
 \seealso{
 \url{https://cloud.google.com/compute/docs/storing-retrieving-metadata}
 

@@ -25,6 +25,10 @@
 #'   Not used.
 #' @return An object of class [Gargle2.0], either new or loaded from the cache.
 #' @export
+#' @examples
+#' \dontrun{
+#' gargle2.0_token()
+#' }
 gargle2.0_token <- function(email = gargle_oauth_email(),
                             app = gargle_app(),
                             package = "gargle",
