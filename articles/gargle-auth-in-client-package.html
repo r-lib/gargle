@@ -99,15 +99,95 @@
 
     
     
-<p><em>In case it’s not obvious, this is very much a draft.</em></p>
-<p>gargle provides common infrastructure for use with Google APIs. This vignette describes how a client package that provides high-level wrappers for a specific API could use gargle to deal with auth.</p>
-<p>I refer to how this is done in the development version of <a href="https://googledrive.tidyverse.org">googledrive</a>, which is a functioning test bed.</p>
+<p>gargle provides common infrastructure for use with Google APIs. This vignette describes one possible design for using gargle to deal with auth, in a client package that provides a high-level wrapper for a specific API. There are frequent references to (the development version of) <a href="https://googledrive.tidyverse.org">googledrive</a>, which is a functioning test bed.</p>
+<div id="key-choices" class="section level2">
+<h2 class="hasAnchor">
+<a href="#key-choices" class="anchor"></a>Key choices</h2>
+<p>Getting a token requires several pieces of information, so let’s review them, with an eye towards the responsibilities of the package author versus the user.</p>
+<ul>
+<li>Overall config: Where do the OAuth app and API key come from?</li>
+<li>Token-level properties: Google identity (email) and scopes.</li>
+<li>Request-level</li>
+</ul>
+<div id="oauth-app" class="section level3">
+<h3 class="hasAnchor">
+<a href="#oauth-app" class="anchor"></a>OAuth app</h3>
+<p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared almost all the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they will use the same app for all work through a client package: probably, the app built into the package.</p>
+<p>A client package can use an internal object of class <code>gargle::AuthClass</code> to hold the auth state. Here’s how it is initialized in googledrive:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">.auth &lt;-<span class="st"> </span>gargle<span class="op">::</span>AuthState<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="dt">package     =</span> <span class="st">"googledrive"</span>,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="dt">app         =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_app.html">tidyverse_app</a></span>(),     <span class="co"># YOUR PKG SHOULD USE ITS OWN APP!</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="dt">api_key     =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_api_key.html">tidyverse_api_key</a></span>(), <span class="co"># YOUR PKG SHOULD USE ITS OWN KEY!</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="dt">auth_active =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="dt">cred        =</span> <span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">)</a></code></pre></div>
+<p>There is a field to hold the OAuth <code>app</code>, which should default to the package’s built-in app. Auth helpers, like <code>drive_oauth_app()</code> and <code>googledrive::drive_auth_config()</code>, make the current app inspectable and configurable for the minority of users who need that level of control.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/oauth_app">oauth_app</a></span>(</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="st">"acme-corp"</span>,</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">key =</span> <span class="st">"123456789.apps.googleusercontent.com"</span>,</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">secret =</span> <span class="st">"abcdefghijklmnopqrstuvwxyz"</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw">drive_auth_config</span>(<span class="dt">app =</span> google_app)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw">drive_oauth_app</span>()</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt; &lt;oauth_app&gt; acme-corp</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt;   key:    123456789.apps.googleusercontent.com</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt;   secret: &lt;hidden&gt;</span></a></code></pre></div>
+</div>
+<div id="api-key" class="section level3">
+<h3 class="hasAnchor">
+<a href="#api-key" class="anchor"></a>API key</h3>
+<p>Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by “anyone with a link” from a Shiny app, without having to do any auth at all!</p>
+<p>If you are wrapping an API with this feature, a default API key can be stored in a field of the internal auth state mentioned above. And again, auth helpers, like <code>googledrive::drive_auth_config()</code> and <code>drive_api_key()</code>, can make the current key inspectable and configurable, for the minority of users who need that level of control.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/oauth_app">oauth_app</a></span>(</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="st">"acme-corp"</span>,</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">key =</span> <span class="st">"123456789.apps.googleusercontent.com"</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">secret =</span> <span class="st">"abcdefghijklmnopqrstuvwxyz"</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw">drive_auth_config</span>(<span class="dt">app =</span> google_app)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="kw">drive_oauth_app</span>()</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; &lt;oauth_app&gt; acme-corp</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   key:    123456789.apps.googleusercontent.com</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;   secret: &lt;hidden&gt;</span></a></code></pre></div>
+<p>A good rule of thumb is that it’s OK to include an API key if all the key does is allow users to do things via API that they would also be able to do in the browser, even <strong>without being logged in</strong>. In this case, Google uses the key to impose quotas and rate limits. If the API key has other implications, for example if it is used for billing purposes, then clearly the client package cannot include a key and should, instead, support the user’s provision of a key.</p>
+</div>
+<div id="email-or-google-identity" class="section level3">
+<h3 class="hasAnchor">
+<a href="#email-or-google-identity" class="anchor"></a>Email or Google identity</h3>
+<p>In contrast to the OAuth app and API key, every user must express which identity they wish to present to the API. This is a familiar concept and users expect to specify this. Since users may have more than one Google account, it’s quite likely that they will want to switch between accounts, even within a single R session, or that they might want to explicitly declare the identity to be used in a specific script or app.</p>
+<p>In googledrive, the main user-facing auth function is <code>googledrive::drive_auth()</code> and <code>email</code> is an optional argument that lets users proactively specify their identity. <code>drive_auth()</code> is usually called indirectly upon first need, but a user can also call it directly in order to specify their target <code>email</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"janedoe_work@gmail.com"</span>)</a></code></pre></div>
+<p>If <code>email</code> is not given, gargle also checks for an option named “gargle_oauth_email”. The <code>email</code> is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser.</p>
+</div>
+<div id="scopes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#scopes" class="anchor"></a>Scopes</h3>
+<p>Most users have no concept of scopes. They just know they want to work with, e.g., Google Drive or Google Sheets. A client package can usually pick sensible default scopes, that will support what most users want to do.</p>
+<p>Here’s the full signature of <code>googledrive::drive_auth()</code>, mentioned above, which reveals its defaults:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">drive_auth &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">email =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                       <span class="dt">path =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                       <span class="dt">scopes =</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                       <span class="dt">cache =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>(),</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>()) { ... }</a></code></pre></div>
+<p>This means that a motivated user could call <code>drive_auth()</code> pre-emptively at the start of the session and request different scopes, such as <code>drive.readonly</code>, if they intend to only read data and want to guard against inadvertent file modification.</p>
+</div>
+<div id="oauth-cache-and-out-of-bounds-auth" class="section level3">
+<h3 class="hasAnchor">
+<a href="#oauth-cache-and-out-of-bounds-auth" class="anchor"></a>OAuth cache and Out-of-bounds auth</h3>
+<p>These are two aspects of OAuth where most users will want sensible default behaviour. For those who want to exert control, that can be done in direct calls to <code>drive_auth()</code> or by configuring an option.</p>
+</div>
+</div>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
 <ol style="list-style-type: decimal">
 <li>Add gargle to your package’s <code>Imports</code>.</li>
-<li>Create an internal <code>gargle::AuthClass</code> object to hold auth state, probably in <code>R/aaa.R</code>.</li>
+<li>Create an internal <code>gargle::AuthClass</code> object to hold auth state.</li>
 <li>Define standard functions for the auth interface between gargle and your package, somewhere such as <code>R/YOURPKG_auth.R</code>. Example: <a href="https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R"><code>tidyverse/googledrive/R/drive_auth.R</code></a>
 </li>
 <li>Use the functions <code>YOURPKG_api_key()</code> and <code>YOURPKG_token()</code> (defined in the standard auth interface) to insert an API key or token in your package’s requests.</li>
@@ -117,19 +197,19 @@
 <div id="initialize-package-auth-state" class="section level2">
 <h2 class="hasAnchor">
 <a href="#initialize-package-auth-state" class="anchor"></a>Initialize package auth state</h2>
-<p>In <code>R/aaa.R</code>, create an internal object <code>.auth</code> to hold the auth state of your package. Here’s how that looks for googledrive:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">.auth &lt;-<span class="st"> </span>gargle<span class="op">::</span>AuthState<span class="op">$</span><span class="kw">new</span>(</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="dt">package     =</span> <span class="st">"googledrive"</span>,</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="dt">app         =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_app.html">tidyverse_app</a></span>(),</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="dt">api_key     =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_api_key.html">tidyverse_api_key</a></span>(),</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="dt">auth_active =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="dt">cred        =</span> <span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">)</a></code></pre></div>
-<p>This state is initialized when googledrive is loaded and is updated during a user’s session. The <code>.auth</code> object lives in the googledrive namespace. It’s an instance of the <code>AuthState</code> R6 class provided by gargle.</p>
+<p>The internal object <code>.auth</code> holds the auth state of your package. Here’s how that looks for googledrive:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">.auth &lt;-<span class="st"> </span>gargle<span class="op">::</span>AuthState<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="dt">package     =</span> <span class="st">"googledrive"</span>,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="dt">app         =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_app.html">tidyverse_app</a></span>(),</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="dt">api_key     =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_api_key.html">tidyverse_api_key</a></span>(),</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">auth_active =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="dt">cred        =</span> <span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">)</a></code></pre></div>
+<p>This is the initial state whenever googledrive is loaded and is updated during a user’s session. The <code>.auth</code> object lives in the googledrive namespace. It’s an instance of the <code>AuthState</code> R6 class provided by gargle.</p>
 <p>Review of <code>.auth</code>’s fields:</p>
 <ul>
 <li>
-<code>package</code>. It just seems like a good idea to record package name.</li>
+<code>package</code>. Package name.</li>
 <li>
 <code>app</code>. The OAuth app. Most client packages will ship with a default app, for the sake of usability.
 <ul>
@@ -140,7 +220,9 @@
 <li>
 <code>api_key</code>. An API key is necessary to send anonymous requests for public resources, i.e., it’s generally sent with requests that lack a token.
 <ul>
-<li>See description above of the <code>app</code> for reasons to ship with a working default and the appropriate usage of the tidyverse key.</li>
+<li>The relevance of the API key varies considerably across Google APIs.</li>
+<li>As with the app, only packages maintained within the <a href="https://github.com/tidyverse"><code>tidyverse</code></a> or <a href="https://github.com/r-lib"><code>r-lib</code></a> GitHub organizations should use the tidyverse key.</li>
+<li>Other packages should substitute their own API key here.</li>
 </ul>
 </li>
 <li>
@@ -154,18 +236,18 @@
 <a href="#getting-that-first-token" class="anchor"></a>Getting that first token</h2>
 <p>I’m focusing on early use, by the naive user, with the OAuth flow. When the user first calls a high-level googledrive function such as <code>drive_find()</code>, a Drive request is ultimately generated with <code>googledrive::request_generate(..., key = NULL, token = drive_token())</code>.</p>
 <p>In the body, the API key is set like so:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">params<span class="op">$</span>key &lt;-<span class="st"> </span>key <span class="op">%||%</span><span class="st"> </span>params<span class="op">$</span>key <span class="op">%||%</span><span class="st"> </span><span class="kw">drive_api_key</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">params<span class="op">$</span>key &lt;-<span class="st"> </span>key <span class="op">%||%</span><span class="st"> </span>params<span class="op">$</span>key <span class="op">%||%</span><span class="st"> </span><span class="kw">drive_api_key</span>()</a></code></pre></div>
 <p>The ability to pass the key directly or as a query parameter is only available to those using googledrive’s low-level API. This is not exposed in high-level functions, which, instead, can only access the current auth config. In this case, the key is obtained from the config via <code>drive_api_key()</code> but, ultimately, does not matter, since we’re going to get a token and we never send both.</p>
 <p>Here’s the definition of <code>drive_token()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">drive_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">isFALSE</a></span>(.auth<span class="op">$</span>auth_active)) {</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(<span class="ot">NULL</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  }</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(.auth<span class="op">$</span>cred)) {</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="kw">drive_auth</span>()</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">  }</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">  httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/config">config</a></span>(<span class="dt">token =</span> .auth<span class="op">$</span>cred)</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">drive_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">isFALSE</a></span>(.auth<span class="op">$</span>auth_active)) {</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(<span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">  }</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(.auth<span class="op">$</span>cred)) {</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">    <span class="kw">drive_auth</span>()</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">  }</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">  httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/config">config</a></span>(<span class="dt">token =</span> .auth<span class="op">$</span>cred)</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">}</a></code></pre></div>
 <p>By default, auth is active, so this will result in a call to <code>drive_auth()</code> to obtain a credential, which is then cached in <code>.auth$cred</code> for the remainder of the session.</p>
 </div>
 <div id="auth-interface" class="section level2">
@@ -222,7 +304,8 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#overview">Overview</a></li>
+<li><a href="#key-choices">Key choices</a></li>
+      <li><a href="#overview">Overview</a></li>
       <li><a href="#initialize-package-auth-state">Initialize package auth state</a></li>
       <li><a href="#getting-that-first-token">Getting that first token</a></li>
       <li><a href="#auth-interface">Auth interface</a></li>
