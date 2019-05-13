@@ -70,11 +70,8 @@ get_userinfo <- function(token) {
     token = token,
     base_url = "https://openidconnect.googleapis.com"
   )
-  raw_resp <- gargle::request_make(req)
-  ## TODO(jennybc) use process_response() once it's available in same pkg
-  httr::stop_for_status(raw_resp)
-  res <- httr::content(raw_resp, as = "parsed", type = "application/json")
-  res
+  resp <- gargle::request_make(req)
+  response_process(resp)
 }
 
 # Assumes the token was obtained with userinfo.email scope.
@@ -100,9 +97,6 @@ get_tokeninfo <- function(token) {
     token = token,
     base_url = "https://www.googleapis.com"
   )
-  raw_resp <- gargle::request_make(req)
-  ## TODO(jennybc) use process_response() once it's available in same pkg
-  httr::stop_for_status(raw_resp)
-  res <- httr::content(raw_resp, as = "parsed", type = "application/json")
-  res
+  resp <- gargle::request_make(req)
+  response_process(resp)
 }
