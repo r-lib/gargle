@@ -14,23 +14,117 @@ knitr::opts_chunk$set(
 )
 ```
 
-*In case it's not obvious, this is very much a draft.*
+gargle provides common infrastructure for use with Google APIs. This vignette describes one possible design for using gargle to deal with auth, in a client package that provides a high-level wrapper for a specific API. There are frequent references to (the development version of) [googledrive](https://googledrive.tidyverse.org), which is a functioning test bed.
 
-gargle provides common infrastructure for use with Google APIs. This vignette describes how a client package that provides high-level wrappers for a specific API could use gargle to deal with auth.
+## Key choices
 
-I refer to how this is done in the development version of [googledrive](https://googledrive.tidyverse.org), which is a functioning test bed.
+Getting a token requires several pieces of information, so let's review them, with an eye towards the responsibilities of the package author versus the user.
+
+  * Overall config: Where do the OAuth app and API key come from?
+  * Token-level properties: Google identity (email) and scopes.
+  * Request-level
+
+### OAuth app
+
+Most users should present OAuth user credentials to Google APIs. However, most users can also be spared almost all the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they will use the same app for all work through a client package: probably, the app built into the package.
+
+A client package can use an internal object of class `gargle::AuthClass` to hold the auth state. Here's how it is initialized in googledrive:
+
+```{r eval = FALSE}
+.auth <- gargle::AuthState$new(
+  package     = "googledrive",
+  app         = gargle::tidyverse_app(),     # YOUR PKG SHOULD USE ITS OWN APP!
+  api_key     = gargle::tidyverse_api_key(), # YOUR PKG SHOULD USE ITS OWN KEY!
+  auth_active = TRUE,
+  cred        = NULL
+)
+```
+
+There is a field to hold the OAuth `app`, which should default to the package's built-in app. Auth helpers, like `drive_oauth_app()` and `googledrive::drive_auth_config()`, make the current app inspectable and configurable for the minority of users who need that level of control.
+
+```{r, eval = FALSE}
+library(googledrive)
+
+google_app <- httr::oauth_app(
+  "acme-corp",
+  key = "123456789.apps.googleusercontent.com",
+  secret = "abcdefghijklmnopqrstuvwxyz"
+)
+drive_auth_config(app = google_app)
+
+drive_oauth_app()
+#> <oauth_app> acme-corp
+#>   key:    123456789.apps.googleusercontent.com
+#>   secret: <hidden>
+```
+
+### API key
+
+Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by "anyone with a link" from a Shiny app, without having to do any auth at all!
+
+If you are wrapping an API with this feature, a default API key can be stored in a field of the internal auth state mentioned above. And again, auth helpers, like `googledrive::drive_auth_config()` and `drive_api_key()`, can make the current key inspectable and configurable, for the minority of users who need that level of control.
+
+```{r, eval = FALSE}
+library(googledrive)
+
+google_app <- httr::oauth_app(
+  "acme-corp",
+  key = "123456789.apps.googleusercontent.com",
+  secret = "abcdefghijklmnopqrstuvwxyz"
+)
+drive_auth_config(app = google_app)
+
+drive_oauth_app()
+#> <oauth_app> acme-corp
+#>   key:    123456789.apps.googleusercontent.com
+#>   secret: <hidden>
+```
+
+A good rule of thumb is that it's OK to include an API key if all the key does is allow users to do things via API that they would also be able to do in the browser, even **without being logged in**. In this case, Google uses the key to impose quotas and rate limits. If the API key has other implications, for example if it is used for billing purposes, then clearly the client package cannot include a key and should, instead, support the user's provision of a key.
+
+### Email or Google identity
+
+In contrast to the OAuth app and API key, every user must express which identity they wish to present to the API. This is a familiar concept and users expect to specify this. Since users may have more than one Google account, it's quite likely that they will want to switch between accounts, even within a single R session, or that they might want to explicitly declare the identity to be used in a specific script or app.
+
+In googledrive, the main user-facing auth function is `googledrive::drive_auth()` and `email` is an optional argument that lets users proactively specify their identity. `drive_auth()` is usually called indirectly upon first need, but a user can also call it directly in order to specify their target `email`:
+
+```{r eval = FALSE}
+drive_auth(email = "janedoe_work@gmail.com")
+```
+
+If `email` is not given, gargle also checks for an option named "gargle_oauth_email". The `email` is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser.
+
+### Scopes
+
+Most users have no concept of scopes. They just know they want to work with, e.g., Google Drive or Google Sheets. A client package can usually pick sensible default scopes, that will support what most users want to do.
+
+Here's the full signature of `googledrive::drive_auth()`, mentioned above, which reveals its defaults:
+
+```{r, eval = FALSE}
+drive_auth <- function(email = NULL,
+                       path = NULL,
+                       scopes = "https://www.googleapis.com/auth/drive",
+                       cache = gargle::gargle_oauth_cache(),
+                       use_oob = gargle::gargle_oob_default()) { ... }
+```
+
+This means that a motivated user could call `drive_auth()` pre-emptively at the start of the session and request different scopes, such as `drive.readonly`, if they intend to only read data and want to guard against inadvertent file modification.
+
+### OAuth cache and Out-of-bounds auth
+
+These are two aspects of OAuth where most users will want sensible default behaviour. For those who want to exert control, that can be done in direct calls to `drive_auth()` or by configuring an option.
 
 ## Overview
 
   1. Add gargle to your package's `Imports`.
-  1. Create an internal `gargle::AuthClass` object to hold auth state, probably in `R/aaa.R`.
+  1. Create an internal `gargle::AuthClass` object to hold auth state.
   1. Define standard functions for the auth interface between gargle and your package, somewhere such as `R/YOURPKG_auth.R`. Example: [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R)
   1. Use the functions `YOURPKG_api_key()` and `YOURPKG_token()` (defined in the standard auth interface) to insert an API key or token in your package's requests.
   1. You or your user can take greater control of auth via `YOURPKG_auth_config()`, `YOURPKG_auth()`, and `YOURPKG_deauth()` (also defined in the standard auth interface).
 
 ## Initialize package auth state
 
-In `R/aaa.R`, create an internal object `.auth` to hold the auth state of your package. Here's how that looks for googledrive:
+The internal object `.auth` holds the auth state of your package. Here's how that looks for googledrive:
 
 ```{r eval = FALSE}
 .auth <- gargle::AuthState$new(
@@ -42,16 +136,18 @@ In `R/aaa.R`, create an internal object `.auth` to hold the auth state of your p
 )
 ```
 
-This state is initialized when googledrive is loaded and is updated during a user's session. The `.auth` object lives in the googledrive namespace. It's an instance of the `AuthState` R6 class provided by gargle.
+This is the initial state whenever googledrive is loaded and is updated during a user's session. The `.auth` object lives in the googledrive namespace. It's an instance of the `AuthState` R6 class provided by gargle.
 
 Review of `.auth`'s fields:
 
-  * `package`. It just seems like a good idea to record package name.
+  * `package`. Package name.
   * `app`. The OAuth app. Most client packages will ship with a default app, for the sake of usability.
     - The googledrive package delegates back to a default tidyverse app provided by gargle. Only packages maintained within the [`tidyverse`](https://github.com/tidyverse) or [`r-lib`](https://github.com/r-lib) GitHub organizations should use this app.
     - Other packages should substitute their default app here.
   * `api_key`. An API key is necessary to send anonymous requests for public resources, i.e., it's generally sent with requests that lack a token.
-    - See description above of the `app` for reasons to ship with a working default and the appropriate usage of the tidyverse key.
+    - The relevance of the API key varies considerably across Google APIs.
+    - As with the app, only packages maintained within the [`tidyverse`](https://github.com/tidyverse) or [`r-lib`](https://github.com/r-lib) GitHub organizations should use the tidyverse key.
+    - Other packages should substitute their own API key here.
   * `auth_active`. When `TRUE`, googledrive makes authorized requests on behalf of an authenticated user and sends a token. When `FALSE`, googledrive sends an API key and no token.
   * `cred` holds the current credential.
     
