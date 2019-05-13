@@ -154,14 +154,14 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(pw &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_pw_gen</span>())</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "lV5mZ8gNh14181zVq6tQKngrodMeaKxMg1CNMlsq1KxBiNjX0K"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "Q74wYsPuJGoXA4jO1b3k484G0johDJlvAAXV2HvOUcjwntWgOY"</span></a></code></pre></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=lV5mZ8gNh14181zVq6tQKngrodMeaKxMg1CNMlsq1KxBiNjX0K</code></pre>
+<pre><code>GARGLE_PASSWORD=Q74wYsPuJGoXA4jO1b3k484G0johDJlvAAXV2HvOUcjwntWgOY</code></pre>
 <p><code>usethis::edit_r_environ()</code> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://www.rdocumentation.org/packages/base/topics/readRenviron">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
