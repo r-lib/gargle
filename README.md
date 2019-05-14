@@ -78,7 +78,8 @@ token <- token_fetch()
 #> pre-authorised account or enter '0' to obtain a new token. Press
 #> Esc/Ctrl + C to abort.
 
-#> 1: janedoe@gmail.com
+#> 1: janedoe_personal@gmail.com
+#> 2: janedoe@example.com
 
 #> Selection: 1
 
@@ -86,7 +87,7 @@ token
 #> <Token (via gargle)>
 #>   <oauth_endpoint> google
 #>              <app> gargle-demo
-#>            <email> janedoe@gmail.com
+#>            <email> janedoe_personal@gmail.com
 #>           <scopes> ...userinfo.email
 #>      <credentials> access_token, expires_in, refresh_token, scope, ...
 ```
