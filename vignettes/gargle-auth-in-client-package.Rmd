@@ -31,6 +31,7 @@ Getting a token requires several pieces of information and there are stark diffe
 In googledrive, the main user-facing auth function is `googledrive::drive_auth()`. Here is its definition (at least approximately, remember this is static code):
 
 ```{r, eval = FALSE}
+# googledrive::
 drive_auth <- function(email = NULL,
                        path = NULL,
                        scopes = "https://www.googleapis.com/auth/drive",
@@ -116,18 +117,20 @@ In contrast to the OAuth app and API key, every user must express which identity
 That explains why `drive_auth()` has the optional `email` argument that lets users proactively specify their identity. `drive_auth()` is usually called indirectly upon first need, but a user can also call it proactively in order to specify their target `email`:
 
 ```{r eval = FALSE}
+# googledrive::
 drive_auth(email = "janedoe_work@gmail.com")
 ```
 
-If `email` is not given, gargle also checks for an option named "gargle_oauth_email". The `email` is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser.
+If `email` is not given, gargle also checks for an option named "gargle_oauth_email". The `email` is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser. Read more in the help for `gargle::gargle_oauth_email()`.
 
 ### Scopes
 
 Most users have no concept of scopes. They just know they want to work with, e.g., Google Drive or Google Sheets. A client package can usually pick sensible default scopes, that will support what most users want to do.
 
-Here's a reminder of the full signature of `googledrive::drive_auth()`:
+Here's a reminder of the signature of `googledrive::drive_auth()`:
 
 ```{r, eval = FALSE}
+# googledrive::
 drive_auth <- function(email = NULL,
                        path = NULL,
                        scopes = "https://www.googleapis.com/auth/drive",
@@ -138,6 +141,7 @@ drive_auth <- function(email = NULL,
 googledrive ships with a default scope, but a motivated user could call `drive_auth()` pre-emptively at the start of the session and request different scopes. For example, if they intend to only read data and want to guard against inadvertent file modification, they might opt for the `drive.readonly` scope.
 
 ```{r, eval = FALSE}
+# googledrive::
 drive_auth(scopes = "https://www.googleapis.com/auth/drive.readonly")
 ```
 
@@ -152,18 +156,24 @@ Here's a concrete outline of how one could set up a client package to get its au
   1. Add gargle to your package's `Imports`.
   1. Create a file `R/YOUR_PKG_auth.R`.
   1. Create an internal `gargle::AuthClass` object to hold auth state.
-     `R/YOUR_PKG_auth.R` is a reasonable place to do this.
+     `R/YOUR_PKG_auth.R` is a good place to do this.
   1. Define standard functions for the auth interface between gargle and your
      package; do this in `R/YOURPKG_auth.R`. Example:
      [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R).
-  1. Use the functions `YOURPKG_api_key()` and `YOURPKG_token()` (defined in the standard auth interface) to insert an API key or token in your package's requests.
-  1. You or your user can take greater control of auth via `YOURPKG_auth_config()`, `YOURPKG_auth()`, and `YOURPKG_deauth()` (also defined in the standard auth interface).
+  1. Use gargle's roxygen helpers to create the docs for your auth functions.
+     This relieves you from writing docs and you inherit standard wording. See
+     [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R)
+     for a demonstration.
+  1. Use the functions `YOURPKG_api_key()` and `YOURPKG_token()` (defined in the
+     standard auth interface) to insert an API key or token in your package's
+     requests.
 
 ## Getting that first token
 
 I focus on early use, by the naive user, with the OAuth flow. When the user first calls a high-level googledrive function such as `drive_find()`, a Drive request is ultimately generated with a call to `googledrive::request_generate()`. Here is its definition, at least approximately:
 
 ```{r eval = FALSE}
+# googledrive::
 request_generate <- function(endpoint = character(),
                              params = list(),
                              key = NULL,
@@ -195,6 +205,7 @@ request_generate <- function(endpoint = character(),
 `googledrive::request_generate()` gets a token with `drive_token()`, which is defined like so:
 
 ```{r eval = FALSE}
+# googledrive::
 drive_token <- function() {
   if (isFALSE(.auth$auth_active)) {
     return(NULL)
@@ -209,6 +220,7 @@ drive_token <- function() {
 where `have_token()` in an internal helper defined as:
 
 ```{r eval = FALSE}
+# googledrive:::
 have_token <- function() {
   inherits(.auth$cred, "Token2.0")
 }
