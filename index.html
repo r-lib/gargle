@@ -136,17 +136,18 @@
 <a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; pre-authorised account or enter '0' to obtain a new token. Press</span></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; Esc/Ctrl + C to abort.</span></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 1: janedoe@gmail.com</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Selection: 1</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">token</a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; &lt;Token (via gargle)&gt;</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;   &lt;oauth_endpoint&gt; google</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;              &lt;app&gt; gargle-demo</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;            &lt;email&gt; janedoe@gmail.com</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 1: janedoe_personal@gmail.com</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 2: janedoe@example.com</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; Selection: 1</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">token</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; &lt;Token (via gargle)&gt;</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt;   &lt;oauth_endpoint&gt; google</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt;              &lt;app&gt; gargle-demo</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;            &lt;email&gt; janedoe_personal@gmail.com</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></a></code></pre></div>
 <p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/places/web-service/intro">Places API</a>. We’ll find the restaurants in a certain part of Vancouver, BC.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"></a>
