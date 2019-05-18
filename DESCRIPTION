@@ -20,10 +20,10 @@ Authors@R:
              role = "cph"),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: Utilities to take some of the pain out of working
-    with Google APIs <https://developers.google.com/apis-explorer>.  This
-    includes functions and classes for handling common credential types
-    and for preparing, executing, and processing HTTP requests.
+Description: Provides utilities for working with Google APIs
+    <https://developers.google.com/apis-explorer>.  This includes
+    functions and classes for handling common credential types and for
+    preparing, executing, and processing HTTP requests.
 License: MIT + file LICENSE
 URL: https://gargle.r-lib.org, https://github.com/r-lib/gargle
 BugReports: https://github.com/r-lib/gargle/issues
