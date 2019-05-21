@@ -21,5 +21,4 @@
 
   * Clean pass from auto-check service
 
-
-
+2019-05-16 Feedback from CRAN assistant MS requests `\donttest()` now instead of `\dontrun{}`, reiterates the `cat()` stuff, new request to "rephrase the first sentence of the description" (no further specifics).

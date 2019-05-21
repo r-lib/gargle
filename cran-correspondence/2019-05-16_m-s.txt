@@ -1,0 +1,13 @@
+Thanks,
+
+\dontrun{} is supposed to be used for examples which should not be
+called by the user. Please replace \dontrun{} with \donttest{}.
+
+You still write information messages to the console that cannot be
+easily suppressed. Instead of print()/cat()/cat_line() rather use
+message()/warning() if you really have to write text to the console.
+(f.i.: token_fetch() )
+
+Please rephrase the first sentence of the description.
+
+Please fix and resubmit.
