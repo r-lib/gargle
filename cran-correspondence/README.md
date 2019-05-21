@@ -25,4 +25,6 @@
 
   * Email sent to reviewer + cran-submissions + cran requesting clarification on
   several points and addressing `cat()`.
+  * 2nd email sent pointing out the vignettes and articles, in case it is
+  somehow not clear where the bulk of the documentation lies.
 

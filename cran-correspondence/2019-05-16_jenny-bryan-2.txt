@@ -1,0 +1,11 @@
+Hello,
+
+I am adding one more piece of information relevant to the example discussion, because perhaps it is not obvious.
+
+This package is thoroughly documented by 4 detailed vignettes and articles, which show how to use the functions, in concert, in order to provide Google auth and request/response handling in packages that wrap web APIs.
+
+There is just very little one can do with any individual function that obtains an auth token, hence the brief documentation of functions to get specific types of credentials. The example can only show a simple call to the functions, often with no arguments, and the example also cannot be run.
+
+Perhaps that helps explain the domain of this package better.
+
+-- Jenny
