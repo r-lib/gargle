@@ -1,0 +1,41 @@
+(my reply to reviewer, cran-submissions, cran re: 2019-05-16_m-s
+email)
+
+Hello MS,
+
+Writing R Extensions says that \donttest{} is to be "used to mark code
+that should be run by example() but not by R CMD check". This package
+provides facilities for handling Google service account tokens and
+OAuth2 user credentials. If, for example, this token fetching code runs
+on CRAN, I will need a way to provide a shared secret to CRAN, so it can
+decrypt a token file, which is the approach I take on remote continuous
+integration services. There is also the problem that sometimes there are
+intermittent 500 errors (server errors) for anything like this, which
+must also be tolerated. Can you please advise how I should proceed? If I
+change all of these from \dontrun{} to \donttest{}, can you assure me
+this will not cause problems?
+
+Currently gargle uses one central function for outputting information to
+the user (cat_line()). This is primarily used for print methods and that
+is its long term use. I also have some usage that provides more of a
+"debugging mode", just in case users need more information about which
+credential functions token_fetch() is actually executing. This
+centralized function cat_line() is under control of a documented option,
+wrapped in a documented function, and it defaults to FALSE. A user will
+never see this output unless they actively change the option, presumably
+at my request, while we debug something. I believe I will have a richer
+set of UI options in the future and, if this debugging mode proves to be
+useful, I will refactor it accordingly.
+
+Under which CRAN policy does this repeated directive about cat() fall
+and does it apply to all packages? Because I would like to alert my
+fellow maintainers to this new rule, so we can all help look for code in
+existing CRAN packages and base R that may need modification.
+
+"Please rephrase the first sentence of the description." Can you please
+provide more specifics? In an experience with another package, my
+attempt to comply with a similar request was even less acceptable to
+CRAN and lead to another round of submission and review. I would like to
+get it right the first time.
+
+-- Jenny
