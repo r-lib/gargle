@@ -27,4 +27,7 @@
   several points and addressing `cat()`.
   * 2nd email sent pointing out the vignettes and articles, in case it is
   somehow not clear where the bulk of the documentation lies.
+  
+2019-05-18 Resubmit, after no luck with email. Responded to comments on 3rd submission in cran-comments.
 
+  * Clean pass from auto-check service
