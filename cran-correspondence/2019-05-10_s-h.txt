@@ -1,0 +1,6 @@
+Thanks, you have examples for unexported functions which cannot run in
+this way.
+Please either add gargle::: to the function calls in the examples, omit
+these examples or export these functions.
+
+Please fix and resubmit.

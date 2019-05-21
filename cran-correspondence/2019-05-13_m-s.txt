@@ -1,0 +1,21 @@
+Thanks,
+
+Please omit the redundant "from R" in the title.
+
+Please add a link to the google apis to the description field of your
+DESCRIPTION file in the form
+<http:...> or <https:...>
+with angle brackets for auto-linking and no space after 'http:' and
+'https:'
+
+You write information messages to the console that cannot be easily
+suppressed. It is more R like to generate objects that can be used to
+extract the information a user is interested in, and then print() that
+object. Instead of print()/cat() rather use message()/warning() if you
+really have to write text to the console. (f.i.: token_fetch() )
+
+Please provide small executable examples in all your exported functions'
+Rd files to illustrate the use of the exported function but also enable
+automatic testing.
+
+Please fix and resubmit.
