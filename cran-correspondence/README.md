@@ -14,5 +14,12 @@
 
 2019-05-13 Feedback from CRAN assistant MS re: title, description, using `cat()`, examples (see email).
 
+  * Removed "from R" from title and provided a "link to the google apis" in description via [eb3a4cd](https://github.com/r-lib/gargle/commit/eb3a4cdf87d9f64d4e0f5472fe377f97a9f75538)
+  * Added examples via [a23bced](https://github.com/r-lib/gargle/commit/a23bced6e62cb947c49fad061424d50de39e3ff0). 7 of 9 must be in `\dontrun{}` because the code can't be run on CRAN due to lack of encrypted files / env vars and the inability to make HTTP calls with a tolerance for intermittent server side failure.
+
+2019-05-13 Resubmit, bump version to v0.1.2
+
+  * Clean pass from auto-check service
+
 
 
