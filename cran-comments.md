@@ -1,72 +1,43 @@
-This is a 4th submission of a new package. I have replied to the reviewer
-and cc'd cran-submissions and cran in response to my latest round of feedback on
-2019-05-18 but have not yet received further instructions. I summarize the main
-points here in this resubmission, in case these explanations suffice.
+This is a 5th submission of a new package. I have replied to the reviewer
+and cc'd cran-submissions and cran in response to my 4th round of feedback on
+2019-05-18 and received answers from Uwe Ligges today 2019-05-27. I summarize
+this last bit of conversation here.
 
 -------------------------------------------------------------------------------
 
-Comment #1 from 3rd CRAN review (2019-05-16)
+cat() vs. message()
 
-> \dontrun{} is supposed to be used for examples which should not be
-> called by the user. Please replace \dontrun{} with \donttest{}.
+>  If you really want to stay with cat() rather then the uniformly 
+better message() ...  I can live with it.
 
-The use of \dontrun{} in gargle seems more in line with information offered by
-Uwe Ligges on r-package-devel (2018-06-12):
-
-> Sure, \dontrun{} markup is intended for cases where neither automated 
-> chercks nor users can expect that the given code work out of the box 
-> and, e.g., changes are needed to make it work, e.g. isertion of otehr 
-> useranmes ... while \donttest{} is expected to work out of the box 
-> (perhaps code that only work interactively or excluded in order to omit 
-> ling running examples from the checks).
-
-I see exclusive use of \dontrun{} in packages with similar goals (e.g. accessing
-web services with authentication) such as AzureAuth and sparklyr which both had
-CRAN updates this past week. It is also used extensively in httr's examples.
-
-gargle has 70% test coverage and these tests are run via CI on multiple OSes and
-versions of R after each commit.
+Yes, I'd like to stay with cat_line() (which is controlled by an option) for now and I understand the sub-optimality. I believe I will have richer options for
+both debugging statements and styled UI statements in the future and the package will take advantage of that in a future release.
 
 -------------------------------------------------------------------------------
 
-Comment #2 from 3rd CRAN review (2019-05-16)
+\dontrun{} vs \donttest{}
 
-> You still write information messages to the console that cannot be
-> easily suppressed. Instead of print()/cat()/cat_line() rather use
-> message()/warning() if you really have to write text to the console.
-> (f.i.: token_fetch() )
+> So please simply tell us if we were wrong and \dontrun{} is really needed.
 
-No output is written to the console that "cannot be easily suppressed".
+Yes I believe \dontrun{} is more appropriate than \donttest{} for gargle as this
+code requires access to secret token files and/or requires the user to authenticate with Google (in the browser, i.e. it's not obvious from the R
+code). This is also typical of what I see in comparable packages/functions that provide OAuth functionality.
 
-Currently gargle uses one central function for outputting information to
-the user (cat_line()). This is primarily used for print methods and that
-is its long term use. I also have some usage that provides more of a
-"debugging mode", just in case users need more information about which
-credential functions token_fetch() is actually executing. This
-centralized function cat_line() is under control of a documented option,
-wrapped in a documented function, and it defaults to NOT emitting any output. A
-user will never see this debugging output unless they actively set an option,
-presumably at my request, while we debug a problem with token acquisition. I
-believe I will have a richer set of UI options in the future and, if this
-debugging mode proves to be useful, I will refactor it accordingly.
- 
 -------------------------------------------------------------------------------
- 
-Comment #3 from 3rd CRAN review (2019-05-16)
 
-> Please rephrase the first sentence of the description.
+> Finally, while your submission was pending, we introduced a new check 
+> and found:
+>
+> Found the following (possibly) invalid file URI:
+>   URI: .github/CODE_OF_CONDUCT.md
+>      From: README.md
 
-I added the URL to this sentence in response to this comment from the 2nd CRAN
-review (2019-05-13).
+This file *does* exist at that location in the package source on GitHub.
+This is how GitHub encourages developers to locate and link this file.
+However the entire .github/ directory needs to be Rbuildignored, hence it's not present in the source you receive.
 
-> Please add a link to the google apis to the description field of your
-> DESCRIPTION file in the form
-> <http:...> or <https:...>
-> with angle brackets for auto-linking and no space after 'http:' and
-> 'https:'
-
-I have now also rephrased to make it as close as possible to the first sentences
-seen in paws and vaultr, other API-wrappers that had CRAN releases this week.
+I have replaced this internal link with a full URL to the file on gargle's
+website.
 
 -------------------------------------------------------------------------------
 
