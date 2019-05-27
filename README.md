@@ -120,5 +120,5 @@ vapply(out$results, function(x) x$name, character(1))
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
+Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
