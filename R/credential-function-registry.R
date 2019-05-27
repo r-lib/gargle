@@ -25,7 +25,8 @@ gargle_env$cred_funs <- list()
 #'
 #' @param f A function to check.
 #' @keywords internal
-#' @example
+#' @noRd
+#' @examples
 #' f <- function(scopes, ...) {}
 #' is_cred_fun(f)
 is_cred_fun <- function(f) {
@@ -69,8 +70,8 @@ cred_funs_list <- function() {
 #'     * "First registered, last tried."
 #'     * "Last registered, first tried."
 #'
-#' @param ... One or more functions with the right signature. See
-#'   [is_cred_fun()].
+#' @param ... One or more functions with the right signature: its first argument
+#'   is named `scopes`, and it includes `...` as an argument.
 #' @export
 cred_funs_add <- function(...) {
   dots <- list(...)

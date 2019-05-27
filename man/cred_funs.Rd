@@ -20,8 +20,8 @@ cred_funs_clear()
 cred_funs_set_default()
 }
 \arguments{
-\item{...}{One or more functions with the right signature. See
-\code{\link[=is_cred_fun]{is_cred_fun()}}.}
+\item{...}{One or more functions with the right signature: its first argument
+is named \code{scopes}, and it includes \code{...} as an argument.}
 
 \item{ls}{A list of credential functions.}
 }
