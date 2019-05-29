@@ -118,7 +118,8 @@
 <p>This gives a sense of the credential functions and reflects the order in which they are called:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="../reference/cred_funs.html">cred_funs_list</a></span>())</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "credentials_service_account" "credentials_app_default"    </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_user_oauth2"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_byo_oauth2"     </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [5] "credentials_user_oauth2"</span></a></code></pre></div>
 <p>It is possible to manipulate this registry of functions. The help for <code><a href="../reference/cred_funs.html">cred_funs_list()</a></code> is a good place to learn more.</p>
 <p>From now on, however, we assume you’re working with the default registry that ships with gargle.</p>
 <p>Note also that these credential functions are exported and can be called directly.</p>
