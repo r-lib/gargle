@@ -11,15 +11,15 @@
 #'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
 #'   `TRUE` to allow email auto-discovery, if exactly one matching token is
 #'   found in the cache. Defaults to the option named "gargle_oauth_email",
-#'   retrieved by [gargle_oauth_email()].
+#'   retrieved by [gargle::gargle_oauth_email()].
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
 #' @param use_oob Whether to prefer "out of band" authentication. Defaults to
 #'   the option named "gargle_oob_default", retrieved via
-#'   [gargle_oob_default()].
+#'   [gargle::gargle_oob_default()].
 #' @param cache Specifies the OAuth token cache. Defaults to the option named
-#'   "gargle_oauth_cache", retrieved via [gargle_oauth_cache()].
+#'   "gargle_oauth_cache", retrieved via [gargle::gargle_oauth_cache()].
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by other credential functions.
 #'   Not used.
