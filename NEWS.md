@@ -1,3 +1,3 @@
-# gargle 0.1.2
+# gargle 0.1.3
 
 * Initial CRAN release
