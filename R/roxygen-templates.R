@@ -175,14 +175,18 @@ PREFIX_auth_config_description <- function(.data = list(
   glue_data_lines(lines, .data = .data)
 }
 
-PREFIX_auth_config_params_except_key <- function() {
+PREFIX_auth_config_params_except_key <- function(.data = list(
+  PACKAGE = "AUTH_CONFIG_SOURCE"
+)) {
   c(
     "@param app OAuth app. Defaults to a {AUTH_CONFIG_SOURCE} app.",
     "@inheritParams gargle::oauth_app_from_json"
   )
 }
 
-PREFIX_auth_config_params_key <- function() {
+PREFIX_auth_config_params_key <- function(.data = list(
+  PACKAGE = "AUTH_CONFIG_SOURCE"
+)) {
   c(
     "@param api_key API key. Defaults to a {AUTH_CONFIG_SOURCE} key. Necessary in",
     "  order to make unauthorized \"token-free\" requests for public resources."
