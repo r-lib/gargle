@@ -61,3 +61,7 @@ reference:
     contents:
       - gargle_app
       - gargle_api_key
+
+template:
+  params:
+    ganalytics: UA-115082821-1
