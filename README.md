@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
 [![Build
 Status](https://travis-ci.org/r-lib/gargle.svg?branch=master)](https://travis-ci.org/r-lib/gargle)
 [![AppVeyor Build
