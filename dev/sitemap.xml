@@ -19,6 +19,9 @@
     <loc>https://gargle.r-lib.org/reference/credentials_app_default.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/credentials_byo_oauth2.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/credentials_gce.html</loc>
   </url>
   <url>
