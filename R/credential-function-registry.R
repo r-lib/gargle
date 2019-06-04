@@ -103,6 +103,7 @@ cred_funs_clear <- function() {
 cred_funs_set_default <- function() {
   cred_funs_clear()
   cred_funs_add(credentials_user_oauth2     = credentials_user_oauth2)
+  cred_funs_add(credentials_byo_oauth2      = credentials_byo_oauth2)
   cred_funs_add(credentials_gce             = credentials_gce)
   cred_funs_add(credentials_app_default     = credentials_app_default)
   cred_funs_add(credentials_service_account = credentials_service_account)

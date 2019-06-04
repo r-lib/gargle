@@ -50,7 +50,8 @@ credentials_app_default()
 
 \url{https://cloud.google.com/sdk/docs/}
 
-Other credential functions: \code{\link{credentials_gce}},
+Other credential functions: \code{\link{credentials_byo_oauth2}},
+  \code{\link{credentials_gce}},
   \code{\link{credentials_service_account}},
   \code{\link{credentials_user_oauth2}},
   \code{\link{token_fetch}}

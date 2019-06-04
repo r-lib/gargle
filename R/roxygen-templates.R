@@ -62,6 +62,7 @@ PREFIX_auth_details <- function(.data = list(
     "    there's no cached token for the email, this triggers a return to the",
     "    browser to choose the identity and give consent.",
     "  * Use a service account token.",
+    "  * Bring their own [Token2.0][httr::Token-class].",
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
     "",
@@ -86,6 +87,9 @@ PREFIX_auth_params_scopes <- function(.data = list(
 }
 PREFIX_auth_params_cache_use_oob <- function() {
   "@inheritParams gargle::gargle2.0_token"
+}
+PREFIX_auth_params_token <- function() {
+  "@param token A token with class [Token2.0][httr::Token-class]."
 }
 
 # PREFIX_deauth() ----------------------------------------------------------
