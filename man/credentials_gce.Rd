@@ -8,7 +8,7 @@ credentials_gce(scopes = NULL, service_account = "default", ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
-in \href{https://developers.google.com/identity/protocols/googlescopes}{OAuth 2.0 Scopes for Google APIs}.
+at \url{https://developers.google.com/identity/protocols/googlescopes}.
 
 For certain token flows, the
 \code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
