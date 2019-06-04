@@ -86,7 +86,8 @@ AuthState <- R6::R6Class("AuthState", list(
       is_string(package),
       is.null(app) || is.oauth_app(app),
       is.null(api_key) || is_string(api_key),
-      isTRUE(auth_active) || isFALSE(auth_active)
+      isTRUE(auth_active) || isFALSE(auth_active),
+      is.null(cred) || inherits(cred, "Token2.0")
     )
     self$package     <- package
     self$app         <- app
