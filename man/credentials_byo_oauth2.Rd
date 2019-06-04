@@ -17,7 +17,7 @@ with a token; gargle uses this to index cached OAuth tokens. This grants no
 permission to view or send email. It is considered a low value scope and
 does not appear on the consent screen.}
 
-\item{token}{A token with class \link[httr:Token-class]{Token2.0}}
+\item{token}{A token with class \link[httr:Token-class]{Token2.0}.}
 
 \item{...}{Additional arguments passed to all credential functions.}
 }

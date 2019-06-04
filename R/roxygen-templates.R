@@ -22,8 +22,7 @@ gargle_lookup_table <- list(
   # Unless your package belongs to the tidyverse GitHub org, DO NOT default
   # to the tidyverse app. DO NOT default to the gargle demo app.
   # Ship an app with your package and repeat package name here.
-  AUTH_CONFIG_SOURCE = "tidyverse",
-  SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes#drivev3"
+  AUTH_CONFIG_SOURCE = "tidyverse"
 )
 
 # PREFIX_auth() ----------------------------------------------------------
@@ -35,10 +34,12 @@ PREFIX_auth_description <- function(.data = list(
 )) {
   glue_data_lines(c(
     "@description",
-    "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. By default,",
-    "you are directed to a web browser, asked to sign in to your Google",
-    "account, and to grant {PACKAGE} permission to operate on your behalf",
-    "with {PRODUCT}. By default, these user credentials are cached in a",
+    "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. This function is a",
+    "wrapper around [gargle::token_fetch()].",
+    "",
+    "By default, you are directed to a web browser, asked to sign in to your",
+    "Google account, and to grant {PACKAGE} permission to operate on your",
+    "behalf with {PRODUCT}. By default, these user credentials are cached in a",
     "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
@@ -66,31 +67,20 @@ PREFIX_auth_details <- function(.data = list(
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
     "",
-    "For even deeper control over auth, use [{PREFIX}_auth_config()] to use",
-    "your own OAuth app or API key."
+    "For details on the many ways to find a token, see",
+    "[gargle::token_fetch()]. For deeper control over auth, use",
+    "[{PREFIX}_auth_config()] to bring your own OAuth app or API key."
   ), .data = .data)
 }
 
-PREFIX_auth_params_email <- function() {
-  "@param email Optional; email address associated with the desired Google user."
-}
-PREFIX_auth_params_path <- function() {
-  "@param path Optional; path to the downloaded JSON file for a service token."
-}
-PREFIX_auth_params_scopes <- function(.data = list(
-  SCOPES_LINK = "https://developers.google.com/identity/protocols/googlescopes"
-)) {
-  glue_data_lines(c(
-    "@param scopes Optional; scope(s) to use. See your choices at",
-    "[OAuth 2.0 Scopes for Google APIs]({SCOPES_LINK})."
-  ), .data = .data)
-}
-PREFIX_auth_params_cache_use_oob <- function() {
+PREFIX_auth_params <- function() {c(
+  "@inheritParams gargle::credentials_service_account",
+  "@inheritParams gargle::credentials_app_default",
+  "@inheritParams gargle::credentials_gce",
+  "@inheritParams gargle::credentials_byo_oauth2",
+  "@inheritParams gargle::credentials_user_oauth2",
   "@inheritParams gargle::gargle2.0_token"
-}
-PREFIX_auth_params_token <- function() {
-  "@param token A token with class [Token2.0][httr::Token-class]."
-}
+)}
 
 # PREFIX_deauth() ----------------------------------------------------------
 
@@ -178,19 +168,19 @@ PREFIX_auth_config_description <- function(.data = list(
 PREFIX_auth_config_params_except_key <- function(.data = list(
   PACKAGE = "AUTH_CONFIG_SOURCE"
 )) {
-  c(
+  glue_data_lines(c(
     "@param app OAuth app. Defaults to a {AUTH_CONFIG_SOURCE} app.",
     "@inheritParams gargle::oauth_app_from_json"
-  )
+  ), .data = .data)
 }
 
 PREFIX_auth_config_params_key <- function(.data = list(
   PACKAGE = "AUTH_CONFIG_SOURCE"
 )) {
-  c(
+  glue_data_lines(c(
     "@param api_key API key. Defaults to a {AUTH_CONFIG_SOURCE} key. Necessary in",
     "  order to make unauthorized \"token-free\" requests for public resources."
-  )
+  ), .data = .data)
 }
 
 PREFIX_auth_config_return_with_key <- function(.data = list(

@@ -14,7 +14,7 @@
 #' wrap it) to accomodate a "bring your own token" workflow.
 #'
 #' @inheritParams token_fetch
-#' @param token A token with class [Token2.0][httr::Token-class]
+#' @param token A token with class [Token2.0][httr::Token-class].
 #'
 #' @return An [Token2.0][httr::Token-class].
 #' @family credential functions
