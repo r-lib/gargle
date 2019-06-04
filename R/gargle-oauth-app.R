@@ -12,7 +12,9 @@
 #' @return An OAuth consumer application, produced by [httr::oauth_app()].
 #' @export
 #' @examples
+#' \dontrun{
 #' gargle_app()
+#' }
 gargle_app <- function() {
   httr::oauth_app(
     appname = "gargle-demo",

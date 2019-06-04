@@ -22,5 +22,7 @@ with a meaningful nickname and your app's client ID and secret.
 }
 }
 \examples{
+\dontrun{
 gargle_app()
+}
 }

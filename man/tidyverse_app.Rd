@@ -15,7 +15,9 @@ googlesheets, bigrquery. Please don't use this app directly in non-tidyverse
 projects.
 }
 \examples{
+\dontrun{
 tidyverse_app()
+}
 }
 \seealso{
 For a default app to use while getting to know gargle and

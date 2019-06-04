@@ -11,7 +11,9 @@
 #' @keywords internal
 #' @export
 #' @examples
+#' \dontrun{
 #' tidyverse_app()
+#' }
 tidyverse_app <- function() {
   httr::oauth_app(
     appname = "tidyverse",

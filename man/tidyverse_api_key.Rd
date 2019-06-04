@@ -16,6 +16,8 @@ projects. For a default API key to use while getting to know gargle and
 instructions on how to get your own key, see \code{\link[=gargle_api_key]{gargle_api_key()}}.
 }
 \examples{
+\dontrun{
 tidyverse_api_key()
+}
 }
 \keyword{internal}

@@ -9,7 +9,9 @@
 #' @keywords internal
 #' @export
 #' @examples
+#' \dontrun{
 #' tidyverse_api_key()
+#' }
 tidyverse_api_key <- function() {
   paste0(
     "AIzaSyCJ-",
