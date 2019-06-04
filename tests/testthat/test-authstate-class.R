@@ -1,6 +1,6 @@
 context("test-authstate-class")
 
-test_that("we are pedantic about inputs when creating AuthState", {
+test_that("inputs are checked when creating AuthState", {
   app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
 
   expect_error(
@@ -13,11 +13,11 @@ test_that("we are pedantic about inputs when creating AuthState", {
     'is_string(package) is not TRUE',
     fixed = TRUE
   )
-  expect_error(init_AuthState(), '"app" is missing')
-  expect_error(init_AuthState(app = app), '"api_key" is missing')
+  expect_error(init_AuthState(app = "not_an_oauth_app"), 'is not TRUE')
+  expect_error(init_AuthState(app = app, api_key = 1234), 'is not TRUE')
   expect_error(
-    init_AuthState(app = app, api_key = "API_KEY"),
-    '"auth_active" is missing'
+    init_AuthState(app = app, api_key = "API_KEY", auth_active = NULL),
+    'is not TRUE'
   )
 
   a <- init_AuthState(
