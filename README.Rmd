@@ -96,7 +96,7 @@ req <- request_build(
     radius = 100,
     type = "restaurant"
   ),
-  key = gargle_api_key(),
+  key = gargle:::gargle_api_key(),
   base_url = "https://maps.googleapis.com"
 )
 resp <- request_make(req)
