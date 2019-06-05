@@ -95,29 +95,31 @@ token
 ```
 
 Here’s an example of using request and response helpers to make a
-one-off request to the [Poly API](https://developers.google.com/poly/)
-and get info about a single asset. We then display its thumbnail PNG.
+one-off request to the [Web Fonts Developer
+API](https://developers.google.com/fonts/docs/developer_api). We show
+the most popular web font families served by Google Fonts.
 
 ``` r
 library(gargle)
 
 req <- request_build(
   method = "GET",
-  path = "v1/assets",
+  path = "webfonts/v1/webfonts",
   params = list(
-    category = "animals",
-    curated = "true",
-    pageSize = 1
+    sort = "popularity"
   ),
   key = gargle_api_key(),
-  base_url = "https://poly.googleapis.com"
+  base_url = "https://www.googleapis.com"
 )
 resp <- request_make(req)
-out <- response_process(resp)[["assets"]][[1]][["thumbnail"]][["url"]]
-knitr::include_graphics(out)
-```
+out <- response_process(resp)
 
-<img src="https://lh3.googleusercontent.com/iOoo-tMGJWru45WG6SrjlZ0ikSo7TJEZb8X7y0B94ePC19-KED3uf1zGZa4jt9rS" width="50%" />
+out <- out[["items"]][1:8]
+vapply(out, function(x) x[["family"]], character(1))
+#> [1] "Roboto"           "Open Sans"        "Lato"            
+#> [4] "Montserrat"       "Roboto Condensed" "Source Sans Pro" 
+#> [7] "Oswald"           "Raleway"
+```
 
 Please note that the ‘gargle’ project is released with a [Contributor
 Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By
