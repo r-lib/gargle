@@ -64,3 +64,12 @@ add_email_scope <- function(scopes = NULL) {
   url <- "https://www.googleapis.com/auth/userinfo.email"
   union(scopes %||% character(), url)
 }
+
+new_srcref <- function(lines) {
+  n <- length(lines)
+
+  srcref(
+    srcfilecopy("HIDDEN", lines),
+    c(1L, 1L, n, nchar(lines[[n]]))
+  )
+}
