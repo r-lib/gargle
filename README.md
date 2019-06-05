@@ -95,31 +95,29 @@ token
 ```
 
 Here’s an example of using request and response helpers to make a
-one-off request to the [Places
-API](https://developers.google.com/places/web-service/intro). We’ll find
-the restaurants in a certain part of Vancouver, BC.
+one-off request to the [Poly API](https://developers.google.com/poly/)
+and get info about a single asset. We then display its thumbnail PNG.
 
 ``` r
 library(gargle)
 
 req <- request_build(
   method = "GET",
-  path = "maps/api/place/nearbysearch/json",
+  path = "v1/assets",
   params = list(
-    location = "49.268682,-123.167117",
-    radius = 100,
-    type = "restaurant"
+    category = "animals",
+    curated = "true",
+    pageSize = 1
   ),
   key = gargle_api_key(),
-  base_url = "https://maps.googleapis.com"
+  base_url = "https://poly.googleapis.com"
 )
 resp <- request_make(req)
-out <- response_process(resp)
-vapply(out$results, function(x) x$name, character(1))
-#> [1] "The Naam"                    "The Oakwood Canadian Bistro"
-#> [3] "Healthy Noodle House"        "Tapatio Mexican Cafe & Bar" 
-#> [5] "FreshFast"
+out <- response_process(resp)[["assets"]][[1]][["thumbnail"]][["url"]]
+knitr::include_graphics(out)
 ```
+
+<img src="https://lh3.googleusercontent.com/iOoo-tMGJWru45WG6SrjlZ0ikSo7TJEZb8X7y0B94ePC19-KED3uf1zGZa4jt9rS" width="50%" />
 
 Please note that the ‘gargle’ project is released with a [Contributor
 Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By

@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "50%"
 )
 ```
 # gargle
@@ -83,25 +83,25 @@ token
 #>      <credentials> access_token, expires_in, refresh_token, scope, ...
 ```
 
-Here's an example of using request and response helpers to make a one-off request to the [Places API](https://developers.google.com/places/web-service/intro). We'll find the restaurants in a certain part of Vancouver, BC.
+Here's an example of using request and response helpers to make a one-off request to the [Poly API](https://developers.google.com/poly/) and get info about a single asset. We then display its thumbnail PNG.
 
 ```{r}
 library(gargle)
 
 req <- request_build(
   method = "GET",
-  path = "maps/api/place/nearbysearch/json",
+  path = "v1/assets",
   params = list(
-    location = "49.268682,-123.167117",
-    radius = 100,
-    type = "restaurant"
+    category = "animals",
+    curated = "true",
+    pageSize = 1
   ),
-  key = gargle:::gargle_api_key(),
-  base_url = "https://maps.googleapis.com"
+  key = gargle_api_key(),
+  base_url = "https://poly.googleapis.com"
 )
 resp <- request_make(req)
-out <- response_process(resp)
-vapply(out$results, function(x) x$name, character(1))
+out <- response_process(resp)[["assets"]][[1]][["thumbnail"]][["url"]]
+knitr::include_graphics(out)
 ```
 
 Please note that the 'gargle' project is released with a [Contributor Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
