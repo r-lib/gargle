@@ -20,15 +20,6 @@ test_that("tidyverse API key", {
   )
 })
 
-test_that("gargle API key", {
-  key <- gargle_api_key()
-  expect_true(is_string(key))
-  expect_error(
-    local(gargle:::gargle_api_key(), envir = globalenv()),
-    "restricted"
-  )
-})
-
 # test_that("tidyverse oauth app", {
 #   oa <- tidyverse_app()
 #   expect_s3_class(oa, "oauth_app")

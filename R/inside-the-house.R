@@ -1,5 +1,4 @@
-from_permitted_package <- function(env = parent.frame(),
-                                   allowed = c("gargle", "googledrive", "googlesheets4", "gmailr", "bigrquery")) {
+from_permitted_package <- function(env = parent.frame()) {
   env <- topenv(env, globalenv())
   if (!isNamespace(env)) {
     return(FALSE)
@@ -7,12 +6,11 @@ from_permitted_package <- function(env = parent.frame(),
 
   nm <- getNamespaceName(env)
   cat_line("attempt from: ", nm)
-  nm %in% allowed
+  nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 
-check_permitted_package <- function(env = parent.frame(),
-                                    allowed = c("gargle", "googledrive", "googlesheets4", "gmailr", "bigrquery")) {
-  if (!from_permitted_package(env, allowed = allowed)) {
+check_permitted_package <- function(env = parent.frame()) {
+  if (!from_permitted_package(env)) {
     msg <- paste(
       "Attempt to use a resource that is restricted to specific tidyverse packages.",
       "This error may mean that you need to:",

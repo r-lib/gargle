@@ -3,15 +3,17 @@
 \name{gargle_api_key}
 \alias{gargle_api_key}
 \title{API key for demonstration purposes}
+\usage{
+gargle_api_key()
+}
 \description{
 Some APIs accept unauthorized requests for public resources, in
 which case the request must be sent with an API key in lieu of a token. This
 function provides an API key for limited use in prototyping and for testing
 and documentation of gargle itself. This key may be deleted or rotated at any
-time. This function is not exported and will only work inside other gargle
-functions, such as \code{\link[=request_build]{request_build()}}.
+time. There are no guarantees about which APIs are enabled.
 
-To get your own API key to without these restrictions, setup a new Google
+To get your own API key, without these limitations, setup a new Google
 Cloud Platform project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of interest,
 and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
 }
@@ -27,7 +29,7 @@ req <- request_build(
     radius = 100,
     type = "restaurant"
   ),
-  key = gargle:::gargle_api_key(),
+  key = gargle_api_key(),
   base_url = "https://maps.googleapis.com"
 )
 resp <- request_make(req)

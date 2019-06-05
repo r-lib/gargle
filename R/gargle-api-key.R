@@ -4,16 +4,15 @@
 #' which case the request must be sent with an API key in lieu of a token. This
 #' function provides an API key for limited use in prototyping and for testing
 #' and documentation of gargle itself. This key may be deleted or rotated at any
-#' time. This function is not exported and will only work inside other gargle
-#' functions, such as [request_build()].
+#' time. There are no guarantees about which APIs are enabled.
 #'
-#' To get your own API key to without these restrictions, setup a new Google
+#' To get your own API key, without these limitations, setup a new Google
 #' Cloud Platform project in [Google Developers
 #' Console](https://console.developers.google.com), enable the APIs of interest,
 #' and follow the instructions in [Setting up API
 #' keys](https://support.google.com/googleapi/answer/6158862).
 #'
-#' @name gargle_api_key
+#' @export
 #' @keywords internal
 #' @examples
 #' \dontrun{
@@ -27,17 +26,14 @@
 #'     radius = 100,
 #'     type = "restaurant"
 #'   ),
-#'   key = gargle:::gargle_api_key(),
+#'   key = gargle_api_key(),
 #'   base_url = "https://maps.googleapis.com"
 #' )
 #' resp <- request_make(req)
 #' out <- response_process(resp)
 #' vapply(out$results, function(x) x$name, character(1))
 #' }
-NULL
-
 gargle_api_key <- function() {
-  check_permitted_package(parent.frame(), allowed = "gargle")
   gak()
 }
 

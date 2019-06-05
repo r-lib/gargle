@@ -10,3 +10,8 @@ test_that("default options", {
   expect_null(gargle_oauth_email())
   expect_true(gargle_quiet())
 })
+
+test_that("gargle API key", {
+  key <- gargle_api_key()
+  expect_true(is_string(key))
+})
