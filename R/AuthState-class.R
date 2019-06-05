@@ -19,11 +19,16 @@
 #' @return An object of class [AuthState].
 #' @export
 #' @examples
+#' my_app <- httr::oauth_app(
+#'   appname = "my_package",
+#'   key = "keykeykeykeykeykey",
+#'   secret = "secretsecretsecret"
+#' )
+#'
 #' init_AuthState(
-#'   package = "mypkg",
-#'   app = gargle_app(),
-#'   api_key = gargle_api_key(),
-#'   auth_active = TRUE
+#'   package = "my_package",
+#'   app = my_app,
+#'   api_key = "api_key_api_key_api_key",
 #' )
 init_AuthState <- function(package = NA_character_,
                            app = NULL,
