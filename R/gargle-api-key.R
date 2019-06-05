@@ -40,3 +40,8 @@ gargle_api_key <- function() {
   check_permitted_package(parent.frame(), allowed = "gargle")
   gak()
 }
+
+tidyverse_api_key <- function() {
+  check_permitted_package(parent.frame())
+  tak()
+}
