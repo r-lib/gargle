@@ -33,13 +33,6 @@
 #' vapply(out$results, function(x) x$name, character(1))
 #' }
 gargle_api_key <- function() {
-  paste0(
-    "AIzaSyDXic",
-    # pgnTLHYCI
-    "V6oK4vR948",
-    # HCWveSQkJ
-    "PUAvlyr7Qh",
-    # ddS4QrEge
-    "kNwCoQ0cA"
-  )
+  check_permitted_package(parent.frame())
+  gak
 }
