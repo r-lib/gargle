@@ -144,7 +144,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>init_AuthState</span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='no'>app</span>, <span class='no'>api_key</span>, <span class='no'>auth_active</span>)</pre>
+    <pre class="usage"><span class='fu'>init_AuthState</span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>app</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>api_key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>auth_active</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,24 +154,29 @@
       <th>package</th>
       <td><p>Package name, an optional string. The associated package will
 generally by implied by the namespace within which the <code>AuthState</code> is
-defined. But it's possible to record the package name explicitly and
-seems like a good practice.</p></td>
+defined. But it's possible to record the package name explicitly and seems
+like a good practice.</p></td>
     </tr>
     <tr>
       <th>app</th>
-      <td><p>An OAuth consumer application, as produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
+      <td><p>Optional. An OAuth consumer application, as produced by
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
     </tr>
     <tr>
       <th>api_key</th>
-      <td><p>API key (a string). Necessary in order to make unauthorized
-"token-free" requests for public resources. Can be <code>NULL</code> if all requests
-will be authorized, i.e. they will include a token.</p></td>
+      <td><p>Optional. API key (a string). Some APIs accept unauthorized,
+"token-free" requests for public resources, but only if the request
+includes an API key.</p></td>
     </tr>
     <tr>
       <th>auth_active</th>
       <td><p>Logical. <code>TRUE</code> means requests should include a token (and
 probably not an API key). <code>FALSE</code> means requests should include an API key
 (and probably not a token).</p></td>
+    </tr>
+    <tr>
+      <th>cred</th>
+      <td><p>Credentials. Typically populated indirectly via <code><a href='token_fetch.html'>token_fetch()</a></code>.</p></td>
     </tr>
     </table>
     
