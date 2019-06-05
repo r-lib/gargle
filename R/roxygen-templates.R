@@ -13,17 +13,16 @@
 # see googledrive/R/drive_auth.R for an example
 # this is an exhaustive list of the pieces of data required by the templates
 
-gargle_lookup_table <- list(
-  PACKAGE     = "googledrive",
-  YOUR_STUFF  = "your Drive files",
-  PRODUCT     = "Google Drive",
-  API         = "Drive API",
-  PREFIX      = "drive",
-  # Unless your package belongs to the tidyverse GitHub org, DO NOT default
-  # to the tidyverse app. DO NOT default to the gargle demo app.
-  # Ship an app with your package and repeat package name here.
-  AUTH_CONFIG_SOURCE = "tidyverse"
-)
+# gargle_lookup_table <- list(
+#   PACKAGE     = "googledrive",
+#   YOUR_STUFF  = "your Drive files",
+#   PRODUCT     = "Google Drive",
+#   API         = "Drive API",
+#   PREFIX      = "drive",
+#   # Only packages maintained by the tidyverse teams can use this app.
+#   # If you ship an app with your package, use an appropriate name here.
+#   AUTH_CONFIG_SOURCE = "tidyverse"
+# )
 
 # PREFIX_auth() ----------------------------------------------------------
 
@@ -91,8 +90,8 @@ PREFIX_deauth_description <- function(.data = list(
   glue_data_lines(c(
     "@description",
     "Put {PACKAGE} into a de-authorized state. Instead of sending a token,",
-    "{PACKAGE} will send its API key. This can be used to access public",
-    "files for which no Google sign-in is required. This is handy for using",
+    "{PACKAGE} will send an API key. This can be used to access public",
+    "resources for which no Google sign-in is required. This is handy for using",
     "{PACKAGE} in a non-interactive setting to make requests that do not",
     "require a token. It will prevent the attempt to obtain a token",
     "interactively in the browser. A built-in API key is used by default or",
