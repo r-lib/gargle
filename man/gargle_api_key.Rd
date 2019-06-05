@@ -10,17 +10,17 @@ gargle_api_key()
 A Google API key
 }
 \description{
-Returns an API key for use when test driving gargle. Some API requests for
-public resources do not require authorization, in which case the request can
-be sent with an API key in lieu of a token. If you want to get your own API
-key, setup a new project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of interest,
-and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
+Some APIs accept unauthorized requests for public resources, in which case
+the request must be sent with an API key in lieu of a token. This function
+returns an API key for limited use in prototyping and for testing and
+documentation of gargle itself.  This function is not exported and will only
+work inside other gargle functions, such as \code{\link[=request_build]{request_build()}}.
+
+To get your own API key, setup a new Google Cloud Platform project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs
+of interest, and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
 }
 \examples{
 \dontrun{
-## see the key
-gargle_api_key()
-
 # use the key with the Places API (explicitly enabled for this key)
 # gets restaurants close to a location in Vancouver, BC
 req <- request_build(

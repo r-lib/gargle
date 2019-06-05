@@ -1,20 +1,22 @@
 #' API key for demonstration purposes
 #'
-#' Returns an API key for use when test driving gargle. Some API requests for
-#' public resources do not require authorization, in which case the request can
-#' be sent with an API key in lieu of a token. If you want to get your own API
-#' key, setup a new project in [Google Developers
-#' Console](https://console.developers.google.com), enable the APIs of interest,
-#' and follow the instructions in [Setting up API
+#' @description
+#'
+#' Some APIs accept unauthorized requests for public resources, in which case
+#' the request must be sent with an API key in lieu of a token. This function
+#' returns an API key for limited use in prototyping and for testing and
+#' documentation of gargle itself.  This function is not exported and will only
+#' work inside other gargle functions, such as [request_build()].
+#'
+#' To get your own API key, setup a new Google Cloud Platform project in [Google
+#' Developers Console](https://console.developers.google.com), enable the APIs
+#' of interest, and follow the instructions in [Setting up API
 #' keys](https://support.google.com/googleapi/answer/6158862).
 #'
 #' @return A Google API key
 #' @export
 #' @examples
 #' \dontrun{
-#' ## see the key
-#' gargle_api_key()
-#'
 #' # use the key with the Places API (explicitly enabled for this key)
 #' # gets restaurants close to a location in Vancouver, BC
 #' req <- request_build(
@@ -33,6 +35,6 @@
 #' vapply(out$results, function(x) x$name, character(1))
 #' }
 gargle_api_key <- function() {
-  check_permitted_package(parent.frame())
+  check_permitted_package(parent.frame(), allowed = "gargle")
   gak()
 }
