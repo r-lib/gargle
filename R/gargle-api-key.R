@@ -34,5 +34,5 @@
 #' }
 gargle_api_key <- function() {
   check_permitted_package(parent.frame())
-  gak
+  gak()
 }

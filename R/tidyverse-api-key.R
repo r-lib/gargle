@@ -14,5 +14,5 @@
 #' }
 tidyverse_api_key <- function() {
   check_permitted_package(parent.frame())
-  tak
+  tak()
 }
