@@ -11,6 +11,11 @@ test_that("it is possible to be 'outside the house'", {
   )
 })
 
+test_that("gargle API key", {
+  key <- gargle_api_key()
+  expect_true(is_string(key))
+})
+
 test_that("tidyverse API key", {
   key <- tidyverse_api_key()
   expect_true(is_string(key))
