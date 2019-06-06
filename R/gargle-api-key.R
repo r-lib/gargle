@@ -17,26 +17,7 @@
 #' @export
 #' @keywords internal
 #' @examples
-#' \dontrun{
-#' # use an API key for which the Places API is enabled!
-#' API_KEY <- "1234567890"
-#'
-#' # get restaurants close to a location in Vancouver, BC
-#' req <- request_build(
-#'   method = "GET",
-#'   path = "maps/api/place/nearbysearch/json",
-#'   params = list(
-#'     location = "49.268682,-123.167117",
-#'     radius = 100,
-#'     type = "restaurant"
-#'   ),
-#'   key = API_KEY,
-#'   base_url = "https://maps.googleapis.com"
-#' )
-#' resp <- request_make(req)
-#' out <- response_process(resp)
-#' vapply(out$results, function(x) x$name, character(1))
-#' }
+#' gargle_api_key()
 gargle_api_key <- function() {
   gak()
 }
