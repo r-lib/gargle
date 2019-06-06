@@ -41,6 +41,14 @@ gargle_api_key <- function() {
   gak()
 }
 
+#' Assets for internal use
+#'
+#' @name internal-assets
+NULL
+
+#' @export
+#' @keywords internal
+#' @rdname internal-assets
 tidyverse_api_key <- function() {
   check_permitted_package(parent.frame())
   tak()
