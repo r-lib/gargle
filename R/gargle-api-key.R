@@ -1,23 +1,27 @@
 #' API key for demonstration purposes
 #'
-#' @description Some APIs accept unauthorized requests for public resources, in
-#' which case the request must be sent with an API key in lieu of a token. This
-#' function provides an API key for limited use in prototyping and for testing
-#' and documentation of gargle itself. This key may be deleted or rotated at any
-#' time. There are no guarantees about which APIs are enabled.
+#' @description Some APIs accept requests for public resources, in which case
+#'   the request must be sent with an API key in lieu of a token. This function
+#'   provides an API key for limited use in prototyping and for testing and
+#'   documentation of gargle itself. This key may be deleted or rotated at any
+#'   time. There are no guarantees about which APIs are enabled. DO NOT USE THIS
+#'   IN A PACKAGE or for anything other than interactive, small-scale
+#'   experimentation.
 #'
-#' To get your own API key, without these limitations, setup a new Google
-#' Cloud Platform project in [Google Developers
-#' Console](https://console.developers.google.com), enable the APIs of interest,
-#' and follow the instructions in [Setting up API
-#' keys](https://support.google.com/googleapi/answer/6158862).
+#'   To get your own API key, without these limitations, set up a new Google
+#'   Cloud Platform project in [Google Developers
+#'   Console](https://console.developers.google.com), enable the APIs of
+#'   interest, and follow the instructions in [Setting up API
+#'   keys](https://support.google.com/googleapi/answer/6158862).
 #'
 #' @export
 #' @keywords internal
 #' @examples
 #' \dontrun{
-#' # use an API key with the Places API (explicitly enabled for this key)
-#' # gets restaurants close to a location in Vancouver, BC
+#' # use an API key for which the Places API is enabled!
+#' API_KEY <- "1234567890"
+#'
+#' # get restaurants close to a location in Vancouver, BC
 #' req <- request_build(
 #'   method = "GET",
 #'   path = "maps/api/place/nearbysearch/json",
@@ -26,7 +30,7 @@
 #'     radius = 100,
 #'     type = "restaurant"
 #'   ),
-#'   key = gargle_api_key(),
+#'   key = API_KEY,
 #'   base_url = "https://maps.googleapis.com"
 #' )
 #' resp <- request_make(req)

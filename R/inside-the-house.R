@@ -12,7 +12,7 @@ from_permitted_package <- function(env = parent.frame()) {
 check_permitted_package <- function(env = parent.frame()) {
   if (!from_permitted_package(env)) {
     msg <- paste(
-      "Attempt to use a resource that is restricted to specific tidyverse packages.",
+      "Attempt to directly access a credential that can only be used within tidyverse packages.",
       "This error may mean that you need to:",
       "  * Create a new project on Google Cloud Platform",
       "  * Enable relevant APIs for your project",
