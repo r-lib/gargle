@@ -155,26 +155,26 @@
 <a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt;            &lt;email&gt; janedoe_personal@gmail.com</span></a>
 <a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span></a>
 <a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></a></code></pre></div>
-<p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/places/web-service/intro">Places API</a>. We’ll find the restaurants in a certain part of Vancouver, BC.</p>
+<p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/fonts/docs/developer_api">Web Fonts Developer API</a>. We show the most popular web font families served by Google Fonts.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">req &lt;-<span class="st"> </span><span class="kw"><a href="reference/request_develop.html">request_build</a></span>(</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">method =</span> <span class="st">"GET"</span>,</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">path =</span> <span class="st">"maps/api/place/nearbysearch/json"</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">path =</span> <span class="st">"webfonts/v1/webfonts"</span>,</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">params =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="dt">location =</span> <span class="st">"49.268682,-123.167117"</span>,</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">    <span class="dt">radius =</span> <span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">    <span class="dt">type =</span> <span class="st">"restaurant"</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">  ),</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">  <span class="dt">key =</span> <span class="kw"><a href="reference/gargle_api_key.html">gargle_api_key</a></span>(),</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="dt">base_url =</span> <span class="st">"https://maps.googleapis.com"</span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">resp &lt;-<span class="st"> </span><span class="kw"><a href="reference/request_make.html">request_make</a></span>(req)</a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">out &lt;-<span class="st"> </span><span class="kw"><a href="reference/response_process.html">response_process</a></span>(resp)</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">vapply</a></span>(out<span class="op">$</span>results, <span class="cf">function</span>(x) x<span class="op">$</span>name, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">character</a></span>(<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; [1] "The Naam"                    "The Oakwood Canadian Bistro"</span></a>
-<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; [3] "Healthy Noodle House"        "Tapatio Mexican Cafe &amp; Bar" </span></a>
-<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; [5] "FreshFast"</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" data-line-number="7">    <span class="dt">sort =</span> <span class="st">"popularity"</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  ),</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="dt">key =</span> <span class="kw"><a href="reference/gargle_api_key.html">gargle_api_key</a></span>(),</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">  <span class="dt">base_url =</span> <span class="st">"https://www.googleapis.com"</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">)</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">resp &lt;-<span class="st"> </span><span class="kw"><a href="reference/request_make.html">request_make</a></span>(req)</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">out &lt;-<span class="st"> </span><span class="kw"><a href="reference/response_process.html">response_process</a></span>(resp)</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15">out &lt;-<span class="st"> </span>out[[<span class="st">"items"</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]</a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">vapply</a></span>(out, <span class="cf">function</span>(x) x[[<span class="st">"family"</span>]], <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">character</a></span>(<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; [1] "Roboto"           "Open Sans"        "Lato"            </span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; [4] "Montserrat"       "Roboto Condensed" "Source Sans Pro" </span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt; [7] "Oswald"           "Raleway"</span></a></code></pre></div>
 <p>Please note that the ‘gargle’ project is released with a <a href="https://gargle.r-lib.org/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>

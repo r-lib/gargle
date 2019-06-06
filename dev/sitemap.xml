@@ -52,6 +52,9 @@
     <loc>https://gargle.r-lib.org/reference/init_AuthState.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/internal-assets.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/oauth_app_from_json.html</loc>
   </url>
   <url>
@@ -62,9 +65,6 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/response_process.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/reference/tidyverse_api_key.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/tidyverse_app.html</loc>
