@@ -7,7 +7,7 @@ test_that("it is possible to be 'outside the house'", {
   expect_false(local(gargle:::from_permitted_package(), envir = globalenv()))
   expect_error(
     local(gargle:::check_permitted_package(), envir = globalenv()),
-    "tidyverse"
+    "within tidyverse"
   )
 })
 
@@ -20,8 +20,8 @@ test_that("tidyverse API key", {
   key <- tidyverse_api_key()
   expect_true(is_string(key))
   expect_error(
-    local(gargle:::tidyverse_api_key(), envir = globalenv()),
-    "tidyverse"
+    local(tidyverse_api_key(), envir = globalenv()),
+    "within tidyverse"
   )
 })
 
