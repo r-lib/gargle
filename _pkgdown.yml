@@ -59,7 +59,6 @@ reference:
     desc: >
       Assets to aid experimentation during development (not for production use!)
     contents:
-      - gargle_app
       - gargle_api_key
 
 template:

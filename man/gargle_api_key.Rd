@@ -6,36 +6,20 @@
 \usage{
 gargle_api_key()
 }
-\value{
-A Google API key
-}
 \description{
-Returns an API key for use when test driving gargle. Some API requests for
-public resources do not require authorization, in which case the request can
-be sent with an API key in lieu of a token. If you want to get your own API
-key, setup a new project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of interest,
-and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
+Some APIs accept requests for public resources, in which case
+the request must be sent with an API key in lieu of a token. This function
+provides an API key for limited use in prototyping and for testing and
+documentation of gargle itself. This key may be deleted or rotated at any
+time. There are no guarantees about which APIs are enabled. DO NOT USE THIS
+IN A PACKAGE or for anything other than interactive, small-scale
+experimentation.
+
+To get your own API key, without these limitations, set up a new Google
+Cloud Platform project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of
+interest, and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
 }
 \examples{
-\dontrun{
-## see the key
 gargle_api_key()
-
-# use the key with the Places API (explicitly enabled for this key)
-# gets restaurants close to a location in Vancouver, BC
-req <- request_build(
-  method = "GET",
-  path = "maps/api/place/nearbysearch/json",
-  params = list(
-    location = "49.268682,-123.167117",
-    radius = 100,
-    type = "restaurant"
-  ),
-  key = gargle_api_key(),
-  base_url = "https://maps.googleapis.com"
-)
-resp <- request_make(req)
-out <- response_process(resp)
-vapply(out$results, function(x) x$name, character(1))
 }
-}
+\keyword{internal}

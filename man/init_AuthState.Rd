@@ -33,10 +33,15 @@ An object of class \link{AuthState}.
 Constructor function for objects of class \link{AuthState}.
 }
 \examples{
+my_app <- httr::oauth_app(
+  appname = "my_package",
+  key = "keykeykeykeykeykey",
+  secret = "secretsecretsecret"
+)
+
 init_AuthState(
-  package = "mypkg",
-  app = gargle_app(),
-  api_key = gargle_api_key(),
-  auth_active = TRUE
+  package = "my_package",
+  app = my_app,
+  api_key = "api_key_api_key_api_key",
 )
 }
