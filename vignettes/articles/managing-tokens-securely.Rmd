@@ -193,7 +193,7 @@ But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That'
 ```{r eval = FALSE}
 # googledrive
 skip_if_no_token <- function() {
-  testthat::skip_if_not(have_token(), "No Drive token")
+  testthat::skip_if_not(drive_has_token(), "No Drive token")
 }
 
 # bigrquery
@@ -202,7 +202,7 @@ skip_if_no_auth <- function() {
 }
 ```
 
-`googledrive::have_token()` and `bigrquery::has_access_cred()` are package-specific functions that return `TRUE` if a token is available and `FALSE` otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
+`googledrive::drive_has_token()` and `bigrquery::has_access_cred()` are package-specific functions that return `TRUE` if a token is available and `FALSE` otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
 
 In bigrquery, `skip_if_no_auth()` is defined below `R/` but it is arguably more common to see such a definition in a file like `tests/testthat/helper.R`, which is where it's defined in googledrive.
 
