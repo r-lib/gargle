@@ -25,14 +25,15 @@ test_that("tidyverse API key", {
   )
 })
 
-# test_that("tidyverse oauth app", {
-#   oa <- tidyverse_app()
-#   expect_s3_class(oa, "oauth_app")
-#   expect_identical(oa$appname, "tidyverse")
-# })
-#
-# test_that("gargle oauth app", {
-#   oa <- gargle_app()
-#   expect_s3_class(oa, "oauth_app")
-#   expect_identical(oa$appname, "gargle-demo")
-# })
+test_that("gargle oauth app", {
+  oa <- gargle_app()
+  expect_s3_class(oa, "oauth_app")
+  expect_match(oa$appname, "^gargle")
+})
+
+test_that("tidyverse oauth app", {
+  oa <- tidyverse_app()
+  expect_s3_class(oa, "oauth_app")
+  expect_match(oa$appname, "^tidyverse")
+})
+

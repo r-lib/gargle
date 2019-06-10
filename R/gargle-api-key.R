@@ -24,6 +24,8 @@ gargle_api_key <- function() {
 
 #' Assets for internal use
 #'
+#' Assets for use inside specific packages maintained by the tidyverse team.
+#'
 #' @name internal-assets
 NULL
 

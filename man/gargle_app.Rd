@@ -7,19 +7,24 @@
 gargle_app()
 }
 \value{
-An OAuth consumer application, produced by \code{\link[httr:oauth_app]{httr::oauth_app()}}.
+An OAuth consumer application, produced by \code{\link[httr:oauth_app]{httr::oauth_app()}},
+invisibly.
 }
 \description{
-Returns an OAuth app that we default to in \code{\link[=credentials_user_oauth2]{credentials_user_oauth2()}}. This
-makes it easy to test drive gargle before obtaining your own client ID and
-secret. Once your use of gargle is more than casual, you should create a
-similar function, but populated with your own credentials, like so:
-\itemize{
-\item Create a \href{https://support.google.com/cloud/answer/6158853}{Cloud Platform Project}
-in the \href{https://console.developers.google.com}{Google Developers Console}.
-\item Create a function, e.g., \code{my_app()}, that calls \code{\link[httr:oauth_app]{httr::oauth_app()}}
-with a meaningful nickname and your app's client ID and secret.
-}
+Invisibly returns an OAuth app that can be used to test drive
+gargle before obtaining your own client ID and secret. This OAuth app may
+be deleted or rotated at any time. There are no guarantees about which APIs
+are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+interactive, small-scale experimentation.
+
+To get your own OAuth app, without these limitations, set up a new Google
+\href{https://support.google.com/cloud/answer/6158853}{Cloud Platform Project}
+in \href{https://console.developers.google.com}{Google Developers Console} and
+complete the
+\href{https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites}{Prerequisites}
+for OAuth 2.0 for Mobile & Desktop Apps. Use \code{\link[httr:oauth_app]{httr::oauth_app()}} to create
+an object of type \code{oauth_app}, suitable for use with the gargle and httr
+packages.
 }
 \examples{
 \dontrun{
