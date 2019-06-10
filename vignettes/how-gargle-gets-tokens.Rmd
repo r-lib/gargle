@@ -142,9 +142,29 @@ credentials_gce(
 
 `credentials_gce()` retrieves service account credentials from a metadata service that is specific to virtual machine instances running on Google Cloud Engine (GCE). Basically, if you have to ask what this is about, this is not the auth method for you. Let us move on.
 
+## `credentials_byo_oauth2()`
+  
+The fourth function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+
+```{r, eval = FALSE}
+token_fetch(token = <TOKEN2.0>)
+
+# credentials_service_account() fails because no `path`,
+# credentials_app_default() fails because no ADC found,
+# credentials_gce() fails because not on GCE,
+# which leads to this call:
+credentials_byo_oauth2(
+  token = <TOKEN2.0>
+)
+```
+
+`credentials_byo_oauth2()` provides a back door for a "bring your own token" workflow. This function accounts for the scenario where an OAuth token has been obtained through external means and it's convenient to be able to put it into force.
+
+`credentials_byo_oauth2()` checks that `token` is of class `httr::Token2.0` and that it appears to be associated with Google. If `token` is not provided or if it doesn't satisfy these requirements, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+
 ## `credentials_user_oauth2()`
   
-The fourth and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+The fifth and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
@@ -152,6 +172,7 @@ token_fetch(scopes = <SCOPES>)
 # credentials_service_account() fails because no `path`,
 # credentials_app_default() fails because no ADC found,
 # credentials_gce() fails because not on GCE,
+# credentials_byo_oauth2() fails because no `token`,
 # which leads to this call:
 credentials_user_oauth2(
   scopes = <SCOPES>,
