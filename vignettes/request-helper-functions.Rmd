@@ -64,8 +64,8 @@ gargle provides support for creating and sending HTTP requests via these functio
     `endpoint`, derived from an API Discovery Document.
   * Checks for required and unrecognized parameters.
   * Peels off `params` destined for the body into their own part.
-  * Returns request data in a form that anticipates the `httr::VERB()` call that
-    is on the horizon.
+  * Returns request data in a form that anticipates the `httr::VERB()` call
+    that is on the horizon.
   
 `request_build(method, path, params, body, token, key, base_url)`: a.k.a. The Dumb One.
 
@@ -108,7 +108,7 @@ Why aren't the ingest functions exported by gargle? First, we regard this as fun
 
 ## Method (or endpoint) data
 
-Our Discovery Document ingest process leaves you with an R list. Let's assume it's available in your package's namespace as an internal object named `.endpoints`. Each item represents one method of the API (Google's vocabulary) or an endpoint (term I originally used in, e.g., googledrive ... maybe I should conform to Google?).
+Our Discovery Document ingest process leaves you with an R list. Let's assume it's available in your package's namespace as an internal object named `.endpoints`. Each item represents one method of the API (Google's vocabulary) or an endpoint (gargle's vocabulary).
 
 Each endpoint has an `id`. These `id`s are also used as names for the list. Examples of some `id`s from the Drive and Sheets APIs:
 
@@ -165,9 +165,12 @@ The `endpoint` argument specifies an endpoint by its name, a.k.a. its `id`.
 
 `params` is where the processed user input goes.
 
-`key` and `token` refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. This is also where we enforce the rule that we always send exactly **one** of `key` and `token`.
+`key` and `token` refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. If your package ships with a default API key, you should append it above as the final fallback value for `params$key`.
 
-`googledrive::request_generate()` takes care of everything specific to the Drive API and the user's input and task. Then it uses `gargle::request_develop()` followed by `gargle::request_build()` to finish preparing the request.
+Do not "borrow" an API key from gargle or another package; always send a key associated with your package or provided by your user. Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your
+application must accurately represent itself when authenticating to Google API services.
+
+After `googledrive::request_generate()` takes care of everything specific to the Drive API and the user's input and task, we call `gargle::request_develop()`. We finish preparing the request with `gargle::request_build()`, which enforces the rule that we always send exactly **one** of `key` and `token`.
 
 ## Design suggestion: making requests
 
@@ -230,5 +233,3 @@ Properties of an endpoint parameters:
 ```{r asis = TRUE, echo = FALSE, comment = NA}
 cat(readLines(fs::path(ddi_dir, "parameter-properties-humane.txt")), sep = "\n")
 ```
-
-
