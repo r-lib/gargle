@@ -98,6 +98,8 @@ drive_oauth_app()
 #>   secret: <hidden>
 ```
 
+Do not "borrow" an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your application must accurately represent itself when authenticating to Google API services.
+
 ### API key
 
 Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by "anyone with a link" from a Shiny app, thereby designing away the need to manage user credentials on the server.
@@ -240,7 +242,7 @@ The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the
 
   * `drive_token()` retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is `NULL`, `drive_auth()` is called to obtain a credential. If `auth_active` is `FALSE`, `NULL` is returned; client packages should be designed to fall back to including an API key in affected HTTP requests.
   * `drive_auth()` ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets `auth_active` to `TRUE`. Can be called directly, but `drive_token()` will call when/as needed.
-  * `drive_deauth()` sets `auth_active` to `FALSE` and `.auth$cred` to `NULL`.s
+  * `drive_deauth()` sets `auth_active` to `FALSE` and `.auth$cred` to `NULL`.
   * `drive_oauth_app()` returns `.auth$app`.
   * `drive_api_key()` returns `.auth$key`.
   * `drive_auth_config()` can be used to query and set auth config. This is how an advanced user would enter their own OAuth app and API key into auth config, in order to affect all subsequent requests.
