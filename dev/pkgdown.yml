@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   managing-tokens-securely: articles/managing-tokens-securely.html
   gargle-auth-in-client-package: gargle-auth-in-client-package.html
+  get-api-credentials: get-api-credentials.html
   how-gargle-gets-tokens: how-gargle-gets-tokens.html
   request-helper-functions: request-helper-functions.html
 urls:

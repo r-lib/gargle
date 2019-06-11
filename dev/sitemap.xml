@@ -76,6 +76,9 @@
     <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>
   </url>
   <url>
