@@ -4,28 +4,15 @@ authors:
   Jennifer Bryan:
     href: https://jennybryan.org
 
-navbar:
-  type: default
-  left:
-  - icon: fa-home fa-lg
-    href: index.html
-  - text: Articles
-    menu:
-    - text: How gargle gets tokens
-      href: articles/how-gargle-gets-tokens.html
-    - text: How to use gargle for auth in a client package
-      href: articles/gargle-auth-in-client-package.html
-    - text: Request Helper Functions
-      href: articles/request-helper-functions.html
-    - text: Managing tokens securely
-      href: articles/articles/managing-tokens-securely.html
-  - text: Reference
-    href: reference/index.html
-  - text: News
-    href: news/index.html
-
 development:
   mode: auto
+
+navbar:
+  components:
+    home: ~
+    news:
+      text: News
+      href: news/index.html
 
 reference:
   - title: "Fetching credentials"
