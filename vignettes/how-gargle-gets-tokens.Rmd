@@ -144,7 +144,7 @@ credentials_gce(
 
 ## `credentials_byo_oauth2()`
   
-The fourth function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+The fourth function tried is `credentials_byo_oauth2()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(token = <TOKEN2.0>)
