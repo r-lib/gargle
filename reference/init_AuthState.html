@@ -73,17 +73,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -93,21 +90,21 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -144,7 +141,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>init_AuthState</span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='no'>app</span>, <span class='no'>api_key</span>, <span class='no'>auth_active</span>)</pre>
+    <pre class="usage"><span class='fu'>init_AuthState</span>(<span class='kw'>package</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>app</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>api_key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>auth_active</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cred</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,24 +151,29 @@
       <th>package</th>
       <td><p>Package name, an optional string. The associated package will
 generally by implied by the namespace within which the <code>AuthState</code> is
-defined. But it's possible to record the package name explicitly and
-seems like a good practice.</p></td>
+defined. But it's possible to record the package name explicitly and seems
+like a good practice.</p></td>
     </tr>
     <tr>
       <th>app</th>
-      <td><p>An OAuth consumer application, as produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
+      <td><p>Optional. An OAuth consumer application, as produced by
+<code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p></td>
     </tr>
     <tr>
       <th>api_key</th>
-      <td><p>API key (a string). Necessary in order to make unauthorized
-"token-free" requests for public resources. Can be <code>NULL</code> if all requests
-will be authorized, i.e. they will include a token.</p></td>
+      <td><p>Optional. API key (a string). Some APIs accept unauthorized,
+"token-free" requests for public resources, but only if the request
+includes an API key.</p></td>
     </tr>
     <tr>
       <th>auth_active</th>
       <td><p>Logical. <code>TRUE</code> means requests should include a token (and
 probably not an API key). <code>FALSE</code> means requests should include an API key
 (and probably not a token).</p></td>
+    </tr>
+    <tr>
+      <th>cred</th>
+      <td><p>Credentials. Typically populated indirectly via <code><a href='token_fetch.html'>token_fetch()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -180,15 +183,20 @@ probably not an API key). <code>FALSE</code> means requests should include an AP
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>init_AuthState</span>(
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"mypkg"</span>,
-  <span class='kw'>app</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span>(),
-  <span class='kw'>api_key</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_api_key.html'>gargle_api_key</a></span>(),
-  <span class='kw'>auth_active</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+    <pre class="examples"><div class='input'><span class='no'>my_app</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>httr</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>oauth_app</a></span>(
+  <span class='kw'>appname</span> <span class='kw'>=</span> <span class='st'>"my_package"</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"keykeykeykeykeykey"</span>,
+  <span class='kw'>secret</span> <span class='kw'>=</span> <span class='st'>"secretsecretsecret"</span>
+)
+
+<span class='fu'>init_AuthState</span>(
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"my_package"</span>,
+  <span class='kw'>app</span> <span class='kw'>=</span> <span class='no'>my_app</span>,
+  <span class='kw'>api_key</span> <span class='kw'>=</span> <span class='st'>"api_key_api_key_api_key"</span>,
 )</div><div class='output co'>#&gt; &lt;AuthState (via gargle)&gt;
-#&gt;          &lt;package&gt; mypkg
-#&gt;              &lt;app&gt; gargle-demo
-#&gt;          &lt;api_key&gt; AIzaSyD...
+#&gt;          &lt;package&gt; my_package
+#&gt;              &lt;app&gt; my_package
+#&gt;          &lt;api_key&gt; api_key...
 #&gt;      &lt;auth_active&gt; TRUE
 #&gt;      &lt;credentials&gt; NULL
 #&gt; ---</div></pre>

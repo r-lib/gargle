@@ -36,17 +36,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -56,21 +53,21 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -125,24 +122,26 @@
 <a class="sourceLine" id="cb1-3" data-line-number="3">                       <span class="dt">path =</span> <span class="ot">NULL</span>,</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">                       <span class="dt">scopes =</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</a>
 <a class="sourceLine" id="cb1-5" data-line-number="5">                       <span class="dt">cache =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>(),</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>()) {</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  cred &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/token_fetch.html">token_fetch</a></span>(</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">    <span class="dt">scopes =</span> scopes,</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">app =</span> <span class="kw">drive_oauth_app</span>(),</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">email =</span> email,</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">path =</span> path,</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">package =</span> <span class="st">"googledrive"</span>,</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="dt">cache =</span> cache,</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">    <span class="dt">use_oob =</span> use_oob</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">  )</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">inherits</a></span>(cred, <span class="st">"Token2.0"</span>)) {</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">    <span class="co"># throw an informative error here</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">  }</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">  .auth<span class="op">$</span><span class="kw">set_cred</span>(cred)</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20">  .auth<span class="op">$</span><span class="kw">set_auth_active</span>(<span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>()</a>
-<a class="sourceLine" id="cb1-23" data-line-number="23">}</a></code></pre></div>
+<a class="sourceLine" id="cb1-6" data-line-number="6">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>(),</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">                       <span class="dt">token =</span> <span class="ot">NULL</span>) {</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  cred &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/token_fetch.html">token_fetch</a></span>(</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">scopes =</span> scopes,</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">app =</span> <span class="kw">drive_oauth_app</span>() <span class="op">%||%</span><span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/internal-assets.html">tidyverse_app</a></span>(),</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">email =</span> email,</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">path =</span> path,</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="dt">package =</span> <span class="st">"googledrive"</span>,</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">    <span class="dt">cache =</span> cache,</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">    <span class="dt">use_oob =</span> use_oob,</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">    <span class="dt">token =</span> token</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">  )</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">inherits</a></span>(cred, <span class="st">"Token2.0"</span>)) {</a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">    <span class="co"># throw an informative error here</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">  }</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">  .auth<span class="op">$</span><span class="kw">set_cred</span>(cred)</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">  .auth<span class="op">$</span><span class="kw">set_auth_active</span>(<span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23">  </a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>()</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">}</a></code></pre></div>
 <p><code>drive_auth()</code> is called automatically upon the first need of a token and that can lead to user interaction, but does not necessarily do so. <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is described in the vignette <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>. The internal <code>.auth</code> object maintains googledrive’s auth state and is explained next.</p>
 </div>
 <div id="auth-state" class="section level3">
@@ -151,16 +150,18 @@
 <p>A client package can use an internal object of class <code>gargle::AuthClass</code> to hold the auth state. Here’s how it is initialized in googledrive:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">.auth &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/init_AuthState.html">init_AuthState</a></span>(</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">package     =</span> <span class="st">"googledrive"</span>,</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">app         =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_app.html">tidyverse_app</a></span>(),     <span class="co"># YOUR PKG SHOULD USE ITS OWN APP!</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">api_key     =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_api_key.html">tidyverse_api_key</a></span>(), <span class="co"># YOUR PKG SHOULD USE ITS OWN KEY!</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">auth_active =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">)</a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">auth_active =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="co"># app = NULL,</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="co"># api_key = NULL,</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="co"># cred = NULL</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">)</a></code></pre></div>
+<p>The Oauth <code>app</code> and <code>api_key</code> are configurable by the user and can fall back to internal credentials. The <code>cred</code> field is populated by the first call to <code>drive_auth()</code> (direct or indirectly via <code>drive_token()</code>).</p>
 </div>
 <div id="oauth-app" class="section level3">
 <h3 class="hasAnchor">
 <a href="#oauth-app" class="anchor"></a>OAuth app</h3>
-<p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they are content to use the same app for all work through a client package: probably, the app built into the package.</p>
-<p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code>, which should default to the package’s built-in app (which should <strong>not</strong> be the gargle or tidyverse app). Exported auth helpers, like <code>drive_oauth_app()</code> and <code>drive_auth_config()</code>, retrieve and modify the current app for the minority of users who need that level of control.</p>
+<p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they are content to use the same app for all work through a client package: possibly, the app built into the package.</p>
+<p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code>. Exported auth helpers, like <code>drive_oauth_app()</code> and <code>drive_auth_config()</code>, retrieve and modify the current app to support users ready to take that level of control.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/oauth_app">oauth_app</a></span>(</a>
@@ -174,19 +175,19 @@
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; &lt;oauth_app&gt; acme-corp</span></a>
 <a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   key:    123456789.apps.googleusercontent.com</span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;   secret: &lt;hidden&gt;</span></a></code></pre></div>
+<p>Do not “borrow” an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
 </div>
 <div id="api-key" class="section level3">
 <h3 class="hasAnchor">
 <a href="#api-key" class="anchor"></a>API key</h3>
-<p>Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by “anyone with a link” from a Shiny app, thereby designing away the need to manage credentials on the server.</p>
-<p>If you are wrapping an API with this feature, a default API key can be stored in the <code>api_key</code> field of the <code>.auth</code> auth state. As with the app, packages should obtain their own API key and not borrow the gargle or tidyverse key. And again, exported auth helpers, like <code>drive_api_key()</code> and <code>drive_auth_config()</code>, make the current key inspectable and configurable, for the minority of users who need that level of control.</p>
+<p>Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by “anyone with a link” from a Shiny app, thereby designing away the need to manage user credentials on the server.</p>
+<p>If you are wrapping an API with this feature, a default API key can be stored in the <code>api_key</code> field of the <code>.auth</code> auth state. As with the app, packages should obtain their own API key and not borrow the gargle or tidyverse key. And again, exported auth helpers, like <code>drive_api_key()</code> and <code>drive_auth_config()</code>, make the current key inspectable and configurable, for users ready to take that level of control.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">drive_auth_config</span>(<span class="dt">api_key =</span> <span class="st">"123456789"</span>)</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">drive_api_key</span>()</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; "123456789"</span></a></code></pre></div>
-<p>A good rule of thumb is that it’s OK to build in an API key if all the key does is allow users to do things via API that they would also be able to do in the browser, even <strong>without being logged in</strong>. In this case, Google uses the key to impose quotas and rate limits. If the API key has other implications, for example if it is used for billing purposes, then clearly the client package cannot include a key and should, instead, support the user’s provision of a key.</p>
 </div>
 <div id="email-or-google-identity" class="section level3">
 <h3 class="hasAnchor">
@@ -207,7 +208,8 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3">                       <span class="dt">path =</span> <span class="ot">NULL</span>,</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">                       <span class="dt">scopes =</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">                       <span class="dt">cache =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>(),</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>()) { ... }</a></code></pre></div>
+<a class="sourceLine" id="cb6-6" data-line-number="6">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>(),</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">                       <span class="dt">token =</span> <span class="ot">NULL</span>) { ... }</a></code></pre></div>
 <p>googledrive ships with a default scope, but a motivated user could call <code>drive_auth()</code> pre-emptively at the start of the session and request different scopes. For example, if they intend to only read data and want to guard against inadvertent file modification, they might opt for the <code>drive.readonly</code> scope.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">drive_auth</span>(<span class="dt">scopes =</span> <span class="st">"https://www.googleapis.com/auth/drive.readonly"</span>)</a></code></pre></div>
@@ -267,13 +269,13 @@
 <a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">isFALSE</a></span>(.auth<span class="op">$</span>auth_active)) {</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(<span class="ot">NULL</span>)</a>
 <a class="sourceLine" id="cb9-5" data-line-number="5">  }</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">have_token</span>()) {</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">drive_has_token</span>()) {</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">    <span class="kw">drive_auth</span>()</a>
 <a class="sourceLine" id="cb9-8" data-line-number="8">  }</a>
 <a class="sourceLine" id="cb9-9" data-line-number="9">  httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/config">config</a></span>(<span class="dt">token =</span> .auth<span class="op">$</span>cred)</a>
 <a class="sourceLine" id="cb9-10" data-line-number="10">}</a></code></pre></div>
-<p>where <code>have_token()</code> in an internal helper defined as:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># googledrive:::</span></a>
+<p>where <code>drive_has_token()</code> in a helper defined as:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">have_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
 <a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">inherits</a></span>(.auth<span class="op">$</span>cred, <span class="st">"Token2.0"</span>)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">}</a></code></pre></div>
@@ -290,7 +292,7 @@
 <li>
 <code>drive_auth()</code> ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets <code>auth_active</code> to <code>TRUE</code>. Can be called directly, but <code>drive_token()</code> will call when/as needed.</li>
 <li>
-<code>drive_deauth()</code> sets <code>auth_active</code> to <code>FALSE</code>.</li>
+<code>drive_deauth()</code> sets <code>auth_active</code> to <code>FALSE</code> and <code>.auth$cred</code> to <code>NULL</code>.</li>
 <li>
 <code>drive_oauth_app()</code> returns <code>.auth$app</code>.</li>
 <li>

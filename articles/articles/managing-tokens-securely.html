@@ -36,17 +36,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -56,21 +53,21 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../../news/index.html">News</a>
@@ -160,14 +157,14 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(pw &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_pw_gen</span>())</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "IognTAPeHnfutuYROoU4EDv23VZYFB7hbcSB6QCHCqTmOX6H8o"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "hXMVaOuo8wnW2LAhvKiyO3EWMU9Vn8H9iKC8tNSEwKHdQo9Vfx"</span></a></code></pre></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=IognTAPeHnfutuYROoU4EDv23VZYFB7hbcSB6QCHCqTmOX6H8o</code></pre>
+<pre><code>GARGLE_PASSWORD=hXMVaOuo8wnW2LAhvKiyO3EWMU9Vn8H9iKC8tNSEwKHdQo9Vfx</code></pre>
 <p><code>usethis::edit_r_environ()</code> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://www.rdocumentation.org/packages/base/topics/readRenviron">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
@@ -252,14 +249,14 @@
 <p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here are the test skippers from googledrive and bigrquery:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># googledrive</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">skip_if_no_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">have_token</span>(), <span class="st">"No Drive token"</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">drive_has_token</span>(), <span class="st">"No Drive token"</span>)</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">}</a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co"># bigrquery</span></a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">skip_if_no_auth &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
 <a class="sourceLine" id="cb9-8" data-line-number="8">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">has_access_cred</span>(), <span class="st">"Authentication not available"</span>)</a>
 <a class="sourceLine" id="cb9-9" data-line-number="9">}</a></code></pre></div>
-<p><code>googledrive::have_token()</code> and <code>bigrquery::has_access_cred()</code> are package-specific functions that return <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.</p>
+<p><code>googledrive::drive_has_token()</code> and <code>bigrquery::has_access_cred()</code> are package-specific functions that return <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.</p>
 <p>In bigrquery, <code>skip_if_no_auth()</code> is defined below <code>R/</code> but it is arguably more common to see such a definition in a file like <code>tests/testthat/helper.R</code>, which is where it’s defined in googledrive.</p>
 <p><em>gargle’s usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it’s not featured here.</em></p>
 </div>

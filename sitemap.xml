@@ -19,6 +19,9 @@
     <loc>https://gargle.r-lib.org/reference/credentials_app_default.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/credentials_byo_oauth2.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/credentials_gce.html</loc>
   </url>
   <url>
@@ -49,6 +52,9 @@
     <loc>https://gargle.r-lib.org/reference/init_AuthState.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/internal-assets.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/oauth_app_from_json.html</loc>
   </url>
   <url>
@@ -61,12 +67,6 @@
     <loc>https://gargle.r-lib.org/reference/response_process.html</loc>
   </url>
   <url>
-    <loc>https://gargle.r-lib.org/reference/tidyverse_api_key.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/reference/tidyverse_app.html</loc>
-  </url>
-  <url>
     <loc>https://gargle.r-lib.org/reference/token_fetch.html</loc>
   </url>
   <url>
@@ -74,6 +74,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>

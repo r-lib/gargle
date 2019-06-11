@@ -32,15 +32,19 @@
 
 <meta property="og:title" content="OAuth app for demonstration purposes — gargle_app" />
 
-<meta property="og:description" content="Returns an OAuth app that we default to in credentials_user_oauth2(). This
-makes it easy to test drive gargle before obtaining your own client ID and
-secret. Once your use of gargle is more than casual, you should create a
-similar function, but populated with your own credentials, like so:
-Create a Cloud Platform Project
-in the Google Developers Console.
-Create a function, e.g., my_app(), that calls httr::oauth_app()
-with a meaningful nickname and your app's client ID and secret.
-" />
+<meta property="og:description" content="Invisibly returns an OAuth app that can be used to test drive
+gargle before obtaining your own client ID and secret. This OAuth app may
+be deleted or rotated at any time. There are no guarantees about which APIs
+are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+interactive, small-scale experimentation.
+To get your own OAuth app, without these limitations, set up a new Google
+Cloud Platform Project
+in Google Developers Console and
+complete the
+Prerequisites
+for OAuth 2.0 for Mobile &amp;amp; Desktop Apps. Use httr::oauth_app() to create
+an object of type oauth_app, suitable for use with the gargle and httr
+packages." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -81,17 +85,14 @@ with a meaningful nickname and your app's client ID and secret.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -101,21 +102,21 @@ with a meaningful nickname and your app's client ID and secret.
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -148,15 +149,19 @@ with a meaningful nickname and your app's client ID and secret.
 
     <div class="ref-description">
     
-    <p>Returns an OAuth app that we default to in <code><a href='credentials_user_oauth2.html'>credentials_user_oauth2()</a></code>. This
-makes it easy to test drive gargle before obtaining your own client ID and
-secret. Once your use of gargle is more than casual, you should create a
-similar function, but populated with your own credentials, like so:</p><ul>
-<li><p>Create a <a href='https://support.google.com/cloud/answer/6158853'>Cloud Platform Project</a>
-in the <a href='https://console.developers.google.com'>Google Developers Console</a>.</p></li>
-<li><p>Create a function, e.g., <code>my_app()</code>, that calls <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>
-with a meaningful nickname and your app's client ID and secret.</p></li>
-</ul>
+    <p>Invisibly returns an OAuth app that can be used to test drive
+gargle before obtaining your own client ID and secret. This OAuth app may
+be deleted or rotated at any time. There are no guarantees about which APIs
+are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+interactive, small-scale experimentation.</p>
+<p>To get your own OAuth app, without these limitations, set up a new Google
+<a href='https://support.google.com/cloud/answer/6158853'>Cloud Platform Project</a>
+in <a href='https://console.developers.google.com'>Google Developers Console</a> and
+complete the
+<a href='https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites'>Prerequisites</a>
+for OAuth 2.0 for Mobile &amp; Desktop Apps. Use <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code> to create
+an object of type <code>oauth_app</code>, suitable for use with the gargle and httr
+packages.</p>
     
     </div>
 
@@ -164,13 +169,14 @@ with a meaningful nickname and your app's client ID and secret.</p></li>
         
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An OAuth consumer application, produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p>
+    <p>An OAuth consumer application, produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>,
+invisibly.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>gargle_app</span>()</div><div class='output co'>#&gt; &lt;oauth_app&gt; gargle-demo
-#&gt;   key:    603366585132-orjlfqlnkvnkeb1menfdhss2oej4i2d5.apps.googleusercontent.com
-#&gt;   secret: &lt;hidden&gt;</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>gargle_app</span>()
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

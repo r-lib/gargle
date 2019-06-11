@@ -74,17 +74,14 @@ consulted by token_fetch()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,21 +91,21 @@ consulted by token_fetch()." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -194,7 +191,8 @@ Function(s) are added to the <em>front</em> of the list. So:</p><pre>* "First re
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='fu'>cred_funs_list</span>())</div><div class='output co'>#&gt; [1] "credentials_service_account" "credentials_app_default"    
-#&gt; [3] "credentials_gce"             "credentials_user_oauth2"    </div><div class='input'>
+#&gt; [3] "credentials_gce"             "credentials_byo_oauth2"     
+#&gt; [5] "credentials_user_oauth2"    </div><div class='input'>
 <span class='no'>creds_one</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>scopes</span>, <span class='no'>...</span>) {}
 <span class='fu'>cred_funs_add</span>(<span class='no'>creds_one</span>)
 <span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>)

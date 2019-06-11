@@ -36,17 +36,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -56,21 +53,21 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
       <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="../articles/request-helper-functions.html">Request Helper Functions</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+    </li>
+    <li>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">News</a>
@@ -124,7 +121,8 @@
 <p>This gives a sense of the credential functions and reflects the order in which they are called:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="../reference/cred_funs.html">cred_funs_list</a></span>())</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "credentials_service_account" "credentials_app_default"    </span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_user_oauth2"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_byo_oauth2"     </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [5] "credentials_user_oauth2"</span></a></code></pre></div>
 <p>It is possible to manipulate this registry of functions. The help for <code><a href="../reference/cred_funs.html">cred_funs_list()</a></code> is a good place to learn more.</p>
 <p>From now on, however, we assume you’re working with the default registry that ships with gargle.</p>
 <p>Note also that these credential functions are exported and can be called directly.</p>
@@ -204,87 +202,106 @@
 <a class="sourceLine" id="cb7-16" data-line-number="16">)</a></code></pre></div>
 <p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> retrieves service account credentials from a metadata service that is specific to virtual machine instances running on Google Cloud Engine (GCE). Basically, if you have to ask what this is about, this is not the auth method for you. Let us move on.</p>
 </div>
-<div id="credentials_user_oauth2" class="section level2">
+<div id="credentials_byo_oauth2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_user_oauth2" class="anchor"></a><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>
+<a href="#credentials_byo_oauth2" class="anchor"></a><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code>
 </h2>
-<p>The fourth and final function tried is <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>)</a>
+<p>The fourth function tried is <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">token =</span> <span class="op">&lt;</span>TOKEN2<span class="fl">.0</span><span class="op">&gt;</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co"># credentials_service_account() fails because no `path`,</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co"># credentials_app_default() fails because no ADC found,</span></a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co"># credentials_gce() fails because not on GCE,</span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co"># which leads to this call:</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw"><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2</a></span>(</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">  <span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>,</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">  <span class="dt">app =</span> <span class="kw"><a href="../reference/gargle_app.html">gargle_app</a></span>(),</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">  <span class="dt">package =</span> <span class="st">"gargle"</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">)</a></code></pre></div>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw"><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2</a></span>(</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">  <span class="dt">token =</span> <span class="op">&lt;</span>TOKEN2<span class="fl">.0</span><span class="op">&gt;</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">)</a></code></pre></div>
+<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> provides a back door for a “bring your own token” workflow. This function accounts for the scenario where an OAuth token has been obtained through external means and it’s convenient to be able to put it into force.</p>
+<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> checks that <code>token</code> is of class <code><a href="https://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token2.0</a></code> and that it appears to be associated with Google. If <code>token</code> is not provided or if it doesn’t satisfy these requirements, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in the registry.</p>
+</div>
+<div id="credentials_user_oauth2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#credentials_user_oauth2" class="anchor"></a><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>
+</h2>
+<p>The fifth and final function tried is <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co"># credentials_service_account() fails because no `path`,</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co"># credentials_app_default() fails because no ADC found,</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co"># credentials_gce() fails because not on GCE,</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co"># which leads to this call:</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="kw"><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2</a></span>(</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  <span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>,</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  <span class="dt">app =</span> <span class="op">&lt;</span>OAUTH_APP<span class="op">&gt;</span>,</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">  <span class="dt">package =</span> <span class="st">"&lt;PACKAGE&gt;"</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">)</a></code></pre></div>
 <p><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> is where the vast majority of users will end up. This is the function that choreographs the traditional “OAuth dance” in the browser. User credentials are cached locally, at the user level, by default. Therefore, after first use, there are scenarios in which gargle can determine unequivocally that it already has a suitable token on hand and can load (and possibly refresh) it, without additional user intervention.</p>
-<p>The <code>scopes</code>, <code>app</code>, and <code>package</code> are often provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code>. In particular, <strong>no one</strong> should be using the OAuth app returned by <code><a href="../reference/gargle_app.html">gargle_app()</a></code> for anything other than experimentation. The wrapper package should use its own app or help the user to provide their own. The wrapper package would presumably also declare itself as the package requesting a token (this is used in messages). So here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> might look when initiated from <code>THINGY_auth()</code>, a function in the fictional thingyr wrapper package:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># user initiates auth or does something that triggers it indirectly</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">THINGY_auth</span>()</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co"># which then calls</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/token_fetch.html">token_fetch</a></span>(</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="dt">scopes  =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">  <span class="dt">package =</span> <span class="st">"thingyr"</span></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">)</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co"># which leads to this call:</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="kw"><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2</a></span>(</a>
-<a class="sourceLine" id="cb9-13" data-line-number="13">  <span class="dt">scopes  =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
-<a class="sourceLine" id="cb9-14" data-line-number="14">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
-<a class="sourceLine" id="cb9-15" data-line-number="15">  <span class="dt">package =</span> <span class="st">"thingyr"</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16">)</a></code></pre></div>
+<p>The <code>scopes</code>, <code>app</code>, and <code>package</code> are generally provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code>. Do not “borrow” an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
+<p>The wrapper package would presumably also declare itself as the package requesting a token (this is used in messages). So here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> might look when initiated from <code>THINGY_auth()</code>, a function in the fictional thingyr wrapper package:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># user initiates auth or does something that triggers it indirectly</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">THINGY_auth</span>()</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co"># which then calls</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/token_fetch.html">token_fetch</a></span>(</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="dt">scopes  =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">  <span class="dt">package =</span> <span class="st">"thingyr"</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co"># which leads to this call:</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="kw"><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2</a></span>(</a>
+<a class="sourceLine" id="cb10-13" data-line-number="13">  <span class="dt">scopes  =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
+<a class="sourceLine" id="cb10-14" data-line-number="14">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
+<a class="sourceLine" id="cb10-15" data-line-number="15">  <span class="dt">package =</span> <span class="st">"thingyr"</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16">)</a></code></pre></div>
 <p>See <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a> for design ideas for a function like <code>THINGY_auth()</code>.</p>
 <p>What happens tomorrow or next week? Do we make this user go through the browser dance again? How do we get to that happy place where we don’t bug them constantly about auth?</p>
 <p>First, we define “suitable”, i.e. what it means to find a matching token in the cache. <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> is a thin wrapper around <code><a href="../reference/gargle2.0_token.html">gargle2.0_token()</a></code> which is the constructor for the <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code> class used to hold an OAuth2 token. And that call might look something like this (simplified for communication purposes):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="../reference/gargle2.0_token.html">gargle2.0_token</a></span>(</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="dt">email   =</span> <span class="kw"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span>(),</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="dt">package =</span> <span class="st">"thingyr"</span>,</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">  <span class="dt">scope   =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="dt">cache   =</span> <span class="kw"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span>()</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/gargle2.0_token.html">gargle2.0_token</a></span>(</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="dt">email   =</span> <span class="kw"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span>(),</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="dt">app     =</span> <span class="kw">thingy_app</span>(),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">  <span class="dt">package =</span> <span class="st">"thingyr"</span>,</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="dt">scope   =</span> <span class="op">&lt;</span>SCOPES_NEEDED_FOR_THE_THINGY_API<span class="op">&gt;</span>,</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">  <span class="dt">cache   =</span> <span class="kw"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span>()</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">)</a></code></pre></div>
 <p>gargle looks in the cache specified by <code><a href="../reference/gargle_options.html">gargle_oauth_cache()</a></code> for a token that has these scopes, this app, and the Google identity specified by <code>email</code>. By default <code>email</code> is <code>NA</code>, so we might find one or more tokens that have the necessary scopes and app. In that case, gargle reveals the <code>email</code> associated with the matching token(s) and asks the user for explicit instructions about how to proceed. That looks something like this:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">The thingyr package is requesting access to your Google account. Select a</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">pre<span class="op">-</span>authorised account or enter <span class="st">'0'</span> to obtain a new token. Press Esc<span class="op">/</span>Ctrl <span class="op">+</span><span class="st"> </span>C to</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">abort.</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="dv">1</span><span class="op">:</span><span class="st"> </span>janedoe_personal<span class="op">@</span>gmail.com</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="dv">2</span><span class="op">:</span><span class="st"> </span>janedoe<span class="op">@</span>example.com</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="dv">3</span><span class="op">:</span><span class="st"> </span>janedoe_work<span class="op">@</span>gmail.com</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">Selection<span class="op">:</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">The thingyr package is requesting access to your Google account. Select a</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">pre<span class="op">-</span>authorised account or enter <span class="st">'0'</span> to obtain a new token. Press Esc<span class="op">/</span>Ctrl <span class="op">+</span><span class="st"> </span>C to</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">abort.</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="dv">1</span><span class="op">:</span><span class="st"> </span>janedoe_personal<span class="op">@</span>gmail.com</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="dv">2</span><span class="op">:</span><span class="st"> </span>janedoe<span class="op">@</span>example.com</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="dv">3</span><span class="op">:</span><span class="st"> </span>janedoe_work<span class="op">@</span>gmail.com</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">Selection<span class="op">:</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
 <p>If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow <em>de novo</em>.</p>
 <p>A user can reduce the need for interaction by passing the target <code>email</code> to <code>thingy_auth()</code>:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"janedoe_work@gmail.com"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">thingy_auth</span>(<span class="dt">email =</span> <span class="st">"janedoe_work@gmail.com"</span>)</a></code></pre></div>
 <p>or by specifying same in the <code>gargle_oauth_email</code> option. A value of <code>email = TRUE</code>, passed directly or via the option, is an alternative strategy: <code>TRUE</code> means that gargle is allowed to use a matching token whenever there is exactly one match.</p>
 <p>The elevated status of <code>email</code> for <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code> tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs. This is one of the main motivations for <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code>, which extends <code><a href="https://www.rdocumentation.org/packages/httr/topics/Token-class">httr::Token2.0</a></code>. The <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code> class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via <code><a href="../reference/gargle_options.html">gargle_oauth_cache()</a></code> and the output looks something like this:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span>()</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#' gargle OAuth cache path:</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span></a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#' </span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#' 14 tokens found</span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#' </span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#' email                         app         scope                          hash...   </span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...</span></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...</span></a>
-<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...</span></a>
-<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...</span></a>
-<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...</span></a>
-<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...</span></a>
-<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...</span></a>
-<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...</span></a>
-<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span></a>
-<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span></a>
-<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span>()</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#' gargle OAuth cache path:</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#' 14 tokens found</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#' </span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#' email                         app         scope                          hash...   </span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...</span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...</span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...</span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...</span></a>
+<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...</span></a>
+<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...</span></a>
+<a class="sourceLine" id="cb14-19" data-line-number="19"><span class="co">#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...</span></a>
+<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span></a>
+<a class="sourceLine" id="cb14-21" data-line-number="21"><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span></a>
+<a class="sourceLine" id="cb14-22" data-line-number="22"><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></a></code></pre></div>
 </div>
   </div>
 
@@ -298,6 +315,7 @@
       <li><a href="#credentials_service_account"><code><a href="--/reference/credentials_service_account-html">credentials_service_account()</a></code></a></li>
       <li><a href="#credentials_app_default"><code><a href="--/reference/credentials_app_default-html">credentials_app_default()</a></code></a></li>
       <li><a href="#credentials_gce"><code><a href="--/reference/credentials_gce-html">credentials_gce()</a></code></a></li>
+      <li><a href="#credentials_byo_oauth2"><code><a href="--/reference/credentials_byo_oauth2-html">credentials_byo_oauth2()</a></code></a></li>
       <li><a href="#credentials_user_oauth2"><code><a href="--/reference/credentials_user_oauth2-html">credentials_user_oauth2()</a></code></a></li>
       </ul>
 </div>
