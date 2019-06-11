@@ -42,6 +42,9 @@ The approach I'll take in this article is to call these functions via `:::`.
 
 ## Overview of the approach
 
+  1. Add the [sodium package](https://cran.r-project.org/package=sodium) to
+     Suggests in your DESCRIPTION, via
+     `usethis::use_package("sodium", "Suggests")` if you like.
   1. Generate a random PASSWORD and give it a self-documenting name, e.g.
      `GARGLE_PASSWORD`. Store as an environment variable.
   1. Identify a secret file of interest, such as the JSON representing a
@@ -153,8 +156,17 @@ This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle
 
 Now you need to rig your tests or their setup around this encrypted token. You need to plan for two scenarios:
 
-  * Decryption is going to work. This is where you actually get to test package functionality against the target API.
-  * Decryption is not going to work. Either because the Suggested [sodium](https://cran.r-project.org/web/packages/sodium/index.html) package is not available or (much more likely) because the environment variable that represents the key is not available.
+  * Decryption is going to work. This is where you actually get to test package functionality against the target API. Put this in `.travis.yml` in order to make sodium available:
+    
+    ``` yaml
+    addons:
+      apt:
+        sources:
+        - sourceline: 'ppa:chris-lea/libsodium'
+        packages:
+        - libsodium-dev
+    ```
+  * Decryption is not going to work. Either because the Suggested [sodium](https://cran.r-project.org/package=sodium) package is not available or (much more likely) because the environment variable that represents the key is not available.
     - This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.
     - This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor. 
     - We recommend that you actively check your package under these conditions,
