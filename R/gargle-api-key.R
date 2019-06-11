@@ -8,11 +8,10 @@
 #'   IN A PACKAGE or for anything other than interactive, small-scale
 #'   experimentation.
 #'
-#'   To get your own API key, without these limitations, set up a new Google
-#'   Cloud Platform project in [Google Developers
-#'   Console](https://console.developers.google.com), enable the APIs of
-#'   interest, and follow the instructions in [Setting up API
-#'   keys](https://support.google.com/googleapi/answer/6158862).
+#'   You can get your own API key, without these limitations. See the [How to
+#'   get your own API
+#'   credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
+#'   vignette for more details.
 #'
 #' @export
 #' @keywords internal

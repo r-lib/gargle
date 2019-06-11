@@ -130,27 +130,23 @@ PREFIX_auth_config_description <- function(.data = list(
   lines <- c(
     "@description",
     "These functions give the user more control over auth than what is",
-    "possible with [{PREFIX}_auth()]. Learn more in Google's documentation:",
-    "[Credentials, access, security, and",
-    "identity](https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279)",
-    "and [Using OAuth 2.0 for Installed Applications](https://developers.google.com/identity/protocols/OAuth2InstalledApp).",
-    "`{PREFIX}_auth_config()` gives control of:",
-    "   * The OAuth app. If you want to use your own app, setup a new project",
-    "     in [Google Developers Console](https://console.developers.google.com).",
-    "     Follow the instructions in [OAuth 2.0 for Mobile & Desktop",
-    "     Apps](https://developers.google.com/identity/protocols/OAuth2InstalledApp)",
-    "     to obtain your own client ID and secret. Either make an app from",
-    "     your client ID and secret via [httr::oauth_app()] or provide a path",
-    "     to the JSON file containing same, which you can download from",
-    "     [Google Developers Console](https://console.developers.google.com)."
+    "possible with [{PREFIX}_auth()]. `{PREFIX}_auth_config()` gives control",
+    "of:",
+    "   * The OAuth app, which is used when obtaining a user token."
   )
   if (.deauth_possible) {
     lines <- append(lines, c(
-    "   * The API key. If {PACKAGE} is deauthorized via",
-    "     [{PREFIX}_deauth()], all requests will be sent with an API key in",
-    "     lieu of a token. If you want to provide your own API key, setup a",
-    "     project as described above and follow the instructions in",
-    "     [Setting up API keys](https://support.google.com/googleapi/answer/6158862).",
+    "   * The API key. If {PACKAGE} is deauthorized via [{PREFIX}_deauth()],",
+    "     all requests will be sent with an API key in lieu of a token."
+    ))
+  }
+  lines <- append(lines, c(
+    "",
+    "See the vignette [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)",
+    "for more."
+  ))
+  if (.deauth_possible) {
+    lines <- append(lines, c(
     "",
     "`{PREFIX}_api_key()` and `{PREFIX}_oauth_app()` retrieve the",
     " currently configured API key and OAuth app, respectively."

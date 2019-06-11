@@ -46,10 +46,16 @@ init_AuthState <- function(package = NA_character_,
 
 #' Authorization state
 #'
+#' @description
 #' An `AuthState` object manages an authorization state, typically on behalf of
-#' a client package that makes requests to a Google API. This state is
-#' incorporated into the package's requests for tokens and controls the
-#' inclusion of tokens in requests to the target API:
+#' a client package that makes requests to a Google API.
+#'
+#' The [How to use gargle for auth in a client
+#' package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html)
+#' vignette describes a design for wrapper packages that relies on an `AuthState`
+#' object. This state can then be incorporated into the package's requests for
+#' tokens and can control the inclusion of tokens in requests to the target API.
+#'
 #'   * `api_key` is the simplest way to associate a request with a specific
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     A few calls to certain APIs, e.g. reading a public Sheet, can succeed
@@ -68,6 +74,7 @@ init_AuthState <- function(package = NA_character_,
 #'     [`httr::Token2.0`][httr::Token-class] (or a subclass thereof), probably
 #'     obtained via [token_fetch()] (or one of its constituent credential
 #'     fetching functions).
+#'
 #' An `AuthState` should be created through the constructor function
 #' [init_AuthState()].
 #'

@@ -53,7 +53,8 @@ including the query).
 }
 \description{
 Intended primarily for internal use in client packages that provide
-high-level wrappers for users.
+high-level wrappers for users. The vignette \href{https://gargle.r-lib.org/articles/request-helper-functions.html}{Request helper functions}
+describes how one might use these functions inside a wrapper package.
 }
 \section{\code{request_develop()}}{
 

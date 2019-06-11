@@ -15,9 +15,8 @@ time. There are no guarantees about which APIs are enabled. DO NOT USE THIS
 IN A PACKAGE or for anything other than interactive, small-scale
 experimentation.
 
-To get your own API key, without these limitations, set up a new Google
-Cloud Platform project in \href{https://console.developers.google.com}{Google Developers Console}, enable the APIs of
-interest, and follow the instructions in \href{https://support.google.com/googleapi/answer/6158862}{Setting up API keys}.
+You can get your own API key, without these limitations. See the \href{https://gargle.r-lib.org/articles/get-api-credentials.html}{How to get your own API credentials}
+vignette for more details.
 }
 \examples{
 gargle_api_key()

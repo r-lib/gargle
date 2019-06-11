@@ -11,9 +11,12 @@ AuthState
 }
 \description{
 An \code{AuthState} object manages an authorization state, typically on behalf of
-a client package that makes requests to a Google API. This state is
-incorporated into the package's requests for tokens and controls the
-inclusion of tokens in requests to the target API:
+a client package that makes requests to a Google API.
+
+The \href{https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html}{How to use gargle for auth in a client package}
+vignette describes a design for wrapper packages that relies on an \code{AuthState}
+object. This state can then be incorporated into the package's requests for
+tokens and can control the inclusion of tokens in requests to the target API.
 \itemize{
 \item \code{api_key} is the simplest way to associate a request with a specific
 Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
@@ -33,8 +36,9 @@ has been fetched. It is generally assumed to be an instance of
 \code{\link[httr:Token-class]{httr::Token2.0}} (or a subclass thereof), probably
 obtained via \code{\link[=token_fetch]{token_fetch()}} (or one of its constituent credential
 fetching functions).
+}
+
 An \code{AuthState} should be created through the constructor function
 \code{\link[=init_AuthState]{init_AuthState()}}.
-}
 }
 \keyword{datasets}

@@ -1,7 +1,9 @@
 #' Build a Google API request
 #'
 #' Intended primarily for internal use in client packages that provide
-#' high-level wrappers for users.
+#' high-level wrappers for users. The vignette [Request helper
+#' functions](https://gargle.r-lib.org/articles/request-helper-functions.html)
+#' describes how one might use these functions inside a wrapper package.
 #'
 #' @param endpoint List of information about the target endpoint or, in
 #'   Google's vocabulary, the target "method". Presumably prepared from the

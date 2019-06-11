@@ -6,14 +6,10 @@
 #'   are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
 #'   interactive, small-scale experimentation.
 #'
-#'   To get your own OAuth app, without these limitations, set up a new Google
-#'   [Cloud Platform Project](https://support.google.com/cloud/answer/6158853)
-#'   in [Google Developers Console](https://console.developers.google.com) and
-#'   complete the
-#'   [Prerequisites](https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites)
-#'    for OAuth 2.0 for Mobile & Desktop Apps. Use [httr::oauth_app()] to create
-#'   an object of type `oauth_app`, suitable for use with the gargle and httr
-#'   packages.
+#'   You can get your own OAuth app (client ID and secret), without these
+#'   limitations. See the [How to get your own API
+#'   credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
+#'   vignette for more details.
 #'
 #' @return An OAuth consumer application, produced by [httr::oauth_app()],
 #'   invisibly.

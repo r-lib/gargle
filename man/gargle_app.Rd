@@ -17,14 +17,9 @@ be deleted or rotated at any time. There are no guarantees about which APIs
 are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
 interactive, small-scale experimentation.
 
-To get your own OAuth app, without these limitations, set up a new Google
-\href{https://support.google.com/cloud/answer/6158853}{Cloud Platform Project}
-in \href{https://console.developers.google.com}{Google Developers Console} and
-complete the
-\href{https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites}{Prerequisites}
-for OAuth 2.0 for Mobile & Desktop Apps. Use \code{\link[httr:oauth_app]{httr::oauth_app()}} to create
-an object of type \code{oauth_app}, suitable for use with the gargle and httr
-packages.
+You can get your own OAuth app (client ID and secret), without these
+limitations. See the \href{https://gargle.r-lib.org/articles/get-api-credentials.html}{How to get your own API credentials}
+vignette for more details.
 }
 \examples{
 \dontrun{
