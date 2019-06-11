@@ -1,8 +1,8 @@
 ---
-title: "Request Helper Functions"
+title: "Request helper functions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Request Helper Functions}
+  %\VignetteIndexEntry{Request helper functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
