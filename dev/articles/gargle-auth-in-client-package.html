@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9001</span>
       </span>
     </div>
 
@@ -130,7 +130,7 @@
 <a class="sourceLine" id="cb1-7" data-line-number="7">                       <span class="dt">token =</span> <span class="ot">NULL</span>) {</a>
 <a class="sourceLine" id="cb1-8" data-line-number="8">  cred &lt;-<span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/token_fetch.html">token_fetch</a></span>(</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="dt">scopes =</span> scopes,</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">app =</span> <span class="kw">drive_oauth_app</span>() <span class="op">%||%</span><span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/tidyverse_app.html">tidyverse_app</a></span>(),</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="dt">app =</span> <span class="kw">drive_oauth_app</span>() <span class="op">%||%</span><span class="st"> </span>gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/internal-assets.html">tidyverse_app</a></span>(),</a>
 <a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="dt">email =</span> email,</a>
 <a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="dt">path =</span> path,</a>
 <a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="dt">package =</span> <span class="st">"googledrive"</span>,</a>
@@ -179,6 +179,7 @@
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; &lt;oauth_app&gt; acme-corp</span></a>
 <a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   key:    123456789.apps.googleusercontent.com</span></a>
 <a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt;   secret: &lt;hidden&gt;</span></a></code></pre></div>
+<p>Do not “borrow” an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
 </div>
 <div id="api-key" class="section level3">
 <h3 class="hasAnchor">
@@ -295,7 +296,7 @@
 <li>
 <code>drive_auth()</code> ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets <code>auth_active</code> to <code>TRUE</code>. Can be called directly, but <code>drive_token()</code> will call when/as needed.</li>
 <li>
-<code>drive_deauth()</code> sets <code>auth_active</code> to <code>FALSE</code> and <code>.auth$cred</code> to <code>NULL</code>.s</li>
+<code>drive_deauth()</code> sets <code>auth_active</code> to <code>FALSE</code> and <code>.auth$cred</code> to <code>NULL</code>.</li>
 <li>
 <code>drive_oauth_app()</code> returns <code>.auth$app</code>.</li>
 <li>

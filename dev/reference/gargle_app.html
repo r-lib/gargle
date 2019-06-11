@@ -32,15 +32,19 @@
 
 <meta property="og:title" content="OAuth app for demonstration purposes — gargle_app" />
 
-<meta property="og:description" content="Returns an OAuth app that we default to in credentials_user_oauth2(). This
-makes it easy to test drive gargle before obtaining your own client ID and
-secret. Once your use of gargle is more than casual, you should create a
-similar function, but populated with your own credentials, like so:
-Create a Cloud Platform Project
-in the Google Developers Console.
-Create a function, e.g., my_app(), that calls httr::oauth_app()
-with a meaningful nickname and your app's client ID and secret.
-" />
+<meta property="og:description" content="Invisibly returns an OAuth app that can be used to test drive
+gargle before obtaining your own client ID and secret. This OAuth app may
+be deleted or rotated at any time. There are no guarantees about which APIs
+are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+interactive, small-scale experimentation.
+To get your own OAuth app, without these limitations, set up a new Google
+Cloud Platform Project
+in Google Developers Console and
+complete the
+Prerequisites
+for OAuth 2.0 for Mobile &amp;amp; Desktop Apps. Use httr::oauth_app() to create
+an object of type oauth_app, suitable for use with the gargle and httr
+packages." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -81,7 +85,7 @@ with a meaningful nickname and your app's client ID and secret.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.1.3.9001</span>
       </span>
     </div>
 
@@ -148,15 +152,19 @@ with a meaningful nickname and your app's client ID and secret.
 
     <div class="ref-description">
     
-    <p>Returns an OAuth app that we default to in <code><a href='credentials_user_oauth2.html'>credentials_user_oauth2()</a></code>. This
-makes it easy to test drive gargle before obtaining your own client ID and
-secret. Once your use of gargle is more than casual, you should create a
-similar function, but populated with your own credentials, like so:</p><ul>
-<li><p>Create a <a href='https://support.google.com/cloud/answer/6158853'>Cloud Platform Project</a>
-in the <a href='https://console.developers.google.com'>Google Developers Console</a>.</p></li>
-<li><p>Create a function, e.g., <code>my_app()</code>, that calls <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>
-with a meaningful nickname and your app's client ID and secret.</p></li>
-</ul>
+    <p>Invisibly returns an OAuth app that can be used to test drive
+gargle before obtaining your own client ID and secret. This OAuth app may
+be deleted or rotated at any time. There are no guarantees about which APIs
+are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+interactive, small-scale experimentation.</p>
+<p>To get your own OAuth app, without these limitations, set up a new Google
+<a href='https://support.google.com/cloud/answer/6158853'>Cloud Platform Project</a>
+in <a href='https://console.developers.google.com'>Google Developers Console</a> and
+complete the
+<a href='https://developers.google.com/identity/protocols/OAuth2InstalledApp#prerequisites'>Prerequisites</a>
+for OAuth 2.0 for Mobile &amp; Desktop Apps. Use <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code> to create
+an object of type <code>oauth_app</code>, suitable for use with the gargle and httr
+packages.</p>
     
     </div>
 
@@ -164,7 +172,8 @@ with a meaningful nickname and your app's client ID and secret.</p></li>
         
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An OAuth consumer application, produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>.</p>
+    <p>An OAuth consumer application, produced by <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code>,
+invisibly.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
