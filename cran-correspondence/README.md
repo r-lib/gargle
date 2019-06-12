@@ -1,5 +1,13 @@
 ## CRAN submission notes
 
+## v0.2.0
+
+2019-06-11 Initial submission v0.2.0
+
+  * Accepted by CRAN teams' auto-check service
+
+## v0.1.3
+
 2019-05-09 Initial submission v0.1.0
 
   * Clean pass from auto-check service
