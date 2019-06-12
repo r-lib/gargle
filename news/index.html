@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -131,6 +131,16 @@
       <small>Source: <a href='https://github.com/r-lib/gargle/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="gargle-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#gargle-0-2-0" class="anchor"></a>gargle 0.2.0<small> 2019-06-11 </small>
+</h1>
+<ul>
+<li><p>All built-in API credentials have been rotated and are stored internally in a way that reinforces appropriate use. There is a new <a href="https://www.tidyverse.org/google_privacy_policy/">Privacy policy</a> as well as a <a href="https://www.tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications">policy for authors of packages or other applications</a>. This is related to a process to get the gargle project <a href="https://support.google.com/cloud/answer/7454865?hl=en">verified</a>, which affects the OAuth2 capabilities and the consent screen.</p></li>
+<li><p>New vignette on “How to get your own API credentials”, to help other package authors or users obtain their own API key or OAuth client ID and secret.</p></li>
+<li><p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> is a new credential function. It is included in the default registry consulted by <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and is tried just before <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>.</p></li>
+</ul>
+</div>
     <div id="gargle-0-1-3" class="section level1">
 <h1 class="page-header">
 <a href="#gargle-0-1-3" class="anchor"></a>gargle 0.1.3<small> 2019-06-03 </small>
@@ -145,6 +155,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#gargle-0-2-0">0.2.0</a></li>
         <li><a href="#gargle-0-1-3">0.1.3</a></li>
       </ul>
     </div>
