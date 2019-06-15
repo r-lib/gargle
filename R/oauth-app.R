@@ -21,11 +21,15 @@ oauth_app_from_json <- function(path,
                                 appname = NULL) {
   stopifnot(is_string(path), is.null(appname) || is_string(appname))
 
-  info <- jsonlite::read_json(path)
+  info <- jsonlite::fromJSON(path, simplifyVector = FALSE)[["installed"]]
+
+  if (!all(c("client_id", "client_secret") %in% names(info))) {
+    stop("Can't find 'client_id' and 'client_secret' in the JSON", call. = FALSE)
+  }
 
   httr::oauth_app(
-    appname = appname %||% info$installed$project_id,
-    key = info$installed$client_id,
-    secret = info$installed$client_secret
+    appname = appname %||% info$project_id,
+    key = info$client_id,
+    secret = info$client_secret
   )
 }

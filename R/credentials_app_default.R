@@ -46,7 +46,7 @@ credentials_app_default <- function(scopes = NULL, ...) {
 
   # The JSON file stored on disk can be either a user credential or a service
   # account.
-  info <- jsonlite::fromJSON(path)
+  info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (info$type == "authorized_user") {
     # In the case of *user* credentials stored as the application default, only
     # the cloud-platform scope will be included. This means we need our scopes to

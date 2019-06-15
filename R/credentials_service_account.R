@@ -19,7 +19,7 @@ credentials_service_account <- function(scopes = NULL,
                                         path = "",
                                         ...) {
   cat_line("trying credentials_service_account()")
-  info <- jsonlite::fromJSON(path)
+  info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   # I add email scope explicitly, whereas I don't need to do so in
   # credentials_user_oauth2(), because it's done in Gargle2.0$new().
   scopes <- normalize_scopes(add_email_scope(scopes))
