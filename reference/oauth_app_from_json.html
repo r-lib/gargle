@@ -32,9 +32,9 @@
 
 <meta property="og:title" content="Create an OAuth app from JSON — oauth_app_from_json" />
 
-<meta property="og:description" content="Essentially a wrapper around httr::oauth_app() that extracts client id (aka
-key) and secret from JSON downloaded from Google Developers Console. If no appname is given,
-the &quot;project_id&quot; from the JSON is used." />
+<meta property="og:description" content="Essentially a wrapper around httr::oauth_app() that extracts the necessary
+info from JSON. If no appname is given, the &quot;project_id&quot; from the JSON is
+used." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -139,9 +139,9 @@ the &quot;project_id&quot; from the JSON is used." />
 
     <div class="ref-description">
     
-    <p>Essentially a wrapper around <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code> that extracts client id (aka
-key) and secret from JSON downloaded from <a href='https://console.developers.google.com'>Google Developers Console</a>. If no <code>appname</code> is given,
-the <code>"project_id"</code> from the JSON is used.</p>
+    <p>Essentially a wrapper around <code><a href='https://www.rdocumentation.org/packages/httr/topics/oauth_app'>httr::oauth_app()</a></code> that extracts the necessary
+info from JSON. If no <code>appname</code> is given, the <code>"project_id"</code> from the JSON is
+used.</p>
     
     </div>
 
@@ -152,7 +152,9 @@ the <code>"project_id"</code> from the JSON is used.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>path</th>
-      <td><p>Path to the JSON file.</p></td>
+      <td><p>JSON obtained from <a href='https://console.developers.google.com'>Google Developers Console</a>, containing a client id
+(aka key) and secret, in one of the forms supported for the <code>txt</code> argument
+of <code><a href='https://www.rdocumentation.org/packages/jsonlite/topics/fromJSON'>jsonlite::fromJSON()</a></code> (typically, a file path or JSON string).</p></td>
     </tr>
     <tr>
       <th>appname</th>
