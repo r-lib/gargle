@@ -119,12 +119,12 @@ AuthState <- R6::R6Class("AuthState", list(
     cat_line("---")
   },
   set_app = function(app) {
-    stopifnot(is.oauth_app(app))
+    stopifnot(is.null(app) || is.oauth_app(app))
     self$app <- app
     invisible(self)
   },
   set_api_key = function(value) {
-    stopifnot(is_string(value))
+    stopifnot(is.null(value) || is_string(value))
     self$api_key <- value
     invisible(self)
   },
