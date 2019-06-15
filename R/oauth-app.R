@@ -1,11 +1,14 @@
 #' Create an OAuth app from JSON
 #'
-#' Essentially a wrapper around [httr::oauth_app()] that extracts client id (aka
-#' key) and secret from JSON downloaded from [Google Developers
-#' Console](https://console.developers.google.com). If no `appname` is given,
-#' the `"project_id"` from the JSON is used.
+#' Essentially a wrapper around [httr::oauth_app()] that extracts the necessary
+#' info from JSON. If no `appname` is given, the `"project_id"` from the JSON is
+#' used.
 #'
-#' @param path Path to the JSON file.
+#' @param path JSON obtained from [Google Developers
+#'   Console](https://console.developers.google.com), containing a client id
+#'   (aka key) and secret, in one of the forms supported for the `txt` argument
+#'   of [jsonlite::fromJSON()] (typically, a file path or JSON string).
+
 #' @inheritParams httr::oauth_app
 #' @export
 #' @examples
