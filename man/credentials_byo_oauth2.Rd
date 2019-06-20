@@ -27,6 +27,10 @@ An \link[httr:Token-class]{Token2.0}.
 \description{
 This function does very little when called directly with a token:
 \itemize{
+\item If input has class \code{request}, i.e. it is a token that has been prepared
+with \code{\link[httr:config]{httr::config()}}, the \code{auth_token} component is extracted. For
+example, such input could be produced by \code{googledrive::drive_token()}
+or \code{bigrquery::bq_token()}.
 \item Checks that the input appears to be a Google OAuth token, based on
 the embedded \code{oauth_endpoint}.
 \item Refreshes the token, if it's refreshable.
@@ -38,6 +42,16 @@ associated with the token have already been baked in to the token itself and
 gargle does not support incremental authorization. The main point of
 \code{credentials_byo_oauth2()} is to allow \code{token_fetch()} (and packages that
 wrap it) to accomodate a "bring your own token" workflow.
+
+This also makes it possible to obtain a token with one package and then
+register it for use with another package. For example, the default scope
+requested by googledrive is also sufficient for operations available in
+googlesheets4. You could use a shared token like so:\preformatted{library(googledrive)
+library(googlesheets4)
+drive_auth(email = "jane_doe@example.com")
+sheets_auth(token = drive_token())
+# work with both packages freely now
+}
 }
 \examples{
 \dontrun{

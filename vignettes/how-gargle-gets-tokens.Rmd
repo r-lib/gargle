@@ -160,7 +160,9 @@ credentials_byo_oauth2(
 
 `credentials_byo_oauth2()` provides a back door for a "bring your own token" workflow. This function accounts for the scenario where an OAuth token has been obtained through external means and it's convenient to be able to put it into force.
 
-`credentials_byo_oauth2()` checks that `token` is of class `httr::Token2.0` and that it appears to be associated with Google. If `token` is not provided or if it doesn't satisfy these requirements, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+`credentials_byo_oauth2()` checks that `token` is of class `httr::Token2.0` and that it appears to be associated with Google. A `token` of class `request` is also acceptable, in which case the `auth_token` component is extracted and treated as the input. This is how a `Token2.0` object would present, if processed with `httr::config()`, as functions like `googledrive::drive_token()` and `bigrquery::bq_token()` do.
+
+If `token` is not provided or if it doesn't satisfy these requirements, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
 
 ## `credentials_user_oauth2()`
   

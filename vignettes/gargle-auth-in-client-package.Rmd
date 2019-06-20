@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 gargle provides common infrastructure for use with Google APIs. This vignette describes one possible design for using gargle to deal with auth, in a client package that provides a high-level wrapper for a specific API.
 
-There are frequent references to (the development version of) [googledrive](https://googledrive.tidyverse.org), which is a functioning test bed. The released version of googledrive already presents a very similar interface to users, but using internal functions. The release of gargle means these functions now exist in gargle, where they can be shared across packages, and the redundant versions in googledrive can be removed. The auth approach described here is already used in the (GitHub-only) [googlesheets4](https://googlesheets4.tidyverse.org) package (the successor to [googlesheets](https://github.com/jennybc/googlesheets)) and the development version of [bigrquery](https://bigrquery.r-dbi.org). [gmailr](https://github.com/jimhester/gmailr) is also slated for retrofitting.
+There are frequent references to (the development version of) [googledrive](https://googledrive.tidyverse.org), which is a functioning test bed. The released version of googledrive already presents a very similar interface to users, but using internal functions. The release of gargle means these functions now exist in gargle, where they can be shared across packages, and the redundant versions in googledrive can be removed. The auth approach described here is already used in (the development version of) [bigrquery](https://bigrquery.r-dbi.org) and the (GitHub-only) [googlesheets4](https://googlesheets4.tidyverse.org) package (the successor to [googlesheets](https://github.com/jennybc/googlesheets)). [gmailr](https://github.com/jimhester/gmailr) is also slated for retrofitting.
 
 ## Key choices
 
@@ -40,7 +40,7 @@ drive_auth <- function(email = NULL,
                        token = NULL) {
   cred <- gargle::token_fetch(
     scopes = scopes,
-    app = drive_oauth_app() %||% gargle::tidyverse_app(),
+    app = drive_oauth_app() %||% <BUILT_IN_DEFAULT_APP>,
     email = email,
     path = path,
     package = "googledrive",
@@ -74,7 +74,7 @@ A client package can use an internal object of class `gargle::AuthClass` to hold
 )
 ```
 
-The Oauth `app` and `api_key` are configurable by the user and can fall back to internal credentials. The `cred` field is populated by the first call to `drive_auth()` (direct or indirectly via `drive_token()`).
+The Oauth `app` and `api_key` are configurable by the user and, when `NULL`, downstream functions can fall back to internal credentials. The `cred` field is populated by the first call to `drive_auth()` (direct or indirectly via `drive_token()`).
 
 ### OAuth app
 
@@ -86,9 +86,9 @@ There is a field in the `.auth` auth state to hold the OAuth `app`. Exported aut
 library(googledrive)
 
 google_app <- httr::oauth_app(
-  "acme-corp",
-  key = "123456789.apps.googleusercontent.com",
-  secret = "abcdefghijklmnopqrstuvwxyz"
+  appname = "acme-corp",
+  key     = "123456789.apps.googleusercontent.com",
+  secret  = "abcdefghijklmnopqrstuvwxyz"
 )
 drive_auth_configure(app = google_app)
 
@@ -238,13 +238,29 @@ drive_has_token <- function() {
 By default, auth is active, and, for a fresh start, we won't have a token stashed in `.auth` yet. So this will result in a call to `drive_auth()` to obtain a credential, which is then cached in `.auth$cred` for the remainder of the session. All subsequent calls to `drive_token()` will just spit back this token.
 
 Above, we discussed scenarios where an advanced user might call `drive_auth()` proactively, with non-default arguments, possibly even loading a service token or using alternative flows, like Application Default Credentials or a Google Cloud Engine flow. Any token loaded in that way is stashed in `.auth$cred` and will be returned by subsequent calls to `drive_token()`.
+
+Multiple gargle-using packages can use a shared token by obtaining a suitably scoped token with one package, then registering that token with the other packages. For example, the default scope requested by googledrive is also sufficient for operations available in googlesheets4. You could use a shared token like so:
+
+```{r eval = FALSE}
+library(googledrive)
+library(googlesheets4)
+
+drive_auth(email = "jane_doe@example.com") # gets a suitably scoped token
+                                           # and stashes for googledrive use
+
+sheets_auth(token = drive_token())         # registers token with googlesheets4
+
+# now work with both packages freely ...
+````
+
+It is important to make sure that the token-requesting package (googledrive, above) is using an OAuth app (client ID and secret) for which all the necessary APIs and scopes are enabled.
     
 ## Auth interface
 
 The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R). That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.
 
-  * `drive_token()` retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is `NULL`, `drive_auth()` is called to obtain a credential. If `auth_active` is `FALSE`, `NULL` is returned; client packages should be designed to fall back to including an API key in affected HTTP requests.
-  * `drive_auth()` ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets `auth_active` to `TRUE`. Can be called directly, but `drive_token()` will call when/as needed.
+  * `drive_token()` retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is `NULL`, `drive_auth()` is called to obtain a credential. If `auth_active` is `FALSE`, `NULL` is returned; client packages should be designed to fall back to including an API key in affected HTTP requests, if sensible for the API.
+  * `drive_auth()` ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets `auth_active` to `TRUE`. Can be called directly, but `drive_token()` will also call it as needed.
   * `drive_deauth()` sets `auth_active` to `FALSE` and `.auth$cred` to `NULL`.
   * `drive_oauth_app()` returns `.auth$app`.
   * `drive_api_key()` returns `.auth$key`.

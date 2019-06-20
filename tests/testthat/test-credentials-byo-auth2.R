@@ -27,3 +27,16 @@ test_that("credentials_byo_auth2() just passes valid input through", {
   )
   expect_identical(credentials_byo_oauth2(token = token), token)
 })
+
+test_that("credentials_byo_auth2() extracts a token from a request", {
+  token <- httr::Token2.0$new(
+    app = httr::oauth_app("x", "y", "z"),
+    endpoint = httr::oauth_endpoints("google"),
+    credentials = list(access_token = "ACCESS_TOKEN")
+  )
+  configured_token <- httr::config(token = token)
+  expect_identical(
+    credentials_byo_oauth2(token = configured_token),
+    token
+  )
+})
