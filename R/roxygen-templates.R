@@ -19,9 +19,6 @@
 #   PRODUCT     = "Google Drive",
 #   API         = "Drive API",
 #   PREFIX      = "drive",
-#   # Only packages maintained by the tidyverse teams can use this app.
-#   # If you ship an app with your package, use an appropriate name here.
-#   AUTH_CONFIG_SOURCE = "tidyverse"
 # )
 
 # PREFIX_auth() ----------------------------------------------------------
@@ -132,6 +129,14 @@ PREFIX_token_description <- function(.data = list(
 
 PREFIX_token_return <- function() {
   "@return A `request` object (an S3 class provided by [httr][httr::httr])."
+}
+
+PREFIX_has_token_description <- function(.data = list(PACKAGE = "PACKAGE")) {
+  glue_data_lines(c(
+    "@description",
+    "Reports whether {PACKAGE} has stored a token, ready for use in downstream",
+    "requests."
+  ), .data = .data)
 }
 
 # PREFIX_auth_config() -------------------------------------------------------
