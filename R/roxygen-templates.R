@@ -68,7 +68,7 @@ PREFIX_auth_details <- function(.data = list(
     "",
     "For details on the many ways to find a token, see",
     "[gargle::token_fetch()]. For deeper control over auth, use",
-    "[{PREFIX}_auth_config()] to bring your own OAuth app or API key."
+    "[{PREFIX}_auth_configure()] to bring your own OAuth app or API key."
   ), .data = .data)
 }
 
@@ -95,7 +95,7 @@ PREFIX_deauth_description <- function(.data = list(
     "{PACKAGE} in a non-interactive setting to make requests that do not",
     "require a token. It will prevent the attempt to obtain a token",
     "interactively in the browser. A built-in API key is used by default or",
-    "the user can configure their own via [{PREFIX}_auth_config()]."
+    "the user can configure their own via [{PREFIX}_auth_configure()]."
   ), .data = .data)
 }
 
@@ -113,7 +113,7 @@ PREFIX_token_description <- function(.data = list(
     "control, [{PREFIX}_auth()] is what they need. If there is no current",
     "token, [{PREFIX}_auth()] is called to either load from cache or",
     "initiate OAuth2.0 flow. If auth has been deactivated via",
-    "[{PREFIX}_auth_config()], `{PREFIX}_token()` returns `NULL`."
+    "[{PREFIX}_deauth()], `{PREFIX}_token()` returns `NULL`."
   ), .data = .data)
 }
 
