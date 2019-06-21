@@ -7,7 +7,7 @@
 oauth_app_from_json(path, appname = NULL)
 }
 \arguments{
-\item{path}{JSON downloaded from Google Developers Console, containing a
+\item{path}{JSON downloaded from Google Cloud Platform Console, containing a
 client id (aka key) and secret, in one of the forms supported for the \code{txt}
 argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
 
@@ -16,13 +16,13 @@ used to make it easier to identify different applications.}
 }
 \description{
 Essentially a wrapper around \code{\link[httr:oauth_app]{httr::oauth_app()}} that extracts the necessary
-info from JSON obtained from \href{https://console.developers.google.com}{Google Developers Console}. If no \code{appname} is given,
+info from JSON obtained from \href{https://console.cloud.google.com}{Google Cloud Platform Console}. If no \code{appname} is given,
 the \code{"project_id"} from the JSON is used.
 }
 \examples{
 \dontrun{
 oauth_app(
-  path = "/path/to/the/JSON/you/downloaded/from/google/dev/console.json"
+  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
 )
 }
 }

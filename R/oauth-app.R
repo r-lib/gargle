@@ -1,11 +1,11 @@
 #' Create an OAuth app from JSON
 #'
 #' Essentially a wrapper around [httr::oauth_app()] that extracts the necessary
-#' info from JSON obtained from [Google Developers
-#' Console](https://console.developers.google.com). If no `appname` is given,
+#' info from JSON obtained from [Google Cloud Platform
+#' Console](https://console.cloud.google.com). If no `appname` is given,
 #' the `"project_id"` from the JSON is used.
 #'
-#' @param path JSON downloaded from Google Developers Console, containing a
+#' @param path JSON downloaded from Google Cloud Platform Console, containing a
 #'   client id (aka key) and secret, in one of the forms supported for the `txt`
 #'   argument of [jsonlite::fromJSON()] (typically, a file path or JSON string).
 #'
@@ -14,7 +14,7 @@
 #' @examples
 #' \dontrun{
 #' oauth_app(
-#'   path = "/path/to/the/JSON/you/downloaded/from/google/dev/console.json"
+#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
 #' )
 #' }
 oauth_app_from_json <- function(path,

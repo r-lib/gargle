@@ -1,10 +1,5 @@
 # nocov start
 
-## FIXME(jennybc): find a place for this
-#' @section API console:
-#' To manage your google projects, use the API console:
-#' \url{https://console.cloud.google.com/}
-
 # example of data client package needs to provide -----------------------------
 
 # a client package should define a list like this and pass it to the functions
