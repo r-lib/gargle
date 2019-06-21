@@ -141,14 +141,14 @@ PREFIX_has_token_return <- function() {
 PREFIX_auth_configure_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
-), .deauth_possible = TRUE, .fallbacks = TRUE) {
+), .has_api_key = TRUE, .fallbacks = TRUE) {
   lines <- c(
     "@description",
     "These functions give more control over and visibility into the auth",
     "configuration than [{PREFIX}_auth()] does. `{PREFIX}_auth_configure()`",
     "lets the user specify their own:",
     "  * OAuth app, which is used when obtaining a user token.",
-    if (.deauth_possible) {
+    if (.has_api_key) {
       c(
     "  * API key. If {PACKAGE} is de-authorized via [{PREFIX}_deauth()], all",
     "    requests are sent with an API key in lieu of a token."
@@ -163,7 +163,7 @@ PREFIX_auth_configure_description <- function(.data = list(
     "are used."
       )
     },
-    if (.deauth_possible) {
+    if (.has_api_key) {
       c(
     "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
     "currently configured OAuth app and API key, respectively."
