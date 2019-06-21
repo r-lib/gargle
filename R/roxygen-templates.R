@@ -93,13 +93,11 @@ PREFIX_deauth_description <- function(.data = list(
     "require a token. It will prevent the attempt to obtain a token",
     "interactively in the browser. The user can configure their own API key",
     "via [{PREFIX}_auth_configure()] and retrieve that key via",
-    "[{PREFIX}_api_key()]."
-  )
-  if (.fallback_api_key) {
-    lines <- append(lines,
-    "In the absence of a user-configured key, an built-in default key is used."
+    "[{PREFIX}_api_key()].",
+    if (.fallback_api_key) {
+    "In the absence of a user-configured key, a built-in default key is used."
+    }
     )
-  }
   glue_data_lines(lines, .data = .data)
 }
 
@@ -116,14 +114,14 @@ PREFIX_token_description <- function(.data = list(
     "do not need to handle tokens \"by hand\" or, even if they need some",
     "control, [{PREFIX}_auth()] is what they need. If there is no current",
     "token, [{PREFIX}_auth()] is called to either load from cache or",
-    "initiate OAuth2.0 flow."
-  )
-  if (.deauth_possible) {
-    lines <- append(lines, c(
+    "initiate OAuth2.0 flow.",
+    if (.deauth_possible) {
+      c(
     "If auth has been deactivated via [{PREFIX}_deauth()], `{PREFIX}_token()`",
     "returns `NULL`."
-    ))
-  }
+      )
+    }
+  )
   glue_data_lines(lines, .data = .data)
 }
 
@@ -139,80 +137,73 @@ PREFIX_has_token_description <- function(.data = list(PACKAGE = "PACKAGE")) {
   ), .data = .data)
 }
 
-# PREFIX_auth_config() -------------------------------------------------------
+PREFIX_has_token_return <- function() {
+  "@return Logical."
+}
 
-PREFIX_auth_config_description <- function(.data = list(
+# PREFIX_auth_configure() -------------------------------------------------------
+
+PREFIX_auth_configure_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
-), .deauth_possible = TRUE) {
+), .deauth_possible = TRUE, .fallbacks = TRUE) {
   lines <- c(
     "@description",
-    "These functions give the user more control over auth than what is",
-    "possible with [{PREFIX}_auth()]. `{PREFIX}_auth_config()` gives control",
-    "of:",
-    "   * The OAuth app, which is used when obtaining a user token."
-  )
-  if (.deauth_possible) {
-    lines <- append(lines, c(
-    "   * The API key. If {PACKAGE} is deauthorized via [{PREFIX}_deauth()],",
-    "     all requests will be sent with an API key in lieu of a token."
-    ))
-  }
-  lines <- append(lines, c(
-    "",
-    "See the vignette [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)",
-    "for more."
-  ))
-  if (.deauth_possible) {
-    lines <- append(lines, c(
-    "",
-    "`{PREFIX}_api_key()` and `{PREFIX}_oauth_app()` retrieve the",
-    " currently configured API key and OAuth app, respectively."
-    ))
-  } else {
-    lines <- append(lines, c(
-    "",
+    "These functions give more control over and visibility into the auth",
+    "configuration than [{PREFIX}_auth()] does. `{PREFIX}_auth_configure()`",
+    "lets the user specify their own:",
+    "  * OAuth app, which is used when obtaining a user token.",
+    if (.deauth_possible) {
+      c(
+    "  * API key. If {PACKAGE} is de-authorized via [{PREFIX}_deauth()], all",
+    "    requests are sent with an API key in lieu of a token."
+      )
+    },
+    "See the vignette",
+    "[How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)",
+    "for more.",
+    if (.fallbacks) {
+      c(
+    "If the user does not configure these settings, internal defaults",
+    "are used."
+      )
+    },
+    if (.deauth_possible) {
+      c(
+    "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
+    "currently configured OAuth app and API key, respectively."
+      )
+    } else {
     "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth app."
-    ))
-  }
+    }
+  )
   glue_data_lines(lines, .data = .data)
 }
 
-PREFIX_auth_config_params_except_key <- function(.data = list(
-  PACKAGE = "AUTH_CONFIG_SOURCE"
-)) {
-  glue_data_lines(c(
-    "@param app OAuth app. Defaults to a {AUTH_CONFIG_SOURCE} app.",
-    "@inheritParams gargle::oauth_app_from_json"
-  ), .data = .data)
+PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
+  c(
+    "@param app OAuth app, in the sense of [httr::oauth_app()].",
+    "@inheritParams gargle::oauth_app_from_json",
+    if (.has_api_key) {
+    "@param api_key API key."
+    }
+  )
 }
 
-PREFIX_auth_config_params_key <- function(.data = list(
-  PACKAGE = "AUTH_CONFIG_SOURCE"
-)) {
-  glue_data_lines(c(
-    "@param api_key API key. Defaults to a {AUTH_CONFIG_SOURCE} key. Necessary in",
-    "  order to make unauthorized \"token-free\" requests for public resources."
-  ), .data = .data)
-}
-
-PREFIX_auth_config_return_with_key <- function(.data = list(
+PREFIX_auth_configure_return <- function(.data = list(
   PREFIX = "PREFIX"
-)) {
-  glue_data_lines(c(
-    "@return `{PREFIX}_auth_config()`: An object of R6 class `AuthState`,",
-    "which is defined in the gargle package. `{PREFIX}_api_key()`: the",
-    "current API key. `{PREFIX}_oauth_app()`: the current",
-    "[httr::oauth_app()]."
-  ), .data = .data)
+), .has_api_key = TRUE) {
+  lines <- c(
+    "@return",
+    "  * `{PREFIX}_auth_configure()`: An object of R6 class",
+    "    [gargle::AuthState], invisibly.",
+    "  * `{PREFIX}_oauth_app()`: the current user-configured",
+    "    [httr::oauth_app()].",
+    if (.has_api_key) {
+    "  * `{PREFIX}_api_key()`: the current user-configured API key."
+    }
+  )
+  glue_data_lines(lines, .data = .data)
 }
 
-PREFIX_auth_config_return_without_key <- function(.data = list(
-  PREFIX = "PREFIX"
-)) {
-  glue_data_lines(c(
-    "@return `{PREFIX}_auth_config()`: An object of R6 class `AuthState`,",
-    "which is defined in the gargle package. `{PREFIX}_oauth_app()`: the ",
-    "current [httr::oauth_app()]."
-  ), .data = .data)
-} # nocov end
+# nocov end
