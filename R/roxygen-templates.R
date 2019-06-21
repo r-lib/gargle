@@ -86,17 +86,24 @@ PREFIX_auth_params <- function() {c(
 PREFIX_deauth_description <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
-)) {
-  glue_data_lines(c(
+), .fallback_api_key = TRUE) {
+  lines <- c(
     "@description",
     "Put {PACKAGE} into a de-authorized state. Instead of sending a token,",
     "{PACKAGE} will send an API key. This can be used to access public",
     "resources for which no Google sign-in is required. This is handy for using",
     "{PACKAGE} in a non-interactive setting to make requests that do not",
     "require a token. It will prevent the attempt to obtain a token",
-    "interactively in the browser. A built-in API key is used by default or",
-    "the user can configure their own via [{PREFIX}_auth_configure()]."
-  ), .data = .data)
+    "interactively in the browser. The user can configure their own API key",
+    "via [{PREFIX}_auth_configure()] and retrieve that key via",
+    "[{PREFIX}_api_key()]."
+  )
+  if (.fallback_api_key) {
+    lines <- append(lines,
+    "In the absence of a user-configured key, an built-in default key is used."
+    )
+  }
+  glue_data_lines(lines, .data = .data)
 }
 
 # PREFIX_token() ----------------------------------------------------------
@@ -104,17 +111,23 @@ PREFIX_deauth_description <- function(.data = list(
 PREFIX_token_description <- function(.data = list(
   API    = "GOOGLE API",
   PREFIX = "PREFIX"
-)) {
-  glue_data_lines(c(
+), .deauth_possible = TRUE) {
+  lines <- c(
     "@description",
     "For internal use or for those programming around the {API}.",
     "Returns a token pre-processed with [httr::config()]. Most users",
     "do not need to handle tokens \"by hand\" or, even if they need some",
     "control, [{PREFIX}_auth()] is what they need. If there is no current",
     "token, [{PREFIX}_auth()] is called to either load from cache or",
-    "initiate OAuth2.0 flow. If auth has been deactivated via",
-    "[{PREFIX}_deauth()], `{PREFIX}_token()` returns `NULL`."
-  ), .data = .data)
+    "initiate OAuth2.0 flow."
+  )
+  if (.deauth_possible) {
+    lines <- append(lines, c(
+    "If auth has been deactivated via [{PREFIX}_deauth()], `{PREFIX}_token()`",
+    "returns `NULL`."
+    ))
+  }
+  glue_data_lines(lines, .data = .data)
 }
 
 PREFIX_token_return <- function() {
