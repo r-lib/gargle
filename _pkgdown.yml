@@ -5,7 +5,7 @@ authors:
     href: https://jennybryan.org
 
 development:
-  mode: release
+  mode: devel
 
 navbar:
   components:
@@ -24,6 +24,7 @@ reference:
       - gargle_oauth_sitrep
       - starts_with("cred_funs")
       - oauth_app_from_json
+      - starts_with("token")
   - title: "Requests and responses"
     desc: >
       Helpers for forming HTTP requests and processing the response
