@@ -10,6 +10,6 @@ test_that("token works", {
       path = rawToChar(secret_read("gargle", "gargle-testing.json"))
     )
   )
-  email <- get_email(token)
+  email <- token_email(token)
   expect_match(email, "^gargle-testing@.*[.]iam[.]gserviceaccount[.]com")
 })

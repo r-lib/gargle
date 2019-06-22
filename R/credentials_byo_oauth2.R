@@ -30,7 +30,7 @@
 #' ```
 #'
 #' @inheritParams token_fetch
-#' @param token A token with class [Token2.0][httr::Token-class].
+#' @inheritParams token-info
 #'
 #' @return An [Token2.0][httr::Token-class].
 #' @family credential functions

@@ -34,7 +34,7 @@ credentials_service_account <- function(scopes = NULL,
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    cat_line("service account email: ", get_email(token))
+    cat_line("service account email: ", token_email(token))
     token
   }
 }

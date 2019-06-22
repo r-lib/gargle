@@ -1,3 +1,100 @@
+# See notes about the userinfo and tokeninfo endpoints below.
+
+#' Get info from a token
+#'
+#' These functions send the `token` to Google endpoints that return info about a
+#' token or a user.
+#'
+#' @param token A token with class [Token2.0][httr::Token-class] or an object of
+#'   httr's class `request`, i.e. a token that has been prepared with
+#'   [httr::config()] and has a [Token2.0][httr::Token-class] in the
+#'   `auth_token` component.
+#' @name token-info
+#'
+#' @return A list containing:
+#'   * `token_userinfo()`: user info
+#'   * `token_email()`: user's email (obtained from a call to `token_userinfo()`)
+#'   * `token_tokeninfo()`: token info
+#'
+#' @examples
+#' \dontrun{
+#' # with service account token
+#' t <- token_fetch(
+#'   scopes = "https://www.googleapis.com/auth/drive",
+#'   path   = "path/to/service/account/token/blah-blah-blah.json"
+#' )
+#' # or with an OAuth token
+#' t <- token_fetch(
+#'   scopes = "https://www.googleapis.com/auth/drive",
+#'   email  = "janedoe@example.com"
+#' )
+#' token_userinfo(t)
+#' token_email(t)
+#' tokens_tokeninfo(t)
+#' }
+NULL
+
+#' @rdname token-info
+#' @export
+#'
+#' @details
+#' It's hard to say exactly what info will be returned by the "userinfo"
+#' endpoint targetted by `token_userinfo()`. It depends on the token's scopes.
+#' OAuth2 tokens obtained via the gargle package include the
+#' `https://www.googleapis.com/auth/userinfo.email` scope, which guarantees we
+#' can learn the email associated with the token. If the token has the
+#' `https://www.googleapis.com/auth/userinfo.profile` scope, there will be even
+#' more information available. But for a token with unknown or arbitrary scopes,
+#' we can't make any promises about what information will be returned.
+token_userinfo <- function(token) {
+  if (inherits(token, "request")) {
+    token <- token$auth_token
+  }
+  stopifnot(inherits(token, "Token2.0"))
+
+  req <- request_build(
+    method = "GET",
+    path = "v1/userinfo",
+    token = token,
+    base_url = "https://openidconnect.googleapis.com"
+  )
+  resp <- request_make(req)
+  response_process(resp)
+}
+
+#' @rdname token-info
+#' @export
+token_email <- function(token) {
+  # Assumes the token was obtained with userinfo.email scope.
+  # This is true of all gargle-mediated tokens, by definition.
+  token_userinfo(token)$email
+}
+
+#' @rdname token-info
+#' @export
+token_tokeninfo <- function(token) {
+  if (inherits(token, "request")) {
+    token <- token$auth_token
+  }
+  stopifnot(inherits(token, "Token2.0"))
+  # A stale token does not fail in a way that leads to auto refresh.
+  # It results in: "Bad Request (HTTP 400)."
+  # Hence, the explicit refresh here.
+  token$refresh()
+
+  # https://www.googleapis.com/oauth2/v3/tokeninfo
+  req <- request_build(
+    method = "GET",
+    path = "oauth2/v3/tokeninfo",
+    # also works
+    # params = list(access_token = token$credentials$access_token),
+    token = token,
+    base_url = "https://www.googleapis.com"
+  )
+  resp <- request_make(req)
+  response_process(resp)
+}
+
 # Good 3rd party overview re: learning about your Google user / token:
 # https://www.oauth.com/oauth2-servers/signing-in-with-google/verifying-the-user-info/
 #
@@ -28,75 +125,3 @@
 #
 # Here's the URL for userinfo_endpoint, at the time of writing:
 # https://openidconnect.googleapis.com/v1/userinfo
-
-
-#' Get info on current user
-#'
-#' The userinfo endpoint can potentially return the user's entire profile, if
-#' the token has the necessary scope. But, by default, gargle-mediated tokens
-#' only include the `userinfo.email` scope, so don't expect to get much beyond
-#' the email, unless you've explicitly scoped for more. `get_userinfo()` can
-#' exploit built-in token refresh, although at the time of writing, the
-#' motivating use case is to get and store the email for a freshly-obtained
-#' token.
-#'
-#' @param token A gargle token
-#'
-#' @return User info or user's email
-#' @keywords internal
-#' @noRd
-#' @examples
-#' \dontrun{
-#' # with service account token
-#' t <- token_fetch(
-#'   scopes = "https://www.googleapis.com/auth/drive",
-#'   path   = "path/to/service/account/token/blah-blah-blah.json"
-#' )
-#' # or with an OAuth token
-#' t <- token_fetch(
-#'   scopes = "https://www.googleapis.com/auth/drive",
-#'   email  = "janedoe@example.com"
-#' )
-#' get_userinfo(t)
-#' get_email(t)
-#' get_tokeninfo(t)
-#' }
-get_userinfo <- function(token) {
-  stopifnot(inherits(token, "Token2.0"))
-
-  req <- gargle::request_build(
-    method = "GET",
-    path = "v1/userinfo",
-    token = token,
-    base_url = "https://openidconnect.googleapis.com"
-  )
-  resp <- gargle::request_make(req)
-  response_process(resp)
-}
-
-# Assumes the token was obtained with userinfo.email scope.
-# This is true of all gargle-mediated tokens, by definition.
-get_email <- function(token) {
-  get_userinfo(token)$email
-}
-
-
-# WARNING: does not trigger token refresh!
-# A token that needs to be refreshed can result in "Bad Request (HTTP 400)."
-# Use when you expect the token to be valid for external reasons, e.g. it is
-# known to be fresh.
-get_tokeninfo <- function(token) {
-  stopifnot(inherits(token, "Token2.0"))
-
-  # https://www.googleapis.com/oauth2/v3/tokeninfo
-  req <- gargle::request_build(
-    method = "GET",
-    path = "oauth2/v3/tokeninfo",
-    # also works
-    # params = list(access_token = token$credentials$access_token),
-    token = token,
-    base_url = "https://www.googleapis.com"
-  )
-  resp <- gargle::request_make(req)
-  response_process(resp)
-}
