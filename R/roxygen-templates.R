@@ -75,7 +75,7 @@ PREFIX_auth_params <- function() {c(
 
 # PREFIX_deauth() ----------------------------------------------------------
 
-PREFIX_deauth_description <- function(.data = list(
+PREFIX_deauth_description_with_api_key <- function(.data = list(
   PACKAGE = "PACKAGE",
   PREFIX  = "PREFIX"
 ), .fallback_api_key = TRUE) {
@@ -93,6 +93,23 @@ PREFIX_deauth_description <- function(.data = list(
     "In the absence of a user-configured key, a built-in default key is used."
     }
     )
+  glue_data_lines(lines, .data = .data)
+}
+
+PREFIX_deauth_description_no_api_key <- function(.data = list(
+  PACKAGE = "PACKAGE",
+  PREFIX  = "PREFIX"
+), .fallback_api_key = TRUE) {
+  lines <- c(
+    "@description",
+    "Clears any currently stored token. The next time {PACKAGE} needs a token,",
+    "the token acquisition process starts over, with a fresh call to",
+    "[{PREFIX}_auth()] and, therefore, internally, a call to",
+    "[gargle::token_fetch()]. Unlike some other packages that use gargle,",
+    "{PACKAGE} is not usable in a de-authorized state. Therefore, calling",
+    "`{PREFIX}_deauth()` only clears the token, i.e. it does NOT imply that",
+    "subsequent requests are made with an API key in lieu of a token."
+  )
   glue_data_lines(lines, .data = .data)
 }
 
@@ -123,6 +140,8 @@ PREFIX_token_description <- function(.data = list(
 PREFIX_token_return <- function() {
   "@return A `request` object (an S3 class provided by [httr][httr::httr])."
 }
+
+# PREFIX_has_token() ----------------------------------------------------------
 
 PREFIX_has_token_description <- function(.data = list(PACKAGE = "PACKAGE")) {
   glue_data_lines(c(
