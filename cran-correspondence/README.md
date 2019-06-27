@@ -1,5 +1,9 @@
 ## CRAN submission notes
 
+## v0.3.0
+
+2019-06-27 Initial submission v0.3.0
+
 ## v0.2.0
 
 2019-06-11 Initial submission v0.2.0
