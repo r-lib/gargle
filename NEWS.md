@@ -2,9 +2,12 @@
 
 * The unexported functions available for generating standardized docs for
   `PKG_auth` functions in client packages have been updated.
-
+  
 * `token_userinfo()`, `token_email()`, and `token_tokeninfo()` are newly
   exported helpers that retrieve information for a token.
+
+* `AuthState$set_app()` and `AuthState$set_api_key()` now allow setting a value
+  of `NULL`, i.e. these fields are easier to clear.
 
 * `credentials_byo_oauth2()` gains the ability to ingest a token from an object of class `httr::request`, i.e. to retrieve the `auth_token` component that holds an object of class `httr::Token2.0` that has been processed with `httr::config()`.
 
