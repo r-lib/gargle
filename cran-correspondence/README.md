@@ -4,6 +4,8 @@
 
 2019-06-27 Initial submission v0.3.0
 
+  * Accepted by CRAN teams' auto-check service
+
 ## v0.2.0
 
 2019-06-11 Initial submission v0.2.0
