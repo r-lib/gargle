@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* The unexported functions available for generating standardized docs for
+  `PKG_auth` functions in client packages have been updated.
+
 * `token_userinfo()`, `token_email()`, and `token_tokeninfo()` are newly
   exported helpers that retrieve information for a token.
 
