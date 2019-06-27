@@ -1,12 +1,11 @@
-This is a small update of a recently released package. gargle has no reverse dependencies.
-
-I've rotated built-in credentials and made other changes for compliance with recent and future developments around handling Google API credentials.
+This is a small update of a recently released package, prior to submitting
+updates to other packages, that will Import gargle.
 
 -------------------------------------------------------------------------------
 
 ## Test environments
 
-* local OS X install, R 3.5.3
+* local OS X install, R 3.6.0
 * local Windows 10 VM, R 3.6.0
 * win-builder (devel and release)
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit, r-hub
