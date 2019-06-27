@@ -32,7 +32,7 @@ In googledrive, the main user-facing auth function is `googledrive::drive_auth()
 
 ```{r, eval = FALSE}
 # googledrive::
-drive_auth <- function(email = NULL,
+drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
                        scopes = "https://www.googleapis.com/auth/drive",
                        cache = gargle::gargle_oauth_cache(),
@@ -117,6 +117,8 @@ drive_api_key()
 
 Many users aren't motivated to take this level of control and appreciate when a package provides a built-in default API key. As with the app, packages should obtain their own API key and not borrow the gargle or tidyverse key.
 
+Some APIs are not usable without a token, in which case a wrapper package may not even expose functionality for managing an API key. Among the packages mentioned as examples, this is true of bigrquery.
+
 ### Email or Google identity
 
 In contrast to the OAuth app and API key, every user must express which identity they wish to present to the API. This is a familiar concept and users expect to specify this. Since users may have more than one Google account, it's quite likely that they will want to switch between accounts, even within a single R session, or that they might want to explicitly declare the identity to be used in a specific script or app.
@@ -138,7 +140,7 @@ Here's a reminder of the signature of `googledrive::drive_auth()`:
 
 ```{r, eval = FALSE}
 # googledrive::
-drive_auth <- function(email = NULL,
+drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
                        scopes = "https://www.googleapis.com/auth/drive",
                        cache = gargle::gargle_oauth_cache(),
@@ -172,8 +174,8 @@ Here's a concrete outline of how one could set up a client package to get its au
   1. Use gargle's roxygen helpers to create the docs for your auth functions.
      This relieves you from writing docs and you inherit standard wording. See
      previously cited examples for inspiration.
-  1. Use the functions `YOURPKG_api_key()` and `YOURPKG_token()` (defined in the
-     standard auth interface) to insert an API key or token in your package's
+  1. Use the functions `YOURPKG_token()` and `YOURPKG_api_key()` (defined in
+     the standard auth interface) to insert a token or API key in your package's
      requests.
 
 ## Getting that first token
@@ -259,22 +261,42 @@ It is important to make sure that the token-requesting package (googledrive, abo
 
 The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R). That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.
 
-  * `drive_token()` retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is `NULL`, `drive_auth()` is called to obtain a credential. If `auth_active` is `FALSE`, `NULL` is returned; client packages should be designed to fall back to including an API key in affected HTTP requests, if sensible for the API.
-  * `drive_auth()` ensures we are dealing with an authenticated user and have a credential on hand with which to place authorized requests. Sets `auth_active` to `TRUE`. Can be called directly, but `drive_token()` will also call it as needed.
-  * `drive_deauth()` sets `auth_active` to `FALSE` and `.auth$cred` to `NULL`.
+  * `drive_token()` retrieves the current credential, in a form that is ready
+    for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is
+    `NULL`, `drive_auth()` is called to obtain a credential. If `auth_active` is
+    `FALSE`, `NULL` is returned; client packages should be designed to fall back
+    to including an API key in affected HTTP requests, if sensible for the API.
+  * `drive_auth()` ensures we are dealing with an authenticated user and have a
+    credential on hand with which to place authorized requests. Sets
+    `auth_active` to `TRUE`. Can be called directly, but `drive_token()` will
+    also call it as needed.
+  * `drive_deauth()` clears the current token. It might also toggle
+    `auth_active`, depending on the features of the target API. See below.
   * `drive_oauth_app()` returns `.auth$app`.
   * `drive_api_key()` returns `.auth$key`.
-  * `drive_auth_configure()` can be used to configure auth. This is how an advanced user would enter their own OAuth app and API key into auth config, in order to affect all subsequent requests.
+  * `drive_auth_configure()` can be used to configure auth. This is how an
+    advanced user would enter their own OAuth app and API key into auth config,
+    in order to affect all subsequent requests.
+  * `drive_user()` reports some information about the user associated with the
+    current token. The Drive API offers an actual endpoint for this, which is
+    not true for most Google APIs. Therefore the analogous function in
+    bigrquery, `bq_user()` is a better general reference.
 
-## De-activating auth
+## De-auth
 
-`drive_deauth()` can be used at any time to enter a de-authorized state, during which requests are sent out with an API key and no token. This is a great way to eliminate any friction re: auth if there's no need for it, i.e. if all requests are for resources that are world readable or available to anyone who knows how to ask for it, such as files shared via "Anyone with the link". The de-authorized state is especially useful in non-interactive settings or where user interaction is indirect, such as via Shiny.
+APIs split into two classes: those that can be used, at least partially, without a token and those that cannot. If an API is usable without a token -- which is true for the Drive API -- then requests must include an API key. Therefore, the auth design for a client package is different for these two types of APIs.
+
+For an API that can be used without a token: `drive_deauth()` can be used at any time to enter a de-authorized state. It sets `auth_active` to `FALSE` and `.auth$cred` to `NULL`. In this state, requests are sent out with an API key and no token. This is a great way to eliminate any friction re: auth if there's no need for it, i.e. if all requests are for resources that are world readable or available to anyone who knows how to ask for it, such as files shared via "Anyone with the link". The de-authorized state is especially useful in non-interactive settings or where user interaction is indirect, such as via Shiny.
+
+For an API that cannot be used without a token: BigQuery is an example of such an API. `bq_deauth()` just clears the current token, so that the auth flow starts over the next time a token is needed.
 
 ## BYOAK = Bring Your Own App and Key
 
 Advanced users can use their own OAuth app and API key. `drive_auth_configure()` lives in `R/drive_auth()` and it provides the ability to modify the current `app` and `api_key`. Recall that `drive_oauth_app()` and `drive_api_key()` also exist for targeted, read-only access.
 
 The vignette [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)" describes how to an API key and OAuth app.
+
+Packages that always send token will omit the API key functionality here.
 
 ## Changing identities (and more)
 
