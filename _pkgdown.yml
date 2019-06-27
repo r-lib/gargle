@@ -5,7 +5,7 @@ authors:
     href: https://jennybryan.org
 
 development:
-  mode: devel
+  mode: auto
 
 navbar:
   components:
