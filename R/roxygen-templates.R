@@ -220,4 +220,25 @@ PREFIX_auth_configure_return <- function(.data = list(
   glue_data_lines(lines, .data = .data)
 }
 
+# PREFIX_user() ----------------------------------------------------------
+
+PREFIX_user_description <- function() {
+  c(
+    "@description",
+    "Reveals the email address of the user associated with the current token.",
+    "If no token has been loaded yet, this function does not initiate auth."
+  )
+}
+
+PREFIX_user_seealso <- function() {
+  c(
+    "@seealso [gargle::token_userinfo()], [gargle::token_email()],",
+    "[gargle::token_tokeninfo()]"
+  )
+}
+
+PREFIX_user_return <- function() {
+  "@return An email address or, if no token has been loaded, `NULL`."
+}
+
 # nocov end
