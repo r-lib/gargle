@@ -200,23 +200,16 @@ if (gargle:::secret_can_decrypt("googledrive")) {
 
 Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. `drive_auth()` is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that's very favorable for our workflow. We'll come back to this below.
 
-But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here are the test skippers from googledrive and bigrquery:
+But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here is the test skipper from googledrive:
 
 ```{r eval = FALSE}
 # googledrive
 skip_if_no_token <- function() {
   testthat::skip_if_not(drive_has_token(), "No Drive token")
 }
-
-# bigrquery
-skip_if_no_auth <- function() {
-  testthat::skip_if_not(has_access_cred(), "Authentication not available")
-}
 ```
 
-`googledrive::drive_has_token()` and `bigrquery::has_access_cred()` are package-specific functions that return `TRUE` if a token is available and `FALSE` otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests.
-
-In bigrquery, `skip_if_no_auth()` is defined below `R/` but it is arguably more common to see such a definition in a file like `tests/testthat/helper.R`, which is where it's defined in googledrive.
+`googledrive::drive_has_token()` returns `TRUE` if a token is available and `FALSE` otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests. It is typical to define such a skipper in `tests/testthat/helper.R` or similar.
 
 *gargle's usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it's not featured here.*
 
@@ -235,15 +228,11 @@ Functions useful for these conversions:
 
 ## Resources
 
-bigrquery, where this approach was first worked out:
+bigrquery and googledrive, which both use this approach.
 
-  * [`bigrquery/R/secret.R`](https://github.com/r-dbi/bigrquery/blob/master/R/secret.R)
   * [`bigrquery/tests/testthat/setup-auth.R`](https://github.com/r-dbi/bigrquery/blob/master/tests/testthat/setup-auth.R)
-  
-googledrive, where this approach was implemented more recently and which leans more heavily on gargle:
-
-  * Testing setup: [`googledrive/tests/testthat/helper.R`](https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R)
-  * Setup chunk of a pkgdown article that is rendered and deployed from Travis-CI: [`vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
+  * [`googledrive/tests/testthat/helper.R`](https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R)
+  * Setup chunk of a pkgdown article that is rendered and deployed from Travis-CI: [`googledrive/vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
 
 "Managing secrets" vignette of httr:
 
