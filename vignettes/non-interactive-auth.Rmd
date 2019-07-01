@@ -19,7 +19,7 @@ Here we describe how to do auth in a package that uses gargle, without requiring
   * We assume the wrapper package uses the design described in [How to use
     gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
     Examples include: bigrquery (dev version), googledrive (dev
-    version), googlesheets4 (github only)l gcalendr (github only).
+    version), googlesheets4 (github only), gcalendr (github only).
   * Full details on [`gargle::token_fetch()`](), which powers this strategy, are
     given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
     
@@ -35,7 +35,7 @@ Here are several ways to achieve this, basically in order of preference.
 
 When two computers are talking to each other, possibly with no human involvement, the most appropriate type of token to use is a service account token.
 
-This requires some advance prepration, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.
+This requires some advance preparation, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.
 
 **Step 1**: Get a service account and then download a token. Described in the gargle article [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html), specifically in the [Service account token](https://gargle.r-lib.org/articles/get-api-credentials.html#service-account-token) section.
 
