@@ -85,6 +85,9 @@
     <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/non-interactive-auth.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/request-helper-functions.html</loc>
   </url>
 </urlset>
