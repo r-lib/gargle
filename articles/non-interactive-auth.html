@@ -36,7 +36,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@
     
 <p>Here we describe how to do auth in a package that uses gargle, without requiring any user interaction.</p>
 <ul>
-<li>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include: bigrquery (dev version), googledrive (dev version), googlesheets4 (github only)l gcalendr (github only).</li>
+<li>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include: bigrquery (dev version), googledrive (dev version), googlesheets4 (github only), gcalendr (github only).</li>
 <li>Full details on <a href=""><code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code></a>, which powers this strategy, are given in <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</li>
 </ul>
 <div id="provide-a-token-or-pre-authorize-token-discovery" class="section level2">
@@ -123,7 +123,7 @@
 <h2 class="hasAnchor">
 <a href="#provide-a-service-account-token-directly" class="anchor"></a>Provide a service account token directly</h2>
 <p>When two computers are talking to each other, possibly with no human involvement, the most appropriate type of token to use is a service account token.</p>
-<p>This requires some advance prepration, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.</p>
+<p>This requires some advance preparation, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.</p>
 <p><strong>Step 1</strong>: Get a service account and then download a token. Described in the gargle article <a href="https://gargle.r-lib.org/articles/get-api-credentials.html">How to get your own API credentials</a>, specifically in the <a href="https://gargle.r-lib.org/articles/get-api-credentials.html#service-account-token">Service account token</a> section.</p>
 <p><strong>Step 2</strong>: Call the wrapper package’s main auth function proactively and provide the path to your service account token. Example using googledrive:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
