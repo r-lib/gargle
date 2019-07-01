@@ -4,9 +4,6 @@ authors:
   Jennifer Bryan:
     href: https://jennybryan.org
 
-development:
-  mode: auto
-
 navbar:
   components:
     home: ~
