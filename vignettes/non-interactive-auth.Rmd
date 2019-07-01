@@ -1,0 +1,145 @@
+---
+title: "Non-interactive auth"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Non-interactive auth}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Here we describe how to do auth in a package that uses gargle, without requiring any user interaction.
+
+  * We assume the wrapper package uses the design described in [How to use
+    gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
+    Examples include: bigrquery (dev version), googledrive (dev
+    version), googlesheets4 (github only)l gcalendr (github only).
+  * Full details on [`gargle::token_fetch()`](), which powers this strategy, are
+    given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+    
+## Provide a token or pre-authorize token discovery
+
+The main principle for auth that does not require user interaction:
+
+> Provide a token directly or take advance measures that indicate you want a token to be discovered.
+
+Here are several ways to achieve this, basically in order of preference.
+
+## Provide a service account token directly
+
+When two computers are talking to each other, possibly with no human involvement, the most appropriate type of token to use is a service account token.
+
+This requires some advance prepration, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.
+
+**Step 1**: Get a service account and then download a token. Described in the gargle article [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html), specifically in the [Service account token](https://gargle.r-lib.org/articles/get-api-credentials.html#service-account-token) section.
+
+**Step 2**: Call the wrapper package's main auth function proactively and provide the path to your service account token. Example using googledrive:
+
+```{r eval = FALSE}
+library(googledrive)
+
+drive_auth(path = "/path/to/your/service-account-token.json")
+```
+
+If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+
+## Rig a service account token as Application Default Credentials
+
+Wrapper packages that use `gargle::token_fetch()` in the recommended way have access to the token search strategy known as **Application Default Credentials**.
+
+You need to put your service token in a very specific location or, alternatively, record the location of your service token in a specific environment variable.
+
+Full details are in the [`credentials_app_default()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+
+If you have your token rigged properly, you **do not** need to do anything else, i.e. you do not need to call `PACKAGE_auth()` explicitly. Your token should just get discovered upon first need.
+
+For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+
+```{r eval = FALSE}
+options(gargle_quiet = FALSE)
+```
+
+## Provide an OAuth token directly
+
+If you somehow have the OAuth token you want to use as an R object, you can provide it directly to the `token` argument of the main auth function. Example using googledrive:
+
+```{r eval = FALSE}
+library(googledrive)
+
+my_oauth_token <- # some process that results in the token you want to use
+drive_auth(token = my_oauth_token)
+```
+
+gargle caches each OAuth token it obtains to an `.rds` file, by default. If you know the filepath to the token you want to use, you could use `readRDS()` to read it and provide as the `token` argument to the wrapper's auth function. Example using googledrive:
+
+```{r eval = FALSE}
+# googledrive
+drive_auth(token = readRDS("/path/to/your/oauth-token.rds"))
+```
+
+How would you know this filepath? That requires some attention to the location of gargle's OAuth token cache folder, which is described in the next section.
+
+Full details are in the [`credentials_byo_oauth2()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_byo_oauth2) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+
+## Allow an OAuth token to be discovered
+
+This is the least recommended strategy, but it appeals to many users, because it doesn't require creating a service account. Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use.
+
+Two main principles:
+
+  1. Take charge of -- or at least notice -- the folder where OAuth tokens are
+     being cached.
+  2. Make sure exactly one cached token will be identified and pre-authorize
+     its use.
+
+There are many ways to do this. We'll show a specific example that should convey the general idea.
+
+### Create a cache for a specific project
+
+**Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project. Using [gcalendr](https://andrie.github.io/gcalendr/) as an example:
+
+```{r eval = FALSE}
+library(gcalendr)
+
+# designate project-specific cache
+options(gargle_oauth_cache = ".secrets")
+
+# check it
+gargle::gargle_oauth_cache()
+
+# trigger auth on purpose --> store a token in the cache
+calendar_auth()
+
+# see your token in the cache
+list.files(".secrets/")
+```
+
+You do this once per project.
+
+**Step 2**: Announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:
+
+```{r eval = FALSE}
+library(gcalendr)
+
+options(
+  gargle_oauth_cache = ".secrets",
+  # as long as .secrets/ holds EXACTLY ONE token, this gives gcalendar
+  # permission to use it without requiring user to confirm
+  gargle_oauth_email = TRUE
+  
+  # alternative if .secrets/ holds more than one gcalendr token:
+  # you could disambiguate by specifying the user's email
+  # gargle_oauth_email = 'jenny@example.org'
+)
+
+# now use gcalendr with no need for explicit auth
+calendar_list()
+```
+
+This is needed in any script, `.Rmd`, or app that needs to use the token non-interactively. Be very intentional about with paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
