@@ -52,6 +52,7 @@ cache_allowed <- function(path) {
     return(FALSE)
   }
 
+  withr::local_options(list(gargle_quiet = FALSE))
   cat_line(glue(
     "Is it OK to cache OAuth access credentials in the folder {sq(path)} ",
     "between R sessions?"

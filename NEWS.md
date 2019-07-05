@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* The yes/no asking if it's OK to cache OAuth tokens actually prints fully
+  now (#333).
+
 # gargle 0.3.0
 
 * The unexported functions available for generating standardized docs for
