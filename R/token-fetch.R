@@ -24,6 +24,10 @@ token_fetch <- function(scopes = NULL, ...) {
     token <- NULL
     token <- tryCatch(
       f(scopes, ...),
+      warning = function(e) {
+        cat_line("Warning: ", e$message)
+        NULL
+      },
       error = function(e) {
         cat_line("Error: ", e$message)
         NULL
