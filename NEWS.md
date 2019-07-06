@@ -1,7 +1,10 @@
 # gargle (development version)
 
-* The yes/no asking if it's OK to cache OAuth tokens actually prints fully
-  now (#333).
+* `token_fetch()` silently catches warnings, in addition to errors, as it falls
+  through the registry of credential-fetching methods (#89).
+
+* The yes/no asking if it's OK to cache OAuth tokens prints fully now
+  (r-dbi/bigrquery#333).
 
 # gargle 0.3.0
 
