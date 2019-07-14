@@ -71,7 +71,7 @@ credentials_app_default <- function(scopes = NULL, ...) {
         credentials = list(refresh_token = info$refresh_token),
         # ADC is already cached.
         cache_path = FALSE,
-        params = list(scope = scope)
+        params = list(scope = scope, as_header = TRUE)
     )
     token$refresh()
     token
