@@ -27,13 +27,22 @@ credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
   if (!all(scopes %in% instance_scopes)) {
     return(NULL)
   }
-  credentials <- fetch_access_token(scopes, service_account = service_account)
+
+  # The access_token can only include the token itself, *not the expiration and type*. Otherwise, the
+  # httr code will create extra header lines that bust the POST request:
+  full_credentials <- fetch_access_token(scopes, service_account = service_account)
+  credentials = full_credentials$access_token
+
   params <- list(
     as_header = TRUE,
     scope = scopes,
     service_account = service_account
   )
-  token <- GceToken$new(credentials = credentials, params = params)
+  # The underlying Token2 class appears to *require* an endpoint and an app, though it doesn't
+  # use them for anything in this case...
+  dummy_endpoint <- httr::oauth_endpoints("google")
+  dummy_app <- httr::oauth_app("google", "dummy_1", secret = "dummy2")
+  token <- GceToken$new(credentials = mini_creds, params = params, endpoint = dummy_endpoint, app = dummy_app)
   token$refresh()
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
@@ -62,7 +71,10 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     TRUE
   },
   refresh = function() {
-    self$credentials$access_token <- fetch_access_token(self$params$scope)
+    # The access_token can only include the token itself, not the expiration and type. Otherwise, the
+    # httr code will create extra header lines that bust the POST request:
+    full_token <- fetch_access_token(self$params$scope, service_account=self$params$service_account)
+    self$credentials$access_token <- full_token$access_token
   },
   revoke = function() {}
 ))
@@ -118,7 +130,8 @@ list_service_accounts <- function() {
 }
 
 get_instance_scopes <- function(service_account) {
-  path <- paste0("instance/service-accounts/", service_account, "scopes")
+  # Gotta have the "/" in front of the scopes to make the URL well-formed:
+  path <- paste0("instance/service-accounts/", service_account, "/scopes")
   scopes <- gce_metadata_request(path)
   ct <- httr::content(scopes, as = "text")
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
