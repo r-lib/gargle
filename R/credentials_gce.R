@@ -42,7 +42,7 @@ credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
   # use them for anything in this case...
   dummy_endpoint <- httr::oauth_endpoints("google")
   dummy_app <- httr::oauth_app("google", "dummy_1", secret = "dummy2")
-  token <- GceToken$new(credentials = mini_creds, params = params, endpoint = dummy_endpoint, app = dummy_app)
+  token <- GceToken$new(credentials = credentials, params = params, endpoint = dummy_endpoint, app = dummy_app)
   token$refresh()
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
