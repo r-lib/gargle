@@ -74,6 +74,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     # The access_token can only include the token itself, not the expiration and type. Otherwise, the
     # httr code will create extra header lines that bust the POST request:
     full_token <- fetch_access_token(self$params$scope, service_account=self$params$service_account)
+    self$credentials <- list(access_token = NULL)
     self$credentials$access_token <- full_token$access_token
   },
   revoke = function() {}
@@ -133,7 +134,8 @@ get_instance_scopes <- function(service_account) {
   # Gotta have the "/" in front of the scopes to make the URL well-formed:
   path <- paste0("instance/service-accounts/", service_account, "/scopes")
   scopes <- gce_metadata_request(path)
-  ct <- httr::content(scopes, as = "text")
+  # Add the encoding parameter to quiet warning message about UTF8:
+  ct <- httr::content(scopes, as = "text", encoding = "utf8")
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
