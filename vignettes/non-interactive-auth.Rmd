@@ -18,8 +18,11 @@ Here we describe how to do auth in a package that uses gargle, without requiring
 
   * We assume the wrapper package uses the design described in [How to use
     gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
-    Examples include: bigrquery (>= v1.2.0), googledrive (dev
-    version), googlesheets4 (github only), gcalendr (github only).
+    Examples include:
+      - [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
+      - [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
+      - [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
+      - [gcalendr](https://andrie.github.io/gcalendr/) *GitHub only*
   * Full details on [`gargle::token_fetch()`](), which powers this strategy, are
     given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
     
