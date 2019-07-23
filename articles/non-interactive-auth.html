@@ -107,7 +107,20 @@
     
 <p>Here we describe how to do auth in a package that uses gargle, without requiring any user interaction.</p>
 <ul>
-<li>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include: bigrquery (&gt;= v1.2.0), googledrive (dev version), googlesheets4 (github only), gcalendr (github only).</li>
+<li>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include:
+<ul>
+<li>
+<a href="https://bigrquery.r-dbi.org">bigrquery</a> (&gt;= v1.2.0)</li>
+<li>
+<a href="https://googledrive.tidyverse.org">googledrive</a> (&gt;= v1.0.0)</li>
+<li>
+<a href="https://googlesheets4.tidyverse.org">googlesheets4</a> <em>GitHub only</em>
+</li>
+<li>
+<a href="https://andrie.github.io/gcalendr/">gcalendr</a> <em>GitHub only</em>
+</li>
+</ul>
+</li>
 <li>Full details on <a href=""><code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code></a>, which powers this strategy, are given in <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</li>
 </ul>
 <div id="provide-a-token-or-pre-authorize-token-discovery" class="section level2">
