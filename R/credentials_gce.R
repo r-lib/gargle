@@ -22,18 +22,30 @@ credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
   instance_scopes <- get_instance_scopes(service_account = service_account)
   # We add a special case for the cloud-platform -> bigquery scope implication.
   if ("https://www.googleapis.com/auth/cloud-platform" %in% instance_scopes) {
-    instance_scopes <- c("https://www.googleapis.com/auth/bigquery", instance_scopes)
+    instance_scopes <- c(
+      "https://www.googleapis.com/auth/bigquery",
+      instance_scopes
+    )
   }
   if (!all(scopes %in% instance_scopes)) {
     return(NULL)
   }
-  credentials <- fetch_access_token(scopes, service_account = service_account)
+
+  gce_token <- fetch_access_token(scopes, service_account = service_account)
+
   params <- list(
     as_header = TRUE,
     scope = scopes,
     service_account = service_account
   )
-  token <- GceToken$new(credentials = credentials, params = params)
+  token <- GceToken$new(
+    credentials = gce_token$access_token,
+    params = params,
+    # The underlying Token2 class appears to *require* an endpoint and an app,
+    # though it doesn't use them for anything in this case.
+    endpoint = httr::oauth_endpoints("google"),
+    app = httr::oauth_app("google", key = "KEY", secret = "SECRET")
+  )
   token$refresh()
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
@@ -62,7 +74,14 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     TRUE
   },
   refresh = function() {
-    self$credentials$access_token <- fetch_access_token(self$params$scope)
+    # The access_token can only include the token itself, not the expiration and type. Otherwise, the
+    # httr code will create extra header lines that bust the POST request:
+    gce_token <- fetch_access_token(
+      self$params$scope,
+      service_account = self$params$service_account
+    )
+    self$credentials <- list(access_token = NULL)
+    self$credentials$access_token <- gce_token$access_token
   },
   revoke = function() {}
 ))
@@ -118,14 +137,14 @@ list_service_accounts <- function() {
 }
 
 get_instance_scopes <- function(service_account) {
-  path <- paste0("instance/service-accounts/", service_account, "scopes")
+  path <- glue("instance/service-accounts/{service_account}/scopes")
   scopes <- gce_metadata_request(path)
-  ct <- httr::content(scopes, as = "text")
+  ct <- httr::content(scopes, as = "text", encoding = "utf8")
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
-fetch_access_token <- function(scopes, service_account, ...) {
-  path <- paste0("instance/service-accounts/", service_account, "/token")
+fetch_access_token <- function(scopes, service_account) {
+  path <- glue("instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)
-  httr::content(response, as = "parsed", "application/json")
+  httr::content(response, as = "parsed", type = "application/json")
 }

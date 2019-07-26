@@ -1,4 +1,6 @@
-# gargle (development version)
+# gargle 0.3.1
+
+* `credentials_gce()` might actually work now (#97,k @wlongabaugh).
 
 * `token_fetch()` silently catches warnings, in addition to errors, as it falls
   through the registry of credential-fetching methods (#89).
