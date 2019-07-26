@@ -4,7 +4,7 @@
 
 * `credentials_gce()` might actually work now (#97, @wlongabaugh).
 
-* `credentials_app_default()` got a small bug fix relating to putting the token in the header (r-dbi/bigrquery/#336)
+* `credentials_app_default()` got a small bug fix relating to putting the token in the header (r-dbi/bigrquery#336)
 
 * `token_fetch()` silently catches warnings, in addition to errors, as it falls
   through the registry of credential-fetching methods (#89).
