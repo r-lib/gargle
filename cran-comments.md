@@ -17,3 +17,7 @@ updates to other packages, that will Import gargle.
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
+
+## Revdeps
+
+The single reverse dependency, bigrquery, passes R CMD check cleanly.
