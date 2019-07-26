@@ -23,7 +23,7 @@ Here we describe how to do auth in a package that uses gargle, without requiring
       - [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
       - [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
       - [gcalendr](https://andrie.github.io/gcalendr/) *GitHub only*
-  * Full details on [`gargle::token_fetch()`](), which powers this strategy, are
+  * Full details on [`gargle::token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.html), which powers this strategy, are
     given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
     
 ## Provide a token or pre-authorize token discovery
