@@ -7,7 +7,7 @@ updates to other packages, that will Import gargle.
 
 * local OS X install, R 3.6.0
 * local Windows 10 VM, R 3.6.0
-* win-builder (devel and release)
+* win-builder (release only; devel seemed to be down?)
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit, r-hub
 * Windows Server 2012 R2 x64 (on appveyor), R 3.6.0 Patched
 * Ubuntu 14.04 (on travis-ci), R devel through 3.2
