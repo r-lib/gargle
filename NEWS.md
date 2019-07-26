@@ -1,6 +1,10 @@
 # gargle 0.3.1
 
-* `credentials_gce()` might actually work now (#97,k @wlongabaugh).
+* [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.htmls) is a new vignette that serves as a guide for any client packages that use gargle for auth.
+
+* `credentials_gce()` might actually work now (#97, @wlongabaugh).
+
+* `credentials_app_default()` got a small bug fix relating to putting the token in the header (r-dbi/bigrquery/#336)
 
 * `token_fetch()` silently catches warnings, in addition to errors, as it falls
   through the registry of credential-fetching methods (#89).
