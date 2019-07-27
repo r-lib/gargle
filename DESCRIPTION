@@ -1,6 +1,6 @@
 Package: gargle
 Title: Utilities for Working with Google APIs
-Version: 0.3.1
+Version: 0.3.1.9000
 Authors@R: 
     c(person(given = "Jennifer",
              family = "Bryan",
