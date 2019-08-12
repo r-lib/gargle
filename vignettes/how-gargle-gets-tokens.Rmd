@@ -97,13 +97,17 @@ credentials_app_default(
 
 `credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application). The credentials themselves are conventional service account or user credentials that happen to be stored in a pre-ordained location and format.
 
-The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started. A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable and `%||%` is used in the spirit of a [null coalescing operator](https://en.wikipedia.org/wiki/Null_coalescing_operator).
+The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started. A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable.
 
 ```{r, eval = FALSE}
-GOOGLE_APPLICATION_CREDENTIALS
-CLOUDSDK_CONFIG/application_default_credentials.json
+${GOOGLE_APPLICATION_CREDENTIALS}
+${CLOUDSDK_CONFIG}/application_default_credentials.json
+
 # on Windows:
-(APPDATA %||% SystemDrive %||% C:)\gcloud\application_default_credentials.json
+%APPDATA%\gcloud\application_default_credentials.json
+%SystemDrive%\gcloud\application_default_credentials.json
+C:\gcloud\application_default_credentials.json
+
 # on not-Windows:
 ~/.config/gcloud/application_default_credentials.json
 ```
