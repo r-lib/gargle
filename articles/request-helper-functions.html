@@ -155,7 +155,7 @@
 <li>Processes the info in <code>params</code> relative to detailed knowledge about the <code>endpoint</code>, derived from an API Discovery Document.</li>
 <li>Checks for required and unrecognized parameters.</li>
 <li>Peels off <code>params</code> destined for the body into their own part.</li>
-<li>Returns request data in a form that anticipates the <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> call that is on the horizon.</li>
+<li>Returns request data in a form that anticipates the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> call that is on the horizon.</li>
 </ul>
 <p><code><a href="../reference/request_develop.html">request_build(method, path, params, body, token, key, base_url)</a></code>: a.k.a. The Dumb One.</p>
 <ul>
@@ -165,8 +165,8 @@
 </ul>
 <p><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code>: actually makes the HTTP request.</p>
 <ul>
-<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>, although that is not required. However, if you have enough info to form a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> call yourself.</li>
-<li>Consults <code>x$method</code> to determine which <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code>, <code>...</code>, and <code>user_agent</code> passed as arguments.</li>
+<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>, although that is not required. However, if you have enough info to form a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> call yourself.</li>
+<li>Consults <code>x$method</code> to determine which <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code>, <code>...</code>, and <code>user_agent</code> passed as arguments.</li>
 </ul>
 <p>They are usually called in the above order, though they don’t have to be used that way. It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.</p>
 </div>
@@ -268,7 +268,7 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a class="sourceLine" id="cb6-18" data-line-number="18">    ...</a>
 <a class="sourceLine" id="cb6-19" data-line-number="19">  )</a>
 <a class="sourceLine" id="cb6-20" data-line-number="20">}</a></code></pre></div>
-<p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to identify the <code><a href="https://www.rdocumentation.org/packages/httr/topics/VERB">httr::VERB()</a></code> and then calls it with the remainder of <code>x</code>, <code>...</code> and the <code>user_agent</code>.</p>
+<p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to identify the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> and then calls it with the remainder of <code>x</code>, <code>...</code> and the <code>user_agent</code>.</p>
 <p>In googledrive we have a thin wrapper around this that injects the googledrive user agent:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">request_make &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</a>

@@ -166,7 +166,7 @@ final step in this sequence of calls:</p><ul>
 </ul>
 
     <p>All that's needed for a successful request is to parse the JSON extracted via
-<code><a href='https://www.rdocumentation.org/packages/httr/topics/content'>httr::content()</a></code>. Therefore, the main point of <code>response_process()</code> is to
+<code><a href='https://httr.r-lib.org/reference/content.html'>httr::content()</a></code>. Therefore, the main point of <code>response_process()</code> is to
 handle less happy outcomes:</p><ul>
 <li><p>Status codes in the 400s (client error) and 500s (server error). The
 structure of the error payload varies across Google APIs and we try to

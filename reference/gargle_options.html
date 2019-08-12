@@ -191,7 +191,7 @@ suitable token is found in the cache.</p></li>
     
     <p><code>gargle_oob_default()</code> returns the option named "gargle_oob_default",
 defaulting to <code>FALSE</code>. This controls whether to prefer "out of band"
-authentication. This is ultimately passed to <code><a href='https://www.rdocumentation.org/packages/httr/topics/init_oauth2.0'>httr::init_oauth2.0()</a></code> as
+authentication. This is ultimately passed to <code><a href='https://httr.r-lib.org/reference/init_oauth2.0.html'>httr::init_oauth2.0()</a></code> as
 <code>use_oob</code>. If <code>FALSE</code> (and httpuv is installed), a local webserver is used
 for the OAuth dance. Otherwise, user gets a URL and prompt for a validation
 code.</p>

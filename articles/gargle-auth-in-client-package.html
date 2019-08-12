@@ -167,7 +167,7 @@
 <p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code>. Exported auth helpers, <code>drive_oauth_app()</code> and <code>drive_auth_configure()</code>, retrieve and modify the current app to support users ready to take that level of control.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/oauth_app">oauth_app</a></span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://httr.r-lib.org/reference/oauth_app.html">oauth_app</a></span>(</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">appname =</span> <span class="st">"acme-corp"</span>,</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">key     =</span> <span class="st">"123456789.apps.googleusercontent.com"</span>,</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">secret  =</span> <span class="st">"abcdefghijklmnopqrstuvwxyz"</span></a>
@@ -278,7 +278,7 @@
 <a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">drive_has_token</span>()) {</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">    <span class="kw">drive_auth</span>()</a>
 <a class="sourceLine" id="cb9-8" data-line-number="8">  }</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">  httr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/httr/topics/config">config</a></span>(<span class="dt">token =</span> .auth<span class="op">$</span>cred)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  httr<span class="op">::</span><span class="kw"><a href="https://httr.r-lib.org/reference/config.html">config</a></span>(<span class="dt">token =</span> .auth<span class="op">$</span>cred)</a>
 <a class="sourceLine" id="cb9-10" data-line-number="10">}</a></code></pre></div>
 <p>where <code>drive_has_token()</code> in a helper defined as:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># googledrive::</span></a>
