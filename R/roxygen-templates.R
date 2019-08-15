@@ -34,7 +34,13 @@ PREFIX_auth_description <- function(.data = list(
     "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
-    "tokens are less likely to be synced to the cloud by accident."
+    "tokens are less likely to be synced to the cloud by accident.",
+    "",
+    "If you are interacting with R from a web-based platform, like RStudio",
+    "Server or Cloud, you need to use a variant of this flow, known as",
+    "out-of-band auth (\"oob\"). If this does not happen automatically, you",
+    "can request it yourself with `use_oob = TRUE` or, more persistently, by",
+    "setting an option via `options(gargle_oob_default = TRUE)`."
   ), .data = .data)
 }
 
@@ -60,7 +66,8 @@ PREFIX_auth_details <- function(.data = list(
     "",
     "For details on the many ways to find a token, see",
     "[gargle::token_fetch()]. For deeper control over auth, use",
-    "[{PREFIX}_auth_configure()] to bring your own OAuth app or API key."
+    "[{PREFIX}_auth_configure()] to bring your own OAuth app or API key.",
+    "Read more about gargle options, see [gargle::gargle_options]."
   ), .data = .data)
 }
 
