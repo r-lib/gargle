@@ -193,12 +193,12 @@
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># check the value of the option, if you like</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7">gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>()</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># trigger auth on purpose --&gt; store a token in the cache</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw">calendar_auth</span>()</a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"></a>
 <a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co"># see your token file in the cache, if you like</span></a>
 <a class="sourceLine" id="cb5-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(<span class="st">".secrets/"</span>)</a></code></pre></div>
-<p>You do this once per project.</p>
+<p>You do this setup once per project.</p>
 <p>Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
@@ -224,7 +224,7 @@
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>,</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="st">'jenny@example.org'</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">)</a>
 <a class="sourceLine" id="cb8-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
@@ -246,6 +246,7 @@
 <p>Be very intentional about paths and working directory. Personally I would use <code>here::here(".secrets)"</code> everywhere above, to make things more robust.</p>
 <p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_quiet =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>For a cached token to be considered a “match”, it must match the current request with respect to user’s email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.</p>
 </div>
 <div id="a-word-about-deployed-environments" class="section level3">
 <h3 class="hasAnchor">
