@@ -119,14 +119,14 @@ options(gargle_oauth_cache = ".secrets")
 # check the value of the option, if you like
 gargle::gargle_oauth_cache()
 
-# trigger auth on purpose --> store a token in the cache
+# trigger auth on purpose --> store a token in the specified cache
 calendar_auth()
 
 # see your token file in the cache, if you like
 list.files(".secrets/")
 ```
 
-You do this once per project.
+You do this setup once per project.
 
 Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:
 
@@ -162,7 +162,7 @@ library(gcalendr)
 
 options(
   gargle_oauth_cache = ".secrets",
-  gargle_oauth_email = 'jenny@example.org'
+  gargle_oauth_email = "jenny@example.org"
 )
 
 # now use gcalendr with no need for explicit auth
