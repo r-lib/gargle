@@ -21,6 +21,7 @@ Here we describe how to do auth in a package that uses gargle, without requiring
     Examples include:
       - [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
       - [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
+      - [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
       - [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
       - [gcalendr](https://andrie.github.io/gcalendr/) *GitHub only*
   * Full details on [`gargle::token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.html), which powers this strategy, are
@@ -51,6 +52,8 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 ```
 
 If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+
+For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as "impersonation", which should tip you off that Google does not really encourage this workflow. This requires [granting the service account domain-wide authority](Delegating domain-wide authority to the service account), which requires that your account is associated with a G Suite domain and also approval from the domain's administrator. If this is impossible or unappealing, just use an OAuth user token, as described below.
 
 ## Rig a service account token as Application Default Credentials
 
@@ -90,9 +93,9 @@ How would you know this filepath? That requires some attention to the location o
 
 Full details are in the [`credentials_byo_oauth2()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_byo_oauth2) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 
-## Allow an OAuth token to be discovered
+## Arrange for an OAuth token to be discovered
 
-This is the least recommended strategy, but it appeals to many users, because it doesn't require creating a service account. Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use.
+This is the least recommended strategy, but it appeals to many users, because it doesn't require creating a service account. Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use. You might be forced to use this strategy with certain APIs, such as Gmail, that are difficult to use with a service account.
 
 Two main principles:
 
