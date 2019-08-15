@@ -116,13 +116,13 @@ library(gcalendr)
 # designate project-specific cache
 options(gargle_oauth_cache = ".secrets")
 
-# check it
+# check the value of the option, if you like
 gargle::gargle_oauth_cache()
 
 # trigger auth on purpose --> store a token in the cache
 calendar_auth()
 
-# see your token in the cache
+# see your token file in the cache, if you like
 list.files(".secrets/")
 ```
 
@@ -135,17 +135,33 @@ library(gcalendr)
 
 options(
   gargle_oauth_cache = ".secrets",
-  # as long as .secrets/ holds EXACTLY ONE token, this gives gcalendar
-  # permission to use it without requiring user to confirm
   gargle_oauth_email = TRUE
-  
-  # alternative if .secrets/ holds more than one gcalendr token:
-  # you could disambiguate by specifying the user's email
-  # gargle_oauth_email = 'jenny@example.org'
 )
 
 # now use gcalendr with no need for explicit auth
 calendar_list()
 ```
 
-This is needed in any script, `.Rmd`, or app that needs to use the token non-interactively. Be very intentional about with paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
+Setting the option `gargle_oauth_email = TRUE` says that gcalendr is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
+
+Here's a slight variation where we say which token to use by explicitly specifying the associated email. This is handy if there's a reason to have more than one token in the cache.
+
+```{r eval = FALSE}
+library(gcalendr)
+
+options(
+  gargle_oauth_cache = ".secrets",
+  gargle_oauth_email = 'jenny@example.org'
+)
+
+# now use gcalendr with no need for explicit auth
+calendar_list()
+```
+
+Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
+
+### A word about deployed environments
+
+The workflow described above is relevant to any project that is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [RStudio Connect](https://www.rstudio.com/products/connect/) or [shinyapps.io](https://www.shinyapps.io). In this context, it does make sense to depart from gargle's default behaviour and create a project-level cache, embedded in the project. Remember, however, that your token is no more secure or hidden than the other source files in your project.
+
+If you are trying to rig a token to work with continuous integration services, such as Travis-CI or AppVeyor, you need to take additional measure to encrypt your token. This is workflow is described in [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
