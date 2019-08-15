@@ -199,6 +199,8 @@ For troubleshooting purposes, you can temporarily toggle a gargle option to see 
 options(gargle_quiet = FALSE)
 ```
 
+For a cached token to be considered a "match", it must match the current request with respect to user's email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.
+
 ### A word about deployed environments
 
 The workflow described above is relevant to any project that is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [RStudio Connect](https://www.rstudio.com/products/connect/) or [shinyapps.io](https://www.shinyapps.io). In this context, it does make sense to depart from gargle's default behaviour and create a project-level cache, embedded in the project. Remember, however, that your token is no more secure or hidden than the other source files in your project.
