@@ -76,6 +76,9 @@
     <loc>https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/auth-from-web.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
   </url>
   <url>
