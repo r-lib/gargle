@@ -108,9 +108,8 @@
 
     
     
-<p>Here we describe how to do auth in a package that uses gargle, without requiring any user interaction.</p>
-<ul>
-<li>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include:
+<p>Here we describe how to do auth with a package that uses gargle, without requiring any user interaction. This comes up in a wide array of contexts, ranging from simple rendering of a local R Markdown document to deploying a data product on a remote server.</p>
+<p>We assume the wrapper package uses the design described in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>. Examples include:</p>
 <ul>
 <li>
 <a href="https://bigrquery.r-dbi.org">bigrquery</a> (&gt;= v1.2.0)</li>
@@ -125,9 +124,7 @@
 <a href="https://andrie.github.io/gcalendr/">gcalendr</a> <em>GitHub only</em>
 </li>
 </ul>
-</li>
-<li>Full details on <a href="https://gargle.r-lib.org/reference/token_fetch.html"><code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code></a>, which powers this strategy, are given in <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</li>
-</ul>
+<p>Full details on <a href="https://gargle.r-lib.org/reference/token_fetch.html"><code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code></a>, which powers this strategy, are given in <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</p>
 <div id="provide-a-token-or-pre-authorize-token-discovery" class="section level2">
 <h2 class="hasAnchor">
 <a href="#provide-a-token-or-pre-authorize-token-discovery" class="anchor"></a>Provide a token or pre-authorize token discovery</h2>
@@ -135,7 +132,30 @@
 <blockquote>
 <p>Provide a token directly or take advance measures that indicate you want a token to be discovered.</p>
 </blockquote>
-<p>Here are several ways to achieve this, basically in order of preference.</p>
+<p>We present several ways to achieve this, basically in order of preference.</p>
+</div>
+<div id="sidebar-1-deployment" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sidebar-1-deployment" class="anchor"></a>Sidebar 1: Deployment</h2>
+<p>First, a word about deployed environments. If this doesn’t apply to you, skip this section.</p>
+<p>Let’s identify a specific type of project: it is developed in one place, with interactivity – such as your local computer – and then deployed elsewhere, where it must run without further interaction – such as on <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> or <a href="https://www.shinyapps.io">shinyapps.io</a>. In this context, it may make sense to depart from gargle’s default behaviour, which is to store tokens outside the project, and to embed them in the project instead. An example at the end of this vignette demonstrates the use of a project-level OAuth cache. A service account token could also be stored in the project. When you embed tokens in the project and deploy, remember, that they are no more secure or hidden than the other source files in the project.</p>
+<p>The vignette <a href="https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html">Managing tokens securely</a> describes a method for embedding an encrypted token in the project, which is an extra level of care needed to work with, e.g., continuous integration services, such as Travis-CI or AppVeyor.</p>
+</div>
+<div id="sidebar-2-i-just-want-my--rmd-to-render" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sidebar-2-i-just-want-my--rmd-to-render" class="anchor"></a>Sidebar 2: I just want my <code>.Rmd</code> to render</h2>
+<p>TL;DR is that you need to give gargle permission to use a token it finds in the cache. These sorts of commands achieve that:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Approach #1: use an option</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># or specify the user</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># Approach #2: call PACKAGE_auth() proactively</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># or specify the user</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a></code></pre></div>
+<p>Keep reading if you want to actually understand this.</p>
 </div>
 <div id="provide-a-service-account-token-directly" class="section level2">
 <h2 class="hasAnchor">
@@ -144,11 +164,11 @@
 <p>This requires some advance preparation, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.</p>
 <p><strong>Step 1</strong>: Get a service account and then download a token. Described in the gargle article <a href="https://gargle.r-lib.org/articles/get-api-credentials.html">How to get your own API credentials</a>, specifically in the <a href="https://gargle.r-lib.org/articles/get-api-credentials.html#service-account-token">Service account token</a> section.</p>
 <p><strong>Step 2</strong>: Call the wrapper package’s main auth function proactively and provide the path to your service account token. Example using googledrive:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">drive_auth</span>(<span class="dt">path =</span> <span class="st">"/path/to/your/service-account-token.json"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">drive_auth</span>(<span class="dt">path =</span> <span class="st">"/path/to/your/service-account-token.json"</span>)</a></code></pre></div>
 <p>If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article <a href="https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html">Managing tokens securely</a>.</p>
-<p>For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as “impersonation”, which should tip you off that Google does not really encourage this workflow. This requires <a href="Delegating%20domain-wide%20authority%20to%20the%20service%20account">granting the service account domain-wide authority</a>, which requires that your account is associated with a G Suite domain and also approval from the domain’s administrator. If this is impossible or unappealing, just use an OAuth user token, as described below.</p>
+<p>For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as “impersonation”, which should tip you off that Google does not really encourage this workflow. This requires <a href="Delegating%20domain-wide%20authority%20to%20the%20service%20account">granting the service account domain-wide authority</a>, which requires that your account is associated with a G Suite domain and also approval from the domain’s administrator. If this is impossible or unappealing, use an OAuth user token, as described below.</p>
 </div>
 <div id="rig-a-service-account-token-as-application-default-credentials" class="section level2">
 <h2 class="hasAnchor">
@@ -158,104 +178,123 @@
 <p>Full details are in the <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default"><code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> section</a> of the gargle article <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</p>
 <p>If you have your token rigged properly, you <strong>do not</strong> need to do anything else, i.e. you do not need to call <code>PACKAGE_auth()</code> explicitly. Your token should just get discovered upon first need.</p>
 <p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_quiet =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_quiet =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 </div>
 <div id="provide-an-oauth-token-directly" class="section level2">
 <h2 class="hasAnchor">
 <a href="#provide-an-oauth-token-directly" class="anchor"></a>Provide an OAuth token directly</h2>
 <p>If you somehow have the OAuth token you want to use as an R object, you can provide it directly to the <code>token</code> argument of the main auth function. Example using googledrive:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">my_oauth_token &lt;-<span class="st"> </span><span class="co"># some process that results in the token you want to use</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="kw">drive_auth</span>(<span class="dt">token =</span> my_oauth_token)</a></code></pre></div>
-<p>gargle caches each OAuth token it obtains to an <code>.rds</code> file, by default. If you know the filepath to the token you want to use, you could use <code><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS()</a></code> to read it and provide as the <code>token</code> argument to the wrapper’s auth function. Example using googledrive:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># googledrive</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">drive_auth</span>(<span class="dt">token =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS</a></span>(<span class="st">"/path/to/your/oauth-token.rds"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">my_oauth_token &lt;-<span class="st"> </span><span class="co"># some process that results in the token you want to use</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">drive_auth</span>(<span class="dt">token =</span> my_oauth_token)</a></code></pre></div>
+<p>gargle caches each OAuth user token it obtains to an <code>.rds</code> file, by default. If you know the filepath to the token you want to use, you could use <code><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS()</a></code> to read it and provide as the <code>token</code> argument to the wrapper’s auth function. Example using googledrive:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># googledrive</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">drive_auth</span>(<span class="dt">token =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/readRDS">readRDS</a></span>(<span class="st">"/path/to/your/oauth-token.rds"</span>))</a></code></pre></div>
 <p>How would you know this filepath? That requires some attention to the location of gargle’s OAuth token cache folder, which is described in the next section.</p>
 <p>Full details are in the <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_byo_oauth2"><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> section</a> of the gargle article <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</p>
 </div>
-<div id="arrange-for-an-oauth-token-to-be-discovered" class="section level2">
+<div id="arrange-for-an-oauth-token-to-be-re-discovered" class="section level2">
 <h2 class="hasAnchor">
-<a href="#arrange-for-an-oauth-token-to-be-discovered" class="anchor"></a>Arrange for an OAuth token to be discovered</h2>
+<a href="#arrange-for-an-oauth-token-to-be-re-discovered" class="anchor"></a>Arrange for an OAuth token to be re-discovered</h2>
 <p>This is the least recommended strategy, but it appeals to many users, because it doesn’t require creating a service account. Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use. You might be forced to use this strategy with certain APIs, such as Gmail, that are difficult to use with a service account.</p>
 <p>Two main principles:</p>
 <ol style="list-style-type: decimal">
 <li>Take charge of – or at least notice – the folder where OAuth tokens are being cached.</li>
 <li>Make sure exactly one cached token will be identified and pre-authorize its use.</li>
 </ol>
-<p>There are many ways to do this. We’ll show a specific example that should convey the general idea.</p>
-<div id="create-a-cache-for-a-specific-project" class="section level3">
+<p>There are many ways to do this. We’ll work several examples using that convey the range of what’s possible.</p>
+<div id="i-just-want-my--rmd-to-render" class="section level3">
 <h3 class="hasAnchor">
-<a href="#create-a-cache-for-a-specific-project" class="anchor"></a>Create a cache for a specific project</h3>
-<p><strong>Step 1</strong>: Obtain the token intended for non-interactive use and make sure it’s cached in a (hidden) directory of the current project. Using <a href="https://andrie.github.io/gcalendr/">gcalendr</a> as an example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># designate project-specific cache</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># check the value of the option, if you like</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>()</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw">calendar_auth</span>()</a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co"># see your token file in the cache, if you like</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(<span class="st">".secrets/"</span>)</a></code></pre></div>
-<p>You do this setup once per project.</p>
-<p>Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:</p>
+<a href="#i-just-want-my--rmd-to-render" class="anchor"></a>I just want my <code>.Rmd</code> to render</h3>
+<p><strong>Step 1</strong>: Get that first token. You must run your code at least once, interactively, do the auth dance, and allow gargle to store the token in its cache.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># do anything that triggers auth</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">calendar_list</span>()</a></code></pre></div>
+<p><strong>Step 2</strong>: Revise your code to pre-authorize the use of that token next time. Now your <code>.Rmd</code> can be rendered or your <code>.R</code> script can run, without further interaction.</p>
+<p>You have two choices to make:</p>
+<ul>
+<li>Set the <code>gargle_oauth_email</code> option or call <code>PACKAGE_auth(email = ...)</code>.
+<ul>
+<li>The option-based approach can be implemented in each <code>.Rmd</code> or <code>.R</code> or in a user-level or project level <code>.Rprofile</code> startup file.</li>
+</ul>
+</li>
+<li>Authorize the use of a “matching token”, in general, (email is <code>TRUE</code>) or give a specific identity (email is an actual address).</li>
+</ul>
+<p>This sets an option that allows gargle to use cached tokens whenever there’s a unique match:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>This sets an option to use tokens associated with a specific email address:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span>)</a></code></pre></div>
+<p>This gets a token <em>right now</em> and allows the use of a matching token, using googledrive as an example:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>This gets a token <em>right now</em>, for the user with a specific email address:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a></code></pre></div>
 </div>
-<div id="ensure-desired-token-will-be-found-and-used" class="section level3">
+<div id="project-level-oauth-cache" class="section level3">
 <h3 class="hasAnchor">
-<a href="#ensure-desired-token-will-be-found-and-used" class="anchor"></a>Ensure desired token will be found and used</h3>
-<p><strong>Step 2</strong>: Announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">  <span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>,</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="kw">calendar_list</span>()</a></code></pre></div>
+<a href="#project-level-oauth-cache" class="anchor"></a>Project-level OAuth cache</h3>
+<p>This is like the previous example, but with an added twist: we use a project-level OAuth cache. This is good for deployed data products.</p>
+<p><strong>Step 1</strong>: Obtain the token intended for non-interactive use and make sure it’s cached in a (hidden) directory of the current project. Using gcalendr as an example:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co"># designate project-specific cache</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co"># check the value of the option, if you like</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oauth_cache</a></span>()</a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="kw">calendar_auth</span>()</a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co"># see your token file in the cache, if you like</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(<span class="st">".secrets/"</span>)</a></code></pre></div>
+<p>Do this setup once per project.</p>
+<p>Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>)</a></code></pre></div>
+<p>If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in <a href="https://gargle.r-lib.org/articles/auth-from-web.html">Auth when using R in the browser</a>.</p>
+<p><strong>Step 2</strong>: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">  <span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>,</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="kw">calendar_list</span>()</a></code></pre></div>
 <p>Setting the option <code>gargle_oauth_email = TRUE</code> says that gcalendr is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, <code>.Rmd</code>, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level <code>.Rprofile</code>.</p>
 <p>Here’s a variation where we say which token to use by explicitly specifying the associated email. This is handy if there’s a reason to have more than one token in the cache.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>,</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">)</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="kw">calendar_list</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">  <span class="dt">gargle_oauth_cache =</span> <span class="st">".secrets"</span>,</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="kw">calendar_list</span>()</a></code></pre></div>
 <p>Here’s another variation where we specify the necessary info directly in an auth call, instead of in options:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="kw">calendar_list</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">calendar_list</span>()</a></code></pre></div>
 <p>Here’s one last variation that applicable when the local cache could contain multiple tokens:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">calendar_list</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gcalendr)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">calendar_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">calendar_list</span>()</a></code></pre></div>
 <p>Be very intentional about paths and working directory. Personally I would use <code>here::here(".secrets)"</code> everywhere above, to make things more robust.</p>
 <p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_quiet =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">gargle_quiet =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <p>For a cached token to be considered a “match”, it must match the current request with respect to user’s email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.</p>
-</div>
-<div id="a-word-about-deployed-environments" class="section level3">
-<h3 class="hasAnchor">
-<a href="#a-word-about-deployed-environments" class="anchor"></a>A word about deployed environments</h3>
-<p>The workflow described above is relevant to any project that is developed in one place, with interactivity – such as your local computer – and then deployed elsewhere, where it must run without further interaction – such as on <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a> or <a href="https://www.shinyapps.io">shinyapps.io</a>. In this context, it does make sense to depart from gargle’s default behaviour and create a project-level cache, embedded in the project. Remember, however, that your token is no more secure or hidden than the other source files in your project.</p>
-<p>If you are trying to rig a token to work with continuous integration services, such as Travis-CI or AppVeyor, you need to take additional measure to encrypt your token. This is workflow is described in <a href="https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html">Managing tokens securely</a>.</p>
 </div>
 </div>
   </div>
@@ -266,10 +305,12 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#provide-a-token-or-pre-authorize-token-discovery">Provide a token or pre-authorize token discovery</a></li>
+      <li><a href="#sidebar-1-deployment">Sidebar 1: Deployment</a></li>
+      <li><a href="#sidebar-2-i-just-want-my--rmd-to-render">Sidebar 2: I just want my <code>.Rmd</code> to render</a></li>
       <li><a href="#provide-a-service-account-token-directly">Provide a service account token directly</a></li>
       <li><a href="#rig-a-service-account-token-as-application-default-credentials">Rig a service account token as Application Default Credentials</a></li>
       <li><a href="#provide-an-oauth-token-directly">Provide an OAuth token directly</a></li>
-      <li><a href="#arrange-for-an-oauth-token-to-be-discovered">Arrange for an OAuth token to be discovered</a></li>
+      <li><a href="#arrange-for-an-oauth-token-to-be-re-discovered">Arrange for an OAuth token to be re-discovered</a></li>
       </ul>
 </div>
       </div>
