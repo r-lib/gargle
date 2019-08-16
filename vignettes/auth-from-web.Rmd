@@ -72,6 +72,53 @@ drive_auth <- function(email = gargle::gargle_oauth_email(),
                        token = NULL) {...}
 ```
 
+## But I didn't need oob yesterday!
+
+Sometimes the usual oauth web flow suddenly stops working for people working directly with R (so NOT via the browser) and they use oob auth to get unstuck again. What's going on in this case?
+
+The initial error looks something like this:
+
+```
+createTcpServer: address already in use
+Error in httpuv::startServer(use$host, use$port, list(call = listen)) : 
+  Failed to create server
+```
+
+It's characteristic of some other process sitting on port 1410, which is what httr is trying to use for auth.
+
+It's true that using oob auth is a workaround. But oob auth is, frankly, more clunky, so why use if you don't have to? Here are ways to fix.
+
+  * Restart your system. This will almost certainly kill the offending process,
+    which is usually a zombie process.
+  * Hunt down the offending process, verify it looks expendable, and kill it.
+
+On *nix-y systems, use `lsof` to get the process ID:
+
+```
+sudo lsof -i :1410
+```
+
+The output will look something like this:
+
+```
+COMMAND   PID  USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME
+R       16664 jenny   20u  IPv4 0x63761a50856c65f      0t0  TCP localhost:hiq (LISTEN)
+```
+
+In this case, as is typical, this is a zombie R process and I feel confident killing it. The process ID is listed there as PID. Note that and kill the process, like so, filling in the PID you found:
+
+```
+kill -9 <PID>
+```
+
+So, to be clear, in this example, the command would be:
+
+```
+kill -9 16664
+```
+
+The normal, non-oob auth web flow should work again now.
+
 ## Further reading
 
 [Generating OAuth tokens for a server using httr](https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. The main thing to remember is that gargle (and gargle-using packages) refer to the `gargle_oob_default` option, not `httr_oob_default`.
