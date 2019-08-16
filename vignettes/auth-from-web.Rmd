@@ -1,0 +1,77 @@
+---
+title: "Auth when using R in the browser"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Auth when using R in the browser}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+If you are working with R in a web-based context, like [RStudio Server](https://www.rstudio.com/products/rstudio-server/) or [Cloud](https://rstudio.cloud), your experience of browser-based auth flows will be
+different from those using R, directly in the Console or through an IDE. You need to use **out-of-band authentication**, sometimes denoted "oob". After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
+
+The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. We have plans in gargle to automatically detect even more contexts that require oob auth (https://github.com/r-lib/gargle/issues/102). But in the meantime ...
+
+When oob auth is attempted in a setting where it is doomed to fail, you are redirected to localhost on port 1410 and receive an error along these lines:
+
+```
+Chrome: This site can't be reached; localhost refused to connect.
+Firefox: Unable to connect; can't establish a connection.
+```
+
+This is a sign that you need to explicitly request oob auth.
+
+This article describes how to do so in a package that uses gargle for auth, which includes:
+
+  * [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
+  * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
+  * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
+  * [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
+  * [gcalendr](https://andrie.github.io/gcalendr/) *GitHub only*
+
+## Request oob auth in the `PKG_auth()` call
+
+These packages aim to make auth "just work" for most users, i.e. it's automatically triggered upon first need. However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters. Here's how you request oob auth, using googledrive as an example:
+
+```{r eval = FALSE}
+library(googledrive)
+
+drive_auth(use_oob = TRUE)
+
+# now carry on with your work
+drive_find(n_max = 5)
+```
+
+This code is tailored to an interactive session and assumes that a user is present to respond. If you *also* need to setup a token for non-interactive use, see the article [Non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html). A key point is that oob auth is relevant to how you *initially* obtain a token. It is orthogonal to downstream use and refreshing. So it is possible that you need to attend to both!
+
+## Set the `gargle_oob_default` option
+
+If you know that you *always* want to use oob auth, as a user or within a project, the best way to express this is to set the `gargle_oob_default` option.
+
+```{r eval = FALSE}
+options(gargle_oob_default = TRUE)
+```
+
+This code could appear at the top of a script, in a setup chunk for `.Rmd`, or in a Shiny app. But it probably makes even more sense in a `.Rprofile` startup file, at the user- or project-level.
+
+Once that option has been set, it is honoured by downstream calls to `PKG_auth()`, explicit or implicit, because the default behaviour of `use_oob` is to consult the option:
+
+```{r, eval = FALSE}
+drive_auth <- function(email = gargle::gargle_oauth_email(),
+                       path = NULL,
+                       scopes = "https://www.googleapis.com/auth/drive",
+                       cache = gargle::gargle_oauth_cache(),
+                       use_oob = gargle::gargle_oob_default(),
+                       token = NULL) {...}
+```
+
+## Further reading
+
+[Generating OAuth tokens for a server using httr](https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. The main thing to remember is that gargle (and gargle-using packages) refer to the `gargle_oob_default` option, not `httr_oob_default`.
