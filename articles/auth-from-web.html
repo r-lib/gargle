@@ -155,6 +155,31 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 <a class="sourceLine" id="cb4-5" data-line-number="5">                       <span class="dt">use_oob =</span> gargle<span class="op">::</span><span class="kw"><a href="https://gargle.r-lib.org/reference/gargle_options.html">gargle_oob_default</a></span>(),</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">                       <span class="dt">token =</span> <span class="ot">NULL</span>) {...}</a></code></pre></div>
 </div>
+<div id="but-i-didnt-need-oob-yesterday" class="section level2">
+<h2 class="hasAnchor">
+<a href="#but-i-didnt-need-oob-yesterday" class="anchor"></a>But I didn’t need oob yesterday!</h2>
+<p>Sometimes the usual oauth web flow suddenly stops working for people working directly with R (so NOT via the browser) and they use oob auth to get unstuck again. What’s going on in this case?</p>
+<p>The initial error looks something like this:</p>
+<pre><code>createTcpServer: address already in use
+Error in httpuv::startServer(use$host, use$port, list(call = listen)) : 
+  Failed to create server</code></pre>
+<p>It’s characteristic of some other process sitting on port 1410, which is what httr is trying to use for auth.</p>
+<p>It’s true that using oob auth is a workaround. But oob auth is, frankly, more clunky, so why use if you don’t have to? Here are ways to fix.</p>
+<ul>
+<li>Restart your system. This will almost certainly kill the offending process, which is usually a zombie process.</li>
+<li>Hunt down the offending process, verify it looks expendable, and kill it.</li>
+</ul>
+<p>On *nix-y systems, use <code>lsof</code> to get the process ID:</p>
+<pre><code>sudo lsof -i :1410</code></pre>
+<p>The output will look something like this:</p>
+<pre><code>COMMAND   PID  USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME
+R       16664 jenny   20u  IPv4 0x63761a50856c65f      0t0  TCP localhost:hiq (LISTEN)</code></pre>
+<p>In this case, as is typical, this is a zombie R process and I feel confident killing it. The process ID is listed there as PID. Note that and kill the process, like so, filling in the PID you found:</p>
+<pre><code>kill -9 &lt;PID&gt;</code></pre>
+<p>So, to be clear, in this example, the command would be:</p>
+<pre><code>kill -9 16664</code></pre>
+<p>The normal, non-oob auth web flow should work again now.</p>
+</div>
 <div id="further-reading" class="section level2">
 <h2 class="hasAnchor">
 <a href="#further-reading" class="anchor"></a>Further reading</h2>
@@ -169,6 +194,7 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#request-oob-auth-in-the-pkg_auth-call">Request oob auth in the <code>PKG_auth()</code> call</a></li>
       <li><a href="#set-the-gargle_oob_default-option">Set the <code>gargle_oob_default</code> option</a></li>
+      <li><a href="#but-i-didnt-need-oob-yesterday">But I didn’t need oob yesterday!</a></li>
       <li><a href="#further-reading">Further reading</a></li>
       </ul>
 </div>
