@@ -148,7 +148,7 @@ token_into_cache <- function(candidate) {
   if (is.null(cache_path)) {
     return()
   }
-  saveRDS(candidate, path(cache_path, candidate$hash()))
+  saveRDS(candidate, path(cache_path, candidate$hash()), version = 2)
 }
 
 # helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
