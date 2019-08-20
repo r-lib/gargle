@@ -189,7 +189,7 @@ Now you need to rig your tests or their setup around this encrypted token. You n
             env: GARGLE_PASSWORD=''
       ```
 
-In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from googledrive's `tests/testthat/helper.R` file (*applies to dev version of googledrive*), but something similar can be seen in bigrquery and googlesheets4:
+In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from googledrive's `tests/testthat/helper.R` file, but something similar can be seen in bigrquery and googlesheets4:
 
 ```{r eval = FALSE}
 if (gargle:::secret_can_decrypt("googledrive")) {

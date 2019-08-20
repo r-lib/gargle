@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 gargle provides common infrastructure for use with Google APIs. This vignette describes one possible design for using gargle to deal with auth, in a client package that provides a high-level wrapper for a specific API.
 
-There are frequent references to (the development version of) [googledrive](https://googledrive.tidyverse.org), which is a functioning test bed. The released version of googledrive already presents a very similar interface to users, but using internal functions. The release of gargle means these functions now exist in gargle, where they can be shared across packages, and the redundant versions in googledrive can be removed. The auth approach described here is already used in [bigrquery](https://bigrquery.r-dbi.org) (v1.2.0 and higher) and the (GitHub-only) [googlesheets4](https://googlesheets4.tidyverse.org) package (the successor to [googlesheets](https://github.com/jennybc/googlesheets)). [gmailr](https://github.com/jimhester/gmailr) is also slated for retrofitting.
+There are frequent references to [googledrive](https://googledrive.tidyverse.org), which uses the design described here, along with [bigrquery](https://bigrquery.r-dbi.org) (v1.2.0 and higher), [gmailr](https://gmailr.r-lib.org) (v1.0.0 and higher), and [googlesheets4](https://googlesheets4.tidyverse.org) (the successor to [googlesheets](https://github.com/jennybc/googlesheets), currently only available on GitHub). 
 
 ## Key choices
 
