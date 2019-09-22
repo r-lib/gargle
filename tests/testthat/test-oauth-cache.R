@@ -81,7 +81,10 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 })
 
 # validate_token_list() ------------------------------------------------------
-test_that("validate_token_list() errors if putative hash != actual hash", {
+test_that("cache_load() copes repairs tokens stored with names != their hash", {
+  cache_folder <- file_temp()
+  on.exit(dir_delete(cache_folder))
+
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
     credentials = list(a = 1),
@@ -127,7 +130,6 @@ test_that("token_from_cache() returns NULL when caching turned off", {
 test_that("token_into_cache(), token_from_cache() roundtrip", {
   cache_folder <- file_temp()
   on.exit(dir_delete(cache_folder))
-  dir_create(cache_folder)
 
   ## this calls token_into_cache()
   token_in <- gargle2.0_token(
@@ -149,7 +151,6 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
 test_that("token_from_cache(), 1 or >1 short hash matches", {
   cache_folder <- file_temp()
   on.exit(dir_delete(cache_folder))
-  dir_create(cache_folder)
 
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
@@ -214,7 +215,6 @@ test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
 test_that("gargle_oauth_sitrep() reports on specified cache", {
   tmp_cache <- file_temp()
   on.exit(dir_delete(tmp_cache))
-  dir_create(tmp_cache)
 
   gargle2.0_token(
     email = "a@example.org",
