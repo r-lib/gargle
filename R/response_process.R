@@ -103,7 +103,7 @@ check_for_json <- function(resp) {
 }
 
 stop_request_failed <- function(message, resp) {
-  rlang::abort(
+  abort(
     glue_collapse(message, sep = "\n"),
     .subclass = "gargle_error_request_failed",
     resp = redact_response(resp),
