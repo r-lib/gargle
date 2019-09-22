@@ -146,8 +146,10 @@ token_from_cache <- function(candidate) {
 token_into_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) {
+    cat_line("not caching token")
     return()
   }
+  cat_line("putting token into the cache: ", cache_path)
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 

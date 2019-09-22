@@ -144,7 +144,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     paste(super$hash(), self$email, sep = "_")
   },
   cache = function() {
-    cat_line("putting token into the cache")
     token_into_cache(self)
     self
   },
