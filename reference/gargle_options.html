@@ -8,21 +8,25 @@
 
 <title>Options consulted by gargle — gargle_options • gargle</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,21 +34,23 @@
 
 
 
-<meta property="og:title" content="Options consulted by gargle — gargle_options" />
 
+<meta property="og:title" content="Options consulted by gargle — gargle_options" />
 <meta property="og:description" content="Wrapper functions around options consulted by gargle, which provide:
 A place to hang documentation.
 The mechanism for setting a default.
-" />
 
-<meta property="og:description" content="If the built-in defaults don't suit you, set one or more of these options.
+
+If the built-in defaults don't suit you, set one or more of these options.
 Typically, this is done in the .Rprofile startup file, with code along
 these lines:options(
   gargle_oauth_email = &quot;jane@example.com&quot;,
   gargle_oauth_cache = &quot;/path/to/folder/that/does/not/sync/to/cloud&quot;
 )
+
 " />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -67,6 +73,7 @@ these lines:options(
 
   gtag('config', 'UA-115082821-1');
 </script>
+
 
   </head>
 
@@ -127,11 +134,10 @@ these lines:options(
   <a href="../news/index.html">News</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/r-lib/gargle">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -142,6 +148,7 @@ these lines:options(
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -153,20 +160,19 @@ these lines:options(
     </div>
 
     <div class="ref-description">
-    
     <p>Wrapper functions around options consulted by gargle, which provide:</p><ul>
 <li><p>A place to hang documentation.</p></li>
 <li><p>The mechanism for setting a default.</p></li>
 </ul>
 
-    <p>If the built-in defaults don't suit you, set one or more of these options.
+<p>If the built-in defaults don't suit you, set one or more of these options.
 Typically, this is done in the <code>.Rprofile</code> startup file, with code along
 these lines:</p><pre>options(
   gargle_oauth_email = "jane@example.com",
   gargle_oauth_cache = "/path/to/folder/that/does/not/sync/to/cloud"
 )
 </pre>
-    
+
     </div>
 
     <pre class="usage"><span class='fu'>gargle_oauth_email</span>()
@@ -176,11 +182,13 @@ these lines:</p><pre>options(
 <span class='fu'>gargle_oauth_cache</span>()
 
 <span class='fu'>gargle_quiet</span>()</pre>
-        
+
+
     <h2 class="hasAnchor" id="gargle-oauth-email"><a class="anchor" href="#gargle-oauth-email"></a><code>gargle_oauth_email</code></h2>
 
     
-    <p><code>gargle_oauth_email()</code> returns the option named "gargle_oauth_email", which
+
+<p><code>gargle_oauth_email()</code> returns the option named "gargle_oauth_email", which
 is undefined by default. If set, this option should be one of:</p><ul>
 <li><p>An actual email address corresponding to your preferred Google identity.
 Example:<code>janedoe@gmail.com</code>.</p></li>
@@ -188,33 +196,33 @@ Example:<code>janedoe@gmail.com</code>.</p></li>
 suitable token is found in the cache.</p></li>
 <li><p><code>FALSE</code> or <code>NA</code> to force the OAuth dance in the browser.</p></li>
 </ul>
-    
+
     <h2 class="hasAnchor" id="gargle-oob-default"><a class="anchor" href="#gargle-oob-default"></a><code>gargle_oob_default</code></h2>
 
     
-    <p><code>gargle_oob_default()</code> returns the option named "gargle_oob_default",
+
+<p><code>gargle_oob_default()</code> returns the option named "gargle_oob_default",
 defaulting to <code>FALSE</code>. This controls whether to prefer "out of band"
 authentication. This is ultimately passed to <code><a href='https://httr.r-lib.org/reference/init_oauth2.0.html'>httr::init_oauth2.0()</a></code> as
 <code>use_oob</code>. If <code>FALSE</code> (and httpuv is installed), a local webserver is used
 for the OAuth dance. Otherwise, user gets a URL and prompt for a validation
 code.</p>
-    
     <h2 class="hasAnchor" id="gargle-oauth-cache"><a class="anchor" href="#gargle-oauth-cache"></a><code>gargle_oauth_cache</code></h2>
 
     
-    <p><code>gargle_oauth_cache()</code> returns the option named "gargle_oauth_cache",
+
+<p><code>gargle_oauth_cache()</code> returns the option named "gargle_oauth_cache",
 defaulting to <code>NA</code>. If defined, the option must be set to a logical value or
 a string. <code>TRUE</code> means to cache using the default user-level cache file,
 <code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means don't cache, and <code>NA</code> means to
 guess using some sensible heuristics.</p>
-    
     <h2 class="hasAnchor" id="gargle-quiet"><a class="anchor" href="#gargle-quiet"></a><code>gargle_quiet</code></h2>
 
     
-    <p><code>gargle_quiet()</code> returns the option named "gargle_quiet", which defaults to
+
+<p><code>gargle_quiet()</code> returns the option named "gargle_quiet", which defaults to
 <code>TRUE</code>. Set this option to <code>FALSE</code> to see more info about gargle's
 activities, which can be helpful for troubleshooting.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>gargle_oauth_email</span>()</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'>gargle_oob_default</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_oauth_cache</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_quiet</span>()</div><div class='output co'>#&gt; [1] TRUE</div></pre>
@@ -222,20 +230,16 @@ activities, which can be helpful for troubleshooting.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
       <li><a href="#gargle-oauth-email"><code>gargle_oauth_email</code></a></li>
-
       <li><a href="#gargle-oob-default"><code>gargle_oob_default</code></a></li>
-
       <li><a href="#gargle-oauth-cache"><code>gargle_oauth_cache</code></a></li>
-
       <li><a href="#gargle-quiet"><code>gargle_quiet</code></a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -243,13 +247,16 @@ activities, which can be helpful for troubleshooting.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

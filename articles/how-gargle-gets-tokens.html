@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How gargle gets tokens • gargle</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="How gargle gets tokens">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -82,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-lib/gargle">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,6 +96,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -115,17 +117,17 @@
 <li>The useR who is writing a script or app, without using such a wrapper, either because the wrapper does not exist or there’s a reason to avoid the dependency.</li>
 </ul>
 <p><code><a href="../reference/token_fetch.html">token_fetch()</a></code> is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests. It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens. We give a few design suggestions here and cover this in more depth in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gargle)</a></code></pre></div>
 <div id="token_fetch" class="section level2">
 <h2 class="hasAnchor">
-<a href="#token_fetch" class="anchor"></a><code><a href="../reference/token_fetch.html">token_fetch()</a></code>
+<a href="#token_fetch" class="anchor"></a><code>token_fetch()</code>
 </h2>
 <p><code><a href="../reference/token_fetch.html">token_fetch()</a></code> is a rather magical function for getting a token. The goal is to make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with <code><a href="../reference/token_fetch.html">token_fetch()</a></code> only in an indirect way, mediated through an API wrapper package. That is not because the interface of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is unfriendly – it’s very flexible! The objective of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is to allow package developers to take responsibility for <em>managing</em> the user’s token, without having to implement all the different ways of <em>obtaining</em> that token in the first place.</p>
 <p>The signature of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is very simple and, therefore, not very informative:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(scopes, ...)</a></code></pre></div>
-<p>Under the hood, <code><a href="../reference/token_fetch.html">token_fetch()</a></code> calls a sequence of much more specific credential functions, each wrapped in a <code><a href="https://www.rdocumentation.org/packages/base/topics/conditions">tryCatch()</a></code> and returning <code>NULL</code> if unsuccessful. The only formal argument these functions have in common is <code>scopes</code>, with the rest being passed via <code>...</code>.</p>
+<p>Under the hood, <code><a href="../reference/token_fetch.html">token_fetch()</a></code> calls a sequence of much more specific credential functions, each wrapped in a <code><a href="https://rdrr.io/r/base/conditions.html">tryCatch()</a></code> and returning <code>NULL</code> if unsuccessful. The only formal argument these functions have in common is <code>scopes</code>, with the rest being passed via <code>...</code>.</p>
 <p>This gives a sense of the credential functions and reflects the order in which they are called:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="../reference/cred_funs.html">cred_funs_list</a></span>())</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="../reference/cred_funs.html">cred_funs_list</a></span>())</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "credentials_service_account" "credentials_app_default"    </span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [3] "credentials_gce"             "credentials_byo_oauth2"     </span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [5] "credentials_user_oauth2"</span></a></code></pre></div>
@@ -140,7 +142,7 @@
 </div>
 <div id="credentials_service_account" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_service_account" class="anchor"></a><code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>
+<a href="#credentials_service_account" class="anchor"></a><code>credentials_service_account()</code>
 </h2>
 <p>The first function tried is <code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> with service account inputs plays out:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>, <span class="dt">path =</span> <span class="st">"/path/to/your/service-account.json"</span>)</a>
@@ -150,7 +152,7 @@
 <a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>,</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">path =</span> <span class="st">"/path/to/your/service-account.json"</span></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7">)</a></code></pre></div>
-<p>The <code>scopes</code> are often provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code>credential_service_account()</code>. The <code>path</code> argument is presumably coming from the user. It is treated as a JSON representation of service account credentials, in any form that is acceptable to <code><a href="https://www.rdocumentation.org/packages/jsonlite/topics/fromJSON">jsonlite::fromJSON()</a></code>. In the above example, that is a file path, but it could also be a JSON string. If there is no named <code>path</code> argument or if it can’t be parsed as a service account credential, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in the registry.</p>
+<p>The <code>scopes</code> are often provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code>credential_service_account()</code>. The <code>path</code> argument is presumably coming from the user. It is treated as a JSON representation of service account credentials, in any form that is acceptable to <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::fromJSON()</a></code>. In the above example, that is a file path, but it could also be a JSON string. If there is no named <code>path</code> argument or if it can’t be parsed as a service account credential, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in the registry.</p>
 <p>Here is some Google documentation about service accounts:</p>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/understanding-service-accounts">Cloud Identity and Access Management &gt; Understanding service accounts</a></li>
@@ -160,7 +162,7 @@
 </div>
 <div id="credentials_app_default" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_app_default" class="anchor"></a><code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code>
+<a href="#credentials_app_default" class="anchor"></a><code>credentials_app_default()</code>
 </h2>
 <p>The second function tried is <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>)</a>
@@ -191,7 +193,7 @@
 </div>
 <div id="credentials_gce" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_gce" class="anchor"></a><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code>
+<a href="#credentials_gce" class="anchor"></a><code>credentials_gce()</code>
 </h2>
 <p>The third function tried is <code><a href="../reference/credentials_gce.html">credentials_gce()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>)</a>
@@ -214,7 +216,7 @@
 </div>
 <div id="credentials_byo_oauth2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_byo_oauth2" class="anchor"></a><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code>
+<a href="#credentials_byo_oauth2" class="anchor"></a><code>credentials_byo_oauth2()</code>
 </h2>
 <p>The fourth function tried is <code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">token =</span> <span class="op">&lt;</span>TOKEN2<span class="fl">.0</span><span class="op">&gt;</span>)</a>
@@ -232,7 +234,7 @@
 </div>
 <div id="credentials_user_oauth2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#credentials_user_oauth2" class="anchor"></a><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>
+<a href="#credentials_user_oauth2" class="anchor"></a><code>credentials_user_oauth2()</code>
 </h2>
 <p>The fifth and final function tried is <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="../reference/token_fetch.html">token_fetch</a></span>(<span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>)</a>
@@ -317,17 +319,18 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#token_fetch"><code><a href="--/reference/token_fetch-html">token_fetch()</a></code></a></li>
+<li><a href="#token_fetch"><code>token_fetch()</code></a></li>
       <li><a href="#get-verbose-output">Get verbose output</a></li>
-      <li><a href="#credentials_service_account"><code><a href="--/reference/credentials_service_account-html">credentials_service_account()</a></code></a></li>
-      <li><a href="#credentials_app_default"><code><a href="--/reference/credentials_app_default-html">credentials_app_default()</a></code></a></li>
-      <li><a href="#credentials_gce"><code><a href="--/reference/credentials_gce-html">credentials_gce()</a></code></a></li>
-      <li><a href="#credentials_byo_oauth2"><code><a href="--/reference/credentials_byo_oauth2-html">credentials_byo_oauth2()</a></code></a></li>
-      <li><a href="#credentials_user_oauth2"><code><a href="--/reference/credentials_user_oauth2-html">credentials_user_oauth2()</a></code></a></li>
+      <li><a href="#credentials_service_account"><code>credentials_service_account()</code></a></li>
+      <li><a href="#credentials_app_default"><code>credentials_app_default()</code></a></li>
+      <li><a href="#credentials_gce"><code>credentials_gce()</code></a></li>
+      <li><a href="#credentials_byo_oauth2"><code>credentials_byo_oauth2()</code></a></li>
+      <li><a href="#credentials_user_oauth2"><code>credentials_user_oauth2()</code></a></li>
       </ul>
 </div>
       </div>
@@ -335,17 +338,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

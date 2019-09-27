@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Managing tokens securely • gargle</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
 <script src="../../pkgdown.js"></script><meta property="og:title" content="Managing tokens securely">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -82,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-lib/gargle">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,6 +96,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -164,16 +166,16 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">(pw &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_pw_gen</span>())</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "1gtosmVZZraqNwlKw1ZALBkZd5wHbWSV8PO4Tma0YPQbjdy9WM"</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "KyRfdf3sWTkcpxYjFOQ7dme2Z6ugUgzPPpt2SoMBaryLoW7h0f"</span></a></code></pre></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=1gtosmVZZraqNwlKw1ZALBkZd5wHbWSV8PO4Tma0YPQbjdy9WM</code></pre>
+<pre><code>GARGLE_PASSWORD=KyRfdf3sWTkcpxYjFOQ7dme2Z6ugUgzPPpt2SoMBaryLoW7h0f</code></pre>
 <p><code>usethis::edit_r_environ()</code> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
-<p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://www.rdocumentation.org/packages/base/topics/readRenviron">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
+<p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://rdrr.io/r/base/readRenviron.html">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
 <div id="provide-environment-variable-to-other-services" class="section level3">
 <h3 class="hasAnchor">
@@ -231,9 +233,9 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">addons:</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="fu">apt:</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">    <span class="fu">sources:</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">sourceline:</span><span class="at"> </span><span class="st">'ppa:chris-lea/libsodium'</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> <span class="fu">sourceline:</span><span class="at"> </span><span class="st">'ppa:chris-lea/libsodium'</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="fu">packages:</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> libsodium-dev</a></code></pre></div>
+<a class="sourceLine" id="cb7-6" data-line-number="6">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> libsodium-dev</a></code></pre></div>
 </li>
 <li>Decryption is not going to work. Either because the Suggested <a href="https://cran.r-project.org/package=sodium">sodium</a> package is not available or (much more likely) because the environment variable that represents the key is not available.
 <ul>
@@ -243,13 +245,13 @@
 <p>We recommend that you actively check your package under these conditions, so that you discover problems before CRAN or your contributors do. Here’s a simplified excerpt from <code>.travis.yml</code> where the main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code> implicitly as an encrypted environment variable, but <code>R CMD check</code> runs for the other builds with <code>GARGLE_PASSWORD</code> explicitly unset:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">matrix:</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="fu">include:</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">r:</span><span class="at"> release</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> <span class="fu">r:</span><span class="at"> release</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">      <span class="co"># &lt;stuff about code coverage, pkgdown build &amp; deploy, etc.&gt;</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">r:</span><span class="at"> release</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> <span class="fu">r:</span><span class="at"> release</span></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">r:</span><span class="at"> devel</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> <span class="fu">r:</span><span class="at"> devel</span></a>
 <a class="sourceLine" id="cb8-8" data-line-number="8">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Arithmetic">-</a></span> <span class="fu">r:</span><span class="at"> oldrel</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">    <span class="kw"><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></span> <span class="fu">r:</span><span class="at"> oldrel</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a></code></pre></div>
 </li>
 </ul>
@@ -258,13 +260,13 @@
 <p>In a wrapper package, you could determine decrypt-ability at the start of the test run. Here’s representative code from googledrive’s <code>tests/testthat/helper.R</code> file, but something similar can be seen in bigrquery and googlesheets4:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="cf">if</span> (gargle<span class="op">:::</span><span class="kw">secret_can_decrypt</span>(<span class="st">"googledrive"</span>)) {</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">  json &lt;-<span class="st"> </span>gargle<span class="op">:::</span><span class="kw">secret_read</span>(<span class="st">"googledrive"</span>, <span class="st">"googledrive-testing.json"</span>)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="kw">drive_auth</span>(<span class="dt">path =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rawConversion">rawToChar</a></span>(json))</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="kw">drive_auth</span>(<span class="dt">path =</span> <span class="kw"><a href="https://rdrr.io/r/base/rawConversion.html">rawToChar</a></span>(json))</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">}</a></code></pre></div>
 <p>Versions of <code>secret_can_decrypt()</code> and <code>secret_read()</code> are defined here in gargle. <code>drive_auth()</code> is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that’s very favorable for our workflow. We’ll come back to this below.</p>
 <p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here is the test skipper from googledrive:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># googledrive</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">skip_if_no_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/skip">skip_if_not</a></span>(<span class="kw">drive_has_token</span>(), <span class="st">"No Drive token"</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  testthat<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/testthat/man/skip.html">skip_if_not</a></span>(<span class="kw">drive_has_token</span>(), <span class="st">"No Drive token"</span>)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">}</a></code></pre></div>
 <p><code>googledrive::drive_has_token()</code> returns <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests. It is typical to define such a skipper in <code>tests/testthat/helper.R</code> or similar.</p>
 <p><em>gargle’s usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it’s not featured here.</em></p>
@@ -280,13 +282,13 @@
 <p>Functions useful for these conversions:</p>
 <ul>
 <li>
-<code><a href="https://www.rdocumentation.org/packages/base/topics/readBin">writeBin()</a></code> / <code><a href="https://www.rdocumentation.org/packages/base/topics/readBin">readBin()</a></code>
+<code><a href="https://rdrr.io/r/base/readBin.html">writeBin()</a></code> / <code><a href="https://rdrr.io/r/base/readBin.html">readBin()</a></code>
 </li>
 <li>
-<code><a href="https://www.rdocumentation.org/packages/base/topics/rawConversion">charToRaw()</a></code> / <code><a href="https://www.rdocumentation.org/packages/base/topics/rawConversion">rawToChar()</a></code>
+<code><a href="https://rdrr.io/r/base/rawConversion.html">charToRaw()</a></code> / <code><a href="https://rdrr.io/r/base/rawConversion.html">rawToChar()</a></code>
 </li>
 <li>
-<code><a href="https://www.rdocumentation.org/packages/sodium/topics/symmetric">sodium::data_encrypt()</a></code> / <code><a href="https://www.rdocumentation.org/packages/sodium/topics/symmetric">sodium::data_decrypt</a></code>
+<code><a href="https://rdrr.io/pkg/sodium/man/symmetric.html">sodium::data_encrypt()</a></code> / <code><a href="https://rdrr.io/pkg/sodium/man/symmetric.html">sodium::data_decrypt</a></code>
 </li>
 </ul>
 </div>
@@ -318,6 +320,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -333,17 +336,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

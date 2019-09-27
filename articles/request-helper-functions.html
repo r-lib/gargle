@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Request helper functions • gargle</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Request helper functions">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -82,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-lib/gargle">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,6 +96,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -115,7 +117,7 @@
 <li><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code></li>
 </ul>
 <p>The target audience is someone writing an R package to wrap a Google API.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gargle)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gargle)</a></code></pre></div>
 <div id="why-use-gargles-request-helpers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#why-use-gargles-request-helpers" class="anchor"></a>Why use gargle’s request helpers?</h2>
@@ -178,8 +180,8 @@
 <a href="#discovery-documents" class="anchor"></a>Discovery Documents</h2>
 <p>Google’s <a href="https://developers.google.com/discovery/">API Discovery Service</a> “provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs”. We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle’s request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.</p>
 <p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can find these files in the gargle installation like so:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">ddi_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"discovery-doc-ingest"</span>, <span class="dt">package =</span> <span class="st">"gargle"</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span>(ddi_dir)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">ddi_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"discovery-doc-ingest"</span>, <span class="dt">package =</span> <span class="st">"gargle"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(ddi_dir)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;  [1] "api-wide-parameter-names.txt"    "api-wide-parameters-humane.txt" </span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;  [3] "api-wide-parameters.csv"         "discover-discovery.R"           </span></a>
 <a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt;  [5] "drive-example.R"                 "ingest-functions.R"             </span></a>
@@ -216,18 +218,18 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a href="#design-suggestion-forming-requests" class="anchor"></a>Design suggestion: forming requests</h2>
 <p>Here’s the model used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># googledrive::</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">request_generate &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">endpoint =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">character</a></span>(),</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                             <span class="dt">params =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(),</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">request_generate &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">endpoint =</span> <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                             <span class="dt">params =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(),</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">                             <span class="dt">key =</span> <span class="ot">NULL</span>,</a>
 <a class="sourceLine" id="cb5-5" data-line-number="5">                             <span class="dt">token =</span> <span class="kw">drive_token</span>()) {</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6">  ept &lt;-<span class="st"> </span>.endpoints[[endpoint]]</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(ept)) {</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(ept)) {</a>
 <a class="sourceLine" id="cb5-8" data-line-number="8">    <span class="kw">stop_glue</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Endpoint not recognized:</span><span class="ch">\n</span><span class="st">  * {endpoint}"</span>)</a>
 <a class="sourceLine" id="cb5-9" data-line-number="9">  }</a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11">  ## modifications specific to googledrive package</a>
 <a class="sourceLine" id="cb5-12" data-line-number="12">  params<span class="op">$</span>key &lt;-<span class="st"> </span>key <span class="op">%||%</span><span class="st"> </span>params<span class="op">$</span>key <span class="op">%||%</span><span class="st"> </span><span class="kw">drive_api_key</span>()</a>
-<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(ept<span class="op">$</span>parameters<span class="op">$</span>supportsTeamDrives)) {</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(ept<span class="op">$</span>parameters<span class="op">$</span>supportsTeamDrives)) {</a>
 <a class="sourceLine" id="cb5-14" data-line-number="14">    params<span class="op">$</span>supportsTeamDrives &lt;-<span class="st"> </span><span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15">  }</a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"></a>
@@ -253,7 +255,7 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute it.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># gargle::</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">request_make &lt;-<span class="st"> </span><span class="cf">function</span>(x, ..., <span class="dt">user_agent =</span> <span class="kw">gargle_user_agent</span>()) {</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/stopifnot">stopifnot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">is.character</a></span>(x<span class="op">$</span>method))</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/character.html">is.character</a></span>(x<span class="op">$</span>method))</a>
 <a class="sourceLine" id="cb6-4" data-line-number="4">  method &lt;-<span class="st"> </span><span class="cf">switch</span>(</a>
 <a class="sourceLine" id="cb6-5" data-line-number="5">    x<span class="op">$</span>method,</a>
 <a class="sourceLine" id="cb6-6" data-line-number="6">    <span class="dt">GET    =</span> httr<span class="op">::</span>GET,</a>
@@ -380,6 +382,7 @@ variant              object  In a variant data type, the value of
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -399,17 +402,20 @@ variant              object  In a variant data type, the value of
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How to use gargle for auth in a client package • gargle</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="How to use gargle for auth in a client package">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -82,7 +83,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/r-lib/gargle">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,6 +96,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -140,13 +142,13 @@
 <a class="sourceLine" id="cb1-15" data-line-number="15">    <span class="dt">use_oob =</span> use_oob,</a>
 <a class="sourceLine" id="cb1-16" data-line-number="16">    <span class="dt">token =</span> token</a>
 <a class="sourceLine" id="cb1-17" data-line-number="17">  )</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">inherits</a></span>(cred, <span class="st">"Token2.0"</span>)) {</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/class.html">inherits</a></span>(cred, <span class="st">"Token2.0"</span>)) {</a>
 <a class="sourceLine" id="cb1-19" data-line-number="19">    <span class="co"># throw an informative error here</span></a>
 <a class="sourceLine" id="cb1-20" data-line-number="20">  }</a>
 <a class="sourceLine" id="cb1-21" data-line-number="21">  .auth<span class="op">$</span><span class="kw">set_cred</span>(cred)</a>
 <a class="sourceLine" id="cb1-22" data-line-number="22">  .auth<span class="op">$</span><span class="kw">set_auth_active</span>(<span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb1-23" data-line-number="23">  </a>
-<a class="sourceLine" id="cb1-24" data-line-number="24">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/invisible">invisible</a></span>()</a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">  <span class="kw"><a href="https://rdrr.io/r/base/invisible.html">invisible</a></span>()</a>
 <a class="sourceLine" id="cb1-25" data-line-number="25">}</a></code></pre></div>
 <p><code>drive_auth()</code> is called automatically upon the first need of a token and that can lead to user interaction, but does not necessarily do so. <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is described in the vignette <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>. The internal <code>.auth</code> object maintains googledrive’s auth state and is explained next.</p>
 </div>
@@ -168,7 +170,7 @@
 <a href="#oauth-app" class="anchor"></a>OAuth app</h3>
 <p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they are content to use the same app for all work through a client package: possibly, the app built into the package.</p>
 <p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code>. Exported auth helpers, <code>drive_oauth_app()</code> and <code>drive_auth_configure()</code>, retrieve and modify the current app to support users ready to take that level of control.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3">google_app &lt;-<span class="st"> </span>httr<span class="op">::</span><span class="kw"><a href="https://httr.r-lib.org/reference/oauth_app.html">oauth_app</a></span>(</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">appname =</span> <span class="st">"acme-corp"</span>,</a>
@@ -188,7 +190,7 @@
 <a href="#api-key" class="anchor"></a>API key</h3>
 <p>Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by “anyone with a link” from a Shiny app, thereby designing away the need to manage user credentials on the server.</p>
 <p>The user can provide their own API key via <code>drive_auth_configure()</code> and retrieve that value with <code>drive_api_key()</code>, just like the OAuth app. The API key is stored in the <code>api_key</code> field of the <code>.auth</code> auth state.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">drive_auth_configure</span>(<span class="dt">api_key =</span> <span class="st">"123456789"</span>)</a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"></a>
@@ -246,19 +248,19 @@
 <a href="#getting-that-first-token" class="anchor"></a>Getting that first token</h2>
 <p>I focus on early use, by the naive user, with the OAuth flow. When the user first calls a high-level googledrive function such as <code>drive_find()</code>, a Drive request is ultimately generated with a call to <code>googledrive::request_generate()</code>. Here is its definition, at least approximately:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># googledrive::</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">request_generate &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">endpoint =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">character</a></span>(),</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">                             <span class="dt">params =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(),</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">request_generate &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">endpoint =</span> <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                             <span class="dt">params =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(),</a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">                             <span class="dt">key =</span> <span class="ot">NULL</span>,</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5">                             <span class="dt">token =</span> <span class="kw">drive_token</span>()) {</a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">  ept &lt;-<span class="st"> </span>.endpoints[[endpoint]]</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(ept)) {</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(ept)) {</a>
 <a class="sourceLine" id="cb8-8" data-line-number="8">    <span class="kw">stop_glue</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Endpoint not recognized:</span><span class="ch">\n</span><span class="st">  * {endpoint}"</span>)</a>
 <a class="sourceLine" id="cb8-9" data-line-number="9">  }</a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb8-11" data-line-number="11">  ## modifications specific to googledrive package</a>
 <a class="sourceLine" id="cb8-12" data-line-number="12">  params<span class="op">$</span>key &lt;-<span class="st"> </span>key <span class="op">%||%</span><span class="st"> </span>params<span class="op">$</span>key <span class="op">%||%</span></a>
 <a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">    </span><span class="kw">drive_api_key</span>() <span class="op">%||%</span><span class="st"> </span><span class="er">&lt;</span>BUILT_IN_DEFAULT_API_KEY<span class="op">&gt;</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">  </span><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/NULL">is.null</a></span>(ept<span class="op">$</span>parameters<span class="op">$</span>supportsTeamDrives)) {</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">  </span><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(ept<span class="op">$</span>parameters<span class="op">$</span>supportsTeamDrives)) {</a>
 <a class="sourceLine" id="cb8-15" data-line-number="15">    params<span class="op">$</span>supportsTeamDrives &lt;-<span class="st"> </span><span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb8-16" data-line-number="16">  }</a>
 <a class="sourceLine" id="cb8-17" data-line-number="17"></a>
@@ -275,8 +277,8 @@
 <p><code>googledrive::request_generate()</code> gets a token with <code>drive_token()</code>, which is defined like so:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">drive_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="cf">if</span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">isFALSE</a></span>(.auth<span class="op">$</span>auth_active)) {</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(<span class="ot">NULL</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isFALSE</a></span>(.auth<span class="op">$</span>auth_active)) {</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="ot">NULL</span>)</a>
 <a class="sourceLine" id="cb9-5" data-line-number="5">  }</a>
 <a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">drive_has_token</span>()) {</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">    <span class="kw">drive_auth</span>()</a>
@@ -286,13 +288,13 @@
 <p>where <code>drive_has_token()</code> in a helper defined as:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># googledrive::</span></a>
 <a class="sourceLine" id="cb10-2" data-line-number="2">drive_has_token &lt;-<span class="st"> </span><span class="cf">function</span>() {</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">inherits</a></span>(.auth<span class="op">$</span>cred, <span class="st">"Token2.0"</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  <span class="kw"><a href="https://rdrr.io/r/base/class.html">inherits</a></span>(.auth<span class="op">$</span>cred, <span class="st">"Token2.0"</span>)</a>
 <a class="sourceLine" id="cb10-4" data-line-number="4">}</a></code></pre></div>
 <p>By default, auth is active, and, for a fresh start, we won’t have a token stashed in <code>.auth</code> yet. So this will result in a call to <code>drive_auth()</code> to obtain a credential, which is then cached in <code>.auth$cred</code> for the remainder of the session. All subsequent calls to <code>drive_token()</code> will just spit back this token.</p>
 <p>Above, we discussed scenarios where an advanced user might call <code>drive_auth()</code> proactively, with non-default arguments, possibly even loading a service token or using alternative flows, like Application Default Credentials or a Google Cloud Engine flow. Any token loaded in that way is stashed in <code>.auth$cred</code> and will be returned by subsequent calls to <code>drive_token()</code>.</p>
 <p>Multiple gargle-using packages can use a shared token by obtaining a suitably scoped token with one package, then registering that token with the other packages. For example, the default scope requested by googledrive is also sufficient for operations available in googlesheets4. You could use a shared token like so:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googlesheets4)</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googlesheets4)</a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"jane_doe@example.com"</span>) <span class="co"># gets a suitably scoped token</span></a>
 <a class="sourceLine" id="cb11-5" data-line-number="5">                                           <span class="co"># and stashes for googledrive use</span></a>
@@ -341,7 +343,7 @@
 <h2 class="hasAnchor">
 <a href="#changing-identities-and-more" class="anchor"></a>Changing identities (and more)</h2>
 <p>One reason for a user to call <code>drive_auth()</code> directly and proactively is to switch from one Google identity to another or to make sure they are presenting themselves with a specific identity. <code>drive_auth()</code> accepts an <code>email</code> argument, which is honored when gargle determines if there is already a suitable token on hand. Here is a sketch of how a user could switch identities during a session, possibly non-interactive:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(googledrive)</a>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"janedoe_work@gmail.com"</span>)</a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co"># do stuff with Google Drive here, with Jane Doe's "work" account</span></a>
@@ -355,6 +357,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -373,17 +376,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
