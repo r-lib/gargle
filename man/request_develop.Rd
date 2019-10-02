@@ -5,12 +5,21 @@
 \alias{request_build}
 \title{Build a Google API request}
 \usage{
-request_develop(endpoint, params = list(),
-  base_url = "https://www.googleapis.com")
+request_develop(
+  endpoint,
+  params = list(),
+  base_url = "https://www.googleapis.com"
+)
 
-request_build(method = "GET", path = "", params = list(),
-  body = list(), token = NULL, key = NULL,
-  base_url = "https://www.googleapis.com")
+request_build(
+  method = "GET",
+  path = "",
+  params = list(),
+  body = list(),
+  token = NULL,
+  key = NULL,
+  base_url = "https://www.googleapis.com"
+)
 }
 \arguments{
 \item{endpoint}{List of information about the target endpoint or, in
@@ -158,7 +167,7 @@ vapply(out$results, function(x) x$name, character(1))
 }
 }
 \seealso{
-Other requests and responses: \code{\link{request_make}},
-  \code{\link{response_process}}
+Other requests and responses: \code{\link{request_make}()},
+  \code{\link{response_process}()}
 }
 \concept{requests and responses}

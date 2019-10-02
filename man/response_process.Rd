@@ -83,7 +83,7 @@ response_process(resp)
 }
 }
 \seealso{
-Other requests and responses: \code{\link{request_develop}},
-  \code{\link{request_make}}
+Other requests and responses: \code{\link{request_develop}()},
+  \code{\link{request_make}()}
 }
 \concept{requests and responses}

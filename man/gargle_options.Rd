@@ -59,7 +59,7 @@ code.
 \code{gargle_oauth_cache()} returns the option named "gargle_oauth_cache",
 defaulting to \code{NA}. If defined, the option must be set to a logical value or
 a string. \code{TRUE} means to cache using the default user-level cache file,
-\code{~/.R/gargle/gargle-oauth}, \code{FALSE} means don't cache, and \code{NA} means to
+\verb{~/.R/gargle/gargle-oauth}, \code{FALSE} means don't cache, and \code{NA} means to
 guess using some sensible heuristics.
 }
 

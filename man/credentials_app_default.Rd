@@ -29,10 +29,10 @@ Application Default Credentials (ADC). The hope is to make auth "just work"
 for someone working on Google-provided infrastructure or who has used Google
 tooling to get started. A sequence of paths is consulted, which we describe
 here, with some abuse of notation. ALL_CAPS represents the value of an
-environment variable and \code{\%||\%} is used in the spirit of a \href{https://en.wikipedia.org/wiki/Null_coalescing_operator}{null coalescing operator}.\preformatted{GOOGLE_APPLICATION_CREDENTIALS
+environment variable and \verb{\%||\%} is used in the spirit of a \href{https://en.wikipedia.org/wiki/Null_coalescing_operator}{null coalescing operator}.\preformatted{GOOGLE_APPLICATION_CREDENTIALS
 CLOUDSDK_CONFIG/application_default_credentials.json
 # on Windows:
-(APPDATA \%||\% SystemDrive \%||\% C:)\gcloud\application_default_credentials.json
+(APPDATA \%||\% SystemDrive \%||\% C:)\\gcloud\\application_default_credentials.json
 # on not-Windows:
 ~/.config/gcloud/application_default_credentials.json
 }
@@ -50,10 +50,10 @@ credentials_app_default()
 
 \url{https://cloud.google.com/sdk/docs/}
 
-Other credential functions: \code{\link{credentials_byo_oauth2}},
-  \code{\link{credentials_gce}},
-  \code{\link{credentials_service_account}},
-  \code{\link{credentials_user_oauth2}},
-  \code{\link{token_fetch}}
+Other credential functions: \code{\link{credentials_byo_oauth2}()},
+  \code{\link{credentials_gce}()},
+  \code{\link{credentials_service_account}()},
+  \code{\link{credentials_user_oauth2}()},
+  \code{\link{token_fetch}()}
 }
 \concept{credential functions}

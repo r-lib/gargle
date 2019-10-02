@@ -38,7 +38,7 @@ gargle::request_make(req)
 }
 }
 \seealso{
-Other requests and responses: \code{\link{request_develop}},
-  \code{\link{response_process}}
+Other requests and responses: \code{\link{request_develop}()},
+  \code{\link{response_process}()}
 }
 \concept{requests and responses}

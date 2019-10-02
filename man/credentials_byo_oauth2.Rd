@@ -64,10 +64,10 @@ credentials_byo_oauth2(token = my_token)
 }
 }
 \seealso{
-Other credential functions: \code{\link{credentials_app_default}},
-  \code{\link{credentials_gce}},
-  \code{\link{credentials_service_account}},
-  \code{\link{credentials_user_oauth2}},
-  \code{\link{token_fetch}}
+Other credential functions: \code{\link{credentials_app_default}()},
+  \code{\link{credentials_gce}()},
+  \code{\link{credentials_service_account}()},
+  \code{\link{credentials_user_oauth2}()},
+  \code{\link{token_fetch}()}
 }
 \concept{credential functions}
