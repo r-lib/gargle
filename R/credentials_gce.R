@@ -14,7 +14,8 @@
 #' \dontrun{
 #' credentials_gce()
 #' }
-credentials_gce <- function(scopes = NULL, service_account = "default", ...) {
+credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
+                            service_account = "default", ...) {
   cat_line("trying credentials_gce()")
   if (!detect_gce() || is.null(scopes)) {
     return(NULL)

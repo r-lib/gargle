@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* `credentials_gce()` gains `cloud-platform` as a default scope, assuming that the typical user wants to "View and manage your data across Google Cloud Platform services" (#110, @MarkEdmondson1234).
+
 * Eliminated uninformative failure when oauth tokens cached on R <= 3.5 are re-loaded on R >= 3.6. The change to the default serialization version (2 vs. 3) creates an apparent mismatch between a token's hash and its key. Instead of inexplicably failing, now we attempt to repair the cache and carry on (#109, [tidyverse/googledrive#274](https://github.com/tidyverse/googledrive/issues/274).
 
 # gargle 0.3.1
