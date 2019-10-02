@@ -48,7 +48,7 @@ cache_available <- function(path) {
 }
 
 cache_allowed <- function(path) {
-  if (!interactive()) {
+  if (!rlang::is_interactive()) {
     return(FALSE)
   }
 
@@ -159,7 +159,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   ## ''                 no email and no instructions
 
   ## if we have no instructions, we need user permission to consult the cache
-  if (empty_string(candidate_email) && !interactive()) {
+  if (empty_string(candidate_email) && !rlang::is_interactive()) {
     return()
   }
 
@@ -191,7 +191,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
   ## we need user to OK our discovery or pick from multiple emails
 
-  if (!interactive()) {
+  if (!rlang::is_interactive()) {
     stop_need_user_interaction(
       "Suitable cached tokens exist, but user confirmation is required."
     )

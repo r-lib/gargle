@@ -38,17 +38,6 @@ add_line <- function(path, line, quiet = FALSE) {
   TRUE
 }
 
-is_testing <- function() {
-  identical(Sys.getenv("TESTTHAT"), "true")
-}
-
-## this function can be replaced by rlang::is_interactive()
-## if this gets merged + released
-## https://github.com/r-lib/rlang/pull/761
-interactive <- function() {
-  rlang::is_interactive() && !is_testing()
-}
-
 ## in the spirit of basename(), but for Google scopes
 ## for printing purposes
 base_scope <- function(x) {

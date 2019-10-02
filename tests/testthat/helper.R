@@ -7,7 +7,7 @@ expect_gargle2.0_token <- function(object, expected) {
 }
 
 ## useful during interactive test development to toggle the
-## rlang_interactive escape hatch in gargle:::interactive()
+## rlang_interactive escape hatch
 interactive_mode <- function() {
   before <- getOption("rlang_interactive", default = TRUE)
   after <- if (before) FALSE else TRUE
