@@ -81,37 +81,31 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 })
 
 # validate_token_list() ------------------------------------------------------
-test_that("validate_token_list() errors if putative hash != actual hash", {
+test_that("cache_load() copes repairs tokens stored with names != their hash", {
+  cache_folder <- file_temp()
+  on.exit(dir_delete(cache_folder))
+
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
     credentials = list(a = 1),
-    cache = FALSE
+    cache = cache_folder
   )
   fauxen_b <- gargle2.0_token(
     email = "b@example.org",
     credentials = list(b = 1),
-    cache = FALSE
+    cache = cache_folder
   )
-  l <- list(fauxen_b, fauxen_a)
-  names(l) <- c(fauxen_a$hash(), fauxen_b$hash())
-  expect_error(
-    validate_token_list(l),
+  file_move(
+    dir_ls(cache_folder),
+    path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
+  )
+  withr::local_options(list(gargle_quiet = FALSE))
+  expect_output(
+    tokens <- cache_load(cache_folder),
     "do not match their hash"
   )
-})
-
-test_that("validate_token_list() errors on duplicated hashes", {
-  fauxen_a <- gargle2.0_token(
-    email = "a@example.org",
-    credentials = list(a = 1),
-    cache = FALSE
-  )
-  l <- list(fauxen_a, fauxen_a)
-  names(l) <- rep(fauxen_a$hash(), 2)
-  expect_error(
-    validate_token_list(l),
-    "duplicated"
-  )
+  expect_gargle2.0_token(tokens[[1]], fauxen_a)
+  expect_gargle2.0_token(tokens[[2]], fauxen_b)
 })
 
 # token into and out of cache ---------------------------------------------
@@ -127,7 +121,6 @@ test_that("token_from_cache() returns NULL when caching turned off", {
 test_that("token_into_cache(), token_from_cache() roundtrip", {
   cache_folder <- file_temp()
   on.exit(dir_delete(cache_folder))
-  dir_create(cache_folder)
 
   ## this calls token_into_cache()
   token_in <- gargle2.0_token(
@@ -149,7 +142,6 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
 test_that("token_from_cache(), 1 or >1 short hash matches", {
   cache_folder <- file_temp()
   on.exit(dir_delete(cache_folder))
-  dir_create(cache_folder)
 
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
@@ -214,7 +206,6 @@ test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
 test_that("gargle_oauth_sitrep() reports on specified cache", {
   tmp_cache <- file_temp()
   on.exit(dir_delete(tmp_cache))
-  dir_create(tmp_cache)
 
   gargle2.0_token(
     email = "a@example.org",
@@ -263,7 +254,7 @@ test_that("extract_email() works", {
   expect_identical(extract_email("abc123_FIRST_LAST@a.com"), "FIRST_LAST@a.com")
 })
 
-test_that("hash_paths() works", {
+test_that("keep_hash_paths() works", {
   x <- c("aa_bb_cc", "a.md", "b.rds", "c.txt", "dd123_e@example.org")
-  expect_identical(hash_paths(x), x[c(1, 5)])
+  expect_identical(keep_hash_paths(x), x[c(1, 5)])
 })

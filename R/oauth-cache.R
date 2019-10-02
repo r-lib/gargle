@@ -89,38 +89,31 @@ cache_ls <- function(path) {
 
 cache_load <- function(path) {
   files <- as.character(dir_ls(path))
-  files <- hash_paths(files)
+  files <- keep_hash_paths(files)
   names(files) <- path_file(files)
   tokens <- map(files, readRDS)
-  validate_token_list(tokens)
-}
 
-validate_token_list <- function(tokens) {
-  hashes <- unname(map_chr(tokens, function(t) t$hash()))
-  nms <- names(tokens)
+  hashes <- map_chr(tokens, function(t) t$hash())
 
-  if (!identical(nms, hashes)) {
-    mismatches <- nms != hashes
+  mismatch <- names(hashes) != hashes
+
+  if (any(mismatch)) {
+    # we've seen this with tokens cached on R 3.5 but reloaded on 3.6
+    # because $hash() calls serialize() and default version changed
     msg <- c(
       "Cache contains tokens with names that do not match their hash:",
       glue("
-        * Token stored as {sq(nms[mismatches])}
-              but hash is {sq(hashes[mismatches])}
-      ")
+        * Token stored as {sq(names(hashes)[mismatch])}
+              but hash is {sq(hashes[mismatch])}
+      "),
+      "Will attempt to repair by renaming."
     )
-    abort(glue_collapse(msg, sep = "\n"))
+    cat_line(msg)
+    file_move(files[mismatch], path(path, hashes[mismatch]))
+    Recall(path)
+  } else {
+    tokens
   }
-
-  if (anyDuplicated(nms)) {
-    dupes <- unique(nms[duplicated(nms)])
-    msg <- c(
-      "Cache contains duplicated tokens:",
-      paste0("  * ", dupes)
-    )
-    abort(glue_collapse(msg, sep = "\n"))
-  }
-
-  tokens
 }
 
 # retrieve and insert tokens from cache -----------------------------------
@@ -146,8 +139,10 @@ token_from_cache <- function(candidate) {
 token_into_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) {
+    cat_line("not caching token")
     return()
   }
+  cat_line("putting token into the cache: ", cache_path)
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
@@ -224,7 +219,7 @@ token_match <- function(candidate, existing, package = "gargle") {
 hash_regex <- "^([0-9a-f]+)_(.*?)$"
 mask_email    <- function(x) sub(hash_regex, "\\1", x)
 extract_email <- function(x) sub(hash_regex, "\\2", x)
-hash_paths <- function(x) x[grep(hash_regex, path_file(x))]
+keep_hash_paths <- function(x) x[grep(hash_regex, path_file(x))]
 
 ## match() but return location of all matches
 match2 <- function(needle, haystack) {
