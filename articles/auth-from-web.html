@@ -111,8 +111,8 @@
     
     
 <p>If you are working with R in a web-based context, like <a href="https://www.rstudio.com/products/rstudio-server/">RStudio Server</a> or <a href="https://rstudio.cloud">Cloud</a>, your experience of browser-based auth flows will be different from those using R, directly in the Console or through an IDE. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
-<p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. We have plans in gargle to automatically detect even more contexts that require oob auth (<a href="https://github.com/r-lib/gargle/issues/102" class="uri">https://github.com/r-lib/gargle/issues/102</a>). But in the meantime …</p>
-<p>When oob auth is attempted in a setting where it is doomed to fail, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
+<p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.</p>
+<p>Here’s a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
 <pre><code>Chrome: This site can't be reached; localhost refused to connect.
 Firefox: Unable to connect; can't establish a connection.</code></pre>
 <p>This is a sign that you need to explicitly request oob auth.</p>
@@ -185,7 +185,7 @@ R       16664 jenny   20u  IPv4 0x63761a50856c65f      0t0  TCP localhost:hiq (L
 <div id="further-reading" class="section level2">
 <h2 class="hasAnchor">
 <a href="#further-reading" class="anchor"></a>Further reading</h2>
-<p><a href="https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server">Generating OAuth tokens for a server using httr</a> covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. The main thing to remember is that gargle (and gargle-using packages) refer to the <code>gargle_oob_default</code> option, not <code>httr_oob_default</code>.</p>
+<p><a href="https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server">Generating OAuth tokens for a server using httr</a> covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. gargle first consults the <code>gargle_oob_default</code> option and, if that is undefined, also consults the <code>httr_oob_default</code> option.</p>
 <p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io">shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/">RStudio Connect</a>), you will also need to consider how the <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">deployed content will authenticate non-interactively</a>.</p>
 </div>
   </div>

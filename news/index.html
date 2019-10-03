@@ -149,6 +149,7 @@
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>gargle consults the option <code>"httr_oob_default"</code>, if the option <code>"gargle_oob_default"</code> is unset. This is part of an effort to automatically detect the need for out-of-bound auth in more situations (<a href='https://github.com/r-lib/gargle/issues/102'>#102</a>).</p></li>
 <li><p><code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code> checks explicitly that <code>type</code> is <code>"service_account"</code>. This makes it easier to detect a common mistake, where the JSON for an OAuth client is provided instead of the JSON representing a service account (<a href='https://github.com/r-lib/gargle/issues/93'>#93</a>).</p></li>
 <li><p>In a non-interactive context, gargle will use a cached OAuth token, if it discovers (at least) one, even if the user has not given explicit instructions. We emit a recommendation that the user make their intent unambiguous and link to the vignette on non-interactive auth (<a href='https://github.com/r-lib/gargle/issues/92'>#92</a>).</p></li>
 <li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> gains <code>cloud-platform</code> as a default scope, assuming that the typical user wants to “View and manage your data across Google Cloud Platform services” (<a href='https://github.com/r-lib/gargle/issues/110'>#110</a>, <a href='https://github.com/MarkEdmondson1234'>@MarkEdmondson1234</a>).</p></li>
