@@ -139,59 +139,71 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
   expect_identical(token_out$credentials, list(a = 1))
 })
 
-test_that("token_from_cache(), 1 or >1 short hash matches", {
-  cache_folder <- file_temp()
-  on.exit(dir_delete(cache_folder))
-
-  fauxen_a <- gargle2.0_token(
-    email = "a@example.org",
-    credentials = list(a = 1),
-    cache = cache_folder
-  )
-
-  one_match <- gargle2.0_token(
-    email = TRUE,
-    cache = cache_folder
-  )
-  expect_gargle2.0_token(fauxen_a, one_match)
-
-  fauxen_b <- gargle2.0_token(
-    email = "b@example.org",
-    credentials = list(b = 1),
-    cache = cache_folder
-  )
-  expect_error(
-    gargle2.0_token(
-      email = TRUE,
-      cache = cache_folder
-    ),
-    class = "gargle_error_need_user_interaction"
-  )
-})
-
 # token_match() ----------------------------------------
 test_that("token_match() returns NULL if nothing to match against", {
   expect_null(token_match("whatever", character()))
 })
 
-test_that("token_match() returns NULL if email is empty", {
-  expect_null(token_match("aaa_", "aaa_"))
+test_that("token_match() returns the full match", {
+  one_existing <- "abc_a@example.com"
+  two_existing <- c(one_existing, "def_b@example.com")
+
+  expect_identical(
+    one_existing,
+    token_match(one_existing, one_existing)
+  )
+  expect_identical(
+    one_existing,
+    token_match(one_existing, two_existing)
+  )
 })
 
-test_that("token_match() returns NULL email given, but no match", {
-  candidate <- "a0_a@example.org"
-  expect_null(token_match(candidate, "b1_a@example.org"))
-  expect_null(token_match(candidate, "a0_b@example.org"))
+test_that("token_match() returns NULL if email given, but no full match", {
+  candidate <- "abc_a@example.org"
+  expect_null(token_match(candidate, "def_a@example.org"))
+  expect_null(token_match(candidate, "abc_b@example.org"))
   expect_null(token_match(candidate, "a@example.org"))
-  expect_null(token_match(candidate, "a0"))
-  expect_null(token_match(candidate, "a0_"))
+  expect_null(token_match(candidate, "abc"))
+  expect_null(token_match(candidate, "abc_"))
 })
 
-test_that("token_match() fails for >1 short hash match, if non-interactive", {
-  candidate <- "a0_"
-  existing <- c("a0_a@example.org", "a0_b@example.org")
-  expect_null(token_match(candidate, existing))
+test_that("token_match() returns NULL if no email and no short hash match", {
+  expect_null(token_match("abc_", "def_a@example.org"))
+  expect_null(token_match("abc_*", "def_a@example.org"))
 })
+
+test_that("token_match() scolds but returns short hash match when non-interactive", {
+  withr::local_options(list(rlang_interactive = FALSE))
+
+  one_existing <- "abc_a@example.com"
+  two_existing <- c(one_existing, "abc_b@example.com")
+
+  expect_output(
+    m <- token_match("abc_", one_existing),
+    "modify your code or options"
+  )
+  expect_identical(m, one_existing)
+
+  expect_output(
+    m <- token_match("abc_*", one_existing),
+    "modify your code or options"
+  )
+  expect_identical(m, one_existing)
+
+  expect_output(
+    m <- token_match("abc_", two_existing),
+    "first will be used"
+  )
+  expect_identical(m, one_existing)
+
+  expect_output(
+    m <- token_match("abc_*", two_existing),
+    "first will be used"
+  )
+  expect_identical(m, one_existing)
+})
+# 1 short hash match, interactive
+# >1 short hash match, interactive
 
 # situation report ----------------------------------------------------------
 
