@@ -17,9 +17,9 @@ knitr::opts_chunk$set(
 If you are working with R in a web-based context, like [RStudio Server](https://www.rstudio.com/products/rstudio-server/) or [Cloud](https://rstudio.cloud), your experience of browser-based auth flows will be
 different from those using R, directly in the Console or through an IDE. You need to use **out-of-band authentication**, sometimes denoted "oob". After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
 
-The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. We have plans in gargle to automatically detect even more contexts that require oob auth (https://github.com/r-lib/gargle/issues/102). But in the meantime ...
+The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.
 
-When oob auth is attempted in a setting where it is doomed to fail, you are redirected to localhost on port 1410 and receive an error along these lines:
+Here's a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:
 
 ```
 Chrome: This site can't be reached; localhost refused to connect.
@@ -121,6 +121,6 @@ The normal, non-oob auth web flow should work again now.
 
 ## Further reading
 
-[Generating OAuth tokens for a server using httr](https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. The main thing to remember is that gargle (and gargle-using packages) refer to the `gargle_oob_default` option, not `httr_oob_default`.
+[Generating OAuth tokens for a server using httr](https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. gargle first consults the `gargle_oob_default` option and, if that is undefined, also consults the `httr_oob_default` option.
 
 If you're creating content to be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [RStudio Connect](https://www.rstudio.com/products/connect/)), you will also need to consider how the [deployed content will authenticate non-interactively](https://gargle.r-lib.org/articles/non-interactive-auth.html). 

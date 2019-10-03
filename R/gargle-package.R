@@ -52,14 +52,19 @@ gargle_oauth_email <- function() {
 #' @rdname gargle_options
 #' @export
 #' @section `gargle_oob_default`:
-#' `gargle_oob_default()` returns the option named "gargle_oob_default",
-#' defaulting to `FALSE`. This controls whether to prefer "out of band"
-#' authentication. This is ultimately passed to [httr::init_oauth2.0()] as
-#' `use_oob`. If `FALSE` (and httpuv is installed), a local webserver is used
-#' for the OAuth dance. Otherwise, user gets a URL and prompt for a validation
-#' code.
+#' `gargle_oob_default()` returns the option named "gargle_oob_default", falls
+#' back to the option named "httr_oob_default", and eventually defaults to
+#' `FALSE`. This controls whether to prefer "out of band" authentication. This
+#' is ultimately passed to [httr::init_oauth2.0()] as `use_oob`. If `FALSE` (and
+#' httpuv is installed), a local webserver is used for the OAuth dance.
+#' Otherwise, user gets a URL and prompt for a validation code.
+#'
+#' Read more about "out of band" authentication in the vignette [Auth when using
+#' R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
 gargle_oob_default <- function() {
-  getOption("gargle_oob_default", default = FALSE)
+  getOption("gargle_oob_default") %||%
+    getOption("httr_oob_default") %||%
+    FALSE
 }
 
 #' @rdname gargle_options
