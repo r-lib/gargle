@@ -147,16 +147,18 @@
 <h2 class="hasAnchor">
 <a href="#sidebar-2-i-just-want-my--rmd-to-render" class="anchor"></a>Sidebar 2: I just want my <code>.Rmd</code> to render</h2>
 <p>TL;DR is that you need to give gargle permission to use a token it finds in the cache. These sorts of commands achieve that:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Approach #1: use an option</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># or specify the user</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># Approach #2: call PACKAGE_auth() proactively</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># or specify the user</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Approach #1: use an option.</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># Either specify the user:</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Or, if you don't use multiple Google identities, you can be more vague:</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># Approach #2: call PACKAGE_auth() proactively.</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># Either specify the user:</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co"># Or, if you don't use multiple Google identities, you can be more vague:</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">drive_auth</span>(<span class="dt">email =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Keep reading if you want to actually understand this.</p>
 </div>
 <div id="provide-a-service-account-token-directly" class="section level2">
@@ -222,7 +224,7 @@
 <li>The option-based approach can be implemented in each <code>.Rmd</code> or <code>.R</code> or in a user-level or project level <code>.Rprofile</code> startup file.</li>
 </ul>
 </li>
-<li>Authorize the use of a “matching token”, in general, (email is <code>TRUE</code>) or give a specific identity (email is an actual address).</li>
+<li>Authorize the use of the “matching token”, in general, (email is <code>TRUE</code>) or give a specific identity (email is an actual address).</li>
 </ul>
 <p>This sets an option that allows gargle to use cached tokens whenever there’s a unique match:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
