@@ -1,5 +1,3 @@
-context("oauth-app")
-
 test_that("oauth app from JSON", {
   oa <- oauth_app_from_json(
     test_path(

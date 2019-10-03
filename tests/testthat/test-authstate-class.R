@@ -1,5 +1,3 @@
-context("test-authstate-class")
-
 test_that("inputs are checked when creating AuthState", {
   app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
 

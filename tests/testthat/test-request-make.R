@@ -1,5 +1,3 @@
-context("request (make)")
-
 test_that("request_make() errors for invalid HTTP methods", {
   expect_error(
     request_make(list(method = httr::GET)),

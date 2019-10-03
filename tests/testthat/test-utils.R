@@ -1,5 +1,3 @@
-context("utils")
-
 test_that("add_email_scope() works", {
   email_url <- add_email_scope()
   expect_length(email_url, 1)

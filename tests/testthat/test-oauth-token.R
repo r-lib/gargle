@@ -1,5 +1,3 @@
-context("Gargle2.0 oauth tokens")
-
 test_that("email is ingested correctly", {
   fauxen_email <- function(email = NULL) {
     gargle2.0_token(email = email, credentials = list(a = 1))$email

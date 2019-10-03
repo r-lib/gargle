@@ -1,5 +1,3 @@
-context("gce-token-mocked")
-
 test_that("Can list service accounts", {
   service_accounts <- c("account1@project.gserviceaccount.com", "default")
   request_mock <- function(path, ...) {

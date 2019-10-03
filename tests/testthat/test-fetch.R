@@ -1,5 +1,3 @@
-context("fetch-token")
-
 # These are used in several tests below.
 creds_always <- function(scopes, ...) { 1 }
 creds_never <- function(scopes, ...) { NULL }

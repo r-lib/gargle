@@ -1,5 +1,3 @@
-context("test-cache.R")
-
 # cache_establish ------------------------------------------------------------
 
 test_that("cache_establish() insists on sensible input", {

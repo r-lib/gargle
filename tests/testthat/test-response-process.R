@@ -1,5 +1,3 @@
-context("Process responses")
-
 find_known_message <- function(file) {
   glue("{fs::path_ext_remove(file)}_MESSAGE.txt")
 }

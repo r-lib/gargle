@@ -1,5 +1,3 @@
-context("decrypt service token")
-
 test_that("token works", {
   skip_if_offline()
   skip_if_no_auth()

@@ -1,5 +1,3 @@
-context("request (develop, build)")
-
 test_that("request_develop() errors for unrecognized parameters", {
   expect_error(
     request_develop(

@@ -1,5 +1,3 @@
-context("registry")
-
 # These are used in several tests below.
 creds_one <- function(scopes, ...) {}
 creds_two <- function(scopes, arg1, arg2 = "optional", ...) {}
