@@ -64,12 +64,20 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #'
 #' This is based on the [Token2.0][httr::Token-class] class provided in httr.
 #' These objects should be created through the constructor function
-#' [gargle2.0_token()]. In the base Token2.0 class, tokens are cached based on
-#' endpoint, app, and scopes. For the `Gargle2.0` subclass, the identifier or
-#' key is expanded to include the email address associated with the token. This
-#' makes it easier to work with Google APIs with multiple identities. The
-#' default location for the token cache is also different: it's now
-#' `"~/.R/gargle/gargle-oauth"` instead of `./.httr-oauth`.
+#' [gargle2.0_token()]. Key differences:
+#' * The key for a cached `Token2.0` comes from hashing the endpoint, app, and
+#' scopes. For the `Gargle2.0` subclass, the identifier or key is expanded to
+#' include the email address associated with the token. This makes it easier to
+#' work with Google APIs with multiple identities.
+#' * `Gargle2.0` tokens are cached, by default, below
+#' `"~/.R/gargle/gargle-oauth"`, i.e. at the user level. In contrast, the
+#' default location for `Token2.0` is `./.httr-oauth`, i.e. in current working
+#' directory. `Gargle2.0` behaviour makes it easier to reuse tokens across
+#' projects and makes it less likely that tokens are accidentally synched to a
+#' remote location like GitHub or DropBox.
+#' * Each `Gargle2.0` token is cached in its own file. The token cache is a
+#' directory of such files. In contrast, `Token2.0` tokens are cached as
+#' components of a list, which is typically serialized to `./.httr-oauth`.
 #'
 #' @docType class
 #' @keywords internal
