@@ -23,7 +23,7 @@ We assume the wrapper package uses the design described in [How to use gargle fo
   * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
   * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
   * [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
-  * [gcalendr](https://andrie.github.io/gcalendr/) *GitHub only*
+  * [gcalendr](https://github.com/andrie/gcalendr) *GitHub only*
 
 Full details on [`gargle::token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.html), which powers this strategy, are given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
     
@@ -140,10 +140,10 @@ There are many ways to do this. We'll work several examples using that convey th
 **Step 1**: Get that first token. You must run your code at least once, interactively, do the auth dance, and allow gargle to store the token in its cache.
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
 # do anything that triggers auth
-calendar_list()
+drive_find(n_max)
 ```
 
 **Step 2**: Revise your code to pre-authorize the use of that token next time. Now your `.Rmd` can be rendered or your `.R` script can run, without further interaction.
@@ -187,7 +187,7 @@ This is like the previous example, but with an added twist: we use a project-lev
 **Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project. Using gcalendr as an example:
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
 # designate project-specific cache
 options(gargle_oauth_cache = ".secrets")
@@ -196,7 +196,7 @@ options(gargle_oauth_cache = ".secrets")
 gargle::gargle_oauth_cache()
 
 # trigger auth on purpose --> store a token in the specified cache
-calendar_auth()
+drive_auth()
 
 # see your token file in the cache, if you like
 list.files(".secrets/")
@@ -207,10 +207,10 @@ Do this setup once per project.
 Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
 # trigger auth on purpose --> store a token in the specified cache
-calendar_auth(cache = ".secrets")
+drive_auth(cache = ".secrets")
 ```
 
 If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in [Auth when using R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
@@ -218,7 +218,7 @@ If you are doing setup in a web-based environment, such as RStudio Server, you m
 **Step 2**: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
 options(
   gargle_oauth_cache = ".secrets",
@@ -226,7 +226,7 @@ options(
 )
 
 # now use gcalendr with no need for explicit auth
-calendar_list()
+drive_find(n_max = 5)
 ```
 
 Setting the option `gargle_oauth_email = TRUE` says that gcalendr is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
@@ -234,7 +234,7 @@ Setting the option `gargle_oauth_email = TRUE` says that gcalendr is allowed to 
 Here's a variation where we say which token to use by explicitly specifying the associated email. This is handy if there's a reason to have more than one token in the cache.
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
 options(
   gargle_oauth_cache = ".secrets",
@@ -242,29 +242,29 @@ options(
 )
 
 # now use gcalendr with no need for explicit auth
-calendar_list()
+drive_find(n_max = 5)
 ```
 
 Here's another variation where we specify the necessary info directly in an auth call, instead of in options:
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
-calendar_auth(cache = ".secrets", email = TRUE)
+drive_auth(cache = ".secrets", email = TRUE)
 
 # now use gcalendr with no need for explicit auth
-calendar_list()
+drive_fine(n_max = 5)
 ```
 
 Here's one last variation that applicable when the local cache could contain multiple tokens:
 
 ```{r}
-library(gcalendr)
+library(googledrive)
 
-calendar_auth(cache = ".secrets", email = "jenny@example.org")
+drive_auth(cache = ".secrets", email = "jenny@example.org")
 
 # now use gcalendr with no need for explicit auth
-calendar_list()
+drive_auth(n_max = 5)
 ```
 
 Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
