@@ -4,13 +4,8 @@
 \alias{init_AuthState}
 \title{Create an AuthState}
 \usage{
-init_AuthState(
-  package = NA_character_,
-  app = NULL,
-  api_key = NULL,
-  auth_active = TRUE,
-  cred = NULL
-)
+init_AuthState(package = NA_character_, app = NULL, api_key = NULL,
+  auth_active = TRUE, cred = NULL)
 }
 \arguments{
 \item{package}{Package name, an optional string. The associated package will

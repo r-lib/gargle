@@ -35,9 +35,9 @@ token or a user.
 It's hard to say exactly what info will be returned by the "userinfo"
 endpoint targetted by \code{token_userinfo()}. It depends on the token's scopes.
 OAuth2 tokens obtained via the gargle package include the
-\verb{https://www.googleapis.com/auth/userinfo.email} scope, which guarantees we
+\code{https://www.googleapis.com/auth/userinfo.email} scope, which guarantees we
 can learn the email associated with the token. If the token has the
-\verb{https://www.googleapis.com/auth/userinfo.profile} scope, there will be even
+\code{https://www.googleapis.com/auth/userinfo.profile} scope, there will be even
 more information available. But for a token with unknown or arbitrary scopes,
 we can't make any promises about what information will be returned.
 }
