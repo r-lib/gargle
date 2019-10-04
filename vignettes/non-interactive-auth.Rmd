@@ -82,7 +82,7 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 
 If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
 
-For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as "impersonation", which should tip you off that Google does not really encourage this workflow. This requires [granting the service account domain-wide authority](Delegating domain-wide authority to the service account), which requires that your account is associated with a G Suite domain and also approval from the domain's administrator. If this is impossible or unappealing, use an OAuth user token, as described below.
+For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as "impersonation", which should tip you off that Google does not really encourage this workflow. This requires [granting the service account domain-wide authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation), which requires that your account is associated with a G Suite domain and also approval from the domain's administrator. If this is impossible or unappealing, use an OAuth user token, as described below.
 
 ## Rig a service account token as Application Default Credentials
 
