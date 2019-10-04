@@ -1,5 +1,4 @@
-This is a small update of a recently released package, prior to submitting
-updates to other packages, that will Import gargle.
+This is a patch release, prior to submitting other packages, that will Import this package.
 
 -------------------------------------------------------------------------------
 
@@ -18,6 +17,9 @@ updates to other packages, that will Import gargle.
 
 0 errors | 0 warnings | 0 notes
 
-## Revdeps
+## revdepcheck results
 
-The single reverse dependency, bigrquery, passes R CMD check cleanly.
+We checked 5 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
