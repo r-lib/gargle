@@ -110,7 +110,7 @@
 
     
     
-<p>If you are working with R in a web-based context, like <a href="https://www.rstudio.com/products/rstudio-server/">RStudio Server</a> or <a href="https://rstudio.cloud">Cloud</a>, your experience of browser-based auth flows will be different from those using R, directly in the Console or through an IDE. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
+<p>If you are working with R in a web-based context, like <a href="https://rstudio.com/products/rstudio/download-server/">RStudio Server</a> or <a href="https://rstudio.cloud">Cloud</a>, your experience of browser-based auth flows will be different from those using R, directly in the Console or through an IDE. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
 <p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.</p>
 <p>Here’s a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
 <pre><code>Chrome: This site can't be reached; localhost refused to connect.
@@ -128,7 +128,7 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 <a href="https://googlesheets4.tidyverse.org">googlesheets4</a> <em>GitHub only</em>
 </li>
 <li>
-<a href="https://andrie.github.io/gcalendr/">gcalendr</a> <em>GitHub only</em>
+<a href="https://github.com/andrie/gcalendr">gcalendr</a> <em>GitHub only</em>
 </li>
 </ul>
 <div id="request-oob-auth-in-the-pkg_auth-call" class="section level2">
