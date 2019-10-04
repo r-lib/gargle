@@ -146,6 +146,14 @@ token_into_cache <- function(candidate) {
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
+token_remove_from_cache <- function(candidate) {
+  cache_path <- candidate$cache_path
+  if (is.null(cache_path)) return()
+  token_path <- path(cache_path, candidate$hash())
+  cat_line("removing token from the cache: ", token_path)
+  file_delete(token_path)
+}
+
 # helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
 token_match <- function(candidate, existing, package = "gargle") {
   if (length(existing) == 0) {
