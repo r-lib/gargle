@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9000</span>
       </span>
     </div>
 
@@ -144,9 +144,14 @@
       <small>Source: <a href='https://github.com/r-lib/gargle/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="gargle-development-version" class="section level1">
+<h1 class="page-header">
+<a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
+</h1>
+</div>
     <div id="gargle-0-4-0" class="section level1">
 <h1 class="page-header">
-<a href="#gargle-0-4-0" class="anchor"></a>gargle 0.4.0<small> Unreleased </small>
+<a href="#gargle-0-4-0" class="anchor"></a>gargle 0.4.0<small> 2019-10-04 </small>
 </h1>
 <ul>
 <li><p>Eliminated uninformative failure when OAuth tokens cached on R &lt;= 3.5 are re-loaded on R &gt;= 3.6. The change to the default serialization version (2 vs. 3) creates an apparent mismatch between a token’s hash and its key. Instead of inexplicably failing, now we attempt to repair the cache and carry on (<a href='https://github.com/r-lib/gargle/issues/109'>#109</a>, <a href="https://github.com/tidyverse/googledrive/issues/274">tidyverse/googledrive<a href='https://github.com/r-lib/gargle/issues/274'>#274</a></a>.</p></li>
@@ -203,6 +208,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#gargle-development-version">development version</a></li>
         <li><a href="#gargle-0-4-0">0.4.0</a></li>
         <li><a href="#gargle-0-3-1">0.3.1</a></li>
         <li><a href="#gargle-0-3-0">0.3.0</a></li>
