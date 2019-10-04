@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-If you are working with R in a web-based context, like [RStudio Server](https://www.rstudio.com/products/rstudio-server/) or [Cloud](https://rstudio.cloud), your experience of browser-based auth flows will be
+If you are working with R in a web-based context, like [RStudio Server](https://rstudio.com/products/rstudio/download-server/) or [Cloud](https://rstudio.cloud), your experience of browser-based auth flows will be
 different from those using R, directly in the Console or through an IDE. You need to use **out-of-band authentication**, sometimes denoted "oob". After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
 
 The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.
