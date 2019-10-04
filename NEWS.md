@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 0.4.0
 
 * gargle consults the option `"httr_oob_default"`, if the option `"gargle_oob_default"` is unset. This is part of an effort to automatically detect the need for out-of-bound auth in more situations (#102).
 
