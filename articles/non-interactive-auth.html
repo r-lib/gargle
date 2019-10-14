@@ -239,7 +239,7 @@
 <h3 class="hasAnchor">
 <a href="#project-level-oauth-cache" class="anchor"></a>Project-level OAuth cache</h3>
 <p>This is like the previous example, but with an added twist: we use a project-level OAuth cache. This is good for deployed data products.</p>
-<p><strong>Step 1</strong>: Obtain the token intended for non-interactive use and make sure it’s cached in a (hidden) directory of the current project. Using gcalendr as an example:</p>
+<p><strong>Step 1</strong>: Obtain the token intended for non-interactive use and make sure it’s cached in a (hidden) directory of the current project. Using googledrive as an example:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co"># designate project-specific cache</span></a>
@@ -260,7 +260,7 @@
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"><span class="kw">drive_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>)</a></code></pre></div>
 <p>If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in <a href="https://gargle.r-lib.org/articles/auth-from-web.html">Auth when using R in the browser</a>.</p>
-<p><strong>Step 2</strong>: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:</p>
+<p><strong>Step 2</strong>: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the googledrive example:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(</a>
@@ -268,9 +268,9 @@
 <a class="sourceLine" id="cb13-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="ot">TRUE</span></a>
 <a class="sourceLine" id="cb13-6" data-line-number="6">)</a>
 <a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co"># now use googledrive with no need for explicit auth</span></a>
 <a class="sourceLine" id="cb13-9" data-line-number="9"><span class="kw">drive_find</span>(<span class="dt">n_max =</span> <span class="dv">5</span>)</a></code></pre></div>
-<p>Setting the option <code>gargle_oauth_email = TRUE</code> says that gcalendr is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, <code>.Rmd</code>, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level <code>.Rprofile</code>.</p>
+<p>Setting the option <code>gargle_oauth_email = TRUE</code> says that googledrive is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, <code>.Rmd</code>, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level <code>.Rprofile</code>.</p>
 <p>Here’s a variation where we say which token to use by explicitly specifying the associated email. This is handy if there’s a reason to have more than one token in the cache.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb14-2" data-line-number="2"></a>
@@ -279,21 +279,21 @@
 <a class="sourceLine" id="cb14-5" data-line-number="5">  <span class="dt">gargle_oauth_email =</span> <span class="st">"jenny@example.org"</span></a>
 <a class="sourceLine" id="cb14-6" data-line-number="6">)</a>
 <a class="sourceLine" id="cb14-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># now use googledrive with no need for explicit auth</span></a>
 <a class="sourceLine" id="cb14-9" data-line-number="9"><span class="kw">drive_find</span>(<span class="dt">n_max =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p>Here’s another variation where we specify the necessary info directly in an auth call, instead of in options:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">drive_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb15-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co"># now use googledrive with no need for explicit auth</span></a>
 <a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">drive_fine</span>(<span class="dt">n_max =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p>Here’s one last variation that applicable when the local cache could contain multiple tokens:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(googledrive)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">drive_auth</span>(<span class="dt">cache =</span> <span class="st">".secrets"</span>, <span class="dt">email =</span> <span class="st">"jenny@example.org"</span>)</a>
 <a class="sourceLine" id="cb16-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># now use gcalendr with no need for explicit auth</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># now use googledrive with no need for explicit auth</span></a>
 <a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">drive_auth</span>(<span class="dt">n_max =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p>Be very intentional about paths and working directory. Personally I would use <code>here::here(".secrets)"</code> everywhere above, to make things more robust.</p>
 <p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
