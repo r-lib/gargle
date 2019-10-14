@@ -184,7 +184,7 @@ drive_auth(email = "jenny@example.org")
 
 This is like the previous example, but with an added twist: we use a project-level OAuth cache. This is good for deployed data products.
 
-**Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project. Using gcalendr as an example:
+**Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project. Using googledrive as an example:
 
 ```{r}
 library(googledrive)
@@ -215,7 +215,7 @@ drive_auth(cache = ".secrets")
 
 If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in [Auth when using R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
 
-**Step 2**: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the gcalendr example:
+**Step 2**: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the googledrive example:
 
 ```{r}
 library(googledrive)
@@ -225,11 +225,11 @@ options(
   gargle_oauth_email = TRUE
 )
 
-# now use gcalendr with no need for explicit auth
+# now use googledrive with no need for explicit auth
 drive_find(n_max = 5)
 ```
 
-Setting the option `gargle_oauth_email = TRUE` says that gcalendr is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
+Setting the option `gargle_oauth_email = TRUE` says that googledrive is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
 
 Here's a variation where we say which token to use by explicitly specifying the associated email. This is handy if there's a reason to have more than one token in the cache.
 
@@ -241,7 +241,7 @@ options(
   gargle_oauth_email = "jenny@example.org"
 )
 
-# now use gcalendr with no need for explicit auth
+# now use googledrive with no need for explicit auth
 drive_find(n_max = 5)
 ```
 
@@ -252,7 +252,7 @@ library(googledrive)
 
 drive_auth(cache = ".secrets", email = TRUE)
 
-# now use gcalendr with no need for explicit auth
+# now use googledrive with no need for explicit auth
 drive_fine(n_max = 5)
 ```
 
@@ -263,7 +263,7 @@ library(googledrive)
 
 drive_auth(cache = ".secrets", email = "jenny@example.org")
 
-# now use gcalendr with no need for explicit auth
+# now use googledrive with no need for explicit auth
 drive_auth(n_max = 5)
 ```
 
