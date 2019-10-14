@@ -45,7 +45,7 @@ The vignette [Managing tokens securely](https://gargle.r-lib.org/articles/articl
 
 ## Sidebar 2: I just want my `.Rmd` to render
 
-TL;DR is that you need to give gargle permission to use a token it finds in the cache. These sorts of commands achieve that:
+TL;DR is that you need to successfully authenticate *once* in an interactive session and then, in your code, give gargle permission to use a token it finds in the cache. These sorts of commands achieve that:
 
 ```{r}
 # Approach #1: use an option.
