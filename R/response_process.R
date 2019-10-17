@@ -84,7 +84,9 @@ response_as_json <- function(resp) {
   check_for_json(resp)
 
   content <- httr::content(resp, type = "raw")
-  jsonlite::fromJSON(rawToChar(content), simplifyVector = FALSE)
+  content <- rawToChar(content)
+  Encoding(content) <- "UTF-8"
+  jsonlite::fromJSON(content, simplifyVector = FALSE)
 }
 
 check_for_json <- function(resp) {
