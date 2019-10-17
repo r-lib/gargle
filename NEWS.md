@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* `response_process()` explicitly declares the UTF-8 encoding of the content in Google API responses [tidyverse/googlesheets4#26](https://github.com/tidyverse/googlesheets4/issues/26).
+
 # gargle 0.4.0
 
 * Eliminated uninformative failure when OAuth tokens cached on R <= 3.5 are re-loaded on R >= 3.6. The change to the default serialization version (2 vs. 3) creates an apparent mismatch between a token's hash and its key. Instead of inexplicably failing, now we attempt to repair the cache and carry on (#109, [tidyverse/googledrive#274](https://github.com/tidyverse/googledrive/issues/274).
