@@ -93,7 +93,7 @@ credentials_app_default_path <- function() {
     appdata <- Sys.getenv("APPDATA", Sys.getenv("SystemDrive", "C:"))
     pth <- c(appdata, "gcloud", pth)
   } else {
-    pth <- path_home(".config", "gcloud")
+    pth <- path_home(".config", "gcloud", pth)
   }
   path_join(pth)
 }
