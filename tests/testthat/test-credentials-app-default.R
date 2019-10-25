@@ -1,6 +1,6 @@
 test_that("credentials_app_default_path() returns the default application credentials path on non-Windows",
   with_mock(
-    is_windows = function() FALSE,
+    `gargle::is_windows` = function() FALSE,
     expect_equal(
       credentials_app_default_path(),
       path_home(".config", "gcloud", "application_default_credentials.json")
@@ -10,7 +10,7 @@ test_that("credentials_app_default_path() returns the default application creden
 
 test_that("credentials_app_default_path() returns the default application credentials path on Windows",
   with_mock(
-    is_windows = function() TRUE,
+    `gargle::is_windows` = function() TRUE,
     expect_equal(
       credentials_app_default_path(),
       path_join(c("C:", "gcloud", "application_default_credentials.json"))
