@@ -8,15 +8,37 @@ test_that("credentials_app_default_path() returns the default application creden
   )
 )
 
-test_that("credentials_app_default_path() returns the default application credentials path on Windows",
-  with_mock(
-    `gargle::is_windows` = function() TRUE,
-    expect_equal(
-      credentials_app_default_path(),
-      path_join(c("C:", "gcloud", "application_default_credentials.json"))
-   )
+test_that("credentials_app_default_path() returns the default application credentials path on Windows", {
+  local_mock(`gargle::is_windows` = function() TRUE)
+  local_mock(Sys.getenv = function(key, unset = "") unset)
+  expect_equal(
+    credentials_app_default_path(),
+    path_join(c("C:", "gcloud", "application_default_credentials.json"))
   )
-)
+})
+
+test_that("credentials_app_default_path() uses the system drive on Windows", {
+  local_mock(`gargle::is_windows` = function() TRUE)
+  local_mock(Sys.getenv = function(key, unset = "") {
+    if (key == "SystemDrive") "D:" else unset
+  })
+  expect_equal(
+    credentials_app_default_path(),
+    path_join(c("D:", "gcloud", "application_default_credentials.json"))
+  )
+})
+
+test_that("credentials_app_default_path() uses the APPDATA environment variable on Windows", {
+  app_data <- path_join(c("D:", "AppData"))
+  local_mock(`gargle::is_windows` = function() TRUE)
+  local_mock(Sys.getenv = function(key, unset = "") {
+    if (key == "APPDATA") app_data else unset
+  })
+  expect_equal(
+    credentials_app_default_path(),
+    path_join(c(app_data, "gcloud", "application_default_credentials.json"))
+  )
+})
 
 test_that("credentials_app_default_path() uses the CLOUDSDK_CONFIG environment variable", {
   config_path <- path_join(c("config", "path"))
