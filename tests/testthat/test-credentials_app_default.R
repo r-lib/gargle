@@ -1,64 +1,77 @@
-test_that("credentials_app_default_path() returns the default application credentials path on non-Windows",
-          with_mock(
-            `gargle::is_windows` = function() FALSE,
-            expect_equal(
-              credentials_app_default_path(),
-              path_home(".config", "gcloud", "application_default_credentials.json")
-            )
-          )
-)
-
-test_that("credentials_app_default_path() returns the default application credentials path on Windows", {
-  local_mock(`gargle::is_windows` = function() TRUE)
-  local_mock(Sys.getenv = function(key, unset = "") unset)
-  expect_equal(
-    credentials_app_default_path(),
-    path_join(c("C:", "gcloud", "application_default_credentials.json"))
-  )
-})
-
-test_that("credentials_app_default_path() uses the system drive on Windows", {
-  local_mock(`gargle::is_windows` = function() TRUE)
-  local_mock(Sys.getenv = function(key, unset = "") {
-    if (key == "SystemDrive") "D:" else unset
-  })
-  expect_equal(
-    credentials_app_default_path(),
-    path_join(c("D:", "gcloud", "application_default_credentials.json"))
-  )
-})
-
-test_that("credentials_app_default_path() uses the APPDATA environment variable on Windows", {
-  app_data <- path_join(c("D:", "AppData"))
-  local_mock(`gargle::is_windows` = function() TRUE)
-  local_mock(Sys.getenv = function(key, unset = "") {
-    if (key == "APPDATA") app_data else unset
-  })
-  expect_equal(
-    credentials_app_default_path(),
-    path_join(c(app_data, "gcloud", "application_default_credentials.json"))
-  )
-})
-
-test_that("credentials_app_default_path() uses the CLOUDSDK_CONFIG environment variable", {
-  config_path <- path_join(c("config", "path"))
+test_that("credentials_app_default_path(), default, non-Windows", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
+    APPDATA = NA, SystemDrive = NA
+  ))
   with_mock(
-    Sys.getenv = function(key) {
-      if (key == "CLOUDSDK_CONFIG") config_path else ""
-    },
+    `gargle:::is_windows` = function() FALSE,
     expect_equal(
       credentials_app_default_path(),
-      path_join(c(config_path, "application_default_credentials.json"))
+      path_home(".config", "gcloud", "application_default_credentials.json")
     )
   )
 })
 
-test_that("credentials_app_default_path() uses the GOOGLE_APPLICATION_CREDENTIALS environment variable", {
-  credentials_path <- path_join(c("path", "to", "credentials.json"))
+test_that("credentials_app_default_path(), default, Windows", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
+    APPDATA = NA, SystemDrive = NA
+  ))
   with_mock(
-    Sys.getenv = function(key) {
-      if (key == "GOOGLE_APPLICATION_CREDENTIALS") credentials_path else ""
-    },
-    expect_equal(credentials_app_default_path(), credentials_path)
+    `gargle:::is_windows` = function() TRUE,
+    expect_equal(
+      credentials_app_default_path(),
+      path("C:", "gcloud", "application_default_credentials.json")
+    )
+  )
+})
+
+test_that("credentials_app_default_path(), system drive, Windows", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
+    APPDATA = NA, SystemDrive = "D:"
+  ))
+  with_mock(
+    `gargle:::is_windows` = function() TRUE,
+    expect_equal(
+      credentials_app_default_path(),
+      path("D:", "gcloud", "application_default_credentials.json")
+    )
+  )
+})
+
+test_that("credentials_app_default_path(), APPDATA env var, Windows", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
+    APPDATA = path("D:", "AppData"), SystemDrive = "D:"
+  ))
+  with_mock(
+    `gargle:::is_windows` = function() TRUE,
+    expect_equal(
+      credentials_app_default_path(),
+      path("D:", "AppData", "gcloud", "application_default_credentials.json")
+    )
+  )
+})
+
+test_that("credentials_app_default_path(), CLOUDSDK_CONFIG env var", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = NA,
+    CLOUDSDK_CONFIG = path("CLOUDSDK", "path")
+  ))
+  expect_equal(
+    credentials_app_default_path(),
+    path("CLOUDSDK", "path", "application_default_credentials.json")
+  )
+})
+
+test_that("credentials_app_default_path(), GOOGLE_APPLICATION_CREDENTIALS env var", {
+  withr::local_envvar(c(
+    GOOGLE_APPLICATION_CREDENTIALS = path("GAC", "path"),
+    CLOUDSDK_CONFIG = path("CLOUDSDK", "path")
+  ))
+  expect_equal(
+    credentials_app_default_path(),
+    path("GAC", "path")
   )
 })
