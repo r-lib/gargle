@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* The application default credentials path is fixed on non-Windows platforms
+  (#115, @acroz).
+
 * `response_process()` explicitly declares the UTF-8 encoding of the content in Google API responses [tidyverse/googlesheets4#26](https://github.com/tidyverse/googlesheets4/issues/26).
 
 # gargle 0.4.0
