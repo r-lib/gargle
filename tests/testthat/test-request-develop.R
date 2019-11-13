@@ -32,6 +32,23 @@ test_that("request_develop() separates body params from query", {
   expect_identical(req$params, list(b = list()))
 })
 
+# https://github.com/r-lib/gargle/issues/122
+test_that("request_develop() copes with a param that goes to path and body", {
+  req <- request_develop(
+    endpoint = list(
+      parameters = list(
+        two_places = list(location = "path", required = FALSE),
+        two_places = list(location = "body", required = FALSE),
+        just_path  = list(location = "path", required = FALSE),
+        just_body  = list(location = "body", required = FALSE)
+      )
+    ),
+    params = list(two_places = list(), just_path = list(), just_body = list())
+  )
+  expect_identical(req$params, list(two_places = list(), just_path = list()))
+  expect_identical(req$body,   list(two_places = list(), just_body = list()))
+})
+
 test_that("request_build() does substitution and puts remainder in query", {
   req <- request_build(
     path = "/{a}/xx/{b}",
