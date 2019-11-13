@@ -137,13 +137,16 @@ request_develop <- function(endpoint,
                             params = list(),
                             base_url = "https://www.googleapis.com") {
   check_params(params, endpoint$parameters)
-  body_params <- Filter(function(x) x$location == "body", endpoint$parameters)
-  params <- partition_params(params, names(body_params))
+  in_body <- vapply(
+    endpoint$parameters,
+    function(x) x$location == "body",
+    logical(1)
+  )
   list(
     method = endpoint$httpMethod,
     path = endpoint$path,
-    params = params$unmatched,
-    body = params$matched,
+    params = params[names(endpoint$parameters[!in_body])],
+    body = params[names(endpoint$parameters[in_body])],
     base_url = base_url
   )
 }
@@ -157,11 +160,14 @@ request_build <- function(method = "GET",
                           token = NULL,
                           key = NULL,
                           base_url = "https://www.googleapis.com") {
-  params <- partition_params(params, extract_path_names(path))
+  path_param_names <- extract_path_names(path)
+  path_params <- params[path_param_names]
+  query_param_names <- setdiff(names(params), path_param_names)
+  query_params <- params[query_param_names]
 
   ## send a token or a key, but never both
-  params$unmatched$key <- if (is.null(token)) {
-    key %||% params$unmatched$key
+  query_params$key <- if (is.null(token)) {
+    key %||% query_params$key
   } else {
     NULL
   }
@@ -170,8 +176,8 @@ request_build <- function(method = "GET",
     method = method,
     url = httr::modify_url(
       url = base_url,
-      path = glue_data(params$matched, path),
-      query = params$unmatched
+      path = glue_data(path_params, path),
+      query = query_params
     ),
     body = body,
     token = token
@@ -195,33 +201,6 @@ check_params <- function(provided, spec) {
   }
 
   invisible(provided)
-}
-
-## partition a parameter list into two parts, based on names:
-##   * unmatched
-##   * matched
-##
-## example input:
-# partition_params(
-#   list(a = "a", b = "b", c = "c", d = "d"),
-#   nms_to_match = c("b", "c")
-# )
-## example output:
-# list(
-#   unmatched = list(a = "a", d = "d"),
-#   matched = list(b = "b", c = "c")
-# )
-partition_params <- function(input, nms_to_match) {
-  out <- list(
-    unmatched = input,
-    matched = list()
-  )
-  if (length(nms_to_match) && length(input)) {
-    m <- names(out$unmatched) %in% nms_to_match
-    out$matched <- out$unmatched[m]
-    out$unmatched <- out$unmatched[!m]
-  }
-  out
 }
 
 ##  input: /v4/spreadsheets/{spreadsheetId}/sheets/{sheetId}:copyTo
