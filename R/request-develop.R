@@ -142,11 +142,13 @@ request_develop <- function(endpoint,
     function(x) x$location == "body",
     logical(1)
   )
+  body_param_names  <- names(endpoint$parameters[in_body])
+  other_param_names <- names(endpoint$parameters[!in_body])
   list(
     method = endpoint$httpMethod,
     path = endpoint$path,
-    params = params[names(endpoint$parameters[!in_body])],
-    body = params[names(endpoint$parameters[in_body])],
+    params = params[intersect(other_param_names, names(params))],
+    body = params[intersect(body_param_names, names(params))],
     base_url = base_url
   )
 }
