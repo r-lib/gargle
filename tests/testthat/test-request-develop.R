@@ -40,7 +40,8 @@ test_that("request_develop() copes with a param that goes to path and body", {
         two_places = list(location = "path", required = FALSE),
         two_places = list(location = "body", required = FALSE),
         just_path  = list(location = "path", required = FALSE),
-        just_body  = list(location = "body", required = FALSE)
+        just_body  = list(location = "body", required = FALSE),
+        elsewhere  = list(location = "????", required = FALSE)
       )
     ),
     params = list(two_places = list(), just_path = list(), just_body = list())
