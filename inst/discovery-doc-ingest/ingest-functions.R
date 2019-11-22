@@ -17,6 +17,50 @@ get_discovery_ids <- function() {
   map_chr(apis[["items"]], "id")
 }
 
+#' Form the URL for a Discovery Document
+#'
+#' @param id Versioned ID string for target API. Use [get_discovery_ids()] to
+#'   see them all and find the one you want.
+#' @return A URL to a JSON file.
+#' @keywords internal
+#' @examples
+#' make_discovery_url("sheets:v4")
+make_discovery_url <- function(id) {
+  av <- set_names(as.list(strsplit(id, split =":")[[1]]), c("api", "version"))
+  ## https://developers.google.com/discovery/v1/reference/apis/getRest
+  getRest_url <-
+    "https://www.googleapis.com/discovery/v1/apis/{api}/{version}/rest"
+  glue::glue_data(av, getRest_url)
+}
+
+#' List (likely) Discovery Documents in a local folder
+#'
+#' @param id Optional ID string, possibly versioned, for target API. Use
+#'   [get_discovery_ids()] to see them all and find the one you want.
+#' @param path Optional directory in which to look. Defaults to `data-raw`
+#'   within the current project.
+#'
+#' @return Files whose names "look like" a Discovery Document
+#' @keywords internal
+#' @examples
+#' list_discovery_documents()
+#' list_discovery_documents("sheets")
+#' list_discovery_documents("sheets:v4")
+list_discovery_documents <- function(id = NULL, path = NULL) {
+  path <- path %||% rprojroot::find_package_root_file("data-raw")
+  if (!is.null(id)) {
+    if (!grepl(":", id)) {
+      id <- glue::glue("{id}:v[[:digit:]]+")
+    }
+    id <- sub(":", "-", id)
+  }
+  id <- id %||% "[[:alnum:]]+[-][[:alnum:]]+"
+  date <- "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}"
+  regexp <- glue::glue("{id}_{date}[.]json")
+  fs::dir_ls(path = path, regexp = regexp) %>%
+    fs::path_rel(path)
+}
+
 #' Download a Discovery Document
 #'
 #' @param id Versioned ID string for target API. Use [get_discovery_ids()] to
@@ -36,11 +80,7 @@ get_discovery_ids <- function() {
 #' download_discovery_document("docs:v1")
 #' download_discovery_document("youtube:v3")
 download_discovery_document <- function(id, path = NULL) {
-  av <- set_names(as.list(strsplit(id, split =":")[[1]]), c("api", "version"))
-  ## https://developers.google.com/discovery/v1/reference/apis/getRest
-  getRest_url <-
-    "https://www.googleapis.com/discovery/v1/apis/{api}/{version}/rest"
-  url <- glue::glue_data(av, getRest_url)
+  url <- make_discovery_url(id)
   dd <- httr::GET(url)
   httr::stop_for_status(dd, glue::glue("find Discovery Document for ID '{id}'"))
 
