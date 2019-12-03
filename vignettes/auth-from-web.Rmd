@@ -33,7 +33,7 @@ This article describes how to do so in a package that uses gargle for auth, whic
   * [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
   * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
   * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
-  * [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
+  * [googlesheets4](https://googlesheets4.tidyverse.org)
   * [gcalendr](https://github.com/andrie/gcalendr) *GitHub only*
 
 ## Request oob auth in the `PKG_auth()` call

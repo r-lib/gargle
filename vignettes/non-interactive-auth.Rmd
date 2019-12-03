@@ -22,7 +22,7 @@ We assume the wrapper package uses the design described in [How to use gargle fo
   * [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
   * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
   * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
-  * [googlesheets4](https://googlesheets4.tidyverse.org) *GitHub only*
+  * [googlesheets4](https://googlesheets4.tidyverse.org)
   * [gcalendr](https://github.com/andrie/gcalendr) *GitHub only*
 
 Full details on [`gargle::token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.html), which powers this strategy, are given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
