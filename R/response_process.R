@@ -128,7 +128,7 @@ gargle_error_message <- function(resp) {
   } else {
     errors <- error[["errors"]]
     if (is.null(errors)) {
-      # developed from test fixture from "sheets.spreadsheets.get" endpoint
+      # developed from test fixtures from "sheets.spreadsheets.get" endpoint
       status <- httr::http_status(resp)
       rpc <- rpc_description(error$status)
       message <- c(
@@ -136,6 +136,13 @@ gargle_error_message <- function(resp) {
         glue("  * {rpc}"),
         glue("  * {error$message}")
       )
+      if (!is.null(error$details)) {
+        message <- c(
+          message,
+          "",
+          reveal_details(error$details)
+        )
+      }
     } else {
       # developed from test fixture from "drive.files.get" endpoint
       errors <- unlist(errors)
@@ -190,3 +197,24 @@ oops <- read.csv(text = trimws(c('
    504,   "DEADLINE_EXCEEDED", "Request deadline exceeded. This will happen only if the caller sets a deadline that is shorter than the method\'s default deadline (i.e. requested deadline is not enough for the server to process the request) and the request did not finish within the deadline."
                          ')),
                  stringsAsFactors = FALSE, strip.white = TRUE)
+
+# https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
+reveal_details <- function(details) {
+  c("Error details:", unlist(lapply(details, reveal_detail)))
+}
+
+reveal_detail <- function(x) {
+  type <- sub("^type.googleapis.com/", "", x$`@type`)
+  # I'll expand types as I gain personal experience with them
+  if (identical(type, "google.rpc.BadRequest")) {
+    return(
+      vapply(x[["fieldViolations"]], function(z) glue("  * {z$description}"), character(1))
+    )
+  }
+  # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
+  glue_lines(c(
+    "  * Error details of type {sq(type)} are not implemented yet.",
+    "  * Workaround: use {bt('tryCatch()')} and inspect error payload yourself.",
+    "  * Please open an issue at https://github.com/tidyverse/googlesheets4/issues, so we can fix."
+  ))
+}

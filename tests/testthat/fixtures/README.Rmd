@@ -53,6 +53,15 @@ response_process(resp)
 
 ---
 
+Request cell data with an invalid field mask.
+
+```{r}
+resp <- readRDS(test_path("fixtures", "sheets-spreadsheets-get-bad-field-mask_400.rds"))
+response_process(resp)
+```
+
+---
+
 Ask for info about a refreshable, but stale OAuth token
 
 ```{r}
