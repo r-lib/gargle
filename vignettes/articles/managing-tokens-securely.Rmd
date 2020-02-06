@@ -24,7 +24,7 @@ This article documents the token management approach taken in gargle. We wanted 
 
 all while keeping the secret secure.
 
-The approach uses symmetric encryption, where the shared key is stored in an environment variable. Why? This works well with existing conventions for local R usage. Most CI services offer support for secure environment variables. And R-hub accepts environment variables via the `env_vars` argument of `rhub::check()`.
+The approach uses symmetric encryption, where the shared key is stored in an environment variable. Why? This works well with existing conventions for local R usage. Most CI services offer support for secure environment variables. And R-hub accepts environment variables via the `env_vars` argument of [`rhub::check()`](https://r-hub.github.io/rhub/reference/check.html).
 
 This is based on an approach originally worked out in [bigrquery](https://bigrquery.r-dbi.org).
 
@@ -90,7 +90,7 @@ Combine the name and value to form a line like this in your user-level `.Renviro
 cat(paste0(pw_name, "=", pw), sep = "\n")
 ```
 
-`usethis::edit_r_environ()` can help create or open this file. We **strongly recommend** using the user-level `.Renviron`, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don't take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in `.gitignore`. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.
+[`usethis::edit_r_environ()`](https://usethis.r-lib.org/reference/edit.html) can help create or open this file. We **strongly recommend** using the user-level `.Renviron`, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don't take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in `.gitignore`. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.
 
 Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause of silent failure. Remember you'll need to restart R or call `readRenviron("~/.Renviron")` for the newly defined environment variable to take effect.
 
@@ -118,7 +118,7 @@ This can also be found via *Settings > Encrypt YAML*.
 
 #### R-hub
 
-Send the environment variable in your calls to `rhub::check()` and friends:
+Send the environment variable in your calls to [`rhub::check()`](https://r-hub.github.io/rhub/reference/check.html) and [friends](https://r-hub.github.io/rhub/reference/index.html#section-check-shortcuts):
 
 ```
 rhub::check(env_vars = Sys.getenv(gargle:::secret_pw_name("gargle"), names = TRUE))
@@ -200,7 +200,7 @@ if (gargle:::secret_can_decrypt("googledrive")) {
 
 Versions of `secret_can_decrypt()` and `secret_read()` are defined here in gargle. `drive_auth()` is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that's very favorable for our workflow. We'll come back to this below.
 
-But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here is the test skipper from googledrive:
+But what if `secret_can_decrypt()` returns `FALSE` and no token is loaded? That's where you rely on a custom test skipper. Here is the [test skipper from googledrive](https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R):
 
 ```{r eval = FALSE}
 # googledrive
@@ -245,4 +245,4 @@ Vignettes of the sodium package, especially the parts relating to symmetric encr
   
 The [cyphr](https://ropensci.github.io/cyphr/) package, which smooths over frictions like those identified above relating to "file vs. object?" and "character vs. raw?":
 
-  * <https://ropensci.github.io/cyphr/>
+  * <https://docs.ropensci.org/cyphr/>
