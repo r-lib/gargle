@@ -6,7 +6,7 @@
 #' final step in this sequence of calls:
 #'   * Request prepared with [request_build()].
 #'   * Request made with [request_make()].
-#'   * Response processed with [response_process()].
+#'   * Response processed with `response_process()`.
 #'
 #' All that's needed for a successful request is to parse the JSON extracted via
 #' `httr::content()`. Therefore, the main point of `response_process()` is to
