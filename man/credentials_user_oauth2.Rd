@@ -4,8 +4,12 @@
 \alias{credentials_user_oauth2}
 \title{Get an OAuth token for a user}
 \usage{
-credentials_user_oauth2(scopes = NULL, app = gargle_app(),
-  package = "gargle", ...)
+credentials_user_oauth2(
+  scopes = NULL,
+  app = gargle_app(),
+  package = "gargle",
+  ...
+)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
@@ -22,9 +26,10 @@ does not appear on the consent screen.}
 
 \item{package}{Name of the package requesting a token. Used in messages.}
 
-\item{...}{Arguments passed on to \code{gargle2.0_token}
-\describe{
-  \item{email}{Optional. Allows user to target a specific Google identity. If
+\item{...}{
+  Arguments passed on to \code{\link[=gargle2.0_token]{gargle2.0_token}}
+  \describe{
+    \item{\code{email}}{Optional. Allows user to target a specific Google identity. If
 specified, this is used for token lookup, i.e. to determine if a suitable
 token is already available in the cache. If no such token is found, \code{email}
 is used to pre-select the targetted Google identity in the OAuth chooser.
@@ -34,18 +39,18 @@ or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
 found in the cache. Defaults to the option named "gargle_oauth_email",
 retrieved by \code{\link[gargle:gargle_oauth_email]{gargle::gargle_oauth_email()}}.}
-  \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
+    \item{\code{use_oob}}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
 \code{\link[gargle:gargle_oob_default]{gargle::gargle_oob_default()}}.}
-  \item{cache}{Specifies the OAuth token cache. Defaults to the option named
+    \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
 "gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle::gargle_oauth_cache()}}.}
-  \item{user_params}{Named list holding endpoint specific parameters to pass to
+    \item{\code{user_params}}{Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the
 access token.}
-  \item{type}{content type used to override incorrect server response}
-  \item{credentials}{Advanced use only: allows you to completely customise
+    \item{\code{type}}{content type used to override incorrect server response}
+    \item{\code{credentials}}{Advanced use only: allows you to completely customise
 token generation.}
-}}
+  }}
 }
 \value{
 A \link{Gargle2.0} token.
@@ -83,10 +88,11 @@ credentials_user_oauth2(scopes, app)
 }
 }
 \seealso{
-Other credential functions: \code{\link{credentials_app_default}},
-  \code{\link{credentials_byo_oauth2}},
-  \code{\link{credentials_gce}},
-  \code{\link{credentials_service_account}},
-  \code{\link{token_fetch}}
+Other credential functions: 
+\code{\link{credentials_app_default}()},
+\code{\link{credentials_byo_oauth2}()},
+\code{\link{credentials_gce}()},
+\code{\link{credentials_service_account}()},
+\code{\link{token_fetch}()}
 }
 \concept{credential functions}

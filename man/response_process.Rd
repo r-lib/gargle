@@ -29,7 +29,7 @@ final step in this sequence of calls:
 \itemize{
 \item Request prepared with \code{\link[=request_build]{request_build()}}.
 \item Request made with \code{\link[=request_make]{request_make()}}.
-\item Response processed with \code{\link[=response_process]{response_process()}}.
+\item Response processed with \code{response_process()}.
 }
 
 All that's needed for a successful request is to parse the JSON extracted via
@@ -83,7 +83,8 @@ response_process(resp)
 }
 }
 \seealso{
-Other requests and responses: \code{\link{request_develop}},
-  \code{\link{request_make}}
+Other requests and responses: 
+\code{\link{request_develop}()},
+\code{\link{request_make}()}
 }
 \concept{requests and responses}

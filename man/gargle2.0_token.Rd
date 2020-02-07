@@ -4,10 +4,18 @@
 \alias{gargle2.0_token}
 \title{Generate a gargle token}
 \usage{
-gargle2.0_token(email = gargle_oauth_email(), app = gargle_app(),
-  package = "gargle", scope = NULL, user_params = NULL,
-  type = NULL, use_oob = gargle_oob_default(), credentials = NULL,
-  cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE, ...)
+gargle2.0_token(
+  email = gargle_oauth_email(),
+  app = gargle_app(),
+  package = "gargle",
+  scope = NULL,
+  user_params = NULL,
+  type = NULL,
+  use_oob = gargle_oob_default(),
+  credentials = NULL,
+  cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
+  ...
+)
 }
 \arguments{
 \item{email}{Optional. Allows user to target a specific Google identity. If

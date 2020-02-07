@@ -6,9 +6,6 @@
 \alias{Gargle2.0}
 \title{OAuth2 token objects specific to Google APIs}
 \format{An R6 class object.}
-\usage{
-Gargle2.0
-}
 \description{
 This is based on the \link[httr:Token-class]{Token2.0} class provided in httr.
 These objects should be created through the constructor function
@@ -30,3 +27,109 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 }
 }
 \keyword{internal}
+\section{Super classes}{
+\code{\link[httr:Token]{httr::Token}} -> \code{\link[httr:Token2.0]{httr::Token2.0}} -> \code{Gargle2.0}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{Gargle2.0$new()}}
+\item \href{#method-print}{\code{Gargle2.0$print()}}
+\item \href{#method-hash}{\code{Gargle2.0$hash()}}
+\item \href{#method-cache}{\code{Gargle2.0$cache()}}
+\item \href{#method-load_from_cache}{\code{Gargle2.0$load_from_cache()}}
+\item \href{#method-refresh}{\code{Gargle2.0$refresh()}}
+\item \href{#method-init_credentials}{\code{Gargle2.0$init_credentials()}}
+\item \href{#method-clone}{\code{Gargle2.0$clone()}}
+}
+}
+\if{html}{
+\out{<details open ><summary>Inherited methods</summary>}
+\itemize{
+\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="can_refresh">}\href{../../httr/html/Token2.0.html#method-can_refresh}{\code{httr::Token2.0$can_refresh()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="revoke">}\href{../../httr/html/Token2.0.html#method-revoke}{\code{httr::Token2.0$revoke()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign">}\href{../../httr/html/Token2.0.html#method-sign}{\code{httr::Token2.0$sign()}}\out{</span>}
+\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate">}\href{../../httr/html/Token2.0.html#method-validate}{\code{httr::Token2.0$validate()}}\out{</span>}
+}
+\out{</details>}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
+  email = gargle_oauth_email(),
+  app = gargle_app(),
+  package = "gargle",
+  credentials = NULL,
+  params = list(),
+  cache_path = gargle_oauth_cache()
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$print(...)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-hash"></a>}}
+\subsection{Method \code{hash()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$hash()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-cache"></a>}}
+\subsection{Method \code{cache()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$cache()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-load_from_cache"></a>}}
+\subsection{Method \code{load_from_cache()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$load_from_cache()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-refresh"></a>}}
+\subsection{Method \code{refresh()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-init_credentials"></a>}}
+\subsection{Method \code{init_credentials()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$init_credentials()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -6,9 +6,6 @@
 \alias{AuthState}
 \title{Authorization state}
 \format{An R6 class object.}
-\usage{
-AuthState
-}
 \description{
 An \code{AuthState} object manages an authorization state, typically on behalf of
 a client package that makes requests to a Google API.
@@ -41,4 +38,113 @@ fetching functions).
 An \code{AuthState} should be created through the constructor function
 \code{\link[=init_AuthState]{init_AuthState()}}.
 }
-\keyword{datasets}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{AuthState$new()}}
+\item \href{#method-print}{\code{AuthState$print()}}
+\item \href{#method-set_app}{\code{AuthState$set_app()}}
+\item \href{#method-set_api_key}{\code{AuthState$set_api_key()}}
+\item \href{#method-set_auth_active}{\code{AuthState$set_auth_active()}}
+\item \href{#method-set_cred}{\code{AuthState$set_cred()}}
+\item \href{#method-clear_cred}{\code{AuthState$clear_cred()}}
+\item \href{#method-get_cred}{\code{AuthState$get_cred()}}
+\item \href{#method-has_cred}{\code{AuthState$has_cred()}}
+\item \href{#method-clone}{\code{AuthState$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$new(
+  package = NA_character_,
+  app = NULL,
+  api_key = NULL,
+  auth_active = TRUE,
+  cred = NULL
+)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-print"></a>}}
+\subsection{Method \code{print()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$print(...)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_app"></a>}}
+\subsection{Method \code{set_app()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_app(app)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_api_key"></a>}}
+\subsection{Method \code{set_api_key()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_api_key(value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_auth_active"></a>}}
+\subsection{Method \code{set_auth_active()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_auth_active(value)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_cred"></a>}}
+\subsection{Method \code{set_cred()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_cred(cred)}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clear_cred"></a>}}
+\subsection{Method \code{clear_cred()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$clear_cred()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_cred"></a>}}
+\subsection{Method \code{get_cred()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$get_cred()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-has_cred"></a>}}
+\subsection{Method \code{has_cred()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$has_cred()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
