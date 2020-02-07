@@ -23,3 +23,9 @@ test_that("email can be set in option", {
   expect_identical(fauxen_email(TRUE), "*")
   expect_identical(fauxen_email("a@example.org"), "a@example.org")
 })
+
+test_that("Attempt to initiate OAuth2 flow fails if non-interactive", {
+  rlang::local_interactive(FALSE)
+  expect_error(gargle2.0_token(cache = FALSE), "requires an interactive session")
+})
+

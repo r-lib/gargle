@@ -1,5 +1,9 @@
 # gargle (development version)
 
+* OAuth2 flow can only be initiated when `rlang::is_interactive()` is `TRUE`. If
+  a new token is needed in a non-interactive session, gargle now throws an
+  error (#113).
+
 * The application default credentials path is fixed on non-Windows platforms
   (#115, @acroz).
 
