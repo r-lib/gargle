@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9003</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@
 <a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">scopes =</span> <span class="op">&lt;</span>SCOPES<span class="op">&gt;</span>,</a>
 <a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">path =</span> <span class="st">"/path/to/your/service-account.json"</span></a>
 <a class="sourceLine" id="cb4-7" data-line-number="7">)</a></code></pre></div>
-<p>The <code>scopes</code> are often provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code>credential_service_account()</code>. The <code>path</code> argument is presumably coming from the user. It is treated as a JSON representation of service account credentials, in any form that is acceptable to <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html">jsonlite::fromJSON()</a></code>. In the above example, that is a file path, but it could also be a JSON string. If there is no named <code>path</code> argument or if it can’t be parsed as a service account credential, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in the registry.</p>
+<p>The <code>scopes</code> are often provided by the API wrapper function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and <code>credential_service_account()</code>. The <code>path</code> argument is presumably coming from the user. It is treated as a JSON representation of service account credentials, in any form that is acceptable to <code><a href="https://jeroen.cran.dev/jsonlite/reference/fromJSON.html">jsonlite::fromJSON()</a></code>. In the above example, that is a file path, but it could also be a JSON string. If there is no named <code>path</code> argument or if it can’t be parsed as a service account credential, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in the registry.</p>
 <p>Here is some Google documentation about service accounts:</p>
 <ul>
 <li><a href="https://cloud.google.com/iam/docs/understanding-service-accounts">Cloud Identity and Access Management &gt; Understanding service accounts</a></li>

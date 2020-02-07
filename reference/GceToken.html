@@ -80,7 +80,7 @@ tokens. Not intended for direct use. See credentials_gce() instead." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9003</span>
       </span>
     </div>
 
@@ -153,18 +153,96 @@ tokens. Not intended for direct use. See credentials_gce() instead." />
 tokens. Not intended for direct use. See <code><a href='credentials_gce.html'>credentials_gce()</a></code> instead.</p>
     </div>
 
-    <pre class="usage"><span class='no'>GceToken</span></pre>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="super-classes"><a class="anchor" href="#super-classes"></a>Super classes</h2>
 
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <p><code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::Token</a></code> -&gt; <code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::Token2.0</a></code> -&gt; <code>GceToken</code></p>
+    <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
+
+    
+<h3>Public methods</h3>
+
+<ul>
+<li><p><a href='#method-print'><code>GceToken$print()</code></a></p></li>
+<li><p><a href='#method-init_credentials'><code>GceToken$init_credentials()</code></a></p></li>
+<li><p><a href='#method-cache'><code>GceToken$cache()</code></a></p></li>
+<li><p><a href='#method-load_from_cache'><code>GceToken$load_from_cache()</code></a></p></li>
+<li><p><a href='#method-can_refresh'><code>GceToken$can_refresh()</code></a></p></li>
+<li><p><a href='#method-refresh'><code>GceToken$refresh()</code></a></p></li>
+<li><p><a href='#method-revoke'><code>GceToken$revoke()</code></a></p></li>
+<li><p><a href='#method-clone'><code>GceToken$clone()</code></a></p></li>
+</ul>
+<p><details open ><summary>Inherited methods</summary>
+<ul>
+<li><p><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href='../../httr/html/Token.html#method-hash'><code>httr::Token$hash()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="initialize"><a href='../../httr/html/Token.html#method-initialize'><code>httr::Token$initialize()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-sign'><code>httr::Token2.0$sign()</code></a></span></p></li>
+<li><p><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href='../../httr/html/Token2.0.html#method-validate'><code>httr::Token2.0$validate()</code></a></span></p></li>
+</ul>
+</details>
+
+<hr>
+<a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$print(...)</pre><p></div></p>
+
+<p><hr>
+<a id="method-init_credentials"></a></p><h3>Method <code>init_credentials()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$init_credentials()</pre><p></div></p>
+
+<p><hr>
+<a id="method-cache"></a></p><h3>Method <code>cache()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$cache(...)</pre><p></div></p>
+
+<p><hr>
+<a id="method-load_from_cache"></a></p><h3>Method <code>load_from_cache()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$load_from_cache(...)</pre><p></div></p>
+
+<p><hr>
+<a id="method-can_refresh"></a></p><h3>Method <code>can_refresh()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$can_refresh()</pre><p></div></p>
+
+<p><hr>
+<a id="method-refresh"></a></p><h3>Method <code>refresh()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$refresh()</pre><p></div></p>
+
+<p><hr>
+<a id="method-revoke"></a></p><h3>Method <code>revoke()</code></h3>
+
+<h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$revoke()</pre><p></div></p>
+
+<p><hr>
+<a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
+<p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
+<p><div class="r"></p><pre>GceToken$clone(deep = FALSE)</pre><p></div></p>
+
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>deep</code></dt><dd><p>Whether to make a deep clone.</p></dd>
+
+</dl><p></div></p>
+
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
+      <li><a href="#super-classes">Super classes</a></li>
+      <li><a href="#methods">Methods</a></li>
     </ul>
 
   </div>

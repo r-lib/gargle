@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9003</span>
       </span>
     </div>
 
@@ -149,6 +149,7 @@
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>OAuth2 flow can only be initiated when <code><a href="https://rlang.r-lib.org/reference/is_interactive.html">rlang::is_interactive()</a></code> is <code>TRUE</code>. If a new token is needed in a non-interactive session, gargle now throws an error (<a href='https://github.com/r-lib/gargle/issues/113'>#113</a>).</p></li>
 <li><p>The application default credentials path is fixed on non-Windows platforms (<a href='https://github.com/r-lib/gargle/issues/115'>#115</a>, <a href='https://github.com/acroz'>@acroz</a>).</p></li>
 <li><p><code><a href="../reference/response_process.html">response_process()</a></code> explicitly declares the UTF-8 encoding of the content in Google API responses <a href="https://github.com/tidyverse/googlesheets4/issues/26">tidyverse/googlesheets4<a href='https://github.com/r-lib/gargle/issues/26'>#26</a></a>.</p></li>
 </ul>
