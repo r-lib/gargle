@@ -215,6 +215,6 @@ reveal_detail <- function(x) {
   glue_lines(c(
     "  * Error details of type {sq(type)} are not implemented yet.",
     "  * Workaround: use {bt('tryCatch()')} and inspect error payload yourself.",
-    "  * Please open an issue at https://github.com/tidyverse/googlesheets4/issues, so we can fix."
+    "  * Please open an issue at https://github.com/r-lib/gargle/issues, so we can fix."
   ))
 }
