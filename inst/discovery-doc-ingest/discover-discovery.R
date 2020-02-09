@@ -15,7 +15,7 @@ ap <- ee %>%
   pluck("parameters") %>%
   enframe(name = "property", value = "info") %>%
   mutate(info = map(info, enframe)) %>%
-  unnest() %>%
+  unnest(cols = info) %>%
   spread(key = name, value = value, convert = TRUE) %>%
   select(property, type, description, everything()) %>%
   write_csv(fs::path(ddi_dir, "api-wide-parameters.csv"))
@@ -25,7 +25,7 @@ mp <- ee %>%
   pluck("schemas", "RestMethod", "properties") %>%
   enframe(name = "property", value = "info") %>%
   mutate(info = map(info, enframe)) %>%
-  unnest() %>%
+  unnest(cols = info) %>%
   spread(key = name, value = value, convert = TRUE) %>%
   select(property, type, description, everything()) %>%
   write_csv(fs::path(ddi_dir, "method-properties.csv"))
@@ -35,7 +35,7 @@ pp <- ee %>%
   pluck("schemas", "JsonSchema", "properties") %>%
   enframe(name = "property", value = "info") %>%
   mutate(info = map(info, enframe)) %>%
-  unnest() %>%
+  unnest(cols = info) %>%
   spread(key = name, value = value, convert = TRUE) %>%
   select(property, type, description, everything()) %>%
   write_csv(fs::path(ddi_dir, "parameter-properties.csv"))
@@ -55,7 +55,7 @@ make_humane_table <- function(df) {
       type =     map2(type, n, pad),
       n = NULL
     ) %>%
-    unnest() %>%
+    unnest(cols = c(property, type, description)) %>%
     replace_na(list(property = "", type = "")) %>%
     modify_at(c("property", "type"), ~ format(.x, justify = "left")) %>%
     glue::glue_data("{property} {type} {description}")
@@ -75,4 +75,3 @@ write_lines(mp$property, fs::path(ddi_dir, "api-wide-parameter-names.txt"))
 write_lines(mp$property, fs::path(ddi_dir, "method-property-names.txt"))
 
 write_lines(pp$property, fs::path(ddi_dir, "parameter-property-names.txt"))
-
