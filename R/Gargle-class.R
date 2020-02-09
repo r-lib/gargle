@@ -62,9 +62,10 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 
 #' OAuth2 token objects specific to Google APIs
 #'
-#' This is based on the [Token2.0][httr::Token-class] class provided in httr.
+#' @description
+#' This is based on the [`Token2.0`][httr::Token-class] class provided in httr.
 #' These objects should be created through the constructor function
-#' [gargle2.0_token()]. Key differences:
+#' [gargle2.0_token()]. Key differences with `Token2.0`:
 #' * The key for a cached `Token2.0` comes from hashing the endpoint, app, and
 #' scopes. For the `Gargle2.0` subclass, the identifier or key is expanded to
 #' include the email address associated with the token. This makes it easier to
@@ -79,14 +80,27 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #' directory of such files. In contrast, `Token2.0` tokens are cached as
 #' components of a list, which is typically serialized to `./.httr-oauth`.
 #'
-#' @docType class
+#' @param email Optional email address. See [gargle2.0_token()] for full details.
+#' @param package Name of the package requesting a token. Used in messages.
+#'
 #' @keywords internal
-#' @format An R6 class object.
 #' @export
 #' @name Gargle-class
 Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
+  #' @field email Email associated with the token.
   email = NULL,
+  #' @field package Name of the package requesting a token. Used in messages.
   package = NULL,
+  #' @description Create a Gargle2.0 token
+  #' @param app An OAuth consumer application.
+  #' @param credentials Exists largely for testing purposes.
+  #' @param params A list of parameters for [httr::init_oauth2.0()]. Some we
+  #'   actively use in gargle: `scope`, `use_oob`. Most we do not:
+  #'   `user_params`, `type`, `as_header`, `use_basic_auth`, `config_init`,
+  #'   `client_credentials`.
+  #' @param cache_path Specifies the OAuth token cache. Read more in
+  #'   [gargle::gargle_oauth_cache()].
+  #' @return A Gargle2.0 token.
   initialize = function(email = gargle_oauth_email(),
                         app = gargle_app(),
                         package = "gargle",
@@ -138,6 +152,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       self$cache()
     }
   },
+  #' @description Print a Gargle2.0 token
+  #' @param ... Not used.
   print = function(...) {
     withr::local_options(list(gargle_quiet = FALSE))
     cat_line("<Token (via gargle)>")
@@ -148,13 +164,16 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     cat_line("     <credentials> ", commapse(names(self$credentials)))
     cat_line("---")
   },
+  #' @description Generate the email-augmented hash of a Gargle2.0 token
   hash = function() {
     paste(super$hash(), self$email, sep = "_")
   },
+  #' @description Put a Gargle2.0 token into the cache
   cache = function() {
     token_into_cache(self)
     self
   },
+  #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
     cat_line("loading token from the cache")
     if (is.null(self$cache_path)) return(FALSE)
@@ -170,6 +189,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$params      <- cached$params
     TRUE
   },
+  #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
     cred <- get("refresh_oauth2.0", asNamespace("httr"))(
       self$endpoint, self$app,
@@ -183,6 +203,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
     self
   },
+  #' @description Initiate a new Gargle2.0 token
   init_credentials = function() {
     cat_line("initiating new token")
     if (rlang::is_interactive()) {
