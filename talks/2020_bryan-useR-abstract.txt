@@ -1,0 +1,13 @@
+A title (10 words)
+Wrapping Google APIs: Handy Specifics and General Lessons
+
+An abstract (1200 characters)
+
+Google offers Application Programming Interfaces (APIs) for hundreds of its services, such as Google Drive, Sheets, Gmail, and BigQuery. The Google API Discovery Service is a meta API that helps others to build tools around ~270 Google APIs; it publishes machine-readable API specifications as "discovery documents". The gargle package uses this information to provide useful infrastructure to anyone calling a Google API from R. You could say gargle is a Google-specific version of the httr package. There are two main parts to gargle, which operate independently: auth and request/response handling. The gargle package is already in use in several CRAN packages, such as googledrive, googlesheets4, gmailr, bigrquery, and googleAuthR. I'll highlight some of the specific uses of these packages and also describe general design principles that are relevant to wrapping non-Google APIs.
+
+https://gargle.r-lib.org
+
+https://googledrive.tidyverse.org
+https://googlesheets4.tidyverse.org
+https://bigrquery.r-dbi.org
+https://gmailr.r-lib.org
