@@ -71,7 +71,7 @@ req <- gargle::request_build(
   method = req$method,
   params = req$params,
   base_url = req$base_url,
-  key = "AIzaSyDKRsnYs5G4c8y4BMlXLKTKMTheNXrsNEM" # used the tidyverse API key
+  key = "???" # used the tidyverse API key
 )
 resp <- gargle::request_make(req)
 
