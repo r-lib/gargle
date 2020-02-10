@@ -63,9 +63,9 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #' OAuth2 token objects specific to Google APIs
 #'
 #' @description
-#' This is based on the [`Token2.0`][httr::Token-class] class provided in httr.
-#' These objects should be created through the constructor function
-#' [gargle2.0_token()]. Key differences with `Token2.0`:
+#' `Gargle2.0` is based on the [`Token2.0`][httr::Token-class] class provided in
+#' httr. The preferred way to create a `Gargle2.0` token is through the
+#' constructor function [gargle2.0_token()]. Key differences with `Token2.0`:
 #' * The key for a cached `Token2.0` comes from hashing the endpoint, app, and
 #' scopes. For the `Gargle2.0` subclass, the identifier or key is expanded to
 #' include the email address associated with the token. This makes it easier to

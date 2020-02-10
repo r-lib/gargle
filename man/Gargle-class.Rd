@@ -5,9 +5,9 @@
 \alias{Gargle2.0}
 \title{OAuth2 token objects specific to Google APIs}
 \description{
-This is based on the \code{\link[httr:Token-class]{Token2.0}} class provided in httr.
-These objects should be created through the constructor function
-\code{\link[=gargle2.0_token]{gargle2.0_token()}}. Key differences with \code{Token2.0}:
+\code{Gargle2.0} is based on the \code{\link[httr:Token-class]{Token2.0}} class provided in
+httr. The preferred way to create a \code{Gargle2.0} token is through the
+constructor function \code{\link[=gargle2.0_token]{gargle2.0_token()}}. Key differences with \code{Token2.0}:
 \itemize{
 \item The key for a cached \code{Token2.0} comes from hashing the endpoint, app, and
 scopes. For the \code{Gargle2.0} subclass, the identifier or key is expanded to
