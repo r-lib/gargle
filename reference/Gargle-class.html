@@ -36,9 +36,9 @@
 
 
 <meta property="og:title" content="OAuth2 token objects specific to Google APIs — Gargle-class" />
-<meta property="og:description" content="This is based on the Token2.0 class provided in httr.
-These objects should be created through the constructor function
-gargle2.0_token(). Key differences:
+<meta property="og:description" content="Gargle2.0 is based on the Token2.0 class provided in
+httr. The preferred way to create a Gargle2.0 token is through the
+constructor function gargle2.0_token(). Key differences with Token2.0:
 The key for a cached Token2.0 comes from hashing the endpoint, app, and
 scopes. For the Gargle2.0 subclass, the identifier or key is expanded to
 include the email address associated with the token. This makes it easier to
@@ -165,9 +165,9 @@ components of a list, which is typically serialized to ./.httr-oauth.
     </div>
 
     <div class="ref-description">
-    <p>This is based on the <a href='https://httr.r-lib.org/reference/Token-class.html'>Token2.0</a> class provided in httr.
-These objects should be created through the constructor function
-<code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code>. Key differences:</p><ul>
+    <p><code>Gargle2.0</code> is based on the <code><a href='https://httr.r-lib.org/reference/Token-class.html'>Token2.0</a></code> class provided in
+httr. The preferred way to create a <code>Gargle2.0</code> token is through the
+constructor function <code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code>. Key differences with <code>Token2.0</code>:</p><ul>
 <li><p>The key for a cached <code>Token2.0</code> comes from hashing the endpoint, app, and
 scopes. For the <code>Gargle2.0</code> subclass, the identifier or key is expanded to
 include the email address associated with the token. This makes it easier to
@@ -187,12 +187,17 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An R6 class object.</p>
     <h2 class="hasAnchor" id="super-classes"><a class="anchor" href="#super-classes"></a>Super classes</h2>
 
     <p><code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::Token</a></code> -&gt; <code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::Token2.0</a></code> -&gt; <code>Gargle2.0</code></p>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
+
+    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+<dt><code>email</code></dt><dd><p>Email associated with the token.</p></dd>
+
+<dt><code>package</code></dt><dd><p>Name of the package requesting a token. Used in messages.</p></dd>
+
+</dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -219,8 +224,7 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 
 <hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-
-<h3>Usage</h3>
+<p>Create a Gargle2.0 token</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$new(
   email = gargle_oauth_email(),
   app = gargle_app(),
@@ -230,40 +234,60 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
   cache_path = gargle_oauth_cache()
 )</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>email</code></dt><dd><p>Optional email address. See <code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code> for full details.</p></dd>
+
+<dt><code>app</code></dt><dd><p>An OAuth consumer application.</p></dd>
+
+<dt><code>package</code></dt><dd><p>Name of the package requesting a token. Used in messages.</p></dd>
+
+<dt><code>credentials</code></dt><dd><p>Exists largely for testing purposes.</p></dd>
+
+<dt><code>params</code></dt><dd><p>A list of parameters for <code><a href='https://httr.r-lib.org/reference/init_oauth2.0.html'>httr::init_oauth2.0()</a></code>. Some we
+actively use in gargle: <code>scope</code>, <code>use_oob</code>. Most we do not:
+<code>user_params</code>, <code>type</code>, <code>as_header</code>, <code>use_basic_auth</code>, <code>config_init</code>,
+<code>client_credentials</code>.</p></dd>
+
+<dt><code>cache_path</code></dt><dd><p>Specifies the OAuth token cache. Read more in
+<code><a href='gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></dd>
+
+</dl><p></div></p>
+<h3>Returns</h3>
+<p>A Gargle2.0 token.</p>
 <p><hr>
 <a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
-
-<h3>Usage</h3>
+<p>Print a Gargle2.0 token</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$print(...)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>...</code></dt><dd><p>Not used.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-hash"></a></p><h3>Method <code>hash()</code></h3>
-
-<h3>Usage</h3>
+<p>Generate the email-augmented hash of a Gargle2.0 token</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$hash()</pre><p></div></p>
 
 <p><hr>
 <a id="method-cache"></a></p><h3>Method <code>cache()</code></h3>
-
-<h3>Usage</h3>
+<p>Put a Gargle2.0 token into the cache</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$cache()</pre><p></div></p>
 
 <p><hr>
 <a id="method-load_from_cache"></a></p><h3>Method <code>load_from_cache()</code></h3>
-
-<h3>Usage</h3>
+<p>(Attempt to) get a Gargle2.0 token from the cache</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$load_from_cache()</pre><p></div></p>
 
 <p><hr>
 <a id="method-refresh"></a></p><h3>Method <code>refresh()</code></h3>
-
-<h3>Usage</h3>
+<p>(Attempt to) refresh a Gargle2.0 token</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$refresh()</pre><p></div></p>
 
 <p><hr>
 <a id="method-init_credentials"></a></p><h3>Method <code>init_credentials()</code></h3>
-
-<h3>Usage</h3>
+<p>Initiate a new Gargle2.0 token</p><h3>Usage</h3>
 <p><div class="r"></p><pre>Gargle2.0$init_credentials()</pre><p></div></p>
 
 <p><hr>
@@ -283,8 +307,8 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
       <li><a href="#super-classes">Super classes</a></li>
+      <li><a href="#public-fields">Public fields</a></li>
       <li><a href="#methods">Methods</a></li>
     </ul>
 

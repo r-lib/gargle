@@ -63,7 +63,7 @@ fetching functions).
 
 
 An AuthState should be created through the constructor function
-init_AuthState()." />
+init_AuthState(), which has more details on the arguments." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -202,14 +202,25 @@ fetching functions).</p></li>
 </ul>
 
 <p>An <code>AuthState</code> should be created through the constructor function
-<code><a href='init_AuthState.html'>init_AuthState()</a></code>.</p>
+<code><a href='init_AuthState.html'>init_AuthState()</a></code>, which has more details on the arguments.</p>
     </div>
 
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public fields</h2>
 
-    <p>An R6 class object.</p>
+    <p><div class="r6-fields"></p><dl class='dl-horizontal'>
+<dt><code>package</code></dt><dd><p>Package name.</p></dd>
+
+<dt><code>app</code></dt><dd><p>An OAuth consumer application.</p></dd>
+
+<dt><code>api_key</code></dt><dd><p>An API key.</p></dd>
+
+<dt><code>auth_active</code></dt><dd><p>Logical, indicating whether auth is active.</p></dd>
+
+<dt><code>cred</code></dt><dd><p>Credentials.</p></dd>
+
+</dl><p></div></p>
     <h2 class="hasAnchor" id="methods"><a class="anchor" href="#methods"></a>Methods</h2>
 
     
@@ -229,8 +240,7 @@ fetching functions).</p></li>
 </ul>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
-
-<h3>Usage</h3>
+<p>Create a new AuthState</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$new(
   package = NA_character_,
   app = NULL,
@@ -239,52 +249,86 @@ fetching functions).</p></li>
   cred = NULL
 )</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>package</code></dt><dd><p>Package name.</p></dd>
+
+<dt><code>app</code></dt><dd><p>An OAuth consumer application.</p></dd>
+
+<dt><code>api_key</code></dt><dd><p>An API key.</p></dd>
+
+<dt><code>auth_active</code></dt><dd><p>Logical, indicating whether auth is active.</p></dd>
+
+<dt><code>cred</code></dt><dd><p>Credentials.</p></dd>
+
+</dl><p></div></p>
+<h3>Details</h3>
+<p>For more details on the parameters, see <code><a href='init_AuthState.html'>init_AuthState()</a></code></p>
+
 <p><hr>
 <a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
-
-<h3>Usage</h3>
+<p>Pring an AuthState</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$print(...)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>...</code></dt><dd><p>Not used.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-set_app"></a></p><h3>Method <code>set_app()</code></h3>
-
-<h3>Usage</h3>
+<p>Set the OAuth app</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$set_app(app)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>app</code></dt><dd><p>An OAuth consumer application.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-set_api_key"></a></p><h3>Method <code>set_api_key()</code></h3>
-
-<h3>Usage</h3>
+<p>Set the API key</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$set_api_key(value)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>value</code></dt><dd><p>An API key.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-set_auth_active"></a></p><h3>Method <code>set_auth_active()</code></h3>
-
-<h3>Usage</h3>
+<p>Set whether auth is (in)active</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$set_auth_active(value)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>value</code></dt><dd><p>Logical, indicating whether to send requests authorized with
+user credentials.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-set_cred"></a></p><h3>Method <code>set_cred()</code></h3>
-
-<h3>Usage</h3>
+<p>Set credentials</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$set_cred(cred)</pre><p></div></p>
 
+<h3>Arguments</h3>
+<p><div class="arguments"></p><dl class='dl-horizontal'>
+<dt><code>cred</code></dt><dd><p>User credentials.</p></dd>
+
+</dl><p></div></p>
 <p><hr>
 <a id="method-clear_cred"></a></p><h3>Method <code>clear_cred()</code></h3>
-
-<h3>Usage</h3>
+<p>Clear credentials</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$clear_cred()</pre><p></div></p>
 
 <p><hr>
 <a id="method-get_cred"></a></p><h3>Method <code>get_cred()</code></h3>
-
-<h3>Usage</h3>
+<p>Get credentials</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$get_cred()</pre><p></div></p>
 
 <p><hr>
 <a id="method-has_cred"></a></p><h3>Method <code>has_cred()</code></h3>
-
-<h3>Usage</h3>
+<p>Report if we have</p><h3>Usage</h3>
 <p><div class="r"></p><pre>AuthState$has_cred()</pre><p></div></p>
 
 <p><hr>
@@ -304,7 +348,7 @@ fetching functions).</p></li>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#format">Format</a></li>
+      <li><a href="#public-fields">Public fields</a></li>
       <li><a href="#methods">Methods</a></li>
     </ul>
 
