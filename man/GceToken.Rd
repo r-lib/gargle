@@ -4,6 +4,11 @@
 \alias{GceToken}
 \title{Token for use on Google Compute Engine instances}
 \description{
+Token for use on Google Compute Engine instances
+
+Token for use on Google Compute Engine instances
+}
+\details{
 This class uses the metadata service available on GCE VMs to fetch access
 tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentials_gce()}} instead.
 }
@@ -36,14 +41,23 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
 \subsection{Method \code{print()}}{
+Print token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$print(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Not used.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_credentials"></a>}}
 \subsection{Method \code{init_credentials()}}{
+Placeholder implementation of required method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$init_credentials()}\if{html}{\out{</div>}}
 }
@@ -52,22 +66,39 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-cache"></a>}}
 \subsection{Method \code{cache()}}{
+Placeholder implementation of required method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$cache(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Not used.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-load_from_cache"></a>}}
 \subsection{Method \code{load_from_cache()}}{
+Placeholder implementation of required method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$load_from_cache(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Not used.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-can_refresh"></a>}}
 \subsection{Method \code{can_refresh()}}{
+Placeholder implementation of required method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$can_refresh()}\if{html}{\out{</div>}}
 }
@@ -76,6 +107,7 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
 \subsection{Method \code{refresh()}}{
+Refresh a GCE token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$refresh()}\if{html}{\out{</div>}}
 }
@@ -84,6 +116,7 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-revoke"></a>}}
 \subsection{Method \code{revoke()}}{
+Placeholder implementation of required method
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$revoke()}\if{html}{\out{</div>}}
 }

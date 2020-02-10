@@ -61,22 +61,31 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 #' This class uses the metadata service available on GCE VMs to fetch access
 #' tokens. Not intended for direct use. See [credentials_gce()] instead.
 #'
+#' @param ... Not used.
+#'
 #' @export
 GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
+  #' @description Print token
   print = function(...) {
     cat("<GceToken>")
   },
+  #' @description Placeholder implementation of required method
   init_credentials = function() {
     self$credentials <- list(access_token = NULL)
   },
+  #' @description Placeholder implementation of required method
   cache = function(...) {},
+  #' @description Placeholder implementation of required method
   load_from_cache = function(...) {},
+  #' @description Placeholder implementation of required method
   can_refresh = function() {
     TRUE
   },
+  #' @description Refresh a GCE token
   refresh = function() {
-    # The access_token can only include the token itself, not the expiration and type. Otherwise, the
-    # httr code will create extra header lines that bust the POST request:
+    # The access_token can only include the token itself, not the expiration and
+    # type. Otherwise, the httr code will create extra header lines that bust
+    # the POST request:
     gce_token <- fetch_access_token(
       self$params$scope,
       service_account = self$params$service_account
@@ -84,6 +93,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     self$credentials <- list(access_token = NULL)
     self$credentials$access_token <- gce_token$access_token
   },
+  #' @description Placeholder implementation of required method
   revoke = function() {}
 ))
 
