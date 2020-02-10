@@ -76,18 +76,29 @@ init_AuthState <- function(package = NA_character_,
 #'     fetching functions).
 #'
 #' An `AuthState` should be created through the constructor function
-#' [init_AuthState()].
+#' [init_AuthState()], which has more details on the arguments.
 #'
-#' @docType class
-#' @format An R6 class object.
+#' @param package Package name.
+#' @param app An OAuth consumer application.
+#' @param api_key An API key.
+#' @param auth_active Logical, indicating whether auth is active.
+#' @param cred Credentials.
+#'
 #' @export
 #' @name AuthState-class
 AuthState <- R6::R6Class("AuthState", list(
+  #' @field package Package name.
   package = NULL,
+  #' @field app An OAuth consumer application.
   app = NULL,
+  #' @field api_key An API key.
   api_key = NULL,
+  #' @field auth_active Logical, indicating whether auth is active.
   auth_active = NULL,
+  #' @field cred Credentials.
   cred = NULL,
+  #' @description Create a new AuthState
+  #' @details For more details on the parameters, see [init_AuthState()]
   initialize = function(package = NA_character_,
                         app = NULL,
                         api_key = NULL,
@@ -108,6 +119,8 @@ AuthState <- R6::R6Class("AuthState", list(
     self$cred        <- cred
     self
   },
+  #' @description Pring an AuthState
+  #' @param ... Not used.
   print = function(...) {
     withr::local_options(list(gargle_quiet = FALSE))
     cat_line("<AuthState (via gargle)>")
@@ -118,31 +131,42 @@ AuthState <- R6::R6Class("AuthState", list(
     cat_line("     <credentials> ", class(self$cred)[[1]])
     cat_line("---")
   },
+  #' @description Set the OAuth app
   set_app = function(app) {
     stopifnot(is.null(app) || is.oauth_app(app))
     self$app <- app
     invisible(self)
   },
+  #' @description Set the API key
+  #' @param value An API key.
   set_api_key = function(value) {
     stopifnot(is.null(value) || is_string(value))
     self$api_key <- value
     invisible(self)
   },
+  #' @description Set whether auth is (in)active
+  #' @param value Logical, indicating whether to send requests authorized with
+  #'   user credentials.
   set_auth_active = function(value) {
     stopifnot(isTRUE(value) || isFALSE(value))
     self$auth_active <- value
     invisible(self)
   },
+  #' @description Set credentials
+  #' @param cred User credentials.
   set_cred = function(cred) {
     self$cred <- cred
     invisible(self)
   },
+  #' @description Clear credentials
   clear_cred = function() {
     self$set_cred(NULL)
   },
+  #' @description Get credentials
   get_cred = function() {
     self$cred
   },
+  #' @description Report if we have
   has_cred = function() {
     ## FIXME(jennybc): how should this interact with auth_active? should it?
     !is.null(self$cred)
