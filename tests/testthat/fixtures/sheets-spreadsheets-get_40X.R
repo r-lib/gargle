@@ -18,7 +18,8 @@ resp <- request_make(req)
 stopifnot(httr::status_code(resp) == 404)
 saveRDS(
   redact_response(resp),
-  test_path("fixtures", "sheets-spreadsheets-get_404.rds")
+  test_path("fixtures", "sheets-spreadsheets-get_404.rds"),
+  version = 2
 )
 
 resp <- readRDS(test_path("fixtures", "sheets-spreadsheets-get_404.rds"))
@@ -47,7 +48,8 @@ resp <- request_make(req)
 stopifnot(httr::status_code(resp) == 400)
 saveRDS(
   redact_response(resp),
-  test_path("fixtures", "sheets-spreadsheets-get_400.rds")
+  test_path("fixtures", "sheets-spreadsheets-get_400.rds"),
+  version = 2
 )
 
 resp <- readRDS(test_path("fixtures", "sheets-spreadsheets-get_400.rds"))
@@ -69,14 +71,15 @@ req <- gargle::request_build(
   method = req$method,
   params = req$params,
   base_url = req$base_url,
-  key = "???" # used the tidyverse API key
+  key = "AIzaSyDKRsnYs5G4c8y4BMlXLKTKMTheNXrsNEM" # used the tidyverse API key
 )
-resp <- request_make(req)
+resp <- gargle::request_make(req)
 
 stopifnot(httr::status_code(resp) == 400)
 saveRDS(
   redact_response(resp),
-  test_path("fixtures", "sheets-spreadsheets-get-bad-field-mask_400.rds")
+  test_path("fixtures", "sheets-spreadsheets-get-bad-field-mask_400.rds"),
+  version = 2
 )
 
 resp <- readRDS(test_path("fixtures", "sheets-spreadsheets-get-bad-field-mask_400.rds"))

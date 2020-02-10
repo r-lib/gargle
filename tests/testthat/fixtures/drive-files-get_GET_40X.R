@@ -15,7 +15,8 @@ resp <- request_make(req)
 stopifnot(httr::status_code(resp) == 404)
 saveRDS(
   redact_response(resp),
-  test_path("fixtures", "drive-files-get_404.rds")
+  test_path("fixtures", "drive-files-get_404.rds"),
+  version = 2
 )
 
 resp <- readRDS(test_path("fixtures", "drive-files-get_404.rds"))
