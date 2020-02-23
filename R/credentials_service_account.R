@@ -17,6 +17,7 @@
 #' }
 credentials_service_account <- function(scopes = NULL,
                                         path = "",
+                                        subject = NULL,
                                         ...) {
   cat_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
@@ -37,7 +38,8 @@ credentials_service_account <- function(scopes = NULL,
     ## https://github.com/r-lib/httr/issues/576
     endpoint = gargle_outh_endpoint(),
     secrets = info,
-    scope = scopes
+    scope = scopes,
+    sub = subject
   )
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
