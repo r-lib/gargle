@@ -48,7 +48,7 @@ cache_available <- function(path) {
 }
 
 cache_allowed <- function(path) {
-  if (!rlang::is_interactive()) {
+  if (!is_interactive()) {
     return(FALSE)
   }
 
@@ -191,7 +191,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   existing <- existing[m]
   # existing holds at least one short hash match
 
-  if (!rlang::is_interactive()) {
+  if (!is_interactive()) {
     # proceed, but make sure user sees messaging about how to do
     # non-interactive auth more properly
     # https://github.com/r-lib/gargle/issues/92
