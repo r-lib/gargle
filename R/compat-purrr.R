@@ -27,4 +27,19 @@ map_chr <- function(.x, .f, ...) {
   map_mold(.x, .f, character(1), ...)
 }
 
+map2 <- function(.x, .y, .f, ...) {
+  out <- mapply(.f, .x, .y, MoreArgs = list(...), SIMPLIFY = FALSE)
+  if (length(out) == length(.x)) {
+    set_names(out, names(.x))
+  } else {
+    set_names(out, NULL)
+  }
+}
+
+imap <- function(.x, .f, ...) {
+  map2(.x, vec_index(.x), .f, ...)
+}
+vec_index <- function(x) {
+  names(x) %||% seq_along(x)
+}
 # nocov end
