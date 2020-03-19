@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Page not found (404) • gargle</title>
+<title>Generate a field mask — field_mask • gargle</title>
 
 
 <!-- jquery -->
@@ -29,13 +29,25 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="https://gargle.r-lib.org/pkgdown.css" rel="stylesheet">
-<script src="https://gargle.r-lib.org/pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Page not found (404)" />
+<meta property="og:title" content="Generate a field mask — field_mask" />
+<meta property="og:description" content="Many Google API requests take a field mask, via a fields parameter, in the
+URL and/or in the body. field_mask() generates such a field mask from an R
+list, typically a list that is destined to be part of the body of a request
+that writes or updates a resource. field_mask() is designed to help in the
+common case where the attributes you wish to modify are exactly the ones
+represented in the object. It is possible to use a &quot;larger&quot; field mask, that
+is either less specific or that explicitly includes other attributes, in
+which case the attributes covered by the mask but absent from the object are
+reset to default values. This is not exactly the use case field_mask() is
+designed for, but its output could still be useful as a first step in
+constructing such a mask." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -64,7 +76,7 @@
   </head>
 
   <body>
-    <div class="container template-title-body">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -76,7 +88,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="https://gargle.r-lib.org/index.html">gargle</a>
+        <a class="navbar-link" href="../index.html">gargle</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9004</span>
       </span>
     </div>
@@ -84,7 +96,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,30 +106,30 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
+      <a href="../articles/articles/managing-tokens-securely.html">Managing tokens securely</a>
     </li>
     <li>
-      <a href="articles/auth-from-web.html">Auth when using R in the browser</a>
+      <a href="../articles/auth-from-web.html">Auth when using R in the browser</a>
     </li>
     <li>
-      <a href="articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
+      <a href="../articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>
     </li>
     <li>
-      <a href="articles/get-api-credentials.html">How to get your own API credentials</a>
+      <a href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li>
-      <a href="articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
+      <a href="../articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>
     </li>
     <li>
-      <a href="articles/non-interactive-auth.html">Non-interactive auth</a>
+      <a href="../articles/non-interactive-auth.html">Non-interactive auth</a>
     </li>
     <li>
-      <a href="articles/request-helper-functions.html">Request helper functions</a>
+      <a href="../articles/request-helper-functions.html">Request helper functions</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="../news/index.html">News</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -138,17 +150,56 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Page not found (404)</h1>
+    <h1>Generate a field mask</h1>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/field-mask.R'><code>R/field-mask.R</code></a></small>
+    <div class="hidden name"><code>field_mask.Rd</code></div>
     </div>
 
-Content not found. Please use links in the navbar.
+    <div class="ref-description">
+    <p>Many Google API requests take a field mask, via a <code>fields</code> parameter, in the
+URL and/or in the body. <code>field_mask()</code> generates such a field mask from an R
+list, typically a list that is destined to be part of the body of a request
+that writes or updates a resource. <code>field_mask()</code> is designed to help in the
+common case where the attributes you wish to modify are exactly the ones
+represented in the object. It is possible to use a "larger" field mask, that
+is either less specific or that explicitly includes other attributes, in
+which case the attributes covered by the mask but absent from the object are
+reset to default values. This is not exactly the use case <code>field_mask()</code> is
+designed for, but its output could still be useful as a first step in
+constructing such a mask.</p>
+    </div>
+
+    <pre class="usage"><span class='fu'>field_mask</span>(<span class='no'>x</span>)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A named R list, where the requirement for names applies at all
+levels, i.e. recursively.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A Google API field mask, as a string.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>field_mask</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>a</span> <span class='kw'>=</span> <span class='st'>"A"</span>))</div><div class='output co'>#&gt; a</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
-
 </div>
-
 
 
       <footer>
