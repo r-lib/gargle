@@ -21,11 +21,11 @@ jobs:
           - {os: windows-latest, r: '3.6', gs4_auth: GARGLE_NOAUTH}
           - {os: macOS-latest, r: '3.6', gs4_auth: GARGLE_PASSWORD}
           - {os: macOS-latest, r: 'devel', gs4_auth: GARGLE_NOAUTH}
-          - {os: ubuntu-16.04, r: '3.2', , gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.3', , gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.4', , gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.5', , gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04, r: '3.6', , gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.2', gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.3', gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.4', gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.5', gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04, r: '3.6', gs4_auth: GARGLE_NOAUTH, rspm: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
