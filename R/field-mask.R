@@ -18,6 +18,9 @@
 #' @return A Google API field mask, as a string.
 #' @export
 #'
+#' @seealso The documentation for the [JSON encoding of a Protocol Buffers
+#'   FieldMask](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks).
+#'
 #' @examples
 #' field_mask(list(a = "A"))
 field_mask <- function(x) {

@@ -29,3 +29,6 @@ constructing such a mask.
 \examples{
 field_mask(list(a = "A"))
 }
+\seealso{
+The documentation for the \href{https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks}{JSON encoding of a Protocol Buffers FieldMask}.
+}

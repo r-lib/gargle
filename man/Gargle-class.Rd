@@ -62,6 +62,7 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a Gargle2.0 token
 \subsection{Usage}{
@@ -102,6 +103,7 @@ A Gargle2.0 token.
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print a Gargle2.0 token
 \subsection{Usage}{
@@ -118,6 +120,7 @@ Print a Gargle2.0 token
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-hash"></a>}}
+\if{latex}{\out{\hypertarget{method-hash}{}}}
 \subsection{Method \code{hash()}}{
 Generate the email-augmented hash of a Gargle2.0 token
 \subsection{Usage}{
@@ -127,6 +130,7 @@ Generate the email-augmented hash of a Gargle2.0 token
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-cache"></a>}}
+\if{latex}{\out{\hypertarget{method-cache}{}}}
 \subsection{Method \code{cache()}}{
 Put a Gargle2.0 token into the cache
 \subsection{Usage}{
@@ -136,6 +140,7 @@ Put a Gargle2.0 token into the cache
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-load_from_cache"></a>}}
+\if{latex}{\out{\hypertarget{method-load_from_cache}{}}}
 \subsection{Method \code{load_from_cache()}}{
 (Attempt to) get a Gargle2.0 token from the cache
 \subsection{Usage}{
@@ -145,6 +150,7 @@ Put a Gargle2.0 token into the cache
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 (Attempt to) refresh a Gargle2.0 token
 \subsection{Usage}{
@@ -154,6 +160,7 @@ Put a Gargle2.0 token into the cache
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-init_credentials}{}}}
 \subsection{Method \code{init_credentials()}}{
 Initiate a new Gargle2.0 token
 \subsection{Usage}{
@@ -163,6 +170,7 @@ Initiate a new Gargle2.0 token
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

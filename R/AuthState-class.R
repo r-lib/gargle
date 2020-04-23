@@ -119,7 +119,7 @@ AuthState <- R6::R6Class("AuthState", list(
     self$cred        <- cred
     self
   },
-  #' @description Pring an AuthState
+  #' @description Print an AuthState
   #' @param ... Not used.
   print = function(...) {
     withr::local_options(list(gargle_quiet = FALSE))
@@ -166,7 +166,7 @@ AuthState <- R6::R6Class("AuthState", list(
   get_cred = function() {
     self$cred
   },
-  #' @description Report if we have
+  #' @description Report if we have credentials
   has_cred = function() {
     ## FIXME(jennybc): how should this interact with auth_active? should it?
     !is.null(self$cred)
