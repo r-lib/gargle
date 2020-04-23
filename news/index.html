@@ -160,9 +160,9 @@
 <li><p><code><a href="../reference/response_process.html">response_process()</a></code> explicitly declares the UTF-8 encoding of the content in Google API responses <a href="https://github.com/tidyverse/googlesheets4/issues/26">tidyverse/googlesheets4<a href='https://github.com/r-lib/gargle/issues/26'>#26</a></a>.</p></li>
 </ul>
 </div>
-    <div id="gargle-0-4-0" class="section level1">
+    <div id="gargle-040" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.0">
-<a href="#gargle-0-4-0" class="anchor"></a>gargle 0.4.0<small> 2019-10-04 </small>
+<a href="#gargle-040" class="anchor"></a>gargle 0.4.0<small> 2019-10-04 </small>
 </h1>
 <ul>
 <li><p>Eliminated uninformative failure when OAuth tokens cached on R &lt;= 3.5 are re-loaded on R &gt;= 3.6. The change to the default serialization version (2 vs. 3) creates an apparent mismatch between a token’s hash and its key. Instead of inexplicably failing, now we attempt to repair the cache and carry on (<a href='https://github.com/r-lib/gargle/issues/109'>#109</a>, <a href="https://github.com/tidyverse/googledrive/issues/274">tidyverse/googledrive<a href='https://github.com/r-lib/gargle/issues/274'>#274</a></a>.</p></li>
@@ -172,9 +172,9 @@
 <li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> gains <code>cloud-platform</code> as a default scope, assuming that the typical user wants to “View and manage your data across Google Cloud Platform services” (<a href='https://github.com/r-lib/gargle/issues/110'>#110</a>, <a href='https://github.com/MarkEdmondson1234'>@MarkEdmondson1234</a>).</p></li>
 </ul>
 </div>
-    <div id="gargle-0-3-1" class="section level1">
+    <div id="gargle-031" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.1">
-<a href="#gargle-0-3-1" class="anchor"></a>gargle 0.3.1<small> 2019-07-26 </small>
+<a href="#gargle-031" class="anchor"></a>gargle 0.3.1<small> 2019-07-26 </small>
 </h1>
 <ul>
 <li><p><a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">Non-interactive auth</a> is a new vignette that serves as a guide for any client packages that use gargle for auth.</p></li>
@@ -184,9 +184,9 @@
 <li><p>The yes/no asking if it’s OK to cache OAuth tokens prints fully now (r-dbi/bigrquery<a href='https://github.com/r-lib/gargle/issues/333'>#333</a>).</p></li>
 </ul>
 </div>
-    <div id="gargle-0-3-0" class="section level1">
+    <div id="gargle-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
-<a href="#gargle-0-3-0" class="anchor"></a>gargle 0.3.0<small> 2019-06-27 </small>
+<a href="#gargle-030" class="anchor"></a>gargle 0.3.0<small> 2019-06-27 </small>
 </h1>
 <ul>
 <li><p>The unexported functions available for generating standardized docs for <code>PKG_auth</code> functions in client packages have been updated.</p></li>
@@ -195,9 +195,9 @@
 <li><p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> gains the ability to ingest a token from an object of class <code>httr::request</code>, i.e. to retrieve the <code>auth_token</code> component that holds an object of class <code><a href="https://httr.r-lib.org/reference/Token-class.html">httr::Token2.0</a></code> that has been processed with <code><a href="https://httr.r-lib.org/reference/config.html">httr::config()</a></code>.</p></li>
 </ul>
 </div>
-    <div id="gargle-0-2-0" class="section level1">
+    <div id="gargle-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#gargle-0-2-0" class="anchor"></a>gargle 0.2.0<small> 2019-06-11 </small>
+<a href="#gargle-020" class="anchor"></a>gargle 0.2.0<small> 2019-06-11 </small>
 </h1>
 <ul>
 <li><p>All built-in API credentials have been rotated and are stored internally in a way that reinforces appropriate use. There is a new <a href="https://www.tidyverse.org/google_privacy_policy/">Privacy policy</a> as well as a <a href="https://www.tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications">policy for authors of packages or other applications</a>. This is related to a process to get the gargle project <a href="https://support.google.com/cloud/answer/7454865?hl=en">verified</a>, which affects the OAuth2 capabilities and the consent screen.</p></li>
@@ -205,9 +205,9 @@
 <li><p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> is a new credential function. It is included in the default registry consulted by <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and is tried just before <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>.</p></li>
 </ul>
 </div>
-    <div id="gargle-0-1-3" class="section level1">
+    <div id="gargle-013" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.3">
-<a href="#gargle-0-1-3" class="anchor"></a>gargle 0.1.3<small> 2019-06-03 </small>
+<a href="#gargle-013" class="anchor"></a>gargle 0.1.3<small> 2019-06-03 </small>
 </h1>
 <ul>
 <li>Initial CRAN release</li>
@@ -230,7 +230,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
