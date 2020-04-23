@@ -7,11 +7,10 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
-[![Build
-Status](https://travis-ci.org/r-lib/gargle.svg?branch=master)](https://travis-ci.org/r-lib/gargle)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/r-lib/gargle?branch=master&svg=true)](https://ci.appveyor.com/project/r-lib/gargle)
-[![codecov.io](https://codecov.io/github/r-lib/gargle/coverage.svg?branch=master)](https://codecov.io/github/r-lib/gargle?branch=master)
+[![R build
+status](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/r-lib/gargle/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/gargle?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
@@ -21,7 +20,7 @@ common credential types and for preparing, executing, and processing
 HTTP requests.
 
 The target user of gargle is an *R package author* who is wrapping one
-of the ~250 Google APIs listed in the [APIs
+of the \~250 Google APIs listed in the [APIs
 Explorer](https://developers.google.com/apis-explorer). gargle aims to
 play roughly the same role as [Google’s official client
 libraries](https://developers.google.com/api-client-library/), but for
@@ -116,9 +115,8 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 vapply(out, function(x) x[["family"]], character(1))
-#> [1] "Roboto"           "Open Sans"        "Lato"            
-#> [4] "Montserrat"       "Roboto Condensed" "Source Sans Pro" 
-#> [7] "Oswald"           "Raleway"
+#> [1] "Roboto"           "Open Sans"        "Lato"             "Montserrat"      
+#> [5] "Noto Sans JP"     "Source Sans Pro"  "Roboto Condensed" "Oswald"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
