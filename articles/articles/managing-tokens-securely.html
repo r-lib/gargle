@@ -166,14 +166,14 @@
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r">(<span class="no">pw</span> <span class="kw">&lt;-</span> <span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_pw_gen</span>())
-<span class="co">#&gt; [1] "dnhAbx21F1xwFxYsllyFbm9Lje0H5SRZ7OTZOf1AplClXuuZPY"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "giJVnnP3PUrzWIEplbFCmfhl72SiLyYuPf44623Q2npuwOwoDT"</span></pre></body></html></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=dnhAbx21F1xwFxYsllyFbm9Lje0H5SRZ7OTZOf1AplClXuuZPY</code></pre>
+<pre><code>GARGLE_PASSWORD=giJVnnP3PUrzWIEplbFCmfhl72SiLyYuPf44623Q2npuwOwoDT</code></pre>
 <p><a href="https://usethis.r-lib.org/reference/edit.html"><code>usethis::edit_r_environ()</code></a> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://rdrr.io/r/base/readRenviron.html">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
@@ -230,29 +230,30 @@
 <ul>
 <li>
 <p>Decryption is going to work. This is where you actually get to test package functionality against the target API. Put this in <code>.travis.yml</code> in order to make sodium available:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="fu">addons:</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="fu">apt:</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">    <span class="fu">sources:</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">    <span class="kw">-</span> <span class="fu">sourceline:</span><span class="at"> </span><span class="st">'ppa:chris-lea/libsodium'</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">    <span class="fu">packages:</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">    <span class="kw">-</span> libsodium-dev</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">addons</span><span class="kw">:</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="at">  </span><span class="fu">apt</span><span class="kw">:</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="at">    </span><span class="fu">sources</span><span class="kw">:</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">sourceline</span><span class="kw">:</span><span class="at"> </span><span class="st">'ppa:chris-lea/libsodium'</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="at">    </span><span class="fu">packages</span><span class="kw">:</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="at">    </span><span class="kw">-</span><span class="at"> libsodium-dev</span></span></code></pre></div>
 </li>
-<li>Decryption is not going to work. Either because the Suggested <a href="https://cran.r-project.org/package=sodium">sodium</a> package is not available or (much more likely) because the environment variable that represents the key is not available.
+<li>
+<p>Decryption is not going to work. Either because the Suggested <a href="https://cran.r-project.org/package=sodium">sodium</a> package is not available or (much more likely) because the environment variable that represents the key is not available.</p>
 <ul>
-<li>This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.</li>
-<li>This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor.</li>
+<li><p>This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.</p></li>
+<li><p>This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor.</p></li>
 <li>
 <p>We recommend that you actively check your package under these conditions, so that you discover problems before CRAN or your contributors do. Here’s a simplified excerpt from <code>.travis.yml</code> where the main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code> implicitly as an encrypted environment variable, but <code>R CMD check</code> runs for the other builds with <code>GARGLE_PASSWORD</code> explicitly unset:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="fu">matrix:</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="fu">include:</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw">-</span> <span class="fu">r:</span><span class="at"> release</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">      <span class="co"># &lt;stuff about code coverage, pkgdown build &amp; deploy, etc.&gt;</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">    <span class="kw">-</span> <span class="fu">r:</span><span class="at"> release</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    <span class="kw">-</span> <span class="fu">r:</span><span class="at"> devel</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">    <span class="kw">-</span> <span class="fu">r:</span><span class="at"> oldrel</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">      <span class="fu">env:</span><span class="at"> GARGLE_PASSWORD=''</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">matrix</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="at">  </span><span class="fu">include</span><span class="kw">:</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> release</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">      # &lt;stuff about code coverage, pkgdown build &amp; deploy, etc.&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> release</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span><span class="at"> GARGLE_PASSWORD=''</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> devel</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span><span class="at"> GARGLE_PASSWORD=''</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> oldrel</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span><span class="at"> GARGLE_PASSWORD=''</span></span></code></pre></div>
 </li>
 </ul>
 </li>
@@ -334,7 +335,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
