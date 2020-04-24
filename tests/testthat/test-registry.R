@@ -15,7 +15,7 @@ test_that("We recognize the right credential functions", {
 })
 
 test_that("We can register new credential functions", {
-  on.exit(cred_funs_clear())
+  withr::defer(cred_funs_clear())
   cred_funs_clear()
 
   cred_funs_add(creds_one)
@@ -37,7 +37,7 @@ test_that("We can register new credential functions", {
 })
 
 test_that("We capture credential function names when possible", {
-  on.exit(cred_funs_clear())
+  withr::defer(cred_funs_clear())
   cred_funs_clear()
 
   cred_funs_add(a = creds_one)
