@@ -49,7 +49,7 @@ credentials_user_oauth2 <- function(scopes = NULL,
                                     app = gargle_app(),
                                     package = "gargle",
                                     ...) {
-  cat_line("trying credentials_user_oauth2()")
+  ui_line("trying credentials_user_oauth2()")
   gargle2.0_token(
     app = app,
     scope = scopes,

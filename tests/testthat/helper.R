@@ -26,3 +26,11 @@ skip_if_no_auth <- function() {
 expect_error_free <- function(...) {
   expect_error(..., regexp = NA)
 }
+
+expect_info <- function(...) {
+  if (is_interactive()) {
+    expect_output(...)
+  } else {
+    expect_message(...)
+  }
+}

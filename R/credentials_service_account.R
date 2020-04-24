@@ -18,10 +18,10 @@
 credentials_service_account <- function(scopes = NULL,
                                         path = "",
                                         ...) {
-  cat_line("trying credentials_service_account()")
+  ui_line("trying credentials_service_account()")
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (!identical(info[["type"]], "service_account")) {
-    cat_line(
+    ui_line(
       "JSON does not appear to represent a service account\n",
       "did you provide the JSON for an OAuth client instead of for a ",
       "service account?"
@@ -43,7 +43,7 @@ credentials_service_account <- function(scopes = NULL,
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    cat_line("service account email: ", token_email(token))
+    ui_line("service account email: ", token_email(token))
     token
   }
 }

@@ -79,7 +79,7 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 })
 
 # validate_token_list() ------------------------------------------------------
-test_that("cache_load() copes repairs tokens stored with names != their hash", {
+test_that("cache_load() repairs tokens stored with names != their hash", {
   cache_folder <- file_temp()
   on.exit(dir_delete(cache_folder))
 
@@ -98,7 +98,7 @@ test_that("cache_load() copes repairs tokens stored with names != their hash", {
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
   withr::local_options(list(gargle_quiet = FALSE))
-  expect_output(
+  expect_info(
     tokens <- cache_load(cache_folder),
     "do not match their hash"
   )
@@ -176,25 +176,25 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "abc_b@example.com")
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_", one_existing),
     "modify your code or options"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_*", one_existing),
     "modify your code or options"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_", two_existing),
     "first will be used"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_*", two_existing),
     "first will be used"
   )
@@ -206,7 +206,7 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
 # situation report ----------------------------------------------------------
 
 test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
-  expect_output(
+  expect_info(
     cache <- gargle_oauth_sitrep(cache = FALSE),
     "No"
   )
@@ -228,7 +228,7 @@ test_that("gargle_oauth_sitrep() reports on specified cache", {
     cache = tmp_cache
   )
 
-  expect_output(
+  expect_info(
     out <- gargle_oauth_sitrep(tmp_cache),
     "2 tokens found"
   )

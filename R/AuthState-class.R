@@ -104,7 +104,7 @@ AuthState <- R6::R6Class("AuthState", list(
                         api_key = NULL,
                         auth_active = TRUE,
                         cred = NULL) {
-    cat_line("initializing AuthState")
+    ui_line("initializing AuthState")
     stopifnot(
       is_string(package),
       is.null(app) || is.oauth_app(app),
@@ -123,13 +123,13 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @param ... Not used.
   print = function(...) {
     withr::local_options(list(gargle_quiet = FALSE))
-    cat_line("<AuthState (via gargle)>")
-    cat_line("         <package> ", self$package)
-    cat_line("             <app> ", self$app$appname)
-    cat_line("         <api_key> ", obfuscate(self$api_key))
-    cat_line("     <auth_active> ", self$auth_active)
-    cat_line("     <credentials> ", class(self$cred)[[1]])
-    cat_line("---")
+    ui_line("<AuthState (via gargle)>")
+    ui_line("         <package> ", self$package)
+    ui_line("             <app> ", self$app$appname)
+    ui_line("         <api_key> ", obfuscate(self$api_key))
+    ui_line("     <auth_active> ", self$auth_active)
+    ui_line("     <credentials> ", class(self$cred)[[1]])
+    ui_line("---")
   },
   #' @description Set the OAuth app
   set_app = function(app) {
