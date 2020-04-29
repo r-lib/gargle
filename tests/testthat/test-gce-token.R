@@ -17,6 +17,7 @@ test_that("Can list service accounts", {
 })
 
 test_that("GCE metadata env vars are respected", {
+  # TODO: use withr here
   tryCatch({
     expect_equal("http://metadata.google.internal/", gce_metadata_url())
     Sys.setenv(GCE_METADATA_URL = "fake.url")
