@@ -41,9 +41,15 @@
 
 <meta property="og:title" content="Make a Google API request — request_make" />
 <meta property="og:description" content="Intended primarily for internal use in client packages that provide
-high-level wrappers for users. request_make() does very little: calls an
-HTTP method, only adding a user agent. Typically the input is created with
-request_build() and the output is processed with response_process()." />
+high-level wrappers for users. request_make() does relatively little:
+Calls an HTTP method.
+Adds a user agent.
+Enforces &quot;json&quot; as the default for encode. This differs from httr's
+default behaviour, but aligns better with Google APIs.
+
+
+Typically the input is created with request_build() and the output is
+processed with response_process()." />
 
 
 
@@ -85,7 +91,7 @@ request_build() and the output is processed with response_process()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9005</span>
       </span>
     </div>
 
@@ -155,12 +161,18 @@ request_build() and the output is processed with response_process()." />
 
     <div class="ref-description">
     <p>Intended primarily for internal use in client packages that provide
-high-level wrappers for users. <code>request_make()</code> does very little: calls an
-HTTP method, only adding a user agent. Typically the input is created with
-<code><a href='request_develop.html'>request_build()</a></code> and the output is processed with <code><a href='response_process.html'>response_process()</a></code>.</p>
+high-level wrappers for users. <code>request_make()</code> does relatively little:</p><ul>
+<li><p>Calls an HTTP method.</p></li>
+<li><p>Adds a user agent.</p></li>
+<li><p>Enforces <code>"json"</code> as the default for <code>encode</code>. This differs from httr's
+default behaviour, but aligns better with Google APIs.</p></li>
+</ul>
+
+<p>Typically the input is created with <code><a href='request_develop.html'>request_build()</a></code> and the output is
+processed with <code><a href='response_process.html'>response_process()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>request_make</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>user_agent</span> <span class='kw'>=</span> <span class='fu'>gargle_user_agent</span>())</pre>
+    <pre class="usage"><span class='fu'>request_make</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>encode</span> <span class='kw'>=</span> <span class='st'>"json"</span>, <span class='kw'>user_agent</span> <span class='kw'>=</span> <span class='fu'>gargle_user_agent</span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,7 +185,22 @@ with <code><a href='request_develop.html'>request_develop()</a></code> or <code>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Optional arguments passed through to the HTTP method.</p></td>
+      <td><p>Optional arguments passed through to the HTTP method. Currently
+neither gargle nor httr checks that all are used, so be aware that unused
+arguments may be silently ignored.</p></td>
+    </tr>
+    <tr>
+      <th>encode</th>
+      <td><p>If the body is a named list, how should it be encoded? Can be
+one of form (application/x-www-form-urlencoded), multipart,
+(multipart/form-data), or json (application/json).</p>
+<p>For "multipart", list elements can be strings or objects created by
+<code><a href='https://httr.r-lib.org/reference/upload_file.html'>upload_file()</a></code>. For "form", elements are coerced to strings
+and escaped, use <code><a href='https://rdrr.io/r/base/AsIs.html'>I()</a></code> to prevent double-escaping. For "json",
+parameters are automatically "unboxed" (i.e. length 1 vectors are
+converted to scalars). To preserve a length 1 vector as a vector,
+wrap in <code><a href='https://rdrr.io/r/base/AsIs.html'>I()</a></code>. For "raw", either a character or raw vector. You'll
+need to make sure to set the <code><a href='https://httr.r-lib.org/reference/content_type.html'>content_type()</a></code> yourself.</p></td>
     </tr>
     <tr>
       <th>user_agent</th>
