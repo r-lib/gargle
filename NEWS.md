@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* `request_make()` default to `encode = "json"`, which differs from the httr
+  default, but aligns better with Google APIs (#124).
+
 * `field_mask()` is a utility function for constructing a
 Protocol-Buffers-style, JSON-encoded field mask from an R list.
 

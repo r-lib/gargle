@@ -4,14 +4,28 @@
 \alias{request_make}
 \title{Make a Google API request}
 \usage{
-request_make(x, ..., user_agent = gargle_user_agent())
+request_make(x, ..., encode = "json", user_agent = gargle_user_agent())
 }
 \arguments{
 \item{x}{List. Holds the components for an HTTP request, presumably created
 with \code{\link[=request_develop]{request_develop()}} or \code{\link[=request_build]{request_build()}}. Must contain a \code{method} and
 \code{url}. If present, \code{body} and \code{token} are used.}
 
-\item{...}{Optional arguments passed through to the HTTP method.}
+\item{...}{Optional arguments passed through to the HTTP method. Currently
+neither gargle nor httr checks that all are used, so be aware that unused
+arguments may be silently ignored.}
+
+\item{encode}{If the body is a named list, how should it be encoded? Can be
+one of form (application/x-www-form-urlencoded), multipart,
+(multipart/form-data), or json (application/json).
+
+For "multipart", list elements can be strings or objects created by
+\code{\link[httr:upload_file]{upload_file()}}. For "form", elements are coerced to strings
+and escaped, use \code{I()} to prevent double-escaping. For "json",
+parameters are automatically "unboxed" (i.e. length 1 vectors are
+converted to scalars). To preserve a length 1 vector as a vector,
+wrap in \code{I()}. For "raw", either a character or raw vector. You'll
+need to make sure to set the \code{\link[httr:content_type]{content_type()}} yourself.}
 
 \item{user_agent}{A user agent string, prepared by \code{\link[httr:user_agent]{httr::user_agent()}}. When
 in doubt, a client package should have an internal function that extends
@@ -23,9 +37,16 @@ Object of class \code{response} from \link{httr}.
 }
 \description{
 Intended primarily for internal use in client packages that provide
-high-level wrappers for users. \code{request_make()} does very little: calls an
-HTTP method, only adding a user agent. Typically the input is created with
-\code{\link[=request_build]{request_build()}} and the output is processed with \code{\link[=response_process]{response_process()}}.
+high-level wrappers for users. \code{request_make()} does relatively little:
+\itemize{
+\item Calls an HTTP method.
+\item Adds a user agent.
+\item Enforces \code{"json"} as the default for \code{encode}. This differs from httr's
+default behaviour, but aligns better with Google APIs.
+}
+
+Typically the input is created with \code{\link[=request_build]{request_build()}} and the output is
+processed with \code{\link[=response_process]{response_process()}}.
 }
 \examples{
 \dontrun{
