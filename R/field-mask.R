@@ -22,7 +22,23 @@
 #'   FieldMask](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks).
 #'
 #' @examples
-#' field_mask(list(a = "A"))
+#' x <- list(sheetId = 1234, title = "my_favorite_worksheet")
+#' field_mask(x)
+#'
+#' x <- list(
+#'   userEnteredFormat = list(
+#'     backgroundColor = list(
+#'       red = 159 / 255, green = 183 / 255, blue = 196 / 255
+#'     )
+#'   )
+#' )
+#' field_mask(x)
+#'
+#' x <- list(
+#'   sheetId = 1234,
+#'   gridProperties = list(rowCount = 5, columnCount = 3)
+#' )
+#' field_mask(x)
 field_mask <- function(x) {
   stopifnot(is_dictionaryish(x))
   explicit_mask <- imap(x, field_mask_impl_)

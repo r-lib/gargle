@@ -27,7 +27,23 @@ designed for, but its output could still be useful as a first step in
 constructing such a mask.
 }
 \examples{
-field_mask(list(a = "A"))
+x <- list(sheetId = 1234, title = "my_favorite_worksheet")
+field_mask(x)
+
+x <- list(
+  userEnteredFormat = list(
+    backgroundColor = list(
+      red = 159 / 255, green = 183 / 255, blue = 196 / 255
+    )
+  )
+)
+field_mask(x)
+
+x <- list(
+  sheetId = 1234,
+  gridProperties = list(rowCount = 5, columnCount = 3)
+)
+field_mask(x)
 }
 \seealso{
 The documentation for the \href{https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks}{JSON encoding of a Protocol Buffers FieldMask}.
