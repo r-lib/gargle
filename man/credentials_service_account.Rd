@@ -4,7 +4,7 @@
 \alias{credentials_service_account}
 \title{Load a service account token}
 \usage{
-credentials_service_account(scopes = NULL, path = "", ...)
+credentials_service_account(scopes = NULL, path = "", subject = NULL, ...)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
@@ -20,6 +20,8 @@ does not appear on the consent screen.}
 \item{path}{JSON identifying the service account, in one of the forms
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
 file path or JSON string).}
+
+\item{subject}{TODO: document this properly.}
 
 \item{...}{Additional arguments passed to all credential functions.}
 }

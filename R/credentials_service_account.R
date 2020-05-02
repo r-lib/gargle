@@ -4,6 +4,7 @@
 #' @param path JSON identifying the service account, in one of the forms
 #'   supported for the `txt` argument of [jsonlite::fromJSON()] (typically, a
 #'   file path or JSON string).
+#' @param subject TODO: document this properly.
 #'
 #' @return An [`httr::TokenServiceAccount`][httr::Token-class] or `NULL`.
 #' @family credential functions
