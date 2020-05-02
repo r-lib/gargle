@@ -4,6 +4,10 @@ authors:
   Jennifer Bryan:
     href: https://jennybryan.org
 
+template:
+  params:
+    ganalytics: UA-115082821-1
+
 home:
   strip_header: true
 
@@ -54,7 +58,3 @@ reference:
       Assets to aid experimentation during development (not for production use!)
     contents:
       - gargle_api_key
-
-template:
-  params:
-    ganalytics: UA-115082821-1
