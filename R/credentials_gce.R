@@ -17,7 +17,12 @@
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
   ui_line("trying credentials_gce()")
-  if (!detect_gce() || is.null(scopes)) {
+  if (!detect_gce()) {
+    ui_line("Error in credentials_gce(): failed to retrieve GCE metadata")
+    return(NULL)
+  }
+  if (is.null(scopes)) {
+    ui_line("Error in credentials_gce(): `scopes` is `NULL`")
     return(NULL)
   }
   instance_scopes <- get_instance_scopes(service_account = service_account)
@@ -29,6 +34,9 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     )
   }
   if (!all(scopes %in% instance_scopes)) {
+    ui_line("Error in credentials_gce(): `scopes` are unacceptable")
+    ui_line(c("Acceptable scopes: ", instance_scopes))
+    ui_line(c("Actual scopes: ", scopes))
     return(NULL)
   }
 
@@ -50,6 +58,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
   token$refresh()
   if (is.null(token$credentials$access_token) ||
       !nzchar(token$credentials$access_token)) {
+    ui_line("Error in credentials_gce(): failed to get access_token")
     NULL
   } else {
     token
@@ -113,6 +122,7 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
     path <- substring(path, 2)
   }
   url <- paste0(root_url, "computeMetadata/v1/", path)
+  ui_line("Requesting GCE metadata from: ", url)
   timeout <- getOption("gargle.gce.timeout", default = 0.8)
   response <- try({
     httr::with_config(httr::timeout(timeout), {
@@ -128,6 +138,15 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
     }
     if (response$headers$`metadata-flavor` != "Google") {
       stop(paste0("Error fetching GCE metadata: missing/invalid metadata-flavor header"))
+    }
+  } else {
+    if (inherits(response, "try-error")) {
+      ui_line("Error fetching GCE metadata: ", attr(response, "condition")$message)
+    } else if (httr::http_error(response)) {
+      ui_line("Error fetching GCE metadata: ", httr::http_status(response)$message)
+    }
+    if (response$headers$`metadata-flavor` != "Google") {
+      ui_line("Error fetching GCE metadata: missing/invalid metadata-flavor header")
     }
   }
   response
