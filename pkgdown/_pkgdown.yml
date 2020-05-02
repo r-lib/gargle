@@ -9,7 +9,13 @@ navbar:
     home: ~
     news:
       text: News
-      href: news/index.html
+      menu:
+      - text: "Blog posts"
+      - text: "gargle’s debut on CRAN"
+        href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
+      - text: "------------------"
+      - text: "Change log"
+        href: news/index.html
 
 reference:
   - title: "Fetching credentials"
