@@ -17,23 +17,22 @@ test_that("Can list service accounts", {
 })
 
 test_that("GCE metadata env vars are respected", {
-  # TODO: use withr here
-  tryCatch({
-    expect_equal("http://metadata.google.internal/", gce_metadata_url())
-    Sys.setenv(GCE_METADATA_URL = "fake.url")
+  expect_equal("http://metadata.google.internal/", gce_metadata_url())
+  withr::with_envvar(
+    c(GCE_METADATA_URL = "fake.url"),
     expect_equal("http://fake.url/", gce_metadata_url())
-
-    options(gargle.gce.use_ip = TRUE)
+  )
+  withr::with_options(
+    list(gargle.gce.use_ip = TRUE),
     expect_equal("http://169.254.169.254/", gce_metadata_url())
-    Sys.setenv(GCE_METADATA_IP = "1.2.3.4")
-    expect_equal("http://1.2.3.4/", gce_metadata_url())
-  }, finally = {
-    # We could save and restore these values, but there's no reason they should
-    # be set in tests.
-    Sys.unsetenv("GCE_METADATA_IP")
-    Sys.unsetenv("GCE_METADATA_URL")
-    options(gargle.gce.use_ip = NULL)
-  })
+  )
+  withr::with_options(
+    list(gargle.gce.use_ip = TRUE),
+    withr::with_envvar(
+      c(GCE_METADATA_IP = "1.2.3.4"),
+      expect_equal("http://1.2.3.4/", gce_metadata_url())
+    )
+  )
 })
 
 test_that("GCE metadata detection fails not on GCE", {

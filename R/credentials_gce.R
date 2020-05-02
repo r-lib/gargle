@@ -144,8 +144,7 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
       ui_line("Error fetching GCE metadata: ", attr(response, "condition")$message)
     } else if (httr::http_error(response)) {
       ui_line("Error fetching GCE metadata: ", httr::http_status(response)$message)
-    }
-    if (response$headers$`metadata-flavor` != "Google") {
+    } else if (response$headers$`metadata-flavor` != "Google") {
       ui_line("Error fetching GCE metadata: missing/invalid metadata-flavor header")
     }
   }
