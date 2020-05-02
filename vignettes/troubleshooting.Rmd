@@ -26,7 +26,7 @@ There is a package-wide option that controls gargle's verbosity: `gargle_quiet`.
 gargle_quiet()
 ```
 
-It defaults to `TRUE`, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tried to guide the user through auth or, in a non-interactive session, it throws an error.
+It defaults to `TRUE`, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.
 
 If you need to see all those gory details, toggle the `gargle_quiet` option to `FALSE` and you'll get much more output as gargle works through various auth approaches.
 
@@ -91,3 +91,10 @@ If you choose to delete your cache (or a specific token), here is the fallout yo
     practical effect for a normal user, but can be noticeable for someone
     developing against a Google API or someone working from many different
     machines / caches.
+ *  If you have rigged some remote mission critical thing (e.g. a Shiny app or
+    cron job) to use a user OAuth token (which is not a great idea), one day
+    continued acquisition of new tokens in your normal interactive life will
+    invalidate the mission critical token. Your thing (the Shiny app or cron
+    job) will mysteriously fail because the OAuth token can't be refreshed. Be
+    prepared to deal with that periodically or, better yet, upgrade to a more
+    robust strategy for [non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).
