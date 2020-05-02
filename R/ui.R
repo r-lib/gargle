@@ -8,15 +8,14 @@ gargle_quiet <- function() {
   getOption("gargle_quiet", default = TRUE)
 }
 
-# All UI output must eventually go through cat_line() so that it
+# All UI output must eventually go through ui_line() so that it
 # can be silenced / activated with 'gargle_quiet'.
-cat_line <- function(..., quiet = gargle_quiet()) {
-  if (quiet) {
-    return(invisible())
+ui_line <- function(..., quiet = gargle_quiet()) {
+  if (!quiet) {
+    inform(paste0(...))
   }
 
-  lines <- paste0(..., "\n")
-  cat(lines, sep = "")
+  invisible()
 }
 
 glue_lines <- function(lines, ..., .env = parent.frame()) {

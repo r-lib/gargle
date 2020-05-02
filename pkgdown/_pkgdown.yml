@@ -4,12 +4,41 @@ authors:
   Jennifer Bryan:
     href: https://jennybryan.org
 
+template:
+  params:
+    ganalytics: UA-115082821-1
+
+home:
+  strip_header: true
+
 navbar:
   components:
     home: ~
     news:
       text: News
-      href: news/index.html
+      menu:
+      - text: "Blog posts"
+      - text: "gargle’s debut on CRAN"
+        href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
+      - text: "------------------"
+      - text: "Change log"
+        href: news/index.html
+
+articles:
+- title: For users of packages that use gargle for auth
+  navbar: ~
+  contents:
+  - non-interactive-auth
+  - troubleshooting
+  - auth-from-web
+  - get-api-credentials
+
+- title: For package developers and advanced users
+  contents:
+  - how-gargle-gets-tokens
+  - gargle-auth-in-client-package
+  - articles/managing-tokens-securely
+  - request-helper-functions
 
 reference:
   - title: "Fetching credentials"
@@ -45,7 +74,3 @@ reference:
       Assets to aid experimentation during development (not for production use!)
     contents:
       - gargle_api_key
-
-template:
-  params:
-    ganalytics: UA-115082821-1

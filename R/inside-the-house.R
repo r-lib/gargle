@@ -5,7 +5,7 @@ from_permitted_package <- function(env = parent.frame()) {
   }
 
   nm <- getNamespaceName(env)
-  cat_line("attempt from: ", nm)
+  ui_line("attempt from: ", nm)
   nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 

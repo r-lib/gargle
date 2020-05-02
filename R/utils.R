@@ -31,7 +31,7 @@ add_line <- function(path, line, quiet = FALSE) {
   }
 
   if (line %in% lines) return(TRUE)
-  cat_line("Adding ", line, " to ", path)
+  ui_line("Adding ", line, " to ", path)
 
   lines <- c(lines, line)
   writeLines(lines, path)
@@ -49,7 +49,7 @@ normalize_scopes <- function(x) {
 }
 
 add_email_scope <- function(scopes = NULL) {
-  cat_line("adding 'userinfo.email' scope")
+  ui_line("adding 'userinfo.email' scope")
   url <- "https://www.googleapis.com/auth/userinfo.email"
   union(scopes %||% character(), url)
 }

@@ -1,5 +1,5 @@
 stop_bad_class <- function(object, expected_class) {
-  nm <- rlang::as_name(rlang::ensym(object))
+  nm <- as_name(ensym(object))
   actual_class <- class(object)
   actual <- glue_collapse(actual_class, sep = "/")
   expected <- glue_collapse(expected_class, sep = ", ", last = " or ")

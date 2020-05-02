@@ -68,6 +68,7 @@ An \code{AuthState} should be created through the constructor function
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new AuthState
 \subsection{Usage}{
@@ -102,8 +103,9 @@ For more details on the parameters, see \code{\link[=init_AuthState]{init_AuthSt
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
-Pring an AuthState
+Print an AuthState
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuthState$print(...)}\if{html}{\out{</div>}}
 }
@@ -118,6 +120,7 @@ Pring an AuthState
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_app"></a>}}
+\if{latex}{\out{\hypertarget{method-set_app}{}}}
 \subsection{Method \code{set_app()}}{
 Set the OAuth app
 \subsection{Usage}{
@@ -134,6 +137,7 @@ Set the OAuth app
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_api_key"></a>}}
+\if{latex}{\out{\hypertarget{method-set_api_key}{}}}
 \subsection{Method \code{set_api_key()}}{
 Set the API key
 \subsection{Usage}{
@@ -150,6 +154,7 @@ Set the API key
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_auth_active"></a>}}
+\if{latex}{\out{\hypertarget{method-set_auth_active}{}}}
 \subsection{Method \code{set_auth_active()}}{
 Set whether auth is (in)active
 \subsection{Usage}{
@@ -167,6 +172,7 @@ user credentials.}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_cred"></a>}}
+\if{latex}{\out{\hypertarget{method-set_cred}{}}}
 \subsection{Method \code{set_cred()}}{
 Set credentials
 \subsection{Usage}{
@@ -183,6 +189,7 @@ Set credentials
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clear_cred"></a>}}
+\if{latex}{\out{\hypertarget{method-clear_cred}{}}}
 \subsection{Method \code{clear_cred()}}{
 Clear credentials
 \subsection{Usage}{
@@ -192,6 +199,7 @@ Clear credentials
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-get_cred"></a>}}
+\if{latex}{\out{\hypertarget{method-get_cred}{}}}
 \subsection{Method \code{get_cred()}}{
 Get credentials
 \subsection{Usage}{
@@ -201,8 +209,9 @@ Get credentials
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-has_cred"></a>}}
+\if{latex}{\out{\hypertarget{method-has_cred}{}}}
 \subsection{Method \code{has_cred()}}{
-Report if we have
+Report if we have credentials
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuthState$has_cred()}\if{html}{\out{</div>}}
 }
@@ -210,6 +219,7 @@ Report if we have
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

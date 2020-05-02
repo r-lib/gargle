@@ -1,4 +1,4 @@
-test_that("credentials_byo_auth2() demands a Token2.0", {
+test_that("credentials_byo_oauth2() demands a Token2.0", {
   expect_error(
     credentials_byo_oauth2(token = "a_naked_access_token"),
     'inherits(token, "Token2.0") is not TRUE',
@@ -6,7 +6,7 @@ test_that("credentials_byo_auth2() demands a Token2.0", {
   )
 })
 
-test_that("credentials_byo_auth2() rejects a token that obviously not Google", {
+test_that("credentials_byo_oauth2() rejects a token that obviously not Google", {
   token <- httr::Token2.0$new(
     app = httr::oauth_app("x", "y", "z"),
     endpoint = httr::oauth_endpoints("github"),
@@ -20,7 +20,7 @@ test_that("credentials_byo_auth2() rejects a token that obviously not Google", {
   )
 })
 
-test_that("credentials_byo_auth2() just passes valid input through", {
+test_that("credentials_byo_oauth2() just passes valid input through", {
   token <- httr::Token2.0$new(
     app = httr::oauth_app("x", "y", "z"),
     endpoint = httr::oauth_endpoints("google"),
@@ -30,7 +30,7 @@ test_that("credentials_byo_auth2() just passes valid input through", {
   expect_identical(credentials_byo_oauth2(token = token), token)
 })
 
-test_that("credentials_byo_auth2() extracts a token from a request", {
+test_that("credentials_byo_oauth2() extracts a token from a request", {
   token <- httr::Token2.0$new(
     app = httr::oauth_app("x", "y", "z"),
     endpoint = httr::oauth_endpoints("google"),

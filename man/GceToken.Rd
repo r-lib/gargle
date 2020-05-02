@@ -40,6 +40,7 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-print"></a>}}
+\if{latex}{\out{\hypertarget{method-print}{}}}
 \subsection{Method \code{print()}}{
 Print token
 \subsection{Usage}{
@@ -56,6 +57,7 @@ Print token
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-init_credentials}{}}}
 \subsection{Method \code{init_credentials()}}{
 Placeholder implementation of required method
 \subsection{Usage}{
@@ -65,6 +67,7 @@ Placeholder implementation of required method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-cache"></a>}}
+\if{latex}{\out{\hypertarget{method-cache}{}}}
 \subsection{Method \code{cache()}}{
 Placeholder implementation of required method
 \subsection{Usage}{
@@ -81,6 +84,7 @@ Placeholder implementation of required method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-load_from_cache"></a>}}
+\if{latex}{\out{\hypertarget{method-load_from_cache}{}}}
 \subsection{Method \code{load_from_cache()}}{
 Placeholder implementation of required method
 \subsection{Usage}{
@@ -97,6 +101,7 @@ Placeholder implementation of required method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-can_refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-can_refresh}{}}}
 \subsection{Method \code{can_refresh()}}{
 Placeholder implementation of required method
 \subsection{Usage}{
@@ -106,6 +111,7 @@ Placeholder implementation of required method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refresh a GCE token
 \subsection{Usage}{
@@ -115,6 +121,7 @@ Refresh a GCE token
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-revoke"></a>}}
+\if{latex}{\out{\hypertarget{method-revoke}{}}}
 \subsection{Method \code{revoke()}}{
 Placeholder implementation of required method
 \subsection{Usage}{
@@ -124,6 +131,7 @@ Placeholder implementation of required method
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

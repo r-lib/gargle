@@ -1,6 +1,12 @@
 # gargle (development version)
 
-* All R6 classes have better documentation now, thanks for new capabilities in roxygen2.
+* `request_make()` default to `encode = "json"`, which differs from the httr
+  default, but aligns better with Google APIs (#124).
+
+* `field_mask()` is a utility function for constructing a
+Protocol-Buffers-style, JSON-encoded field mask from an R list.
+
+* All R6 classes have better documentation now, thanks to new capabilities in roxygen2.
 
 * OAuth2 flow can only be initiated when `rlang::is_interactive()` is `TRUE`. If
   a new token is needed in a non-interactive session, gargle now throws an

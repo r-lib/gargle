@@ -1,0 +1,100 @@
+---
+title: "Troubleshooting gargle auth"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Troubleshooting gargle auth}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gargle)
+```
+
+## `gargle_quiet`
+
+There is a package-wide option that controls gargle's verbosity: `gargle_quiet`. The function `gargle_quiet()` reveals the current value:
+
+```{r}
+gargle_quiet()
+```
+
+It defaults to `TRUE`, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.
+
+If you need to see all those gory details, toggle the `gargle_quiet` option to `FALSE` and you'll get much more output as gargle works through various auth approaches.
+
+```{r}
+# save current value
+op <- options(gargle_quiet = FALSE)
+
+gargle_quiet()
+
+# restore original value
+options(op)
+```
+
+## `gargle_oauth_sitrep()`
+
+`gargle_oauth_sitrep()` provides an OAuth2 "situation report".
+
+`gargle_oauth_sitrep()` is only relevant to OAuth2 user tokens. If you are using (or struggling to use) a service account token, Application Default Credentials, or credentials from the GCE metadata service, `gargle_oauth_sitrep()` isn't going to help you figure out what's going on.
+
+Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.
+
+```{r, eval = FALSE}
+gargle_oauth_sitrep()
+#' gargle OAuth cache path:
+#' /Users/janedoe/.R/gargle/gargle-oauth
+#' 
+#' 14 tokens found
+#' 
+#' email                         app         scope                          hash...   
+#' ----------------------------- ----------- ------------------------------ ----------
+#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
+#' buzzy@example.org             gargle-demo                                15acf95...
+#' stella@example.org            gargle-demo ...drive                       4281945...
+#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...
+#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...
+#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...
+#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...
+#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...
+#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...
+#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...
+#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...
+#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...
+#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...
+#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
+```
+
+It is relatively harmless to delete the folder serving as the OAuth cache. Or, if you have reason to believe one specific cached token is causing you pain, you could delete a specific token (an `.rds` file) from the cache. OAuth user tokens are meant to be perishable and replaceable.
+
+If you choose to delete your cache (or a specific token), here is the fallout you can expect:
+
+  * You will need to re-auth (usually, meaning the browser dance) in projects
+    that have been using the deleted tokens.
+  * If you have `.R` or `.Rmd` files that you execute or render
+    non-interactively, presumably with code such as
+    `PKG_auth(email = "janedoe@example.com")`, those won't run non-interactively
+    until you've obtained and cached a token for the package and that
+    identity (email) interactively once.
+  * A specific Google user (email) can only have a certain number of OAuth
+    tokens at a time (something like 50 per OAuth client). So, whenever you get
+    a new token (as opposed to refreshing an existing token), there is the
+    potential for it to invalidate an older token. This is unlikely to have any
+    practical effect for a normal user, but can be noticeable for someone
+    developing against a Google API or someone working from many different
+    machines / caches.
+ *  If you have rigged some remote mission critical thing (e.g. a Shiny app or
+    cron job) to use a user OAuth token (which is not a great idea), one day
+    continued acquisition of new tokens in your normal interactive life will
+    invalidate the mission critical token. Your thing (the Shiny app or cron
+    job) will mysteriously fail because the OAuth token can't be refreshed. Be
+    prepared to deal with that periodically or, better yet, upgrade to a more
+    robust strategy for [non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html).

@@ -15,7 +15,7 @@ test_that("cache_establish() insists on sensible input", {
   )
 })
 
-test_that("`cache = TRUE` defers to default cache path", {
+test_that("`cache = TRUE` withr::defers to default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
     `gargle:::cache_create` = function(path) NULL,
@@ -37,7 +37,7 @@ test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
 
 test_that("`cache = <filepath>` creates cache folder, recursively", {
   tmpfolder <- path_temp("foo", "bar")
-  on.exit(dir_delete(tmpfolder))
+  withr::defer(dir_delete(tmpfolder))
 
   cache_establish(tmpfolder)
   expect_true(dir_exists(tmpfolder))
@@ -45,7 +45,7 @@ test_that("`cache = <filepath>` creates cache folder, recursively", {
 
 test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   tmpproj <- file_temp()
-  on.exit(dir_delete(tmpproj))
+  withr::defer(dir_delete(tmpproj))
   dir_create(tmpproj)
   writeLines("", path(tmpproj, "DESCRIPTION"))
   writeLines("", path(tmpproj, ".gitignore"))
@@ -79,9 +79,9 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 })
 
 # validate_token_list() ------------------------------------------------------
-test_that("cache_load() copes repairs tokens stored with names != their hash", {
+test_that("cache_load() repairs tokens stored with names != their hash", {
   cache_folder <- file_temp()
-  on.exit(dir_delete(cache_folder))
+  withr::defer(dir_delete(cache_folder))
 
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
@@ -98,7 +98,7 @@ test_that("cache_load() copes repairs tokens stored with names != their hash", {
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
   withr::local_options(list(gargle_quiet = FALSE))
-  expect_output(
+  expect_info(
     tokens <- cache_load(cache_folder),
     "do not match their hash"
   )
@@ -118,7 +118,7 @@ test_that("token_from_cache() returns NULL when caching turned off", {
 
 test_that("token_into_cache(), token_from_cache() roundtrip", {
   cache_folder <- file_temp()
-  on.exit(dir_delete(cache_folder))
+  withr::defer(dir_delete(cache_folder))
 
   ## this calls token_into_cache()
   token_in <- gargle2.0_token(
@@ -176,25 +176,25 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "abc_b@example.com")
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_", one_existing),
     "modify your code or options"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_*", one_existing),
     "modify your code or options"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_", two_existing),
     "first will be used"
   )
   expect_identical(m, one_existing)
 
-  expect_output(
+  expect_info(
     m <- token_match("abc_*", two_existing),
     "first will be used"
   )
@@ -206,7 +206,7 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
 # situation report ----------------------------------------------------------
 
 test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
-  expect_output(
+  expect_info(
     cache <- gargle_oauth_sitrep(cache = FALSE),
     "No"
   )
@@ -215,7 +215,7 @@ test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
 
 test_that("gargle_oauth_sitrep() reports on specified cache", {
   tmp_cache <- file_temp()
-  on.exit(dir_delete(tmp_cache))
+  withr::defer(dir_delete(tmp_cache))
 
   gargle2.0_token(
     email = "a@example.org",
@@ -228,7 +228,7 @@ test_that("gargle_oauth_sitrep() reports on specified cache", {
     cache = tmp_cache
   )
 
-  expect_output(
+  expect_info(
     out <- gargle_oauth_sitrep(tmp_cache),
     "2 tokens found"
   )

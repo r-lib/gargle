@@ -48,12 +48,12 @@ cache_available <- function(path) {
 }
 
 cache_allowed <- function(path) {
-  if (!rlang::is_interactive()) {
+  if (!is_interactive()) {
     return(FALSE)
   }
 
   withr::local_options(list(gargle_quiet = FALSE))
-  cat_line(glue(
+  ui_line(glue(
     "Is it OK to cache OAuth access credentials in the folder {sq(path)} ",
     "between R sessions?"
   ))
@@ -108,7 +108,7 @@ cache_load <- function(path) {
       "),
       "Will attempt to repair by renaming."
     )
-    cat_line(msg)
+    ui_line(msg)
     file_move(files[mismatch], path(path, hashes[mismatch]))
     Recall(path)
   } else {
@@ -139,10 +139,10 @@ token_from_cache <- function(candidate) {
 token_into_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) {
-    cat_line("not caching token")
+    ui_line("not caching token")
     return()
   }
-  cat_line("putting token into the cache: ", cache_path)
+  ui_line("putting token into the cache: ", cache_path)
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
@@ -150,7 +150,7 @@ token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) return()
   token_path <- path(cache_path, candidate$hash())
-  cat_line("removing token from the cache: ", token_path)
+  ui_line("removing token from the cache: ", token_path)
   file_delete(token_path)
 }
 
@@ -191,7 +191,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   existing <- existing[m]
   # existing holds at least one short hash match
 
-  if (!rlang::is_interactive()) {
+  if (!is_interactive()) {
     # proceed, but make sure user sees messaging about how to do
     # non-interactive auth more properly
     # https://github.com/r-lib/gargle/issues/92
@@ -200,7 +200,7 @@ token_match <- function(candidate, existing, package = "gargle") {
     if (length(existing) > 1) {
       emails <- extract_email(existing)
       emails <- glue("  * {emails}")
-      cat_line(glue(
+      ui_line(glue(
         "Suitable tokens found in the cache, associated with these emails:\n",
         "{glue_collapse(emails, sep = '\n')}", "\n",
         "The first will be used."
@@ -217,11 +217,11 @@ token_match <- function(candidate, existing, package = "gargle") {
     msg <- glue::glue_collapse(msg)
     # morally, I'd like to throw a warning but current design of token_fetch()
     # means warnings are caught
-    cat_line(msg)
+    ui_line(msg)
   }
 
   if (length(existing) == 1 && candidate_email == "*") {
-    cat_line(glue(
+    ui_line(glue(
       "The {package} package is using a cached token for {extract_email(existing)}."
     ))
     return(existing)
@@ -230,7 +230,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   # we need user to OK our discovery or pick from multiple emails
   withr::local_options(list(gargle_quiet = FALSE))
   emails <- extract_email(existing)
-  cat_line(glue(
+  ui_line(glue(
     "The {package} package is requesting access to your Google account. ",
     "Select a pre-authorised account or enter '0' to obtain a new token. ",
     "Press Esc/Ctrl + C to abort."
@@ -291,16 +291,16 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     path <- cache_establish(cache)
   )
   if (is.null(path)) {
-    cat_line("No gargle OAuth cache has been established.")
+    ui_line("No gargle OAuth cache has been established.")
     return(invisible())
   }
 
-  cat_line("gargle OAuth cache path:")
-  cat_line(path)
-  cat_line()
+  ui_line("gargle OAuth cache path:")
+  ui_line(path)
+  ui_line()
   tokens <- cache_load(path)
-  cat_line(glue("{length(tokens)} tokens found"))
-  cat_line()
+  ui_line(glue("{length(tokens)} tokens found"))
+  ui_line()
 
   nms    <- names(tokens)
   hash   <- mask_email(nms)
@@ -327,7 +327,7 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     )
   }
 
-  cat_line(glue_data(
+  ui_line(glue_data(
     df,
     "{email} {app} {scopes} {hash...}",
     .transformer = format_transformer

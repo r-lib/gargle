@@ -107,7 +107,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         credentials = NULL,
                         params = list(),
                         cache_path = gargle_oauth_cache()) {
-    cat_line("Gargle2.0 initialize")
+    ui_line("Gargle2.0 initialize")
     stopifnot(
       is.null(email) || is_string(email) ||
         isTRUE(email) || isFALSE(email) || is.na(email),
@@ -137,7 +137,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
-      cat_line("credentials provided directly")
+      ui_line("credentials provided directly")
       self$credentials <- credentials
       return(self$cache())
     }
@@ -146,7 +146,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (self$load_from_cache()) {
       self
     } else {
-      cat_line("no matching token in the cache")
+      ui_line("no matching token in the cache")
       self$init_credentials()
       self$email <- token_email(self) %||% NA_character_
       self$cache()
@@ -156,13 +156,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @param ... Not used.
   print = function(...) {
     withr::local_options(list(gargle_quiet = FALSE))
-    cat_line("<Token (via gargle)>")
-    cat_line("  <oauth_endpoint> google")
-    cat_line("             <app> ", self$app$appname)
-    cat_line("           <email> ", self$email)
-    cat_line("          <scopes> ", commapse(base_scope(self$params$scope)))
-    cat_line("     <credentials> ", commapse(names(self$credentials)))
-    cat_line("---")
+    ui_line("<Token (via gargle)>")
+    ui_line("  <oauth_endpoint> google")
+    ui_line("             <app> ", self$app$appname)
+    ui_line("           <email> ", self$email)
+    ui_line("          <scopes> ", commapse(base_scope(self$params$scope)))
+    ui_line("     <credentials> ", commapse(names(self$credentials)))
+    ui_line("---")
   },
   #' @description Generate the email-augmented hash of a Gargle2.0 token
   hash = function() {
@@ -175,13 +175,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
-    cat_line("loading token from the cache")
+    ui_line("loading token from the cache")
     if (is.null(self$cache_path)) return(FALSE)
 
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
-    cat_line("matching token found in the cache")
+    ui_line("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
     self$app         <- cached$app
@@ -205,8 +205,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description Initiate a new Gargle2.0 token
   init_credentials = function() {
-    cat_line("initiating new token")
-    if (rlang::is_interactive()) {
+    ui_line("initiating new token")
+    if (is_interactive()) {
       super$init_credentials()
     } else {
       abort("OAuth2 flow requires an interactive session")

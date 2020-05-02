@@ -16,9 +16,8 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
-[![Build Status](https://travis-ci.org/r-lib/gargle.svg?branch=master)](https://travis-ci.org/r-lib/gargle)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-lib/gargle?branch=master&svg=true)](https://ci.appveyor.com/project/r-lib/gargle)
-[![codecov.io](https://codecov.io/github/r-lib/gargle/coverage.svg?branch=master)](https://codecov.io/github/r-lib/gargle?branch=master)
+[![R build status](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/gargle/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/gargle?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 

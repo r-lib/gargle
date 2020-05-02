@@ -42,14 +42,14 @@
 #' credentials_byo_oauth2(token = my_token)
 #' }
 credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
-  cat_line("trying credentials_byo_oauth()")
+  ui_line("trying credentials_byo_oauth()")
   if (inherits(token, "request")) {
     token <- token$auth_token
   }
   stopifnot(inherits(token, "Token2.0"))
 
   if (!is.null(scopes)) {
-    cat_line(
+    ui_line(
       "`scopes` cannot be specified when user brings their own OAuth token; ",
       "`scopes` are already implicit in the token"
     )
