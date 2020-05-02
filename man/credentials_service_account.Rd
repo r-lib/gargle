@@ -4,7 +4,7 @@
 \alias{credentials_service_account}
 \title{Load a service account token}
 \usage{
-credentials_service_account(scopes = NULL, path = "", subject = NULL, ...)
+credentials_service_account(scopes = NULL, path = "", ..., subject = NULL)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
@@ -21,9 +21,13 @@ does not appear on the consent screen.}
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
 file path or JSON string).}
 
-\item{subject}{TODO: document this properly.}
-
 \item{...}{Additional arguments passed to all credential functions.}
+
+\item{subject}{An optional subject claim. Use for a service account which has
+been granted domain-wide authority by an administrator. Such delegation of
+domain-wide authority means that the service account is permitted to act on
+behalf of users, without their consent. Identify the user to impersonate
+via their email, e.g. \code{subject = "user@example.com"}.}
 }
 \value{
 An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
@@ -40,6 +44,11 @@ token <- credentials_service_account(
 }
 }
 \seealso{
+Additional reading on delegation of domain-wide authority:
+\itemize{
+\item \url{https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority}
+}
+
 Other credential functions: 
 \code{\link{credentials_app_default}()},
 \code{\link{credentials_byo_oauth2}()},
