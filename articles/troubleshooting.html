@@ -121,7 +121,7 @@
 <p>There is a package-wide option that controls gargle’s verbosity: <code>gargle_quiet</code>. The function <code><a href="../reference/gargle_options.html">gargle_quiet()</a></code> reveals the current value:</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span>()
 <span class="co">#&gt; [1] TRUE</span></pre></body></html></div>
-<p>It defaults to <code>TRUE</code>, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tried to guide the user through auth or, in a non-interactive session, it throws an error.</p>
+<p>It defaults to <code>TRUE</code>, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.</p>
 <p>If you need to see all those gory details, toggle the <code>gargle_quiet</code> option to <code>FALSE</code> and you’ll get much more output as gargle works through various auth approaches.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># save current value</span>
 <span class="no">op</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">gargle_quiet</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
@@ -167,6 +167,7 @@
 <li>You will need to re-auth (usually, meaning the browser dance) in projects that have been using the deleted tokens.</li>
 <li>If you have <code>.R</code> or <code>.Rmd</code> files that you execute or render non-interactively, presumably with code such as <code>PKG_auth(email = "janedoe@example.com")</code>, those won’t run non-interactively until you’ve obtained and cached a token for the package and that identity (email) interactively once.</li>
 <li>A specific Google user (email) can only have a certain number of OAuth tokens at a time (something like 50 per OAuth client). So, whenever you get a new token (as opposed to refreshing an existing token), there is the potential for it to invalidate an older token. This is unlikely to have any practical effect for a normal user, but can be noticeable for someone developing against a Google API or someone working from many different machines / caches.</li>
+<li>If you have rigged some remote mission critical thing (e.g. a Shiny app or cron job) to use a user OAuth token (which is not a great idea), one day continued acquisition of new tokens in your normal interactive life will invalidate the mission critical token. Your thing (the Shiny app or cron job) will mysteriously fail because the OAuth token can’t be refreshed. Be prepared to deal with that periodically or, better yet, upgrade to a more robust strategy for <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">non-interactive auth</a>.</li>
 </ul>
 </div>
   </div>
