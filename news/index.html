@@ -162,6 +162,7 @@
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code> and <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> gain an optional <code>subject</code> argument, which can be used to pass a subject claim along to <code><a href="https://httr.r-lib.org/reference/oauth_service_token.html">httr::oauth_service_token()</a></code> (<a href='https://github.com/r-lib/gargle/issues/131'>#131</a>, <a href='https://github.com/samterfa'>@samterfa</a>).</p></li>
 <li><p><code><a href="../reference/request_make.html">request_make()</a></code> default to <code>encode = "json"</code>, which differs from the httr default, but aligns better with Google APIs (<a href='https://github.com/r-lib/gargle/issues/124'>#124</a>).</p></li>
 <li><p><code><a href="../reference/field_mask.html">field_mask()</a></code> is a utility function for constructing a Protocol-Buffers-style, JSON-encoded field mask from an R list.</p></li>
 <li><p>All R6 classes have better documentation now, thanks to new capabilities in roxygen2.</p></li>
