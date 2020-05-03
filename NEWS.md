@@ -1,6 +1,6 @@
 # gargle (development version)
 
-* `credentials_service_account()` gains an optional `subject` argument, which can be used to pass a subject claim along to `httr::oauth_service_token()` (#131, @samterfa).
+* `credentials_service_account()` and `credentials_app_default()` gain an optional `subject` argument, which can be used to pass a subject claim along to `httr::oauth_service_token()` (#131, @samterfa).
 
 * `request_make()` default to `encode = "json"`, which differs from the httr
   default, but aligns better with Google APIs (#124).
