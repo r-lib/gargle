@@ -4,7 +4,7 @@
 \alias{credentials_app_default}
 \title{Load Application Default Credentials}
 \usage{
-credentials_app_default(scopes = NULL, ...)
+credentials_app_default(scopes = NULL, ..., subject = NULL)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
@@ -18,6 +18,12 @@ permission to view or send email. It is considered a low value scope and
 does not appear on the consent screen.}
 
 \item{...}{Additional arguments passed to all credential functions.}
+
+\item{subject}{An optional subject claim. Use for a service account which has
+been granted domain-wide authority by an administrator. Such delegation of
+domain-wide authority means that the service account is permitted to act on
+behalf of users, without their consent. Identify the user to impersonate
+via their email, e.g. \code{subject = "user@example.com"}.}
 }
 \value{
 An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
