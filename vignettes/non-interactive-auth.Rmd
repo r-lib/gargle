@@ -82,7 +82,24 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 
 If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
 
-For certain APIs, service accounts are inherently awkward, in which case you might have to resort to an OAuth user token. Gmail is a good example. In this case, you might want the service account to act on your behalf, e.g., to send email as you. This is described as "impersonation", which should tip you off that Google does not really encourage this workflow. This requires [granting the service account domain-wide authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation), which requires that your account is associated with a G Suite domain and also approval from the domain's administrator. If this is impossible or unappealing, use an OAuth user token, as described below.
+For certain APIs, service accounts are inherently awkward, because you often want to do things *on behalf of a specific user*. Gmail is a good example. If you are sending email programmatically, there's a decent chance you want to send it as yourself (or from some other specific email account) instead of from `zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com`. This is described as "impersonation", which should tip you off that Google does not exactly encourage this workflow. Some details:
+
+* This requires "delegating domain-wide authority " to the service account.
+* It is only possible in the context of a G Suite domain and only an
+  administrator of the domain can set this up.
+* The domain-wide authority is granted only for specific scopes, so those can be
+  as narrow as possible. This may make a domain administrator more receptive
+  to the idea.
+* This is documented in a few different places, such as:
+  - [Delegating domain-wide authority to the service account](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority) from Google Identity Platform docs
+  - [Perform G Suite Domain-Wide Delegation of Authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation) from G Suite Admin SDK docs
+* The `subject` argument of `credentials_service_account()` is available to
+  to specify which user to impersonate, e.g. `subject = "user@example.com"`.
+  This argument first appeared in gargle 0.5.0, so it may not necessarily be
+  exposed yet in user-facing auth functions like `drive_auth()`. If you
+  need `subject` in a client package, that is a reasonable feature request.
+
+If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
 
 ## Rig a service account token as Application Default Credentials
 
