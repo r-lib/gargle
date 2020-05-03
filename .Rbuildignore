@@ -5,10 +5,8 @@
 ^internal$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^\.httr-oauth$
 ^scratch\.R$
-^appveyor\.yml$
 ^codecov\.yml$
 ^.*\.key$
 ^LICENSE\.md$

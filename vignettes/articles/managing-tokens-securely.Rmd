@@ -19,7 +19,7 @@ Testing presents special challenges for packages that wrap an API. Here we tackl
 This article documents the token management approach taken in gargle. We wanted it to be relatively easy to have a secret, such as an auth token, that we can:
 
   * Use locally
-  * Use with continuous integration (CI) services, such as Travis-CI
+  * Use with continuous integration (CI) services, such as GitHub Actions
   * Use with [R-hub](https://docs.r-hub.io)
 
 all while keeping the secret secure.
@@ -96,6 +96,21 @@ Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause o
 
 ### Provide environment variable to other services
 
+#### GitHub Actions:
+
+Define the environment variable as an encrypted secret in your repo:
+
+<https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets>
+
+Use the secrets context to expose a secret as an environment variable in your workflows.     That will look like like so, in some appropriate place in your workflow file:
+
+```
+env:
+  PACKAGE_PASSWORD: ${{ secrets.PACKAGE_PASSWORD }}
+```
+
+Remember that the secret, and therefore the associated environment variable, is not available when workflows are triggered via an external pull request. This is another reason to carry on gracefully when token decryption is not possible (see below).
+
 #### Travis-CI
 
 Define the environment variable in your repo settings via the browser UI:
@@ -105,6 +120,17 @@ Define the environment variable in your repo settings via the browser UI:
 Alternatively, you can use the Travis command line interface to configure the environment variable or even define an encrypted environment variable in `.travis.yml`.
 
 Regardless of how you define it, remember that private environment variables are not available to external pull requests, which is another reason to carry on gracefully when token decryption is not possible (see below).
+
+You may also need something like this in `.travis.yml` so that the sodium R package can be installed:
+    
+``` yaml
+addons:
+  apt:
+    sources:
+    - sourceline: 'ppa:chris-lea/libsodium'
+    packages:
+    - libsodium-dev
+```
 
 #### AppVeyor
 
@@ -156,38 +182,56 @@ This writes an encrypted version of `gargle-testing.json` to `inst/secret/gargle
 
 Now you need to rig your tests or their setup around this encrypted token. You need to plan for two scenarios:
 
-  * Decryption is going to work. This is where you actually get to test package functionality against the target API. Put this in `.travis.yml` in order to make sodium available:
-    
-    ``` yaml
-    addons:
-      apt:
-        sources:
-        - sourceline: 'ppa:chris-lea/libsodium'
-        packages:
-        - libsodium-dev
-    ```
+  * Decryption is going to work. This is where you actually get to test package functionality against the target API, with auth.
   * Decryption is not going to work. Either because the Suggested [sodium](https://cran.r-project.org/package=sodium) package is not available or (much more likely) because the environment variable that represents the key is not available.
     - This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.
-    - This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as Travis-CI or AppVeyor. 
-    - We recommend that you actively check your package under these conditions,
-      so that you discover problems before CRAN or your contributors do. Here's
-      a simplified excerpt from `.travis.yml` where the main `r: release`
-      build accesses `GARGLE_PASSWORD` implicitly as an encrypted environment
-      variable, but `R CMD check` runs for the other builds with
-      `GARGLE_PASSWORD` explicitly unset:
+    - This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as GitHub Actions, Travis-CI, or AppVeyor. 
+
+#### CI configuration
+
+We recommend that you actively check your package under the "no decryption, no token" scenario, so that you discover problems before CRAN or your contributors do. In fact, this should probably be the default situation for your CI jobs and you only supply the secret to a single, flagship job -- probably the check with the current R release and your favorite operating system.
+
+Here's the simplified build matrix from the `R CMD check` GitHub Actions workflow file used by gargle (note: we redacted a very long `rspm` URL that's irrelevant here):
+
+``` yaml
+strategy:
+  matrix:
+    config:
+      - {os: macOS-latest,   r: 'devel', gargle_auth: GARGLE_NOAUTH}
+      - {os: macOS-latest,   r: '4.0',   gargle_auth: GARGLE_PASSWORD}
+      - {os: windows-latest, r: '4.0',   gargle_auth: GARGLE_NOAUTH}
+      - {os: ubuntu-16.04,   r: '4.0',   gargle_auth: GARGLE_NOAUTH, rspm: "..."}
+      - {os: ubuntu-16.04,   r: '3.6',   gargle_auth: GARGLE_NOAUTH, rspm: "..."}
+      - {os: ubuntu-16.04,   r: '3.5',   gargle_auth: GARGLE_NOAUTH, rspm: "..."}
+      - {os: ubuntu-16.04,   r: '3.4',   gargle_auth: GARGLE_NOAUTH, rspm: "..."}
+      - {os: ubuntu-16.04,   r: '3.3',   gargle_auth: GARGLE_NOAUTH, rspm: "..."}
+
+env:
+  GARGLE_PASSWORD: ${{ secrets[matrix.config.gargle_auth] }}
+```
+
+Notice how `GARGLE_PASSWORD` will only be available when checking against the released version of R on macOS-latest.
+
+bigrquery implements the same idea with a different approach: it does not provide `BIGRQUERY_PASSWORD` to the main `R CMD check` GitHub Actions workflow at all. Instead there is a separate "live api" workflow that only has one job and that accesses the secret.
+
+The tidyverse / r-lib team is transitioning from Travis/AppVeyor to GitHub Actions. But in case it is helpful, here's a simplified excerpt from a `.travis.yml` file used by gargle in the past. The main `r: release` build accesses `GARGLE_PASSWORD` implicitly as an encrypted environment variable, but `R CMD check` runs for the other builds with `GARGLE_PASSWORD` explicitly unset:
       
-      ``` yaml
-      matrix:
-        include:
-          - r: release
-            # <stuff about code coverage, pkgdown build & deploy, etc.>
-          - r: release
-            env: GARGLE_PASSWORD=''
-          - r: devel
-            env: GARGLE_PASSWORD=''
-          - r: oldrel
-            env: GARGLE_PASSWORD=''
-      ```
+``` yaml
+matrix:
+  include:
+    - r: release
+      # <stuff about code coverage, pkgdown build & deploy, etc.>
+    - r: release
+      env: GARGLE_PASSWORD=''
+    - r: devel
+      env: GARGLE_PASSWORD=''
+    - r: oldrel
+      env: GARGLE_PASSWORD=''
+```
+
+Regardless of your CI platform, your absolute best bet for writing configuration files is to look at what other R package developers are doing in their public source repos. All of the above is static, simplified, and (probably) stale and will never reflect the current state-of-the-art.
+
+#### Testthat configuration
 
 In a wrapper package, you could determine decrypt-ability at the start of the test run. Here's representative code from googledrive's `tests/testthat/helper.R` file, but something similar can be seen in bigrquery and googlesheets4:
 
@@ -230,9 +274,9 @@ Functions useful for these conversions:
 
 bigrquery and googledrive, which both use this approach.
 
-  * [`bigrquery/tests/testthat/setup-auth.R`](https://github.com/r-dbi/bigrquery/blob/master/tests/testthat/setup-auth.R)
+  * [`bigrquery/tests/testthat/helper-auth.R`](https://github.com/r-dbi/bigrquery/blob/master/tests/testthat/helper-auth.R)
   * [`googledrive/tests/testthat/helper.R`](https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R)
-  * Setup chunk of a pkgdown article that is rendered and deployed from Travis-CI: [`googledrive/vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
+  * Setup chunk of a pkgdown article that is rendered and deployed via CI: [`googledrive/vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
 
 "Managing secrets" vignette of httr:
 
