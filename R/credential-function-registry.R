@@ -34,7 +34,7 @@ is_cred_fun <- function(f) {
     return(FALSE)
   }
   args <- names(formals(f))
-  args[1] == "scopes" && args[length(args)] == "..."
+  args[1] == "scopes" && "..." %in% args
 }
 
 #' Credential function registry

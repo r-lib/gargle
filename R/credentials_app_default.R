@@ -18,7 +18,7 @@
 #' If the above search successfully identifies a JSON file, it is parsed and
 #' ingested either as a service account token or a user OAuth2 credential.
 #'
-#' @inheritParams token_fetch
+#' @inheritParams credentials_service_account
 #'
 #' @seealso
 #'
@@ -34,7 +34,7 @@
 #' \dontrun{
 #' credentials_app_default()
 #' }
-credentials_app_default <- function(scopes = NULL, ...) {
+credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
   ui_line("trying credentials_app_default()")
   # In general, application default credentials only include the cloud-platform
   # scope.
@@ -77,7 +77,7 @@ credentials_app_default <- function(scopes = NULL, ...) {
     token
   } else {
     ui_line("ADC cred type: service_account")
-    credentials_service_account(scopes, path)
+    credentials_service_account(scopes, path = path, subject = subject)
   }
 }
 
