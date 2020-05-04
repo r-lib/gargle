@@ -17,7 +17,7 @@ work with Google APIs with multiple identities.
 \code{"~/.R/gargle/gargle-oauth"}, i.e. at the user level. In contrast, the
 default location for \code{Token2.0} is \code{./.httr-oauth}, i.e. in current working
 directory. \code{Gargle2.0} behaviour makes it easier to reuse tokens across
-projects and makes it less likely that tokens are accidentally synched to a
+projects and makes it less likely that tokens are accidentally synced to a
 remote location like GitHub or DropBox.
 \item Each \code{Gargle2.0} token is cached in its own file. The token cache is a
 directory of such files. In contrast, \code{Token2.0} tokens are cached as
