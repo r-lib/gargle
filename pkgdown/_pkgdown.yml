@@ -18,7 +18,7 @@ navbar:
       text: News
       menu:
       - text: "Blog posts"
-      - text: "gargle’s debut on CRAN"
+      - text: "gargle's debut on CRAN"
         href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
       - text: "------------------"
       - text: "Change log"

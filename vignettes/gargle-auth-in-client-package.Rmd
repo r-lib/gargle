@@ -74,7 +74,7 @@ A client package can use an internal object of class `gargle::AuthClass` to hold
 )
 ```
 
-The Oauth `app` and `api_key` are configurable by the user and, when `NULL`, downstream functions can fall back to internal credentials. The `cred` field is populated by the first call to `drive_auth()` (direct or indirectly via `drive_token()`).
+The OAuth `app` and `api_key` are configurable by the user and, when `NULL`, downstream functions can fall back to internal credentials. The `cred` field is populated by the first call to `drive_auth()` (direct or indirectly via `drive_token()`).
 
 ### OAuth app
 

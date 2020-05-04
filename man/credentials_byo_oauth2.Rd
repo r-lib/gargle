@@ -44,7 +44,7 @@ There is no point providing \code{scopes}. They are ignored because the \code{sc
 associated with the token have already been baked in to the token itself and
 gargle does not support incremental authorization. The main point of
 \code{credentials_byo_oauth2()} is to allow \code{token_fetch()} (and packages that
-wrap it) to accomodate a "bring your own token" workflow.
+wrap it) to accommodate a "bring your own token" workflow.
 
 This also makes it possible to obtain a token with one package and then
 register it for use with another package. For example, the default scope
