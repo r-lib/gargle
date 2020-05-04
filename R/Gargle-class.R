@@ -74,7 +74,7 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #' `"~/.R/gargle/gargle-oauth"`, i.e. at the user level. In contrast, the
 #' default location for `Token2.0` is `./.httr-oauth`, i.e. in current working
 #' directory. `Gargle2.0` behaviour makes it easier to reuse tokens across
-#' projects and makes it less likely that tokens are accidentally synched to a
+#' projects and makes it less likely that tokens are accidentally synced to a
 #' remote location like GitHub or DropBox.
 #' * Each `Gargle2.0` token is cached in its own file. The token cache is a
 #' directory of such files. In contrast, `Token2.0` tokens are cached as
@@ -115,7 +115,12 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is_string(package),
       is.list(params)
     )
-
+    if (identical(email, "")) {
+      abort(paste0(
+        "`email` must not be \"\" (the empty string)\n",
+        "Do you intend to consult an env var, but it's unset?"
+      ))
+    }
     if (isTRUE(email)) {
       email <- "*"
     }
