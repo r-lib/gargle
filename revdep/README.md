@@ -34,13 +34,13 @@
 
 ## All (7)
 
-|package                                |version |error |warning |note |
-|:--------------------------------------|:-------|:-----|:-------|:----|
-|[bigrquery](problems.md#bigrquery)     |1.2.0   |1     |        |     |
-|boxr                                   |0.3.5   |      |        |     |
-|gmailr                                 |1.0.0   |      |        |     |
-|googleAuthR                            |1.2.1   |      |        |     |
-|googleCloudStorageR                    |0.5.1   |      |        |     |
-|[googledrive](problems.md#googledrive) |1.0.1   |1     |        |     |
-|googlesheets4                          |0.1.1   |      |        |     |
+|package             |version |error |warning |note |
+|:-------------------|:-------|:-----|:-------|:----|
+|bigrquery           |1.2.0   |      |        |     |
+|boxr                |0.3.5   |      |        |     |
+|gmailr              |1.0.0   |      |        |     |
+|googleAuthR         |1.2.1   |      |        |     |
+|googleCloudStorageR |0.5.1   |      |        |     |
+|googledrive         |1.0.1   |      |        |     |
+|googlesheets4       |0.1.1   |      |        |     |
 
