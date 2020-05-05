@@ -1,14 +1,28 @@
 # gargle (development version)
 
-* `credentials_service_account()` and `credentials_app_default()` gain an optional `subject` argument, which can be used to pass a subject claim along to `httr::oauth_service_token()` (#131, @samterfa).
+* [Troubleshooting gargle auth](https://gargle.r-lib.org/articles/troubleshooting.html)
+  is a new vignette.
 
-* `request_make()` default to `encode = "json"`, which differs from the httr
+* All user-facing messaging routes through `rlang::inform()`, which (as of
+  rlang 0.4.2) prints to standard output in interactive sessions and to
+  standard error in non-interactive sessions (#133). Messaging remains under
+  the control of the `"gargle_quiet"` option, which defaults to `TRUE`.
+  
+* The `Gargle2.0` class gains its own `$refresh()` method, which removes a
+  token from gargle's cache when it cannot be refreshed (#79).
+  
+* `credentials_service_account()` and `credentials_app_default()` gain an
+  optional `subject` argument, which can be used to pass a subject claim along
+  to `httr::oauth_service_token()` (#131, @samterfa).
+
+* `request_make()` defaults to `encode = "json"`, which differs from the httr
   default, but aligns better with Google APIs (#124).
 
 * `field_mask()` is a utility function for constructing a
-Protocol-Buffers-style, JSON-encoded field mask from an R list.
+  Protocol-Buffers-style, JSON-encoded field mask from a named R list.
 
-* All R6 classes have better documentation now, thanks to new capabilities in roxygen2.
+* All R6 classes use the new documentation capabilities that appeared in
+  roxygen2 7.0.0.
 
 * OAuth2 flow can only be initiated when `rlang::is_interactive()` is `TRUE`. If
   a new token is needed in a non-interactive session, gargle now throws an
@@ -16,8 +30,14 @@ Protocol-Buffers-style, JSON-encoded field mask from an R list.
 
 * The application default credentials path is fixed on non-Windows platforms
   (#115, @acroz).
+  
+* `request_develop()` can accept a parameter that appears in both the path and
+  the body (#123).
 
-* `response_process()` explicitly declares the UTF-8 encoding of the content in Google API responses [tidyverse/googlesheets4#26](https://github.com/tidyverse/googlesheets4/issues/26).
+* `response_process()` explicitly declares the UTF-8 encoding of the content in
+  Google API responses [tidyverse/googlesheets4#26](https://github.com/tidyverse/googlesheets4/issues/26).
+  
+* `response_process()` is able to expose details for a wider set of errors.
 
 # gargle 0.4.0
 
