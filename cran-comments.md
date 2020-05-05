@@ -1,25 +1,14 @@
-This is a patch release, prior to submitting other packages, that will Import this package.
-
--------------------------------------------------------------------------------
-
 ## Test environments
 
-* local OS X install, R 3.6.0
-* local Windows 10 VM, R 3.6.0
-* win-builder (devel & release)
-* Windows Server 2008 R2 SP1, R-devel, 32/64 bit, r-hub
-* Windows Server 2012 R2 x64 (on appveyor), R 3.6.1 Patched
-* Ubuntu 16.04 (on travis-ci), R devel through 3.2
-* Ubuntu Linux 16.04 LTS, R-release, GCC on r-hub
-* Fedora Linux, R-devel, clang, gfortran on r-hub
-
-## R CMD check results
-
-0 errors | 0 warnings | 0 notes
+* macOS 10.15         (github actions), R devel, release
+* windows server 2019 (github actions), R        release
+* ubuntu 16.04        (github actions), R        release, oldrel, 3.5, 3.4, 3.3
+* windows server 2008 R2 (r-hub) R devel
+* win-builder R devel
 
 ## revdepcheck results
 
-We checked 5 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
+We checked 7 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
  * We saw 0 new problems
  * We failed to check 0 packages
