@@ -162,13 +162,18 @@
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><a href="https://gargle.r-lib.org/articles/troubleshooting.html">Troubleshooting gargle auth</a> is a new vignette.</p></li>
+<li><p>All user-facing messaging routes through <code><a href="https://rlang.r-lib.org/reference/abort.html">rlang::inform()</a></code>, which (as of rlang 0.4.2) prints to standard output in interactive sessions and to standard error in non-interactive sessions (<a href='https://github.com/r-lib/gargle/issues/133'>#133</a>). Messaging remains under the control of the <code>"gargle_quiet"</code> option, which defaults to <code>TRUE</code>.</p></li>
+<li><p>The <code>Gargle2.0</code> class gains its own <code>$refresh()</code> method, which removes a token from gargle’s cache when it cannot be refreshed (<a href='https://github.com/r-lib/gargle/issues/79'>#79</a>).</p></li>
 <li><p><code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code> and <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> gain an optional <code>subject</code> argument, which can be used to pass a subject claim along to <code><a href="https://httr.r-lib.org/reference/oauth_service_token.html">httr::oauth_service_token()</a></code> (<a href='https://github.com/r-lib/gargle/issues/131'>#131</a>, <a href='https://github.com/samterfa'>@samterfa</a>).</p></li>
-<li><p><code><a href="../reference/request_make.html">request_make()</a></code> default to <code>encode = "json"</code>, which differs from the httr default, but aligns better with Google APIs (<a href='https://github.com/r-lib/gargle/issues/124'>#124</a>).</p></li>
-<li><p><code><a href="../reference/field_mask.html">field_mask()</a></code> is a utility function for constructing a Protocol-Buffers-style, JSON-encoded field mask from an R list.</p></li>
-<li><p>All R6 classes have better documentation now, thanks to new capabilities in roxygen2.</p></li>
+<li><p><code><a href="../reference/request_make.html">request_make()</a></code> defaults to <code>encode = "json"</code>, which differs from the httr default, but aligns better with Google APIs (<a href='https://github.com/r-lib/gargle/issues/124'>#124</a>).</p></li>
+<li><p><code><a href="../reference/field_mask.html">field_mask()</a></code> is a utility function for constructing a Protocol-Buffers-style, JSON-encoded field mask from a named R list.</p></li>
+<li><p>All R6 classes use the new documentation capabilities that appeared in roxygen2 7.0.0.</p></li>
 <li><p>OAuth2 flow can only be initiated when <code><a href="https://rlang.r-lib.org/reference/is_interactive.html">rlang::is_interactive()</a></code> is <code>TRUE</code>. If a new token is needed in a non-interactive session, gargle now throws an error (<a href='https://github.com/r-lib/gargle/issues/113'>#113</a>).</p></li>
 <li><p>The application default credentials path is fixed on non-Windows platforms (<a href='https://github.com/r-lib/gargle/issues/115'>#115</a>, <a href='https://github.com/acroz'>@acroz</a>).</p></li>
+<li><p><code><a href="../reference/request_develop.html">request_develop()</a></code> can accept a parameter that appears in both the path and the body (<a href='https://github.com/r-lib/gargle/issues/123'>#123</a>).</p></li>
 <li><p><code><a href="../reference/response_process.html">response_process()</a></code> explicitly declares the UTF-8 encoding of the content in Google API responses <a href="https://github.com/tidyverse/googlesheets4/issues/26">tidyverse/googlesheets4<a href='https://github.com/r-lib/gargle/issues/26'>#26</a></a>.</p></li>
+<li><p><code><a href="../reference/response_process.html">response_process()</a></code> is able to expose details for a wider set of errors.</p></li>
 </ul>
 </div>
     <div id="gargle-040" class="section level1">
