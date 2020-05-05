@@ -57,6 +57,7 @@ reference:
     contents:
       - starts_with("request")
       - starts_with("response")
+      - field_mask
   - title: "Classes"
     desc: >
       Classes to represent a token or auth state and their constructors
