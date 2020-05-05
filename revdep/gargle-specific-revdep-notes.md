@@ -6,6 +6,9 @@ Two challenges:
   * Have to think carefully about whether the env vars that allow "our"
     packages (googledrive, bigrquery, googlesheets4) to decrypt their
     tokens should really be available to revdepcheck's jobs.
+  * Packages that change external state -- such as creating and deleting files
+    on Drive -- have special considerations around parallel checks. Consider
+    the potential for crosstalk.
     
 ## crancache matters
 
@@ -102,7 +105,9 @@ googledrive, bigrquery, googlesheets4, and gargle all use a common approach for 
 
 Now, I actually care more than about getting just gargle onto CRAN. I really want gargle to work with all of those client packages in real life, for real users. So once I got all the crancache issues fixed, I ran revdep checks yet again, with all the env vars available. This was largely successful except for googledrive.
 
-There was intermittent test failure for functions that create files, i.e. in tests with a lot of quick file creation and deletion. I hypothesized that the 2 different check runs (against CRAN gargle and dev gargle) were actually interfering with each other.
+## Parallel checks
+
+There was intermittent test failure for googledrive functions that create files, i.e. in tests with a lot of quick file creation and deletion. I hypothesized that the 2 different check runs (against CRAN gargle and dev gargle) were actually interfering with each other.
 
 So I made sure to queue up just googledrive then rerun revdep checks **with just 1 worker**. Usually we use 4 workers. But in this case, I don't want any checks running in parallel. And this worked.
 
