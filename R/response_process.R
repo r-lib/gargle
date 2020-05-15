@@ -203,18 +203,37 @@ reveal_details <- function(details) {
   c("Error details:", unlist(lapply(details, reveal_detail)))
 }
 
+# https://github.com/googleapis/googleapis/blob/master/google/rpc/rpc_publish.yaml
+# https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
 reveal_detail <- function(x) {
   type <- sub("^type.googleapis.com/", "", x$`@type`)
-  # I'll expand types as I gain personal experience with them
-  if (identical(type, "google.rpc.BadRequest")) {
-    return(
-      vapply(x[["fieldViolations"]], function(z) glue("  * {z$description}"), character(1))
+
+  rpc_bad_request <- function(e) {
+    bullets <- vapply(
+      e[["fieldViolations"]],
+      function(z) glue("  * {z$description}"), character(1)
     )
+    c("Field violations", bullets)
   }
-  # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
-  glue_lines(c(
-    "  * Error details of type {sq(type)} are not implemented yet.",
-    "  * Workaround: use {bt('tryCatch()')} and inspect error payload yourself.",
-    "  * Please open an issue at https://github.com/r-lib/gargle/issues, so we can fix."
-  ))
+  rpc_help <- function(e) {
+    bullets <- unlist(lapply(
+      e[["links"]],
+      function(z) {
+        c(glue("  * description: {z$description}"), glue("  * url: {z$url}"))
+      }
+    ))
+    c("Links", bullets)
+  }
+
+  switch(
+    type,
+    "google.rpc.BadRequest" = rpc_bad_request(x),
+    "google.rpc.Help"       = rpc_help(x),
+    # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
+    glue_lines(c(
+      "  * Error details of type {sq(type)} may not be fully revealed.",
+      "  * Workaround: use {bt('tryCatch()')} and inspect error payload yourself.",
+      "  * Consider opening an issue at https://github.com/r-lib/gargle/issues."
+    ))
+  )
 }
