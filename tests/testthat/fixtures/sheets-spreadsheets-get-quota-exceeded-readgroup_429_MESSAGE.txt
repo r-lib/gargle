@@ -1,0 +1,10 @@
+> response_process(resp)
+Error: Client error: (429) RESOURCE_EXHAUSTED
+  * Either out of resource quota or reaching rate limiting. The client should look for google.rpc.QuotaFailure error detail for more information.
+  * Quota exceeded for quota group 'ReadGroup' and limit 'Read requests per user per 100 seconds' of service 'sheets.googleapis.com' for consumer 'project_number:603366585132'.
+
+Error details:
+Links
+  * description: Google developer console API key
+  * url: https://console.developers.google.com/project/603366585132/apiui/credential
+

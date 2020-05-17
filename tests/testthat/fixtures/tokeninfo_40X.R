@@ -1,8 +1,7 @@
 # intent is to specify an existing, valid, but STALE token in the cache
-token <- token_fetch(
-  scope = "https://www.googleapis.com/auth/drive",
-  email = "jenny.f.bryan@gmail.com"
-)
+googledrive::drive_auth("jenny.f.bryan@gmail.com")
+token <- googledrive::drive_token()
+token <- token$auth_token
 req <- gargle::request_build(
   method = "GET",
   path = "oauth2/v3/tokeninfo",
@@ -14,14 +13,14 @@ resp <- gargle::request_make(req)
 # perhaps the token isn't actually stale?
 stopifnot(httr::status_code(resp) == 400)
 saveRDS(
-  redact_response(resp),
-  test_path("fixtures", "tokeninfo_400_stale.rds"),
+  gargle:::redact_response(resp),
+  testthat::test_path("fixtures", "tokeninfo-stale_400.rds"),
   version = 2
 )
 
-resp <- readRDS(test_path("fixtures", "tokeninfo_400_stale.rds"))
-response_process(resp)
+gargle::response_process(resp)
 
+# specify a bad path
 req <- gargle::request_build(
   method = "GET",
   path = "oauth2/v3/tokeninf", # <-- typo here
@@ -31,10 +30,9 @@ resp <- gargle::request_make(req)
 
 stopifnot(httr::status_code(resp) == 404)
 saveRDS(
-  redact_response(resp),
-  test_path("fixtures", "tokeninfo_400_bad-path.rds"),
+  gargle:::redact_response(resp),
+  testthat::test_path("fixtures", "tokeninfo-bad-path_400.rds"),
   version = 2
 )
 
-resp <- readRDS(test_path("fixtures", "tokeninfo_400_bad-path.rds"))
-response_process(resp)
+gargle::response_process(resp)

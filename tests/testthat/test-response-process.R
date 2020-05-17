@@ -1,40 +1,42 @@
-find_known_message <- function(file) {
-  glue("{fs::path_ext_remove(file)}_MESSAGE.txt")
+verify_recorded_error <- function(slug) {
+  rds_file <- test_path("fixtures", fs::path_ext_set(slug, "rds"))
+  output_file <- glue("{fs::path_ext_remove(rds_file)}_MESSAGE.txt")
+
+  resp <- readRDS(rds_file)
+  expect_error(response_process(resp), class = "gargle_error_request_failed")
+  verify_output(output_file, response_process(resp))
 }
 
-test_that("Request for non-existent resource (Drive v3, JSON content)", {
-  file <- test_path("fixtures", "drive-files-get_404.rds")
-  resp <- readRDS(file)
-  err <- expect_error(response_process(resp), class = "gargle_error_request_failed")
-  expect_known_output(print(err$message), find_known_message(file))
+test_that("Use key that's not enabled for the API (Sheets)", {
+  verify_recorded_error("sheets-spreadsheets-get-api-key-not-enabled_403")
 })
 
-test_that("Request for non-existent resource (Sheets v4, HTML content)", {
-  file <- test_path("fixtures", "sheets-spreadsheets-get_404.rds")
-  resp <- readRDS(file)
-  err <- expect_error(response_process(resp), class = "gargle_error_request_failed")
-  expect_known_output(print(err$message), find_known_message(file))
+test_that("Request with invalid argument (Sheets, bad range)", {
+  verify_recorded_error("sheets-spreadsheets-get-nonexistent-range_400")
 })
 
-test_that("Request with invalid argument (Sheets v4 error style)", {
-  file <- test_path("fixtures", "sheets-spreadsheets-get_400.rds")
-  resp <- readRDS(file)
-  err <- expect_error(response_process(resp), class = "gargle_error_request_failed")
-  expect_known_output(print(err$message), find_known_message(file))
+test_that("Request with bad field mask (Sheets)", {
+  verify_recorded_error("sheets-spreadsheets-get-bad-field-mask_400")
 })
 
-test_that("Request with invalid value (tokeninfo, JSON content)", {
-  file <- test_path("fixtures", "tokeninfo_400_stale.rds")
-  resp <- readRDS(file)
-  err <- expect_error(response_process(resp), class = "gargle_error_request_failed")
-  expect_known_output(print(err$message), find_known_message(file))
+test_that("Request for nonexistent resource (Sheets)", {
+  verify_recorded_error("sheets-spreadsheets-get-nonexistent-sheet-id_404")
+})
+
+test_that("Request for non-existent resource (Drive)", {
+  verify_recorded_error("drive-files-get-nonexistent-file-id_404")
+})
+
+test_that("Request with invalid value (tokeninfo, stale token)", {
+  verify_recorded_error("tokeninfo-stale_400")
 })
 
 test_that("Request to bad URL (tokeninfo, HTML content)", {
-  file <- test_path("fixtures", "tokeninfo_400_bad-path.rds")
-  resp <- readRDS(file)
-  err <- expect_error(response_process(resp), class = "gargle_error_request_failed")
-  expect_known_output(print(err$message), find_known_message(file))
+  verify_recorded_error("tokeninfo-bad-path_400")
+})
+
+test_that("Resource exhausted (Sheets, ReadGroup)", {
+  verify_recorded_error("sheets-spreadsheets-get-quota-exceeded-readgroup_429")
 })
 
 test_that("RPC codes can be looked up (or not)", {
