@@ -31,7 +31,7 @@ resp <- gargle::request_make(req)
 stopifnot(httr::status_code(resp) == 404)
 saveRDS(
   gargle:::redact_response(resp),
-  testthat::test_path("fixtures", "tokeninfo-bad-path_400.rds"),
+  testthat::test_path("fixtures", "tokeninfo-bad-path_404.rds"),
   version = 2
 )
 

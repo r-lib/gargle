@@ -107,8 +107,11 @@ check_for_json <- function(resp) {
 stop_request_failed <- function(message, resp) {
   abort(
     glue_collapse(message, sep = "\n"),
-    .subclass = "gargle_error_request_failed",
-    resp = redact_response(resp),
+    class = c(
+      "gargle_error_request_failed",
+      glue("http_error_{httr::status_code(resp)}")
+    ),
+    resp = redact_response(resp)
   )
 }
 
