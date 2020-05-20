@@ -8,6 +8,7 @@ Auth
 authed
 AuthState
 automagically
+backoff
 behaviour
 bigrquery
 BYOAK
@@ -22,6 +23,7 @@ cron
 crypto
 customise
 cyphr
+datetime
 dbi
 de
 De
@@ -53,6 +55,7 @@ IAM
 inlining
 io
 iteratively
+jitter
 json
 JSON
 lifecycle
@@ -61,6 +64,8 @@ novo
 oauth
 OAuth
 oob
+Opnieuw
+Opnieuw's
 ORCID
 PID
 pkgdown
