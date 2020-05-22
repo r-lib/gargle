@@ -195,12 +195,11 @@ retry_after_header <- function(resp) {
   }
 
   h <- httr::headers(resp)
-  # workaround https://github.com/r-lib/httr/issues/611
-  loc <- grep("retry-after", names(h), ignore.case = TRUE)
-  if (length(loc) > 0) {
-    as.numeric(h[[loc]])
-  } else {
+  retry_after <- resp$headers[["retry-after"]]
+  if (is.null(retry_after)) {
     NULL
+  } else {
+    as.numeric(retry_after)
   }
 }
 

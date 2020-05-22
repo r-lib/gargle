@@ -1,6 +1,10 @@
 test_that("request_retry() logic works as advertised", {
-  faux_response <- function(status_code = 200, ...) {
-    structure(list(status_code = status_code, ...), class = "response")
+  faux_response <- function(status_code = 200, h = NULL) {
+    structure(
+      list(status_code = status_code,
+           headers = if (!is.null(h)) httr::insensitive(h)),
+      class = "response"
+    )
   }
   faux_request_make <- function(responses = list(faux_response())) {
     i <- 0
@@ -33,7 +37,7 @@ test_that("request_retry() logic works as advertised", {
 
   # fail, then succeed (Retry-After header)
   r <- list(
-    faux_response(429, headers = list(`Retry-After` = 1.4)),
+    faux_response(429, h = list(`Retry-After` = 1.4)),
     faux_response()
   )
   expect_message(
@@ -98,27 +102,31 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
 })
 
 test_that("backoff() honors Retry-After header", {
-  faux_error <- function(h) {
-    structure(list(status_code = 429, headers = h), class = "response")
+  faux_429 <- function(h) {
+    structure(
+      list(status_code = 429,
+           headers = httr::insensitive(h)),
+      class = "response"
+    )
   }
 
   # play with capitalization and character vs numeric
   out <- with_mock(
     `gargle::gargle_error_message` = function(...) "oops",
-    backoff(1, faux_error(list(`Retry-After` = "1.2")))
+    backoff(1, faux_429(list(`Retry-After` = "1.2")))
   )
   expect_equal(out, 1.2)
 
   out <- with_mock(
     `gargle::gargle_error_message` = function(...) "oops",
-    backoff(1, faux_error(list(`retry-after` = 2.4)))
+    backoff(1, faux_429(list(`retry-after` = 2.4)))
   )
   expect_equal(out, 2.4)
 
   # should work even when tries_made > 1
   out <- with_mock(
     `gargle::gargle_error_message` = function(...) "oops",
-    backoff(3, faux_error(list(`reTry-aFteR` = 3.6)))
+    backoff(3, faux_429(list(`reTry-aFteR` = 3.6)))
   )
   expect_equal(out, 3.6)
 })
