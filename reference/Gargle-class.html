@@ -179,7 +179,7 @@ components of a list, which is typically serialized to ./.httr-oauth.
     <div class="ref-description">
     <p><code>Gargle2.0</code> is based on the <code><a href='https://httr.r-lib.org/reference/Token-class.html'>Token2.0</a></code> class provided in
 httr. The preferred way to create a <code>Gargle2.0</code> token is through the
-constructor function <code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code>. Key differences with <code>Token2.0</code>:</p><ul>
+constructor function <code><a href='https://gargle.r-lib.org/reference/gargle2.0_token.html'>gargle2.0_token()</a></code>. Key differences with <code>Token2.0</code>:</p><ul>
 <li><p>The key for a cached <code>Token2.0</code> comes from hashing the endpoint, app, and
 scopes. For the <code>Gargle2.0</code> subclass, the identifier or key is expanded to
 include the email address associated with the token. This makes it easier to
@@ -237,18 +237,18 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 <hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
 <p>Create a Gargle2.0 token</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>new</span>(
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_email</a></span>(),
-  <span class='kw'>app</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span>(),
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"gargle"</span>,
-  <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>cache_path</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_cache</a></span>()
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>new</span>(
+  email = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span>(),
+  app = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_app.html'>gargle_app</a></span>(),
+  package = <span class='st'>"gargle"</span>,
+  credentials = <span class='kw'>NULL</span>,
+  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  cache_path = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span>()
 )</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
-<dt><code>email</code></dt><dd><p>Optional email address. See <code><a href='gargle2.0_token.html'>gargle2.0_token()</a></code> for full details.</p></dd>
+<dt><code>email</code></dt><dd><p>Optional email address. See <code><a href='https://gargle.r-lib.org/reference/gargle2.0_token.html'>gargle2.0_token()</a></code> for full details.</p></dd>
 
 <dt><code>app</code></dt><dd><p>An OAuth consumer application.</p></dd>
 
@@ -262,7 +262,7 @@ actively use in gargle: <code>scope</code>, <code>use_oob</code>. Most we do not
 <code>client_credentials</code>.</p></dd>
 
 <dt><code>cache_path</code></dt><dd><p>Specifies the OAuth token cache. Read more in
-<code><a href='gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></dd>
+<code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></dd>
 
 </dl><p></div></p>
 <h3>Returns</h3>
@@ -270,7 +270,7 @@ actively use in gargle: <code>scope</code>, <code>use_oob</code>. Most we do not
 <p><hr>
 <a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
 <p>Print a Gargle2.0 token</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>...</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -280,32 +280,32 @@ actively use in gargle: <code>scope</code>, <code>use_oob</code>. Most we do not
 <p><hr>
 <a id="method-hash"></a></p><h3>Method <code>hash()</code></h3>
 <p>Generate the email-augmented hash of a Gargle2.0 token</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>hash</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>hash</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-cache"></a></p><h3>Method <code>cache()</code></h3>
 <p>Put a Gargle2.0 token into the cache</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>cache</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>cache</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-load_from_cache"></a></p><h3>Method <code>load_from_cache()</code></h3>
 <p>(Attempt to) get a Gargle2.0 token from the cache</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>load_from_cache</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>load_from_cache</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-refresh"></a></p><h3>Method <code>refresh()</code></h3>
 <p>(Attempt to) refresh a Gargle2.0 token</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>refresh</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>refresh</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-init_credentials"></a></p><h3>Method <code>init_credentials()</code></h3>
 <p>Initiate a new Gargle2.0 token</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>init_credentials</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>init_credentials</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>Gargle2.0</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>Gargle2.0</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>

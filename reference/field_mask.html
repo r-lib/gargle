@@ -171,19 +171,19 @@ constructing such a mask." />
 
     <div class="ref-description">
     <p>Many Google API requests take a field mask, via a <code>fields</code> parameter, in the
-URL and/or in the body. <code>field_mask()</code> generates such a field mask from an R
+URL and/or in the body. <code><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask()</a></code> generates such a field mask from an R
 list, typically a list that is destined to be part of the body of a request
-that writes or updates a resource. <code>field_mask()</code> is designed to help in the
+that writes or updates a resource. <code><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask()</a></code> is designed to help in the
 common case where the attributes you wish to modify are exactly the ones
 represented in the object. It is possible to use a "larger" field mask, that
 is either less specific or that explicitly includes other attributes, in
 which case the attributes covered by the mask but absent from the object are
-reset to default values. This is not exactly the use case <code>field_mask()</code> is
+reset to default values. This is not exactly the use case <code><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask()</a></code> is
 designed for, but its output could still be useful as a first step in
 constructing such a mask.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>field_mask</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask</a></span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,21 +203,21 @@ levels, i.e. recursively.</p></td>
     <div class='dont-index'><p>The documentation for the <a href='https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks'>JSON encoding of a Protocol Buffers FieldMask</a>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>sheetId</span> <span class='kw'>=</span> <span class='fl'>1234</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>"my_favorite_worksheet"</span>)
-<span class='fu'>field_mask</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; sheetId,title</div><div class='input'>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>userEnteredFormat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>backgroundColor</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-      <span class='kw'>red</span> <span class='kw'>=</span> <span class='fl'>159</span> / <span class='fl'>255</span>, <span class='kw'>green</span> <span class='kw'>=</span> <span class='fl'>183</span> / <span class='fl'>255</span>, <span class='kw'>blue</span> <span class='kw'>=</span> <span class='fl'>196</span> / <span class='fl'>255</span>
+    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(sheetId = <span class='fl'>1234</span>, title = <span class='st'>"my_favorite_worksheet"</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; sheetId,title</div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  userEnteredFormat = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    backgroundColor = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+      red = <span class='fl'>159</span> <span class='op'>/</span> <span class='fl'>255</span>, green = <span class='fl'>183</span> <span class='op'>/</span> <span class='fl'>255</span>, blue = <span class='fl'>196</span> <span class='op'>/</span> <span class='fl'>255</span>
     )
   )
 )
-<span class='fu'>field_mask</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; userEnteredFormat.backgroundColor(red,green,blue)</div><div class='input'>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-  <span class='kw'>sheetId</span> <span class='kw'>=</span> <span class='fl'>1234</span>,
-  <span class='kw'>gridProperties</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>rowCount</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>columnCount</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; userEnteredFormat.backgroundColor(red,green,blue)</div><div class='input'>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+  sheetId = <span class='fl'>1234</span>,
+  gridProperties = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(rowCount = <span class='fl'>5</span>, columnCount = <span class='fl'>3</span>)
 )
-<span class='fu'>field_mask</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; sheetId,gridProperties(rowCount,columnCount)</div></pre>
+<span class='fu'><a href='https://gargle.r-lib.org/reference/field_mask.html'>field_mask</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; sheetId,gridProperties(rowCount,columnCount)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

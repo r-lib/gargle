@@ -162,18 +162,18 @@ consulted by token_fetch()." />
 
     <div class="ref-description">
     <p>Functions to query or manipulate the registry of credential functions
-consulted by <code><a href='token_fetch.html'>token_fetch()</a></code>.</p>
+consulted by <code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cred_funs_list</span>()
+    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_list</a></span>()
 
-<span class='fu'>cred_funs_add</span>(<span class='no'>...</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_add</a></span>(<span class='kw'>...</span>)
 
-<span class='fu'>cred_funs_set</span>(<span class='no'>ls</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_set</a></span>(<span class='kw'>ls</span>)
 
-<span class='fu'>cred_funs_clear</span>()
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_clear</a></span>()
 
-<span class='fu'>cred_funs_set_default</span>()</pre>
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_set_default</a></span>()</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -207,20 +207,20 @@ Function(s) are added to the <em>front</em> of the list. So:</p><pre>* "First re
 </ul>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='token_fetch.html'>token_fetch()</a></code>, which is where the registry is actually used.</p></div>
+    <div class='dont-index'><p><code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch()</a></code>, which is where the registry is actually used.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'>cred_funs_list</span>())</div><div class='output co'>#&gt; [1] "credentials_service_account" "credentials_app_default"    
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_list</a></span>())</div><div class='output co'>#&gt; [1] "credentials_service_account" "credentials_app_default"    
 #&gt; [3] "credentials_gce"             "credentials_byo_oauth2"     
 #&gt; [5] "credentials_user_oauth2"    </div><div class='input'>
-<span class='no'>creds_one</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>scopes</span>, <span class='no'>...</span>) {}
-<span class='fu'>cred_funs_add</span>(<span class='no'>creds_one</span>)
-<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>)
-<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>, <span class='kw'>two</span> <span class='kw'>=</span> <span class='no'>creds_one</span>)
-<span class='fu'>cred_funs_add</span>(<span class='kw'>one</span> <span class='kw'>=</span> <span class='no'>creds_one</span>, <span class='no'>creds_one</span>)
+<span class='kw'>creds_one</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>scopes</span>, <span class='kw'>...</span>) {}
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_add</a></span>(<span class='kw'>creds_one</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_add</a></span>(one = <span class='kw'>creds_one</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_add</a></span>(one = <span class='kw'>creds_one</span>, two = <span class='kw'>creds_one</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_add</a></span>(one = <span class='kw'>creds_one</span>, <span class='kw'>creds_one</span>)
 
 <span class='co'># undo all of the above and return to default</span>
-<span class='fu'>cred_funs_set_default</span>()</div></pre>
+<span class='fu'><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_set_default</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

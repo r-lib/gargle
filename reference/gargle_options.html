@@ -179,26 +179,26 @@ these lines:options(
 <p>If the built-in defaults don't suit you, set one or more of these options.
 Typically, this is done in the <code>.Rprofile</code> startup file, with code along
 these lines:</p><pre><span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span>(
-  <span class='kw'>gargle_oauth_email</span> <span class='kw'>=</span> <span class='st'>"jane@example.com"</span>,
-  <span class='kw'>gargle_oauth_cache</span> <span class='kw'>=</span> <span class='st'>"/path/to/folder/that/does/not/sync/to/cloud"</span>
+  gargle_oauth_email = <span class='st'>"jane@example.com"</span>,
+  gargle_oauth_cache = <span class='st'>"/path/to/folder/that/does/not/sync/to/cloud"</span>
 )</pre>
 
     </div>
 
-    <pre class="usage"><span class='fu'>gargle_oauth_email</span>()
+    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span>()
 
-<span class='fu'>gargle_oob_default</span>()
+<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default</a></span>()
 
-<span class='fu'>gargle_oauth_cache</span>()
+<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span>()
 
-<span class='fu'>gargle_quiet</span>()</pre>
+<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_quiet</a></span>()</pre>
 
 
     <h2 class="hasAnchor" id="gargle-oauth-email"><a class="anchor" href="#gargle-oauth-email"></a><code>gargle_oauth_email</code></h2>
 
     
 
-<p><code>gargle_oauth_email()</code> returns the option named "gargle_oauth_email", which
+<p><code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email()</a></code> returns the option named "gargle_oauth_email", which
 is undefined by default. If set, this option should be one of:</p><ul>
 <li><p>An actual email address corresponding to your preferred Google identity.
 Example:<code>janedoe@gmail.com</code>.</p></li>
@@ -211,7 +211,7 @@ suitable token is found in the cache.</p></li>
 
     
 
-<p><code>gargle_oob_default()</code> returns the option named "gargle_oob_default", falls
+<p><code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default()</a></code> returns the option named "gargle_oob_default", falls
 back to the option named "httr_oob_default", and eventually defaults to
 <code>FALSE</code>. This controls whether to prefer "out of band" authentication. This
 is ultimately passed to <code><a href='https://httr.r-lib.org/reference/init_oauth2.0.html'>httr::init_oauth2.0()</a></code> as <code>use_oob</code>. If <code>FALSE</code> (and
@@ -222,7 +222,7 @@ Otherwise, user gets a URL and prompt for a validation code.</p>
 
     
 
-<p><code>gargle_oauth_cache()</code> returns the option named "gargle_oauth_cache",
+<p><code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache()</a></code> returns the option named "gargle_oauth_cache",
 defaulting to <code>NA</code>. If defined, the option must be set to a logical value or
 a string. <code>TRUE</code> means to cache using the default user-level cache file,
 <code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means don't cache, and <code>NA</code> means to
@@ -231,12 +231,12 @@ guess using some sensible heuristics.</p>
 
     
 
-<p><code>gargle_quiet()</code> returns the option named "gargle_quiet", which defaults to
+<p><code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_quiet()</a></code> returns the option named "gargle_quiet", which defaults to
 <code>TRUE</code>. Set this option to <code>FALSE</code> to see more info about gargle's
 activities, which can be helpful for troubleshooting.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>gargle_oauth_email</span>()</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'>gargle_oob_default</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_oauth_cache</span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>gargle_quiet</span>()</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span>()</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span>()</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_quiet</a></span>()</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

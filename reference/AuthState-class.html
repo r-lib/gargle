@@ -209,12 +209,12 @@ API key, respectively.</p></li>
 has been fetched. It is generally assumed to be an instance of
 <code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::TokenServiceAccount</a></code> or
 <code><a href='https://httr.r-lib.org/reference/Token-class.html'>httr::Token2.0</a></code> (or a subclass thereof), probably
-obtained via <code><a href='token_fetch.html'>token_fetch()</a></code> (or one of its constituent credential
+obtained via <code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch()</a></code> (or one of its constituent credential
 fetching functions).</p></li>
 </ul>
 
 <p>An <code>AuthState</code> should be created through the constructor function
-<code><a href='init_AuthState.html'>init_AuthState()</a></code>, which has more details on the arguments.</p>
+<code><a href='https://gargle.r-lib.org/reference/init_AuthState.html'>init_AuthState()</a></code>, which has more details on the arguments.</p>
     </div>
 
 
@@ -253,12 +253,12 @@ fetching functions).</p></li>
 <p><hr>
 <a id="method-new"></a></p><h3>Method <code>new()</code></h3>
 <p>Create a new AuthState</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>new</span>(
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
-  <span class='kw'>app</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>api_key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>auth_active</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cred</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>new</span>(
+  package = <span class='fl'>NA_character_</span>,
+  app = <span class='kw'>NULL</span>,
+  api_key = <span class='kw'>NULL</span>,
+  auth_active = <span class='fl'>TRUE</span>,
+  cred = <span class='kw'>NULL</span>
 )</pre><p></div></p>
 
 <h3>Arguments</h3>
@@ -275,12 +275,12 @@ fetching functions).</p></li>
 
 </dl><p></div></p>
 <h3>Details</h3>
-<p>For more details on the parameters, see <code><a href='init_AuthState.html'>init_AuthState()</a></code></p>
+<p>For more details on the parameters, see <code><a href='https://gargle.r-lib.org/reference/init_AuthState.html'>init_AuthState()</a></code></p>
 
 <p><hr>
 <a id="method-print"></a></p><h3>Method <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code></h3>
 <p>Print an AuthState</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>...</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='kw'>...</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -290,7 +290,7 @@ fetching functions).</p></li>
 <p><hr>
 <a id="method-set_app"></a></p><h3>Method <code>set_app()</code></h3>
 <p>Set the OAuth app</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>set_app</span>(<span class='no'>app</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>set_app</span>(<span class='kw'>app</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -300,7 +300,7 @@ fetching functions).</p></li>
 <p><hr>
 <a id="method-set_api_key"></a></p><h3>Method <code>set_api_key()</code></h3>
 <p>Set the API key</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>set_api_key</span>(<span class='no'>value</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>set_api_key</span>(<span class='kw'>value</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -310,7 +310,7 @@ fetching functions).</p></li>
 <p><hr>
 <a id="method-set_auth_active"></a></p><h3>Method <code>set_auth_active()</code></h3>
 <p>Set whether auth is (in)active</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>set_auth_active</span>(<span class='no'>value</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>set_auth_active</span>(<span class='kw'>value</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -321,7 +321,7 @@ user credentials.</p></dd>
 <p><hr>
 <a id="method-set_cred"></a></p><h3>Method <code>set_cred()</code></h3>
 <p>Set credentials</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>set_cred</span>(<span class='no'>cred</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>set_cred</span>(<span class='kw'>cred</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>
@@ -331,22 +331,22 @@ user credentials.</p></dd>
 <p><hr>
 <a id="method-clear_cred"></a></p><h3>Method <code>clear_cred()</code></h3>
 <p>Clear credentials</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>clear_cred</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>clear_cred</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-get_cred"></a></p><h3>Method <code>get_cred()</code></h3>
 <p>Get credentials</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>get_cred</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>get_cred</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-has_cred"></a></p><h3>Method <code>has_cred()</code></h3>
 <p>Report if we have credentials</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>has_cred</span>()</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>has_cred</span>()</pre><p></div></p>
 
 <p><hr>
 <a id="method-clone"></a></p><h3>Method <code>clone()</code></h3>
 <p>The objects of this class are cloneable with this method.</p><h3>Usage</h3>
-<p><div class="r"></p><pre><span class='no'>AuthState</span>$<span class='fu'>clone</span>(<span class='kw'>deep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre><p></div></p>
+<p><div class="r"></p><pre><span class='kw'>AuthState</span><span class='op'>$</span><span class='fu'>clone</span>(deep = <span class='fl'>FALSE</span>)</pre><p></div></p>
 
 <h3>Arguments</h3>
 <p><div class="arguments"></p><dl>

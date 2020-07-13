@@ -160,20 +160,20 @@
     </div>
 
     <div class="ref-description">
-    <p>Constructor function for objects of class <a href='Gargle-class.html'>Gargle2.0</a>.</p>
+    <p>Constructor function for objects of class <a href='https://gargle.r-lib.org/reference/Gargle-class.html'>Gargle2.0</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gargle2.0_token</span>(
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_email</a></span>(),
-  <span class='kw'>app</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span>(),
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"gargle"</span>,
-  <span class='kw'>scope</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>user_params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_oob</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oob_default</a></span>(),
-  <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cache</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>credentials</span>)) <span class='fu'><a href='gargle_options.html'>gargle_oauth_cache</a></span>() <span class='kw'>else</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
+    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/gargle2.0_token.html'>gargle2.0_token</a></span>(
+  email = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_email</a></span>(),
+  app = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_app.html'>gargle_app</a></span>(),
+  package = <span class='st'>"gargle"</span>,
+  scope = <span class='kw'>NULL</span>,
+  user_params = <span class='kw'>NULL</span>,
+  type = <span class='kw'>NULL</span>,
+  use_oob = <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oob_default</a></span>(),
+  credentials = <span class='kw'>NULL</span>,
+  cache = <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='kw'>credentials</span>)) <span class='fu'><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle_oauth_cache</a></span>() <span class='co'>else</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -190,7 +190,7 @@ always determined from the token itself, never from this argument. Use <code>NA<
 or <code>FALSE</code> to match nothing and force the OAuth dance in the browser. Use
 <code>TRUE</code> to allow email auto-discovery, if exactly one matching token is
 found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by <code><a href='gargle_options.html'>gargle::gargle_oauth_email()</a></code>.</p></td>
+retrieved by <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oauth_email()</a></code>.</p></td>
     </tr>
     <tr>
       <th>app</th>
@@ -218,7 +218,7 @@ access token.</p></td>
       <th>use_oob</th>
       <td><p>Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
-<code><a href='gargle_options.html'>gargle::gargle_oob_default()</a></code>.</p></td>
+<code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oob_default()</a></code>.</p></td>
     </tr>
     <tr>
       <th>credentials</th>
@@ -228,7 +228,7 @@ token generation.</p></td>
     <tr>
       <th>cache</th>
       <td><p>Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via <code><a href='gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></td>
+"gargle_oauth_cache", retrieved via <code><a href='https://gargle.r-lib.org/reference/gargle_options.html'>gargle::gargle_oauth_cache()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -239,11 +239,11 @@ Not used.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <a href='Gargle-class.html'>Gargle2.0</a>, either new or loaded from the cache.</p>
+    <p>An object of class <a href='https://gargle.r-lib.org/reference/Gargle-class.html'>Gargle2.0</a>, either new or loaded from the cache.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>gargle2.0_token</span>()
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://gargle.r-lib.org/reference/gargle2.0_token.html'>gargle2.0_token</a></span>()
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

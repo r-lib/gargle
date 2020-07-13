@@ -106,7 +106,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="troubleshooting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Troubleshooting gargle auth</h1>
@@ -119,24 +119,30 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gargle</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://gargle.r-lib.org">gargle</a></span>)
+</pre></div>
 <div id="gargle_quiet" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gargle_quiet" class="anchor"></a><code>gargle_quiet</code>
 </h2>
 <p>There is a package-wide option that controls gargle’s verbosity: <code>gargle_quiet</code>. The function <code><a href="../reference/gargle_options.html">gargle_quiet()</a></code> reveals the current value:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span>()
-<span class="co">#&gt; [1] TRUE</span></pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span>()
+<span class="co">#&gt; [1] TRUE</span>
+</pre></div>
 <p>It defaults to <code>TRUE</code>, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.</p>
 <p>If you need to see all those gory details, toggle the <code>gargle_quiet</code> option to <code>FALSE</code> and you’ll get much more output as gargle works through various auth approaches.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># save current value</span>
-<span class="no">op</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">gargle_quiet</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="co"># save current value</span>
+<span class="kw">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(gargle_quiet = <span class="fl">FALSE</span>)
 
 <span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span>()
 <span class="co">#&gt; [1] FALSE</span>
 
 <span class="co"># restore original value</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="no">op</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="kw">op</span>)
+</pre></div>
 </div>
 <div id="gargle_oauth_sitrep" class="section level2">
 <h2 class="hasAnchor">
@@ -145,7 +151,8 @@
 <p><code><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> provides an OAuth2 “situation report”.</p>
 <p><code><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> is only relevant to OAuth2 user tokens. If you are using (or struggling to use) a service account token, Application Default Credentials, or credentials from the GCE metadata service, <code><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> isn’t going to help you figure out what’s going on.</p>
 <p>Here is indicative output of <code><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code>, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span>()
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span>()
 <span class="co">#' gargle OAuth cache path:</span>
 <span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span>
 <span class="co">#' </span>
@@ -166,7 +173,8 @@
 <span class="co">#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...</span>
 <span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span>
 <span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span>
-<span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></pre></body></html></div>
+<span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span>
+</pre></div>
 <p>It is relatively harmless to delete the folder serving as the OAuth cache. Or, if you have reason to believe one specific cached token is causing you pain, you could delete a specific token (an <code>.rds</code> file) from the cache. OAuth user tokens are meant to be perishable and replaceable.</p>
 <p>If you choose to delete your cache (or a specific token), here is the fallout you can expect:</p>
 <ul>

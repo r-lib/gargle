@@ -165,11 +165,11 @@ token or a user." />
 token or a user.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>token_userinfo</span>(<span class='no'>token</span>)
+    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/token-info.html'>token_userinfo</a></span>(<span class='kw'>token</span>)
 
-<span class='fu'>token_email</span>(<span class='no'>token</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/token-info.html'>token_email</a></span>(<span class='kw'>token</span>)
 
-<span class='fu'>token_tokeninfo</span>(<span class='no'>token</span>)</pre>
+<span class='fu'><a href='https://gargle.r-lib.org/reference/token-info.html'>token_tokeninfo</a></span>(<span class='kw'>token</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,15 +186,15 @@ httr's class <code>request</code>, i.e. a token that has been prepared with
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list containing:</p><ul>
-<li><p><code>token_userinfo()</code>: user info</p></li>
-<li><p><code>token_email()</code>: user's email (obtained from a call to <code>token_userinfo()</code>)</p></li>
-<li><p><code>token_tokeninfo()</code>: token info</p></li>
+<li><p><code><a href='https://gargle.r-lib.org/reference/token-info.html'>token_userinfo()</a></code>: user info</p></li>
+<li><p><code><a href='https://gargle.r-lib.org/reference/token-info.html'>token_email()</a></code>: user's email (obtained from a call to <code><a href='https://gargle.r-lib.org/reference/token-info.html'>token_userinfo()</a></code>)</p></li>
+<li><p><code><a href='https://gargle.r-lib.org/reference/token-info.html'>token_tokeninfo()</a></code>: token info</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>It's hard to say exactly what info will be returned by the "userinfo"
-endpoint targetted by <code>token_userinfo()</code>. It depends on the token's scopes.
+endpoint targetted by <code><a href='https://gargle.r-lib.org/reference/token-info.html'>token_userinfo()</a></code>. It depends on the token's scopes.
 OAuth2 tokens obtained via the gargle package include the
 <code>https://www.googleapis.com/auth/userinfo.email</code> scope, which guarantees we
 can learn the email associated with the token. If the token has the
@@ -203,20 +203,20 @@ more information available. But for a token with unknown or arbitrary scopes,
 we can't make any promises about what information will be returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># with service account token</span>
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span>(
-  <span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
-  <span class='kw'>path</span>   <span class='kw'>=</span> <span class='st'>"path/to/service/account/token/blah-blah-blah.json"</span>
+<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch</a></span>(
+  scopes = <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
+  path   = <span class='st'>"path/to/service/account/token/blah-blah-blah.json"</span>
 )
 <span class='co'># or with an OAuth token</span>
-<span class='no'>t</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span>(
-  <span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
-  <span class='kw'>email</span>  <span class='kw'>=</span> <span class='st'>"janedoe@example.com"</span>
+<span class='kw'>t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch</a></span>(
+  scopes = <span class='st'>"https://www.googleapis.com/auth/drive"</span>,
+  email  = <span class='st'>"janedoe@example.com"</span>
 )
-<span class='fu'>token_userinfo</span>(<span class='no'>t</span>)
-<span class='fu'>token_email</span>(<span class='no'>t</span>)
-<span class='fu'>tokens_tokeninfo</span>(<span class='no'>t</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/token-info.html'>token_userinfo</a></span>(<span class='kw'>t</span>)
+<span class='fu'><a href='https://gargle.r-lib.org/reference/token-info.html'>token_email</a></span>(<span class='kw'>t</span>)
+<span class='fu'>tokens_tokeninfo</span>(<span class='kw'>t</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

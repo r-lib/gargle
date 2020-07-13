@@ -1,16 +1,8 @@
 pandoc: 2.7.3
 pkgdown: 1.5.1.9000
-pkgdown_sha: af8262bd26e7029886e0f260470061353ad08d94
-articles:
-  managing-tokens-securely: articles/managing-tokens-securely.html
-  auth-from-web: auth-from-web.html
-  gargle-auth-in-client-package: gargle-auth-in-client-package.html
-  get-api-credentials: get-api-credentials.html
-  how-gargle-gets-tokens: how-gargle-gets-tokens.html
-  non-interactive-auth: non-interactive-auth.html
-  request-helper-functions: request-helper-functions.html
-  troubleshooting: troubleshooting.html
-last_built: 2020-05-28T15:30Z
+pkgdown_sha: caf7cc74e008e8d0d6e53eeda93cd3cad3545bf2
+articles: []
+last_built: 2020-07-13T16:41Z
 urls:
   reference: https://gargle.r-lib.org/reference
   article: https://gargle.r-lib.org/articles
