@@ -27,7 +27,7 @@ always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
 found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by \code{\link[gargle:gargle_oauth_email]{gargle::gargle_oauth_email()}}.}
+retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
@@ -43,13 +43,13 @@ access token.}
 
 \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
-\code{\link[gargle:gargle_oob_default]{gargle::gargle_oob_default()}}.}
+\code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
 
 \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle::gargle_oauth_cache()}}.}
+"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 
 \item{...}{Absorbs arguments intended for use by other credential functions.
 Not used.}

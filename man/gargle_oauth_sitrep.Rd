@@ -8,7 +8,7 @@ gargle_oauth_sitrep(cache = NULL)
 }
 \arguments{
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[gargle:gargle_oauth_cache]{gargle::gargle_oauth_cache()}}.}
+"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 }
 \value{
 A data frame with one row per cached token, invisibly.

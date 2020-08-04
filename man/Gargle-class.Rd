@@ -93,7 +93,7 @@ actively use in gargle: \code{scope}, \code{use_oob}. Most we do not:
 \code{client_credentials}.}
 
 \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
-\code{\link[gargle:gargle_oauth_cache]{gargle::gargle_oauth_cache()}}.}
+\code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 }
 \if{html}{\out{</div>}}
 }
