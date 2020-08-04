@@ -167,20 +167,20 @@ high-level wrappers for users. The vignette <a href='https://gargle.r-lib.org/ar
 describes how one might use these functions inside a wrapper package.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop</a></span>(
-  <span class='kw'>endpoint</span>,
-  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  base_url = <span class='st'>"https://www.googleapis.com"</span>
+    <pre class="usage"><span class='fu'>request_develop</span>(
+  <span class='no'>endpoint</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com"</span>
 )
 
-<span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build</a></span>(
-  method = <span class='st'>"GET"</span>,
-  path = <span class='st'>""</span>,
-  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  body = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  token = <span class='kw'>NULL</span>,
-  key = <span class='kw'>NULL</span>,
-  base_url = <span class='st'>"https://www.googleapis.com"</span>
+<span class='fu'>request_build</span>(
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>body</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>token</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com"</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -196,7 +196,7 @@ for the target API.</p></td>
     <tr>
       <th>params</th>
       <td><p>Named list. Values destined for URL substitution, the query,
-or, for <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop()</a></code> only, the body. For <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code>, body
+or, for <code>request_develop()</code> only, the body. For <code>request_build()</code>, body
 parameters must be passed via the <code>body</code> argument.</p></td>
     </tr>
     <tr>
@@ -213,7 +213,7 @@ parameters must be passed via the <code>body</code> argument.</p></td>
 <code>base_url</code>. Examples: <code>drive/v3/about</code> or <code>drive/v3/files/{fileId}</code>. The
 <code>path</code> can be a template, i.e. it can include variables inside curly
 brackets, such as <code>{fileId}</code> in the example. Such variables are substituted
-by <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code>, using named parameters found in <code>params</code>.</p></td>
+by <code>request_build()</code>, using named parameters found in <code>params</code>.</p></td>
     </tr>
     <tr>
       <th>body</th>
@@ -235,13 +235,13 @@ formal argument <code>key</code> will clobber it, if non-<code>NULL</code>.</p><
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop()</a></code>: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> with components <code>method</code>, <code>path</code>, <code>params</code>,
+    <p><code>request_develop()</code>: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> with components <code>method</code>, <code>path</code>, <code>params</code>,
 <code>body</code>, and <code>base_url</code>.</p>
-<p><code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code>: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> with components <code>method</code>, <code>path</code>
+<p><code>request_build()</code>: <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> with components <code>method</code>, <code>path</code>
 (post-substitution), <code>query</code> (the input <code>params</code> not used in URL
 substitution), <code>body</code>, <code>token</code>, <code>url</code> (the full URL, post-substitution,
 including the query).</p>
-    <h2 class="hasAnchor" id="request-develop-"><a class="anchor" href="#request-develop-"></a><code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop()</a></code></h2>
+    <h2 class="hasAnchor" id="request-develop-"><a class="anchor" href="#request-develop-"></a><code>request_develop()</code></h2>
 
     
 
@@ -257,21 +257,21 @@ parameters. In the return value, body parameters are separated from
 those destined for path substitution or the query.</p></li>
 </ul>
 
-<p>The return value is typically used as input to <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code>.</p>
-    <h2 class="hasAnchor" id="request-build-"><a class="anchor" href="#request-build-"></a><code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code></h2>
+<p>The return value is typically used as input to <code>request_build()</code>.</p>
+    <h2 class="hasAnchor" id="request-build-"><a class="anchor" href="#request-build-"></a><code>request_build()</code></h2>
 
     
 
 
 <p>Builds a request, in a purely mechanical sense. This function does nothing
 specific to any particular Google API or endpoint.</p><ul>
-<li><p>Use with the output of <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop()</a></code> or with hand-crafted input.</p></li>
+<li><p>Use with the output of <code>request_develop()</code> or with hand-crafted input.</p></li>
 <li><p><code>params</code> are used for variable substitution in <code>path</code>. Leftover <code>params</code>
 that are not bound by the <code>path</code> template automatically become HTTP
 query parameters.</p></li>
 <li><p>Adds an API key to the query iff <code>token = NULL</code> and removes the API key
 otherwise. Client packages should generally pass their own API key in, but
-note that <code><a href='https://gargle.r-lib.org/reference/gargle_api_key.html'>gargle_api_key()</a></code> is available for small-scale experimentation.</p></li>
+note that <code><a href='gargle_api_key.html'>gargle_api_key()</a></code> is available for small-scale experimentation.</p></li>
 </ul>
 
 <p>See <code>googledrive::generate_request()</code> for an example of usage in a client
@@ -279,71 +279,71 @@ package. googledrive has an internal list of selected endpoints, derived from
 the <a href='https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'>Drive API Discovery Document</a>,
 exposed via <code>googledrive::drive_endpoints()</code>. An element from such a list is
 the expected input for <code>endpoint</code>. <code>googledrive::generate_request()</code> is a
-wrapper around <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop()</a></code> and <code><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build()</a></code> that inserts a
+wrapper around <code>request_develop()</code> and <code>request_build()</code> that inserts a
 googledrive-managed API key and some logic about Team Drives. All user-facing
 functions use <code>googledrive::generate_request()</code> under the hood.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other requests and responses: 
-<code><a href='https://gargle.r-lib.org/reference/request_make.html'>request_make</a>()</code>,
-<code><a href='https://gargle.r-lib.org/reference/response_process.html'>response_process</a>()</code></p></div>
+<code><a href='request_make.html'>request_make</a>()</code>,
+<code><a href='response_process.html'>response_process</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>## Example with a prepared endpoint</span>
-<span class='kw'>ept</span> <span class='op'>&lt;-</span> <span class='kw'>googledrive</span>::<span class='fu'>drive_endpoints</span>(<span class='st'>"drive.files.update"</span>)[[<span class='fl'>1</span>]]
-<span class='kw'>req</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_develop</a></span>(
-  <span class='kw'>ept</span>,
-  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    fileId = <span class='st'>"abc"</span>,
-    addParents = <span class='st'>"123"</span>,
-    description = <span class='st'>"Exciting File"</span>
+<span class='no'>ept</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>googledrive</span><span class='kw ns'>::</span><span class='fu'>drive_endpoints</span>(<span class='st'>"drive.files.update"</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='fu'>request_develop</span>(
+  <span class='no'>ept</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>fileId</span> <span class='kw'>=</span> <span class='st'>"abc"</span>,
+    <span class='kw'>addParents</span> <span class='kw'>=</span> <span class='st'>"123"</span>,
+    <span class='kw'>description</span> <span class='kw'>=</span> <span class='st'>"Exciting File"</span>
   )
 )
-<span class='kw'>req</span>
+<span class='no'>req</span>
 
-<span class='kw'>req</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build</a></span>(
-  method = <span class='kw'>req</span><span class='op'>$</span><span class='kw'>method</span>,
-  path = <span class='kw'>req</span><span class='op'>$</span><span class='kw'>path</span>,
-  params = <span class='kw'>req</span><span class='op'>$</span><span class='kw'>params</span>,
-  body = <span class='kw'>req</span><span class='op'>$</span><span class='kw'>body</span>,
-  token = <span class='st'>"PRETEND_I_AM_A_TOKEN"</span>
+<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='fu'>request_build</span>(
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='no'>req</span>$<span class='no'>method</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>req</span>$<span class='no'>path</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='no'>req</span>$<span class='no'>params</span>,
+  <span class='kw'>body</span> <span class='kw'>=</span> <span class='no'>req</span>$<span class='no'>body</span>,
+  <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>"PRETEND_I_AM_A_TOKEN"</span>
 )
-<span class='kw'>req</span>
+<span class='no'>req</span>
 
 <span class='co'>## Example with no previous knowledge of the endpoint</span>
 <span class='co'>## List a file's comments</span>
 <span class='co'>## https://developers.google.com/drive/v3/reference/comments/list</span>
-<span class='kw'>req</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build</a></span>(
-  method = <span class='st'>"GET"</span>,
-  path = <span class='st'>"drive/v3/files/{fileId}/comments"</span>,
-  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    fileId = <span class='st'>"your-file-id-goes-here"</span>,
-    fields = <span class='st'>"*"</span>
+<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='fu'>request_build</span>(
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"drive/v3/files/{fileId}/comments"</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>fileId</span> <span class='kw'>=</span> <span class='st'>"your-file-id-goes-here"</span>,
+    <span class='kw'>fields</span> <span class='kw'>=</span> <span class='st'>"*"</span>
   ),
-  token = <span class='st'>"PRETEND_I_AM_A_TOKEN"</span>
+  <span class='kw'>token</span> <span class='kw'>=</span> <span class='st'>"PRETEND_I_AM_A_TOKEN"</span>
 )
-<span class='kw'>req</span>
+<span class='no'>req</span>
 
 <span class='co'># Example with no previous knowledge of the endpoint and no token</span>
 <span class='co'># use an API key for which the Places API is enabled!</span>
-<span class='kw'>API_KEY</span> <span class='op'>&lt;-</span> <span class='st'>"1234567890"</span>
+<span class='no'>API_KEY</span> <span class='kw'>&lt;-</span> <span class='st'>"1234567890"</span>
 
 <span class='co'># get restaurants close to a location in Vancouver, BC</span>
-<span class='kw'>req</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/request_develop.html'>request_build</a></span>(
-  method = <span class='st'>"GET"</span>,
-  path = <span class='st'>"maps/api/place/nearbysearch/json"</span>,
-  params = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    location = <span class='st'>"49.268682,-123.167117"</span>,
-    radius = <span class='fl'>100</span>,
-    type = <span class='st'>"restaurant"</span>
+<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='fu'>request_build</span>(
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>,
+  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"maps/api/place/nearbysearch/json"</span>,
+  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
+    <span class='kw'>location</span> <span class='kw'>=</span> <span class='st'>"49.268682,-123.167117"</span>,
+    <span class='kw'>radius</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+    <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"restaurant"</span>
   ),
-  key = <span class='kw'>API_KEY</span>,
-  base_url = <span class='st'>"https://maps.googleapis.com"</span>
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>API_KEY</span>,
+  <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://maps.googleapis.com"</span>
 )
-<span class='kw'>resp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/request_make.html'>request_make</a></span>(<span class='kw'>req</span>)
-<span class='kw'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://gargle.r-lib.org/reference/response_process.html'>response_process</a></span>(<span class='kw'>resp</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span>(<span class='kw'>out</span><span class='op'>$</span><span class='kw'>results</span>, <span class='fu'>function</span>(<span class='kw'>x</span>) <span class='kw'>x</span><span class='op'>$</span><span class='kw'>name</span>, <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>1</span>))
+<span class='no'>resp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='request_make.html'>request_make</a></span>(<span class='no'>req</span>)
+<span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='response_process.html'>response_process</a></span>(<span class='no'>resp</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>vapply</a></span>(<span class='no'>out</span>$<span class='no'>results</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>name</span>, <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>1</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -360,7 +360,7 @@ functions use <code>googledrive::generate_request()</code> under the hood.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -126,9 +126,7 @@
 <li><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code></li>
 </ul>
 <p>The target audience is someone writing an R package to wrap a Google API.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://gargle.r-lib.org">gargle</a></span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gargle</span>)</pre></body></html></div>
 <div id="why-use-gargles-request-helpers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#why-use-gargles-request-helpers" class="anchor"></a>Why use gargle’s request helpers?</h2>
@@ -191,16 +189,14 @@
 <a href="#discovery-documents" class="anchor"></a>Discovery Documents</h2>
 <p>Google’s <a href="https://developers.google.com/discovery/">API Discovery Service</a> “provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs”. We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle’s request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.</p>
 <p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can find these files in the gargle installation like so:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">ddi_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"discovery-doc-ingest"</span>, package = <span class="st">"gargle"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw">ddi_dir</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">ddi_dir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"discovery-doc-ingest"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"gargle"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="no">ddi_dir</span>)
 <span class="co">#&gt;  [1] "api-wide-parameter-names.txt"    "api-wide-parameters-humane.txt" </span>
 <span class="co">#&gt;  [3] "api-wide-parameters.csv"         "discover-discovery.R"           </span>
 <span class="co">#&gt;  [5] "drive-example.R"                 "ingest-functions.R"             </span>
 <span class="co">#&gt;  [7] "method-properties-humane.txt"    "method-properties.csv"          </span>
 <span class="co">#&gt;  [9] "method-property-names.txt"       "parameter-properties-humane.txt"</span>
-<span class="co">#&gt; [11] "parameter-properties.csv"        "parameter-property-names.txt"</span>
-</pre></div>
+<span class="co">#&gt; [11] "parameter-properties.csv"        "parameter-property-names.txt"</span></pre></body></html></div>
 <p>Main files of interest to the developer of a client package:</p>
 <ul>
 <li>
@@ -223,42 +219,38 @@ sheets.spreadsheets.create
 sheets.spreadsheets.values.clear
 sheets.spreadsheets.sheets.copyTo</code></pre>
 <p>Retrieve the metadata for one endpoint by name, e.g.:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">.endpoints</span>[[<span class="st">"drive.files.create"</span>]]
-</pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">.endpoints</span><span class="kw">[[</span><span class="st">"drive.files.create"</span>]]</pre></body></html></div>
 <p>That info can be passed along to <code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
 </div>
 <div id="design-suggestion-forming-requests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#design-suggestion-forming-requests" class="anchor"></a>Design suggestion: forming requests</h2>
 <p>Here’s the model used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># googledrive::</span>
-<span class="kw">request_generate</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">endpoint</span> = <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),
-                             <span class="kw">params</span> = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(),
-                             <span class="kw">key</span> = <span class="kw">NULL</span>,
-                             <span class="kw">token</span> = <span class="fu">drive_token</span>()) {
-  <span class="kw">ept</span> <span class="op">&lt;-</span> <span class="kw">.endpoints</span>[[<span class="kw">endpoint</span>]]
-  <span class="co">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="kw">ept</span>)) {
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># googledrive::</span>
+<span class="no">request_generate</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">endpoint</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span>(),
+                             <span class="no">params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(),
+                             <span class="no">key</span> <span class="kw">=</span> <span class="kw">NULL</span>,
+                             <span class="no">token</span> <span class="kw">=</span> <span class="fu">drive_token</span>()) {
+  <span class="no">ept</span> <span class="kw">&lt;-</span> <span class="no">.endpoints</span><span class="kw">[[</span><span class="no">endpoint</span>]]
+  <span class="kw">if</span> (<span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="no">ept</span>)) {
     <span class="fu">stop_glue</span>(<span class="st">"\nEndpoint not recognized:\n  * {endpoint}"</span>)
   }
 
   <span class="co">## modifications specific to googledrive package</span>
-  <span class="kw">params</span><span class="op">$</span><span class="kw">key</span> <span class="op">&lt;-</span> <span class="kw">key</span> <span class="op">%||%</span> <span class="kw">params</span><span class="op">$</span><span class="kw">key</span> <span class="op">%||%</span> <span class="fu">drive_api_key</span>()
-  <span class="co">if</span> (<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="kw">ept</span><span class="op">$</span><span class="kw">parameters</span><span class="op">$</span><span class="kw">supportsTeamDrives</span>)) {
-    <span class="kw">params</span><span class="op">$</span><span class="kw">supportsTeamDrives</span> <span class="op">&lt;-</span> <span class="fl">TRUE</span>
+  <span class="no">params</span>$<span class="no">key</span> <span class="kw">&lt;-</span> <span class="no">key</span> <span class="kw">%||%</span> <span class="no">params</span>$<span class="no">key</span> <span class="kw">%||%</span> <span class="fu">drive_api_key</span>()
+  <span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span>(<span class="no">ept</span>$<span class="no">parameters</span>$<span class="no">supportsTeamDrives</span>)) {
+    <span class="no">params</span>$<span class="no">supportsTeamDrives</span> <span class="kw">&lt;-</span> <span class="fl">TRUE</span>
   }
 
-  <span class="kw">req</span> <span class="op">&lt;-</span> <span class="kw">gargle</span>::<span class="fu"><a href="../reference/request_develop.html">request_develop</a></span>(endpoint = <span class="kw">ept</span>, params = <span class="kw">params</span>)
-  <span class="kw">gargle</span>::<span class="fu"><a href="../reference/request_develop.html">request_build</a></span>(
-    path = <span class="kw">req</span><span class="op">$</span><span class="kw">path</span>,
-    method = <span class="kw">req</span><span class="op">$</span><span class="kw">method</span>,
-    params = <span class="kw">req</span><span class="op">$</span><span class="kw">params</span>,
-    body = <span class="kw">req</span><span class="op">$</span><span class="kw">body</span>,
-    token = <span class="kw">token</span>
+  <span class="no">req</span> <span class="kw">&lt;-</span> <span class="kw pkg">gargle</span><span class="kw ns">::</span><span class="fu"><a href="../reference/request_develop.html">request_develop</a></span>(<span class="kw">endpoint</span> <span class="kw">=</span> <span class="no">ept</span>, <span class="kw">params</span> <span class="kw">=</span> <span class="no">params</span>)
+  <span class="kw pkg">gargle</span><span class="kw ns">::</span><span class="fu"><a href="../reference/request_develop.html">request_build</a></span>(
+    <span class="kw">path</span> <span class="kw">=</span> <span class="no">req</span>$<span class="no">path</span>,
+    <span class="kw">method</span> <span class="kw">=</span> <span class="no">req</span>$<span class="no">method</span>,
+    <span class="kw">params</span> <span class="kw">=</span> <span class="no">req</span>$<span class="no">params</span>,
+    <span class="kw">body</span> <span class="kw">=</span> <span class="no">req</span>$<span class="no">body</span>,
+    <span class="kw">token</span> <span class="kw">=</span> <span class="no">token</span>
   )
-}
-</pre></div>
+}</pre></body></html></div>
 <p>The <code>endpoint</code> argument specifies an endpoint by its name, a.k.a. its <code>id</code>.</p>
 <p><code>params</code> is where the processed user input goes.</p>
 <p><code>key</code> and <code>token</code> refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. If your package ships with a default API key, you should append it above as the final fallback value for <code>params$key</code>.</p>
@@ -270,36 +262,32 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a href="#design-suggestion-making-requests" class="anchor"></a>Design suggestion: making requests</h2>
 <p>The output of <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> specifies an HTTP request.</p>
 <p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute it.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="co"># gargle::</span>
-<span class="kw">request_make</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">x</span>, <span class="kw">...</span>, <span class="kw">user_agent</span> = <span class="fu">gargle_user_agent</span>()) {
-  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">is.character</a></span>(<span class="kw">x</span><span class="op">$</span><span class="kw">method</span>))
-  <span class="kw">method</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/switch.html">switch</a></span>(
-    <span class="kw">x</span><span class="op">$</span><span class="kw">method</span>,
-    GET    = <span class="kw">httr</span>::<span class="kw"><a href="https://httr.r-lib.org/reference/GET.html">GET</a></span>,
-    POST   = <span class="kw">httr</span>::<span class="kw"><a href="https://httr.r-lib.org/reference/POST.html">POST</a></span>,
-    PATCH  = <span class="kw">httr</span>::<span class="kw"><a href="https://httr.r-lib.org/reference/PATCH.html">PATCH</a></span>,
-    PUT    = <span class="kw">httr</span>::<span class="kw"><a href="https://httr.r-lib.org/reference/PUT.html">PUT</a></span>,
-    DELETE = <span class="kw">httr</span>::<span class="kw"><a href="https://httr.r-lib.org/reference/DELETE.html">DELETE</a></span>,
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># gargle::</span>
+<span class="no">request_make</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>, <span class="no">user_agent</span> <span class="kw">=</span> <span class="fu">gargle_user_agent</span>()) {
+  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">is.character</a></span>(<span class="no">x</span>$<span class="no">method</span>))
+  <span class="no">method</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/switch.html">switch</a></span>(
+    <span class="no">x</span>$<span class="no">method</span>,
+    <span class="kw">GET</span>    <span class="kw">=</span> <span class="kw pkg">httr</span><span class="kw ns">::</span><span class="no"><a href="https://httr.r-lib.org/reference/GET.html">GET</a></span>,
+    <span class="kw">POST</span>   <span class="kw">=</span> <span class="kw pkg">httr</span><span class="kw ns">::</span><span class="no"><a href="https://httr.r-lib.org/reference/POST.html">POST</a></span>,
+    <span class="kw">PATCH</span>  <span class="kw">=</span> <span class="kw pkg">httr</span><span class="kw ns">::</span><span class="no"><a href="https://httr.r-lib.org/reference/PATCH.html">PATCH</a></span>,
+    <span class="kw">PUT</span>    <span class="kw">=</span> <span class="kw pkg">httr</span><span class="kw ns">::</span><span class="no"><a href="https://httr.r-lib.org/reference/PUT.html">PUT</a></span>,
+    <span class="kw">DELETE</span> <span class="kw">=</span> <span class="kw pkg">httr</span><span class="kw ns">::</span><span class="no"><a href="https://httr.r-lib.org/reference/DELETE.html">DELETE</a></span>,
     <span class="fu">abort</span>(<span class="fu">glue</span>(<span class="st">"Not a recognized HTTP method: {bt(x$method)}"</span>))
   )
   <span class="fu">method</span>(
-    url = <span class="kw">x</span><span class="op">$</span><span class="kw">url</span>,
-    body = <span class="kw">x</span><span class="op">$</span><span class="kw">body</span>,
-    <span class="kw">x</span><span class="op">$</span><span class="kw">token</span>,
-    <span class="kw">user_agent</span>,
-    <span class="kw">...</span>
+    <span class="kw">url</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">url</span>,
+    <span class="kw">body</span> <span class="kw">=</span> <span class="no">x</span>$<span class="no">body</span>,
+    <span class="no">x</span>$<span class="no">token</span>,
+    <span class="no">user_agent</span>,
+    <span class="no">...</span>
   )
-}
-</pre></div>
+}</pre></body></html></div>
 <p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to identify the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> and then calls it with the remainder of <code>x</code>, <code>...</code> and the <code>user_agent</code>.</p>
 <p>In googledrive we have a thin wrapper around this that injects the googledrive user agent:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co"># googledrive::</span>
-<span class="kw">request_make</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">x</span>, <span class="kw">...</span>) {
-  <span class="kw">gargle</span>::<span class="fu"><a href="../reference/request_make.html">request_make</a></span>(<span class="kw">x</span>, <span class="kw">...</span>, user_agent = <span class="fu">drive_ua</span>())
-}
-</pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># googledrive::</span>
+<span class="no">request_make</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>) {
+  <span class="kw pkg">gargle</span><span class="kw ns">::</span><span class="fu"><a href="../reference/request_make.html">request_make</a></span>(<span class="no">x</span>, <span class="no">...</span>, <span class="kw">user_agent</span> <span class="kw">=</span> <span class="fu">drive_ua</span>())
+}</pre></body></html></div>
 </div>
 <div id="reference" class="section level2">
 <h2 class="hasAnchor">
@@ -417,7 +405,7 @@ variant              object  In a variant data type, the value of
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -135,10 +135,8 @@
 <a href="#accessing-the-secret_-functions" class="anchor"></a>Accessing the <code>secret_*()</code> functions</h2>
 <p>gargle’s approach to managing test tokens is implemented through several functions that all start with the <code>secret_</code> prefix. These functions are not (currently?) exported. This may seem odd, since others might want to use these functions. But note they are only needed during setup or at test time. This sort of usage is compatible with others calling internal gargle functions and possibly inlining a version of a couple test helpers.</p>
 <p>One way to make the <code>secret_*()</code> functions available for local experimentation is to call <code>devtools::load_all()</code>, which exposes all internal objects in a package:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">devtools</span>::<span class="fu">load_all</span>(<span class="st">"path/to/source/of/gargle/"</span>)
-</pre></div>
-<p>The approach I’ll take in this article is to call these functions via <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">:::</a></code>.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">load_all</span>(<span class="st">"path/to/source/of/gargle/"</span>)</pre></body></html></div>
+<p>The approach I’ll take in this article is to call these functions via <code>:::</code>.</p>
 </div>
 <div id="overview-of-the-approach" class="section level2">
 <h2 class="hasAnchor">
@@ -169,26 +167,22 @@
 <h3 class="hasAnchor">
 <a href="#generate-a-name-for-the-password" class="anchor"></a>Generate a name for the PASSWORD</h3>
 <p><code>secret_pw_name()</code> creates a name of the form “PACKAGE_PASSWORD”, a convention baked into the <code>secret_*()</code> family of functions.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-(<span class="kw">pw_name</span> <span class="op">&lt;-</span> <span class="kw">gargle</span>:::<span class="fu">secret_pw_name</span>(<span class="st">"gargle"</span>))
-<span class="co">#&gt; [1] "GARGLE_PASSWORD"</span>
-</pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r">(<span class="no">pw_name</span> <span class="kw">&lt;-</span> <span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_pw_name</span>(<span class="st">"gargle"</span>))
+<span class="co">#&gt; [1] "GARGLE_PASSWORD"</span></pre></body></html></div>
 </div>
 <div id="generate-a-random-password" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-a-random-password" class="anchor"></a>Generate a random PASSWORD</h3>
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-(<span class="kw">pw</span> <span class="op">&lt;-</span> <span class="kw">gargle</span>:::<span class="fu">secret_pw_gen</span>())
-<span class="co">#&gt; [1] "7mAmMpBDPOdLuYYVdBNOUrRcjZcwjasxFNs7X1KcGbiZPgHVqK"</span>
-</pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r">(<span class="no">pw</span> <span class="kw">&lt;-</span> <span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_pw_gen</span>())
+<span class="co">#&gt; [1] "4rUcBnDCC13jOge1iLnOxpwMuWwFaE6LLRRvuRK8dydsMpFgCX"</span></pre></body></html></div>
 </div>
 <div id="define-environment-variable-in--renviron" class="section level3">
 <h3 class="hasAnchor">
 <a href="#define-environment-variable-in--renviron" class="anchor"></a>Define environment variable in <code>.Renviron</code>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=7mAmMpBDPOdLuYYVdBNOUrRcjZcwjasxFNs7X1KcGbiZPgHVqK</code></pre>
+<pre><code>GARGLE_PASSWORD=4rUcBnDCC13jOge1iLnOxpwMuWwFaE6LLRRvuRK8dydsMpFgCX</code></pre>
 <p><a href="https://usethis.r-lib.org/reference/edit.html"><code>usethis::edit_r_environ()</code></a> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code><a href="https://rdrr.io/r/base/readRenviron.html">readRenviron("~/.Renviron")</a></code> for the newly defined environment variable to take effect.</p>
 </div>
@@ -248,13 +242,11 @@
 <code>data</code>, either a file path to the unencrypted secret file or the data to be encrypted as a raw vector. In the case of a secret file, we <strong>strongly recommend</strong> that its primary home on your local computer is outside your package and, generally, outside of any folder that syncs regularly to a remote, e.g. GitHub or DropBox. This decreases the chance of accidental leakage.</li>
 </ul>
 <p>Example of a call to <code>secret_write()</code>, where <code>gargle-testing.json</code> is a JSON file downloaded for a service account managed via the <a href="https://console.cloud.google.com/project">Google API / Cloud Platform console</a>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">gargle</span>:::<span class="fu">secret_write</span>(
-  package = <span class="st">"gargle"</span>,
-  name = <span class="st">"gargle-testing.json"</span>,
-  input = <span class="st">"a/very/private/local/folder/gargle-testing.json"</span>
-)
-</pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_write</span>(
+  <span class="kw">package</span> <span class="kw">=</span> <span class="st">"gargle"</span>,
+  <span class="kw">name</span> <span class="kw">=</span> <span class="st">"gargle-testing.json"</span>,
+  <span class="kw">input</span> <span class="kw">=</span> <span class="st">"a/very/private/local/folder/gargle-testing.json"</span>
+)</pre></body></html></div>
 <p>This writes an encrypted version of <code>gargle-testing.json</code> to <code>inst/secret/gargle-testing.json</code> relative to the current working directory, which is presumably the top-level directory of gargle’s source. This encrypted file <em>should</em> be committed and pushed.</p>
 </div>
 <div id="test-setup" class="section level3">
@@ -308,20 +300,16 @@
 <h4 class="hasAnchor">
 <a href="#testthat-configuration" class="anchor"></a>Testthat configuration</h4>
 <p>In a wrapper package, you could determine decrypt-ability at the start of the test run. Here’s representative code from googledrive’s <code>tests/testthat/helper.R</code> file, but something similar can be seen in bigrquery and googlesheets4:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="co">if</span> (<span class="kw">gargle</span>:::<span class="fu">secret_can_decrypt</span>(<span class="st">"googledrive"</span>)) {
-  <span class="kw">json</span> <span class="op">&lt;-</span> <span class="kw">gargle</span>:::<span class="fu">secret_read</span>(<span class="st">"googledrive"</span>, <span class="st">"googledrive-testing.json"</span>)
-  <span class="fu">drive_auth</span>(path = <span class="fu"><a href="https://rdrr.io/r/base/rawConversion.html">rawToChar</a></span>(<span class="kw">json</span>))
-}
-</pre></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="kw">if</span> (<span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_can_decrypt</span>(<span class="st">"googledrive"</span>)) {
+  <span class="no">json</span> <span class="kw">&lt;-</span> <span class="kw pkg">gargle</span><span class="kw ns">:::</span><span class="fu">secret_read</span>(<span class="st">"googledrive"</span>, <span class="st">"googledrive-testing.json"</span>)
+  <span class="fu">drive_auth</span>(<span class="kw">path</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rawConversion.html">rawToChar</a></span>(<span class="no">json</span>))
+}</pre></body></html></div>
 <p>Versions of <code>secret_can_decrypt()</code> and <code>secret_read()</code> are defined here in gargle. <code>drive_auth()</code> is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that’s very favorable for our workflow. We’ll come back to this below.</p>
 <p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here is the <a href="https://github.com/tidyverse/googledrive/blob/master/tests/testthat/helper.R">test skipper from googledrive</a>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="co"># googledrive</span>
-<span class="kw">skip_if_no_token</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
-  <span class="kw">testthat</span>::<span class="fu"><a href="https://testthat.r-lib.org/reference/skip.html">skip_if_not</a></span>(<span class="fu">drive_has_token</span>(), <span class="st">"No Drive token"</span>)
-}
-</pre></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="co"># googledrive</span>
+<span class="no">skip_if_no_token</span> <span class="kw">&lt;-</span> <span class="kw">function</span>() {
+  <span class="kw pkg">testthat</span><span class="kw ns">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/skip.html">skip_if_not</a></span>(<span class="fu">drive_has_token</span>(), <span class="st">"No Drive token"</span>)
+}</pre></body></html></div>
 <p><code>googledrive::drive_has_token()</code> returns <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests. It is typical to define such a skipper in <code>tests/testthat/helper.R</code> or similar.</p>
 <p><em>gargle’s usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it’s not featured here.</em></p>
 </div>
@@ -389,7 +377,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

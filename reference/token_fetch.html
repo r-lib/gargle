@@ -167,13 +167,13 @@ full description of token_fetch()." />
     <div class="ref-description">
     <p>This is a rather magical function that calls a series of concrete
 credential-fetching functions, each wrapped in a <code><a href='https://rdrr.io/r/base/conditions.html'>tryCatch()</a></code>.
-<code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch()</a></code> keeps trying until it succeeds or there are no more functions
-to try. Use <code><a href='https://gargle.r-lib.org/reference/cred_funs.html'>cred_funs_list()</a></code> to see the current registry, in order. See the
+<code>token_fetch()</code> keeps trying until it succeeds or there are no more functions
+to try. Use <code><a href='cred_funs.html'>cred_funs_list()</a></code> to see the current registry, in order. See the
 vignette <a href='https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html'>How gargle gets tokens</a> for a
-full description of <code><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch()</a></code>.</p>
+full description of <code>token_fetch()</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch</a></span>(scopes = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>token_fetch</span>(<span class='kw'>scopes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -201,15 +201,15 @@ does not appear on the consent screen.</p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other credential functions: 
-<code><a href='https://gargle.r-lib.org/reference/credentials_app_default.html'>credentials_app_default</a>()</code>,
-<code><a href='https://gargle.r-lib.org/reference/credentials_byo_oauth2.html'>credentials_byo_oauth2</a>()</code>,
-<code><a href='https://gargle.r-lib.org/reference/credentials_gce.html'>credentials_gce</a>()</code>,
-<code><a href='https://gargle.r-lib.org/reference/credentials_service_account.html'>credentials_service_account</a>()</code>,
-<code><a href='https://gargle.r-lib.org/reference/credentials_user_oauth2.html'>credentials_user_oauth2</a>()</code></p></div>
+<code><a href='credentials_app_default.html'>credentials_app_default</a>()</code>,
+<code><a href='credentials_byo_oauth2.html'>credentials_byo_oauth2</a>()</code>,
+<code><a href='credentials_gce.html'>credentials_gce</a>()</code>,
+<code><a href='credentials_service_account.html'>credentials_service_account</a>()</code>,
+<code><a href='credentials_user_oauth2.html'>credentials_user_oauth2</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://gargle.r-lib.org/reference/token_fetch.html'>token_fetch</a></span>(scopes = <span class='st'>"https://www.googleapis.com/auth/userinfo.email"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'>token_fetch</span>(<span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/userinfo.email"</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -226,7 +226,7 @@ does not appear on the consent screen.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
