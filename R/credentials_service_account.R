@@ -10,6 +10,8 @@
 #'   behalf of users, without their consent. Identify the user to impersonate
 #'   via their email, e.g. `subject = "user@example.com"`.
 #'
+#' @details Note that fetching a token for a service account requires a reasonably accurate system clock. For more information, see the vignette [How gargle gets
+#' tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 #' @seealso Additional reading on delegation of domain-wide authority:
 #' * <https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority>
 #'
