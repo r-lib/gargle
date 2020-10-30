@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* `oauth_app_from_json` now supports JSON files from the "Web application"
+  client type. (#155)
+
 # gargle 0.5.0
 
 * [Troubleshooting gargle auth](https://gargle.r-lib.org/articles/troubleshooting.html)

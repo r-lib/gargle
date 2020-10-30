@@ -8,6 +8,16 @@ test_that("oauth app from JSON", {
   expect_identical(oa$appname, "a_project")
   expect_identical(oa$secret, "ssshh-i-am-a-secret")
   expect_identical(oa$key, "abc.apps.googleusercontent.com")
+
+  oa <- oauth_app_from_json(
+    test_path(
+      "fixtures", "client_secret_456.googleusercontent.com.json"
+    )
+  )
+  expect_s3_class(oa, "oauth_app")
+  expect_identical(oa$appname, "a_project")
+  expect_identical(oa$secret, "ssshh-i-am-a-secret")
+  expect_identical(oa$key, "abc.apps.googleusercontent.com")
 })
 
 test_that("JSON that is apparently not an oauth app triggers error", {
