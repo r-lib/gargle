@@ -21,7 +21,12 @@ oauth_app_from_json <- function(path,
                                 appname = NULL) {
   stopifnot(is_string(path), is.null(appname) || is_string(appname))
 
-  info <- jsonlite::fromJSON(path, simplifyVector = FALSE)[["installed"]]
+  json <- jsonlite::fromJSON(path, simplifyVector = FALSE)
+  info <- json[["installed"]]
+  if (is.null(info)) {
+    # Web client credentials use this key instead
+    info <- json[["web"]]
+  }
 
   if (!all(c("client_id", "client_secret") %in% names(info))) {
     stop("Can't find 'client_id' and 'client_secret' in the JSON", call. = FALSE)
