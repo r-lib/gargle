@@ -199,11 +199,11 @@ unexpected.</p></li>
 
     </div>
 
-    <pre class="usage"><span class='fu'>response_process</span>(<span class='no'>resp</span>, <span class='kw'>error_message</span> <span class='kw'>=</span> <span class='no'>gargle_error_message</span>)
+    <pre class="usage"><span class='fu'>response_process</span><span class='op'>(</span><span class='va'>resp</span>, error_message <span class='op'>=</span> <span class='va'>gargle_error_message</span><span class='op'>)</span>
 
-<span class='fu'>response_as_json</span>(<span class='no'>resp</span>)
+<span class='fu'>response_as_json</span><span class='op'>(</span><span class='va'>resp</span><span class='op'>)</span>
 
-<span class='fu'>gargle_error_message</span>(<span class='no'>resp</span>)</pre>
+<span class='fu'>gargle_error_message</span><span class='op'>(</span><span class='va'>resp</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -241,30 +241,31 @@ inherit gargle's handling of non-JSON input.</p>
 <code><a href='request_make.html'>request_make</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># get an OAuth2 token with 'userinfo.email' scope</span>
-<span class='no'>token</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span>(<span class='kw'>scopes</span> <span class='kw'>=</span> <span class='st'>"https://www.googleapis.com/auth/userinfo.email"</span>)
+<span class='va'>token</span> <span class='op'>&lt;-</span> <span class='fu'><a href='token_fetch.html'>token_fetch</a></span><span class='op'>(</span>scopes <span class='op'>=</span> <span class='st'>"https://www.googleapis.com/auth/userinfo.email"</span><span class='op'>)</span>
 
 <span class='co'># see the email associated with this token</span>
-<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gargle</span><span class='kw ns'>::</span><span class='fu'><a href='request_develop.html'>request_build</a></span>(
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"v1/userinfo"</span>,
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='no'>token</span>,
-  <span class='kw'>base_url</span> <span class='kw'>=</span> <span class='st'>"https://openidconnect.googleapis.com"</span>
-)
-<span class='no'>resp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gargle</span><span class='kw ns'>::</span><span class='fu'><a href='request_make.html'>request_make</a></span>(<span class='no'>req</span>)
-<span class='fu'>response_process</span>(<span class='no'>resp</span>)
+<span class='va'>req</span> <span class='op'>&lt;-</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='request_develop.html'>request_build</a></span><span class='op'>(</span>
+  method <span class='op'>=</span> <span class='st'>"GET"</span>,
+  path <span class='op'>=</span> <span class='st'>"v1/userinfo"</span>,
+  token <span class='op'>=</span> <span class='va'>token</span>,
+  base_url <span class='op'>=</span> <span class='st'>"https://openidconnect.googleapis.com"</span>
+<span class='op'>)</span>
+<span class='va'>resp</span> <span class='op'>&lt;-</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='request_make.html'>request_make</a></span><span class='op'>(</span><span class='va'>req</span><span class='op'>)</span>
+<span class='fu'>response_process</span><span class='op'>(</span><span class='va'>resp</span><span class='op'>)</span>
 
 <span class='co'># make a bad request (this token has incorrect scope)</span>
-<span class='no'>req</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gargle</span><span class='kw ns'>::</span><span class='fu'><a href='request_develop.html'>request_build</a></span>(
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"GET"</span>,
-  <span class='kw'>path</span> <span class='kw'>=</span> <span class='st'>"fitness/v1/users/{userId}/dataSources"</span>,
-  <span class='kw'>token</span> <span class='kw'>=</span> <span class='no'>token</span>,
-  <span class='kw'>params</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>userId</span> <span class='kw'>=</span> <span class='fl'>12345</span>)
-)
-<span class='no'>resp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>gargle</span><span class='kw ns'>::</span><span class='fu'><a href='request_make.html'>request_make</a></span>(<span class='no'>req</span>)
-<span class='fu'>response_process</span>(<span class='no'>resp</span>)
-}</div></pre>
+<span class='va'>req</span> <span class='op'>&lt;-</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='request_develop.html'>request_build</a></span><span class='op'>(</span>
+  method <span class='op'>=</span> <span class='st'>"GET"</span>,
+  path <span class='op'>=</span> <span class='st'>"fitness/v1/users/{userId}/dataSources"</span>,
+  token <span class='op'>=</span> <span class='va'>token</span>,
+  params <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>userId <span class='op'>=</span> <span class='fl'>12345</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='va'>resp</span> <span class='op'>&lt;-</span> <span class='fu'>gargle</span><span class='fu'>::</span><span class='fu'><a href='request_make.html'>request_make</a></span><span class='op'>(</span><span class='va'>req</span><span class='op'>)</span>
+<span class='fu'>response_process</span><span class='op'>(</span><span class='va'>resp</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -280,7 +281,7 @@ inherit gargle's handling of non-JSON input.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

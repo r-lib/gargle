@@ -134,18 +134,21 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of gargle from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"gargle"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"gargle"</span><span class="op">)</span></pre></div>
 <p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("devtools")</span>
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"r-lib/gargle"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-lib/gargle"</span><span class="op">)</span></pre></div>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <p>gargle is a low-level package and does not do anything visibly exciting on its own. But here’s a bit of usage in an interactive scenario where a user confirms they want to use a specific Google identity and loads an OAuth2 token.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gargle</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
 
-<span class="no">token</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/token_fetch.html">token_fetch</a></span>()
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/token_fetch.html">token_fetch</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The gargle package is requesting access to your Google account. Select a</span>
 <span class="co">#&gt; pre-authorised account or enter '0' to obtain a new token. Press</span>
 <span class="co">#&gt; Esc/Ctrl + C to abort.</span>
@@ -155,7 +158,7 @@
 
 <span class="co">#&gt; Selection: 1</span>
 
-<span class="no">token</span>
+<span class="va">token</span>
 <span class="co">#&gt; &lt;Token (via gargle)&gt;</span>
 <span class="co">#&gt;   &lt;oauth_endpoint&gt; google</span>
 <span class="co">#&gt;              &lt;app&gt; gargle-demo</span>
@@ -163,22 +166,23 @@
 <span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span>
 <span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></pre></div>
 <p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/fonts/docs/developer_api">Web Fonts Developer API</a>. We show the most popular web font families served by Google Fonts.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gargle</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
 
-<span class="no">req</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/request_develop.html">request_build</a></span>(
-  <span class="kw">method</span> <span class="kw">=</span> <span class="st">"GET"</span>,
-  <span class="kw">path</span> <span class="kw">=</span> <span class="st">"webfonts/v1/webfonts"</span>,
-  <span class="kw">params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(
-    <span class="kw">sort</span> <span class="kw">=</span> <span class="st">"popularity"</span>
-  ),
-  <span class="kw">key</span> <span class="kw">=</span> <span class="fu"><a href="reference/gargle_api_key.html">gargle_api_key</a></span>(),
-  <span class="kw">base_url</span> <span class="kw">=</span> <span class="st">"https://www.googleapis.com"</span>
-)
-<span class="no">resp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/request_make.html">request_make</a></span>(<span class="no">req</span>)
-<span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/response_process.html">response_process</a></span>(<span class="no">resp</span>)
+<span class="va">req</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_develop.html">request_build</a></span><span class="op">(</span>
+  method <span class="op">=</span> <span class="st">"GET"</span>,
+  path <span class="op">=</span> <span class="st">"webfonts/v1/webfonts"</span>,
+  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+    sort <span class="op">=</span> <span class="st">"popularity"</span>
+  <span class="op">)</span>,
+  key <span class="op">=</span> <span class="fu"><a href="reference/gargle_api_key.html">gargle_api_key</a></span><span class="op">(</span><span class="op">)</span>,
+  base_url <span class="op">=</span> <span class="st">"https://www.googleapis.com"</span>
+<span class="op">)</span>
+<span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span>
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span>
 
-<span class="no">out</span> <span class="kw">&lt;-</span> <span class="no">out</span><span class="kw">[[</span><span class="st">"items"</span>]][<span class="fl">1</span>:<span class="fl">8</span>]
-<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="no">out</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span><span class="kw">[[</span><span class="st">"family"</span>]], <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="fl">1</span>))
+<span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[[</span><span class="st">"items"</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[[</span><span class="st">"family"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Roboto"           "Open Sans"        "Lato"             "Montserrat"      </span>
 <span class="co">#&gt; [5] "Noto Sans JP"     "Source Sans Pro"  "Roboto Condensed" "Oswald"</span></pre></div>
 <p>Please note that the ‘gargle’ project is released with a <a href="https://gargle.r-lib.org/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
@@ -245,7 +249,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

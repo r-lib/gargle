@@ -163,18 +163,18 @@
     <p>Constructor function for objects of class <a href='Gargle-class.html'>Gargle2.0</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gargle2.0_token</span>(
-  <span class='kw'>email</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_email</a></span>(),
-  <span class='kw'>app</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span>(),
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"gargle"</span>,
-  <span class='kw'>scope</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>user_params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_oob</span> <span class='kw'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oob_default</a></span>(),
-  <span class='kw'>credentials</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cache</span> <span class='kw'>=</span> <span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>credentials</span>)) <span class='fu'><a href='gargle_options.html'>gargle_oauth_cache</a></span>() <span class='kw'>else</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>gargle2.0_token</span><span class='op'>(</span>
+  email <span class='op'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_email</a></span><span class='op'>(</span><span class='op'>)</span>,
+  app <span class='op'>=</span> <span class='fu'><a href='gargle_app.html'>gargle_app</a></span><span class='op'>(</span><span class='op'>)</span>,
+  package <span class='op'>=</span> <span class='st'>"gargle"</span>,
+  scope <span class='op'>=</span> <span class='cn'>NULL</span>,
+  user_params <span class='op'>=</span> <span class='cn'>NULL</span>,
+  type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  use_oob <span class='op'>=</span> <span class='fu'><a href='gargle_options.html'>gargle_oob_default</a></span><span class='op'>(</span><span class='op'>)</span>,
+  credentials <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cache <span class='op'>=</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>credentials</span><span class='op'>)</span><span class='op'>)</span> <span class='fu'><a href='gargle_options.html'>gargle_oauth_cache</a></span><span class='op'>(</span><span class='op'>)</span> <span class='kw'>else</span> <span class='cn'>FALSE</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -242,9 +242,10 @@ Not used.</p></td>
     <p>An object of class <a href='Gargle-class.html'>Gargle2.0</a>, either new or loaded from the cache.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>gargle2.0_token</span>()
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>gargle2.0_token</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -260,7 +261,7 @@ Not used.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
