@@ -9,7 +9,7 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
   app$httpHandler <- function(req) {
     resp <-
       handle_oauth_callback(req, oauth_app) %||%
-      handle_logged_in(req, httpHandler) %||%
+      handle_logged_in(req, oauth_app, httpHandler) %||%
       handle_welcome(req, oauth_app, scopes)
     resp
   }
@@ -18,7 +18,7 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
   app$serverFuncSource <- function() {
     wrappedServer <- serverFuncSource()
     function(input, output, session) {
-      creds <- read_creds_from_cookies(session$request)
+      creds <- read_creds_from_cookies(session$request, oauth_app)
       if (is.null(creds)) {
         stop("gargle_token cookie expected but not found")
       } else {
@@ -61,7 +61,10 @@ handle_oauth_callback <- function(req, oauth_app) {
             Location = infer_app_url(req),
             "Cache-Control" = "no-store",
             "Set-Cookie" = paste0("gargle_auth_state=; Max-Age=0"),
-            "Set-Cookie" = paste0("gargle_token=", wrap_creds(cred), "; Max-Age=", cred$expires_in)
+            "Set-Cookie" = paste0(
+              "gargle_token=", wrap_creds(cred, oauth_app), "; ",
+              "Max-Age=", cred$expires_in
+            )
           )
         ))
       }
@@ -69,8 +72,8 @@ handle_oauth_callback <- function(req, oauth_app) {
   }
 }
 
-handle_logged_in <- function(req, httpHandler) {
-  if (!is.null(read_creds_from_cookies(req))) {
+handle_logged_in <- function(req, oauth_app, httpHandler) {
+  if (!is.null(read_creds_from_cookies(req, oauth_app))) {
     # User is already logged in, proceed
     return(httpHandler(req))
   }
@@ -105,22 +108,54 @@ handle_welcome <- function(req, oauth_app, scopes) {
   )
 }
 
-read_creds_from_cookies <- function(req) {
+read_creds_from_cookies <- function(req, oauth_app) {
   cookies <- parse_cookies(req)
   gargle_token <- cookies[["gargle_token"]]
   if (!is.null(gargle_token)) {
-    unwrap_creds(gargle_token)
+    unwrap_creds(gargle_token, oauth_app)
   }
 }
 
-wrap_creds <- function(creds) {
-  # TODO: Stir in client ID and secret, encrypt, and sign
-  creds[["access_token"]]
+wrap_creds <- function(creds, oauth_app) {
+  cred_str <- creds[["access_token"]]
+
+  oauth_app_str <- enc2utf8(paste(oauth_app$secret, oauth_app$key))
+
+  salt <- sodium::random(32)
+  nonce <- sodium::random(24)
+  key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
+  ciphertext <- sodium::data_encrypt(charToRaw(cred_str), key = key, nonce = nonce)
+
+  sodium::bin2hex(c(salt, nonce, ciphertext))
 }
 
-unwrap_creds <- function(gargle_token) {
-  # TODO: Verify signature, client ID, secret
-  gargle_token
+unwrap_creds <- function(gargle_token, oauth_app) {
+  if (is.null(gargle_token)) {
+    return(NULL)
+  }
+
+  tryCatch({
+    oauth_app_str <- paste(oauth_app$secret, oauth_app$key)
+
+    bytes <- sodium::hex2bin(gargle_token)
+
+    if (length(bytes) <= 32 + 24) {
+      stop(call. = FALSE, "gargle cookie payload was too short")
+    }
+
+    salt <- bytes[1:32]
+    nonce <- bytes[32 + (1:24)]
+    rest <- tail(bytes, -(32 + 24))
+
+    key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
+    cleartext <- sodium::data_decrypt(rest, key = key, nonce = nonce)
+    cleartext <- rawToChar(cleartext)
+    Encoding(cleartext) <- "UTF-8"
+    cleartext
+  }, error = function(err) {
+    ui_line("gargle cookie failed to decrypt: ", conditionMessage(err))
+    return(NULL)
+  })
 }
 
 has_code_param <- function(req) {
