@@ -1,0 +1,200 @@
+#' @export
+require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
+
+  force(oauth_app)
+  force(scopes)
+  force(welcome_ui)
+
+  httpHandler <- app$httpHandler
+  app$httpHandler <- function(req) {
+    resp <-
+      handle_oauth_callback(req, oauth_app) %||%
+      handle_logged_in(req, httpHandler) %||%
+      handle_welcome(req, oauth_app, scopes)
+    resp
+  }
+
+  serverFuncSource <- app$serverFuncSource
+  app$serverFuncSource <- function() {
+    wrappedServer <- serverFuncSource()
+    function(input, output, session) {
+      creds <- read_creds_from_cookies(session$request)
+      if (is.null(creds)) {
+        stop("gargle_token cookie expected but not found")
+      } else {
+        session$userData$gargle_token <- creds
+        wrappedServer(input, output, session)
+      }
+    }
+  }
+
+  app
+}
+
+handle_oauth_callback <- function(req, oauth_app) {
+  if (has_code_param(req)) {
+    # User just completed login; verify, set cookie, and redirect
+    cookies <- parse_cookies(req)
+    gargle_auth_state <- cookies[["gargle_auth_state"]]
+    if (!is.null(gargle_auth_state)) {
+      qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
+      code <- qs$code
+      state <- qs$state
+
+      if (identical(state, gargle_auth_state)) {
+        cred <- httr::oauth2.0_access_token(
+          gargle_outh_endpoint(),
+          app = oauth_app,
+          code = code,
+          redirect_uri = infer_app_url(req)
+        )
+
+        # cred has:
+        # access_token, expires_in, scope, token_type, and id_token
+        # (and possibly refresh_token)
+
+        return(shiny::httpResponse(
+          status = 307L,
+          content_type = "text/plain",
+          content = "",
+          headers = list(
+            Location = infer_app_url(req),
+            "Cache-Control" = "no-store",
+            "Set-Cookie" = paste0("gargle_auth_state=; Max-Age=0"),
+            "Set-Cookie" = paste0("gargle_token=", wrap_creds(cred), "; Max-Age=", cred$expires_in)
+          )
+        ))
+      }
+    }
+  }
+}
+
+handle_logged_in <- function(req, httpHandler) {
+  if (!is.null(read_creds_from_cookies(req))) {
+    # User is already logged in, proceed
+    return(httpHandler(req))
+  }
+}
+
+handle_welcome <- function(req, oauth_app, scopes) {
+  redirect_uri <- infer_app_url(req)
+  state <- sodium::bin2hex(sodium::random(32))
+  query_extra <- list(
+    access_type = "offline"
+  )
+
+  # TODO: Add email?
+
+  auth_url <- httr::oauth2.0_authorize_url(
+    endpoint = gargle_outh_endpoint(),
+    oauth_app,
+    scope = paste(scopes, collapse = " "),
+    redirect_uri = redirect_uri,
+    state = state,
+    query_extra = query_extra)
+
+  shiny::httpResponse(
+    status = 307L,
+    content_type = NULL,
+    content = "",
+    headers = list(
+      Location = auth_url,
+      "Cache-Control" = "no-store",
+      "Set-Cookie" = paste0("gargle_auth_state=", state)
+    )
+  )
+}
+
+read_creds_from_cookies <- function(req) {
+  cookies <- parse_cookies(req)
+  gargle_token <- cookies[["gargle_token"]]
+  if (!is.null(gargle_token)) {
+    unwrap_creds(gargle_token)
+  }
+}
+
+wrap_creds <- function(creds) {
+  # TODO: Stir in client ID and secret, encrypt, and sign
+  creds[["access_token"]]
+}
+
+unwrap_creds <- function(gargle_token) {
+  # TODO: Verify signature, client ID, secret
+  gargle_token
+}
+
+has_code_param <- function(req) {
+  qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
+  "code" %in% names(qs)
+}
+
+infer_app_url <- function(req) {
+
+  url <-
+    # Connect
+    req[["HTTP_X_RSC_REQUEST"]] %||%
+    req[["HTTP_RSTUDIO_CONNECT_APP_BASE_URL"]] %||%
+    # ShinyApps.io
+    if (!is.null(req[["HTTP_X_REDX_FRONTEND_NAME"]])) { paste0("https://", req[["HTTP_X_REDX_FRONTEND_NAME"]]) }
+
+  if (is.null(url)) {
+    forwarded_host <- req[["HTTP_X_FORWARDED_HOST"]]
+    forwarded_port <- req[["HTTP_X_FORWARDED_PORT"]]
+
+    host <- if (!is.null(forwarded_host) && !is.null(forwarded_port)) {
+      paste0(forwarded_host, ":", forwarded_port)
+    } else {
+      req[["HTTP_HOST"]] %||% paste0(req[["SERVER_NAME"]], ":", req[["SERVER_PORT"]])
+    }
+
+    proto <- req[["HTTP_X_FORWARDED_PROTO"]] %||% req[["rook.url_scheme"]]
+
+    if (tolower(proto) == "http") {
+      host <- sub(":80$", "", host)
+    } else if (tolower(proto) == "https") {
+      host <- sub(":443$", "", host)
+    }
+
+    url <- paste0(
+      proto,
+      "://",
+      host,
+      req[["SCRIPT_NAME"]],
+      req[["PATH_INFO"]]
+    )
+  }
+
+  # Strip existing querystring, if any
+  url <- sub("\\?.*", "", url)
+
+  url
+}
+
+parse_cookies <- function(req) {
+  cookie_header <- req[["HTTP_COOKIE"]]
+  if (is.null(cookie_header)) {
+    return(NULL)
+  }
+
+  cookies <- strsplit(cookie_header, "; *")[[1]]
+  m <- regexec("(.*?)=(.*)", cookies)
+  matches <- regmatches(cookies, m)
+  names <- vapply(matches, function(x) {
+    if (length(x) == 3) {
+      x[[2]]
+    } else {
+      ""
+    }
+  }, character(1))
+
+  if (any(names == "")) {
+    # Malformed cookie
+    return(NULL)
+  }
+
+  values <- vapply(matches, function(x) {
+    x[[3]]
+  }, character(1))
+
+  setNames(as.list(values), names)
+}
