@@ -3,6 +3,7 @@
 export(AuthState)
 export(Gargle2.0)
 export(GceToken)
+export(cookie_options)
 export(cred_funs_add)
 export(cred_funs_clear)
 export(cred_funs_list)

@@ -1,5 +1,6 @@
 #' @export
-require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
+require_oauth <- function(app, oauth_app, scopes, welcome_ui,
+  cookie_opts = cookie_options(http_only = TRUE)) {
 
   force(oauth_app)
   force(scopes)
@@ -8,9 +9,9 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
   httpHandler <- app$httpHandler
   app$httpHandler <- function(req) {
     resp <-
-      handle_oauth_callback(req, oauth_app) %||%
+      handle_oauth_callback(req, oauth_app, cookie_opts) %||%
       handle_logged_in(req, oauth_app, httpHandler) %||%
-      handle_welcome(req, oauth_app, scopes)
+      handle_welcome(req, oauth_app, scopes, cookie_opts)
     resp
   }
 
@@ -31,7 +32,7 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui) {
   app
 }
 
-handle_oauth_callback <- function(req, oauth_app) {
+handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
   if (has_code_param(req)) {
     # User just completed login; verify, set cookie, and redirect
     cookies <- parse_cookies(req)
@@ -57,14 +58,12 @@ handle_oauth_callback <- function(req, oauth_app) {
           status = 307L,
           content_type = "text/plain",
           content = "",
-          headers = list(
+          headers = rlang::list2(
             Location = infer_app_url(req),
             "Cache-Control" = "no-store",
-            "Set-Cookie" = paste0("gargle_auth_state=; Max-Age=0"),
-            "Set-Cookie" = paste0(
-              "gargle_token=", wrap_creds(cred, oauth_app), "; ",
-              "Max-Age=", cred$expires_in
-            )
+            !!!delete_cookie_header("gargle_auth_state", cookie_opts),
+            !!!set_cookie_header("gargle_token", wrap_creds(cred, oauth_app),
+              cookie_opts)
           )
         ))
       }
@@ -79,7 +78,7 @@ handle_logged_in <- function(req, oauth_app, httpHandler) {
   }
 }
 
-handle_welcome <- function(req, oauth_app, scopes) {
+handle_welcome <- function(req, oauth_app, scopes, cookie_opts) {
   redirect_uri <- infer_app_url(req)
   state <- sodium::bin2hex(sodium::random(32))
   query_extra <- list(
@@ -100,10 +99,10 @@ handle_welcome <- function(req, oauth_app, scopes) {
     status = 307L,
     content_type = NULL,
     content = "",
-    headers = list(
+    headers = rlang::list2(
       Location = auth_url,
       "Cache-Control" = "no-store",
-      "Set-Cookie" = paste0("gargle_auth_state=", state)
+      !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
     )
   )
 }
@@ -232,4 +231,77 @@ parse_cookies <- function(req) {
   }, character(1))
 
   setNames(as.list(values), names)
+}
+
+#' @export
+cookie_options <- function(expires = NULL, max_age = NULL,
+  domain = NULL, path = NULL, secure = NULL, http_only = NULL, same_site = NULL) {
+
+  if (!is.null(expires)) {
+    stopifnot(length(expires) == 1 && (inherits(expires, "POSIXt") || is.character(expires)))
+    if (inherits(expires, "POSIXt")) {
+      expires <- as.POSIXlt(expires, tz = "GMT")
+      expires <- sprintf("%s, %02d %s %04d %02d:%02d:%02.0f GMT",
+        c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")[[expires$wday + 1]],
+        expires$mday,
+        c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")[[expires$mon + 1]],
+        expires$year + 1900,
+        expires$hour,
+        expires$min,
+        expires$sec
+      )
+    }
+  }
+
+  stopifnot(is.null(max_age) || (is.numeric(max_age) && length(max_age) == 1))
+  if (!is.null(max_age)) {
+    max_age <- sprintf("%.0f", max_age)
+  }
+  stopifnot(is.null(domain) || (is.character(domain) && length(domain) == 1))
+  stopifnot(is.null(path) || (is.character(path) && length(path) == 1))
+  stopifnot(is.null(secure) || isTRUE(secure))
+  stopifnot(is.null(http_only) || isTRUE(http_only))
+
+  stopifnot(is.null(same_site) || (is.character(same_site) && length(same_site) == 1 &&
+      grepl("^(strict|lax|none)$", same_site, ignore.case = TRUE)))
+  # Normalize case
+  if (!is.null(same_site)) {
+    same_site <- c(strict = "Strict", lax = "Lax", none = "None")[[tolower(same_site)]]
+  }
+
+  list(
+    "Expires" = expires,
+    "Max-Age" = max_age,
+    "Domain" = domain,
+    "Path" = path,
+    "Secure" = secure,
+    "HttpOnly" = http_only,
+    "SameSite" = same_site
+  )
+}
+
+set_cookie_header <- function(name, value, cookie_options = cookie_options()) {
+
+  stopifnot(is.character(name) && length(name) == 1)
+  stopifnot(is.null(value) || (is.character(value) && length(value) == 1))
+  value <- value %||% ""
+
+  parts <- rlang::list2(
+    !!name := value,
+    !!!cookie_options
+  )
+  parts <- parts[!vapply(parts, is.null, logical(1))]
+
+  names <- names(parts)
+  sep <- ifelse(vapply(parts, isTRUE, logical(1)), "", "=")
+  values <- ifelse(vapply(parts, isTRUE, logical(1)), "", as.character(parts))
+  list(
+    "Set-Cookie" = paste(collapse = "; ", paste0(names, sep, values))
+  )
+}
+
+delete_cookie_header <- function(name, cookie_options = cookie_options()) {
+  cookie_options[["Expires"]] <- NULL
+  cookie_options[["Max-Age"]] <- 0
+  set_cookie_header(name, "", cookie_options)
 }
