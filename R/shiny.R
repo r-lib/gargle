@@ -23,7 +23,12 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
       if (is.null(creds)) {
         stop("gargle_token cookie expected but not found")
       } else {
-        session$userData$gargle_token <- creds
+        email <- jwt_decode(creds[["id_token"]])[["claim"]][["email"]]
+        stopifnot(is.character(email) && length(email) == 1)
+
+        token <- gargle2.0_token(email, oauth_app, package = "gargle",
+          scope = creds$scope, credentials = creds)
+        session$userData$gargle_token <- token
         wrappedServer(input, output, session)
       }
     }
@@ -116,7 +121,7 @@ read_creds_from_cookies <- function(req, oauth_app) {
 }
 
 wrap_creds <- function(creds, oauth_app) {
-  cred_str <- creds[["access_token"]]
+  cred_str <- jsonlite::toJSON(creds, auto_unbox = TRUE)
 
   oauth_app_str <- enc2utf8(paste(oauth_app$secret, oauth_app$key))
 
@@ -150,7 +155,8 @@ unwrap_creds <- function(gargle_token, oauth_app) {
     cleartext <- sodium::data_decrypt(rest, key = key, nonce = nonce)
     cleartext <- rawToChar(cleartext)
     Encoding(cleartext) <- "UTF-8"
-    cleartext
+
+    jsonlite::parse_json(cleartext)
   }, error = function(err) {
     ui_line("gargle cookie failed to decrypt: ", conditionMessage(err))
     return(NULL)
@@ -304,4 +310,15 @@ delete_cookie_header <- function(name, cookie_options = cookie_options()) {
   cookie_options[["Expires"]] <- NULL
   cookie_options[["Max-Age"]] <- 0
   set_cookie_header(name, "", cookie_options)
+}
+
+jwt_decode <- function(jwt_str) {
+  stopifnot(is.character(jwt_str) && length(jwt_str) == 1)
+  pieces <- strsplit(jwt_str, ".", fixed = TRUE)[[1]]
+  stopifnot(length(pieces) == 3)
+
+  list(
+    header = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[1]]))),
+    claim = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[2]])))
+  )
 }
