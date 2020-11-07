@@ -127,8 +127,8 @@
 <li><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code></li>
 </ul>
 <p>The target audience is someone writing an R package to wrap a Google API.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></code></pre></div>
 <div id="why-use-gargles-request-helpers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#why-use-gargles-request-helpers" class="anchor"></a>Why use gargle’s request helpers?</h2>
@@ -191,15 +191,15 @@
 <a href="#discovery-documents" class="anchor"></a>Discovery Documents</h2>
 <p>Google’s <a href="https://developers.google.com/discovery/">API Discovery Service</a> “provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs”. We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle’s request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.</p>
 <p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can find these files in the gargle installation like so:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">ddi_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"discovery-doc-ingest"</span>, package <span class="op">=</span> <span class="st">"gargle"</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ddi_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"discovery-doc-ingest"</span>, package <span class="op">=</span> <span class="st">"gargle"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">ddi_dir</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "api-wide-parameter-names.txt"    "api-wide-parameters-humane.txt" </span>
 <span class="co">#&gt;  [3] "api-wide-parameters.csv"         "discover-discovery.R"           </span>
 <span class="co">#&gt;  [5] "drive-example.R"                 "ingest-functions.R"             </span>
 <span class="co">#&gt;  [7] "method-properties-humane.txt"    "method-properties.csv"          </span>
 <span class="co">#&gt;  [9] "method-property-names.txt"       "parameter-properties-humane.txt"</span>
-<span class="co">#&gt; [11] "parameter-properties.csv"        "parameter-property-names.txt"</span></pre></div>
+<span class="co">#&gt; [11] "parameter-properties.csv"        "parameter-property-names.txt"</span></code></pre></div>
 <p>Main files of interest to the developer of a client package:</p>
 <ul>
 <li>
@@ -222,16 +222,16 @@ sheets.spreadsheets.create
 sheets.spreadsheets.values.clear
 sheets.spreadsheets.sheets.copyTo</code></pre>
 <p>Retrieve the metadata for one endpoint by name, e.g.:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">.endpoints</span><span class="op">[[</span><span class="st">"drive.files.create"</span><span class="op">]</span><span class="op">]</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">.endpoints</span><span class="op">[[</span><span class="st">"drive.files.create"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <p>That info can be passed along to <code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
 </div>
 <div id="design-suggestion-forming-requests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#design-suggestion-forming-requests" class="anchor"></a>Design suggestion: forming requests</h2>
 <p>Here’s the model used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># googledrive::</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># googledrive::</span>
 <span class="va">request_generate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>,
                              <span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,
                              <span class="va">key</span> <span class="op">=</span> <span class="cn">NULL</span>,
@@ -255,7 +255,7 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
     body <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">body</span>,
     token <span class="op">=</span> <span class="va">token</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>The <code>endpoint</code> argument specifies an endpoint by its name, a.k.a. its <code>id</code>.</p>
 <p><code>params</code> is where the processed user input goes.</p>
 <p><code>key</code> and <code>token</code> refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. If your package ships with a default API key, you should append it above as the final fallback value for <code>params$key</code>.</p>
@@ -267,8 +267,8 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <a href="#design-suggestion-making-requests" class="anchor"></a>Design suggestion: making requests</h2>
 <p>The output of <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> specifies an HTTP request.</p>
 <p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute it.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="co"># gargle::</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># gargle::</span>
 <span class="va">request_make</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, <span class="va">user_agent</span> <span class="op">=</span> <span class="fu">gargle_user_agent</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">is.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">method</span><span class="op">)</span><span class="op">)</span>
   <span class="va">method</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html">switch</a></span><span class="op">(</span>
@@ -287,14 +287,14 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
     <span class="va">user_agent</span>,
     <span class="va">...</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to identify the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> and then calls it with the remainder of <code>x</code>, <code>...</code> and the <code>user_agent</code>.</p>
 <p>In googledrive we have a thin wrapper around this that injects the googledrive user agent:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co"># googledrive::</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># googledrive::</span>
 <span class="va">request_make</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span>
   <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/request_make.html">request_make</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, user_agent <span class="op">=</span> <span class="fu">drive_ua</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="reference" class="section level2">
 <h2 class="hasAnchor">
