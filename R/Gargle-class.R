@@ -131,7 +131,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     ## optional hint for the auth server to pre-fill the email box
     login_hint <- if (is_string(email) && email != "*") email
 
-    self$endpoint   <- gargle_outh_endpoint()
+    self$endpoint   <- gargle_oauth_endpoint()
     self$email      <- email
     self$app        <- app
     self$package    <- package

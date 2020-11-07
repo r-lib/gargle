@@ -44,7 +44,7 @@ credentials_service_account <- function(scopes = NULL,
   token <- httr::oauth_service_token(
     ## FIXME: not sure endpoint is truly necessary, but httr thinks it is.
     ## https://github.com/r-lib/httr/issues/576
-    endpoint = gargle_outh_endpoint(),
+    endpoint = gargle_oauth_endpoint(),
     secrets = info,
     scope = scopes,
     sub = subject
