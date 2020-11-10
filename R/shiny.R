@@ -1,3 +1,17 @@
+#' Require OAuth login for Shiny app
+#'
+#' Use this function to enforce Google Auth login for all visitors to a Shiny
+#' app. Once logged in, a [token][Gargle-class] will be stored on the Shiny
+#' session object and automatically used for any Google API operations that go
+#' through gargle.
+#'
+#' @param app The return value from [shiny::shinyApp()]. For readability,
+#'   consider using a pipe operator, i.e. `shinyApp() %>% require_oauth(...)`.
+#' @param oauth_app An [httr::oauth_app()] object that provides the OAuth client
+#'   ID and secret. See the [How to get your own API
+#'   credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
+#'   vignette and [oauth_app_from_json()].
+#' @inheritParams token_fetch
 #' @export
 require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   cookie_opts = cookie_options(http_only = TRUE)) {
@@ -5,6 +19,8 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   force(oauth_app)
   force(scopes)
   force(welcome_ui)
+
+  scopes <- normalize_scopes(add_email_scope(scopes))
 
   httpHandler <- app$httpHandler
   app$httpHandler <- function(req) {
@@ -128,6 +144,8 @@ wrap_creds <- function(creds, oauth_app) {
   salt <- sodium::random(32)
   nonce <- sodium::random(24)
   key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
+  # TODO: Add an expiration time (to the encrypted/signed payload), so a
+  # stolen cookie could only be used for a limited time.
   ciphertext <- sodium::data_encrypt(charToRaw(cred_str), key = key, nonce = nonce)
 
   sodium::bin2hex(c(salt, nonce, ciphertext))
@@ -149,7 +167,7 @@ unwrap_creds <- function(gargle_token, oauth_app) {
 
     salt <- bytes[1:32]
     nonce <- bytes[32 + (1:24)]
-    rest <- tail(bytes, -(32 + 24))
+    rest <- utils::tail(bytes, -(32 + 24))
 
     key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
     cleartext <- sodium::data_decrypt(rest, key = key, nonce = nonce)
@@ -236,7 +254,7 @@ parse_cookies <- function(req) {
     x[[3]]
   }, character(1))
 
-  setNames(as.list(values), names)
+  stats::setNames(as.list(values), names)
 }
 
 #' @export
