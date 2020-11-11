@@ -25,9 +25,10 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   httpHandler <- app$httpHandler
   app$httpHandler <- function(req) {
     resp <-
+      handle_logout(req, cookie_opts) %||%
       handle_oauth_callback(req, oauth_app, cookie_opts) %||%
       handle_logged_in(req, oauth_app, httpHandler) %||%
-      handle_welcome(req, oauth_app, scopes, cookie_opts)
+      handle_welcome(req, welcome_ui, oauth_app, scopes, cookie_opts)
     resp
   }
 
@@ -37,7 +38,7 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
     function(input, output, session) {
       token <- read_creds_from_cookies(session$request, oauth_app)
       if (is.null(token)) {
-        stop("gargle_token cookie expected but not found")
+        # Do nothing
       } else {
         session$userData$gargle_token <- token
         wrappedServer(input, output, session)
@@ -105,6 +106,34 @@ suppress_token_fetch <- function(shiny, onStop) {
   })
 }
 
+handle_logout <- function(req, cookie_opts) {
+  if (!isTRUE(req$PATH_INFO == "/logout")) {
+    return(NULL)
+  }
+
+  token <- read_creds_from_cookies(req, oauth_app)
+  if (!is.null(token)) {
+    tryCatch(
+      token$revoke(),
+      error = function(e) {
+        warning("Error while revoking token for logout: ", conditionMessage(e))
+      }
+    )
+  }
+
+  shiny::httpResponse(
+    status = 307L,
+    content_type = NULL,
+    content = "",
+    headers = rlang::list2(
+      Location = "./",
+      "Cache-Control" = "no-store",
+      !!!delete_cookie_header("gargle_auth_state", cookie_opts),
+      !!!delete_cookie_header("gargle_token", cookie_opts)
+    )
+  )
+}
+
 handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
   if (has_code_param(req)) {
     # User just completed login; verify, set cookie, and redirect
@@ -123,13 +152,9 @@ handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
           redirect_uri = infer_app_url(req)
         )
 
-        # cred has:
-        # access_token, expires_in, scope, token_type, and id_token
-        # (and possibly refresh_token)
-
         return(shiny::httpResponse(
           status = 307L,
-          content_type = "text/plain",
+          content_type = NULL,
           content = "",
           headers = rlang::list2(
             Location = infer_app_url(req),
@@ -156,14 +181,12 @@ handle_logged_in <- function(req, oauth_app, httpHandler) {
   }
 }
 
-handle_welcome <- function(req, oauth_app, scopes, cookie_opts) {
+handle_welcome <- function(req, welcome_ui, oauth_app, scopes, cookie_opts) {
   redirect_uri <- infer_app_url(req)
   state <- sodium::bin2hex(sodium::random(32))
   query_extra <- list(
     access_type = "offline"
   )
-
-  # TODO: Add email?
 
   auth_url <- httr::oauth2.0_authorize_url(
     endpoint = gargle_outh_endpoint(),
@@ -173,16 +196,43 @@ handle_welcome <- function(req, oauth_app, scopes, cookie_opts) {
     state = state,
     query_extra = query_extra)
 
-  shiny::httpResponse(
-    status = 307L,
-    content_type = NULL,
-    content = "",
-    headers = rlang::list2(
-      Location = auth_url,
-      "Cache-Control" = "no-store",
-      !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
+  if (is.null(welcome_ui)) {
+    shiny::httpResponse(
+      status = 307L,
+      content_type = NULL,
+      content = "",
+      headers = rlang::list2(
+        Location = auth_url,
+        "Cache-Control" = "no-store",
+        !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
+      )
     )
-  )
+  } else {
+    ui <- welcome_ui(req = req, login_url = auth_url)
+    if (inherits(ui, "httpResponse")) {
+      ui
+    } else {
+      lang <- attr(ui, "lang", exact = TRUE) %||% "en"
+      if (!(inherits(ui, "shiny.tag") && ui$name == "body")) {
+        ui <- tags$body(ui)
+      }
+      doc <- htmltools::htmlTemplate(
+        system.file("shiny", "default.html", package = "gargle"),
+        lang = lang,
+        body = ui,
+        document_ = TRUE
+      )
+      html <- htmltools::renderDocument(doc, processDep = shiny::createWebDependency)
+      shiny::httpResponse(
+        status = 403L,
+        content = html,
+        headers = rlang::list2(
+          "Cache-Control" = "no-store",
+          !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
+        )
+      )
+    }
+  }
 }
 
 read_creds_from_cookies <- function(req, oauth_app) {
@@ -464,4 +514,43 @@ with_shiny_token <- function(token, expr) {
   )
 
   promises::with_promise_domain(domain, expr)
+}
+
+#' @export
+basic_welcome_ui <- function(...) {
+  function(req, login_url) {
+    shiny::fluidPage(
+      jquerylib::jquery_core(),
+      shiny::fluidRow(
+        shiny::column(6, offset = 3, class = "text-center",
+          ...,
+          p(google_signin_button(login_url))
+        )
+      )
+    )
+  }
+}
+
+#' @export
+google_signin_button <- function(login_url, ..., theme = c("light", "dark"),
+  aria_label = "Sign in with Google") {
+
+  stopifnot(is.character(login_url) && length(login_url) == 1)
+  theme <- match.arg(theme)
+
+  dep <- htmltools::htmlDependency(
+    "google-sign-in-button-styles",
+    "1.0",
+    src = "branding",
+    package = "gargle",
+    all_files = TRUE,
+    stylesheet = "signin.css"
+  )
+  htmltools::tagList(
+    dep,
+    tags$a(href = login_url, class = paste0("google-signin-button-", theme),
+      "aria-label" = aria_label,
+      ...
+    )
+  )
 }
