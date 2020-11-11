@@ -35,22 +35,74 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   app$serverFuncSource <- function() {
     wrappedServer <- serverFuncSource()
     function(input, output, session) {
-      creds <- read_creds_from_cookies(session$request, oauth_app)
-      if (is.null(creds)) {
+      token <- read_creds_from_cookies(session$request, oauth_app)
+      if (is.null(token)) {
         stop("gargle_token cookie expected but not found")
       } else {
-        email <- jwt_decode(creds[["id_token"]])[["claim"]][["email"]]
-        stopifnot(is.character(email) && length(email) == 1)
-
-        token <- gargle2.0_token(email, oauth_app, package = "gargle",
-          scope = creds$scope, credentials = creds)
         session$userData$gargle_token <- token
         wrappedServer(input, output, session)
       }
     }
   }
 
+  onStart <- app$onStart
+  app$onStart <- function() {
+
+    install_shiny_authstate_interceptor()
+    suppress_token_fetch()
+
+    # Call original onStart, if any
+    if (is.function(onStart)) {
+      onStart()
+    }
+  }
+
   app
+}
+
+install_shiny_authstate_interceptor <- function(shiny, onStop) {
+  push_authstate_interceptor(
+    auth_active_func = function(value, fallback) {
+      if (missing(value)) {
+        !is.null(shiny_token())
+      } else {
+        fallback(value)
+      }
+    },
+    cred_func = function(value, fallback) {
+      if (missing(value)) {
+        shiny_token()
+      } else {
+        fallback(value)
+      }
+    }
+  )
+
+  shiny::onStop(function() {
+    pop_authstate_interceptor()
+  }, session = NULL)
+}
+
+suppress_token_fetch <- function(shiny, onStop) {
+  cred_funs <- cred_funs_list()
+  cred_funs_clear()
+  cred_funs_add(shiny = function(scopes, ...) {
+    args <- list(...)
+    pkg <- if (!is.null(args$package)) {
+      paste("The", args$package, "package")
+    } else {
+      "A package"
+    }
+    message(
+      pkg, " tried to access Google credentials without consulting Shiny. ",
+      "This operation will fail! Try upgrading that package to the latest ",
+      "version."
+    )
+    NULL
+  })
+  shiny::onStop(function() {
+    cred_funs_set(cred_funs)
+  })
 }
 
 handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
@@ -93,9 +145,14 @@ handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
 }
 
 handle_logged_in <- function(req, oauth_app, httpHandler) {
-  if (!is.null(read_creds_from_cookies(req, oauth_app))) {
+  token <- read_creds_from_cookies(req, oauth_app)
+  if (!is.null(token)) {
+    # TODO: If token is expired, refresh and rewrite the cookie
+
     # User is already logged in, proceed
-    return(httpHandler(req))
+    with_shiny_token(token, {
+      httpHandler(req)
+    })
   }
 }
 
@@ -174,7 +231,15 @@ unwrap_creds <- function(gargle_token, oauth_app) {
     cleartext <- rawToChar(cleartext)
     Encoding(cleartext) <- "UTF-8"
 
-    jsonlite::parse_json(cleartext)
+    creds <- jsonlite::parse_json(cleartext)
+
+    email <- jwt_decode(creds[["id_token"]])[["claim"]][["email"]]
+    stopifnot(is.character(email) && length(email) == 1)
+
+    token <- gargle2.0_token(email, oauth_app, package = "gargle",
+      scope = creds$scope, credentials = creds)
+
+    token
   }, error = function(err) {
     ui_line("gargle cookie failed to decrypt: ", conditionMessage(err))
     return(NULL)
@@ -339,4 +404,64 @@ jwt_decode <- function(jwt_str) {
     header = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[1]]))),
     claim = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[2]])))
   )
+}
+
+shiny_token <- function() {
+  session <- shiny::getDefaultReactiveDomain()
+  if (!is.null(session)) {
+    session$userData$gargle_token
+  } else {
+    NULL
+  }
+}
+
+with_shiny_token <- function(token, expr) {
+  force(token)
+
+  on <- function() {
+    push_authstate_interceptor(
+      auth_active_func = function(value, fallback) {
+        if (missing(value)) {
+          !is.null(token)
+        } else {
+          fallback(value)
+        }
+      },
+      cred_func = function(value, fallback) {
+        if (missing(value)) {
+          token
+        } else {
+          fallback(value)
+        }
+      }
+    )
+  }
+  off <- pop_authstate_interceptor
+
+  domain <- promises::new_promise_domain(
+    wrapOnFulfilled = function(onFulfilled) {
+      function(...) {
+        on()
+        on.exit(off, add = TRUE)
+
+        onFulfilled(...)
+      }
+    },
+    wrapOnRejected = function(onRejected) {
+      function(...) {
+        on()
+        on.exit(off, add = TRUE)
+
+        onRejected(...)
+      }
+    },
+    wrapSync = function(expr) {
+      on()
+      on.exit(off, add = TRUE)
+
+      expr
+    }
+  )
+
+  promises::with_promise_domain(domain, expr)
 }
