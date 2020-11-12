@@ -492,7 +492,7 @@ with_shiny_token <- function(token, expr) {
     wrapOnFulfilled = function(onFulfilled) {
       function(...) {
         on()
-        on.exit(off, add = TRUE)
+        on.exit(off(), add = TRUE)
 
         onFulfilled(...)
       }
@@ -500,14 +500,14 @@ with_shiny_token <- function(token, expr) {
     wrapOnRejected = function(onRejected) {
       function(...) {
         on()
-        on.exit(off, add = TRUE)
+        on.exit(off(), add = TRUE)
 
         onRejected(...)
       }
     },
     wrapSync = function(expr) {
       on()
-      on.exit(off, add = TRUE)
+      on.exit(off(), add = TRUE)
 
       expr
     }
