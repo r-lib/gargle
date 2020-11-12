@@ -12,33 +12,59 @@
 #'   credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
 #'   vignette and [oauth_app_from_json()].
 #' @inheritParams token_fetch
+#' @welcome_ui The UI to be displayed when an unauthenticated user attempts to visit.
 #' @export
-require_oauth <- function(app, oauth_app, scopes, welcome_ui,
+require_oauth <- function(app, oauth_app, scopes, welcome_ui = NULL,
   cookie_opts = cookie_options(http_only = TRUE)) {
 
+  # This function takes the app object and transforms/decorates it to create a
+  # new app object. The new app object will wrap the original ui/server with
+  # authentication logic, so that the original ui/server is not invoked unless
+  # and until the user has a valid Google token.
+  #
+  # It also modifies the gargle environment so that if gargle-derived packages
+  # look for tokens from their internal .auth (AuthState), they are given the
+  # token that Shiny knows about.
+
+  # Force and normalize arguments
+  force(app)
   force(oauth_app)
-  force(scopes)
-  force(welcome_ui)
-
   scopes <- normalize_scopes(add_email_scope(scopes))
+  force(welcome_ui)
+  force(cookie_opts)
 
+  # Override the HTTP handler, which is the "front door" through which a browser
+  # comes to the Shiny app.
   httpHandler <- app$httpHandler
   app$httpHandler <- function(req) {
+    # Each handle_* function will decide if it can handle the request, based on
+    # the URL path, request method, presence/absence/validity of cookies, etc.
+    # The return value will be NULL if the `handle` function couldn't handle the
+    # request, and either HTML tag objects or a shiny::httpResponse if it
+    # decided to handle it.
     resp <-
+      # The /logout path revokes the token and deletes cookies
       handle_logout(req, oauth_app, cookie_opts) %||%
+      # Handles callback redirect from Google (after user logs in successfully)
+      # and sets gargle cookies
       handle_oauth_callback(req, oauth_app, cookie_opts) %||%
+      # Handles requests that have good gargle cookies; shows the actual app
       handle_logged_in(req, oauth_app, httpHandler) %||%
+      # If we get here, the user isn't logged in; show them welcome_ui if
+      # non-NULL, or else send them straight to Google
       handle_welcome(req, welcome_ui, oauth_app, scopes, cookie_opts)
     resp
   }
 
+  # Only invoke the provided server logic if the user is logged in; and make the
+  # token automatically available within the server logic
   serverFuncSource <- app$serverFuncSource
   app$serverFuncSource <- function() {
     wrappedServer <- serverFuncSource()
     function(input, output, session) {
       token <- read_creds_from_cookies(session$request, oauth_app)
       if (is.null(token)) {
-        # Do nothing
+        stop("No valid OAuth token was found on the websocket connection")
       } else {
         session$userData$gargle_token <- token
         wrappedServer(input, output, session)
@@ -61,254 +87,6 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   app
 }
 
-install_shiny_authstate_interceptor <- function(shiny, onStop) {
-  push_authstate_interceptor(
-    auth_active_func = function(value, fallback) {
-      if (missing(value)) {
-        !is.null(shiny_token())
-      } else {
-        fallback(value)
-      }
-    },
-    cred_func = function(value, fallback) {
-      if (missing(value)) {
-        shiny_token()
-      } else {
-        fallback(value)
-      }
-    }
-  )
-
-  shiny::onStop(function() {
-    pop_authstate_interceptor()
-  }, session = NULL)
-}
-
-suppress_token_fetch <- function(shiny, onStop) {
-  cred_funs <- cred_funs_list()
-  cred_funs_clear()
-  cred_funs_add(shiny = function(scopes, ...) {
-    args <- list(...)
-    pkg <- if (!is.null(args$package)) {
-      paste("The", args$package, "package")
-    } else {
-      "A package"
-    }
-    message(
-      pkg, " tried to access Google credentials without consulting Shiny. ",
-      "This operation will fail! Try upgrading that package to the latest ",
-      "version."
-    )
-    NULL
-  })
-  shiny::onStop(function() {
-    cred_funs_set(cred_funs)
-  })
-}
-
-handle_logout <- function(req, oauth_app, cookie_opts) {
-  if (!isTRUE(req$PATH_INFO == "/logout")) {
-    return(NULL)
-  }
-
-  token <- read_creds_from_cookies(req, oauth_app)
-  if (!is.null(token)) {
-    tryCatch(
-      {
-        token$revoke()
-        ui_line("Token successfully revoked")
-      },
-      error = function(e) {
-        message("Error while revoking token for logout: ", conditionMessage(e))
-      }
-    )
-  } else {
-    ui_line("Logout called but no (valid) credential cookie detected")
-  }
-
-  shiny::httpResponse(
-    status = 307L,
-    content_type = NULL,
-    content = "",
-    headers = rlang::list2(
-      Location = "./",
-      "Cache-Control" = "no-store",
-      !!!delete_cookie_header("gargle_auth_state", cookie_opts),
-      !!!delete_cookie_header("gargle_token", cookie_opts)
-    )
-  )
-}
-
-handle_oauth_callback <- function(req, oauth_app, cookie_opts) {
-  if (has_code_param(req)) {
-    # User just completed login; verify, set cookie, and redirect
-    cookies <- parse_cookies(req)
-    gargle_auth_state <- cookies[["gargle_auth_state"]]
-    if (!is.null(gargle_auth_state)) {
-      qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
-      code <- qs$code
-      state <- qs$state
-
-      if (identical(state, gargle_auth_state)) {
-        cred <- httr::oauth2.0_access_token(
-          gargle_outh_endpoint(),
-          app = oauth_app,
-          code = code,
-          redirect_uri = infer_app_url(req)
-        )
-
-        return(shiny::httpResponse(
-          status = 307L,
-          content_type = NULL,
-          content = "",
-          headers = rlang::list2(
-            Location = infer_app_url(req),
-            "Cache-Control" = "no-store",
-            !!!delete_cookie_header("gargle_auth_state", cookie_opts),
-            !!!set_cookie_header("gargle_token", wrap_creds(cred, oauth_app),
-              cookie_opts)
-          )
-        ))
-      }
-    }
-  }
-}
-
-handle_logged_in <- function(req, oauth_app, httpHandler) {
-  token <- read_creds_from_cookies(req, oauth_app)
-  if (!is.null(token)) {
-    # TODO: If token is expired, refresh and rewrite the cookie
-
-    # User is already logged in, proceed
-    with_shiny_token(token, {
-      httpHandler(req)
-    })
-  }
-}
-
-handle_welcome <- function(req, welcome_ui, oauth_app, scopes, cookie_opts) {
-  redirect_uri <- infer_app_url(req)
-  state <- sodium::bin2hex(sodium::random(32))
-  query_extra <- list(
-    access_type = "offline"
-  )
-
-  auth_url <- httr::oauth2.0_authorize_url(
-    endpoint = gargle_outh_endpoint(),
-    oauth_app,
-    scope = paste(scopes, collapse = " "),
-    redirect_uri = redirect_uri,
-    state = state,
-    query_extra = query_extra)
-
-  if (is.null(welcome_ui)) {
-    shiny::httpResponse(
-      status = 307L,
-      content_type = NULL,
-      content = "",
-      headers = rlang::list2(
-        Location = auth_url,
-        "Cache-Control" = "no-store",
-        !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
-      )
-    )
-  } else {
-    ui <- welcome_ui(req = req, login_url = auth_url)
-    if (inherits(ui, "httpResponse")) {
-      ui
-    } else {
-      lang <- attr(ui, "lang", exact = TRUE) %||% "en"
-      if (!(inherits(ui, "shiny.tag") && ui$name == "body")) {
-        ui <- tags$body(ui)
-      }
-      doc <- htmltools::htmlTemplate(
-        system.file("shiny", "default.html", package = "gargle"),
-        lang = lang,
-        body = ui,
-        document_ = TRUE
-      )
-      html <- htmltools::renderDocument(doc, processDep = shiny::createWebDependency)
-      shiny::httpResponse(
-        status = 403L,
-        content = html,
-        headers = rlang::list2(
-          "Cache-Control" = "no-store",
-          !!!set_cookie_header("gargle_auth_state", state, cookie_opts)
-        )
-      )
-    }
-  }
-}
-
-read_creds_from_cookies <- function(req, oauth_app) {
-  cookies <- parse_cookies(req)
-  gargle_token <- cookies[["gargle_token"]]
-  if (!is.null(gargle_token)) {
-    unwrap_creds(gargle_token, oauth_app)
-  }
-}
-
-wrap_creds <- function(creds, oauth_app) {
-  cred_str <- jsonlite::toJSON(creds, auto_unbox = TRUE)
-
-  oauth_app_str <- enc2utf8(paste(oauth_app$secret, oauth_app$key))
-
-  salt <- sodium::random(32)
-  nonce <- sodium::random(24)
-  key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
-  # TODO: Add an expiration time (to the encrypted/signed payload), so a
-  # stolen cookie could only be used for a limited time.
-  ciphertext <- sodium::data_encrypt(charToRaw(cred_str), key = key, nonce = nonce)
-
-  sodium::bin2hex(c(salt, nonce, ciphertext))
-}
-
-unwrap_creds <- function(gargle_token, oauth_app) {
-  if (is.null(gargle_token)) {
-    return(NULL)
-  }
-
-  tryCatch({
-    oauth_app_str <- paste(oauth_app$secret, oauth_app$key)
-
-    bytes <- sodium::hex2bin(gargle_token)
-
-    if (length(bytes) <= 32 + 24) {
-      stop(call. = FALSE, "gargle cookie payload was too short")
-    }
-
-    salt <- bytes[1:32]
-    nonce <- bytes[32 + (1:24)]
-    rest <- utils::tail(bytes, -(32 + 24))
-
-    key <- sodium::scrypt(charToRaw(oauth_app_str), salt = salt, size = 32)
-    cleartext <- sodium::data_decrypt(rest, key = key, nonce = nonce)
-    cleartext <- rawToChar(cleartext)
-    Encoding(cleartext) <- "UTF-8"
-
-    creds <- jsonlite::parse_json(cleartext)
-
-    email <- jwt_decode(creds[["id_token"]])[["claim"]][["email"]]
-    stopifnot(is.character(email) && length(email) == 1)
-
-    token <- gargle2.0_token(email, oauth_app, package = "gargle",
-      scope = creds$scope, credentials = creds)
-
-    if (!token$validate()) {
-      token$refresh()
-    }
-
-    token
-  }, error = function(err) {
-    ui_line("gargle cookie failed to decrypt: ", conditionMessage(err))
-    return(NULL)
-  })
-}
-
-has_code_param <- function(req) {
-  qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
-  "code" %in% names(qs)
-}
 
 infer_app_url <- function(req) {
 
@@ -350,216 +128,4 @@ infer_app_url <- function(req) {
   url <- sub("\\?.*", "", url)
 
   url
-}
-
-parse_cookies <- function(req) {
-  cookie_header <- req[["HTTP_COOKIE"]]
-  if (is.null(cookie_header)) {
-    return(NULL)
-  }
-
-  cookies <- strsplit(cookie_header, "; *")[[1]]
-  m <- regexec("(.*?)=(.*)", cookies)
-  matches <- regmatches(cookies, m)
-  names <- vapply(matches, function(x) {
-    if (length(x) == 3) {
-      x[[2]]
-    } else {
-      ""
-    }
-  }, character(1))
-
-  if (any(names == "")) {
-    # Malformed cookie
-    return(NULL)
-  }
-
-  values <- vapply(matches, function(x) {
-    x[[3]]
-  }, character(1))
-
-  stats::setNames(as.list(values), names)
-}
-
-#' @export
-cookie_options <- function(expires = NULL, max_age = NULL,
-  domain = NULL, path = NULL, secure = NULL, http_only = NULL, same_site = NULL) {
-
-  if (!is.null(expires)) {
-    stopifnot(length(expires) == 1 && (inherits(expires, "POSIXt") || is.character(expires)))
-    if (inherits(expires, "POSIXt")) {
-      expires <- as.POSIXlt(expires, tz = "GMT")
-      expires <- sprintf("%s, %02d %s %04d %02d:%02d:%02.0f GMT",
-        c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")[[expires$wday + 1]],
-        expires$mday,
-        c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")[[expires$mon + 1]],
-        expires$year + 1900,
-        expires$hour,
-        expires$min,
-        expires$sec
-      )
-    }
-  }
-
-  stopifnot(is.null(max_age) || (is.numeric(max_age) && length(max_age) == 1))
-  if (!is.null(max_age)) {
-    max_age <- sprintf("%.0f", max_age)
-  }
-  stopifnot(is.null(domain) || (is.character(domain) && length(domain) == 1))
-  stopifnot(is.null(path) || (is.character(path) && length(path) == 1))
-  stopifnot(is.null(secure) || isTRUE(secure))
-  stopifnot(is.null(http_only) || isTRUE(http_only))
-
-  stopifnot(is.null(same_site) || (is.character(same_site) && length(same_site) == 1 &&
-      grepl("^(strict|lax|none)$", same_site, ignore.case = TRUE)))
-  # Normalize case
-  if (!is.null(same_site)) {
-    same_site <- c(strict = "Strict", lax = "Lax", none = "None")[[tolower(same_site)]]
-  }
-
-  list(
-    "Expires" = expires,
-    "Max-Age" = max_age,
-    "Domain" = domain,
-    "Path" = path,
-    "Secure" = secure,
-    "HttpOnly" = http_only,
-    "SameSite" = same_site
-  )
-}
-
-set_cookie_header <- function(name, value, cookie_options = cookie_options()) {
-
-  stopifnot(is.character(name) && length(name) == 1)
-  stopifnot(is.null(value) || (is.character(value) && length(value) == 1))
-  value <- value %||% ""
-
-  parts <- rlang::list2(
-    !!name := value,
-    !!!cookie_options
-  )
-  parts <- parts[!vapply(parts, is.null, logical(1))]
-
-  names <- names(parts)
-  sep <- ifelse(vapply(parts, isTRUE, logical(1)), "", "=")
-  values <- ifelse(vapply(parts, isTRUE, logical(1)), "", as.character(parts))
-  list(
-    "Set-Cookie" = paste(collapse = "; ", paste0(names, sep, values))
-  )
-}
-
-delete_cookie_header <- function(name, cookie_options = cookie_options()) {
-  cookie_options[["Expires"]] <- NULL
-  cookie_options[["Max-Age"]] <- 0
-  set_cookie_header(name, "", cookie_options)
-}
-
-jwt_decode <- function(jwt_str) {
-  stopifnot(is.character(jwt_str) && length(jwt_str) == 1)
-  pieces <- strsplit(jwt_str, ".", fixed = TRUE)[[1]]
-  stopifnot(length(pieces) == 3)
-
-  list(
-    header = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[1]]))),
-    claim = jsonlite::parse_json(rawToChar(base64enc::base64decode(pieces[[2]])))
-  )
-}
-
-shiny_token <- function() {
-  session <- shiny::getDefaultReactiveDomain()
-  if (!is.null(session)) {
-    session$userData$gargle_token
-  } else {
-    NULL
-  }
-}
-
-with_shiny_token <- function(token, expr) {
-  force(token)
-
-  on <- function() {
-    push_authstate_interceptor(
-      auth_active_func = function(value, fallback) {
-        if (missing(value)) {
-          !is.null(token)
-        } else {
-          fallback(value)
-        }
-      },
-      cred_func = function(value, fallback) {
-        if (missing(value)) {
-          token
-        } else {
-          fallback(value)
-        }
-      }
-    )
-  }
-  off <- pop_authstate_interceptor
-
-  domain <- promises::new_promise_domain(
-    wrapOnFulfilled = function(onFulfilled) {
-      function(...) {
-        on()
-        on.exit(off(), add = TRUE)
-
-        onFulfilled(...)
-      }
-    },
-    wrapOnRejected = function(onRejected) {
-      function(...) {
-        on()
-        on.exit(off, add = TRUE)
-
-        onRejected(...)
-      }
-    },
-    wrapSync = function(expr) {
-      on()
-      on.exit(off, add = TRUE)
-
-      expr
-    }
-  )
-
-  promises::with_promise_domain(domain, expr)
-}
-
-#' @export
-basic_welcome_ui <- function(...) {
-  function(req, login_url) {
-    shiny::fluidPage(
-      jquerylib::jquery_core(),
-      shiny::fluidRow(
-        shiny::column(6, offset = 3, class = "text-center",
-          ...,
-          p(google_signin_button(login_url))
-        )
-      )
-    )
-  }
-}
-
-#' @export
-google_signin_button <- function(login_url, ..., theme = c("light", "dark"),
-  aria_label = "Sign in with Google") {
-
-  stopifnot(is.character(login_url) && length(login_url) == 1)
-  theme <- match.arg(theme)
-
-  dep <- htmltools::htmlDependency(
-    "google-sign-in-button-styles",
-    "1.0",
-    src = "branding",
-    package = "gargle",
-    all_files = TRUE,
-    stylesheet = "signin.css"
-  )
-  htmltools::tagList(
-    dep,
-    tags$a(href = login_url, class = paste0("google-signin-button-", theme),
-      "aria-label" = aria_label,
-      ...
-    )
-  )
 }
