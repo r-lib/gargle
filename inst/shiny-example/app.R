@@ -19,7 +19,12 @@ welcome <- basic_welcome_ui(
 # UI to be displayed after login. You can call Google APIs from here.
 ui <- function(req) {
   fluidPage(
-    gargle::token_email(googledrive::drive_token()),
+    absolutePanel(top = 5, right = 5,
+      "Logged in as ",
+      gargle::token_email(googledrive::drive_token()),
+      " | ",
+      tags$a(href = "logout", "Log out")
+    ),
     verbatimTextOutput("foo")
   )
 }
