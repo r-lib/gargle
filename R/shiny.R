@@ -25,7 +25,7 @@ require_oauth <- function(app, oauth_app, scopes, welcome_ui,
   httpHandler <- app$httpHandler
   app$httpHandler <- function(req) {
     resp <-
-      handle_logout(req, cookie_opts) %||%
+      handle_logout(req, oauth_app, cookie_opts) %||%
       handle_oauth_callback(req, oauth_app, cookie_opts) %||%
       handle_logged_in(req, oauth_app, httpHandler) %||%
       handle_welcome(req, welcome_ui, oauth_app, scopes, cookie_opts)
@@ -106,7 +106,7 @@ suppress_token_fetch <- function(shiny, onStop) {
   })
 }
 
-handle_logout <- function(req, cookie_opts) {
+handle_logout <- function(req, oauth_app, cookie_opts) {
   if (!isTRUE(req$PATH_INFO == "/logout")) {
     return(NULL)
   }
@@ -114,11 +114,16 @@ handle_logout <- function(req, cookie_opts) {
   token <- read_creds_from_cookies(req, oauth_app)
   if (!is.null(token)) {
     tryCatch(
-      token$revoke(),
+      {
+        token$revoke()
+        ui_line("Token successfully revoked")
+      },
       error = function(e) {
-        warning("Error while revoking token for logout: ", conditionMessage(e))
+        message("Error while revoking token for logout: ", conditionMessage(e))
       }
     )
+  } else {
+    ui_line("Logout called but no (valid) credential cookie detected")
   }
 
   shiny::httpResponse(
@@ -288,6 +293,10 @@ unwrap_creds <- function(gargle_token, oauth_app) {
 
     token <- gargle2.0_token(email, oauth_app, package = "gargle",
       scope = creds$scope, credentials = creds)
+
+    if (!token$validate()) {
+      token$refresh()
+    }
 
     token
   }, error = function(err) {
@@ -500,14 +509,14 @@ with_shiny_token <- function(token, expr) {
     wrapOnRejected = function(onRejected) {
       function(...) {
         on()
-        on.exit(off(), add = TRUE)
+        on.exit(off, add = TRUE)
 
         onRejected(...)
       }
     },
     wrapSync = function(expr) {
       on()
-      on.exit(off(), add = TRUE)
+      on.exit(off, add = TRUE)
 
       expr
     }
