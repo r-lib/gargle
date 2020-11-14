@@ -8,6 +8,9 @@ oauth_scopes = c(
   "https://www.googleapis.com/auth/drive.readonly"
 )
 
+# DO NOT DEPLOY using `gargle_app`--it is for testing purposes only! Instead,
+# get your own API credentials from Google and call httr::oauth_app().
+# See https://gargle.r-lib.org/articles/get-api-credentials.html
 oauth_app <- gargle_app()
 
 # What people will see before they log in

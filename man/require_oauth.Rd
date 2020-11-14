@@ -8,7 +8,7 @@ require_oauth(
   app,
   oauth_app,
   scopes,
-  welcome_ui,
+  welcome_ui = NULL,
   cookie_opts = cookie_options(http_only = TRUE)
 )
 }
@@ -29,6 +29,15 @@ included. This grants permission to retrieve the email address associated
 with a token; gargle uses this to index cached OAuth tokens. This grants no
 permission to view or send email. It is considered a low value scope and
 does not appear on the consent screen.}
+
+\item{welcome_ui}{A function that provides the UI to be displayed when a user
+tries to visit the app without being logged in. See the "Welcome UI"
+section below.}
+
+\item{cookie_opts}{\code{require_oauth} uses an HTTP cookie to remember login
+credentials between visits. Use this parameter to control aspects of the
+cookie, such as maximum age (defaults to the duration of the browser
+process).}
 }
 \description{
 Use this function to enforce Google Auth login for all visitors to a Shiny
@@ -36,3 +45,45 @@ app. Once logged in, a \link[=Gargle-class]{token} will be stored on the Shiny
 session object and automatically used for any Google API operations that go
 through gargle.
 }
+\section{Welcome UI}{
+
+
+You can use the \code{welcome_ui} parameter to customize the page that greets
+users before they log in. With the default value of \code{NULL}, users will not
+see a welcome message, but instead be immediately directed to a Google
+sign-in page.
+
+If you want to welcome the user with some instructions, or at least an
+indication of what app they're logging into, the simplest way is to use the
+\code{\link[=basic_welcome_ui]{basic_welcome_ui()}} function. This will create a \code{\link[shiny:fluidPage]{shiny::fluidPage()}} and
+put whatever UI you pass it into a centered div; and below that, a Google
+sign-in button.
+
+Here's an example with a simple headline and one-line welcome message:\if{html}{\out{<div class="r">}}\preformatted{welcome <- basic_welcome_ui(
+  h2("Welcome!"),
+  p("To use this app, please sign in with a Google account.")
+)
+shinyApp(ui, server) \%>\% require_oauth(oauth_app, scopes, welcome_ui = welcome)
+}\if{html}{\out{</div>}}
+
+\figure{basic_welcome_ui.png}{Basic welcome UI}
+
+You can also provide a completely custom welcome page. To do so, pass a
+function that takes two parameters: \code{req} and \code{login_url}. The \code{req}
+parameter will be a \href{https://github.com/jeffreyhorner/Rook}{Rook}
+environment, and can generally be ignored. The \code{login_url} parameter is the
+URL the user should be directed to when they're ready to log in; this
+should be turned into a link or button (see \code{\link[=google_signin_button]{google_signin_button()}}).\if{html}{\out{<div class="r">}}\preformatted{welcome <- function(req, login_url) \{
+  fluidPage(theme = shinythemes::shinytheme("darkly"),
+    div(style = "padding: 3rem;",
+      h3("Sign in to continue"),
+      google_signin_button(login_url, theme = "dark")
+    )
+  )
+\}
+shinyApp(ui, server) \%>\% require_oauth(oauth_app, scopes, welcome_ui = welcome)
+}\if{html}{\out{</div>}}
+
+\figure{custom_welcome_ui.png}{Custom welcome UI}
+}
+

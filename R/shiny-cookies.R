@@ -63,6 +63,8 @@ unwrap_creds <- function(gargle_token, oauth_app) {
   })
 }
 
+# Returns a named list of cookies that are present in this request; or `NULL` if
+# no cookie header was found, or the cookie header was malformed.
 parse_cookies <- function(req) {
   cookie_header <- req[["HTTP_COOKIE"]]
   if (is.null(cookie_header)) {
@@ -92,9 +94,30 @@ parse_cookies <- function(req) {
   stats::setNames(as.list(values), names)
 }
 
+#' HTTP cookie options
+#'
+#' @description
+#' Creates a cookie options object that can be passed to [require_oauth()],
+#' to use when writing HTTP cookies for persisting auth credentials.
+#'
+#' @param max_age Either `NULL` or a number indicating how many seconds (after a
+#'   cookie is set) until the cookie expires. If both `expires` and `max_age`
+#'   are `NULL`, then the cookie will be removed when the browser shuts down.
+#' @param http_only Either `NULL` or `TRUE`, which indicates that the cookie
+#'   should not be readable by JavaScript code in the client, only by the server
+#'   (the R process running Shiny). You should use `TRUE` unless you know you
+#'   have a specific reason not to.
+#' @param domain,path,secure,same_site Standard HTTP cookie options; see
+#'   [MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
+#'   for details.
+#' @param expires A [POSIXt][base::POSIXt] (`POSIXlt` or `POSIXct`) object
+#'   specifying the time at which the cookie expires. (You'll generally want to
+#'   use `max_age` instead; and if both `max_age` and `expires` are both
+#'   specified, `max_age` takes precedence.)
+#'
 #' @export
-cookie_options <- function(expires = NULL, max_age = NULL,
-  domain = NULL, path = NULL, secure = NULL, http_only = NULL, same_site = NULL) {
+cookie_options <- function(max_age = NULL, domain = NULL, path = NULL,
+  secure = NULL, http_only = TRUE, same_site = NULL, expires = NULL) {
 
   if (!is.null(expires)) {
     stopifnot(length(expires) == 1 && (inherits(expires, "POSIXt") || is.character(expires)))
@@ -118,8 +141,14 @@ cookie_options <- function(expires = NULL, max_age = NULL,
   }
   stopifnot(is.null(domain) || (is.character(domain) && length(domain) == 1))
   stopifnot(is.null(path) || (is.character(path) && length(path) == 1))
-  stopifnot(is.null(secure) || isTRUE(secure))
-  stopifnot(is.null(http_only) || isTRUE(http_only))
+  stopifnot(is.null(secure) || isTRUE(secure) || isFALSE(secure))
+  if (isFALSE(secure)) {
+    secure <- NULL
+  }
+  stopifnot(is.null(http_only) || isTRUE(http_only) || isFALSE(http_only))
+  if (isFALSE(http_only)) {
+    http_only <- NULL
+  }
 
   stopifnot(is.null(same_site) || (is.character(same_site) && length(same_site) == 1 &&
       grepl("^(strict|lax|none)$", same_site, ignore.case = TRUE)))
@@ -139,6 +168,7 @@ cookie_options <- function(expires = NULL, max_age = NULL,
   )
 }
 
+# Returns a list, suitable for `!!!`-ing into a list of HTTP headers
 set_cookie_header <- function(name, value, cookie_options = cookie_options()) {
 
   stopifnot(is.character(name) && length(name) == 1)
@@ -159,12 +189,16 @@ set_cookie_header <- function(name, value, cookie_options = cookie_options()) {
   list("Set-Cookie" = header)
 }
 
+# Returns a list, suitable for `!!!`-ing into a list of HTTP headers
 delete_cookie_header <- function(name, cookie_options = cookie_options()) {
   cookie_options[["Expires"]] <- NULL
   cookie_options[["Max-Age"]] <- 0
   set_cookie_header(name, "", cookie_options)
 }
 
+# A JWT token is just a couple of JSON blobs, each base64 encoded, then joined
+# with "." characters as delimiters. (There's a signature too, but this function
+# ignores it. See the {jose} package if signature verification is needed.)
 jwt_decode <- function(jwt_str) {
   stopifnot(is.character(jwt_str) && length(jwt_str) == 1)
   pieces <- strsplit(jwt_str, ".", fixed = TRUE)[[1]]

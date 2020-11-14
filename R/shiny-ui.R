@@ -1,13 +1,28 @@
+#' Helper function for creating a basic welcome screen
+#'
+#' Call this function with a bit of content (say, the title of your app and a
+#' couple of sentences describing why login is required) and a `welcome_ui`
+#' function will be returned, suitable for passing to [require_oauth()]. (See
+#' the Details section of [require_oauth()] to see an example of
+#' `basic_welcome_ui`.)
+#'
+#' @param ... _Unnamed_ arguments should be Shiny UI objects (i.e. HTML tags), and
+#'   will become the page's main contents; they will immediately be followed by
+#'   a Google signin button.
+#'
+#'   _Named_ arguments become attributes on the innermost
+#'   `<div>` element that wraps both the given content, and the sign-in button.
+#'
 #' @export
 basic_welcome_ui <- function(...) {
   function(req, login_url) {
-    tagList(
+    htmltools::tagList(
       jquerylib::jquery_core(),
       shiny::fluidPage(
         shiny::fluidRow(
           shiny::column(6, offset = 3, class = "text-center",
             ...,
-            p(google_signin_button(login_url))
+            htmltools::p(google_signin_button(login_url))
           )
         )
       )
@@ -32,7 +47,7 @@ google_signin_button <- function(login_url, ..., theme = c("light", "dark"),
   )
   htmltools::tagList(
     dep,
-    tags$a(href = login_url, class = paste0("google-signin-button-", theme),
+    htmltools::tags$a(href = login_url, class = paste0("google-signin-button-", theme),
       "aria-label" = aria_label,
       ...
     )
