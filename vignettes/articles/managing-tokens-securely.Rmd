@@ -96,13 +96,17 @@ Make sure `.Renviron` ends in a newline; the lack of this is a notorious cause o
 
 ### Provide environment variable to other services
 
+#### RStudio Connect:
+
+After publishing an R Markdown report or Shiny application on RStudio Connect, you'll see the Content Settings Panel to the right of whatever you just published. Use the [Vars tab](https://docs.rstudio.com/connect/user/content-settings/#content-vars) to create a `PACKAGE_PASSWORD` environment variable.
+
 #### GitHub Actions:
 
 Define the environment variable as an encrypted secret in your repo:
 
 <https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets>
 
-Use the secrets context to expose a secret as an environment variable in your workflows.     That will look like like so, in some appropriate place in your workflow file:
+Use the secrets context to expose a secret as an environment variable in your workflows.     That will look like so, in some appropriate place in your workflow file:
 
 ```
 env:

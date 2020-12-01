@@ -44,7 +44,12 @@ An \code{AuthState} should be created through the constructor function
 \item{\code{app}}{An OAuth consumer application.}
 
 \item{\code{api_key}}{An API key.}
-
+}
+\if{html}{\out{</div>}}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
 \item{\code{auth_active}}{Logical, indicating whether auth is active.}
 
 \item{\code{cred}}{Credentials.}

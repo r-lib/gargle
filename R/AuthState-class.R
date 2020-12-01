@@ -86,89 +86,147 @@ init_AuthState <- function(package = NA_character_,
 #'
 #' @export
 #' @name AuthState-class
-AuthState <- R6::R6Class("AuthState", list(
-  #' @field package Package name.
-  package = NULL,
-  #' @field app An OAuth consumer application.
-  app = NULL,
-  #' @field api_key An API key.
-  api_key = NULL,
-  #' @field auth_active Logical, indicating whether auth is active.
-  auth_active = NULL,
-  #' @field cred Credentials.
-  cred = NULL,
-  #' @description Create a new AuthState
-  #' @details For more details on the parameters, see [init_AuthState()]
-  initialize = function(package = NA_character_,
-                        app = NULL,
-                        api_key = NULL,
-                        auth_active = TRUE,
-                        cred = NULL) {
-    ui_line("initializing AuthState")
-    stopifnot(
-      is_string(package),
-      is.null(app) || is.oauth_app(app),
-      is.null(api_key) || is_string(api_key),
-      isTRUE(auth_active) || isFALSE(auth_active),
-      is.null(cred) || inherits(cred, "Token2.0")
+AuthState <- R6::R6Class("AuthState",
+  private = list(
+    auth_active_ = NULL,
+    cred_ = NULL
+  ),
+  public = list(
+    #' @field package Package name.
+    package = NULL,
+    #' @field app An OAuth consumer application.
+    app = NULL,
+    #' @field api_key An API key.
+    api_key = NULL,
+    #' @description Create a new AuthState
+    #' @details For more details on the parameters, see [init_AuthState()]
+    initialize = function(package = NA_character_,
+      app = NULL,
+      api_key = NULL,
+      auth_active = TRUE,
+      cred = NULL) {
+      ui_line("initializing AuthState")
+      stopifnot(
+        is_string(package),
+        is.null(app) || is.oauth_app(app),
+        is.null(api_key) || is_string(api_key),
+        isTRUE(auth_active) || isFALSE(auth_active),
+        is.null(cred) || inherits(cred, "Token2.0")
+      )
+      self$package     <- package
+      self$app         <- app
+      self$api_key     <- api_key
+      self$auth_active <- auth_active
+      self$cred        <- cred
+      self
+    },
+    #' @description Print an AuthState
+    #' @param ... Not used.
+    print = function(...) {
+      withr::local_options(list(gargle_quiet = FALSE))
+      ui_line("<AuthState (via gargle--with Joe's changes)>")
+      ui_line("         <package> ", self$package)
+      ui_line("             <app> ", self$app$appname)
+      ui_line("         <api_key> ", obfuscate(self$api_key))
+      ui_line("     <auth_active> ", self$auth_active)
+      ui_line("     <credentials> ", class(self$cred)[[1]])
+      ui_line("---")
+    },
+    #' @description Set the OAuth app
+    set_app = function(app) {
+      stopifnot(is.null(app) || is.oauth_app(app))
+      self$app <- app
+      invisible(self)
+    },
+    #' @description Set the API key
+    #' @param value An API key.
+    set_api_key = function(value) {
+      stopifnot(is.null(value) || is_string(value))
+      self$api_key <- value
+      invisible(self)
+    },
+    #' @description Set whether auth is (in)active
+    #' @param value Logical, indicating whether to send requests authorized with
+    #'   user credentials.
+    set_auth_active = function(value) {
+      stopifnot(isTRUE(value) || isFALSE(value))
+      self$auth_active <- value
+      invisible(self)
+    },
+    #' @description Set credentials
+    #' @param cred User credentials.
+    set_cred = function(cred) {
+      self$cred <- cred
+      invisible(self)
+    },
+    #' @description Clear credentials
+    clear_cred = function() {
+      self$set_cred(NULL)
+    },
+    #' @description Get credentials
+    get_cred = function() {
+      self$cred
+    },
+    #' @description Report if we have credentials
+    has_cred = function() {
+      ## FIXME(jennybc): how should this interact with auth_active? should it?
+      !is.null(self$cred)
+    }
+  ),
+  active = list(
+    #' @field auth_active Logical, indicating whether auth is active.
+    auth_active = function(value) {
+      invoke_authstate_interceptor("auth_active", value, function(value, fallback) {
+        if (missing(value)) {
+          private$auth_active_
+        } else {
+          private$auth_active_ <- value
+        }
+      })
+    },
+    #' @field cred Credentials.
+    cred = function(value) {
+      invoke_authstate_interceptor("cred", value, function(value, fallback) {
+        if (missing(value)) {
+          private$cred_
+        } else {
+          private$cred_ <- value
+        }
+      })
+    }
+  )
+)
+
+push_authstate_interceptor <- function(auth_active_func, cred_func) {
+  stopifnot(is.function(auth_active_func))
+  stopifnot(is.function(cred_func))
+
+  gargle_env$cred_access_decorators <- c(
+    gargle_env$cred_access_decorators,
+    list(
+      list(auth_active = auth_active_func, cred = cred_func)
     )
-    self$package     <- package
-    self$app         <- app
-    self$api_key     <- api_key
-    self$auth_active <- auth_active
-    self$cred        <- cred
-    self
-  },
-  #' @description Print an AuthState
-  #' @param ... Not used.
-  print = function(...) {
-    withr::local_options(list(gargle_quiet = FALSE))
-    ui_line("<AuthState (via gargle)>")
-    ui_line("         <package> ", self$package)
-    ui_line("             <app> ", self$app$appname)
-    ui_line("         <api_key> ", obfuscate(self$api_key))
-    ui_line("     <auth_active> ", self$auth_active)
-    ui_line("     <credentials> ", class(self$cred)[[1]])
-    ui_line("---")
-  },
-  #' @description Set the OAuth app
-  set_app = function(app) {
-    stopifnot(is.null(app) || is.oauth_app(app))
-    self$app <- app
-    invisible(self)
-  },
-  #' @description Set the API key
-  #' @param value An API key.
-  set_api_key = function(value) {
-    stopifnot(is.null(value) || is_string(value))
-    self$api_key <- value
-    invisible(self)
-  },
-  #' @description Set whether auth is (in)active
-  #' @param value Logical, indicating whether to send requests authorized with
-  #'   user credentials.
-  set_auth_active = function(value) {
-    stopifnot(isTRUE(value) || isFALSE(value))
-    self$auth_active <- value
-    invisible(self)
-  },
-  #' @description Set credentials
-  #' @param cred User credentials.
-  set_cred = function(cred) {
-    self$cred <- cred
-    invisible(self)
-  },
-  #' @description Clear credentials
-  clear_cred = function() {
-    self$set_cred(NULL)
-  },
-  #' @description Get credentials
-  get_cred = function() {
-    self$cred
-  },
-  #' @description Report if we have credentials
-  has_cred = function() {
-    ## FIXME(jennybc): how should this interact with auth_active? should it?
-    !is.null(self$cred)
+  )
+  invisible()
+}
+
+pop_authstate_interceptor <- function() {
+  stopifnot(length(gargle_env$cred_access_decorators) >= 1)
+
+  gargle_env$cred_access_decorators <- utils::head(gargle_env$cred_access_decorators, -1)
+  invisible()
+}
+
+invoke_authstate_interceptor <- function(name, value, fallback, i = length(gargle_env$cred_access_decorators)) {
+  stopifnot(isTRUE(name %in% c("auth_active", "cred")))
+  stopifnot(is.function(fallback) && identical(names(formals(fallback)), c("value", "fallback")))
+  stopifnot(is.integer(i) && length(i) == 1 && i >= 0)
+
+  if (i == 0L) {
+    fallback(value, NULL)
+  } else {
+    gargle_env$cred_access_decorators[[i]][[name]](value, function(value) {
+      invoke_authstate_interceptor(name, value, fallback, i - 1L)
+    })
   }
-))
+}

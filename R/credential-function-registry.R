@@ -6,12 +6,16 @@
 #' This environment contains:
 #' * `$cred_funs` is the ordered list of credential functions to use when trying
 #'   to fetch credentials.
+#' * `$cred_access_decorators` is the ordered list of list objects, each of
+#'   which contains `$auth_active` and `$cred` functions, that intercept reads
+#'   for `AuthState`'s active fields of the same names.
 #'
 #' @noRd
 #' @format An environment.
 #' @keywords internal
 gargle_env <- new.env(parent = emptyenv())
 gargle_env$cred_funs <- list()
+gargle_env$cred_access_decorators <- list()
 
 #' Check that f is a viable credential fetching function
 #'

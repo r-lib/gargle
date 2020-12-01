@@ -65,16 +65,26 @@ drive_auth <- function(email = gargle::gargle_oauth_email(),
 A client package can use an internal object of class `gargle::AuthClass` to hold the auth state. Here's how it is initialized in googledrive:
 
 ```{r eval = FALSE}
-.auth <- gargle::init_AuthState(
-  package     = "googledrive",
-  auth_active = TRUE
-  # app = NULL,
-  # api_key = NULL,
-  # cred = NULL
-)
+.auth <- NULL
+
+.onLoad <- function(libname, pkgname) {
+  .auth <<- gargle::init_AuthState(
+    package     = "googledrive",
+    auth_active = TRUE
+    # app = NULL,
+    # api_key = NULL,
+    # cred = NULL
+  )
+}
 ```
 
+(If your package already has an `.onLoad` function defined, add the `.auth <<- gargle::init_AuthState(...)` to that one instead of creating a new one.)
+
 The OAuth `app` and `api_key` are configurable by the user and, when `NULL`, downstream functions can fall back to internal credentials. The `cred` field is populated by the first call to `drive_auth()` (direct or indirectly via `drive_token()`).
+
+It might seem strange that `.auth` is declared with `NULL`, then populated in `.onLoad()`. Why not simply write `.auth <- gargle::init_AuthState(...)` at the top level? In fact, earlier versions of this article recommended just that. This is a problem because "the R objects of the package are created at installation time and stored in a database in the R directory of the installed package, being loaded into the session at first use"[^1]. Since `AuthState` is an R6 class declared in gargle, and `.auth` is in googledrive, you'd end up with code from the gargle package being stored in the googledrive package's database. That can cause big problems if you install a new copy of gargle that has made changes to the `AuthState` implementation---googledrive will continue using the old `AuthState` implementation! Follow the `.onLoad()` pattern here, and this issue disappears.
+
+[^1]: https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Creating-R-packages
 
 ### OAuth app
 
