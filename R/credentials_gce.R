@@ -143,14 +143,14 @@ detect_gce <- function() {
 # @return A list of service account names.
 list_service_accounts <- function() {
   accounts <- gce_metadata_request("instance/service-accounts")
-  ct <- httr::content(accounts, as = "text", encoding = "utf8")
+  ct <- httr::content(accounts, as = "text", encoding = "UTF-8")
   strsplit(ct, split = "/\n", fixed = TRUE)[[1]]
 }
 
 get_instance_scopes <- function(service_account) {
   path <- glue("instance/service-accounts/{service_account}/scopes")
   scopes <- gce_metadata_request(path)
-  ct <- httr::content(scopes, as = "text", encoding = "utf8")
+  ct <- httr::content(scopes, as = "text", encoding = "UTF-8")
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
