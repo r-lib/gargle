@@ -67,6 +67,9 @@
     <loc>https://gargle.r-lib.org/reference/request_make.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/request_retry.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/response_process.html</loc>
   </url>
   <url>
