@@ -29,19 +29,19 @@ APIs, who are prepared to navigate the details of low-level API access.
 
 gargle’s functionality falls into two main domains:
 
-  - **Auth.** The `token_fetch()` function calls a series of concrete
+-   **Auth.** The `token_fetch()` function calls a series of concrete
     credential-fetching functions to obtain a valid access token (or it
     quietly dies trying).
-      - This covers explicit service accounts, application default
+    -   This covers explicit service accounts, application default
         credentials, Google Compute Engine, and the standard OAuth2
         browser flow.
-      - gargle offers the `Gargle2.0` class, which extends
+    -   gargle offers the `Gargle2.0` class, which extends
         `httr::Token2.0`. It is the default class for user OAuth 2.0
         credentials. There are two main differences from
         `httr::Token2.0`: greater emphasis on the user’s email
         (e.g. Google identity) and default token caching is at the user
         level.
-  - **Requests and responses**. A family of functions helps to prepare
+-   **Requests and responses**. A family of functions helps to prepare
     HTTP requests, (possibly with reference to an API spec derived from
     a Discovery Document), make requests, and process the response.
 
@@ -115,8 +115,8 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 vapply(out, function(x) x[["family"]], character(1))
-#> [1] "Roboto"           "Open Sans"        "Lato"             "Montserrat"      
-#> [5] "Noto Sans JP"     "Source Sans Pro"  "Roboto Condensed" "Oswald"
+#> [1] "Roboto"           "Open Sans"        "Noto Sans JP"     "Lato"            
+#> [5] "Montserrat"       "Source Sans Pro"  "Roboto Condensed" "Oswald"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
