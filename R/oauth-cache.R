@@ -327,11 +327,12 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     )
   }
 
-  ui_line(glue_data(
+  lines <- glue_data(
     df,
     "{email} {app} {scopes} {hash...}",
     .transformer = format_transformer
-  ))
+  )
+  ui_line(glue_collapse(lines, sep = "\n"))
 
   df$hash... <- NULL
   invisible(df)
