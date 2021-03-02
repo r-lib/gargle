@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* Better handling of `BadRequest` errors, i.e. more specifics are revealed.
+
 * `oauth_app_from_json` now supports JSON files from the "Web application"
   client type (#155).
   
