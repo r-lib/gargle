@@ -8,7 +8,7 @@ jobs:
   pkgdown:
     runs-on: macOS-latest
     env:
-      GOOGLESHEETS4_PASSWORD: ${{ secrets.GARGLE_PASSWORD }}
+      GARGLE_PASSWORD: ${{ secrets.GARGLE_PASSWORD }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
