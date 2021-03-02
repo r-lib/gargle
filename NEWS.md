@@ -1,7 +1,9 @@
 # gargle (development version)
 
 * `oauth_app_from_json` now supports JSON files from the "Web application"
-  client type. (#155)
+  client type (#155).
+  
+* `request_retry()` is a drop-in substitute for `request_make()` that uses (modified) exponential backoff to retry requests that fail with error `429 RESOURCE_EXHAUSTED` (#63).
 
 * Credentials used in selected client packages have been rolled. Users of bigrquery, googledrive, and googlesheets4 can expect a prompt to re-authorize the "Tidyverse API Packages" when using an OAuth user token. This has no impact on users who use their own OAuth app (i.e. client ID and secret) or those who use service account tokens.
 
