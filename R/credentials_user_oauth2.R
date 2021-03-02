@@ -16,7 +16,7 @@
 #' token][credentials_service_account].
 #'
 #' @param scopes A character vector of scopes to request. Pick from those listed
-#'   at <https://developers.google.com/identity/protocols/googlescopes>.
+#'   at <https://developers.google.com/identity/protocols/oauth2/scopes>.
 #'
 #'   For certain token flows, the
 #'   `"https://www.googleapis.com/auth/userinfo.email"` scope is unconditionally

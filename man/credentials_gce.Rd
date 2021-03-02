@@ -12,7 +12,7 @@ credentials_gce(
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
-at \url{https://developers.google.com/identity/protocols/googlescopes}.
+at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.
 
 For certain token flows, the
 \code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
