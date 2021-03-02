@@ -162,6 +162,7 @@
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Better handling of <code>BadRequest</code> errors, i.e. more specifics are revealed.</p></li>
 <li><p><code>oauth_app_from_json</code> now supports JSON files from the “Web application” client type (<a href='https://github.com/r-lib/gargle/issues/155'>#155</a>).</p></li>
 <li><p><code><a href="../reference/request_retry.html">request_retry()</a></code> is a drop-in substitute for <code><a href="../reference/request_make.html">request_make()</a></code> that uses (modified) exponential backoff to retry requests that fail with error <code>429 RESOURCE_EXHAUSTED</code> (<a href='https://github.com/r-lib/gargle/issues/63'>#63</a>).</p></li>
 <li><p>Credentials used in selected client packages have been rolled. Users of bigrquery, googledrive, and googlesheets4 can expect a prompt to re-authorize the “Tidyverse API Packages” when using an OAuth user token. This has no impact on users who use their own OAuth app (i.e. client ID and secret) or those who use service account tokens.</p></li>
