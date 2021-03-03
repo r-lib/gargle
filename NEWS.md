@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 1.0.0
 
 * Better handling of `BadRequest` errors, i.e. more specifics are revealed.
 
