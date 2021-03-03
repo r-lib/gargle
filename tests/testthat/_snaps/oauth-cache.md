@@ -50,13 +50,13 @@
       https://gargle.r-lib.org/articles/non-interactive-auth.html
       The gargle package is using a cached token for a@example.com.
 
-# gargle_oauth_sitrep() reports on specified cache
+# gargle_oauth_sitrep() works
 
     Code
-      out <- gargle_oauth_sitrep(tmp_cache)
-    Message <message>
+      writeLines(out)
+    Output
       gargle OAuth cache path:
-      /tmp/Rtmpx9lyYC/file1127f6ba3748a
+      {path to gargle oauth cache}
       
       2 tokens found
       

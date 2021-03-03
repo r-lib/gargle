@@ -201,16 +201,7 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
 
 # situation report ----------------------------------------------------------
 
-test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
-  expect_info(
-    cache <- gargle_oauth_sitrep(cache = FALSE),
-    "No"
-  )
-  expect_null(cache)
-})
-
-test_that("gargle_oauth_sitrep() reports on specified cache", {
-  skip("Have this refactored in a branch already ... just wait")
+test_that("gargle_oauth_dat() reports on specified cache", {
   tmp_cache <- file_temp()
   withr::defer(dir_delete(tmp_cache))
 
@@ -225,12 +216,36 @@ test_that("gargle_oauth_sitrep() reports on specified cache", {
     cache = tmp_cache
   )
 
-  expect_info(
-    out <- gargle_oauth_sitrep(tmp_cache),
-    "2 tokens found"
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "data.frame")
+  expect_equal(nrow(dat), 2)
+  expect_equal(dat$email, c("a@example.org", "b@example.org"))
+})
+
+test_that("gargle_oauth_sitrep() works", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
   )
-  expect_s3_class(out, "data.frame")
-  expect_equal(nrow(out), 2)
+  gargle2.0_token(
+    email = "b@example.org",
+    credentials = list(b = 2),
+    cache = tmp_cache
+  )
+
+  # bit of fiddliness to remove the volatile path
+  out <- capture.output(
+    gargle_oauth_sitrep(tmp_cache),
+    type = "message"
+  )
+  out <- sub(tmp_cache, "{path to gargle oauth cache}", out, fixed = TRUE)
+  expect_snapshot(
+    writeLines(out)
+  )
 })
 
 # helpers -----------------------------------------------------------

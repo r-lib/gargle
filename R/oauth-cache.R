@@ -285,11 +285,7 @@ match2 <- function(needle, haystack) {
 #' gargle_oauth_sitrep()
 gargle_oauth_sitrep <- function(cache = NULL) {
   withr::local_options(list(gargle_quiet = FALSE))
-  withr::with_options(
-    # I do not want to actively trigger cache establishment
-    list(rlang_interactive = FALSE),
-    path <- cache_establish(cache)
-  )
+  path <- maybe_cache_path(cache)
   if (is.null(path)) {
     ui_line("No gargle OAuth cache has been established.")
     return(invisible())
@@ -298,23 +294,10 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   ui_line("gargle OAuth cache path:")
   ui_line(path)
   ui_line()
-  tokens <- cache_load(path)
-  ui_line(glue("{length(tokens)} tokens found"))
+
+  dat <- gargle_oauth_dat(path)
+  ui_line(glue("{nrow(dat)} tokens found"))
   ui_line()
-
-  nms    <- names(tokens)
-  hash   <- mask_email(nms)
-  email  <- extract_email(nms)
-  app    <- map_chr(tokens, function(t) t$app$appname)
-  scopes <- map(tokens, function(t) t$params$scope)
-  email_scope <- "https://www.googleapis.com/auth/userinfo.email"
-  scopes <- map(scopes, function(s) s[s != email_scope])
-  scopes <- map_chr(scopes, function(s) commapse(base_scope(s)))
-
-  df <- data.frame(
-    email, app, scopes, hash, hash... = obfuscate(hash, first = 7, last = 0),
-    stringsAsFactors = FALSE, row.names = NULL
-  )
 
   format_transformer <- function(text, envir) {
     res <- eval(parse(text = text, keep.source = FALSE), envir)
@@ -328,12 +311,42 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   }
 
   lines <- glue_data(
-    df,
+    dat,
     "{email} {app} {scopes} {hash...}",
     .transformer = format_transformer
   )
   ui_line(glue_collapse(lines, sep = "\n"))
 
-  df$hash... <- NULL
-  invisible(df)
+  invisible(dat)
+}
+
+maybe_cache_path <- function(cache = NULL) {
+  # I do not want to actively trigger cache establishment
+  withr::local_options(list(rlang_interactive = FALSE))
+  cache_establish(cache)
+}
+
+gargle_oauth_dat <- function(cache = NULL) {
+  path <- maybe_cache_path(cache)
+  if (is.null(path)) {
+    return(invisible())
+  }
+
+  tokens <- cache_load(path)
+
+  nms    <- names(tokens)
+  hash   <- mask_email(nms)
+  email  <- extract_email(nms)
+  app    <- map_chr(tokens, function(t) t$app$appname)
+  scopes <- map(tokens, function(t) t$params$scope)
+  email_scope <- "https://www.googleapis.com/auth/userinfo.email"
+  scopes <- map(scopes, function(s) s[s != email_scope])
+  scopes <- map_chr(scopes, function(s) commapse(base_scope(s)))
+
+  data.frame(
+    email, app, scopes, hash,
+    hash... = obfuscate(hash, first = 7, last = 0),
+    filepath = path(path, nms),
+    stringsAsFactors = FALSE, row.names = NULL
+  )
 }
