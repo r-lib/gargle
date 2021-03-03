@@ -44,7 +44,7 @@ test_that("We capture credential function names when possible", {
   cred_funs_add(b = function(scopes, ...) {})
   cred_funs_add(creds_one)
   cred_funs_add(function(scopes, ...) {})
-  expect_identical(names(cred_funs_list()), c("", "", "b", "a"))
+  expect_equal(names(cred_funs_list()), c("", "", "b", "a"))
 
   cred_funs_clear()
 
@@ -54,5 +54,5 @@ test_that("We capture credential function names when possible", {
     b = function(scopes, ...) {},
     a = creds_one
   )
-  expect_identical(names(cred_funs_list()), c("", "", "b", "a"))
+  expect_equal(names(cred_funs_list()), c("", "", "b", "a"))
 })

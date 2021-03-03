@@ -1,19 +1,13 @@
 expect_gargle2.0_token <- function(object, expected) {
-  expect_identical(object$cache_path, expected$cache_path)
-  expect_identical(  object$endpoint,   expected$endpoint)
-  expect_identical(     object$email,      expected$email)
-  expect_identical(       object$app,        expected$app)
-  expect_identical(    object$params,     expected$params)
+  expect_equal(object$cache_path, expected$cache_path)
+  expect_equal(  object$endpoint,   expected$endpoint)
+  expect_equal(     object$email,      expected$email)
+  expect_equal(       object$app,        expected$app)
+  expect_equal(    object$params,     expected$params)
 }
 
-## useful during interactive test development to toggle the
-## rlang_interactive escape hatch
-interactive_mode <- function() {
-  before <- getOption("rlang_interactive", default = TRUE)
-  after <- if (before) FALSE else TRUE
-  options(rlang_interactive = after)
-  cat("rlang_interactive:", before, "-->", after, "\n")
-  invisible()
+with_mock <- function(..., .parent = parent.frame()) {
+  mockr::with_mock(..., .parent = .parent, .env = "gargle")
 }
 
 skip_if_no_auth <- function() {

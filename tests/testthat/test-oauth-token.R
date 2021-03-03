@@ -6,8 +6,8 @@ test_that("email is ingested correctly", {
   expect_null(fauxen_email(NULL))
   expect_null(fauxen_email(NA))
   expect_null(fauxen_email(FALSE))
-  expect_identical(fauxen_email(TRUE), "*")
-  expect_identical(fauxen_email("a@example.org"), "a@example.org")
+  expect_equal(fauxen_email(TRUE), "*")
+  expect_equal(fauxen_email("a@example.org"), "a@example.org")
 })
 
 test_that("email can be set in option", {
@@ -20,8 +20,8 @@ test_that("email can be set in option", {
   expect_null(fauxen_email(NULL))
   expect_null(fauxen_email(NA))
   expect_null(fauxen_email(FALSE))
-  expect_identical(fauxen_email(TRUE), "*")
-  expect_identical(fauxen_email("a@example.org"), "a@example.org")
+  expect_equal(fauxen_email(TRUE), "*")
+  expect_equal(fauxen_email("a@example.org"), "a@example.org")
 })
 
 test_that("Attempt to initiate OAuth2 flow fails if non-interactive", {

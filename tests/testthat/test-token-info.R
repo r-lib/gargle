@@ -16,7 +16,7 @@ test_that("token_*() functions work", {
   )
 
   expect_match(email, "^gargle-testing@.*[.]iam[.]gserviceaccount[.]com")
-  expect_identical(email, tokeninfo$email)
+  expect_equal(email, tokeninfo$email)
   expect_true(
     "https://www.googleapis.com/auth/userinfo.email" %in% tokeninfo$scope
   )

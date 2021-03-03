@@ -1,5 +1,11 @@
 # gargle (development version)
 
+## Dependency changes
+
+gargle now relies on testthat >= 3.0.0 and, specifically, uses third edition features.
+
+mockr is new in Suggests, since `testthat::use_mock()` is superseded.
+
 # gargle 1.0.0
 
 * Better handling of `BadRequest` errors, i.e. more specifics are revealed.

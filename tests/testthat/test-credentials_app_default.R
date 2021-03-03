@@ -4,7 +4,7 @@ test_that("credentials_app_default_path(), default, non-Windows", {
     APPDATA = NA, SystemDrive = NA
   ))
   with_mock(
-    `gargle:::is_windows` = function() FALSE,
+    is_windows = function() FALSE,
     expect_equal(
       credentials_app_default_path(),
       path_home(".config", "gcloud", "application_default_credentials.json")
@@ -18,7 +18,7 @@ test_that("credentials_app_default_path(), default, Windows", {
     APPDATA = NA, SystemDrive = NA
   ))
   with_mock(
-    `gargle:::is_windows` = function() TRUE,
+    is_windows = function() TRUE,
     expect_equal(
       credentials_app_default_path(),
       path("C:", "gcloud", "application_default_credentials.json")
@@ -32,7 +32,7 @@ test_that("credentials_app_default_path(), system drive, Windows", {
     APPDATA = NA, SystemDrive = "D:"
   ))
   with_mock(
-    `gargle:::is_windows` = function() TRUE,
+    is_windows = function() TRUE,
     expect_equal(
       credentials_app_default_path(),
       path("D:", "gcloud", "application_default_credentials.json")
@@ -46,7 +46,7 @@ test_that("credentials_app_default_path(), APPDATA env var, Windows", {
     APPDATA = path("D:", "AppData"), SystemDrive = "D:"
   ))
   with_mock(
-    `gargle:::is_windows` = function() TRUE,
+    is_windows = function() TRUE,
     expect_equal(
       credentials_app_default_path(),
       path("D:", "AppData", "gcloud", "application_default_credentials.json")

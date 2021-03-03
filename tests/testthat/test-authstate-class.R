@@ -24,17 +24,17 @@ test_that("inputs are checked when creating AuthState", {
     api_key = "API_KEY",
     auth_active = TRUE
   )
-  expect_is(a, "AuthState")
+  expect_s3_class(a, "AuthState")
 })
 
 test_that("AuthState app can be modified and cleared", {
   app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
   a <- init_AuthState(app = app, api_key = "API_KEY", auth_active = TRUE)
-  expect_identical(a$app$appname, "AAA")
+  expect_equal(a$app$appname, "AAA")
 
   app2 <- httr::oauth_app("BBB", key = "KEY", secret = "SECRET")
   a$set_app(app2)
-  expect_identical(a$app$appname, "BBB")
+  expect_equal(a$app$appname, "BBB")
 
   a$set_app(NULL)
   expect_null(a$app)
@@ -43,10 +43,10 @@ test_that("AuthState app can be modified and cleared", {
 test_that("AuthState api_key can be modified and cleared", {
   app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
   a <- init_AuthState(app = app, api_key = "AAA", auth_active = TRUE)
-  expect_identical(a$api_key, "AAA")
+  expect_equal(a$api_key, "AAA")
 
   a$set_api_key("BBB")
-  expect_identical(a$api_key, "BBB")
+  expect_equal(a$api_key, "BBB")
 
   a$set_api_key(NULL)
   expect_null(a$api_key)
@@ -67,9 +67,9 @@ test_that("AuthState supports basic handling of cred", {
 
   a$set_cred("hi")
   expect_true(a$has_cred())
-  expect_identical(a$get_cred(), "hi")
+  expect_equal(a$get_cred(), "hi")
   a$clear_cred()
   expect_false(a$has_cred())
   a$set_cred("bye")
-  expect_identical(a$get_cred(), "bye")
+  expect_equal(a$get_cred(), "bye")
 })
