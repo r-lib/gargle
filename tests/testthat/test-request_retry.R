@@ -45,7 +45,7 @@ test_that("request_retry() logic works as advertised", {
     request_retry()
   ) %>%
     expect_message("Retry 1.*header") %>%
-    suppressMessages(0)
+    suppressMessages()
   expect_equal(httr::status_code(out), 200)
 
   # make sure max_tries_total is adjustable)
