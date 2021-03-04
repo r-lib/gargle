@@ -237,12 +237,14 @@ test_that("gargle_oauth_sitrep() works", {
     cache = tmp_cache
   )
 
-  # bit of fiddliness to remove the volatile path
+  # bit of fiddliness to remove the volatile path and the hashes that can vary
+  # by OS
   out <- capture.output(
     gargle_oauth_sitrep(tmp_cache),
     type = "message"
   )
   out <- sub(tmp_cache, "{path to gargle oauth cache}", out, fixed = TRUE)
+  out <- sub("[[:xdigit:]]{7}[.]{3}", "{hash...}", out)
   expect_snapshot(
     writeLines(out)
   )
