@@ -212,6 +212,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   init_credentials = function() {
     ui_line("initiating new token")
     if (is_interactive()) {
+      if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
+        encourage_httpuv()
+      }
       super$init_credentials()
     } else {
       # TODO: good candidate for an eventual sub-classed gargle error
@@ -220,3 +223,22 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
   }
 ))
+
+encourage_httpuv <- function() {
+  if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
+    return(invisible())
+  }
+  # it is intentional that we don't use ui_line() here
+  cat(glue("
+    The httpuv package enables a nicer Google auth experience, in many cases
+    It doesn't seem to be installed
+    Would you like to install it now?"))
+  if (utils::menu(c("Yes", "No")) == 1) {
+    utils::install.packages("httpuv")
+  }
+ invisible()
+}
+
+
+
+

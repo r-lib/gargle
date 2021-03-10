@@ -20,6 +20,14 @@ is.oauth_app <- function(x) inherits(x, "oauth_app")
 
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")
 
+is_rstudio_server <- function() {
+  if (rstudioapi::hasFun("versionInfo")) {
+    rstudioapi::versionInfo()$mode == "server"
+  } else {
+    FALSE
+  }
+}
+
 add_line <- function(path, line, quiet = FALSE) {
   if (file_exists(path)) {
     lines <- readLines(path, warn = FALSE)

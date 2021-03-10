@@ -35,10 +35,12 @@ Imports:
     httr (>= 1.4.0),
     jsonlite,
     rlang (>= 0.4.9),
+    rstudioapi,
     stats,
     withr
 Suggests: 
     covr,
+    httpuv,
     knitr,
     mockr,
     rmarkdown,

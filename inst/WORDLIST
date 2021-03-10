@@ -86,6 +86,7 @@ repos
 rlang
 ropensci
 roxygen
+rstudioapi
 shinyapps
 symlink
 targetted

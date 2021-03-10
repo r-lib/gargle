@@ -2,6 +2,10 @@
 
 ## Dependency changes
 
+rstudioapi is new in Imports.
+
+httpuv is new in Suggests. We encourage its installation in interactive sessions, if we're about to initiate OAuth flow, unless it's clear that out-of-band auth is inevitable.
+
 gargle now relies on testthat >= 3.0.0 and, specifically, uses third edition features.
 
 mockr is new in Suggests, since `testthat::use_mock()` is superseded.
