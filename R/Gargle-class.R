@@ -214,6 +214,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (is_interactive()) {
       super$init_credentials()
     } else {
+      # TODO: good candidate for an eventual sub-classed gargle error
+      # would be useful in testing to know that this is exactly where we aborted
       abort("OAuth2 flow requires an interactive session")
     }
   }
