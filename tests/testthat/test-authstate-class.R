@@ -8,7 +8,7 @@ test_that("inputs are checked when creating AuthState", {
       api_key = "API_KEY",
       auth_active = TRUE
     ),
-    'is_string(package) is not TRUE',
+    'is_scalar_character(package) is not TRUE',
     fixed = TRUE
   )
   expect_error(init_AuthState(app = "not_an_oauth_app"), 'is not TRUE')

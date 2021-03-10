@@ -109,7 +109,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         cache_path = gargle_oauth_cache()) {
     ui_line("Gargle2.0 initialize")
     stopifnot(
-      is.null(email) || is_string(email) ||
+      is.null(email) || is_scalar_character(email) ||
         isTRUE(email) || isFALSE(email) || is.na(email),
       is.oauth_app(app),
       is_string(package),

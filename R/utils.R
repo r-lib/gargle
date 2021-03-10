@@ -1,5 +1,3 @@
-is_string <- function(x) is.character(x) && length(x) == 1
-
 empty_string <- function(x) {
   stopifnot(is.character(x))
   !nzchar(x)
