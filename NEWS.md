@@ -1,5 +1,7 @@
 # gargle (development version)
 
+`gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
+
 ## Dependency changes
 
 rstudioapi is new in Imports.

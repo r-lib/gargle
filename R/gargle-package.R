@@ -54,17 +54,26 @@ gargle_oauth_email <- function() {
 #' @section `gargle_oob_default`:
 #' `gargle_oob_default()` returns the option named "gargle_oob_default", falls
 #' back to the option named "httr_oob_default", and eventually defaults to
-#' `FALSE`. This controls whether to prefer "out of band" authentication. This
-#' is ultimately passed to [httr::init_oauth2.0()] as `use_oob`. If `FALSE` (and
+#' `FALSE`. This controls whether to prefer "out of band" authentication. We
+#' also return `FALSE` unconditionally on RStudio Server or Cloud. This value is
+#' ultimately passed to [httr::init_oauth2.0()] as `use_oob`. If `FALSE` (and
 #' httpuv is installed), a local webserver is used for the OAuth dance.
 #' Otherwise, user gets a URL and prompt for a validation code.
 #'
 #' Read more about "out of band" authentication in the vignette [Auth when using
 #' R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
 gargle_oob_default <- function() {
+  if (is_rstudio_server()) {
+    # TODO: Is there a better, more general condition we could use to detect
+    # whether OOB is necessary?
+    # Idea from @jcheng: check if it's an SSH session?
+    # e.g. https://unix.stackexchange.com/questions/9605/how-can-i-detect-if-the-shell-is-controlled-from-ssh/9607#9607
+    TRUE
+  } else {
   getOption("gargle_oob_default") %||%
     getOption("httr_oob_default") %||%
     FALSE
+  }
 }
 
 #' @rdname gargle_options

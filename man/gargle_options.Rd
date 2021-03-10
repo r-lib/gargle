@@ -48,8 +48,9 @@ suitable token is found in the cache.
 
 \code{gargle_oob_default()} returns the option named "gargle_oob_default", falls
 back to the option named "httr_oob_default", and eventually defaults to
-\code{FALSE}. This controls whether to prefer "out of band" authentication. This
-is ultimately passed to \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}} as \code{use_oob}. If \code{FALSE} (and
+\code{FALSE}. This controls whether to prefer "out of band" authentication. We
+also return \code{FALSE} unconditionally on RStudio Server or Cloud. This value is
+ultimately passed to \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}} as \code{use_oob}. If \code{FALSE} (and
 httpuv is installed), a local webserver is used for the OAuth dance.
 Otherwise, user gets a URL and prompt for a validation code.
 
