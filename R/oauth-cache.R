@@ -52,11 +52,10 @@ cache_allowed <- function(path) {
     return(FALSE)
   }
 
-  withr::local_options(list(gargle_quiet = FALSE))
-  ui_line(glue(
-    "Is it OK to cache OAuth access credentials in the folder {sq(path)} ",
-    "between R sessions?"
-  ))
+  # use cat() to match what's done inside utils::menu()
+  cat(glue("
+    Is it OK to cache OAuth access credentials in the folder {sq(path)} \\
+    between R sessions?"))
   utils::menu(c("Yes", "No")) == 1
 }
 
@@ -228,13 +227,12 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
 
   # we need user to OK our discovery or pick from multiple emails
-  withr::local_options(list(gargle_quiet = FALSE))
   emails <- extract_email(existing)
-  ui_line(glue(
-    "The {package} package is requesting access to your Google account. ",
-    "Select a pre-authorised account or enter '0' to obtain a new token. ",
-    "Press Esc/Ctrl + C to abort."
-  ))
+  # use cat() to match what's done inside utils::menu()
+  cat(glue("
+    The {package} package is requesting access to your Google account
+    Select a pre-authorised account or enter '0' to obtain a new token
+    Press Esc/Ctrl + C to cancel"))
   choice <- utils::menu(emails)
 
   if (choice == 0) {

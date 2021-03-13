@@ -228,7 +228,7 @@ encourage_httpuv <- function() {
   if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
     return(invisible())
   }
-  # it is intentional that we don't use ui_line() here
+  # use cat() to match what's done inside utils::menu()
   cat(glue("
     The httpuv package enables a nicer Google auth experience, in many cases
     It doesn't seem to be installed
