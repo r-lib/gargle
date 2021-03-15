@@ -73,3 +73,15 @@ test_that("AuthState supports basic handling of cred", {
   a$set_cred("bye")
   expect_equal(a$get_cred(), "bye")
 })
+
+test_that("AuthState prints nicely", {
+  app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
+  a <- init_AuthState(
+    package = "PKG",
+    app = app,
+    api_key = "API_KEY",
+    auth_active = TRUE
+  )
+  a$set_cred(structure("TOKEN", class = "some_sort_of_token"))
+  expect_snapshot(print(a))
+})

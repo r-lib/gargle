@@ -33,9 +33,23 @@ glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
   map_chr(lines, gd)
 }
 
+# inspired by
+# https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
+# more discussion at
+# https://github.com/r-lib/cli/issues/222
+cli_format = function(..., .envir = parent.frame()) {
+  txt <- cli::cli_format_method(cli::cli_text(..., .envir = .envir))
+  # @rundel does this to undo wrapping done by cli_format_method()
+  # I haven't had this need yet
+  # paste(txt, collapse = " ")
+  txt
+}
+
 commapse <- function(...) paste0(..., collapse = ", ")
 bt <- function(x) encodeString(x, quote = "`")
 sq <- function(x) encodeString(x, quote = "'")
+fr <- function(x) format(x, justify = 'right')
+fl <- function(x) format(x, justify = 'left')
 
 ## obscure part of (sensitive?) strings with '...'
 ## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"

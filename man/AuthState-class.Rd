@@ -55,7 +55,7 @@ An \code{AuthState} should be created through the constructor function
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{AuthState$new()}}
-\item \href{#method-print}{\code{AuthState$print()}}
+\item \href{#method-format}{\code{AuthState$format()}}
 \item \href{#method-set_app}{\code{AuthState$set_app()}}
 \item \href{#method-set_api_key}{\code{AuthState$set_api_key()}}
 \item \href{#method-set_auth_active}{\code{AuthState$set_auth_active()}}
@@ -102,12 +102,12 @@ For more details on the parameters, see \code{\link[=init_AuthState]{init_AuthSt
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
-\subsection{Method \code{print()}}{
-Print an AuthState
+\if{html}{\out{<a id="method-format"></a>}}
+\if{latex}{\out{\hypertarget{method-format}{}}}
+\subsection{Method \code{format()}}{
+Format an AuthState
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$print(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$format(...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

@@ -119,17 +119,23 @@ AuthState <- R6::R6Class("AuthState", list(
     self$cred        <- cred
     self
   },
-  #' @description Print an AuthState
+  #' @description Format an AuthState
   #' @param ... Not used.
-  print = function(...) {
-    withr::local_options(list(gargle_quiet = FALSE))
-    ui_line("<AuthState (via gargle)>")
-    ui_line("         <package> ", self$package)
-    ui_line("             <app> ", self$app$appname)
-    ui_line("         <api_key> ", obfuscate(self$api_key))
-    ui_line("     <auth_active> ", self$auth_active)
-    ui_line("     <credentials> ", class(self$cred)[[1]])
-    ui_line("---")
+  format = function(...) {
+    x <- list(
+      "package"     = cli_format("{.pkg {self$package}}"),
+      "app"         = self$app$appname,
+      "api_key"     = obfuscate(self$api_key),
+      "auth_active" = self$auth_active,
+      # TODO: implement .class angle brackets
+      "credentials" = glue("<{class(self$cred)[[1]]}>")
+    )
+    c(
+      cli::cli_format_method(
+        cli::cli_h1("<AuthState (via {.pkg gargle})>")
+      ),
+      glue("{fr(names(x))}: {fl(x)}")
+    )
   },
   #' @description Set the OAuth app
   set_app = function(app) {
