@@ -4,6 +4,8 @@
 
 ## Dependency changes
 
+cli is new in Imports.
+
 rstudioapi is new in Imports.
 
 httpuv is new in Suggests. We encourage its installation in interactive sessions, if we're about to initiate OAuth flow, unless it's clear that out-of-band auth is inevitable.
