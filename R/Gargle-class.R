@@ -157,17 +157,29 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       self$cache()
     }
   },
+  #' @description Format a Gargle2.0 token
+  #' @param ... Not used.
+  format = function(...) {
+    x <- list(
+      oauth_endpoint = "google",
+      app            = self$app$appname,
+      email          = cli_format("{.email {self$email}}"),
+      scopes         = commapse(base_scope(self$params$scope)),
+      credentials    = commapse(names(self$credentials))
+    )
+    c(
+      cli::cli_format_method(
+        cli::cli_h1("<Token (via {.pkg gargle})>")
+      ),
+      glue("{fr(names(x))}: {fl(x)}")
+    )
+  },
   #' @description Print a Gargle2.0 token
   #' @param ... Not used.
   print = function(...) {
-    withr::local_options(list(gargle_quiet = FALSE))
-    ui_line("<Token (via gargle)>")
-    ui_line("  <oauth_endpoint> google")
-    ui_line("             <app> ", self$app$appname)
-    ui_line("           <email> ", self$email)
-    ui_line("          <scopes> ", commapse(base_scope(self$params$scope)))
-    ui_line("     <credentials> ", commapse(names(self$credentials)))
-    ui_line("---")
+    # a format method is not sufficient for Gargle2.0 because the parent class
+    # has a print method
+    cli::cat_line(self$format())
   },
   #' @description Generate the email-augmented hash of a Gargle2.0 token
   hash = function() {

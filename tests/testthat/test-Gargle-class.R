@@ -56,3 +56,13 @@ test_that("`email = NA`, `email = FALSE` means we don't consult the cache", {
     "OAuth2 flow requires an interactive session"
   )
 })
+
+test_that("Gargle2.0 prints nicely", {
+  fauxen <- gargle2.0_token(
+    email = "a@example.org",
+    app = httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET"),
+    credentials = list(a = 1),
+    cache = FALSE
+  )
+  expect_snapshot(print(fauxen))
+})
