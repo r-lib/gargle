@@ -6,6 +6,8 @@
 \alias{gargle_oob_default}
 \alias{gargle_oauth_cache}
 \alias{gargle_verbosity}
+\alias{local_gargle_verbosity}
+\alias{with_gargle_verbosity}
 \alias{gargle_quiet}
 \title{Options consulted by gargle}
 \usage{
@@ -17,7 +19,18 @@ gargle_oauth_cache()
 
 gargle_verbosity()
 
+local_gargle_verbosity(level, env = parent.frame())
+
+with_gargle_verbosity(level, code)
+
 gargle_quiet()
+}
+\arguments{
+\item{level}{Verbosity level: "debug" > "info" > "silent"}
+
+\item{env}{The environment to use for scoping}
+
+\item{code}{Code to execute with specified verbosity level}
 }
 \description{
 Wrapper functions around options consulted by gargle, which provide:

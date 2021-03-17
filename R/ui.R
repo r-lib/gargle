@@ -46,6 +46,48 @@ gargle_verbosity <- function() {
 
 #' @rdname gargle_options
 #' @export
+#' @param level Verbosity level: "debug" > "info" > "silent"
+#' @param env The environment to use for scoping
+local_gargle_verbosity <- function(level, env = parent.frame()) {
+  withr::local_options(list(gargle_verbosity = level), .local_envir = env)
+}
+
+#' @rdname gargle_options
+#' @export
+#' @param code Code to execute with specified verbosity level
+with_gargle_verbosity <- function(level, code) {
+  withr::with_options(list(gargle_verbosity = level), code = code)
+}
+
+gargle_debug <- function(texts, .envir = parent.frame()) {
+  if (gargle_verbosity() == "debug") {
+    gargle_alert(texts, .envir = .envir)
+  }
+}
+
+gargle_info <- function(texts, .envir = parent.frame()) {
+  if (gargle_verbosity() %in% c("debug", "info")) {
+    gargle_alert(texts, .envir = .envir)
+  }
+}
+
+# TODO: if a better built-in solution arises in the semantic UI, use it
+# https://github.com/r-lib/cli/issues/211
+gargle_alert <- function(texts, .envir = parent.frame()) {
+  # pre-process with glue + wacky delimiters so I can do glue-style
+  # line continuation with `\\`
+  texts <- lapply(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
+  cli::cli_alert(texts[1], wrap = TRUE, .envir = .envir)
+  cli::cli_div(theme = list(.alert = list(before = "  ")))
+  # TODO: add `wrap = TRUE` once this gets fixed
+  # yes, there is existing usage that wraps
+  # https://github.com/r-lib/cli/issues/230
+  lapply(texts[-1], cli::cli_alert, .envir = .envir)
+  cli::cli_end()
+}
+
+#' @rdname gargle_options
+#' @export
 gargle_quiet <- function() {
   getOption("gargle_quiet", default = TRUE)
 }
