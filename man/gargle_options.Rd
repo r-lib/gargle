@@ -5,6 +5,7 @@
 \alias{gargle_oauth_email}
 \alias{gargle_oob_default}
 \alias{gargle_oauth_cache}
+\alias{gargle_verbosity}
 \alias{gargle_quiet}
 \title{Options consulted by gargle}
 \usage{
@@ -13,6 +14,8 @@ gargle_oauth_email()
 gargle_oob_default()
 
 gargle_oauth_cache()
+
+gargle_verbosity()
 
 gargle_quiet()
 }
@@ -66,11 +69,23 @@ a string. \code{TRUE} means to cache using the default user-level cache file,
 guess using some sensible heuristics.
 }
 
-\section{\code{gargle_quiet}}{
+\section{\code{gargle_verbosity}}{
 
-\code{gargle_quiet()} returns the option named "gargle_quiet", which defaults to
-\code{TRUE}. Set this option to \code{FALSE} to see more info about gargle's
-activities, which can be helpful for troubleshooting.
+\code{gargle_verbosity()} returns the option named "gargle_verbosity", which
+determines gargle's verbosity. There are three possible values, inspired by
+the logging levels of log4j:
+\itemize{
+\item "debug": Fine-grained information helpful when debugging, e.g. figuring out
+how \code{token_fetch()} is working through the registry of credential
+functions. Previously, this was activated by setting an option named
+"gargle_quiet" to \code{FALSE}.
+\item "info" (default): High-level information that a typical user needs to see.
+Since typical gargle usage is always indirect, i.e. gargle is called by
+another package, gargle itself is very quiet. There are very few messages
+emitted when \code{gargle_verbosity = "info"}.
+\item "silent": No messages at all. However, warnings or errors are still thrown
+normally.
+}
 }
 
 \examples{
