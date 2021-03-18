@@ -219,12 +219,36 @@ test_that("gargle_oauth_dat() reports on specified cache", {
   )
 
   dat <- gargle_oauth_dat(tmp_cache)
-  expect_s3_class(dat, "data.frame")
+  expect_s3_class(dat, "gargle_oauth_dat")
   expect_equal(nrow(dat), 2)
   expect_equal(dat$email, c("a@example.org", "b@example.org"))
 })
 
-test_that("gargle_oauth_sitrep() works", {
+test_that("gargle_oauth_dat() is OK with nonexistent or empty cache", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  columns <- c("email", "app", "scopes", "hash", "filepath")
+
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "gargle_oauth_dat")
+  expect_equal(nrow(dat), 0)
+  expect_setequal(names(dat), columns)
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
+  )
+  file_delete(dir_ls(tmp_cache))
+
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "gargle_oauth_dat")
+  expect_equal(nrow(dat), 0)
+  expect_setequal(names(dat), columns)
+})
+
+test_that("gargle_oauth_sitrep() works with a cache", {
   tmp_cache <- file_temp()
   withr::defer(dir_delete(tmp_cache))
 

@@ -297,24 +297,7 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   ui_line(glue("{nrow(dat)} tokens found"))
   ui_line()
 
-  format_transformer <- function(text, envir) {
-    res <- eval(parse(text = text, keep.source = FALSE), envir)
-    res <- format(c(text, res))
-    c(
-      res[1],
-      # R 3.2 does not have strrep()
-      paste(rep.int("_", nchar(res[1])), collapse = ""),
-      res[-1]
-    )
-  }
-
-  lines <- glue_data(
-    dat,
-    "{email} {app} {scopes} {hash...}",
-    .transformer = format_transformer
-  )
-  ui_line(glue_collapse(lines, sep = "\n"))
-
+  ui_line(glue_collapse(format(dat), sep = "\n"))
   invisible(dat)
 }
 
@@ -327,10 +310,10 @@ maybe_cache_path <- function(cache = NULL) {
 gargle_oauth_dat <- function(cache = NULL) {
   path <- maybe_cache_path(cache)
   if (is.null(path)) {
-    return(invisible())
+    tokens <- list()
+  } else {
+    tokens <- cache_load(path)
   }
-
-  tokens <- cache_load(path)
 
   nms    <- names(tokens)
   hash   <- mask_email(nms)
@@ -341,10 +324,45 @@ gargle_oauth_dat <- function(cache = NULL) {
   scopes <- map(scopes, function(s) s[s != email_scope])
   scopes <- map_chr(scopes, function(s) commapse(base_scope(s)))
 
-  data.frame(
-    email, app, scopes, hash,
-    hash... = obfuscate(hash, first = 7, last = 0),
-    filepath = path(path, nms),
-    stringsAsFactors = FALSE, row.names = NULL
+  structure(
+    data.frame(
+      email, app, scopes, hash,
+      filepath = path(path, nms),
+      stringsAsFactors = FALSE, row.names = NULL
+    ),
+    class = c("gargle_oauth_dat", "data.frame")
   )
+}
+
+#' @export
+format.gargle_oauth_dat <- function(x, ...) {
+  format_transformer <- function(text, envir) {
+    res <- eval(parse(text = text, keep.source = FALSE), envir)
+    res <- format(c(text, res))
+    c(
+      res[1],
+      # R 3.2 does not have strrep()
+      paste(rep.int("_", nchar(res[1])), collapse = ""),
+      res[-1]
+    )
+  }
+
+  # obfuscate the hash for brevity
+  hash_column <- which(names(x) == "hash")
+  x[[hash_column]] <- obfuscate(x[[hash_column]], first = 7, last = 0)
+  names(x)[hash_column] <- "hash..."
+
+  # NOTE: the filepath variable is absent from the formatted data frame
+
+  glue_data(
+    x,
+    "{email} {app} {scopes} {hash...}",
+    .transformer = format_transformer
+  )
+}
+
+#' @export
+print.gargle_oauth_dat <- function(x, ...) {
+ cli::cat_line(format(x))
+ invisible(x)
 }
