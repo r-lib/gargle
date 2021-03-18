@@ -11,8 +11,9 @@ test_that("Can list service accounts", {
   }
 
   with_mock(
-    gce_metadata_request = request_mock,
-    expect_equal(service_accounts, list_service_accounts())
+    gce_metadata_request = request_mock, {
+      expect_equal(service_accounts, list_service_accounts())
+    }
   )
 })
 

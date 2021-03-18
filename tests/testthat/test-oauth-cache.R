@@ -18,8 +18,9 @@ test_that("cache_establish() insists on sensible input", {
 test_that("`cache = TRUE` withr::defers to default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
-    cache_create = function(path) NULL,
-    expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
+    cache_create = function(path) NULL, {
+      expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
+    }
   )
 })
 
@@ -30,8 +31,9 @@ test_that("`cache = FALSE` does nothing", {
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
   with_mock(
     gargle_default_oauth_cache_path = function() file_temp(),
-    cache_allowed = function(path) FALSE,
-    expect_equal(cache_establish(NA), cache_establish(FALSE))
+    cache_allowed = function(path) FALSE, {
+      expect_equal(cache_establish(NA), cache_establish(FALSE))
+    }
   )
 })
 
