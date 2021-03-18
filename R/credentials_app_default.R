@@ -35,14 +35,14 @@
 #' credentials_app_default()
 #' }
 credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
-  ui_line("trying credentials_app_default()")
+  gargle_debug("trying {.fun credentials_app_default}")
   # In general, application default credentials only include the cloud-platform
   # scope.
   path <- credentials_app_default_path()
   if (!file_exists(path)) {
     return(NULL)
   }
-  ui_line("file exists at ADC path: ", path)
+  gargle_debug(c("file exists at ADC path:", "{.file {path}}"))
 
   # The JSON file stored on disk can be either a user credential or a service
   # account.
@@ -61,7 +61,7 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
       return(NULL)
     }
-    ui_line("ADC cred type: authorized_user")
+    gargle_debug("ADC cred type: {.val authorized_user}")
     endpoint <- httr::oauth_endpoints("google")
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
     scope <- "https://www.googleapis.com/auth/cloud.platform"
@@ -76,7 +76,7 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     token$refresh()
     token
   } else {
-    ui_line("ADC cred type: service_account")
+    gargle_debug("ADC cred type: {.val service_account}")
     credentials_service_account(scopes, path = path, subject = subject)
   }
 }

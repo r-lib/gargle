@@ -95,19 +95,32 @@ cache_load <- function(path) {
   hashes <- map_chr(tokens, function(t) t$hash())
 
   mismatch <- names(hashes) != hashes
-
   if (any(mismatch)) {
+    # original motivation:
     # we've seen this with tokens cached on R 3.5 but reloaded on 3.6
     # because $hash() calls serialize() and default version changed
-    msg <- c(
-      "Cache contains tokens with names that do not match their hash:",
-      glue("
-        * Token stored as {sq(names(hashes)[mismatch])}
-              but hash is {sq(hashes[mismatch])}
-      "),
-      "Will attempt to repair by renaming."
+    #
+    # later observation: I suppose this could also get triggered if someone
+    # caches on, e.g., Windows, then moves/deploys the project to *nix
+    n <- sum(mismatch)
+    mismatch_name <- names(hashes)[mismatch]
+    mismatch_hash <- hashes[mismatch]
+    mismatch_name_fmt <- lapply(
+      mismatch_name,
+      function(x) cli_format("{.val {x}} (name)")
     )
-    ui_line(msg)
+    mismatch_hash_fmt <- lapply(
+      mismatch_hash,
+      function(x) cli_format("{.field {x}} (hash)")
+    )
+    msg <- c(
+      glue(cli::pluralize("
+        Cache contains token{?s} with names that do not match \\
+        their hash: {cli::qty(n)}")),
+      as.vector(rbind(mismatch_name_fmt, mismatch_hash_fmt)),
+      "Will attempt to repair by renaming"
+    )
+    gargle_debug(msg)
     file_move(files[mismatch], path(path, hashes[mismatch]))
     Recall(path)
   } else {
@@ -138,10 +151,10 @@ token_from_cache <- function(candidate) {
 token_into_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) {
-    ui_line("not caching token")
+    gargle_debug("not caching token")
     return()
   }
-  ui_line("putting token into the cache: ", cache_path)
+  gargle_debug(c("putting token into the cache:", "{.file {cache_path}}"))
   saveRDS(candidate, path(cache_path, candidate$hash()))
 }
 
@@ -149,7 +162,7 @@ token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) return()
   token_path <- path(cache_path, candidate$hash())
-  ui_line("removing token from the cache: ", token_path)
+  gargle_debug(c("removing token from the cache:", "{.file {token_path}}"))
   file_delete(token_path)
 }
 
@@ -194,35 +207,38 @@ token_match <- function(candidate, existing, package = "gargle") {
     # proceed, but make sure user sees messaging about how to do
     # non-interactive auth more properly
     # https://github.com/r-lib/gargle/issues/92
-    withr::local_options(list(gargle_quiet = FALSE))
+    local_gargle_verbosity("info")
     candidate_email <- "*"
     if (length(existing) > 1) {
       emails <- extract_email(existing)
-      emails <- glue("  * {emails}")
-      ui_line(glue(
-        "Suitable tokens found in the cache, associated with these emails:\n",
-        "{glue_collapse(emails, sep = '\n')}", "\n",
-        "The first will be used."
-      ))
+      emails_fmt <- lapply(
+        emails,
+        function(x) cli_format("{cli::symbol$line} {.email {x}}")
+      )
+      msg <- c(
+        "Suitable tokens found in the cache, associated with these emails:",
+        emails_fmt,
+        "Defaulting to the first email"
+      )
+      gargle_info(msg)
       existing <- existing[[1]]
     }
     msg <- c(
-      "Using an auto-discovered, cached token.\n",
-      "To suppress this message, modify your code or options to clearly ",
-      "consent to the use of a cached token.\n",
-      "See gargle's \"Non-interactive auth\" vignette for more details:\n",
-      "https://gargle.r-lib.org/articles/non-interactive-auth.html"
+      "Using an auto-discovered, cached token",
+      "To suppress this message, modify your code or options \\
+       to clearly consent to the use of a cached token",
+      "See gargle's \"Non-interactive auth\" vignette for more details:",
+      "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
     )
-    msg <- glue_collapse(msg)
     # morally, I'd like to throw a warning but current design of token_fetch()
     # means warnings are caught
-    ui_line(msg)
+    gargle_info(msg)
   }
 
   if (length(existing) == 1 && candidate_email == "*") {
-    ui_line(glue(
-      "The {package} package is using a cached token for {extract_email(existing)}."
-    ))
+    gargle_info(
+      "The {.pkg {package}} package is using a cached token for \\
+      {.email {extract_email(existing)}}")
     return(existing)
   }
 

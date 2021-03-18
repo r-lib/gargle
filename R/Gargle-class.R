@@ -107,7 +107,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         credentials = NULL,
                         params = list(),
                         cache_path = gargle_oauth_cache()) {
-    ui_line("Gargle2.0 initialize")
+    gargle_debug("Gargle2.0 initialize")
     stopifnot(
       is.null(email) || is_scalar_character(email) ||
         isTRUE(email) || isFALSE(email) || is.na(email),
@@ -142,7 +142,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
-      ui_line("credentials provided directly")
+      gargle_debug("credentials provided directly")
       self$credentials <- credentials
       return(self$cache())
     }
@@ -151,7 +151,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (self$load_from_cache()) {
       self
     } else {
-      ui_line("no matching token in the cache")
+      gargle_debug("no matching token in the cache")
       self$init_credentials()
       self$email <- token_email(self) %||% NA_character_
       self$cache()
@@ -192,13 +192,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
-    ui_line("loading token from the cache")
+    gargle_debug("loading token from the cache")
     if (is.null(self$cache_path) || isTRUE(is.na(self$email))) return(FALSE)
 
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
-    ui_line("matching token found in the cache")
+    gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
     self$app         <- cached$app
@@ -222,7 +222,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description Initiate a new Gargle2.0 token
   init_credentials = function() {
-    ui_line("initiating new token")
+    gargle_debug("initiating new token")
     if (is_interactive()) {
       if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
         encourage_httpuv()

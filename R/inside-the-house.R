@@ -5,7 +5,7 @@ from_permitted_package <- function(env = parent.frame()) {
   }
 
   nm <- getNamespaceName(env)
-  ui_line("attempt from: ", nm)
+  gargle_debug("attempt to access internal gargle data from: {.pkg {nm}}")
   nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 

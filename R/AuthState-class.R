@@ -104,7 +104,7 @@ AuthState <- R6::R6Class("AuthState", list(
                         api_key = NULL,
                         auth_active = TRUE,
                         cred = NULL) {
-    ui_line("initializing AuthState")
+    gargle_debug("initializing AuthState")
     stopifnot(
       is_scalar_character(package),
       is.null(app) || is.oauth_app(app),

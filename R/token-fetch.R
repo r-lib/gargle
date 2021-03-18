@@ -19,17 +19,17 @@
 #' token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
 #' }
 token_fetch <- function(scopes = NULL, ...) {
-  ui_line("trying token_fetch()")
+  gargle_debug("trying {.fun token_fetch}")
   for (f in gargle_env$cred_funs) {
     token <- NULL
     token <- tryCatch(
       f(scopes, ...),
       warning = function(e) {
-        ui_line("Warning: ", e$message)
+        gargle_debug(c("Warning caught by {.fun token_fetch}:", e$message))
         NULL
       },
       error = function(e) {
-        ui_line("Error: ", e$message)
+        gargle_debug(c("Error caught by {.fun token_fetch}:", e$message))
         NULL
       }
     )

@@ -48,6 +48,8 @@ test_that("`cache = <filepath>` creates cache folder, recursively", {
 test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   tmpproj <- file_temp()
   withr::defer(dir_delete(tmpproj))
+  local_gargle_verbosity("silent")
+
   dir_create(tmpproj)
   writeLines("", path(tmpproj, "DESCRIPTION"))
   writeLines("", path(tmpproj, ".gitignore"))
@@ -82,6 +84,7 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 
 # validate_token_list() ------------------------------------------------------
 test_that("cache_load() repairs tokens stored with names != their hash", {
+  # TODO: I expect some fiddliness with this one in CI, circle back
   cache_folder <- file_temp()
   withr::defer(dir_delete(cache_folder))
 
@@ -99,10 +102,9 @@ test_that("cache_load() repairs tokens stored with names != their hash", {
     dir_ls(cache_folder),
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
-  withr::local_options(list(gargle_quiet = FALSE))
-  expect_info(
-    tokens <- cache_load(cache_folder),
-    "do not match their hash"
+  local_gargle_verbosity("debug")
+  expect_snapshot(
+    tokens <- cache_load(cache_folder)
   )
   expect_gargle2.0_token(tokens[[1]], fauxen_a)
   expect_gargle2.0_token(tokens[[2]], fauxen_b)
@@ -173,7 +175,7 @@ test_that("token_match() returns NULL if no email and no short hash match", {
 })
 
 test_that("token_match() scolds but returns short hash match when non-interactive", {
-  withr::local_options(list(rlang_interactive = FALSE))
+  local_interactive(FALSE)
 
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "abc_b@example.com")
