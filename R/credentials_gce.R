@@ -16,7 +16,7 @@
 #' }
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
-  ui_line("trying credentials_gce()")
+  gargle_debug("trying {.fun credentials_gce}")
   if (!detect_gce() || is.null(scopes)) {
     return(NULL)
   }

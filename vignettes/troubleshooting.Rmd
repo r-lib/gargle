@@ -18,27 +18,29 @@ knitr::opts_chunk$set(
 library(gargle)
 ```
 
-## `gargle_quiet`
+## "gargle_verbosity" option
 
-There is a package-wide option that controls gargle's verbosity: `gargle_quiet`. The function `gargle_quiet()` reveals the current value:
+There is a package-wide option that controls gargle's verbosity: "gargle_verbosity". The function `gargle_verbosity()` reveals the current value:
 
 ```{r}
-gargle_quiet()
+gargle_verbosity()
 ```
 
-It defaults to `TRUE`, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.
+It defaults to "info", which is fairly quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.
 
-If you need to see all those gory details, toggle the `gargle_quiet` option to `FALSE` and you'll get much more output as gargle works through various auth approaches.
+If you need to see all those gory details, set the "gargle_verbosity" option to "debug" and you'll get much more output as gargle works through various auth approaches.
 
 ```{r}
 # save current value
-op <- options(gargle_quiet = FALSE)
+op <- options(gargle_verbosity = "debug")
 
-gargle_quiet()
+gargle_verbosity()
 
 # restore original value
 options(op)
 ```
+
+Note there are withr-style helpers, `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 ## `gargle_oauth_sitrep()`
 
@@ -50,10 +52,8 @@ Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accept
 
 ```{r, eval = FALSE}
 gargle_oauth_sitrep()
-#' gargle OAuth cache path:
+#' > 14 tokens found in this gargle OAuth cache:
 #' /Users/janedoe/.R/gargle/gargle-oauth
-#' 
-#' 14 tokens found
 #' 
 #' email                         app         scope                          hash...   
 #' ----------------------------- ----------- ------------------------------ ----------

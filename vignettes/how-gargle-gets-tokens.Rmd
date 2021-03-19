@@ -55,7 +55,7 @@ Note also that these credential functions are exported and can be called directl
 
 ## Get verbose output
 
-To see more information about what gargle is up to, set the option `gargle_quiet` to `FALSE`. Read more in the docs for `gargle_quiet()`.
+To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug". Read more in the docs for `gargle_verbosity()`.
 
 ## `credentials_service_account()`
 

@@ -104,7 +104,7 @@ AuthState <- R6::R6Class("AuthState", list(
                         api_key = NULL,
                         auth_active = TRUE,
                         cred = NULL) {
-    ui_line("initializing AuthState")
+    gargle_debug("initializing AuthState")
     stopifnot(
       is_scalar_character(package),
       is.null(app) || is.oauth_app(app),
@@ -123,7 +123,7 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @param ... Not used.
   format = function(...) {
     x <- list(
-      package     = cli_format("{.pkg {self$package}}"),
+      package     = cli_this("{.pkg {self$package}}"),
       app         = self$app$appname,
       api_key     = obfuscate(self$api_key),
       auth_active = self$auth_active,

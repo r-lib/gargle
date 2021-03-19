@@ -15,7 +15,7 @@ test_that("cache_establish() insists on sensible input", {
   )
 })
 
-test_that("`cache = TRUE` withr::defers to default cache path", {
+test_that("`cache = TRUE` uses default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
     cache_create = function(path) NULL, {
@@ -48,6 +48,8 @@ test_that("`cache = <filepath>` creates cache folder, recursively", {
 test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   tmpproj <- file_temp()
   withr::defer(dir_delete(tmpproj))
+  local_gargle_verbosity("silent")
+
   dir_create(tmpproj)
   writeLines("", path(tmpproj, "DESCRIPTION"))
   writeLines("", path(tmpproj, ".gitignore"))
@@ -60,7 +62,7 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   )
 })
 
-test_that("default is to consult and write the oauth cache option", {
+test_that("default is to consult and set the oauth cache option", {
   withr::with_options(
     list(gargle_oauth_cache = NA),
     with_mock(
@@ -99,10 +101,16 @@ test_that("cache_load() repairs tokens stored with names != their hash", {
     dir_ls(cache_folder),
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
-  withr::local_options(list(gargle_quiet = FALSE))
-  expect_info(
+  local_gargle_verbosity("debug")
+
+  # bit of fiddliness to deal with hashes that can vary by OS
+  out <- capture.output(
     tokens <- cache_load(cache_folder),
-    "do not match their hash"
+    type = "message"
+  )
+  out <- sub("[[:xdigit:]]+(?=.+\\(hash\\)$)", "{TOKEN_HASH}", out, perl = TRUE)
+  expect_snapshot(
+    writeLines(out)
   )
   expect_gargle2.0_token(tokens[[1]], fauxen_a)
   expect_gargle2.0_token(tokens[[2]], fauxen_b)
@@ -173,7 +181,7 @@ test_that("token_match() returns NULL if no email and no short hash match", {
 })
 
 test_that("token_match() scolds but returns short hash match when non-interactive", {
-  withr::local_options(list(rlang_interactive = FALSE))
+  local_interactive(FALSE)
 
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "abc_b@example.com")

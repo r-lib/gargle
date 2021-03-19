@@ -165,26 +165,19 @@ backoff <- function(tries_made,
 
   status_code <- httr::status_code(resp)
 
-  # ALERT we're going to emit information regardless of the value of
-  # gargle_quiet(). But we'll be very brief it it's FALSE.
-  if (gargle_quiet()) {
-    msg <- glue("
-        Request failed [{status_code}]. Retry {tries_made} happens in \\
-        {round(wait_time, 1)} seconds ...
-                  ")
-  } else {
+  if (gargle_verbosity() == "debug") {
     msg <- c(
-      glue("Request failed [{status_code}]."), "",
-      gargle_error_message(resp), "",
-      glue("
-          Retry {tries_made} happens in {round(wait_time, 1)} seconds ...
-          (strategy: {wait_rationale})
-             ")
+      "Request failed [{status_code}]",
+      gargle_error_message(resp),
+      "Retry {tries_made} happens in {round(wait_time, 1)} seconds ...",
+      "(strategy: {wait_rationale})"
     )
-    msg <- glue_collapse(msg, sep = "\n")
+    gargle_debug(msg)
+  } else {
+    gargle_info("
+      Request failed [{status_code}]. Retry {tries_made} happens in \\
+      {round(wait_time, 1)} seconds ...")
   }
-  ui_line(msg, quiet = FALSE)
-
   wait_time
 }
 

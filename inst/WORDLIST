@@ -37,6 +37,7 @@ behaviour
 bigrquery
 cancelled
 ci
+cli
 cloneable
 config
 cran
@@ -101,4 +102,5 @@ useR
 useRs
 userinfo
 webserver
+withr
 www

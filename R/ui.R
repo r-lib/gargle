@@ -1,21 +1,97 @@
 #' @rdname gargle_options
 #' @export
-#' @section `gargle_quiet`:
-#' `gargle_quiet()` returns the option named "gargle_quiet", which defaults to
-#' `TRUE`. Set this option to `FALSE` to see more info about gargle's
-#' activities, which can be helpful for troubleshooting.
-gargle_quiet <- function() {
-  getOption("gargle_quiet", default = TRUE)
+#' @section `gargle_verbosity`:
+#' `gargle_verbosity()` returns the option named "gargle_verbosity", which
+#' determines gargle's verbosity. There are three possible values, inspired by
+#' the logging levels of log4j:
+#' * "debug": Fine-grained information helpful when debugging, e.g. figuring out
+#'   how `token_fetch()` is working through the registry of credential
+#'   functions. Previously, this was activated by setting an option named
+#'   "gargle_quiet" to `FALSE`.
+#' * "info" (default): High-level information that a typical user needs to see.
+#'   Since typical gargle usage is always indirect, i.e. gargle is called by
+#'   another package, gargle itself is very quiet. There are very few messages
+#'   emitted when `gargle_verbosity = "info"`.
+#' * "silent": No messages at all. However, warnings or errors are still thrown
+#'   normally.
+gargle_verbosity <- function() {
+  gv <- getOption("gargle_verbosity")
+
+  # help people using the previous option
+  if (is.null(gv)) {
+    gq <- getOption("gargle_quiet")
+    if (is_false(gq)) {
+      options(gargle_verbosity = "debug")
+      with_gargle_verbosity(
+        "debug",
+        gargle_debug(c(
+          "Option {.val gargle_quiet} is deprecated in favor of \\
+          {.val gargle_verbosity}",
+          "Instead of: {.code options(gargle_quiet = FALSE)}",
+          'Now do: {.code options(gargle_verbosity = "debug")}'
+        ))
+      )
+    }
+  }
+  gv <- getOption("gargle_verbosity", "info")
+
+  vals <- c("debug", "info", "silent")
+  vals_fmt <- glue_collapse(sq(vals), sep = ", ")
+  if (!is_string(gv) || !(gv %in% vals)) {
+    abort(glue('
+      Option "gargle_verbosity" must be one of: {vals_fmt}'))
+  }
+  gv
 }
 
-# All UI output must eventually go through ui_line() so that it
-# can be silenced / activated with 'gargle_quiet'.
-ui_line <- function(..., quiet = gargle_quiet()) {
-  if (!quiet) {
-    inform(paste0(...))
-  }
+#' @rdname gargle_options
+#' @export
+#' @param level Verbosity level: "debug" > "info" > "silent"
+#' @param env The environment to use for scoping
+local_gargle_verbosity <- function(level, env = parent.frame()) {
+  withr::local_options(list(gargle_verbosity = level), .local_envir = env)
+}
 
-  invisible()
+#' @rdname gargle_options
+#' @export
+#' @param code Code to execute with specified verbosity level
+with_gargle_verbosity <- function(level, code) {
+  withr::with_options(list(gargle_verbosity = level), code = code)
+}
+
+gargle_debug <- function(texts, .envir = parent.frame()) {
+  if (gargle_verbosity() == "debug") {
+    gargle_alert(texts, .envir = .envir)
+  }
+}
+
+gargle_info <- function(texts, .envir = parent.frame()) {
+  if (gargle_verbosity() %in% c("debug", "info")) {
+    gargle_alert(texts, .envir = .envir)
+  }
+}
+
+gargle_verbatim <- function(texts) {
+  if (gargle_verbosity() %in% c("debug", "info")) {
+    texts <- glue_continuation(texts)
+    cli::cli_verbatim(texts)
+  }
+}
+
+# TODO: if a better built-in solution arises in the semantic UI, use it
+# https://github.com/r-lib/cli/issues/211
+gargle_alert <- function(texts, .envir = parent.frame()) {
+  texts <- glue_continuation(texts)
+  cli::cli_alert(texts[1], wrap = TRUE, .envir = .envir)
+  cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+  walk(texts[-1], cli::cli_alert, wrap = TRUE, .envir = .envir)
+  cli::cli_end()
+}
+
+glue_continuation <- function(texts) {
+  # pre-process with glue + wacky delimiters so I can do glue-style
+  # line continuation with `\\`
+  map(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
 }
 
 glue_lines <- function(lines, ..., .env = parent.frame()) {
@@ -37,7 +113,7 @@ glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
 # https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
 # more discussion at
 # https://github.com/r-lib/cli/issues/222
-cli_format = function(..., .envir = parent.frame()) {
+cli_this = function(..., .envir = parent.frame()) {
   txt <- cli::cli_format_method(cli::cli_text(..., .envir = .envir))
   # @rundel does this to undo wrapping done by cli_format_method()
   # I haven't had this need yet
@@ -67,4 +143,8 @@ obfuscate <- function(x, first = 7, last = 0) {
       )
     )
   out
+}
+
+message <- function(...) {
+  abort(glue("Internal error: use gargle's UI functions, not {bt('message()')}"))
 }

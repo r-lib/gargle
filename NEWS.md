@@ -1,5 +1,28 @@
 # gargle (development version)
 
+## User interface
+
+The user interface has gotten more stylish, thanks to the cli package (<https://cli.r-lib.org>).
+
+`gargle_verbosity()` replaces `gargle_quiet()`.
+Each such function is (or was) a convenience wrapper to query the option with that name.
+Therefore, the option named "gargle_verbosity" now replaces "gargle_quiet".
+If "gargle_verbosity" is unset, the old "gargle_quiet" is still consulted, but the user is advised to update their usage.
+
+The new "gargle_verbosity" option is more expressive and has three levels:
+
+* "debug", equivalent to the previous `gargle_quiet = FALSE`. Use for debugging
+  and troubleshooting.
+* "info" (the default), basically equivalent to the previous
+  `gargle_quiet = TRUE`. Since gargle is not a user-facing package, it has very
+  little to say and only emits messages that end users really need to see.
+* "silent", no previous equivalent and of little practical significance. But it
+  can be used to suppress all gargle messages.
+  
+The helpers `with_gargle_verbosity()` and `local_gargle_verbosity()` make it easy to temporarily modify the verbosity level, in the spirit of the [withr package](https://withr.r-lib.org).
+
+## Other changes
+
 `gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
 
 ## Dependency changes
