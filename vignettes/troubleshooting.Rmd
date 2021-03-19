@@ -52,10 +52,8 @@ Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accept
 
 ```{r, eval = FALSE}
 gargle_oauth_sitrep()
-#' gargle OAuth cache path:
+#' > 14 tokens found in this gargle OAuth cache:
 #' /Users/janedoe/.R/gargle/gargle-oauth
-#' 
-#' 14 tokens found
 #' 
 #' email                         app         scope                          hash...   
 #' ----------------------------- ----------- ------------------------------ ----------
