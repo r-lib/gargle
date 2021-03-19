@@ -111,11 +111,13 @@ Full details are in the [`credentials_app_default()` section](https://gargle.r-l
 
 If you have your token rigged properly, you **do not** need to do anything else, i.e. you do not need to call `PACKAGE_auth()` explicitly. Your token should just get discovered upon first need.
 
-For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
 ```{r}
-options(gargle_quiet = FALSE)
+options(gargle_verbosity = "debug")
 ```
+
+withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 ## Provide an OAuth token directly
 
@@ -273,7 +275,7 @@ drive_auth(cache = ".secrets", email = TRUE)
 drive_fine(n_max = 5)
 ```
 
-Here's one last variation that applicable when the local cache could contain multiple tokens:
+Here's one last variation that's applicable when the local cache could contain multiple tokens:
 
 ```{r}
 library(googledrive)
@@ -286,10 +288,12 @@ drive_auth(n_max = 5)
 
 Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
 
-For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
 ```{r}
-options(gargle_quiet = FALSE)
+options(gargle_verbosity = "debug")
 ```
+
+withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 For a cached token to be considered a "match", it must match the current request with respect to user's email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.
