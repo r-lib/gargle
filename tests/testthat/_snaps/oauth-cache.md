@@ -1,13 +1,13 @@
 # cache_load() repairs tokens stored with names != their hash
 
     Code
-      tokens <- cache_load(cache_folder)
-    Message <cliMessage>
+      writeLines(out)
+    Output
       > Cache contains tokens with names that do not match their hash:
         'abc123_c@example.org' (name)
-        6b9469630f4421cb48150bb3dfe8bdb0_a@example.org (hash)
+        {TOKEN_HASH}_a@example.org (hash)
         'def456_d@example.org' (name)
-        6b9469630f4421cb48150bb3dfe8bdb0_b@example.org (hash)
+        {TOKEN_HASH}_b@example.org (hash)
         Will attempt to repair by renaming
 
 # token_match() scolds but returns short hash match when non-interactive

@@ -15,7 +15,7 @@ test_that("cache_establish() insists on sensible input", {
   )
 })
 
-test_that("`cache = TRUE` withr::defers to default cache path", {
+test_that("`cache = TRUE` uses default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
     cache_create = function(path) NULL, {
@@ -62,7 +62,7 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   )
 })
 
-test_that("default is to consult and write the oauth cache option", {
+test_that("default is to consult and set the oauth cache option", {
   withr::with_options(
     list(gargle_oauth_cache = NA),
     with_mock(
@@ -84,7 +84,6 @@ test_that("cache_allowed() returns false when non-interactive (or testing)", {
 
 # validate_token_list() ------------------------------------------------------
 test_that("cache_load() repairs tokens stored with names != their hash", {
-  # TODO: I expect some fiddliness with this one in CI, circle back
   cache_folder <- file_temp()
   withr::defer(dir_delete(cache_folder))
 
@@ -103,8 +102,15 @@ test_that("cache_load() repairs tokens stored with names != their hash", {
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
   local_gargle_verbosity("debug")
+
+  # bit of fiddliness to deal with hashes that can vary by OS
+  out <- capture.output(
+    tokens <- cache_load(cache_folder),
+    type = "message"
+  )
+  out <- sub("[[:xdigit:]]+(?=.+\\(hash\\)$)", "{TOKEN_HASH}", out, perl = TRUE)
   expect_snapshot(
-    tokens <- cache_load(cache_folder)
+    writeLines(out)
   )
   expect_gargle2.0_token(tokens[[1]], fauxen_a)
   expect_gargle2.0_token(tokens[[2]], fauxen_b)
