@@ -99,16 +99,6 @@ gargle_quiet <- function() {
   getOption("gargle_quiet", default = TRUE)
 }
 
-# All UI output must eventually go through ui_line() so that it
-# can be silenced / activated with 'gargle_quiet'.
-ui_line <- function(..., quiet = gargle_quiet()) {
-  if (!quiet) {
-    inform(paste0(...))
-  }
-
-  invisible()
-}
-
 glue_lines <- function(lines, ..., .env = parent.frame()) {
   # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
   # plus: I've only got compat-purrr here, so I have to write a function
