@@ -93,12 +93,6 @@ gargle_alert <- function(texts, .envir = parent.frame()) {
   cli::cli_end()
 }
 
-#' @rdname gargle_options
-#' @export
-gargle_quiet <- function() {
-  getOption("gargle_quiet", default = TRUE)
-}
-
 glue_lines <- function(lines, ..., .env = parent.frame()) {
   # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
   # plus: I've only got compat-purrr here, so I have to write a function

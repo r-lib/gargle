@@ -8,7 +8,6 @@
 \alias{gargle_verbosity}
 \alias{local_gargle_verbosity}
 \alias{with_gargle_verbosity}
-\alias{gargle_quiet}
 \title{Options consulted by gargle}
 \usage{
 gargle_oauth_email()
@@ -22,8 +21,6 @@ gargle_verbosity()
 local_gargle_verbosity(level, env = parent.frame())
 
 with_gargle_verbosity(level, code)
-
-gargle_quiet()
 }
 \arguments{
 \item{level}{Verbosity level: "debug" > "info" > "silent"}
@@ -105,5 +102,5 @@ normally.
 gargle_oauth_email()
 gargle_oob_default()
 gargle_oauth_cache()
-gargle_quiet()
+gargle_verbosity()
 }

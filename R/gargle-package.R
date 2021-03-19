@@ -32,7 +32,7 @@ NULL
 #' gargle_oauth_email()
 #' gargle_oob_default()
 #' gargle_oauth_cache()
-#' gargle_quiet()
+#' gargle_verbosity()
 NULL
 
 #' @rdname gargle_options
