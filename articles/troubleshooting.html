@@ -121,25 +121,25 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></code></pre></div>
-<div id="gargle_quiet" class="section level2">
+<div id="gargle_verbosity-option" class="section level2">
 <h2 class="hasAnchor">
-<a href="#gargle_quiet" class="anchor"></a><code>gargle_quiet</code>
-</h2>
-<p>There is a package-wide option that controls gargle’s verbosity: <code>gargle_quiet</code>. The function <code><a href="../reference/gargle_options.html">gargle_quiet()</a></code> reveals the current value:</p>
+<a href="#gargle_verbosity-option" class="anchor"></a>“gargle_verbosity” option</h2>
+<p>There is a package-wide option that controls gargle’s verbosity: “gargle_verbosity”. The function <code><a href="../reference/gargle_options.html">gargle_verbosity()</a></code> reveals the current value:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
-<p>It defaults to <code>TRUE</code>, i.e. gargle defaults to being very quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.</p>
-<p>If you need to see all those gory details, toggle the <code>gargle_quiet</code> option to <code>FALSE</code> and you’ll get much more output as gargle works through various auth approaches.</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gargle_options.html">gargle_verbosity</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] "info"</span></code></pre></div>
+<p>It defaults to “info”, which is fairly quiet. This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds. If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.</p>
+<p>If you need to see all those gory details, set the “gargle_verbosity” option to “debug” and you’ll get much more output as gargle works through various auth approaches.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># save current value</span>
-<span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/gargle_options.html">gargle_quiet</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] FALSE</span>
+<span class="fu"><a href="../reference/gargle_options.html">gargle_verbosity</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; [1] "debug"</span>
 
 <span class="co"># restore original value</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></code></pre></div>
+<p>Note there are withr-style helpers, <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code>.</p>
 </div>
 <div id="gargle_oauth_sitrep" class="section level2">
 <h2 class="hasAnchor">
@@ -150,10 +150,8 @@
 <p>Here is indicative output of <code><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code>, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#' gargle OAuth cache path:</span>
+<span class="co">#' &gt; 14 tokens found in this gargle OAuth cache:</span>
 <span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span>
-<span class="co">#' </span>
-<span class="co">#' 14 tokens found</span>
 <span class="co">#' </span>
 <span class="co">#' email                         app         scope                          hash...   </span>
 <span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span>

@@ -161,7 +161,24 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
+<div id="user-interface" class="section level2">
+<h2 class="hasAnchor">
+<a href="#user-interface" class="anchor"></a>User interface</h2>
+<p>The user interface has gotten more stylish, thanks to the cli package (<a href="https://cli.r-lib.org" class="uri">https://cli.r-lib.org</a>).</p>
+<p><code><a href="../reference/gargle_options.html">gargle_verbosity()</a></code> replaces <code>gargle_quiet()</code>. Each such function is (or was) a convenience wrapper to query the option with that name. Therefore, the option named “gargle_verbosity” now replaces “gargle_quiet”. If “gargle_verbosity” is unset, the old “gargle_quiet” is still consulted, but the user is advised to update their usage.</p>
+<p>The new “gargle_verbosity” option is more expressive and has three levels:</p>
+<ul>
+<li>“debug”, equivalent to the previous <code>gargle_quiet = FALSE</code>. Use for debugging and troubleshooting.</li>
+<li>“info” (the default), basically equivalent to the previous <code>gargle_quiet = TRUE</code>. Since gargle is not a user-facing package, it has very little to say and only emits messages that end users really need to see.</li>
+<li>“silent”, no previous equivalent and of little practical significance. But it can be used to suppress all gargle messages.</li>
+</ul>
+<p>The helpers <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code> make it easy to temporarily modify the verbosity level, in the spirit of the <a href="https://withr.r-lib.org">withr package</a>.</p>
+</div>
+<div id="other-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-changes" class="anchor"></a>Other changes</h2>
 <p><code><a href="../reference/gargle_options.html">gargle_oob_default()</a></code> returns <code>TRUE</code> unconditionally when running in RStudio Server.</p>
+</div>
 <div id="dependency-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dependency-changes" class="anchor"></a>Dependency changes</h2>

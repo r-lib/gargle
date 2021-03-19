@@ -205,9 +205,10 @@
 <p>You need to put your service token in a very specific location or, alternatively, record the location of your service token in a specific environment variable.</p>
 <p>Full details are in the <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default"><code>credentials_app_default()</code> section</a> of the gargle article <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</p>
 <p>If you have your token rigged properly, you <strong>do not</strong> need to do anything else, i.e. you do not need to call <code>PACKAGE_auth()</code> explicitly. Your token should just get discovered upon first need.</p>
-<p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
+<p>For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></code></pre></div>
+<p>withr-style convenience helpers also exist: <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code>.</p>
 </div>
 <div id="provide-an-oauth-token-directly" class="section level2">
 <h2 class="hasAnchor">
@@ -325,7 +326,7 @@
 
 <span class="co"># now use googledrive with no need for explicit auth</span>
 <span class="fu">drive_fine</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
-<p>Here’s one last variation that applicable when the local cache could contain multiple tokens:</p>
+<p>Here’s one last variation that’s applicable when the local cache could contain multiple tokens:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
@@ -334,9 +335,10 @@
 <span class="co"># now use googledrive with no need for explicit auth</span>
 <span class="fu">drive_auth</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Be very intentional about paths and working directory. Personally I would use <code>here::here(".secrets)"</code> everywhere above, to make things more robust.</p>
-<p>For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
+<p>For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></code></pre></div>
+<p>withr-style convenience helpers also exist: <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code>.</p>
 <p>For a cached token to be considered a “match”, it must match the current request with respect to user’s email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.</p>
 </div>
 </div>
