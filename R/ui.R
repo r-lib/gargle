@@ -73,7 +73,7 @@ gargle_info <- function(texts, .envir = parent.frame()) {
 
 gargle_verbatim <- function(texts) {
   if (gargle_verbosity() %in% c("debug", "info")) {
-    texts <- map(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
+    texts <- glue_continuation(texts)
     cli::cli_verbatim(texts)
   }
 }
@@ -81,16 +81,17 @@ gargle_verbatim <- function(texts) {
 # TODO: if a better built-in solution arises in the semantic UI, use it
 # https://github.com/r-lib/cli/issues/211
 gargle_alert <- function(texts, .envir = parent.frame()) {
+  texts <- glue_continuation(texts)
+  cli::cli_alert(texts[1], wrap = TRUE, .envir = .envir)
+  cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
+  walk(texts[-1], cli::cli_alert, wrap = TRUE, .envir = .envir)
+  cli::cli_end()
+}
+
+glue_continuation <- function(texts) {
   # pre-process with glue + wacky delimiters so I can do glue-style
   # line continuation with `\\`
-  texts <- lapply(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
-  cli::cli_alert(texts[1], wrap = TRUE, .envir = .envir)
-  cli::cli_div(theme = list(.alert = list(before = "  ")))
-  # TODO: add `wrap = TRUE` once this gets fixed
-  # yes, there is existing usage that wraps
-  # https://github.com/r-lib/cli/issues/230
-  lapply(texts[-1], cli::cli_alert, .envir = .envir)
-  cli::cli_end()
+  map(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
 }
 
 glue_lines <- function(lines, ..., .env = parent.frame()) {
