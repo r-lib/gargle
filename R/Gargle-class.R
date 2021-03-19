@@ -163,7 +163,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     x <- list(
       oauth_endpoint = "google",
       app            = self$app$appname,
-      email          = cli_format("{.email {self$email}}"),
+      email          = cli_this("{.email {self$email}}"),
       scopes         = commapse(base_scope(self$params$scope)),
       credentials    = commapse(names(self$credentials))
     )

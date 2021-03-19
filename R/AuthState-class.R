@@ -123,7 +123,7 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @param ... Not used.
   format = function(...) {
     x <- list(
-      package     = cli_format("{.pkg {self$package}}"),
+      package     = cli_this("{.pkg {self$package}}"),
       app         = self$app$appname,
       api_key     = obfuscate(self$api_key),
       auth_active = self$auth_active,

@@ -107,11 +107,11 @@ cache_load <- function(path) {
     mismatch_hash <- hashes[mismatch]
     mismatch_name_fmt <- lapply(
       mismatch_name,
-      function(x) cli_format("{.val {x}} (name)")
+      function(x) cli_this("{.val {x}} (name)")
     )
     mismatch_hash_fmt <- lapply(
       mismatch_hash,
-      function(x) cli_format("{.field {x}} (hash)")
+      function(x) cli_this("{.field {x}} (hash)")
     )
     msg <- c(
       glue(cli::pluralize("
@@ -213,7 +213,7 @@ token_match <- function(candidate, existing, package = "gargle") {
       emails <- extract_email(existing)
       emails_fmt <- lapply(
         emails,
-        function(x) cli_format("{cli::symbol$line} {.email {x}}")
+        function(x) cli_this("{cli::symbol$line} {.email {x}}")
       )
       msg <- c(
         "Suitable tokens found in the cache, associated with these emails:",

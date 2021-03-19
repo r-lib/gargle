@@ -112,7 +112,7 @@ glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
 # https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
 # more discussion at
 # https://github.com/r-lib/cli/issues/222
-cli_format = function(..., .envir = parent.frame()) {
+cli_this = function(..., .envir = parent.frame()) {
   txt <- cli::cli_format_method(cli::cli_text(..., .envir = .envir))
   # @rundel does this to undo wrapping done by cli_format_method()
   # I haven't had this need yet
