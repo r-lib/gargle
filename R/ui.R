@@ -143,3 +143,7 @@ obfuscate <- function(x, first = 7, last = 0) {
     )
   out
 }
+
+message <- function(...) {
+  abort(glue("Internal error: use gargle's UI functions, not {bt('message()')}"))
+}
