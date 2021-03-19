@@ -298,22 +298,20 @@ match2 <- function(needle, haystack) {
 #' @examples
 #' gargle_oauth_sitrep()
 gargle_oauth_sitrep <- function(cache = NULL) {
-  withr::local_options(list(gargle_quiet = FALSE))
   path <- maybe_cache_path(cache)
   if (is.null(path)) {
-    ui_line("No gargle OAuth cache has been established.")
+    gargle_info("No gargle OAuth cache has been established")
     return(invisible())
   }
 
-  ui_line("gargle OAuth cache path:")
-  ui_line(path)
-  ui_line()
-
   dat <- gargle_oauth_dat(path)
-  ui_line(glue("{nrow(dat)} tokens found"))
-  ui_line()
+  gargle_info(c(
+    "{nrow(dat)} token{?s} found in this gargle OAuth cache:",
+    "{.path {path}}",
+    ""
+  ))
 
-  ui_line(glue_collapse(format(dat), sep = "\n"))
+  gargle_verbatim(format(dat))
   invisible(dat)
 }
 

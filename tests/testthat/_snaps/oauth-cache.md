@@ -67,11 +67,9 @@
     Code
       writeLines(out)
     Output
-      gargle OAuth cache path:
-      {path to gargle oauth cache}
-      
-      2 tokens found
-      
+      > 2 tokens found in this gargle OAuth cache:
+        {path to gargle oauth cache}
+        
       email         app         scopes hash...   
       _____________ ___________ ______ __________
       a@example.org gargle-clio        {hash...}

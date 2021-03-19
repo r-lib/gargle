@@ -71,6 +71,13 @@ gargle_info <- function(texts, .envir = parent.frame()) {
   }
 }
 
+gargle_verbatim <- function(texts) {
+  if (gargle_verbosity() %in% c("debug", "info")) {
+    texts <- map(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
+    cli::cli_verbatim(texts)
+  }
+}
+
 # TODO: if a better built-in solution arises in the semantic UI, use it
 # https://github.com/r-lib/cli/issues/211
 gargle_alert <- function(texts, .envir = parent.frame()) {

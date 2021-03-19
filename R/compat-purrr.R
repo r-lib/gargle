@@ -27,6 +27,11 @@ map_chr <- function(.x, .f, ...) {
   map_mold(.x, .f, character(1), ...)
 }
 
+walk <- function(.x, .f, ...) {
+  map(.x, .f, ...)
+  invisible(.x)
+}
+
 map2 <- function(.x, .y, .f, ...) {
   out <- mapply(.f, .x, .y, MoreArgs = list(...), SIMPLIFY = FALSE)
   if (length(out) == length(.x)) {
