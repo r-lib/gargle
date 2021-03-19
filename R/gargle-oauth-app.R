@@ -14,6 +14,7 @@
 #' @return An OAuth consumer application, produced by [httr::oauth_app()],
 #'   invisibly.
 #' @export
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' gargle_app()
