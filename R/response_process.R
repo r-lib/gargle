@@ -238,11 +238,17 @@ reveal_detail <- function(x) {
     ))
     c("Links", bullets)
   }
+  rpc_error_info <- function(e) {
+    e <- unlist(e)
+    e <- e[names(e) != "@type"]
+    glue_data(as.list(e), "  * {names(e)}: {e}")
+  }
 
   switch(
     type,
     "google.rpc.BadRequest" = rpc_bad_request(x),
     "google.rpc.Help"       = rpc_help(x),
+    "google.rpc.ErrorInfo"  = rpc_error_info(x),
     # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
     glue_lines(c(
       "  * Error details of type {sq(type)} may not be fully revealed.",
