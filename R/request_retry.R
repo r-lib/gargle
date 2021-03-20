@@ -197,7 +197,11 @@ retry_after_header <- function(resp) {
 }
 
 sheets_per_user_quota_exhaustion <- function(resp) {
-  any(grepl("per user per 100 seconds", gargle_error_message(resp)))
+  msg <- gargle_error_message(resp)
+  # the structure of this error and the wording of this message have changed
+  # over time
+  any(grepl("per user per 100 seconds", msg)) ||
+    any(grepl("per minute per user", msg))
 }
 
 calculate_base_wait <- function(n_waits, total_wait_time) {
