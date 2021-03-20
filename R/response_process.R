@@ -63,7 +63,12 @@
 #' resp <- gargle::request_make(req)
 #' response_process(resp)
 #' }
-response_process <- function(resp, error_message = gargle_error_message) {
+response_process <- function(resp,
+                             error_message = gargle_error_message,
+                             remember = TRUE) {
+  if (remember) {
+    gargle_env$last_response <- resp
+  }
   code <- httr::status_code(resp)
 
   if (code >= 200 && code < 300) {
@@ -74,6 +79,12 @@ response_process <- function(resp, error_message = gargle_error_message) {
       response_as_json(resp)
     }
   } else {
+    if (remember) {
+      gargle_env$last_error <- tryCatch(
+        response_as_json(resp),
+        gargle_error_request_failed = function(e) e$message
+      )
+    }
     stop_request_failed(error_message(resp), resp)
   }
 }

@@ -1,18 +1,3 @@
-#' Environment used for gargle global state
-#'
-#' Unfortunately, we're stuck having at least some state, in order to maintain a
-#' list of credential functions to try.
-#'
-#' This environment contains:
-#' * `$cred_funs` is the ordered list of credential functions to use when trying
-#'   to fetch credentials.
-#'
-#' @noRd
-#' @format An environment.
-#' @keywords internal
-gargle_env <- new.env(parent = emptyenv())
-gargle_env$cred_funs <- list()
-
 #' Check that f is a viable credential fetching function
 #'
 #' In the abstract, a credential fetching function is any function which takes a
