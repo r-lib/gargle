@@ -1,3 +1,19 @@
+expect_recorded_error <- function(filename, status_code) {
+  rds_file <- test_path("fixtures", fs::path_ext_set(filename, "rds"))
+  resp <- readRDS(rds_file)
+  expect_error(response_process(resp), class = "gargle_error_request_failed")
+  expect_error(response_process(resp), class = glue("http_error_{status_code}"))
+  expect_snapshot_error(response_process(resp))
+}
+
+test_that("Resource exhausted (Sheets, ReadGroup)", {
+  expect_recorded_error(
+    "sheets-spreadsheets-get-quota-exceeded-readgroup_429",
+    429
+  )
+})
+
+# TODO: finish switching over to expect_recorded_error() ----
 verify_recorded_error <- function(filename, status_code) {
   rds_file <- test_path("fixtures", fs::path_ext_set(filename, "rds"))
   output_file <- glue("{fs::path_ext_remove(rds_file)}_MESSAGE.txt")
@@ -36,13 +52,7 @@ test_that("Request to bad URL (tokeninfo, HTML content)", {
   verify_recorded_error("tokeninfo-bad-path_404", 404)
 })
 
-test_that("Resource exhausted (Sheets, ReadGroup)", {
-  verify_recorded_error(
-    "sheets-spreadsheets-get-quota-exceeded-readgroup_429",
-    429
-  )
-})
-
+# helpers ----
 test_that("RPC codes can be looked up (or not)", {
   expect_match(
     rpc_description("ALREADY_EXISTS"),
