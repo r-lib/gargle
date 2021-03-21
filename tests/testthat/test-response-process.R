@@ -13,6 +13,13 @@ test_that("Resource exhausted (Sheets, ReadGroup)", {
   )
 })
 
+test_that("Request for non-existent resource (Drive)", {
+  expect_recorded_error(
+    "drive-files-get-nonexistent-file-id_404",
+    404
+  )
+})
+
 # TODO: finish switching over to expect_recorded_error() ----
 verify_recorded_error <- function(filename, status_code) {
   rds_file <- test_path("fixtures", fs::path_ext_set(filename, "rds"))
@@ -38,10 +45,6 @@ test_that("Request with bad field mask (Sheets)", {
 
 test_that("Request for nonexistent resource (Sheets)", {
   verify_recorded_error("sheets-spreadsheets-get-nonexistent-sheet-id_404", 404)
-})
-
-test_that("Request for non-existent resource (Drive)", {
-  verify_recorded_error("drive-files-get-nonexistent-file-id_404", 404)
 })
 
 test_that("Request with invalid value (tokeninfo, stale token)", {

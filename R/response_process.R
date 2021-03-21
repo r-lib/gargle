@@ -140,33 +140,39 @@ gargle_error_message <- function(resp) {
       httr::http_status(resp)$message,
       glue("  * {content$error_description}")
     )
-  } else {
-    errors <- error[["errors"]]
-    if (is.null(errors)) {
-      # developed from test fixtures from "sheets.spreadsheets.get" endpoint
-      status <- httr::http_status(resp)
-      rpc <- rpc_description(error$status)
+    return(message)
+  }
+  errors <- error[["errors"]]
+
+  if (is.null(errors)) {
+    # developed from test fixtures from "sheets.spreadsheets.get" endpoint
+    status <- httr::http_status(resp)
+    rpc <- rpc_description(error$status)
+    message <- c(
+      glue("{status$category}: ({error$code}) {error$status}"),
+      glue("  * {rpc}"),
+      glue("  * {error$message}")
+    )
+    if (!is.null(error$details)) {
       message <- c(
-        glue("{status$category}: ({error$code}) {error$status}"),
-        glue("  * {rpc}"),
-        glue("  * {error$message}")
-      )
-      if (!is.null(error$details)) {
-        message <- c(
-          message,
-          "",
-          reveal_details(error$details)
-        )
-      }
-    } else {
-      # developed from test fixture from "drive.files.get" endpoint
-      errors <- unlist(errors)
-      message <- c(
-        httr::http_status(resp)$message,
-        glue("  * {format(names(errors), justify = 'right')}: {errors}")
+        message,
+        "",
+        reveal_details(error$details)
       )
     }
+    return(message)
   }
+
+  # developed from
+  # - test fixture from "drive.files.get" endpoint
+  # - response_process() example of under/mis-scoped token
+  errors <- unlist(errors)
+  message <- c(
+    httr::http_status(resp)$message,
+    error$message,
+    error$status,
+    glue("  * {format(names(errors), justify = 'right')}: {errors}")
+  )
   message
 }
 

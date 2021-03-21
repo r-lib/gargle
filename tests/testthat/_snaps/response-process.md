@@ -12,3 +12,13 @@
       * metadata.service: sheets.googleapis.com
       * metadata.quota_metric: sheets.googleapis.com/read_requests
 
+# Request for non-existent resource (Drive)
+
+    Client error: (404) Not Found
+    File not found: NOPE_NOT_A_GOOD_ID.
+      *       domain: global
+      *       reason: notFound
+      *      message: File not found: NOPE_NOT_A_GOOD_ID.
+      * locationType: parameter
+      *     location: fileId
+
