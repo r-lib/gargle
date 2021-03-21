@@ -22,3 +22,12 @@
       * locationType: parameter
       *     location: fileId
 
+# Request for which we don't have scope (Fitness)
+
+    Client error: (403) Forbidden
+    Request had insufficient authentication scopes.
+    PERMISSION_DENIED
+      * message: Insufficient Permission
+      *  domain: global
+      *  reason: insufficientPermissions
+

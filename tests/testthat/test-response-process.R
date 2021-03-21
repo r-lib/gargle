@@ -20,6 +20,13 @@ test_that("Request for non-existent resource (Drive)", {
   )
 })
 
+test_that("Request for which we don't have scope (Fitness)", {
+  expect_recorded_error(
+    "fitness-get-wrong-scope_403",
+    403
+  )
+})
+
 # TODO: finish switching over to expect_recorded_error() ----
 verify_recorded_error <- function(filename, status_code) {
   rds_file <- test_path("fixtures", fs::path_ext_set(filename, "rds"))
