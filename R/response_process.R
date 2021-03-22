@@ -18,11 +18,17 @@
 #'   * Status code in the 100s (information) or 300s (redirection). These are
 #'     unexpected.
 #'
-#' @details
 #' If `process_response()` results in an error, a redacted version of the `resp`
-#' input is returned in the condition (auth tokens are removed). Use functions
-#' such as `rlang::last_error()` or `rlang::catch_cnd()` to capture the
-#' condition and do a more detailed forensic examination.
+#' input is returned in the condition (auth tokens are removed).
+#'
+#' @details
+#' When `remember = TRUE` (the default), gargle stores the most recently seen
+#' response internally, for *post hoc* examination. The stored response is
+#' literally just the most recent `resp` input, but with auth tokens redacted.
+#' It can be accessed via the unexported function
+#' `gargle:::gargle_last_response()`. A companion function
+#' `gargle:::gargle_last_content()` returns the content of the last response,
+#' which is probably the most useful form for *post mortem* analysis.
 #'
 #' The `response_as_json()` helper is exported only as an aid to maintainers who
 #' wish to use their own `error_message` function, instead of gargle's built-in
@@ -33,6 +39,7 @@
 #' @param resp Object of class `response` from [httr].
 #' @param error_message Function that produces an informative error message from
 #'   the primary input, `resp`. It must return a character vector.
+#' @param remember Whether to remember the most recently processed response.
 #'
 #' @return The content of the request, as a list. An HTTP status code of 204 (No
 #'   content) is a special case returning `TRUE`.
@@ -67,7 +74,7 @@ response_process <- function(resp,
                              error_message = gargle_error_message,
                              remember = TRUE) {
   if (remember) {
-    gargle_env$last_response <- resp
+    gargle_env$last_response <- redact_response(resp)
   }
   code <- httr::status_code(resp)
 
@@ -79,12 +86,6 @@ response_process <- function(resp,
       response_as_json(resp)
     }
   } else {
-    if (remember) {
-      gargle_env$last_error <- tryCatch(
-        response_as_json(resp),
-        gargle_error_request_failed = function(e) e$message
-      )
-    }
     stop_request_failed(error_message(resp), resp)
   }
 }

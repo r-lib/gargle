@@ -6,7 +6,7 @@
 \alias{gargle_error_message}
 \title{Process a Google API response}
 \usage{
-response_process(resp, error_message = gargle_error_message)
+response_process(resp, error_message = gargle_error_message, remember = TRUE)
 
 response_as_json(resp)
 
@@ -17,6 +17,8 @@ gargle_error_message(resp)
 
 \item{error_message}{Function that produces an informative error message from
 the primary input, \code{resp}. It must return a character vector.}
+
+\item{remember}{Whether to remember the most recently processed response.}
 }
 \value{
 The content of the request, as a list. An HTTP status code of 204 (No
@@ -43,12 +45,18 @@ create a useful message for all variants we know about.
 \item Status code in the 100s (information) or 300s (redirection). These are
 unexpected.
 }
+
+If \code{process_response()} results in an error, a redacted version of the \code{resp}
+input is returned in the condition (auth tokens are removed).
 }
 \details{
-If \code{process_response()} results in an error, a redacted version of the \code{resp}
-input is returned in the condition (auth tokens are removed). Use functions
-such as \code{rlang::last_error()} or \code{rlang::catch_cnd()} to capture the
-condition and do a more detailed forensic examination.
+When \code{remember = TRUE} (the default), gargle stores the most recently seen
+response internally, for \emph{post hoc} examination. The stored response is
+literally just the most recent \code{resp} input, but with auth tokens redacted.
+It can be accessed via the unexported function
+\code{gargle:::gargle_last_response()}. A companion function
+\code{gargle:::gargle_last_content()} returns the content of the last response,
+which is probably the most useful form for \emph{post mortem} analysis.
 
 The \code{response_as_json()} helper is exported only as an aid to maintainers who
 wish to use their own \code{error_message} function, instead of gargle's built-in

@@ -6,9 +6,6 @@
 #'   `cred_funs_set_default()` in `.onLoad()`.
 #' * `$last_response` is the most recent response provided to
 #'   `response_process()`.
-#' # `$last_error` is the most recent error handled by `response_process()`, in
-#'    a more ready-to-explore form than the raw response stored in
-#'    `$last_response`.
 #'
 #' @noRd
 #' @format An environment.
@@ -22,6 +19,14 @@ gargle_last_response <- function() {
   gargle_env$last_response
 }
 
-gargle_last_error <- function() {
-  gargle_env$last_error
+gargle_last_content <- function() {
+  resp <- gargle_last_response()
+  if (inherits(resp, "response")) {
+    tryCatch(
+      response_as_json(resp),
+      gargle_error_request_failed = function(e) e$message
+    )
+  } else {
+    list()
+  }
 }
