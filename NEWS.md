@@ -25,6 +25,10 @@ The helpers `with_gargle_verbosity()` and `local_gargle_verbosity()` make it eas
 
 `gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
 
+`response_process()` gains a `remember` argument.
+When `TRUE` (the default), gargle stores the most recent response internally.
+Unexported functions `gargle:::gargle_last_response()` and `gargle:::gargle_last_content()` facilitate *post mortem* analysis of, e.g., a failed request (#152).
+
 ## Dependency changes
 
 cli is new in Imports.
