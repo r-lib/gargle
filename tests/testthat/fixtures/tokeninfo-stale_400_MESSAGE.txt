@@ -1,4 +1,0 @@
-> response_process(resp)
-Error: Client error: (400) Bad Request
-  * Invalid Value
-

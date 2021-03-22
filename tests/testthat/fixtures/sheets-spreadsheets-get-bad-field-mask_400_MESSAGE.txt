@@ -1,9 +1,0 @@
-> response_process(resp)
-Error: Client error: (400) INVALID_ARGUMENT
-  * Client specified an invalid argument. Check error message and error details for more information.
-  * Request contains an invalid argument.
-
-Error details:
-Field violations
-  * Error expanding 'fields' parameter. Cannot find matching fields for path 'sheets.sheetProperties'.
-
