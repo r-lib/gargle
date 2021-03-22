@@ -178,7 +178,9 @@
 <h2 class="hasAnchor">
 <a href="#other-changes" class="anchor"></a>Other changes</h2>
 <p><code><a href="../reference/gargle_options.html">gargle_oob_default()</a></code> returns <code>TRUE</code> unconditionally when running in RStudio Server.</p>
-<p><code><a href="../reference/response_process.html">response_process()</a></code> gains a <code>remember</code> argument. When <code>TRUE</code> (the default), gargle stores the most recent response internally. Unexported functions <code>gargle:::gargle_last_response()</code> and <code>gargle:::gargle_last_content()</code> facilitate <em>post mortem</em> analysis of, e.g., a failed request (<a href='https://github.com/r-lib/gargle/issues/152'>#152</a>).</p>
+<p><code><a href="../reference/response_process.html">response_process()</a></code> gains a <code>remember</code> argument. When <code>TRUE</code> (the default), gargle stores the most recent response internally (with auth tokens redacted). Unexported functions <code>gargle:::gargle_last_response()</code> and <code>gargle:::gargle_last_content()</code> facilitate <em>post mortem</em> analysis of, e.g., a failed request (<a href='https://github.com/r-lib/gargle/issues/152'>#152</a>).</p>
+<p><code>google.rpc.ErrorInfo</code> errors are explicitly handled now, resulting in a more informative error message.</p>
+<p><code><a href="../reference/request_retry.html">request_retry()</a></code> is better able to detect when the per-user quota has been exhausted (vs. the per-project quota), resulting in a more informed choice of backoff.</p>
 </div>
 <div id="dependency-changes" class="section level2">
 <h2 class="hasAnchor">
