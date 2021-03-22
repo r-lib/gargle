@@ -26,8 +26,12 @@ The helpers `with_gargle_verbosity()` and `local_gargle_verbosity()` make it eas
 `gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
 
 `response_process()` gains a `remember` argument.
-When `TRUE` (the default), gargle stores the most recent response internally.
+When `TRUE` (the default), gargle stores the most recent response internally (with auth tokens redacted).
 Unexported functions `gargle:::gargle_last_response()` and `gargle:::gargle_last_content()` facilitate *post mortem* analysis of, e.g., a failed request (#152).
+
+`google.rpc.ErrorInfo` errors are explicitly handled now, resulting in a more informative error message.
+
+`request_retry()` is better able to detect when the per-user quota has been exhausted (vs. the per-project quota), resulting in a more informed choice of backoff.
 
 ## Dependency changes
 
