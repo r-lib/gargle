@@ -39,6 +39,8 @@ cli is new in Imports.
 
 rstudioapi is new in Imports.
 
+rappdirs is new in Imports.
+
 httpuv is new in Suggests. We encourage its installation in interactive sessions, if we're about to initiate OAuth flow, unless it's clear that out-of-band auth is inevitable.
 
 gargle now relies on testthat >= 3.0.0 and, specifically, uses third edition features.
