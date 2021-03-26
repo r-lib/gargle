@@ -18,7 +18,8 @@ test_that("cache_establish() insists on sensible input", {
 test_that("`cache = TRUE` uses default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
-    cache_create = function(path) NULL, {
+    cache_create = function(path) NULL,
+    {
       expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
     }
   )
@@ -30,8 +31,11 @@ test_that("`cache = FALSE` does nothing", {
 
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
   with_mock(
+    # we want no existing cache to be found, be it current or legacy
     gargle_default_oauth_cache_path = function() file_temp(),
-    cache_allowed = function(path) FALSE, {
+    gargle_legacy_default_oauth_cache_path = function() file_temp(),
+    cache_allowed = function(path) FALSE,
+    {
       expect_equal(cache_establish(NA), cache_establish(FALSE))
     }
   )
@@ -66,8 +70,11 @@ test_that("default is to consult and set the oauth cache option", {
   withr::with_options(
     list(gargle_oauth_cache = NA),
     with_mock(
+      # we want no existing cache to be found, be it current or legacy
       gargle_default_oauth_cache_path = function() file_temp(),
-      cache_allowed = function(path) FALSE, {
+      gargle_legacy_default_oauth_cache_path = function() file_temp(),
+      cache_allowed = function(path) FALSE,
+      {
         expect_equal(getOption("gargle_oauth_cache"), NA)
         cache_establish()
         expect_false(getOption("gargle_oauth_cache"))
@@ -76,10 +83,43 @@ test_that("default is to consult and set the oauth cache option", {
   )
 })
 
-# cache_allowed() ---------------------------------------------------------
+# cache_allowed() --------------------------------------------------------------
 
 test_that("cache_allowed() returns false when non-interactive (or testing)", {
   expect_false(cache_allowed(getwd()))
+})
+
+# cache_clean() --------------------------------------------------------------
+
+test_that("cache_clean() works", {
+  cache_folder <- path_temp("cache_clean-test")
+  withr::defer(dir_delete(cache_folder))
+
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    app = httr::oauth_app("apple", key = "KEY", secret = "SECRET"),
+    credentials = list(a = 1),
+    cache = cache_folder
+  )
+  fauxen_b <- gargle2.0_token(
+    email = "b@example.org",
+    app = httr::oauth_app("banana", key = "KEY", secret = "SECRET"),
+    credentials = list(b = 1),
+    cache = cache_folder
+  )
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(nrow(dat), 2)
+
+  expect_snapshot(
+    cache_clean(cache_folder, "apple")
+  )
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(dat$app, "banana")
+
+  local_gargle_verbosity("silent")
+  cache_clean(cache_folder, "banana")
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(nrow(dat), 0)
 })
 
 # validate_token_list() ------------------------------------------------------

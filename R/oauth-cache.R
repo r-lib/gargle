@@ -4,7 +4,7 @@
 # cache setup, loading, validation --------------------------------------------
 
 gargle_default_oauth_cache_path <- function() {
-  path_home(".R", "gargle", "gargle-oauth")
+  rappdirs::user_cache_dir("gargle")
 }
 
 ## this is the cache setup interface for the Gargle2.0 class
@@ -18,9 +18,16 @@ cache_establish <- function(cache = NULL) {
     stop_bad_class(cache, c("logical", "character"))
   }
 
-  # If NA, consider default cache folder.
-  # Request user's permission to create it, if doesn't exist yet.
-  # Store outcome of this mission (TRUE or FALSE) in the option for the session.
+  # takes care of the re-location of the default cache, implemented in v1.1.0
+  # once we consider the transition done, this if(){...} can go away
+  # the persistent solution for cleaning out legacy tokens is cache_clean() below
+  if (isTRUE(cache) || is.na(cache)) {
+    close_out_legacy_cache()
+  }
+
+  # If NA, consider default cache folder
+  # Request user's permission to create it, if doesn't exist yet
+  # Store outcome of this mission (TRUE or FALSE) in the option for the session
   if (is.na(cache)) {
     cache <- cache_available(gargle_default_oauth_cache_path())
     options("gargle_oauth_cache" = cache)
@@ -36,7 +43,9 @@ cache_establish <- function(cache = NULL) {
   }
   ## cache is now a path
 
-  if (!dir_exists(cache)) {
+  if (dir_exists(cache)) {
+    cache_clean(cache)
+  } else {
     cache_create(cache)
   }
 
@@ -52,10 +61,10 @@ cache_allowed <- function(path) {
     return(FALSE)
   }
 
-  # use cat() to match what's done inside utils::menu()
-  cat(glue("
-    Is it OK to cache OAuth access credentials in the folder {sq(path)} \\
-    between R sessions?"))
+  local_gargle_verbosity("info")
+  gargle_info("
+    Is it OK to cache OAuth access credentials in the folder \\
+    {.path {path}} between R sessions?")
   utils::menu(c("Yes", "No")) == 1
 }
 
@@ -126,6 +135,35 @@ cache_load <- function(path) {
   } else {
     tokens
   }
+}
+
+cache_clean <- function(cache, pattern = "-calliope$") {
+  # deletes an empty directory at the legacy cache location
+  # new location implemented in v1.1.0
+  # once we consider the transition done, this defer() can go away
+  withr::defer(delete_empty_legacy_cache(cache))
+
+  dat_tokens <- gargle_oauth_dat(cache)
+  dat_tokens$legacy <- grepl(pattern, dat_tokens$app)
+  n <- sum(dat_tokens$legacy)
+  if (n == 0) {
+    return(FALSE)
+  }
+
+  gargle_info("
+    Deleting {n} tokens obtained with an old tidyverse OAuth app")
+  gargle_info("
+    You can expect interactive prompts to re-auth with the new app")
+  gargle_info(c(
+    "If this rolling of credentials is highly disruptive to your workflow, \\
+     that means you should be relying on your own OAuth app \\
+     (or using a service account token)",
+    "Learn more these in these articles:",
+    "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}",
+    "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
+  ))
+  file_delete(dat_tokens$filepath[dat_tokens$legacy])
+  TRUE
 }
 
 # retrieve and insert tokens from cache -----------------------------------
@@ -244,11 +282,11 @@ token_match <- function(candidate, existing, package = "gargle") {
 
   # we need user to OK our discovery or pick from multiple emails
   emails <- extract_email(existing)
-  # use cat() to match what's done inside utils::menu()
-  cat(glue("
-    The {package} package is requesting access to your Google account
-    Select a pre-authorised account or enter '0' to obtain a new token
-    Press Esc/Ctrl + C to cancel"))
+  local_gargle_verbosity("info")
+  gargle_info(c(
+    "The {.pkg {package}} package is requesting access to your Google account",
+    "Select a pre-authorised account or enter '0' to obtain a new token",
+    "Press Esc/Ctrl + C to cancel"))
   choice <- utils::menu(emails)
 
   if (choice == 0) {
@@ -292,22 +330,24 @@ match2 <- function(needle, haystack) {
 #'
 #' @inheritParams gargle2.0_token
 #'
-#' @return A data frame with one row per cached token, invisibly.
+#' @return A data frame with one row per cached token, invisibly. Note this data
+#'   frame may contain more columns than it seems, e.g. the `filepath` column
+#'   isn't printed by default.
 #' @export
 #'
 #' @examples
 #' gargle_oauth_sitrep()
 gargle_oauth_sitrep <- function(cache = NULL) {
-  path <- maybe_cache_path(cache)
-  if (is.null(path)) {
-    gargle_info("No gargle OAuth cache has been established")
+  cache <- cache %||% gargle_default_oauth_cache_path()
+  if (!is_dir(cache)) {
+    gargle_info("No gargle OAuth cache found at {.path {cache}}")
     return(invisible())
   }
 
-  dat <- gargle_oauth_dat(path)
+  dat <- gargle_oauth_dat(cache)
   gargle_info(c(
     "{nrow(dat)} token{?s} found in this gargle OAuth cache:",
-    "{.path {path}}",
+    "{.path {cache}}",
     ""
   ))
 
@@ -315,18 +355,12 @@ gargle_oauth_sitrep <- function(cache = NULL) {
   invisible(dat)
 }
 
-maybe_cache_path <- function(cache = NULL) {
-  # I do not want to actively trigger cache establishment
-  withr::local_options(list(rlang_interactive = FALSE))
-  cache_establish(cache)
-}
-
 gargle_oauth_dat <- function(cache = NULL) {
-  path <- maybe_cache_path(cache)
-  if (is.null(path)) {
-    tokens <- list()
+  cache <- cache %||% gargle_default_oauth_cache_path()
+  if (is_dir(cache)) {
+    tokens <- cache_load(cache)
   } else {
-    tokens <- cache_load(path)
+    tokens <- list()
   }
 
   nms    <- names(tokens)
@@ -341,7 +375,7 @@ gargle_oauth_dat <- function(cache = NULL) {
   structure(
     data.frame(
       email, app, scopes, hash,
-      filepath = path(path, nms),
+      filepath = path(cache, nms),
       stringsAsFactors = FALSE, row.names = NULL
     ),
     class = c("gargle_oauth_dat", "data.frame")
@@ -379,4 +413,79 @@ format.gargle_oauth_dat <- function(x, ...) {
 print.gargle_oauth_dat <- function(x, ...) {
  cli::cat_line(format(x))
  invisible(x)
+}
+
+# cache relocation, implemented in v1.1.0 --------------------------------------
+
+gargle_legacy_default_oauth_cache_path <- function() {
+  path_home(".R", "gargle", "gargle-oauth")
+}
+
+is_legacy_cache <- function(cache) {
+  path_real(cache) == path_real(gargle_legacy_default_oauth_cache_path())
+}
+
+delete_empty_legacy_cache <- function(cache) {
+  if (!is_legacy_cache(cache)) {
+    return()
+  }
+
+  # use dir_ls() or gargle_oauth_dat()?
+  # dir_ls() captures all files
+  # gargle_oauth_dat() just captures files that "look" like our tokens
+  # this should rarely matter, but I'll err on the side of not deleting files
+  #   that I don't recognize as ours
+  cache_contents <- dir_ls(cache, all = TRUE)
+  if (length(cache_contents) == 0) {
+    gargle_debug("
+      Legacy cache {.path {cache}} is empty, deleting the directory")
+    dir_delete(cache)
+    TRUE
+  } else {
+    FALSE
+  }
+}
+
+# gets rid of an existing cache at the legacy location, whatever it takes
+#
+# ideally, it's empty and we can delete it and start over
+# that's why we first delete legacy tokens
+#
+# if there are still tokens remaining, move them to new default cache
+#
+# once we consider the transition done, this function can go away
+# the persistent solution for cleaning out legacy tokens is cache_clean()
+close_out_legacy_cache <- function() {
+  default_cache <- gargle_default_oauth_cache_path()
+  if (dir_exists(default_cache)) {
+    # cache already established at current default path
+    # even if a legacy cache still exists, we shall not speak of it
+    return()
+  }
+
+  cache <- gargle_legacy_default_oauth_cache_path()
+  if (dir_exists(cache)) {
+    cache_clean(cache)
+  }
+  if (!dir_exists(cache)) {
+    return()
+  }
+
+  # we have a non-empty legacy cache
+  cache_relocate(from = cache, to = default_cache)
+}
+
+cache_relocate <- function(from, to) {
+  gargle_info(c(
+    "The default location for caching gargle OAuth tokens has changed",
+    "Previously: {.path {from}}",
+    "As of gargle v1.1.0: {.path {to}}"
+  ))
+  if (!dir_exists(to)) {
+    cache_create(to)
+  }
+  dat_tokens <- gargle_oauth_dat(from)
+  file_move(dat_tokens$filepath, to)
+  gargle_info("Relocating {nrow(dat_tokens)} existing token{?s} to new cache")
+  delete_empty_legacy_cache(from)
 }

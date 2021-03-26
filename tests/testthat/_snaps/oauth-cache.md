@@ -1,3 +1,19 @@
+# cache_clean() works
+
+    Code
+      cache_clean(cache_folder, "apple")
+    Message <cliMessage>
+      > Deleting 1 tokens obtained with an old tidyverse OAuth app
+      > You can expect interactive prompts to re-auth with the new app
+      > If this rolling of credentials is highly disruptive to your workflow, that
+        means you should be relying on your own OAuth app (or using a service account
+        token)
+        Learn more these in these articles:
+        <https://gargle.r-lib.org/articles/get-api-credentials.html>
+        <https://gargle.r-lib.org/articles/non-interactive-auth.html>
+    Output
+      [1] TRUE
+
 # cache_load() repairs tokens stored with names != their hash
 
     Code
