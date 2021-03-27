@@ -422,7 +422,9 @@ gargle_legacy_default_oauth_cache_path <- function() {
 }
 
 is_legacy_cache <- function(cache) {
-  path_real(cache) == path_real(gargle_legacy_default_oauth_cache_path())
+  legacy_cache <- gargle_legacy_default_oauth_cache_path()
+  dir_exists(legacy_cache) &&
+    path_real(cache) == path_real(legacy_cache)
 }
 
 delete_empty_legacy_cache <- function(cache) {
