@@ -1,5 +1,29 @@
 # gargle (development version)
 
+## OAuth token cache
+
+Two changes affect stored user OAuth tokens:
+
+* The default cache location has moved, to better align with general
+  conventions around where to cache user data. Here's how that looks for a
+  typical user:
+  - Typical before, macOS: `~/.R/gargle/gargle-oauth`
+  - Typical after, macOS: `~/Library/Caches/gargle`
+  - Typical before, Windows: `C:/Users/jane/.R/gargle/gargle-oauth`
+  - Typical after, Windows: `C:/Users/jane/AppData/Local/gargle/gargle/Cache`
+* Tokens created with one of the built-in OAuth apps provided by the tidyverse
+  packages are checked for validity. Tokens made with an old app are deleted.
+  - Nickname of previous tidyverse OAuth app: `tidyverse-calliope`
+  - Nickname of tidyverse OAuth app as of gargle v1.0.0: `tidyverse-clio`
+  
+For users who accept all default behaviour around OAuth, these changes just mean you will see some messages about cleaning and moving the token cache.
+These users can also expect to go through interactive auth (approximately once per package / API), to obtain fresh tokens made with the current tidyverse OAuth app.
+
+If the rolling of the tidyverse OAuth app is highly disruptive to your workflow, this is a good wake-up call that you should be using your own OAuth app or, perhaps, an entirely different auth method, such as using a service account token in non-interactive settings.
+As always, these articles explain how to take more control of auth:
+ * <https://gargle.r-lib.org/articles/get-api-credentials.html>
+ * <https://gargle.r-lib.org/articles/non-interactive-auth.html>
+
 ## User interface
 
 The user interface has gotten more stylish, thanks to the cli package (<https://cli.r-lib.org>).
@@ -38,6 +62,8 @@ Unexported functions `gargle:::gargle_last_response()` and `gargle:::gargle_last
 cli is new in Imports.
 
 rstudioapi is new in Imports.
+
+rappdirs is new in Imports.
 
 httpuv is new in Suggests. We encourage its installation in interactive sessions, if we're about to initiate OAuth flow, unless it's clear that out-of-band auth is inevitable.
 

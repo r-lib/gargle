@@ -11,7 +11,9 @@ gargle_oauth_sitrep(cache = NULL)
 "gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 }
 \value{
-A data frame with one row per cached token, invisibly.
+A data frame with one row per cached token, invisibly. Note this data
+frame may contain more columns than it seems, e.g. the \code{filepath} column
+isn't printed by default.
 }
 \description{
 Get a human-oriented overview of the existing gargle OAuth tokens:
