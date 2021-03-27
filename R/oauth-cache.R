@@ -4,7 +4,7 @@
 # cache setup, loading, validation --------------------------------------------
 
 gargle_default_oauth_cache_path <- function() {
-  rappdirs::user_cache_dir("gargle")
+  path_tidy(rappdirs::user_cache_dir("gargle"))
 }
 
 ## this is the cache setup interface for the Gargle2.0 class
