@@ -161,6 +161,39 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
+<div id="oauth-token-cache" class="section level2">
+<h2 class="hasAnchor">
+<a href="#oauth-token-cache" class="anchor"></a>OAuth token cache</h2>
+<p>Two changes affect stored user OAuth tokens:</p>
+<ul>
+<li>The default cache location has moved, to better align with general conventions around where to cache user data. Here’s how that looks for a typical user:
+<ul>
+<li>Typical before, macOS: <code>~/.R/gargle/gargle-oauth</code>
+</li>
+<li>Typical after, macOS: <code>~/Library/Caches/gargle</code>
+</li>
+<li>Typical before, Windows: <code>C:/Users/jane/.R/gargle/gargle-oauth</code>
+</li>
+<li>Typical after, Windows: <code>C:/Users/jane/AppData/Local/gargle/gargle/Cache</code>
+</li>
+</ul>
+</li>
+<li>Tokens created with one of the built-in OAuth apps provided by the tidyverse packages are checked for validity. Tokens made with an old app are deleted.
+<ul>
+<li>Nickname of previous tidyverse OAuth app: <code>tidyverse-calliope</code>
+</li>
+<li>Nickname of tidyverse OAuth app as of gargle v1.0.0: <code>tidyverse-clio</code>
+</li>
+</ul>
+</li>
+</ul>
+<p>For users who accept all default behaviour around OAuth, these changes just mean you will see some messages about cleaning and moving the token cache. These users can also expect to go through interactive auth (approximately once per package / API), to obtain fresh tokens made with the current tidyverse OAuth app.</p>
+<p>If the rolling of the tidyverse OAuth app is highly disruptive to your workflow, this is a good wake-up call that you should be using your own OAuth app or, perhaps, an entirely different auth method, such as using a service account token in non-interactive settings. As always, these articles explain how to take more control of auth:</p>
+<ul>
+<li><a href="https://gargle.r-lib.org/articles/get-api-credentials.html" class="uri">https://gargle.r-lib.org/articles/get-api-credentials.html</a></li>
+<li><a href="https://gargle.r-lib.org/articles/non-interactive-auth.html" class="uri">https://gargle.r-lib.org/articles/non-interactive-auth.html</a></li>
+</ul>
+</div>
 <div id="user-interface" class="section level2">
 <h2 class="hasAnchor">
 <a href="#user-interface" class="anchor"></a>User interface</h2>
@@ -187,6 +220,7 @@
 <a href="#dependency-changes" class="anchor"></a>Dependency changes</h2>
 <p>cli is new in Imports.</p>
 <p>rstudioapi is new in Imports.</p>
+<p>rappdirs is new in Imports.</p>
 <p>httpuv is new in Suggests. We encourage its installation in interactive sessions, if we’re about to initiate OAuth flow, unless it’s clear that out-of-band auth is inevitable.</p>
 <p>gargle now relies on testthat &gt;= 3.0.0 and, specifically, uses third edition features.</p>
 <p>mockr is new in Suggests, since <code>testthat::use_mock()</code> is superseded.</p>
