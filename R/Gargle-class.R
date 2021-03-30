@@ -209,8 +209,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
     cred <- refresh_oauth2.0(
-      self$endpoint, self$app,
-      self$credentials, self$params$user_params, self$params$use_basic_auth
+      self$endpoint, self$app, self$credentials,
+      package = self$package
     )
     if (is.null(cred)) {
       token_remove_from_cache(self)

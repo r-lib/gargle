@@ -6,8 +6,7 @@
 # Refreshes the given token, and returns a new credential with a
 # valid access_token. Based on:
 # https://developers.google.com/identity/protocols/oauth2/native-app#offline
-refresh_oauth2.0 <- function(endpoint, app, credentials, user_params = NULL,
-                             use_basic_auth = FALSE) {
+refresh_oauth2.0 <- function(endpoint, app, credentials, package = NULL) {
   if (is.null(credentials$refresh_token)) {
     abort("Refresh token not available")
   }
@@ -19,10 +18,6 @@ refresh_oauth2.0 <- function(endpoint, app, credentials, user_params = NULL,
     client_secret = app$secret,
     grant_type = "refresh_token"
   )
-
-  if (!is.null(user_params)) {
-    req_params <- utils::modifyList(user_params, req_params)
-  }
 
   response <- httr::POST(refresh_url, body = req_params, encode = "form")
 
