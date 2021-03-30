@@ -9,7 +9,7 @@
 refresh_oauth2.0 <- function(endpoint, app, credentials, user_params = NULL,
                              use_basic_auth = FALSE) {
   if (is.null(credentials$refresh_token)) {
-    stop("Refresh token not available", call. = FALSE)
+    abort("Refresh token not available")
   }
 
   refresh_url <- endpoint$access
@@ -28,12 +28,12 @@ refresh_oauth2.0 <- function(endpoint, app, credentials, user_params = NULL,
 
   err <- find_oauth2.0_error(response)
   if (!is.null(err)) {
-    lines <- c(
-      paste0("Unable to refresh token: ", err$error),
+    msg <- c(
+      glue("Unable to refresh token: {err$error}"),
       err$error_description,
       err$error_uri
     )
-    warning(paste(lines, collapse = "\n"), call. = FALSE)
+    warn(msg)
     return(NULL)
   }
 
