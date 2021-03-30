@@ -200,7 +200,10 @@ token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) return()
   token_path <- path(cache_path, candidate$hash())
-  gargle_debug(c("removing token from the cache:", "{.file {token_path}}"))
+  # this can happen when a token fails to refresh and is removed on disk,
+  # but not necessarily in the auth state
+  if (!file_exists(token_path)) return()
+  gargle_debug(c("Removing token from the cache:", "{.file {token_path}}"))
   file_delete(token_path)
 }
 
