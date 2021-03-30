@@ -137,7 +137,7 @@ cache_load <- function(path) {
   }
 }
 
-cache_clean <- function(cache, pattern = "-calliope$") {
+cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
   # deletes an empty directory at the legacy cache location
   # new location implemented in v1.1.0
   # once we consider the transition done, this defer() can go away
@@ -165,6 +165,8 @@ cache_clean <- function(cache, pattern = "-calliope$") {
   file_delete(dat_tokens$filepath[dat_tokens$legacy])
   TRUE
 }
+
+gargle_legacy_app_pattern <- function() "-calliope$"
 
 # retrieve and insert tokens from cache -----------------------------------
 
