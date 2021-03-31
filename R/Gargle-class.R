@@ -208,12 +208,16 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
-    cred <- get("refresh_oauth2.0", asNamespace("httr"))(
-      self$endpoint, self$app,
-      self$credentials, self$params$user_params, self$params$use_basic_auth
+    cred <- refresh_oauth2.0(
+      self$endpoint, self$app, self$credentials,
+      package = self$package
     )
     if (is.null(cred)) {
       token_remove_from_cache(self)
+      # TODO: why do we return the current, invalid, unrefreshed token?
+      # at the very least, let's clear the refresh_token, to prevent
+      # future refresh attempts
+      self$credentials$refresh_token <- NULL
     } else {
       self$credentials <- cred
       self$cache()

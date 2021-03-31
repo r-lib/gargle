@@ -137,7 +137,7 @@ cache_load <- function(path) {
   }
 }
 
-cache_clean <- function(cache, pattern = "-calliope$") {
+cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
   # deletes an empty directory at the legacy cache location
   # new location implemented in v1.1.0
   # once we consider the transition done, this defer() can go away
@@ -165,6 +165,8 @@ cache_clean <- function(cache, pattern = "-calliope$") {
   file_delete(dat_tokens$filepath[dat_tokens$legacy])
   TRUE
 }
+
+gargle_legacy_app_pattern <- function() "-calliope$"
 
 # retrieve and insert tokens from cache -----------------------------------
 
@@ -200,8 +202,13 @@ token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) return()
   token_path <- path(cache_path, candidate$hash())
-  gargle_debug(c("removing token from the cache:", "{.file {token_path}}"))
-  file_delete(token_path)
+  # when does token_path not exist?
+  # the first time a token fails to refresh it is removed on disk,
+  # but a package may still have it stored in its auth state
+  if (file_exists(token_path)) {
+    gargle_debug(c("Removing token from the cache:", "{.file {token_path}}"))
+    file_delete(token_path)
+  }
 }
 
 # helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
