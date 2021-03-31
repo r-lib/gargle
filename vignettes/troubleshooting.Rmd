@@ -162,7 +162,7 @@ It might look something like this:
 knitr::include_graphics("deleted_client.png")
 ```
 
-As of gargle version v1.1.0, we're trying harder to recognize this specific problem and to provide a more detailed and actionalbe error message:
+As of gargle version v1.1.0, we're trying harder to recognize this specific problem and to provide a more detailed and actionable error message:
 
 ```
 Auto-refreshing stale OAuth token.
