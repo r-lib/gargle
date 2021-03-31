@@ -122,22 +122,26 @@ This is unlikely to be an issue for a casual user, but it can absolutely become 
 
 ### Credential rolling
 
-Many users of packages like googlesheets4 or googledrive tacitly rely on the built-in OAuth app provided by those packages (provided by gargle, actually).
-The package maintainers and OAuth app owners will need to periodically create a new OAuth app and disable the old one.
+Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth app used by those packages.
+Periodically the maintainer of such a package will need to roll the app, i.e. create a new OAuth app and disable the old one.
 This will make it impossible to refresh existing tokens, made with the old, disabled app.
+Those tokens will stop working.
+
+*In gargle v1.0.0, in March 2021, we rolled the app used in googlesheets4, googledrive, and bigrquery.
+At some point in 2021, we plan to disable the old app.
+Anyone relying on the default app will have to upgrade.*
 
 The solution is to update the package in question, e.g. googlesheets4:
-
 
 ```{r eval = FALSE}
 install.packages("googlesheets4")
 ```
 
 **Restart R!**
-Resume your work and chances are you'll be prompted to re-auth with the new app
-and you'll be back in business.
+Resume your work.
+Chances are you'll be prompted to re-auth with the new app and you'll be back in business.
 
-How can you tell if this is your problem?
+What does this problem look like in the wild?
 
 With gargle versions up to v1.0.0, you will probably see this:
 
