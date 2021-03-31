@@ -202,11 +202,13 @@ token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
   if (is.null(cache_path)) return()
   token_path <- path(cache_path, candidate$hash())
-  # this can happen when a token fails to refresh and is removed on disk,
-  # but not necessarily in the auth state
-  if (!file_exists(token_path)) return()
-  gargle_debug(c("Removing token from the cache:", "{.file {token_path}}"))
-  file_delete(token_path)
+  # when does token_path not exist?
+  # the first time a token fails to refresh it is removed on disk,
+  # but a package may still have it stored in its auth state
+  if (file_exists(token_path)) {
+    gargle_debug(c("Removing token from the cache:", "{.file {token_path}}"))
+    file_delete(token_path)
+  }
 }
 
 # helpers to compare tokens based on SHORTHASH_EMAIL ------------------------
