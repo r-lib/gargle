@@ -81,7 +81,7 @@
 #' * <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>
 #' * <https://tech.channable.com/posts/2020-02-05-opnieuw.html>
 #' * <https://github.com/channable/opnieuw>
-#' * <https://cloud.google.com/storage/docs/exponential-backoff>
+#' * <https://cloud.google.com/storage/docs/retry-strategy>
 #' * <https://cloud.google.com/storage/docs/gsutil/addlhelp/RetryHandlingStrategy>
 #' * <https://tools.ietf.org/html/rfc7231#section-7.1.3>
 #' * <https://developers.google.com/sheets/api/limits>
