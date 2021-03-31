@@ -66,7 +66,7 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
       err$error_description,
       err$error_uri
     ))
-    return()
+    return(invisible())
   }
 
   # special handling for 'deleted_client'
@@ -89,7 +89,7 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
         in case the default app has been updated")
     )
     warn(msg)
-    return()
+    return(invisible())
   }
 
   # deleted app doesn't seem to be one of "ours"
@@ -109,5 +109,5 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
     }
   )
   warn(msg)
-  NULL
+  invisible()
 }
