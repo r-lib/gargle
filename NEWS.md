@@ -47,6 +47,9 @@ The helpers `with_gargle_verbosity()` and `local_gargle_verbosity()` make it eas
 
 ## Other changes
 
+There is special error handling when OAuth token refresh fails, due to deletion of the associated OAuth app.
+This should help users who are relying on the default app provided by a package and, presumably, they need to update that package (#168).
+
 `gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
 
 `response_process()` gains a `remember` argument.
