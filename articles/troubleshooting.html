@@ -212,12 +212,13 @@
 <div id="credential-rolling" class="section level3">
 <h3 class="hasAnchor">
 <a href="#credential-rolling" class="anchor"></a>Credential rolling</h3>
-<p>Many users of packages like googlesheets4 or googledrive tacitly rely on the built-in OAuth app provided by those packages (provided by gargle, actually). The package maintainers and OAuth app owners will need to periodically create a new OAuth app and disable the old one. This will make it impossible to refresh existing tokens, made with the old, disabled app.</p>
+<p>Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth app used by those packages. Periodically the maintainer of such a package will need to roll the app, i.e. create a new OAuth app and disable the old one. This will make it impossible to refresh existing tokens, made with the old, disabled app. Those tokens will stop working.</p>
+<p><em>In gargle v1.0.0, in March 2021, we rolled the app used in googlesheets4, googledrive, and bigrquery. At some point in 2021, we plan to disable the old app. Anyone relying on the default app will have to upgrade.</em></p>
 <p>The solution is to update the package in question, e.g. googlesheets4:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"googlesheets4"</span><span class="op">)</span></code></pre></div>
-<p><strong>Restart R!</strong> Resume your work and chances are you’ll be prompted to re-auth with the new app and you’ll be back in business.</p>
-<p>How can you tell if this is your problem?</p>
+<p><strong>Restart R!</strong> Resume your work. Chances are you’ll be prompted to re-auth with the new app and you’ll be back in business.</p>
+<p>What does this problem look like in the wild?</p>
 <p>With gargle versions up to v1.0.0, you will probably see this:</p>
 <pre><code>Auto-refreshing stale OAuth token.
 Error in get("refresh_oauth2.0", asNamespace("httr"))(self$endpoint, self$app,  :
@@ -229,7 +230,7 @@ Error 401: deleted_client
 The OAuth client was deleted.</code></pre>
 <p>It might look something like this:</p>
 <p><img src="deleted_client.png" width="400px"></p>
-<p>As of gargle version v1.1.0, we’re trying harder to recognize this specific problem and to provide a more detailed and actionalbe error message:</p>
+<p>As of gargle version v1.1.0, we’re trying harder to recognize this specific problem and to provide a more detailed and actionable error message:</p>
 <pre><code>Auto-refreshing stale OAuth token.
 Error: Client error: (401) UNAUTHENTICATED
   * Request not authenticated due to missing, invalid, or expired OAuth token.
