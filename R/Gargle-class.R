@@ -214,8 +214,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     )
     if (is.null(cred)) {
       token_remove_from_cache(self)
-      # TODO: return(NULL) here? why do we return the current, invalid,
-      # unrefreshed token?
+      # TODO: why do we return the current, invalid, unrefreshed token?
+      # at the very least, let's clear the refresh_token, to prevent
+      # future refresh attempts
+      self$credentials$refresh_token <- NULL
     } else {
       self$credentials <- cred
       self$cache()
