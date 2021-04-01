@@ -91,7 +91,7 @@ gargle_alert <- function(texts, .envir = parent.frame()) {
 glue_continuation <- function(texts) {
   # pre-process with glue + wacky delimiters so I can do glue-style
   # line continuation with `\\`
-  map(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
+  map_chr(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
 }
 
 glue_lines <- function(lines, ..., .env = parent.frame()) {
