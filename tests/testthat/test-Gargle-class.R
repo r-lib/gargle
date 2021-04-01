@@ -40,7 +40,9 @@ test_that("`email = NA`, `email = FALSE` means we don't consult the cache", {
     credentials = list(a = 1),
     cache = cache_folder
   )
-  # TODO: use better gargle-specific message-suppressing technology when exists
+  # can't use with_gargle_verbosity() here, because we use
+  # local_gargle_verbosity("info") in token_match(), to force the user to
+  # see messaging about auto-discovery
   suppressMessages(
     fauxen_out <- gargle2.0_token(cache = cache_folder)
   )
