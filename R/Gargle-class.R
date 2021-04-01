@@ -252,7 +252,7 @@ encourage_httpuv <- function() {
   if (utils::menu(c("Yes", "No")) == 1) {
     utils::install.packages("httpuv")
   }
- invisible()
+  invisible()
 }
 
 
