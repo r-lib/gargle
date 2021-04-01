@@ -61,8 +61,8 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
     # this is basically what httr does, except we don't have an explicit
     # whitelist of acceptable values of err$error, because we know Google does
     # not limit itself to these
-    warn(c(
-      glue("Unable to refresh token: {err$error}"),
+    gargle_warn(c(
+      "Unable to refresh token: {err$error}",
       err$error_description,
       err$error_uri
     ))
@@ -77,37 +77,29 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
   if (is_legacy_app) {
     main_pkg <- package %||% "gargle"
     all_pkgs <- if (main_pkg == "gargle") "gargle" else c(main_pkg, "gargle")
-    msg <- c(
-      glue("
-        Unable to refresh token, because the associated OAuth app \\
-        has been deleted"),
-      glue("
-        You appear to be relying on the default app used by the \\
-        {main_pkg} package"),
-      glue("
-        Consider re-installing {glue_collapse(all_pkgs, sep = ' and ')}, \\
-        in case the default app has been updated")
-    )
-    warn(msg)
+    gargle_warn(c(
+      "Unable to refresh token, because the associated OAuth app \\
+       has been deleted",
+      "You appear to be relying on the default app used by the \\
+       {main_pkg} package",
+      "Consider re-installing {glue_collapse(all_pkgs, sep = ' and ')}, \\
+       in case the default app has been updated"
+    ))
     return(invisible())
   }
 
   # deleted app doesn't seem to be one of "ours"
-  msg <- c(
-    glue("
-      Unable to refresh token, because the associated OAuth app \\
-      has been deleted"),
-    if (nzchar(app_name)) glue("App name: {app_name}"),
+  gargle_warn(c(
+    "Unable to refresh token, because the associated OAuth app \\
+     has been deleted",
+    if (nzchar(app_name)) "App name: {app_name}",
     if (!is.null(package)) {
       c(
-        glue("
-          If you did not configure this OAuth app, it may be built into the \\
-          {package} package"),
-        glue("
-          If so, consider re-installing {package} to get an updated app")
+        "If you did not configure this OAuth app, it may be built into the \\
+         {package} package",
+        "If so, consider re-installing {package} to get an updated app"
       )
     }
-  )
-  warn(msg)
+  ))
   invisible()
 }
