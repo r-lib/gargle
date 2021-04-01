@@ -14,7 +14,8 @@ cache_establish <- function(cache = NULL) {
   if (length(cache) != 1) {
     gargle_abort("{bt('cache')} must have length 1, not {length(cache)}")
   }
-  if (!is.logical(cache) && !is.character(cache)) {
+  # the inherits() call is so we accept 'fs_path'
+  if (!is.logical(cache) && !is.character(cache) && !inherits(cache, "character")) {
     gargle_abort_bad_class(cache, c("logical", "character"))
   }
 

@@ -26,8 +26,8 @@ gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
 gargle_abort_bad_class <- function(object, expected_class) {
   nm <- as_name(ensym(object))
   actual_class <- class(object)
-  actual <- glue_collapse(actual_class, sep = "/")
-  expected <- glue_collapse(expected_class, sep = ", ", last = " or ")
+  actual <- glue("<{glue_collapse(actual_class, sep = '/')}>")
+  expected <- glue_collapse(glue("<{expected_class}>"), sep = ", ", last = " or ")
   gargle_abort(
     "{bt(nm)} must be {expected}, not of class {sq(actual)}",
     class = "gargle_error_bad_class",
