@@ -8,9 +8,11 @@
 NULL
 
 gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
-  g <- function(line) glue(line, .envir = .envir)
-  msg <- map_chr(message, g)
-  abort(msg, class = c(class, "gargle_error"), ...)
+  abort(
+    glue_lines(message, .envir = .envir),
+    class = c(class, "gargle_error"),
+    ...
+  )
 }
 
 # my heart's not totally in this because I'm not sure we should really be
@@ -18,9 +20,10 @@ gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
 # so this wrapper makes the messaging more humane
 # I am declining to add a class, e.g. gargle_warning
 gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
-  g <- function(line) glue(line, .envir = .envir)
-  msg <- map_chr(message, g)
-  warn(msg, ...)
+  warn(
+    glue_lines(message, .envir = .envir),
+    ...
+  )
 }
 
 gargle_abort_bad_class <- function(object, expected_class) {

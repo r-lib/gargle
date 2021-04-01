@@ -94,18 +94,18 @@ glue_continuation <- function(texts) {
   map_chr(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
 }
 
-glue_lines <- function(lines, ..., .env = parent.frame()) {
+glue_lines <- function(lines, ..., .envir = parent.frame()) {
   # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
   # plus: I've only got compat-purrr here, so I have to write a function
-  g <- function(line) glue(line, ..., .envir = .env)
+  g <- function(line) glue(line, ..., .envir = .envir)
   map_chr(lines, g)
 }
 
-glue_data_lines <- function(.data, lines, ..., .env = parent.frame()) {
+glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
   # work around name collision of `.x` of map_chr() vs. of glue_data()
   # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
   # plus: I've only got compat-purrr here, so I have to write a function
-  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .env)
+  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .envir)
   map_chr(lines, gd)
 }
 
