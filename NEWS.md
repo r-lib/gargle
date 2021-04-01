@@ -28,6 +28,9 @@ As always, these articles explain how to take more control of auth:
 
 The user interface has gotten more stylish, thanks to the cli package (<https://cli.r-lib.org>).
 
+All errors thrown by gargle route through `rlang::abort()`, providing better access to the backtrace and, potentially, error data.
+These errors have, at the very least, the `gargle_error` class and may also have additional subclasses.
+
 `gargle_verbosity()` replaces `gargle_quiet()`.
 Each such function is (or was) a convenience wrapper to query the option with that name.
 Therefore, the option named "gargle_verbosity" now replaces "gargle_quiet".

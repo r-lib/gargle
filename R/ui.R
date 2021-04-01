@@ -38,8 +38,8 @@ gargle_verbosity <- function() {
   vals <- c("debug", "info", "silent")
   vals_fmt <- glue_collapse(sq(vals), sep = ", ")
   if (!is_string(gv) || !(gv %in% vals)) {
-    abort(glue('
-      Option "gargle_verbosity" must be one of: {vals_fmt}'))
+    gargle_abort('
+      Option "gargle_verbosity" must be one of: {vals_fmt}')
   }
   gv
 }
@@ -146,5 +146,6 @@ obfuscate <- function(x, first = 7, last = 0) {
 }
 
 message <- function(...) {
-  abort(glue("Internal error: use gargle's UI functions, not {bt('message()')}"))
+  gargle_abort("
+    Internal error: use gargle's UI functions, not {bt('message()')}")
 }

@@ -116,10 +116,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is.list(params)
     )
     if (identical(email, "")) {
-      abort(paste0(
-        "`email` must not be \"\" (the empty string)\n",
-        "Do you intend to consult an env var, but it's unset?"
-      ))
+      gargle_abort("
+        {bt('email')} must not be \"\" (the empty string)
+        Do you intend to consult an env var, but it's unset?")
     }
     if (isTRUE(email)) {
       email <- "*"
@@ -235,7 +234,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     } else {
       # TODO: good candidate for an eventual sub-classed gargle error
       # would be useful in testing to know that this is exactly where we aborted
-      abort("OAuth2 flow requires an interactive session")
+      gargle_abort("OAuth2 flow requires an interactive session")
     }
   }
 ))

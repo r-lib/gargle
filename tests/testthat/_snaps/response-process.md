@@ -49,8 +49,8 @@
 # Request with invalid argument (Sheets, bad range)
 
     Client error: (400) INVALID_ARGUMENT
-      * Client specified an invalid argument. Check error message and error details for more information.
-      * Unable to parse range: NOPE!A5:F15
+    * Client specified an invalid argument. Check error message and error details for more information.
+    * Unable to parse range: NOPE!A5:F15
 
 # Request with bad field mask (Sheets)
 
@@ -65,13 +65,13 @@
 # Request for nonexistent resource (Sheets)
 
     Client error: (404) NOT_FOUND
-      * A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting.
-      * Requested entity was not found.
+    * A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting.
+    * Requested entity was not found.
 
 # Request with invalid value (tokeninfo, stale token)
 
     Client error: (400) Bad Request
-      * Invalid Value
+    * Invalid Value
 
 # Request to bad URL (tokeninfo, HTML content)
 

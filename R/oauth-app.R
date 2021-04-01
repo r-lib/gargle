@@ -25,8 +25,8 @@ oauth_app_from_json <- function(path,
   info <- json[["installed"]] %||% json[["web"]]
 
   if (!all(c("client_id", "client_secret") %in% names(info))) {
-    abort(glue("
-      Can't find {sq('client_id')} and {sq('client_secret')} in the JSON"))
+    gargle_abort("
+      Can't find {sq('client_id')} and {sq('client_secret')} in the JSON")
   }
 
   httr::oauth_app(

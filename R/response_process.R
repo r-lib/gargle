@@ -117,7 +117,8 @@ check_for_json <- function(resp) {
 }
 
 gargle_abort_request_failed <- function(message, resp) {
-  abort(
+  gargle_abort(
+    # TODO: return to this message
     glue_collapse(message, sep = "\n"),
     class = c(
       "gargle_error_request_failed",
@@ -130,6 +131,7 @@ gargle_abort_request_failed <- function(message, resp) {
 #' @export
 #' @rdname response_process
 gargle_error_message <- function(resp) {
+  # TODO: lots of message-making work needed here ... but sounds hard
   content <- response_as_json(resp)
   error <- content[["error"]]
 

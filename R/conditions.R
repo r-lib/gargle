@@ -1,12 +1,26 @@
+#' Error conditions for the gargle package
+#'
+#' @param class Use only if you want to subclass beyond `gargle_error`
+#'
+#' @keywords internal
+#' @name gargle-conditions
+#' @noRd
+NULL
+
+gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
+  g <- function(line) glue(line, .envir = .envir)
+  msg <- map_chr(message, g)
+  abort(msg, class = c(class, "gargle_error"), ...)
+}
+
 gargle_abort_bad_class <- function(object, expected_class) {
   nm <- as_name(ensym(object))
   actual_class <- class(object)
   actual <- glue_collapse(actual_class, sep = "/")
   expected <- glue_collapse(expected_class, sep = ", ", last = " or ")
-  message <- glue("{bt(nm)} must be {expected}, not of class {sq(actual)}.")
-  abort(
-    "gargle_error_bad_class",
-    message = message,
+  gargle_abort(
+    "{bt(nm)} must be {expected}, not of class {sq(actual)}",
+    class = "gargle_error_bad_class",
     object_name = nm,
     actual_class = actual_class,
     expected_class = expected_class
@@ -14,13 +28,14 @@ gargle_abort_bad_class <- function(object, expected_class) {
 }
 
 gargle_abort_bad_params <- function(names, reason) {
+  # TODO: there's no way this is the best/right method of forming this message
   message <- glue_collapse(
     c(glue("These parameters are {reason}:"), names),
     sep = "\n"
   )
-  abort(
-    "gargle_error_bad_params",
-    message = message,
+  gargle_abort(
+    message,
+    class = "gargle_error_bad_params",
     names = names,
     reason = reason
   )

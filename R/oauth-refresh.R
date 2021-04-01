@@ -8,7 +8,7 @@
 # https://developers.google.com/identity/protocols/oauth2/native-app#offline
 refresh_oauth2.0 <- function(endpoint, app, credentials, package = NULL) {
   if (is.null(credentials$refresh_token)) {
-    abort("Refresh token not available")
+    gargle_abort("Refresh token not available")
   }
 
   refresh_url <- endpoint$access

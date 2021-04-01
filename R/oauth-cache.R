@@ -12,7 +12,7 @@ gargle_default_oauth_cache_path <- function() {
 cache_establish <- function(cache = NULL) {
   cache <- cache %||% gargle_oauth_cache()
   if (length(cache) != 1) {
-    abort(glue("{bt('cache')} must have length 1, not {length(cache)}."))
+    gargle_abort("{bt('cache')} must have length 1, not {length(cache)}")
   }
   if (!is.logical(cache) && !is.character(cache)) {
     gargle_abort_bad_class(cache, c("logical", "character"))
