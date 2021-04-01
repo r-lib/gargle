@@ -33,6 +33,7 @@ auth
 authed
 automagically
 backoff
+backtrace
 behaviour
 bigrquery
 cancelled
@@ -91,6 +92,7 @@ ropensci
 roxygen
 rstudioapi
 shinyapps
+subclasses
 symlink
 targetted
 targetting
