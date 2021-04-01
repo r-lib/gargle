@@ -194,12 +194,12 @@ check_params <- function(provided, spec) {
   required <- Filter(function(x) isTRUE(x$required), spec)
   missing <- setdiff(names(required), names(provided))
   if (length(missing)) {
-    stop_bad_params(missing, reason = "missing")
+    gargle_abort_bad_params(missing, reason = "missing")
   }
 
   unknown <- setdiff(names(provided), names(spec))
   if (length(unknown)) {
-    stop_bad_params(unknown, reason = "unknown")
+    gargle_abort_bad_params(unknown, reason = "unknown")
   }
 
   invisible(provided)

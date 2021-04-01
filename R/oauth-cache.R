@@ -15,7 +15,7 @@ cache_establish <- function(cache = NULL) {
     abort(glue("{bt('cache')} must have length 1, not {length(cache)}."))
   }
   if (!is.logical(cache) && !is.character(cache)) {
-    stop_bad_class(cache, c("logical", "character"))
+    gargle_abort_bad_class(cache, c("logical", "character"))
   }
 
   # takes care of the re-location of the default cache, implemented in v1.1.0

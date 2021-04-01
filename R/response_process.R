@@ -86,7 +86,7 @@ response_process <- function(resp,
       response_as_json(resp)
     }
   } else {
-    stop_request_failed(error_message(resp), resp)
+    gargle_abort_request_failed(error_message(resp), resp)
   }
 }
 
@@ -113,10 +113,10 @@ check_for_json <- function(resp) {
     "{obfuscate(content, first = 197, last = 0)}"
   ))
 
-  stop_request_failed(message, resp)
+  gargle_abort_request_failed(message, resp)
 }
 
-stop_request_failed <- function(message, resp) {
+gargle_abort_request_failed <- function(message, resp) {
   abort(
     glue_collapse(message, sep = "\n"),
     class = c(

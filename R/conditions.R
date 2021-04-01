@@ -1,4 +1,4 @@
-stop_bad_class <- function(object, expected_class) {
+gargle_abort_bad_class <- function(object, expected_class) {
   nm <- as_name(ensym(object))
   actual_class <- class(object)
   actual <- glue_collapse(actual_class, sep = "/")
@@ -13,14 +13,7 @@ stop_bad_class <- function(object, expected_class) {
   )
 }
 
-stop_need_user_interaction <- function(message) {
-  abort(
-    "gargle_error_need_user_interaction",
-    message = message
-  )
-}
-
-stop_bad_params <- function(names, reason) {
+gargle_abort_bad_params <- function(names, reason) {
   message <- glue_collapse(
     c(glue("These parameters are {reason}:"), names),
     sep = "\n"
