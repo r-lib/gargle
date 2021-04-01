@@ -38,13 +38,8 @@ gargle_abort_bad_class <- function(object, expected_class) {
 }
 
 gargle_abort_bad_params <- function(names, reason) {
-  # TODO: there's no way this is the best/right method of forming this message
-  message <- glue_collapse(
-    c(glue("These parameters are {reason}:"), names),
-    sep = "\n"
-  )
   gargle_abort(
-    message,
+    c("These parameters are {reason}:", names),
     class = "gargle_error_bad_params",
     names = names,
     reason = reason

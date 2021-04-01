@@ -1,20 +1,18 @@
 test_that("request_develop() errors for unrecognized parameters", {
-  expect_error(
+  expect_snapshot_error(
     request_develop(
       endpoint = list(parameters = list(a = list())),
       params = list(b = list(), c = list())
-    ),
-    class = "gargle_error_bad_params"
+    )
   )
 })
 
 test_that("request_develop() errors if required parameter is missing", {
-  expect_error(
+  expect_snapshot_error(
     request_develop(
       endpoint = list(parameters = list(a = list(required = TRUE))),
       params = list(b = list())
-    ),
-    class = "gargle_error_bad_params"
+    )
   )
 })
 
