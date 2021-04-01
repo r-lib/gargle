@@ -198,6 +198,7 @@
 <h2 class="hasAnchor">
 <a href="#user-interface" class="anchor"></a>User interface</h2>
 <p>The user interface has gotten more stylish, thanks to the cli package (<a href="https://cli.r-lib.org" class="uri">https://cli.r-lib.org</a>).</p>
+<p>All errors thrown by gargle route through <code><a href="https://rlang.r-lib.org/reference/abort.html">rlang::abort()</a></code>, providing better access to the backtrace and, potentially, error data. These errors have, at the very least, the <code>gargle_error</code> class and may also have additional subclasses.</p>
 <p><code><a href="../reference/gargle_options.html">gargle_verbosity()</a></code> replaces <code>gargle_quiet()</code>. Each such function is (or was) a convenience wrapper to query the option with that name. Therefore, the option named “gargle_verbosity” now replaces “gargle_quiet”. If “gargle_verbosity” is unset, the old “gargle_quiet” is still consulted, but the user is advised to update their usage.</p>
 <p>The new “gargle_verbosity” option is more expressive and has three levels:</p>
 <ul>
