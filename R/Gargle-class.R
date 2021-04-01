@@ -244,11 +244,12 @@ encourage_httpuv <- function() {
   if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
     return(invisible())
   }
-  # use cat() to match what's done inside utils::menu()
-  cat(glue("
-    The httpuv package enables a nicer Google auth experience, in many cases
-    It doesn't seem to be installed
-    Would you like to install it now?"))
+  local_gargle_verbosity("info")
+  gargle_info(c(
+    "The {.pkg httpuv} package enables a nicer Google auth experience, \\
+     in many cases",
+    "It doesn't seem to be installed",
+    "Would you like to install it now?"))
   if (utils::menu(c("Yes", "No")) == 1) {
     utils::install.packages("httpuv")
   }
