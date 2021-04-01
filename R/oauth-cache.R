@@ -123,9 +123,9 @@ cache_load <- function(path) {
       function(x) cli_this("{.field {x}} (hash)")
     )
     msg <- c(
-      glue(cli::pluralize("
+      cli::pluralize("
         Cache contains token{?s} with names that do not match \\
-        their hash: {cli::qty(n)}")),
+        their hash: {cli::qty(n)}"),
       as.vector(rbind(mismatch_name_fmt, mismatch_hash_fmt)),
       "Will attempt to repair by renaming"
     )

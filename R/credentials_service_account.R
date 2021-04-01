@@ -32,9 +32,8 @@ credentials_service_account <- function(scopes = NULL,
   if (!identical(info[["type"]], "service_account")) {
     gargle_debug(c(
       "JSON does not appear to represent a service account",
-      glue("
-        Did you provide the JSON for an OAuth client instead of for a \\
-        service account?")
+      "Did you provide the JSON for an OAuth client instead of for a \\
+       service account?"
     ))
     return()
   }
