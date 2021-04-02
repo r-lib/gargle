@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 1.1.0
 
 ## OAuth token cache
 
