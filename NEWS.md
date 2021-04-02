@@ -13,6 +13,8 @@ Two changes affect stored user OAuth tokens:
   - Typical after, Windows: `C:/Users/jane/AppData/Local/gargle/gargle/Cache`
 * Tokens created with one of the built-in OAuth apps provided by the tidyverse
   packages are checked for validity. Tokens made with an old app are deleted.
+  Note that we introduced a new OAuth app in gargle v1.0.0 and the previous
+  app could be disabled at any time.
   - Nickname of previous tidyverse OAuth app: `tidyverse-calliope`
   - Nickname of tidyverse OAuth app as of gargle v1.0.0: `tidyverse-clio`
   
