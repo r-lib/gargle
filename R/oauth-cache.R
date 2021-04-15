@@ -348,7 +348,7 @@ match2 <- function(needle, haystack) {
 #' @examples
 #' gargle_oauth_sitrep()
 gargle_oauth_sitrep <- function(cache = NULL) {
-  cache <- cache %||% gargle_default_oauth_cache_path()
+  cache <- cache %||% cache_locate()
   if (!is_dir(cache)) {
     gargle_info("No gargle OAuth cache found at {.path {cache}}")
     return(invisible())
@@ -429,6 +429,27 @@ print.gargle_oauth_dat <- function(x, ...) {
 
 gargle_legacy_default_oauth_cache_path <- function() {
   path_home(".R", "gargle", "gargle-oauth")
+}
+
+# TODO: when the cache relocation dust has settled,
+# delete this function and replace with gargle_default_oauth_cache_path()
+# exists just for passive cache discovery
+cache_locate <- function() {
+  default_cache <- gargle_default_oauth_cache_path()
+  if (dir_exists(default_cache)) {
+    return(default_cache)
+  }
+
+  cache <- gargle_legacy_default_oauth_cache_path()
+  if (dir_exists(cache)) {
+    gargle_info(c(
+      "!" = "Legacy OAuth cache found",
+      "!" = "Expect cache to be cleaned and relocated upon first use"
+    ))
+    return(cache)
+  }
+
+  default_cache
 }
 
 is_legacy_cache <- function(cache) {
