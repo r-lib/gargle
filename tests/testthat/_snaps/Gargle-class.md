@@ -7,7 +7,7 @@
       -- <Token (via gargle)> --------------------------------------------------------
       oauth_endpoint: google
                  app: APPNAME
-               email: a@example.org
+               email: 'a@example.org'
               scopes: ...userinfo.email
          credentials: a
 

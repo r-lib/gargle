@@ -38,7 +38,7 @@
       gargle_debug(c("11 {.field {foo}} 22", "33 {.file a/b/c} 44"))
     Message <cliMessage>
       > 11 FOO 22
-        33 a/b/c 44
+        33 'a/b/c' 44
 
 ---
 

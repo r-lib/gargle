@@ -36,7 +36,7 @@
         use of a cached token
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      > The gargle package is using a cached token for a@example.com
+      > The gargle package is using a cached token for 'a@example.com'
 
 ---
 
@@ -48,7 +48,7 @@
         use of a cached token
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      > The gargle package is using a cached token for a@example.com
+      > The gargle package is using a cached token for 'a@example.com'
 
 ---
 
@@ -56,15 +56,15 @@
       m <- token_match("abc_", two_existing)
     Message <cliMessage>
       > Suitable tokens found in the cache, associated with these emails:
-        - a@example.com
-        - b@example.com
+        - 'a@example.com'
+        - 'b@example.com'
         Defaulting to the first email
       > Using an auto-discovered, cached token
         To suppress this message, modify your code or options to clearly consent to the
         use of a cached token
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      > The gargle package is using a cached token for a@example.com
+      > The gargle package is using a cached token for 'a@example.com'
 
 ---
 
@@ -72,15 +72,15 @@
       m <- token_match("abc_*", two_existing)
     Message <cliMessage>
       > Suitable tokens found in the cache, associated with these emails:
-        - a@example.com
-        - b@example.com
+        - 'a@example.com'
+        - 'b@example.com'
         Defaulting to the first email
       > Using an auto-discovered, cached token
         To suppress this message, modify your code or options to clearly consent to the
         use of a cached token
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      > The gargle package is using a cached token for a@example.com
+      > The gargle package is using a cached token for 'a@example.com'
 
 # gargle_oauth_sitrep() works with a cache
 
@@ -88,7 +88,7 @@
       writeLines(out)
     Output
       > 2 tokens found in this gargle OAuth cache:
-        {path to gargle oauth cache}
+        '{path to gargle oauth cache}'
         
       email         app         scopes hash...   
       _____________ ___________ ______ __________
