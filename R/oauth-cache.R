@@ -124,11 +124,13 @@ cache_load <- function(path) {
       function(x) cli_this("{.field {x}} (hash)")
     )
     msg <- c(
-      cli::pluralize("
-        Cache contains token{?s} with names that do not match \\
-        their hash: {cli::qty(n)}"),
-      as.vector(rbind(mismatch_name_fmt, mismatch_hash_fmt)),
-      "Will attempt to repair by renaming"
+      "!" = "Cache contains {cli::qty(n)}{?a /}token{?s} with {?a /}name{?s} \\
+             that do{?es/} not match {?its/their} hash:",
+      set_names(
+        as.vector(rbind(mismatch_name_fmt, mismatch_hash_fmt)),
+        ~ rep_along(., "*")
+      ),
+      " " = "Will attempt to repair by renaming"
     )
     gargle_debug(msg)
     file_move(files[mismatch], path(path, hashes[mismatch]))
@@ -151,17 +153,16 @@ cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
     return(FALSE)
   }
 
-  gargle_info("
-    Deleting {n} tokens obtained with an old tidyverse OAuth app")
-  gargle_info("
-    You can expect interactive prompts to re-auth with the new app")
   gargle_info(c(
-    "If this rolling of credentials is highly disruptive to your workflow, \\
-     that means you should be relying on your own OAuth app \\
-     (or using a service account token)",
-    "Learn more these in these articles:",
-    "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}",
-    "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
+    "v" = "Deleting {n} token{?s} obtained with an old tidyverse OAuth app",
+    "i" = "Expect interactive prompts to re-auth with the new app",
+    "!" = "Is this rolling of credentials highly disruptive to your \\
+           workflow?",
+    " " = "That means you should rely on your own OAuth app \\
+           (or switch to a service account token)",
+    " " = "Learn more these in these articles:",
+    " " = "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}",
+    " " = "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
   ))
   file_delete(dat_tokens$filepath[dat_tokens$legacy])
   TRUE
@@ -259,22 +260,23 @@ token_match <- function(candidate, existing, package = "gargle") {
       emails <- extract_email(existing)
       emails_fmt <- lapply(
         emails,
-        function(x) cli_this("{cli::symbol$line} {.email {x}}")
+        function(x) cli_this("{.email {x}}")
       )
       msg <- c(
-        "Suitable tokens found in the cache, associated with these emails:",
-        emails_fmt,
-        "Defaulting to the first email"
+        "i" = "Suitable tokens found in the cache, associated with these \\
+               emails:",
+        set_names(emails_fmt, ~ rep_along(., "*")),
+        " " = "Defaulting to the first email"
       )
       gargle_info(msg)
       existing <- existing[[1]]
     }
     msg <- c(
-      "Using an auto-discovered, cached token",
-      "To suppress this message, modify your code or options \\
-       to clearly consent to the use of a cached token",
-      "See gargle's \"Non-interactive auth\" vignette for more details:",
-      "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
+      "!" = "Using an auto-discovered, cached token",
+      " " = "To suppress this message, modify your code or options \\
+             to clearly consent to the use of a cached token",
+      " " = "See gargle's \"Non-interactive auth\" vignette for more details:",
+      " " = "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
     )
     # morally, I'd like to throw a warning but current design of token_fetch()
     # means warnings are caught
@@ -282,9 +284,9 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
 
   if (length(existing) == 1 && candidate_email == "*") {
-    gargle_info(
-      "The {.pkg {package}} package is using a cached token for \\
-      {.email {extract_email(existing)}}")
+    gargle_info(c(
+      "i" = "The {.pkg {package}} package is using a cached token for \\
+             {.email {extract_email(existing)}}"))
     return(existing)
   }
 

@@ -7,8 +7,8 @@
     Code
       out <- gargle_verbosity()
     Message <cliMessage>
-      > Option gargle_quiet is deprecated in favor of gargle_verbosity
-        Instead of: `options(gargle_quiet = FALSE)`
+      ! Option gargle_quiet is deprecated in favor of gargle_verbosity
+      i Instead of: `options(gargle_quiet = FALSE)`
         Now do: `options(gargle_verbosity = "debug")`
 
 # gargle_info() works
@@ -16,16 +16,16 @@
     Code
       gargle_info(c("aa {.field {blah}} bb", "cc {.emph xyz} dd"))
     Message <cliMessage>
-      > aa BLAH bb
-        cc xyz dd
+      aa BLAH bb
+      cc xyz dd
 
 ---
 
     Code
       gargle_info(c("ee {.field {blah}} ff", "gg {.emph xyz} hh"))
     Message <cliMessage>
-      > ee BLAH ff
-        gg xyz hh
+      ee BLAH ff
+      gg xyz hh
 
 ---
 
@@ -37,8 +37,8 @@
     Code
       gargle_debug(c("11 {.field {foo}} 22", "33 {.file a/b/c} 44"))
     Message <cliMessage>
-      > 11 FOO 22
-        33 'a/b/c' 44
+      11 FOO 22
+      33 'a/b/c' 44
 
 ---
 

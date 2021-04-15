@@ -25,10 +25,10 @@ gargle_verbosity <- function() {
       with_gargle_verbosity(
         "debug",
         gargle_debug(c(
-          "Option {.val gargle_quiet} is deprecated in favor of \\
-          {.val gargle_verbosity}",
-          "Instead of: {.code options(gargle_quiet = FALSE)}",
-          'Now do: {.code options(gargle_verbosity = "debug")}'
+          "!" = "Option {.val gargle_quiet} is deprecated in favor of \\
+                 {.val gargle_verbosity}",
+          "i" = "Instead of: {.code options(gargle_quiet = FALSE)}",
+          " " = 'Now do: {.code options(gargle_verbosity = "debug")}'
         ))
       )
     }
@@ -61,13 +61,13 @@ with_gargle_verbosity <- function(level, code) {
 
 gargle_debug <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() == "debug") {
-    gargle_alert(texts, .envir = .envir)
+    cli::cli_memo(texts, .envir = .envir)
   }
 }
 
 gargle_info <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() %in% c("debug", "info")) {
-    gargle_alert(texts, .envir = .envir)
+    cli::cli_memo(texts, .envir = .envir)
   }
 }
 
@@ -76,16 +76,6 @@ gargle_verbatim <- function(texts) {
     texts <- glue_continuation(texts)
     cli::cli_verbatim(texts)
   }
-}
-
-# TODO: if a better built-in solution arises in the semantic UI, use it
-# https://github.com/r-lib/cli/issues/211
-gargle_alert <- function(texts, .envir = parent.frame()) {
-  texts <- glue_continuation(texts)
-  cli::cli_alert(texts[1], wrap = TRUE, .envir = .envir)
-  cli::cli_div(theme = list(.alert = list(`margin-left` = 2, before = "")))
-  walk(texts[-1], cli::cli_alert, wrap = TRUE, .envir = .envir)
-  cli::cli_end()
 }
 
 glue_continuation <- function(texts) {

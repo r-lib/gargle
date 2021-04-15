@@ -167,16 +167,16 @@ backoff <- function(tries_made,
 
   if (gargle_verbosity() == "debug") {
     msg <- c(
-      "Request failed [{status_code}]",
-      gargle_error_message(resp),
-      "Retry {tries_made} happens in {round(wait_time, 1)} seconds ...",
-      "(strategy: {wait_rationale})"
+      "x" = "Request failed [{status_code}]",
+      " " = gargle_error_message(resp),
+      "i" = "Retry {tries_made} happens in {round(wait_time, 1)} seconds ...",
+      " " = "(strategy: {wait_rationale})"
     )
     gargle_debug(msg)
   } else {
-    gargle_info("
-      Request failed [{status_code}]. Retry {tries_made} happens in \\
-      {round(wait_time, 1)} seconds ...")
+    gargle_info(c(
+      "x" = "Request failed [{status_code}]. Retry {tries_made} happens in \\
+             {round(wait_time, 1)} seconds ..."))
   }
   wait_time
 }
