@@ -7,7 +7,7 @@
     Code
       out <- gargle_verbosity()
     Message <cliMessage>
-      ! Option gargle_quiet is deprecated in favor of gargle_verbosity
+      ! Option 'gargle_quiet' is deprecated in favor of 'gargle_verbosity'
       i Instead of: `options(gargle_quiet = FALSE)`
         Now do: `options(gargle_verbosity = "debug")`
 

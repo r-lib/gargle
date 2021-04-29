@@ -61,13 +61,13 @@ with_gargle_verbosity <- function(level, code) {
 
 gargle_debug <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() == "debug") {
-    cli::cli_memo(texts, .envir = .envir)
+    cli::cli_bullets(texts, .envir = .envir)
   }
 }
 
 gargle_info <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() %in% c("debug", "info")) {
-    cli::cli_memo(texts, .envir = .envir)
+    cli::cli_bullets(texts, .envir = .envir)
   }
 }
 
