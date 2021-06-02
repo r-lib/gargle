@@ -15,6 +15,7 @@
 #' also suggests it might be time to use a [service account
 #' token][credentials_service_account].
 #'
+
 #' @param scopes A character vector of scopes to request. Pick from those listed
 #'   at <https://developers.google.com/identity/protocols/oauth2/scopes>.
 #'
@@ -22,8 +23,8 @@
 #'   `"https://www.googleapis.com/auth/userinfo.email"` scope is unconditionally
 #'   included. This grants permission to retrieve the email address associated
 #'   with a token; gargle uses this to index cached OAuth tokens. This grants no
-#'   permission to view or send email. It is considered a low value scope and
-#'   does not appear on the consent screen.
+#'   permission to view or send email and is generally considered a low-value
+#'   scope.
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @inheritDotParams gargle2.0_token -scope -app -package

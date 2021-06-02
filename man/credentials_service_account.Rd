@@ -14,8 +14,8 @@ For certain token flows, the
 \code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
 included. This grants permission to retrieve the email address associated
 with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.}
+permission to view or send email and is generally considered a low-value
+scope.}
 
 \item{path}{JSON identifying the service account, in one of the forms
 supported for the \code{txt} argument of \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a
@@ -52,6 +52,7 @@ Additional reading on delegation of domain-wide authority:
 Other credential functions: 
 \code{\link{credentials_app_default}()},
 \code{\link{credentials_byo_oauth2}()},
+\code{\link{credentials_external_account}()},
 \code{\link{credentials_gce}()},
 \code{\link{credentials_user_oauth2}()},
 \code{\link{token_fetch}()}

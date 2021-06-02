@@ -14,8 +14,8 @@ For certain token flows, the
 \code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
 included. This grants permission to retrieve the email address associated
 with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.}
+permission to view or send email and is generally considered a low-value
+scope.}
 
 \item{token}{A token with class \link[httr:Token-class]{Token2.0} or an object of
 httr's class \code{request}, i.e. a token that has been prepared with
@@ -66,6 +66,7 @@ credentials_byo_oauth2(token = my_token)
 \seealso{
 Other credential functions: 
 \code{\link{credentials_app_default}()},
+\code{\link{credentials_external_account}()},
 \code{\link{credentials_gce}()},
 \code{\link{credentials_service_account}()},
 \code{\link{credentials_user_oauth2}()},

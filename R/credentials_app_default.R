@@ -75,9 +75,12 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     )
     token$refresh()
     token
-  } else {
+  } else if (info$type == "service_account") {
     gargle_debug("ADC cred type: {.val service_account}")
     credentials_service_account(scopes, path = path, subject = subject)
+  } else if (info$type == "external_account") {
+    gargle_debug("ADC cred type: {.val external_account}")
+    credentials_external_account(scopes, path = path)
   }
 }
 
