@@ -2,7 +2,7 @@
 % Please edit documentation in R/credentials_external_account.R
 \name{oauth_external_token}
 \alias{oauth_external_token}
-\title{Generate OAuth token for external accounts.}
+\title{Generate OAuth token for an external account.}
 \usage{
 oauth_external_token(
   path = "",
@@ -14,7 +14,12 @@ oauth_external_token(
 external account, in one of the forms supported for the \code{txt} argument of
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (probably, a file path, although it could be a JSON
 string). The instructions for generating this configuration are given at
-\href{https://cloud.google.com/iam/docs/access-resources-aws#generate}{Automatically generate credentials}.}
+\href{https://cloud.google.com/iam/docs/access-resources-aws#generate}{Automatically generate credentials}.
+
+Note that external account tokens are a natural fit for use as Application
+Default Credentials, so consider storing the configuration file in one of
+the standard locations consulted for ADC, instead of providing \code{path}
+explicitly. See \code{\link[=credentials_app_default]{credentials_app_default()}} for more.}
 
 \item{scopes}{A character vector of scopes to request. Pick from those listed
 at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.
@@ -27,5 +32,5 @@ permission to view or send email and is generally considered a low-value
 scope.}
 }
 \description{
-Generate OAuth token for external accounts.
+Generate OAuth token for an external account.
 }

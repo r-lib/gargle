@@ -26,16 +26,18 @@ behalf of users, without their consent. Identify the user to impersonate
 via their email, e.g. \code{subject = "user@example.com"}.}
 }
 \value{
-An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or an
-\code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::TokenServiceAccount}}, a \code{\link{WifToken}},
+an \code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 }
 \description{
 Loads credentials from a file identified via a search strategy known as
 Application Default Credentials (ADC). The hope is to make auth "just work"
 for someone working on Google-provided infrastructure or who has used Google
-tooling to get started. A sequence of paths is consulted, which we describe
-here, with some abuse of notation. ALL_CAPS represents the value of an
-environment variable and \verb{\%||\%} is used in the spirit of a \href{https://en.wikipedia.org/wiki/Null_coalescing_operator}{null coalescing operator}.\preformatted{GOOGLE_APPLICATION_CREDENTIALS
+tooling to get started, such as the \href{https://cloud.google.com/sdk/gcloud}{\code{gcloud} command line tool}.
+
+A sequence of paths is consulted, which we describe here, with some abuse of
+notation. ALL_CAPS represents the value of an environment variable and \verb{\%||\%}
+is used in the spirit of a \href{https://en.wikipedia.org/wiki/Null_coalescing_operator}{null coalescing operator}.\preformatted{GOOGLE_APPLICATION_CREDENTIALS
 CLOUDSDK_CONFIG/application_default_credentials.json
 # on Windows:
 (APPDATA \%||\% SystemDrive \%||\% C:)\\gcloud\\application_default_credentials.json
@@ -44,7 +46,10 @@ CLOUDSDK_CONFIG/application_default_credentials.json
 }
 
 If the above search successfully identifies a JSON file, it is parsed and
-ingested either as a service account token or a user OAuth2 credential.
+ingested as a service account, an external account ("workload identity
+federation"), or a user account. Literally, if the JSON describes a service
+account, we call \code{\link[=credentials_service_account]{credentials_service_account()}} and if it describes an
+external account, we call \code{\link[=credentials_external_account]{credentials_external_account()}}.
 }
 \examples{
 \dontrun{
@@ -52,9 +57,10 @@ credentials_app_default()
 }
 }
 \seealso{
-\url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
-
-\url{https://cloud.google.com/sdk/docs/}
+\itemize{
+\item \url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
+\item \url{https://cloud.google.com/sdk/docs/}
+}
 
 Other credential functions: 
 \code{\link{credentials_byo_oauth2}()},

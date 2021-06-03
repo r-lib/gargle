@@ -38,6 +38,11 @@
 #'   [Automatically generate
 #'   credentials](https://cloud.google.com/iam/docs/access-resources-aws#generate).
 #'
+#'   Note that external account tokens are a natural fit for use as Application
+#'   Default Credentials, so consider storing the configuration file in one of
+#'   the standard locations consulted for ADC, instead of providing `path`
+#'   explicitly. See [credentials_app_default()] for more.
+#'
 #' @seealso
 
 #' * <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/ >
@@ -201,14 +206,14 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
   # TODO: are cache and load_from_cache really required?
   # alternatively, what if calling them threw an error?
   #' @description Placeholder implementation of required method. Returns self.
-  cache = function(...) self,
+  cache = function() self,
   #' @description Placeholder implementation of required method. Returns self.
   load_from_cache = function() self,
 
   # TODO: are these really required?
-  #' @description Placeholder implementation of required method
+  #' @description Placeholder implementation of required method.
   validate = function() {},
-  #' @description Placeholder implementation of required method
+  #' @description Placeholder implementation of required method.
   revoke = function() {}
 ))
 

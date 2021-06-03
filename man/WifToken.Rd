@@ -127,7 +127,7 @@ Placeholder implementation of required method. Returns \code{TRUE}.
 \subsection{Method \code{cache()}}{
 Placeholder implementation of required method. Returns self.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{WifToken$cache(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{WifToken$cache()}\if{html}{\out{</div>}}
 }
 
 }
@@ -145,7 +145,7 @@ Placeholder implementation of required method. Returns self.
 \if{html}{\out{<a id="method-validate"></a>}}
 \if{latex}{\out{\hypertarget{method-validate}{}}}
 \subsection{Method \code{validate()}}{
-Placeholder implementation of required method
+Placeholder implementation of required method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{WifToken$validate()}\if{html}{\out{</div>}}
 }
@@ -155,7 +155,7 @@ Placeholder implementation of required method
 \if{html}{\out{<a id="method-revoke"></a>}}
 \if{latex}{\out{\hypertarget{method-revoke}{}}}
 \subsection{Method \code{revoke()}}{
-Placeholder implementation of required method
+Placeholder implementation of required method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{WifToken$revoke()}\if{html}{\out{</div>}}
 }
