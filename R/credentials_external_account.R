@@ -43,7 +43,10 @@
 #'   the standard locations consulted for ADC, instead of providing `path`
 #'   explicitly. See [credentials_app_default()] for more.
 #'
-#' @seealso
+
+#' @seealso There is substantical setup necessary, both on the GCP and AWS side,
+#'   to use this authentication method. These two links provide, respectively,
+#'   a high-level overview and step-by-step instructions.
 
 #' * <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/ >
 
