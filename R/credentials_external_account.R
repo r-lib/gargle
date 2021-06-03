@@ -242,7 +242,7 @@ init_oauth_external_account <- function(params) {
     subject_token = serialized_subject_token
   )
 
-  fetch_short_lived_token(
+  fetch_wif_access_token(
     federated_access_token,
     impersonation_url = params[["service_account_impersonation_url"]],
     scope = params[["scope"]]
@@ -349,9 +349,9 @@ fetch_federated_access_token <- function(params,
 }
 
 # https://cloud.google.com/iam/docs/creating-short-lived-service-account-credentials#sa-credentials-oauth
-fetch_short_lived_token <- function(federated_access_token,
-                                    impersonation_url,
-                                    scope = "https://www.googleapis.com/auth/cloud-platform") {
+fetch_wif_access_token <- function(federated_access_token,
+                                   impersonation_url,
+                                   scope = "https://www.googleapis.com/auth/cloud-platform") {
   req <- list(
     method = "POST",
     url = impersonation_url,
