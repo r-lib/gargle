@@ -50,6 +50,15 @@
 #' @examples
 #' \dontrun{
 #' credentials_external_account()
+#'
+#' # if credentials_external_account() is being called indirectly, via a wrapper
+#' # package and token_fetch(), consider that the wrapper package may be inserting
+#' # its own default scopes
+#' #
+#' # it may be necessary to explicitly specify cloud-platform scope (and only
+#' # cloud-platform) in the call to a high-level PKG_auth() function in order to
+#' # achieve this:
+#' credentials_external_accoun(scopes = "https://www.googleapis.com/auth/cloud-platform")
 #' }
 credentials_external_account <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                                          path = "",
@@ -59,14 +68,11 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
     return(NULL)
   }
   # TODO: do I need a more refined scope check? such as, do I need to make sure
-  # cloud-platform is one of them?
+  # cloud-platform is one of them? or that cloud-platform is the only scope?
 
   # TODO: I would like to add email scope, as for other gargle token flows. But
-  # it appears to derail this flow. Empirically, it causes the last token
-  # exchange to fail. Not sure if this is truly impossible or if it's a
-  # consequence of some other choice I've made or the configuration of my
-  # AWS/GCP testbed.
-  # scopes <- normalize_scopes(add_email_scope(scopes))
+  # it appears to derail this flow. See notes elsewhere.
+  #scopes <- normalize_scopes(add_email_scope(scopes))
   scopes <- normalize_scopes(scopes)
 
   token <- oauth_external_token(path = path, scopes = scopes)
@@ -81,7 +87,7 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
   }
 }
 
-#' Generate OAuth token for external accounts.
+#' Generate OAuth token for an external account.
 #'
 #' @inheritParams credentials_external_account
 #' @export
@@ -154,23 +160,13 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
   #'   flow in this case.
   refresh = function() {
     gargle_debug("WifToken refresh")
-    # TODO: there's something kind of wrong about this, because it's not a true
-    # refresh.
-    # example: if I attempt token_userinfo(x) on a WifToken, httr tries to "fix"
-    # things by refreshing the token. But that's not the problem. It's the
-    # scopes associated with the token.
+    # There's something kind of wrong about this, because it's not a true
+    # refresh. But it's basically required by the way httr currently works.
+    # For example, if I attempt token_userinfo(x) on a WifToken, it fails with
+    # 401, but httr tries to "fix" things by refreshing the token. But this is
+    # not a problem that refreshing can fix. It's something about IAM/scopes.
     self$init_credentials()
   },
-
-  # #' @description Adds the `access_token` as the `Authorization` header
-  # #'   using the Bearer schema.
-  # sign = function(method, url) {
-  #   config <- httr::add_headers(
-  #     Authorization = paste("Bearer", self$credentials$access_token)
-  #   )
-  #   # need to call internal httr function :(
-  #   httr:::request_build(method = method, url = url, config)
-  # },
 
   #' @description Format a [WifToken()].
   #' @param ... Not used.
@@ -197,7 +193,8 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
 
   #' @description Placeholder implementation of required method. Returns `TRUE`.
   can_refresh = function() {
-    # TODO: see above re: my ambivalence about this
+    # TODO: see above re: my ambivalence about the whole notion of refresh with
+    # respect to this flow
     TRUE
   },
 
@@ -266,8 +263,8 @@ init_oauth_external_account <- function(params) {
 aws_subject_token <- function(credential_source, audience) {
   if (!is_installed(c("aws.ec2metadata", "aws.signature"))) {
     gargle_abort("
-      Packages aws.ec2metadata and aws.signature must be installed in order to \\
-      use workload identity federation on AWS")
+      Packages aws.ec2metadata and aws.signature must be installed in order \\
+      to use workload identity federation on AWS.")
   }
   region <- aws.ec2metadata::instance_document()$region
 
@@ -355,13 +352,32 @@ fetch_federated_access_token <- function(params,
 fetch_short_lived_token <- function(federated_access_token,
                                     impersonation_url,
                                     scope = "https://www.googleapis.com/auth/cloud-platform") {
-  # the presence of the email scope seems to be a showstopper here, specifically
-  # not sure if that's an absolute constraint or the result of some choice
-  # Vinay or I have made
   req <- list(
     method = "POST",
     url = impersonation_url,
-    body = list(scope = scope),
+
+    # in my hands, the presence of ANY scope besides cloud-platform seems to be
+    # a showstopper here
+    # to be fair, it is EXACTLY what the docs show and there's no indication
+    # that it's an example ... maybe it's meant literally?
+
+    # I'm not sure if this is an absolute constraint on this token flow, the
+    # result of some regrettable choice I have made elsewhere, or some aspect of
+    # my test setup's configuration
+
+    # https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control
+    # ^ that's about GKE, but this description sounds a bit like my situation,
+    # in the sense that maybe IAM roles matter more than scope (?)
+    # "For example, suppose the VM has cloud-platform scope but does not have
+    # userinfo-email scope. When the VM gets an access token, Google Cloud
+    # associates that token with the cloud-platform scope."
+
+    # it is definitely true that I can't call gargle::token_userinfo() on the
+    # access tokens I get
+
+    # body = list(scope = scope),
+    body = list(scope = "https://www.googleapis.com/auth/cloud-platform"),
+
     token = httr::add_headers(
       Authorization = paste("Bearer", federated_access_token$access_token)
     )
