@@ -274,6 +274,7 @@ aws_subject_token <- function(credential_source, audience) {
       Packages aws.ec2metadata and aws.signature must be installed in order \\
       to use workload identity federation on AWS.")
   }
+
   region <- aws.ec2metadata::instance_document()$region
 
   regional_cred_verification_url <- glue(
@@ -284,10 +285,11 @@ aws_subject_token <- function(credential_source, audience) {
 
   headers_orig <- list(
     host = parsed_url$hostname,
-    # TODO: allowing aws.signature to form these for now, but unless I patch
-    # that, I'll need to pre-compute / pre-fetch them
-    #`x-amz-date` = dttm,
-    #`x-amz-security-token` = session_token,
+    # for some reason, this is not included as a signed header unless I provide
+    # it
+    `x-amz-date` = format(Sys.time(),"%Y%m%dT%H%M%SZ", tz = "UTC"),
+    # in contrast, session token IS automatically included if it exists, which
+    # it should
     `x-goog-cloud-target-resource` = audience
   )
 
@@ -303,12 +305,27 @@ aws_subject_token <- function(credential_source, audience) {
     request_body = ""
   )
 
+  # unfortunately, the headers actually used to make the canonical request
+  # returned in the signed object, so we dig them out of the canonical request
+  req_parts <- strsplit(signed[["CanonicalRequest"]], split = "\n")[[1]]
+  f <- function(needle) {
+    needle <- paste0("^", needle, ":")
+    x <- grep(needle, req_parts, value = TRUE)
+    sub(needle, "", x)
+  }
+  headers <- list(
+    host                           = f("host"),
+    `x-amz-date`                   = f("x-amz-date"),
+    `x-amz-security-token`         = f("x-amz-security-token"),
+    `x-goog-cloud-target-resource` = f("x-goog-cloud-target-resource")
+  )
+
   list(
     url = regional_cred_verification_url,
     method = verb,
     headers = c(
       Authorization = signed$SignatureHeader,
-      signed$CanonicalHeaders
+      headers
     )
   )
 }

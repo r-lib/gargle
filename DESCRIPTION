@@ -54,8 +54,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
-    r-lib/cli,
-    jennybc/aws.signature@tweak-for-wif-auth
+    r-lib/cli
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
