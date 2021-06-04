@@ -32,7 +32,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     return(NULL)
   }
 
-  gce_token <- fetch_access_token(scopes, service_account = service_account)
+  gce_token <- fetch_gce_access_token(scopes, service_account = service_account)
 
   params <- list(
     as_header = TRUE,
@@ -86,7 +86,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     # The access_token can only include the token itself, not the expiration and
     # type. Otherwise, the httr code will create extra header lines that bust
     # the POST request:
-    gce_token <- fetch_access_token(
+    gce_token <- fetch_gce_access_token(
       self$params$scope,
       service_account = self$params$service_account
     )
@@ -157,7 +157,8 @@ get_instance_scopes <- function(service_account) {
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
-fetch_access_token <- function(scopes, service_account) {
+# TODO: why isn't scopes used here at all?
+fetch_gce_access_token <- function(scopes, service_account) {
   path <- glue("instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)
   httr::content(response, as = "parsed", type = "application/json")

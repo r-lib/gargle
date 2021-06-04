@@ -140,6 +140,18 @@ gargle_error_message <- function(resp) {
   error <- content[["error"]]
 
   # Handle variety of error messages returned by different google APIs
+
+  if (identical(names(content), c("error", "error_description"))) {
+    # seen when calling userinfo endpoint with an access token obtained via
+    # workload identity federation
+    message <- c(
+      httr::http_status(resp)$message,
+      glue("  * {content$error}"),
+      glue("  * {content$error_description}")
+    )
+    return(message)
+  }
+
   if (is.null(error)) {
     # developed from test fixture from tokeninfo endpoint
     message <- c(

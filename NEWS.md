@@ -1,5 +1,16 @@
 # gargle (development version)
 
+## Workload identity federation
+
+`credentials_external_account()` is a new function that implements "workload identity federation", a new (as of April 2021) keyless authentication mechanism.
+This allows applications running on a non-Google Cloud platform, such as AWS, to access Google Cloud resources without using a conventional service account token, eliminating the security problem posed by long-lived, powerful service account credential files.
+
+`credentials_external_account()` has been inserted into the default registry of credential-fetchers tried by `token_fetch()`, which makes it automatically available in certain wrapper packages, such as bigrquery.
+`credentials_app_default()` recognizes the JSON configuration for an external account and passes such a call along to `credentials_external_account()`.
+
+This new feature is still experimental and currently only supports AWS.
+This [blog post](https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation) provides a good high-level introduction to workload identity federation.
+
 # gargle 1.1.0
 
 ## OAuth token cache
