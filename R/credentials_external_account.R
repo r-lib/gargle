@@ -1,10 +1,14 @@
 #' Get a token for an external account
 #'
-#' @description Workload identity federation is a new (as of April 2021) keyless
-#'   authentication mechanism that allows applications running on a non-Google
-#'   Cloud platform, such as AWS, to access Google Cloud resources without using
-#'   a conventional service account token. This eliminates the dilemma of how to
-#'   safely manage service account credential files.
+#' @description
+
+#' `r lifecycle::badge('experimental')`
+
+#' Workload identity federation is a new (as of April 2021) keyless
+#' authentication mechanism that allows applications running on a non-Google
+#' Cloud platform, such as AWS, to access Google Cloud resources without using a
+#' conventional service account token. This eliminates the dilemma of how to
+#' safely manage service account credential files.
 #'
 
 #'  Unlike service accounts, the configuration file for workload identity

@@ -38,10 +38,11 @@ explicitly. See \code{\link[=credentials_app_default]{credentials_app_default()}
 A \code{\link[=WifToken]{WifToken()}} or \code{NULL}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 Workload identity federation is a new (as of April 2021) keyless
 authentication mechanism that allows applications running on a non-Google
-Cloud platform, such as AWS, to access Google Cloud resources without using
-a conventional service account token. This eliminates the dilemma of how to
+Cloud platform, such as AWS, to access Google Cloud resources without using a
+conventional service account token. This eliminates the dilemma of how to
 safely manage service account credential files.
 
 Unlike service accounts, the configuration file for workload identity
