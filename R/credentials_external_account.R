@@ -44,7 +44,7 @@
 #'   explicitly. See [credentials_app_default()] for more.
 #'
 
-#' @seealso There is substantical setup necessary, both on the GCP and AWS side,
+#' @seealso There is substantial setup necessary, both on the GCP and AWS side,
 #'   to use this authentication method. These two links provide, respectively,
 #'   a high-level overview and step-by-step instructions.
 
@@ -305,8 +305,9 @@ aws_subject_token <- function(credential_source, audience) {
     request_body = ""
   )
 
-  # unfortunately, the headers actually used to make the canonical request
-  # returned in the signed object, so we dig them out of the canonical request
+  # unfortunately, the headers actually used to make the canonical request are
+  # not returned in the signed object, so we dig them out of the canonical
+  # request
   req_parts <- strsplit(signed[["CanonicalRequest"]], split = "\n")[[1]]
   f <- function(needle) {
     needle <- paste0("^", needle, ":")
