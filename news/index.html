@@ -161,6 +161,13 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gargle-development-version" class="anchor"></a>gargle (development version)<small> Unreleased </small>
 </h1>
+<div id="workload-identity-federation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#workload-identity-federation" class="anchor"></a>Workload identity federation</h2>
+<p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> is a new function that implements “workload identity federation”, a new (as of April 2021) keyless authentication mechanism. This allows applications running on a non-Google Cloud platform, such as AWS, to access Google Cloud resources without using a conventional service account token, eliminating the security problem posed by long-lived, powerful service account credential files.</p>
+<p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> has been inserted into the default registry of credential-fetchers tried by <code><a href="../reference/token_fetch.html">token_fetch()</a></code>, which makes it automatically available in certain wrapper packages, such as bigrquery. <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> recognizes the JSON configuration for an external account and passes such a call along to <code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code>.</p>
+<p>This new feature is still experimental and currently only supports AWS. This <a href="https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation">blog post</a> provides a good high-level introduction to workload identity federation.</p>
+</div>
 </div>
     <div id="gargle-110" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.0">

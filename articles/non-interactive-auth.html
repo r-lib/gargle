@@ -181,6 +181,7 @@
 
 <span class="fu">drive_auth</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/your/service-account-token.json"</span><span class="op">)</span></code></pre></div>
 <p>If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article <a href="https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html">Managing tokens securely</a>.</p>
+<p>If the code is running on AWS, a special auth flow is available called workload identity federation. Learn more in the documentation for <code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code>.</p>
 <p>For certain APIs, service accounts are inherently awkward, because you often want to do things <em>on behalf of a specific user</em>. Gmail is a good example. If you are sending email programmatically, there’s a decent chance you want to send it as yourself (or from some other specific email account) instead of from <code>zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com</code>. This is described as “impersonation”, which should tip you off that Google does not exactly encourage this workflow. Some details:</p>
 <ul>
 <li>This requires “delegating domain-wide authority” to the service account.</li>
@@ -198,11 +199,11 @@
 </ul>
 <p>If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.</p>
 </div>
-<div id="rig-a-service-account-token-as-application-default-credentials" class="section level2">
+<div id="rig-a-service-or-external-account-for-use-with-application-default-credentials" class="section level2">
 <h2 class="hasAnchor">
-<a href="#rig-a-service-account-token-as-application-default-credentials" class="anchor"></a>Rig a service account token as Application Default Credentials</h2>
+<a href="#rig-a-service-or-external-account-for-use-with-application-default-credentials" class="anchor"></a>Rig a service or external account for use with Application Default Credentials</h2>
 <p>Wrapper packages that use <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code> in the recommended way have access to the token search strategy known as <strong>Application Default Credentials</strong>.</p>
-<p>You need to put your service token in a very specific location or, alternatively, record the location of your service token in a specific environment variable.</p>
+<p>You need to put the JSON corresponding to your service or external account in a very specific location or, alternatively, record the location of this JSON file in a specific environment variable.</p>
 <p>Full details are in the <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default"><code>credentials_app_default()</code> section</a> of the gargle article <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How gargle gets tokens</a>.</p>
 <p>If you have your token rigged properly, you <strong>do not</strong> need to do anything else, i.e. you do not need to call <code>PACKAGE_auth()</code> explicitly. Your token should just get discovered upon first need.</p>
 <p>For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>

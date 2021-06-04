@@ -13,6 +13,9 @@
     <loc>https://gargle.r-lib.org/reference/GceToken.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/WifToken.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/cred_funs.html</loc>
   </url>
   <url>
@@ -20,6 +23,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/credentials_byo_oauth2.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/credentials_external_account.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/credentials_gce.html</loc>
@@ -59,6 +65,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/oauth_app_from_json.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/oauth_external_token.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/request_develop.html</loc>
