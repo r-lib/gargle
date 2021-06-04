@@ -82,6 +82,9 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 
 If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
 
+If the code is running on AWS, a special auth flow is available called workload identity federation.
+Learn more in the documentation for `credentials_external_account()`.
+
 For certain APIs, service accounts are inherently awkward, because you often want to do things *on behalf of a specific user*. Gmail is a good example. If you are sending email programmatically, there's a decent chance you want to send it as yourself (or from some other specific email account) instead of from `zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com`. This is described as "impersonation", which should tip you off that Google does not exactly encourage this workflow. Some details:
 
 * This requires "delegating domain-wide authority " to the service account.
@@ -101,11 +104,11 @@ For certain APIs, service accounts are inherently awkward, because you often wan
 
 If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
 
-## Rig a service account token as Application Default Credentials
+## Rig a service or external account for use with Application Default Credentials
 
 Wrapper packages that use `gargle::token_fetch()` in the recommended way have access to the token search strategy known as **Application Default Credentials**.
 
-You need to put your service token in a very specific location or, alternatively, record the location of your service token in a specific environment variable.
+You need to put the JSON corresponding to your service or external account in a very specific location or, alternatively, record the location of this JSON file in a specific environment variable.
 
 Full details are in the [`credentials_app_default()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 

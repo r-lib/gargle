@@ -68,7 +68,7 @@ gargle_verbosity()
 
 `gargle_oauth_sitrep()` provides an OAuth2 "situation report".
 
-`gargle_oauth_sitrep()` is only relevant to OAuth2 user tokens. If you are using (or struggling to use) a service account token, Application Default Credentials, or credentials from the GCE metadata service, `gargle_oauth_sitrep()` isn't going to help you figure out what's going on.
+`gargle_oauth_sitrep()` is only relevant to OAuth2 user tokens. If you are using (or struggling to use) a service account token, workload identity federation, Application Default Credentials, or credentials from the GCE metadata service, `gargle_oauth_sitrep()` isn't going to help you figure out what's going on.
 
 Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.
 
