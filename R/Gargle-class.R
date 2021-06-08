@@ -10,7 +10,9 @@
 #'   always determined from the token itself, never from this argument. Use `NA`
 #'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
 #'   `TRUE` to allow email auto-discovery, if exactly one matching token is
-#'   found in the cache. Defaults to the option named "gargle_oauth_email",
+#'   found in the cache. Specify just the domain, e.g. `"example.com"`, to
+#'   create code that "just works" for both `alice@example.com` and
+#'   `bob@example.com`. Defaults to the option named "gargle_oauth_email",
 #'   retrieved by [gargle::gargle_oauth_email()].
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.

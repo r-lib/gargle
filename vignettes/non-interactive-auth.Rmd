@@ -175,8 +175,14 @@ You have two choices to make:
   * Set the `gargle_oauth_email` option or call `PACKAGE_auth(email = ...)`.
     - The option-based approach can be implemented in each `.Rmd` or `.R` or
       in a user-level or project level `.Rprofile` startup file.
-  * Authorize the use of the "matching token", in general, (email is `TRUE`) or
-    give a specific identity (email is an actual address).
+  * Authorize the use of the "matching token":
+    - `email = TRUE` works if we're only going to find, at most, 1 token, i.e.
+      you always auth with the same identity
+    - `email = "jane@example.com"` pre-authorizes use of a token associated with
+      a specific identity
+    - `email = "example.com"` pre-authorizes use of a token associated with an
+      identity from a specific domain; good for code that might be executed on
+      the machines of both `alice@example.com` and `bob@example.com`
 
 This sets an option that allows gargle to use cached tokens whenever there's a unique match:
 
@@ -190,6 +196,12 @@ This sets an option to use tokens associated with a specific email address:
 options(gargle_oauth_email = "jenny@example.org")
 ```
 
+This sets an option to use tokens associated with an email address with a specific domain:
+
+```{r}
+options(gargle_oauth_email = "example.org")
+```
+
 This gets a token *right now* and allows the use of a matching token, using googledrive as an example:
 
 ```{r}
@@ -200,6 +212,12 @@ This gets a token *right now*, for the user with a specific email address:
 
 ```{r}
 drive_auth(email = "jenny@example.org")
+```
+
+This gets a token *right now*, first checking the cache for a token associated with a specific domain:
+
+```{r}
+drive_auth(email = "example.org")
 ```
 
 ### Project-level OAuth cache
