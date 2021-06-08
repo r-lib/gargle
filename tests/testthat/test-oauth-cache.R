@@ -220,6 +220,14 @@ test_that("token_match() returns NULL if no email and no short hash match", {
   expect_null(token_match("abc_*", "def_a@example.org"))
 })
 
+test_that("token_match() finds a match based on domain", {
+  one_match_of_two <- c("abc_jane@example.org", "abc_jane@gmail.com")
+  expect_snapshot(
+    m <- token_match("abc_*@example.org", one_match_of_two)
+  )
+  expect_equal(m, one_match_of_two[[1]])
+})
+
 test_that("token_match() scolds but returns short hash match when non-interactive", {
   local_interactive(FALSE)
 

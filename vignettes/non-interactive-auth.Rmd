@@ -50,14 +50,14 @@ TL;DR is that you need to successfully authenticate *once* in an interactive ses
 ```{r}
 # Approach #1: use an option.
 # Either specify the user:
-options(gargle_oauth_email = "jenny@example.org")
+options(gargle_oauth_email = "jenny@example.com")
 # Or, if you don't use multiple Google identities, you can be more vague:
 options(gargle_oauth_email = TRUE)
 
 # Approach #2: call PACKAGE_auth() proactively.
 library(googledrive)
 # Either specify the user:
-drive_auth(email = "jenny@example.org")
+drive_auth(email = "jenny@example.com")
 # Or, if you don't use multiple Google identities, you can be more vague:
 drive_auth(email = TRUE)
 ```
@@ -175,8 +175,14 @@ You have two choices to make:
   * Set the `gargle_oauth_email` option or call `PACKAGE_auth(email = ...)`.
     - The option-based approach can be implemented in each `.Rmd` or `.R` or
       in a user-level or project level `.Rprofile` startup file.
-  * Authorize the use of the "matching token", in general, (email is `TRUE`) or
-    give a specific identity (email is an actual address).
+  * Authorize the use of the "matching token":
+    - `email = TRUE` works if we're only going to find, at most, 1 token, i.e.
+      you always auth with the same identity
+    - `email = "jane@example.com"` pre-authorizes use of a token associated with
+      a specific identity
+    - `email = "*@example.com"` pre-authorizes use of a token associated with an
+      identity from a specific domain; good for code that might be executed on
+      the machines of both `alice@example.com` and `bob@example.com`
 
 This sets an option that allows gargle to use cached tokens whenever there's a unique match:
 
@@ -187,7 +193,13 @@ options(gargle_oauth_email = TRUE)
 This sets an option to use tokens associated with a specific email address:
 
 ```{r}
-options(gargle_oauth_email = "jenny@example.org")
+options(gargle_oauth_email = "jenny@example.com")
+```
+
+This sets an option to use tokens associated with an email address with a specific domain:
+
+```{r}
+options(gargle_oauth_email = "*@example.com")
 ```
 
 This gets a token *right now* and allows the use of a matching token, using googledrive as an example:
@@ -199,7 +211,13 @@ drive_auth(email = TRUE)
 This gets a token *right now*, for the user with a specific email address:
 
 ```{r}
-drive_auth(email = "jenny@example.org")
+drive_auth(email = "jenny@example.com")
+```
+
+This gets a token *right now*, first checking the cache for a token associated with a specific domain:
+
+```{r}
+drive_auth(email = "*@example.com")
 ```
 
 ### Project-level OAuth cache
@@ -260,7 +278,7 @@ library(googledrive)
 
 options(
   gargle_oauth_cache = ".secrets",
-  gargle_oauth_email = "jenny@example.org"
+  gargle_oauth_email = "jenny@example.com"
 )
 
 # now use googledrive with no need for explicit auth
@@ -283,7 +301,7 @@ Here's one last variation that's applicable when the local cache could contain m
 ```{r}
 library(googledrive)
 
-drive_auth(cache = ".secrets", email = "jenny@example.org")
+drive_auth(cache = ".secrets", email = "jenny@example.com")
 
 # now use googledrive with no need for explicit auth
 drive_auth(n_max = 5)

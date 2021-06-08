@@ -26,6 +26,13 @@
       * {TOKEN_HASH}_b@example.org (hash)
         Will attempt to repair by renaming
 
+# token_match() finds a match based on domain
+
+    Code
+      m <- token_match("abc_*@example.org", one_match_of_two)
+    Message <cliMessage>
+      i The gargle package is using a cached token for 'jane@example.org'
+
 # token_match() scolds but returns short hash match when non-interactive
 
     Code

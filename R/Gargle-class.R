@@ -10,8 +10,10 @@
 #'   always determined from the token itself, never from this argument. Use `NA`
 #'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
 #'   `TRUE` to allow email auto-discovery, if exactly one matching token is
-#'   found in the cache. Defaults to the option named "gargle_oauth_email",
-#'   retrieved by [gargle::gargle_oauth_email()].
+#'   found in the cache. Specify just the domain with a glob pattern, e.g.
+#'   `"*@example.com"`, to create code that "just works" for both
+#'   `alice@example.com` and `bob@example.com`. Defaults to the option named
+#'   "gargle_oauth_email", retrieved by [gargle::gargle_oauth_email()].
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
@@ -128,7 +130,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
     # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
     # optional hint for the auth server to pre-fill the email box
-    login_hint <- if (is_string(email) && email != "*") email
+    login_hint <- if (is_string(email) && !startsWith(email, "*")) email
 
     self$endpoint   <- gargle_oauth_endpoint()
     self$email      <- email

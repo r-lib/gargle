@@ -11,6 +11,11 @@ This allows applications running on a non-Google Cloud platform, such as AWS, to
 This new feature is still experimental and currently only supports AWS.
 This [blog post](https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation) provides a good high-level introduction to workload identity federation.
 
+## Other changes
+
+The `email` argument of `credentials_user_oauth2()` accepts domain-only email specification via a glob pattern.
+The goal is to make it possible for code like `PKG_auth(email = "*@example.com")` to identify a suitable cached token when executed on the machine of either `alice@example.com` and `bob@example.com`.
+
 # gargle 1.1.0
 
 ## OAuth token cache
