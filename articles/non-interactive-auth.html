@@ -157,14 +157,14 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Approach #1: use an option.</span>
 <span class="co"># Either specify the user:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.org"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span>
 <span class="co"># Or, if you don't use multiple Google identities, you can be more vague:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># Approach #2: call PACKAGE_auth() proactively.</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 <span class="co"># Either specify the user:</span>
-<span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.org"</span><span class="op">)</span>
+<span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span>
 <span class="co"># Or, if you don't use multiple Google identities, you can be more vague:</span>
 <span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Keep reading if you want to actually understand this.</p>
@@ -254,27 +254,43 @@
 <li>The option-based approach can be implemented in each <code>.Rmd</code> or <code>.R</code> or in a user-level or project level <code>.Rprofile</code> startup file.</li>
 </ul>
 </li>
-<li>Authorize the use of the “matching token”, in general, (email is <code>TRUE</code>) or give a specific identity (email is an actual address).</li>
+<li>Authorize the use of the “matching token”:
+<ul>
+<li>
+<code>email = TRUE</code> works if we’re only going to find, at most, 1 token, i.e. you always auth with the same identity</li>
+<li>
+<code>email = "jane@example.com"</code> pre-authorizes use of a token associated with a specific identity</li>
+<li>
+<code>email = "*@example.com"</code> pre-authorizes use of a token associated with an identity from a specific domain; good for code that might be executed on the machines of both <code>alice@example.com</code> and <code>bob@example.com</code>
+</li>
+</ul>
+</li>
 </ul>
 <p>This sets an option that allows gargle to use cached tokens whenever there’s a unique match:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>This sets an option to use tokens associated with a specific email address:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.org"</span><span class="op">)</span></code></pre></div>
-<p>This gets a token <em>right now</em> and allows the use of a matching token, using googledrive as an example:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></code></pre></div>
+<p>This sets an option to use tokens associated with an email address with a specific domain:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></code></pre></div>
+<p>This gets a token <em>right now</em> and allows the use of a matching token, using googledrive as an example:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>This gets a token <em>right now</em>, for the user with a specific email address:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.org"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></code></pre></div>
+<p>This gets a token <em>right now</em>, first checking the cache for a token associated with a specific domain:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="project-level-oauth-cache" class="section level3">
 <h3 class="hasAnchor">
 <a href="#project-level-oauth-cache" class="anchor"></a>Project-level OAuth cache</h3>
 <p>This is like the previous example, but with an added twist: we use a project-level OAuth cache. This is good for deployed data products.</p>
 <p><strong>Step 1</strong>: Obtain the token intended for non-interactive use and make sure it’s cached in a (hidden) directory of the current project. Using googledrive as an example:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
 <span class="co"># designate project-specific cache</span>
@@ -290,14 +306,14 @@
 <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="st">".secrets/"</span><span class="op">)</span></code></pre></div>
 <p>Do this setup once per project.</p>
 <p>Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
 <span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span>
 <span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span><span class="op">)</span></code></pre></div>
 <p>If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in <a href="https://gargle.r-lib.org/articles/auth-from-web.html">Auth when using R in the browser</a>.</p>
 <p><strong>Step 2</strong>: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the googledrive example:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
@@ -309,18 +325,18 @@
 <span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Setting the option <code>gargle_oauth_email = TRUE</code> says that googledrive is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, <code>.Rmd</code>, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level <code>.Rprofile</code>.</p>
 <p>Here’s a variation where we say which token to use by explicitly specifying the associated email. This is handy if there’s a reason to have more than one token in the cache.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>
   gargle_oauth_cache <span class="op">=</span> <span class="st">".secrets"</span>,
-  gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.org"</span>
+  gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.com"</span>
 <span class="op">)</span>
 
 <span class="co"># now use googledrive with no need for explicit auth</span>
 <span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Here’s another variation where we specify the necessary info directly in an auth call, instead of in options:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
 <span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -328,16 +344,16 @@
 <span class="co"># now use googledrive with no need for explicit auth</span>
 <span class="fu">drive_fine</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Here’s one last variation that’s applicable when the local cache could contain multiple tokens:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
 
-<span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="st">"jenny@example.org"</span><span class="op">)</span>
+<span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span>
 
 <span class="co"># now use googledrive with no need for explicit auth</span>
 <span class="fu">drive_auth</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>Be very intentional about paths and working directory. Personally I would use <code>here::here(".secrets)"</code> everywhere above, to make things more robust.</p>
 <p>For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></code></pre></div>
 <p>withr-style convenience helpers also exist: <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code>.</p>
 <p>For a cached token to be considered a “match”, it must match the current request with respect to user’s email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.</p>

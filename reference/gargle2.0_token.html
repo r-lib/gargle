@@ -189,8 +189,10 @@ Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use <code>NA</code>
 or <code>FALSE</code> to match nothing and force the OAuth dance in the browser. Use
 <code>TRUE</code> to allow email auto-discovery, if exactly one matching token is
-found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by <code><a href='gargle_options.html'>gargle_oauth_email()</a></code>.</p></td>
+found in the cache. Specify just the domain with a glob pattern, e.g.
+<code>"*@example.com"</code>, to create code that "just works" for both
+<code>alice@example.com</code> and <code>bob@example.com</code>. Defaults to the option named
+"gargle_oauth_email", retrieved by <code><a href='gargle_options.html'>gargle_oauth_email()</a></code>.</p></td>
     </tr>
     <tr>
       <th>app</th>
