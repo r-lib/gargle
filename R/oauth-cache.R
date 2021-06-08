@@ -229,16 +229,17 @@ token_match <- function(candidate, existing, package = "gargle") {
   candidate_email <- extract_email(candidate)
   # possible values    what they mean
   # ------------------ ---------------------------------------------------------
-  # 'blah@example.org' user specified an email
+  # 'blah@example.org' user specified an email (string contains '@')
+  # 'example.org'      user specified only a domain (does not contain '@')
   # '*'                `email = TRUE`, i.e. permission to use *one* that we find
   #                    (we still scold for multiple matches)
   # ''                 user gave no email and no instructions
 
   # if email was specified, we're done
-  if (!empty_string(candidate_email) && candidate_email != "*") {
+  if (!empty_string(candidate_email) && grepl("@", candidate_email)) {
     return()
   }
-  # candidate_email is either '*' or ''
+  # candidate_email is '*' or '' or domain-only, e.g. 'example.org'
 
   # match on the short hash
   m <- match2(mask_email(candidate), mask_email(existing))
@@ -249,6 +250,20 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
   existing <- existing[m]
   # existing holds at least one short hash match
+
+  # filter on domain, if provided
+  if (!empty_string(candidate_email) && candidate_email != "*") {
+    m <- match2(candidate_email, sub(".+@(.+)$", "\\1", existing))
+    if (!is_na(m)) {
+      existing <- existing[m]
+    }
+    if (length(existing) == 1) {
+      gargle_info(c(
+        "i" = "The {.pkg {package}} package is using a cached token for \\
+               {.email {extract_email(existing)}}"))
+      return(existing)
+    }
+  }
 
   if (!is_interactive()) {
     # proceed, but make sure user sees messaging about how to do

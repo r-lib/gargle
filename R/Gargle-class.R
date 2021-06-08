@@ -128,7 +128,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
     # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
     # optional hint for the auth server to pre-fill the email box
-    login_hint <- if (is_string(email) && email != "*") email
+    login_hint <- if (is_string(email) && grepl("@", email)) email
 
     self$endpoint   <- gargle_oauth_endpoint()
     self$email      <- email
