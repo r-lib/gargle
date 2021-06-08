@@ -15,8 +15,10 @@ GCP
 Gmail
 IAM
 JSON
+Keyless
 OAuth
 ORCID
+OpenID
 Opnieuw
 Opnieuw's
 PID
@@ -25,6 +27,7 @@ Testthat
 Tidyverse
 UI
 VMs
+WifToken
 YAML
 api
 apis
@@ -52,11 +55,11 @@ de
 decrypt
 decrypted
 emptively
-env
 filepath
 funder
 gargle’
 gcalendr
+gcp
 github
 gmailr
 googledrive
@@ -72,7 +75,9 @@ io
 iteratively
 jitter
 json
+keyless
 macOS
+misconfigured
 mockr
 mortem
 novo
