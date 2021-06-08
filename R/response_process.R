@@ -202,7 +202,7 @@ redact_response <- function(resp) {
 
 rpc_description <- function(rpc) {
   m <- match(rpc, oops$RPC)
-  if (is.na(m)) {
+  if (is_na(m)) {
     NULL
   } else {
     oops$Description[[m]]

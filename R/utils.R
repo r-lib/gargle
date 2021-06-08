@@ -14,8 +14,6 @@ file_is_empty <- function(path) {
 
 isFALSE <- function(x) identical(x, FALSE)
 
-isNA <- function(x) length(x) == 1 && is.na(x)
-
 is.oauth_app <- function(x) inherits(x, "oauth_app")
 
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")

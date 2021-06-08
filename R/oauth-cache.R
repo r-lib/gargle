@@ -22,14 +22,14 @@ cache_establish <- function(cache = NULL) {
   # takes care of the re-location of the default cache, implemented in v1.1.0
   # once we consider the transition done, this if(){...} can go away
   # the persistent solution for cleaning out legacy tokens is cache_clean() below
-  if (isTRUE(cache) || is.na(cache)) {
+  if (isTRUE(cache) || is_na(cache)) {
     close_out_legacy_cache()
   }
 
   # If NA, consider default cache folder
   # Request user's permission to create it, if doesn't exist yet
   # Store outcome of this mission (TRUE or FALSE) in the option for the session
-  if (is.na(cache)) {
+  if (is_na(cache)) {
     cache <- cache_available(gargle_default_oauth_cache_path())
     options("gargle_oauth_cache" = cache)
   }
@@ -220,7 +220,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
 
   m <- match2(candidate, existing)
-  if (!is.na(m)) {
+  if (!is_na(m)) {
     stopifnot(length(m) == 1)
     return(existing[[m]])
   }

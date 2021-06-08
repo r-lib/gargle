@@ -110,7 +110,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     gargle_debug("Gargle2.0 initialize")
     stopifnot(
       is.null(email) || is_scalar_character(email) ||
-        isTRUE(email) || isFALSE(email) || is.na(email),
+        isTRUE(email) || isFALSE(email) || is_na(email),
       is.oauth_app(app),
       is_string(package),
       is.list(params)
@@ -123,7 +123,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (isTRUE(email)) {
       email <- "*"
     }
-    if (isFALSE(email) || isNA(email)) {
+    if (isFALSE(email) || is_na(email)) {
       email <- NA_character_
     }
     # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
@@ -192,7 +192,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
     gargle_debug("loading token from the cache")
-    if (is.null(self$cache_path) || isTRUE(is.na(self$email))) return(FALSE)
+    if (is.null(self$cache_path) || is_na(self$email)) return(FALSE)
 
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
