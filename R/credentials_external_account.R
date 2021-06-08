@@ -351,7 +351,7 @@ serialize_subject_token <- function(x) {
 
   # The GCP STS endpoint expects the prepared request to be serialized as a JSON
   # string, which is then URL-encoded.
-  URLencode(
+  utils::URLencode(
     jsonlite::toJSON(x, auto_unbox = TRUE),
     reserved = TRUE
   )

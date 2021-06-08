@@ -39,6 +39,7 @@ Imports:
     rlang (>= 0.4.9),
     rstudioapi,
     stats,
+    utils,
     withr
 Suggests: 
     aws.ec2metadata,
