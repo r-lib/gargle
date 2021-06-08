@@ -75,7 +75,7 @@ credentials_external_account()
 # it may be necessary to explicitly specify cloud-platform scope (and only
 # cloud-platform) in the call to a high-level PKG_auth() function in order to
 # achieve this:
-credentials_external_accoun(scopes = "https://www.googleapis.com/auth/cloud-platform")
+credentials_external_account(scopes = "https://www.googleapis.com/auth/cloud-platform")
 }
 }
 \seealso{
