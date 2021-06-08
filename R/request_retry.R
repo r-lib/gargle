@@ -82,7 +82,6 @@
 #' * <https://tech.channable.com/posts/2020-02-05-opnieuw.html>
 #' * <https://github.com/channable/opnieuw>
 #' * <https://cloud.google.com/storage/docs/retry-strategy>
-#' * <https://cloud.google.com/storage/docs/gsutil/addlhelp/RetryHandlingStrategy>
 #' * <https://tools.ietf.org/html/rfc7231#section-7.1.3>
 #' * <https://developers.google.com/sheets/api/limits>
 #' * <https://googleapis.dev/python/google-api-core/latest/retry.html>
