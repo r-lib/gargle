@@ -26,10 +26,10 @@ Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
-found in the cache. Specify just the domain, e.g. \code{"example.com"}, to
-create code that "just works" for both \code{alice@example.com} and
-\code{bob@example.com}. Defaults to the option named "gargle_oauth_email",
-retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
+found in the cache. Specify just the domain with a glob pattern, e.g.
+\code{"*@example.com"}, to create code that "just works" for both
+\code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
+"gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 

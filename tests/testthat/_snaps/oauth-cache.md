@@ -29,7 +29,7 @@
 # token_match() finds a match based on domain
 
     Code
-      m <- token_match("abc_example.org", one_match_of_two)
+      m <- token_match("abc_*@example.org", one_match_of_two)
     Message <cliMessage>
       i The gargle package is using a cached token for 'jane@example.org'
 

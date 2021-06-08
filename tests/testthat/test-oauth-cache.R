@@ -223,7 +223,7 @@ test_that("token_match() returns NULL if no email and no short hash match", {
 test_that("token_match() finds a match based on domain", {
   one_match_of_two <- c("abc_jane@example.org", "abc_jane@gmail.com")
   expect_snapshot(
-    m <- token_match("abc_example.org", one_match_of_two)
+    m <- token_match("abc_*@example.org", one_match_of_two)
   )
   expect_equal(m, one_match_of_two[[1]])
 })

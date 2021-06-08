@@ -5,8 +5,8 @@
 #'   if it's compatible with the user's request in this sense:
 #'   * OAuth app must be same.
 #'   * Scopes must be same.
-#'   * Email, if provided, must be same. If specified email does not contain
-#'     `@`, it is interpreted as the domain of the target email address.
+#'   * Email, if provided, must be same. If specified email is a glob pattern
+#'     like `"*@example.com"`, email matching is done at the domain level.
 #'
 
 #' gargle is very conservative about using OAuth tokens discovered in the user's
