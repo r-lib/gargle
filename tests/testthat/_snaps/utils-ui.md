@@ -16,7 +16,7 @@
     Code
       gargle_info(c("aa {.field {blah}} bb", "cc {.emph xyz} dd"))
     Message <cliMessage>
-      aa BLAH bb
+      aa 'BLAH' bb
       cc xyz dd
 
 ---
@@ -24,7 +24,7 @@
     Code
       gargle_info(c("ee {.field {blah}} ff", "gg {.emph xyz} hh"))
     Message <cliMessage>
-      ee BLAH ff
+      ee 'BLAH' ff
       gg xyz hh
 
 ---
@@ -37,7 +37,7 @@
     Code
       gargle_debug(c("11 {.field {foo}} 22", "33 {.file a/b/c} 44"))
     Message <cliMessage>
-      11 FOO 22
+      11 'FOO' 22
       33 'a/b/c' 44
 
 ---

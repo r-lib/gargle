@@ -1,3 +1,32 @@
+gargle_theme <- function() {
+  list(
+    span.field = list(transform = single_quote_if_no_color),
+    # mostly motivated by consistency with googledrive, where the cumulative
+    # use of color made me want to do this
+    ".memo .memo-item-*" = list(
+      "text-exdent" = 2,
+      before = function(x) paste0(cli::symbol$bullet, " ")
+    )
+  )
+}
+
+single_quote_if_no_color <- function(x) quote_if_no_color(x, "'")
+double_quote_if_no_color <- function(x) quote_if_no_color(x, '"')
+
+quote_if_no_color <- function(x, quote = "'") {
+  # TODO: if a better way appears in cli, use it
+  # @gabor says: "if you want to have before and after for the no-color case
+  # only, we can have a selector for that, such as:
+  # span.field::no-color
+  # (but, at the time I write this, cli does not support this yet)
+  if (cli::num_ansi_colors() > 1) {
+    x
+  } else {
+    paste0(quote, x, quote)
+  }
+}
+
+
 #' @rdname gargle_options
 #' @export
 #' @section `gargle_verbosity`:
@@ -61,12 +90,14 @@ with_gargle_verbosity <- function(level, code) {
 
 gargle_debug <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() == "debug") {
+    cli::cli_div(theme = gargle_theme())
     cli::cli_bullets(texts, .envir = .envir)
   }
 }
 
 gargle_info <- function(texts, .envir = parent.frame()) {
   if (gargle_verbosity() %in% c("debug", "info")) {
+    cli::cli_div(theme = gargle_theme())
     cli::cli_bullets(texts, .envir = .envir)
   }
 }
