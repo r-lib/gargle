@@ -88,31 +88,31 @@ with_gargle_verbosity <- function(level, code) {
   withr::with_options(list(gargle_verbosity = level), code = code)
 }
 
-gargle_debug <- function(texts, .envir = parent.frame()) {
+gargle_debug <- function(text, .envir = parent.frame()) {
   if (gargle_verbosity() == "debug") {
     cli::cli_div(theme = gargle_theme())
-    cli::cli_bullets(texts, .envir = .envir)
+    cli::cli_bullets(text, .envir = .envir)
   }
 }
 
-gargle_info <- function(texts, .envir = parent.frame()) {
+gargle_info <- function(text, .envir = parent.frame()) {
   if (gargle_verbosity() %in% c("debug", "info")) {
     cli::cli_div(theme = gargle_theme())
-    cli::cli_bullets(texts, .envir = .envir)
+    cli::cli_bullets(text, .envir = .envir)
   }
 }
 
-gargle_verbatim <- function(texts) {
+gargle_verbatim <- function(text) {
   if (gargle_verbosity() %in% c("debug", "info")) {
-    texts <- glue_continuation(texts)
-    cli::cli_verbatim(texts)
+    text <- glue_continuation(text)
+    cli::cli_verbatim(text)
   }
 }
 
-glue_continuation <- function(texts) {
+glue_continuation <- function(text) {
   # pre-process with glue + wacky delimiters so I can do glue-style
   # line continuation with `\\`
-  map_chr(texts, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
+  map_chr(text, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
 }
 
 glue_lines <- function(lines, ..., .envir = parent.frame()) {
