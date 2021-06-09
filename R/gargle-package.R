@@ -42,6 +42,8 @@ NULL
 #' is undefined by default. If set, this option should be one of:
 #'   * An actual email address corresponding to your preferred Google identity.
 #'     Example:`janedoe@gmail.com`.
+#'   * A glob pattern that indicates your preferred Google domain.
+#'     Example:`*@example.com`.
 #'   * `TRUE` to allow email and OAuth token auto-discovery, if exactly one
 #'     suitable token is found in the cache.
 #'   * `FALSE` or `NA` to force the OAuth dance in the browser.

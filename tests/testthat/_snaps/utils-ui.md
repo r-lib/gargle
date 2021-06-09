@@ -1,6 +1,6 @@
 # gargle_verbosity() validates the value it finds
 
-    Option "gargle_verbosity" must be one of: 'debug', 'info', 'silent'
+    Option "gargle_verbosity" must be one of: 'debug', 'info', and 'silent'
 
 # gargle_verbosity() accomodates people using the old option
 

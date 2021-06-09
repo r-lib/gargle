@@ -65,10 +65,9 @@ gargle_verbosity <- function() {
   gv <- getOption("gargle_verbosity", "info")
 
   vals <- c("debug", "info", "silent")
-  vals_fmt <- glue_collapse(sq(vals), sep = ", ")
   if (!is_string(gv) || !(gv %in% vals)) {
-    gargle_abort('
-      Option "gargle_verbosity" must be one of: {vals_fmt}')
+    # ideally this would collapse with 'or' not 'and' but I'm going with it
+    gargle_abort('Option "gargle_verbosity" must be one of: {.field {vals}}')
   }
   gv
 }
@@ -168,7 +167,7 @@ obfuscate <- function(x, first = 7, last = 0) {
 
 message <- function(...) {
   gargle_abort("
-    Internal error: use gargle's UI functions, not {bt('message()')}")
+    Internal error: use {.pkg gargle}'s UI functions, not {.fun message}")
 }
 
 #' Error conditions for the gargle package
@@ -181,9 +180,11 @@ message <- function(...) {
 NULL
 
 gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
-  abort(
-    glue_lines(message, .envir = .envir),
+  cli::cli_div(theme = gargle_theme())
+  cli::cli_abort(
+    message,
     class = c(class, "gargle_error"),
+    .envir = .envir,
     ...
   )
 }
@@ -193,19 +194,22 @@ gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
 # so this wrapper makes the messaging more humane
 # I am declining to add a class, e.g. gargle_warning
 gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
-  warn(
-    glue_lines(message, .envir = .envir),
-    ...
-  )
+  cli::cli_div(theme = gargle_theme())
+  cli::cli_warn(message, .envir = .envir, ...)
 }
 
 gargle_abort_bad_class <- function(object, expected_class) {
   nm <- as_name(ensym(object))
   actual_class <- class(object)
-  actual <- glue("<{glue_collapse(actual_class, sep = '/')}>")
-  expected <- glue_collapse(glue("<{expected_class}>"), sep = ", ", last = " or ")
+  expected <- glue_collapse(
+    gargle_map_cli(expected_class, template = "{.cls <<x>>}"),
+    sep = ", ", last = " or "
+  )
+  msg <- glue("
+    {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}",
+    .open = "<<", .close =">>")
   gargle_abort(
-    "{bt(nm)} must be {expected}, not of class {sq(actual)}",
+    msg,
     class = "gargle_error_bad_class",
     object_name = nm,
     actual_class = actual_class,
@@ -215,9 +219,68 @@ gargle_abort_bad_class <- function(object, expected_class) {
 
 gargle_abort_bad_params <- function(names, reason) {
   gargle_abort(
-    c("These parameters are {reason}:", names),
+    c(
+      "These parameters are {reason}:",
+      bulletize(gargle_map_cli(names))
+    ),
     class = "gargle_error_bad_params",
     names = names,
     reason = reason
   )
+}
+
+#' Map a cli-styled template over an object
+#'
+#' For internal use in gargle, googledrive, and googlesheets4 (for now).
+#'
+#' @keywords internal
+#' @export
+gargle_map_cli <- function(x, ...) UseMethod("gargle_map_cli")
+
+#' @export
+gargle_map_cli.default <- function(x, ...) {
+  gargle_abort("
+    Don't know how to {.fun gargle_map_cli} an object of class \\
+    {.cls {class(x)}}.")
+}
+
+#' @export
+gargle_map_cli.NULL <- function(x, ...) NULL
+
+#' @export
+gargle_map_cli.character <- function(x,
+                                     template = "{.field <<x>>}",
+                                     .open = "<<", .close = ">>",
+                                     ...) {
+  as.character(glue(template, .open = .open, .close = .close))
+}
+
+#' Abbreviate a bullet list neatly
+#'
+#' For internal use in gargle, googledrive, and googlesheets4 (for now).
+#'
+#' @keywords internal
+#' @export
+bulletize <- function(x, bullet = "*", n_show = 5, n_fudge = 2) {
+  n <- length(x)
+  n_show_actual <- compute_n_show(n, n_show, n_fudge)
+  out <- utils::head(x, n_show_actual)
+  n_not_shown <- n - n_show_actual
+
+  out <- set_names(out, rep_along(out, bullet))
+
+  if (n_not_shown == 0) {
+    out
+  } else {
+    c(out, " " = glue("{cli::symbol$ellipsis} and {n_not_shown} more"))
+  }
+}
+
+# I don't want to do "... and x more" if x is silly, i.e. 1 or 2
+compute_n_show <- function(n, n_show_nominal = 5, n_fudge = 2) {
+  if (n > n_show_nominal && n - n_show_nominal > n_fudge) {
+    n_show_nominal
+  } else {
+    n
+  }
 }

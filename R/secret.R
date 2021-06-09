@@ -90,7 +90,7 @@ secret_read <- function(package, name) {
 
 gargle_abort_secret <- function(message, package) {
   gargle_abort(
-    "gargle_error_secret",
+    class = "gargle_error_secret",
     message = message,
     package = package
   )

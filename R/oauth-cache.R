@@ -12,7 +12,7 @@ gargle_default_oauth_cache_path <- function() {
 cache_establish <- function(cache = NULL) {
   cache <- cache %||% gargle_oauth_cache()
   if (length(cache) != 1) {
-    gargle_abort("{bt('cache')} must have length 1, not {length(cache)}")
+    gargle_abort("{.arg cache} must have length 1, not {length(cache)}")
   }
   # the inherits() call is so we accept 'fs_path'
   if (!is.logical(cache) && !is.character(cache) && !inherits(cache, "character")) {

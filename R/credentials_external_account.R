@@ -240,7 +240,7 @@ init_oauth_external_account <- function(params) {
   credential_source <- params$credential_source
   if (!identical(credential_source$environment_id, "aws1")) {
     gargle_abort("
-      gargle's workload identity federation flow only supports AWS at \\
+      {.pkg gargle}'s workload identity federation flow only supports AWS at \\
       this time.")
   }
   subject_token <- aws_subject_token(
@@ -275,8 +275,8 @@ init_oauth_external_account <- function(params) {
 aws_subject_token <- function(credential_source, audience) {
   if (!is_installed(c("aws.ec2metadata", "aws.signature"))) {
     gargle_abort("
-      Packages aws.ec2metadata and aws.signature must be installed in order \\
-      to use workload identity federation on AWS.")
+      Packages {.pkg aws.ec2metadata} and {.pkg aws.signature} must be \\
+      installed in order to use workload identity federation on AWS.")
   }
 
   region <- aws.ec2metadata::instance_document()$region

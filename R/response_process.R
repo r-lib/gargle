@@ -108,23 +108,25 @@ check_for_json <- function(resp) {
   }
 
   content <- httr::content(resp, as = "text")
-  message <- glue_lines(c(
-    "Expected content type 'application/json' not {sq(type)}.",
-    "{obfuscate(content, first = 197, last = 0)}"
-  ))
-
-  gargle_abort_request_failed(message, resp)
+  gargle_abort_request_failed(
+    c(
+      gargle_map_cli(
+        type,
+        template = "Expected content type {.field application/json}, not \\
+                    {.field <<x>>}."
+      ),
+      "*" = obfuscate(content, first = 197, last = 0)
+    ),
+    resp = resp
+  )
 }
 
+# personal policy: a wrapper around a wrapper around cli_abort() should not
+# capture/pass an environment
+# if you really want cli styling, you have to pre-interpolate
 gargle_abort_request_failed <- function(message, resp) {
   gargle_abort(
-    # TODO: take advantage of future developments in abort()'s error
-    # message formatting
-    # https://github.com/r-lib/rlang/issues/1130
-    # https://github.com/r-lib/rlang/pull/1144
-    # for now, it's better to keep doing it myself, when presenting these
-    # Google errors
-    glue_collapse(message, sep = "\n"),
+    message,
     class = c(
       "gargle_error_request_failed",
       glue("http_error_{httr::status_code(resp)}")
@@ -141,13 +143,17 @@ gargle_error_message <- function(resp) {
 
   # Handle variety of error messages returned by different google APIs
 
+  # It would be fussy to employ cli styling here, as we would need to
+  # pre-interpolate data from `resp`. So we either don't style or we use simple
+  # "no color" styles.
+
   if (identical(names(content), c("error", "error_description"))) {
     # seen when calling userinfo endpoint with an access token obtained via
     # workload identity federation
     message <- c(
       httr::http_status(resp)$message,
-      glue("  * {content$error}"),
-      glue("  * {content$error_description}")
+      "*" = content$error,
+      "*" = content$error_description
     )
     return(message)
   }
@@ -156,7 +162,7 @@ gargle_error_message <- function(resp) {
     # developed from test fixture from tokeninfo endpoint
     message <- c(
       httr::http_status(resp)$message,
-      glue("  * {content$error_description}")
+      "*" = content$error_description
     )
     return(message)
   }
@@ -165,11 +171,10 @@ gargle_error_message <- function(resp) {
   if (is.null(errors)) {
     # developed from test fixtures from "sheets.spreadsheets.get" endpoint
     status <- httr::http_status(resp)
-    rpc <- rpc_description(error$status)
     message <- c(
       glue("{status$category}: ({error$code}) {error$status}"),
-      glue("  * {rpc}"),
-      glue("  * {error$message}")
+      "*" = rpc_description(error$status),
+      "*" = error$message
     )
     if (!is.null(error$details)) {
       message <- c(
@@ -189,7 +194,12 @@ gargle_error_message <- function(resp) {
     httr::http_status(resp)$message,
     error$message,
     error$status,
-    glue("  * {format(names(errors), justify = 'right')}: {errors}")
+    bulletize(
+      # format() has no effect when processed by cli; bring that back later?
+      # glue("{format(names(errors), justify = 'right')}: {errors}"),
+      glue("{names(errors)}: {errors}"),
+      n_show = 10
+    )
   )
   message
 }
@@ -248,25 +258,29 @@ reveal_detail <- function(x) {
   type <- sub("^type.googleapis.com/", "", x$`@type`)
 
   rpc_bad_request <- function(e) {
-    bullets <- vapply(
-      e[["fieldViolations"]],
-      function(z) glue("  * {z$description}"), character(1)
-    )
+    f <- function(x) {
+      c(
+        "*" = glue("Field: {x$field}"),
+        " " = glue("Description: {x$description}")
+      )
+    }
+    bullets <- unlist(map(e[["fieldViolations"]], f))
     c("Field violations", bullets)
   }
   rpc_help <- function(e) {
-    bullets <- unlist(lapply(
-      e[["links"]],
-      function(z) {
-        c(glue("  * description: {z$description}"), glue("  * url: {z$url}"))
-      }
-    ))
+    f <- function(x) {
+      c(
+        "*" = glue("Description: {x$description}"),
+        " " = glue("URL: {x$url}")
+        )
+    }
+    bullets <- unlist(map(e[["links"]], f))
     c("Links", bullets)
   }
   rpc_error_info <- function(e) {
     e <- unlist(e)
     e <- e[names(e) != "@type"]
-    glue_data(as.list(e), "  * {names(e)}: {e}")
+    bulletize(glue_data(as.list(e), "{names(e)}: {e}"), n_show = 10)
   }
 
   switch(
@@ -275,10 +289,12 @@ reveal_detail <- function(x) {
     "google.rpc.Help"       = rpc_help(x),
     "google.rpc.ErrorInfo"  = rpc_error_info(x),
     # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
-    glue_lines(c(
-      "  * Error details of type {sq(type)} may not be fully revealed.",
-      "  * Workaround: use {bt('tryCatch()')} and inspect error payload yourself.",
-      "  * Consider opening an issue at https://github.com/r-lib/gargle/issues."
-    ))
+    bulletize(glue_lines(c(
+      "Error details of type {sq(type)} may not be fully revealed.",
+      "Workaround: use {bt('gargle:::gargle_last_response()')} or \\
+       {bt('gargle:::gargle_last_content()')} to inspect error payload \\
+       yourself.",
+      "Consider opening an issue at <https://github.com/r-lib/gargle/issues.>"
+    )))
   )
 }

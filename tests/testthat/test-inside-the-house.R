@@ -5,9 +5,9 @@ test_that("gargle is 'inside the house'", {
 
 test_that("it is possible to be 'outside the house'", {
   expect_false(local(gargle:::from_permitted_package(), envir = globalenv()))
-  expect_error(
+  expect_snapshot(
     local(gargle:::check_permitted_package(), envir = globalenv()),
-    "within tidyverse"
+    error = TRUE
   )
 })
 
@@ -19,9 +19,9 @@ test_that("gargle API key", {
 test_that("tidyverse API key", {
   key <- tidyverse_api_key()
   expect_true(is_string(key))
-  expect_error(
+  expect_snapshot(
     local(tidyverse_api_key(), envir = globalenv()),
-    "within tidyverse"
+    error = TRUE
   )
 })
 
@@ -36,4 +36,3 @@ test_that("tidyverse oauth app", {
   expect_s3_class(oa, "oauth_app")
   expect_match(oa$appname, "^tidyverse")
 })
-

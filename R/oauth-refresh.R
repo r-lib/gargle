@@ -63,8 +63,8 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
     # not limit itself to these
     gargle_warn(c(
       "Unable to refresh token: {err$error}",
-      err$error_description,
-      err$error_uri
+      "*" = err$error_description,
+      "*" = err$error_uri
     ))
     return(invisible())
   }
@@ -79,11 +79,11 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
     all_pkgs <- if (main_pkg == "gargle") "gargle" else c(main_pkg, "gargle")
     gargle_warn(c(
       "Unable to refresh token, because the associated OAuth app \\
-       has been deleted",
-      "You appear to be relying on the default app used by the \\
-       {main_pkg} package",
-      "Consider re-installing {glue_collapse(all_pkgs, sep = ' and ')}, \\
-       in case the default app has been updated"
+       has been deleted.",
+      "i" = "You appear to be relying on the default app used by the \\
+             {.pkg {main_pkg}} package.",
+      " " = "Consider re-installing {.pkg {all_pkgs}}, \\
+             in case the default app has been updated."
     ))
     return(invisible())
   }
@@ -91,13 +91,14 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
   # deleted app doesn't seem to be one of "ours"
   gargle_warn(c(
     "Unable to refresh token, because the associated OAuth app \\
-     has been deleted",
-    if (nzchar(app_name)) "App name: {app_name}",
+     has been deleted.",
+    "*" = if (nzchar(app_name)) "App name: {.field {app_name}}",
     if (!is.null(package)) {
       c(
-        "If you did not configure this OAuth app, it may be built into the \\
-         {package} package",
-        "If so, consider re-installing {package} to get an updated app"
+        "i" = "If you did not configure this OAuth app, it may be built into \\
+               the {.pkg {package}} package.",
+        " " = "If so, consider re-installing {.pkg {package}} to get an updated \\
+               app."
       )
     }
   ))
