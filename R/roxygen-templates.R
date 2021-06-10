@@ -30,17 +30,18 @@ PREFIX_auth_description <- function(.data = list(
     "",
     "By default, you are directed to a web browser, asked to sign in to your",
     "Google account, and to grant {PACKAGE} permission to operate on your",
-    "behalf with {PRODUCT}. By default, these user credentials are cached in a",
-    "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
+    "behalf with {PRODUCT}. By default, with your permission, these user",
+    "credentials are cached in a folder below your home directory, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
     "tokens are less likely to be synced to the cloud by accident.",
     "",
-    "If you are interacting with R from a web-based platform, like RStudio",
-    "Server or Cloud, you need to use a variant of this flow, known as",
-    "out-of-band auth (\"oob\"). If this does not happen automatically, you",
-    "can request it yourself with `use_oob = TRUE` or, more persistently, by",
-    "setting an option via `options(gargle_oob_default = TRUE)`."
+    "If you are interacting with R within a browser (applies to RStudio Server,",
+    "RStudio Workbench, and RStudio Cloud), you need a variant of this flow,",
+    "known as out-of-band auth (\"oob\"). If this does not happen",
+    "automatically, you can request it yourself with `use_oob = TRUE` or,",
+    "more persistently, by setting an option via",
+    "`options(gargle_oob_default = TRUE)`."
   ), .data = .data)
 }
 
@@ -67,6 +68,7 @@ PREFIX_auth_details <- function(.data = list(
     "  * Bring their own [Token2.0][httr::Token-class].",
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
+    "  * Customize scopes.",
     "",
     "For details on the many ways to find a token, see",
     "[gargle::token_fetch()]. For deeper control over auth, use",
@@ -77,6 +79,7 @@ PREFIX_auth_details <- function(.data = list(
 
 PREFIX_auth_params <- function() {c(
   "@inheritParams gargle::credentials_service_account",
+  "@inheritParams gargle::credentials_external_account",
   "@inheritParams gargle::credentials_app_default",
   "@inheritParams gargle::credentials_gce",
   "@inheritParams gargle::credentials_byo_oauth2",
