@@ -167,7 +167,7 @@ these lines:options(
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Options consulted by gargle</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/gargle-package.R'><code>R/gargle-package.R</code></a>, <a href='https://github.com/r-lib/gargle/blob/master/R/ui.R'><code>R/ui.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/gargle/blob/master/R/gargle-package.R'><code>R/gargle-package.R</code></a>, <a href='https://github.com/r-lib/gargle/blob/master/R/utils-ui.R'><code>R/utils-ui.R</code></a></small>
     <div class="hidden name"><code>gargle_options.Rd</code></div>
     </div>
 
@@ -224,6 +224,8 @@ these lines:</p><pre><span class='fu'><a href='https://rdrr.io/r/base/options.ht
 is undefined by default. If set, this option should be one of:</p><ul>
 <li><p>An actual email address corresponding to your preferred Google identity.
 Example:<code>janedoe@gmail.com</code>.</p></li>
+<li><p>A glob pattern that indicates your preferred Google domain.
+Example:<code>*@example.com</code>.</p></li>
 <li><p><code>TRUE</code> to allow email and OAuth token auto-discovery, if exactly one
 suitable token is found in the cache.</p></li>
 <li><p><code>FALSE</code> or <code>NA</code> to force the OAuth dance in the browser.</p></li>

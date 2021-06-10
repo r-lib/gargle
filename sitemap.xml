@@ -16,6 +16,9 @@
     <loc>https://gargle.r-lib.org/reference/WifToken.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/bulletize.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/cred_funs.html</loc>
   </url>
   <url>
@@ -50,6 +53,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_app.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/gargle_map_cli.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_oauth_sitrep.html</loc>
