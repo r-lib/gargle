@@ -289,12 +289,18 @@ reveal_detail <- function(x) {
     "google.rpc.Help"       = rpc_help(x),
     "google.rpc.ErrorInfo"  = rpc_error_info(x),
     # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
-    bulletize(glue_lines(c(
-      "Error details of type {sq(type)} may not be fully revealed.",
-      "Workaround: use {bt('gargle:::gargle_last_response()')} or \\
-       {bt('gargle:::gargle_last_content()')} to inspect error payload \\
-       yourself.",
-      "Consider opening an issue at <https://github.com/r-lib/gargle/issues.>"
-    )))
+    bulletize(
+      map_chr(
+        c(
+          "Error details of type '{type}' may not be fully revealed.",
+          "Workaround: use `gargle:::gargle_last_response()` or \\
+           `gargle:::gargle_last_content()` to inspect error payload \\
+           yourself.",
+          "Consider opening an issue at \\
+           <https://github.com/r-lib/gargle/issues.>"
+        ),
+        glue
+      )
+    )
   )
 }

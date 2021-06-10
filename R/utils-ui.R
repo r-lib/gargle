@@ -1,6 +1,7 @@
 gargle_theme <- function() {
   list(
     span.field = list(transform = single_quote_if_no_color),
+    # make the default bullet "regular" color, instead of explicitly colored
     # mostly motivated by consistency with googledrive, where the cumulative
     # use of color made me want to do this
     ".memo .memo-item-*" = list(
@@ -101,34 +102,6 @@ gargle_info <- function(text, .envir = parent.frame()) {
   }
 }
 
-gargle_verbatim <- function(text) {
-  if (gargle_verbosity() %in% c("debug", "info")) {
-    text <- glue_continuation(text)
-    cli::cli_verbatim(text)
-  }
-}
-
-glue_continuation <- function(text) {
-  # pre-process with glue + wacky delimiters so I can do glue-style
-  # line continuation with `\\`
-  map_chr(text, function(x) glue(x, .open = "<<<<", .close = ">>>>"))
-}
-
-glue_lines <- function(lines, ..., .envir = parent.frame()) {
-  # eliminate confusion re: `...` of glue_lines() vs. `...` of map_chr()
-  # plus: I've only got compat-purrr here, so I have to write a function
-  g <- function(line) glue(line, ..., .envir = .envir)
-  map_chr(lines, g)
-}
-
-glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
-  # work around name collision of `.x` of map_chr() vs. of glue_data()
-  # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
-  # plus: I've only got compat-purrr here, so I have to write a function
-  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .envir)
-  map_chr(lines, gd)
-}
-
 # inspired by
 # https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
 # more discussion at
@@ -142,8 +115,6 @@ cli_this = function(..., .envir = parent.frame()) {
 }
 
 commapse <- function(...) paste0(..., collapse = ", ")
-bt <- function(x) encodeString(x, quote = "`")
-sq <- function(x) encodeString(x, quote = "'")
 fr <- function(x) format(x, justify = 'right')
 fl <- function(x) format(x, justify = 'left')
 

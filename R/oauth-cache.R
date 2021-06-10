@@ -367,7 +367,7 @@ match2 <- function(needle, haystack) {
 gargle_oauth_sitrep <- function(cache = NULL) {
   cache <- cache %||% cache_locate()
   if (!is_dir(cache)) {
-    gargle_info("No gargle OAuth cache found at {.path {cache}}")
+    gargle_info("No gargle OAuth cache found at {.path {cache}}.")
     return(invisible())
   }
 
@@ -378,7 +378,9 @@ gargle_oauth_sitrep <- function(cache = NULL) {
     ""
   ))
 
-  gargle_verbatim(format(dat))
+  if (gargle_verbosity() %in% c("debug", "info")) {
+    cli::cli_verbatim(format(dat))
+  }
   invisible(dat)
 }
 
@@ -416,8 +418,7 @@ format.gargle_oauth_dat <- function(x, ...) {
     res <- format(c(text, res))
     c(
       res[1],
-      # R 3.2 does not have strrep()
-      paste(rep.int("_", nchar(res[1])), collapse = ""),
+      strrep("_", nchar(res[1])),
       res[-1]
     )
   }
