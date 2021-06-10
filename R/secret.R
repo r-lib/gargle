@@ -25,7 +25,7 @@ secret_pw_get <- function(package) {
   pw <- Sys.getenv(pw_name, "")
   if (identical(pw, "")) {
     gargle_abort_secret(
-      message = glue("Envvar {sq(pw_name)} is not defined"),
+      message = "Env var {.envvar {pw_name}} is not defined",
       package = package
     )
   }
