@@ -77,10 +77,15 @@ token_tokeninfo <- function(token) {
     token <- token$auth_token
   }
   stopifnot(inherits(token, "Token2.0"))
-  # A stale token does not fail in a way that leads to auto refresh.
-  # It results in: "Bad Request (HTTP 400)."
-  # Hence, the explicit refresh here.
-  token$refresh()
+  # I only want to refresh a user token, which I identify in this rather
+  # back-ass-wards way, i.e. by a process of elimination
+  if (!inherits(token, "WifToken") && !inherits("TokenServiceAccount") &&
+      !inherits(token, "GceToken")) {
+    # A stale token does not fail in a way that leads to auto refresh.
+    # It results in: "Bad Request (HTTP 400)."
+    # Hence, the explicit refresh here.
+    token$refresh()
+  }
 
   # https://www.googleapis.com/oauth2/v3/tokeninfo
   req <- request_build(
