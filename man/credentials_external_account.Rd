@@ -67,15 +67,6 @@ support this token flow for additional platforms, please \href{https://github.co
 \examples{
 \dontrun{
 credentials_external_account()
-
-# if credentials_external_account() is being called indirectly, via a wrapper
-# package and token_fetch(), consider that the wrapper package may be inserting
-# its own default scopes
-#
-# it may be necessary to explicitly specify cloud-platform scope (and only
-# cloud-platform) in the call to a high-level PKG_auth() function in order to
-# achieve this:
-credentials_external_account(scopes = "https://www.googleapis.com/auth/cloud-platform")
 }
 }
 \seealso{

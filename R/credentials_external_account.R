@@ -62,15 +62,6 @@
 #' @examples
 #' \dontrun{
 #' credentials_external_account()
-#'
-#' # if credentials_external_account() is being called indirectly, via a wrapper
-#' # package and token_fetch(), consider that the wrapper package may be inserting
-#' # its own default scopes
-#' #
-#' # it may be necessary to explicitly specify cloud-platform scope (and only
-#' # cloud-platform) in the call to a high-level PKG_auth() function in order to
-#' # achieve this:
-#' credentials_external_account(scopes = "https://www.googleapis.com/auth/cloud-platform")
 #' }
 credentials_external_account <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                                          path = "",
@@ -80,12 +71,9 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
     return(NULL)
   }
   # TODO: do I need a more refined scope check? such as, do I need to make sure
-  # cloud-platform is one of them? or that cloud-platform is the only scope?
+  # cloud-platform is one of them?
 
-  # TODO: I would like to add email scope, as for other gargle token flows. But
-  # it appears to derail this flow. See notes elsewhere.
-  #scopes <- normalize_scopes(add_email_scope(scopes))
-  scopes <- normalize_scopes(scopes)
+  scopes <- normalize_scopes(add_email_scope(scopes))
 
   token <- oauth_external_token(path = path, scopes = scopes)
 
@@ -93,8 +81,7 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
       !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    # TODO: figure out if there's something useful to do here, like this:
-    # gargle_debug("service account email: {.email {token_email(token)}}")
+    gargle_debug("service account email: {.email {token_email(token)}}")
     token
   }
 }
@@ -113,10 +100,6 @@ oauth_external_token <- function(path = "",
     gargle_debug("JSON does not appear to represent an external account")
     return()
   }
-
-  # at this point, httr::oauth_service_token() "checks" the scopes,
-  # meaning it collapses them into a single string
-  # I'm choosing to delay that step
 
   params <- c(
     list(scopes = scopes),
@@ -143,8 +126,11 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
     gargle_debug("WifToken initialize")
     # TODO: any desired validity checks on contents of params
 
-    # this feels like the right place to collapse scopes
-    params$scope <- glue_collapse(params$scopes, sep = " ")
+    # NOTE: the final token exchange with
+    # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+    # takes scopes as an **array**, not a space delimited string
+    # so we do NOT collapse scopes in this flow
+    params$scope <- params$scopes
     self$params <- params
 
     self$init_credentials()
@@ -178,10 +164,15 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
   refresh = function() {
     gargle_debug("WifToken refresh")
     # There's something kind of wrong about this, because it's not a true
-    # refresh. But it's basically required by the way httr currently works.
-    # For example, if I attempt token_userinfo(x) on a WifToken, it fails with
-    # 401, but httr tries to "fix" things by refreshing the token. But this is
-    # not a problem that refreshing can fix. It's something about IAM/scopes.
+    # refresh. But this method is basically required by the way httr currently
+    # works.
+    # This means that some uses of $refresh() aren't really appropriate for a
+    # WifToken.
+    # For example, if I attempt token_userinfo(x) on a WifToken that lacks
+    # appropriate scope, it fails with 401.
+    # httr tries to "fix" things by refreshing the token. But this is
+    # not a problem that refreshing can fix.
+    # I've now prevented that particular phenomenon in token_userinfo().
     self$init_credentials()
   },
 
@@ -189,7 +180,6 @@ WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
   #' @param ... Not used.
   format = function(...) {
     x <- list(
-      foo = "bar",
       scopes         = commapse(base_scope(self$params$scope)),
       credentials    = commapse(names(self$credentials))
     )
@@ -366,6 +356,16 @@ serialize_subject_token <- function(x) {
 # https://cloud.google.com/iam/docs/reference/sts/rest/v1/TopLevel/token
 fetch_federated_access_token <- function(params,
                                          subject_token) {
+  # this request must have one of these scopes:
+  # https://www.googleapis.com/auth/cloud-platform
+  # https://www.googleapis.com/auth/iam
+  # NOTE: this is not (necessarily) where the scopes passed in to this flow go
+  if ("https://www.googleapis.com/auth/cloud-platform" %in% params$scope) {
+    scope <- "https://www.googleapis.com/auth/cloud-platform"
+  } else {
+    # TODO: get some guidance on what the fall back should be here
+    scope <- "https://www.googleapis.com/auth/iam"
+  }
   req <- list(
     method = "POST",
     url = params$token_url,
@@ -373,7 +373,7 @@ fetch_federated_access_token <- function(params,
       audience = params[["audience"]],
       grantType = "urn:ietf:params:oauth:grant-type:token-exchange",
       requestedTokenType = "urn:ietf:params:oauth:token-type:access_token",
-      scope = params[["scope"]],
+      scope = scope,
       subjectTokenType = params[["subject_token_type"]],
       subjectToken = subject_token
     )
@@ -390,29 +390,9 @@ fetch_wif_access_token <- function(federated_access_token,
   req <- list(
     method = "POST",
     url = impersonation_url,
-
-    # in my hands, the presence of ANY scope besides cloud-platform seems to be
-    # a showstopper here
-    # to be fair, it is EXACTLY what the docs show and there's no indication
-    # that it's an example ... maybe it's meant literally?
-
-    # I'm not sure if this is an absolute constraint on this token flow, the
-    # result of some regrettable choice I have made elsewhere, or some aspect of
-    # my test setup's configuration
-
-    # https://cloud.google.com/kubernetes-engine/docs/how-to/role-based-access-control
-    # ^ that's about GKE, but this description sounds a bit like my situation,
-    # in the sense that maybe IAM roles matter more than scope (?)
-    # "For example, suppose the VM has cloud-platform scope but does not have
-    # userinfo-email scope. When the VM gets an access token, Google Cloud
-    # associates that token with the cloud-platform scope."
-
-    # it is definitely true that I can't call gargle::token_userinfo() on the
-    # access tokens I get
-
-    # body = list(scope = scope),
-    body = list(scope = "https://www.googleapis.com/auth/cloud-platform"),
-
+    # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+    # takes scopes as an **array**, not a space delimited string
+    body = list(scope = scope),
     token = httr::add_headers(
       Authorization = paste("Bearer", federated_access_token$access_token)
     )
