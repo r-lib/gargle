@@ -356,6 +356,7 @@ serialize_subject_token <- function(x) {
 # https://cloud.google.com/iam/docs/reference/sts/rest/v1/TopLevel/token
 fetch_federated_access_token <- function(params,
                                          subject_token) {
+  # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken#authorization-scopes
   # this request must have one of these scopes:
   # https://www.googleapis.com/auth/cloud-platform
   # https://www.googleapis.com/auth/iam
