@@ -119,8 +119,9 @@
 
     
     
-<p>If you are working with R in a web-based context, like <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio Server</a> or <a href="https://rstudio.cloud">Cloud</a>, your experience of browser-based auth flows will be different from those using R, directly in the Console or through an IDE. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
-<p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.</p>
+<p>If you are working with R in a web-based context, such as <a href="https://www.rstudio.com/products/rstudio/download-server/">RStudio Server</a>, <a href="https://rstudio.cloud">RStudio Cloud</a>, or <a href="https://www.rstudio.com/products/workbench/">RStudio Workbench</a>, your experience of browser-based auth flows will be different from those using R on their local machine. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
+<p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. gargle also tries to detect usage via RStudio Server, Cloud, or Workbench, but this still may not catch 100% of situations where oob auth is necessary.</p>
+<p>Therefore, some users may still need to recognize this situation and explicitly request oob auth.</p>
 <p>Here’s a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
 <pre><code>Chrome: This site can't be reached; localhost refused to connect.
 Firefox: Unable to connect; can't establish a connection.</code></pre>

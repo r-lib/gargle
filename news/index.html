@@ -171,7 +171,7 @@
 <div id="other-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other-changes" class="anchor"></a>Other changes</h2>
-<p>The <code>email</code> argument of <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> accepts domain-only email specification via a glob pattern. The goal is to make it possible for code like <code>PKG_auth(email = "*@example.com")</code> to identify a suitable cached token when executed on the machine of either <code>alice@example.com</code> and <code>bob@example.com</code>.</p>
+<p>The <code>email</code> argument of <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> accepts domain-only email specification via a glob pattern. The goal is to make it possible for code like <code>PKG_auth(email = "*@example.com")</code> to identify a suitable cached token when executed on the machine of either <code>alice@example.com</code> or <code>bob@example.com</code>.</p>
 <p>gargle now throws errors via <code><a href="https://cli.r-lib.org/reference/cli_abort.html">cli::cli_abort()</a></code>, which means the messages are now more stylish.</p>
 </div>
 </div>

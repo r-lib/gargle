@@ -122,7 +122,7 @@
 <li>
 <strong>Auth.</strong> The <code><a href="reference/token_fetch.html">token_fetch()</a></code> function calls a series of concrete credential-fetching functions to obtain a valid access token (or it quietly dies trying).
 <ul>
-<li>This covers explicit service accounts, application default credentials, Google Compute Engine, and the standard OAuth2 browser flow.</li>
+<li>This covers explicit service accounts, application default credentials, Google Compute Engine, (experimentally) workload identity federation, and the standard OAuth2 browser flow.</li>
 <li>gargle offers the <code>Gargle2.0</code> class, which extends <code><a href="https://httr.r-lib.org/reference/Token-class.html">httr::Token2.0</a></code>. It is the default class for user OAuth 2.0 credentials. There are two main differences from <code><a href="https://httr.r-lib.org/reference/Token-class.html">httr::Token2.0</a></code>: greater emphasis on the user’s email (e.g. Google identity) and default token caching is at the user level.</li>
 </ul>
 </li>
