@@ -79,8 +79,7 @@ token_tokeninfo <- function(token) {
   stopifnot(inherits(token, "Token2.0"))
   # I only want to refresh a user token, which I identify in this rather
   # back-ass-wards way, i.e. by a process of elimination
-  if (!inherits(token, "WifToken") && !inherits("TokenServiceAccount") &&
-      !inherits(token, "GceToken")) {
+  if (!inherits(token, c("TokenServiceAccount", "WifToken", "GceToken"))) {
     # A stale token does not fail in a way that leads to auto refresh.
     # It results in: "Bad Request (HTTP 400)."
     # Hence, the explicit refresh here.
