@@ -12,6 +12,7 @@ Token for use on Google Compute Engine instances
 This class uses the metadata service available on GCE VMs to fetch access
 tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentials_gce()}} instead.
 }
+\keyword{internal}
 \section{Super classes}{
 \code{\link[httr:Token]{httr::Token}} -> \code{\link[httr:Token2.0]{httr::Token2.0}} -> \code{GceToken}
 }

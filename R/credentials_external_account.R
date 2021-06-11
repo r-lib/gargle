@@ -102,6 +102,8 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
 #' Generate OAuth token for an external account.
 #'
 #' @inheritParams credentials_external_account
+#'
+#' @keywords internal
 #' @export
 oauth_external_token <- function(path = "",
                                  scopes = "https://www.googleapis.com/auth/cloud-platform") {
@@ -129,6 +131,9 @@ oauth_external_token <- function(path = "",
 
 #' Token for use with workload identity federation
 #'
+#' Not intended for direct use. See [credentials_external_account()] instead.
+#'
+#' @keywords internal
 #' @export
 WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
   #' @description Get a token via workload identity federation

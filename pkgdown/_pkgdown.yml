@@ -64,7 +64,6 @@ reference:
     contents:
       - Gargle2.0
       - gargle2.0_token
-      - GceToken
       - AuthState
       - init_AuthState
   - title: "Options"

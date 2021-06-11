@@ -63,6 +63,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 #'
 #' @param ... Not used.
 #'
+#' @keywords internal
 #' @export
 GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   #' @description Print token

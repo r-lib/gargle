@@ -34,3 +34,4 @@ scope.}
 \description{
 Generate OAuth token for an external account.
 }
+\keyword{internal}
