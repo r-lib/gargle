@@ -30,7 +30,8 @@ gargle's functionality falls into two main domains:
     credential-fetching functions to obtain a valid access token (or it quietly
     dies trying).
     - This covers explicit service accounts, application default credentials,
-      Google Compute Engine, and the standard OAuth2 browser flow.
+      Google Compute Engine, (experimentally) workload identity federation, and
+      the standard OAuth2 browser flow.
     - gargle offers the `Gargle2.0` class, which extends `httr::Token2.0`. It is
       the default class for user OAuth 2.0 credentials. There are two main
       differences from `httr::Token2.0`: greater emphasis on the user's email
