@@ -16,7 +16,7 @@ This [blog post](https://cloud.google.com/blog/products/identity-security/enable
 The `email` argument of `credentials_user_oauth2()` accepts domain-only email specification via a glob pattern.
 The goal is to make it possible for code like `PKG_auth(email = "*@example.com")` to identify a suitable cached token when executed on the machine of either `alice@example.com` or `bob@example.com`.
 
-gargle now throws errors via `cli::cli_abort()`, which means the messages are now more stylish.
+gargle now throws errors via `cli::cli_abort()`, which means error messages now have the same styling as informational messages.
 
 # gargle 1.1.0
 
