@@ -14,10 +14,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-If you are working with R in a web-based context, like [RStudio Server](https://www.rstudio.com/products/rstudio/download-server/) or [Cloud](https://rstudio.cloud), your experience of browser-based auth flows will be
-different from those using R, directly in the Console or through an IDE. You need to use **out-of-band authentication**, sometimes denoted "oob". After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
+If you are working with R in a web-based context, such as [RStudio Server](https://www.rstudio.com/products/rstudio/download-server/), [RStudio Cloud](https://rstudio.cloud), or [RStudio Workbench](https://www.rstudio.com/products/workbench/), your experience of browser-based auth flows will be
+different from those using R on their local machine.
+You need to use **out-of-band authentication**, sometimes denoted "oob".
+After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
 
-The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. However, gargle and httr currently fail to detect some other situations where oob is necessary. In these case, the user needs to recognize the situation and explicitly request oob auth.
+The need to use oob auth can sometimes be detected automatically.
+For example, oob auth is always used when the httpuv package is not installed.
+gargle also tries to detect usage via RStudio Server, Cloud, or Workbench, but this still may not catch 100% of situations where oob auth is necessary.
+
+Therefore, some users may still need to recognize this situation and explicitly request oob auth.
 
 Here's a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:
 
