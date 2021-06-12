@@ -449,11 +449,16 @@ gargle_legacy_default_oauth_cache_path <- function() {
   path_home(".R", "gargle", "gargle-oauth")
 }
 
-# TODO: Why doesn't this consult the option?
-# TODO: when the cache relocation dust has settled,
-# delete this function and replace with gargle_default_oauth_cache_path()
-# exists just for passive cache discovery
+# main point of this is **passive** cache discovery
 cache_locate <- function() {
+  option_cache <- gargle_oauth_cache()
+  if (is_scalar_character(option_cache)) {
+    gargle_info(c(
+      "i" = 'Taking cache location from the {.code "gargle_oauth_cache"} option'
+    ))
+    return(option_cache)
+  }
+
   default_cache <- gargle_default_oauth_cache_path()
   if (dir_exists(default_cache)) {
     return(default_cache)

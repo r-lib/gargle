@@ -332,6 +332,31 @@ test_that("gargle_oauth_sitrep() works with a cache", {
   )
 })
 
+test_that("gargle_oauth_sitrep() consults the option for cache location", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
+  )
+
+  withr::local_options(list(gargle_oauth_cache = tmp_cache))
+  local_gargle_verbosity("debug")
+  out <- capture.output(
+    gargle_oauth_sitrep(),
+    type = "message"
+  )
+  # bit of fiddliness to remove the volatile path and the hashes that can vary
+  # by OS
+  out <- sub(tmp_cache, "{path to gargle oauth cache}", out, fixed = TRUE)
+  out <- sub("[[:xdigit:]]{7}[.]{3}", "{hash...}", out)
+  expect_snapshot(
+    writeLines(out)
+  )
+})
+
 # helpers -----------------------------------------------------------
 
 test_that("match2() works", {

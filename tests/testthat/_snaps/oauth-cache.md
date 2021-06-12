@@ -102,3 +102,16 @@
       a@example.org gargle-clio        {hash...}
       b@example.org gargle-clio        {hash...}
 
+# gargle_oauth_sitrep() consults the option for cache location
+
+    Code
+      writeLines(out)
+    Output
+      i Taking cache location from the `"gargle_oauth_cache"` option
+      1 token found in this gargle OAuth cache:
+      '{path to gargle oauth cache}'
+      
+      email         app         scopes hash...   
+      _____________ ___________ ______ __________
+      a@example.org gargle-clio        {hash...}
+
