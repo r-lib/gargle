@@ -354,19 +354,9 @@ serialize_subject_token <- function(x) {
 
 # https://datatracker.ietf.org/doc/html/rfc8693
 # https://cloud.google.com/iam/docs/reference/sts/rest/v1/TopLevel/token
+# https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken#authorization-scopes
 fetch_federated_access_token <- function(params,
                                          subject_token) {
-  # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken#authorization-scopes
-  # this request must have one of these scopes:
-  # https://www.googleapis.com/auth/cloud-platform
-  # https://www.googleapis.com/auth/iam
-  # NOTE: this is not (necessarily) where the scopes passed in to this flow go
-  if ("https://www.googleapis.com/auth/cloud-platform" %in% params$scope) {
-    scope <- "https://www.googleapis.com/auth/cloud-platform"
-  } else {
-    # TODO: get some guidance on what the fall back should be here
-    scope <- "https://www.googleapis.com/auth/iam"
-  }
   req <- list(
     method = "POST",
     url = params$token_url,
@@ -374,7 +364,12 @@ fetch_federated_access_token <- function(params,
       audience = params[["audience"]],
       grantType = "urn:ietf:params:oauth:grant-type:token-exchange",
       requestedTokenType = "urn:ietf:params:oauth:token-type:access_token",
-      scope = scope,
+      # this request must have one of these scopes:
+      # https://www.googleapis.com/auth/cloud-platform
+      # https://www.googleapis.com/auth/iam
+      # I am hard-wiring the iam scope, guided by the least privilege principle,
+      # as it is the narrower of the 2 scopes
+      scope = "https://www.googleapis.com/auth/iam",
       subjectTokenType = params[["subject_token_type"]],
       subjectToken = subject_token
     )
@@ -392,7 +387,7 @@ fetch_wif_access_token <- function(federated_access_token,
     method = "POST",
     url = impersonation_url,
     # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
-    # takes scopes as an **array**, not a space delimited string
+    # takes scope as an **array**, not a space delimited string
     body = list(scope = scope),
     token = httr::add_headers(
       Authorization = paste("Bearer", federated_access_token$access_token)
