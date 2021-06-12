@@ -52,7 +52,7 @@
 #'   to use this authentication method. These two links provide, respectively,
 #'   a high-level overview and step-by-step instructions.
 
-#' * <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/ >
+#' * <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/>
 
 #' * <https://cloud.google.com/iam/docs/access-resources-aws>
 
@@ -70,8 +70,6 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
   if (!detect_aws_ec2() || is.null(scopes)) {
     return(NULL)
   }
-  # TODO: do I need a more refined scope check? such as, do I need to make sure
-  # cloud-platform is one of them?
 
   scopes <- normalize_scopes(add_email_scope(scopes))
 
