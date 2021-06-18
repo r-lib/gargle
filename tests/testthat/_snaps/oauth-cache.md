@@ -3,11 +3,11 @@
     Code
       cache_clean(cache_folder, "apple")
     Message <cliMessage>
-      v Deleting 1 token obtained with an old tidyverse OAuth app
-      i Expect interactive prompts to re-auth with the new app
+      v Deleting 1 token obtained with an old tidyverse OAuth app.
+      i Expect interactive prompts to re-auth with the new app.
       ! Is this rolling of credentials highly disruptive to your workflow?
         That means you should rely on your own OAuth app (or switch to a service
-        account token)
+        account token).
         Learn more these in these articles:
         <https://gargle.r-lib.org/articles/get-api-credentials.html>
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
@@ -31,31 +31,31 @@
     Code
       m <- token_match("abc_*@example.org", one_match_of_two)
     Message <cliMessage>
-      i The gargle package is using a cached token for 'jane@example.org'
+      i The gargle package is using a cached token for 'jane@example.org'.
 
 # token_match() scolds but returns short hash match when non-interactive
 
     Code
       m <- token_match("abc_", one_existing)
     Message <cliMessage>
-      ! Using an auto-discovered, cached token
+      ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
-        the use of a cached token
+        the use of a cached token.
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      i The gargle package is using a cached token for 'a@example.com'
+      i The gargle package is using a cached token for 'a@example.com'.
 
 ---
 
     Code
       m <- token_match("abc_*", one_existing)
     Message <cliMessage>
-      ! Using an auto-discovered, cached token
+      ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
-        the use of a cached token
+        the use of a cached token.
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      i The gargle package is using a cached token for 'a@example.com'
+      i The gargle package is using a cached token for 'a@example.com'.
 
 ---
 
@@ -65,13 +65,13 @@
       i Suitable tokens found in the cache, associated with these emails:
       * 'a@example.com'
       * 'b@example.com'
-        Defaulting to the first email
-      ! Using an auto-discovered, cached token
+        Defaulting to the first email.
+      ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
-        the use of a cached token
+        the use of a cached token.
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      i The gargle package is using a cached token for 'a@example.com'
+      i The gargle package is using a cached token for 'a@example.com'.
 
 ---
 
@@ -81,13 +81,13 @@
       i Suitable tokens found in the cache, associated with these emails:
       * 'a@example.com'
       * 'b@example.com'
-        Defaulting to the first email
-      ! Using an auto-discovered, cached token
+        Defaulting to the first email.
+      ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
-        the use of a cached token
+        the use of a cached token.
         See gargle's "Non-interactive auth" vignette for more details:
         <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-      i The gargle package is using a cached token for 'a@example.com'
+      i The gargle package is using a cached token for 'a@example.com'.
 
 # gargle_oauth_sitrep() works with a cache
 
@@ -107,7 +107,7 @@
     Code
       writeLines(out)
     Output
-      i Taking cache location from the `"gargle_oauth_cache"` option
+      i Taking cache location from the `"gargle_oauth_cache"` option.
       1 token found in this gargle OAuth cache:
       '{path to gargle oauth cache}'
       

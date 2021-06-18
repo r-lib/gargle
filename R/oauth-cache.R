@@ -12,7 +12,7 @@ gargle_default_oauth_cache_path <- function() {
 cache_establish <- function(cache = NULL) {
   cache <- cache %||% gargle_oauth_cache()
   if (length(cache) != 1) {
-    gargle_abort("{.arg cache} must have length 1, not {length(cache)}")
+    gargle_abort("{.arg cache} must have length 1, not {length(cache)}.")
   }
   # the inherits() call is so we accept 'fs_path'
   if (!is.logical(cache) && !is.character(cache) && !inherits(cache, "character")) {
@@ -154,12 +154,12 @@ cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
   }
 
   gargle_info(c(
-    "v" = "Deleting {n} token{?s} obtained with an old tidyverse OAuth app",
-    "i" = "Expect interactive prompts to re-auth with the new app",
+    "v" = "Deleting {n} token{?s} obtained with an old tidyverse OAuth app.",
+    "i" = "Expect interactive prompts to re-auth with the new app.",
     "!" = "Is this rolling of credentials highly disruptive to your \\
            workflow?",
     " " = "That means you should rely on your own OAuth app \\
-           (or switch to a service account token)",
+           (or switch to a service account token).",
     " " = "Learn more these in these articles:",
     " " = "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}",
     " " = "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
@@ -262,7 +262,7 @@ token_match <- function(candidate, existing, package = "gargle") {
     if (length(existing) == 1) {
       gargle_info(c(
         "i" = "The {.pkg {package}} package is using a cached token for \\
-               {.email {extract_email(existing)}}"))
+               {.email {extract_email(existing)}}."))
       return(existing)
     }
   }
@@ -283,15 +283,15 @@ token_match <- function(candidate, existing, package = "gargle") {
         "i" = "Suitable tokens found in the cache, associated with these \\
                emails:",
         set_names(emails_fmt, ~ rep_along(., "*")),
-        " " = "Defaulting to the first email"
+        " " = "Defaulting to the first email."
       )
       gargle_info(msg)
       existing <- existing[[1]]
     }
     msg <- c(
-      "!" = "Using an auto-discovered, cached token",
+      "!" = "Using an auto-discovered, cached token.",
       " " = "To suppress this message, modify your code or options \\
-             to clearly consent to the use of a cached token",
+             to clearly consent to the use of a cached token.",
       " " = "See gargle's \"Non-interactive auth\" vignette for more details:",
       " " = "{.url https://gargle.r-lib.org/articles/non-interactive-auth.html}"
     )
@@ -303,7 +303,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   if (length(existing) == 1 && candidate_email == "*") {
     gargle_info(c(
       "i" = "The {.pkg {package}} package is using a cached token for \\
-             {.email {extract_email(existing)}}"))
+             {.email {extract_email(existing)}}."))
     return(existing)
   }
 
@@ -311,9 +311,9 @@ token_match <- function(candidate, existing, package = "gargle") {
   emails <- extract_email(existing)
   local_gargle_verbosity("info")
   gargle_info(c(
-    "The {.pkg {package}} package is requesting access to your Google account",
-    "Select a pre-authorised account or enter '0' to obtain a new token",
-    "Press Esc/Ctrl + C to cancel"))
+    "The {.pkg {package}} package is requesting access to your Google account.",
+    "Select a pre-authorised account or enter '0' to obtain a new token.",
+    "Press Esc/Ctrl + C to cancel."))
   choice <- utils::menu(emails)
 
   if (choice == 0) {
@@ -454,7 +454,7 @@ cache_locate <- function() {
   option_cache <- gargle_oauth_cache()
   if (is_scalar_character(option_cache)) {
     gargle_info(c(
-      "i" = 'Taking cache location from the {.code "gargle_oauth_cache"} option'
+      "i" = 'Taking cache location from the {.code "gargle_oauth_cache"} option.'
     ))
     return(option_cache)
   }
@@ -467,8 +467,8 @@ cache_locate <- function() {
   cache <- gargle_legacy_default_oauth_cache_path()
   if (dir_exists(cache)) {
     gargle_info(c(
-      "!" = "Legacy OAuth cache found",
-      "!" = "Expect cache to be cleaned and relocated upon first use"
+      "!" = "Legacy OAuth cache found.",
+      "!" = "Expect cache to be cleaned and relocated upon first use."
     ))
     return(cache)
   }
@@ -534,7 +534,7 @@ close_out_legacy_cache <- function() {
 
 cache_relocate <- function(from, to) {
   gargle_info(c(
-    "The default location for caching gargle OAuth tokens has changed",
+    "The default location for caching gargle OAuth tokens has changed.",
     "Previously: {.path {from}}",
     "As of gargle v1.1.0: {.path {to}}"
   ))
@@ -543,6 +543,6 @@ cache_relocate <- function(from, to) {
   }
   dat_tokens <- gargle_oauth_dat(from)
   file_move(dat_tokens$filepath, to)
-  gargle_info("Relocating {nrow(dat_tokens)} existing token{?s} to new cache")
+  gargle_info("Relocating {nrow(dat_tokens)} existing token{?s} to new cache.")
   delete_empty_legacy_cache(from)
 }

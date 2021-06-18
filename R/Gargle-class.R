@@ -119,7 +119,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     )
     if (identical(email, "")) {
       gargle_abort("
-        {.arg email} must not be \"\" (the empty string)
+        {.arg email} must not be \"\" (the empty string).
         Do you intend to consult an env var, but it's unset?")
     }
     if (isTRUE(email)) {
@@ -236,7 +236,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     } else {
       # TODO: good candidate for an eventual sub-classed gargle error
       # would be useful in testing to know that this is exactly where we aborted
-      gargle_abort("OAuth2 flow requires an interactive session")
+      gargle_abort("OAuth2 flow requires an interactive session.")
     }
   }
 ))
@@ -248,8 +248,8 @@ encourage_httpuv <- function() {
   local_gargle_verbosity("info")
   gargle_info(c(
     "The {.pkg httpuv} package enables a nicer Google auth experience, \\
-     in many cases",
-    "It doesn't seem to be installed",
+     in many cases.",
+    "It doesn't seem to be installed.",
     "Would you like to install it now?"))
   if (utils::menu(c("Yes", "No")) == 1) {
     utils::install.packages("httpuv")

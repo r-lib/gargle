@@ -6,10 +6,10 @@
       Attempt to directly access a credential that can only be used within
       tidyverse packages.
       This error may mean that you need to:
-      * Create a new project on Google Cloud Platform
-      * Enable relevant APIs for your project
-      * Create an API key and/or an OAuth client ID
-      * Configure your requests to use your API key and OAuth client ID
+      * Create a new project on Google Cloud Platform.
+      * Enable relevant APIs for your project.
+      * Create an API key and/or an OAuth client ID.
+      * Configure your requests to use your API key and OAuth client ID.
       i See gargle's "How to get your own API credentials" vignette for more details:
       i <https://gargle.r-lib.org/articles/get-api-credentials.html>
 
@@ -21,10 +21,10 @@
       Attempt to directly access a credential that can only be used within
       tidyverse packages.
       This error may mean that you need to:
-      * Create a new project on Google Cloud Platform
-      * Enable relevant APIs for your project
-      * Create an API key and/or an OAuth client ID
-      * Configure your requests to use your API key and OAuth client ID
+      * Create a new project on Google Cloud Platform.
+      * Enable relevant APIs for your project.
+      * Create an API key and/or an OAuth client ID.
+      * Configure your requests to use your API key and OAuth client ID.
       i See gargle's "How to get your own API credentials" vignette for more details:
       i <https://gargle.r-lib.org/articles/get-api-credentials.html>
 

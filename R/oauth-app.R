@@ -26,7 +26,7 @@ oauth_app_from_json <- function(path,
 
   if (!all(c("client_id", "client_secret") %in% names(info))) {
     gargle_abort("
-      Can't find {.field client_id} and {.field client_secret} in the JSON")
+      Can't find {.field client_id} and {.field client_secret} in the JSON.")
   }
 
   httr::oauth_app(

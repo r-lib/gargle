@@ -138,7 +138,7 @@ obfuscate <- function(x, first = 7, last = 0) {
 
 message <- function(...) {
   gargle_abort("
-    Internal error: use {.pkg gargle}'s UI functions, not {.fun message}")
+    Internal error: use {.pkg gargle}'s UI functions, not {.fun message}.")
 }
 
 #' Error conditions for the gargle package
@@ -177,7 +177,7 @@ gargle_abort_bad_class <- function(object, expected_class) {
     sep = ", ", last = " or "
   )
   msg <- glue("
-    {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}",
+    {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}.",
     .open = "<<", .close =">>")
   gargle_abort(
     msg,

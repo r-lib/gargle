@@ -38,7 +38,7 @@ add_line <- function(path, line) {
     return(TRUE)
   }
 
-  gargle_info("Adding {.val {line}} to {.file {path}}")
+  gargle_info("Adding {.val {line}} to {.file {path}}.")
   lines <- c(lines, line)
   writeLines(lines, path)
   TRUE

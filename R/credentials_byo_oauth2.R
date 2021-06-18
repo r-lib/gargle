@@ -67,7 +67,7 @@ check_endpoint <- function(endpoint) {
   urls <- endpoint[c("authorize", "access", "validate", "revoke")]
   urls_ok <- all(grepl("google", urls))
   if (!urls_ok) {
-    gargle_abort("Token doesn't use Google's OAuth endpoint")
+    gargle_abort("Token doesn't use Google's OAuth endpoint.")
   }
   endpoint
 }
