@@ -258,9 +258,9 @@ token_match <- function(candidate, existing, package = "gargle") {
     m <- match2(domain_part(candidate_email), domain_part(existing))
     if (is_na(m)) {
       return()
-    } else {
-      existing <- existing[m]
     }
+    existing <- existing[m]
+
     if (length(existing) == 1) {
       gargle_info(c(
         "i" = "The {.pkg {package}} package is using a cached token for \\
