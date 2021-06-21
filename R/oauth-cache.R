@@ -256,7 +256,9 @@ token_match <- function(candidate, existing, package = "gargle") {
   if (!empty_string(candidate_email) && startsWith(candidate_email, "*@")) {
     domain_part <- function(x) sub(".+@(.+)$", "\\1", x)
     m <- match2(domain_part(candidate_email), domain_part(existing))
-    if (!is_na(m)) {
+    if (is_na(m)) {
+      return()
+    } else {
       existing <- existing[m]
     }
     if (length(existing) == 1) {
