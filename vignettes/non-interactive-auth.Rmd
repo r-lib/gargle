@@ -293,7 +293,7 @@ library(googledrive)
 drive_auth(cache = ".secrets", email = TRUE)
 
 # now use googledrive with no need for explicit auth
-drive_fine(n_max = 5)
+drive_find(n_max = 5)
 ```
 
 Here's one last variation that's applicable when the local cache could contain multiple tokens:
