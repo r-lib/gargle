@@ -74,7 +74,7 @@ There is substantial setup necessary, both on the GCP and AWS side,
 to use this authentication method. These two links provide, respectively,
 a high-level overview and step-by-step instructions.
 \itemize{
-\item <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/ >
+\item \url{https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/}
 \item \url{https://cloud.google.com/iam/docs/access-resources-aws}
 }
 
