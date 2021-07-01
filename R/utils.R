@@ -1,5 +1,3 @@
-is_string <- function(x) is.character(x) && length(x) == 1
-
 empty_string <- function(x) {
   stopifnot(is.character(x))
   !nzchar(x)
@@ -16,13 +14,19 @@ file_is_empty <- function(path) {
 
 isFALSE <- function(x) identical(x, FALSE)
 
-isNA <- function(x) length(x) == 1 && is.na(x)
-
 is.oauth_app <- function(x) inherits(x, "oauth_app")
 
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")
 
-add_line <- function(path, line, quiet = FALSE) {
+is_rstudio_server <- function() {
+  if (rstudioapi::hasFun("versionInfo")) {
+    rstudioapi::versionInfo()$mode == "server"
+  } else {
+    FALSE
+  }
+}
+
+add_line <- function(path, line) {
   if (file_exists(path)) {
     lines <- readLines(path, warn = FALSE)
     lines <- lines[lines != ""]
@@ -30,9 +34,11 @@ add_line <- function(path, line, quiet = FALSE) {
     lines <- character()
   }
 
-  if (line %in% lines) return(TRUE)
-  ui_line("Adding ", line, " to ", path)
+  if (line %in% lines) {
+    return(TRUE)
+  }
 
+  gargle_info("Adding {.val {line}} to {.file {path}}.")
   lines <- c(lines, line)
   writeLines(lines, path)
   TRUE
@@ -49,7 +55,7 @@ normalize_scopes <- function(x) {
 }
 
 add_email_scope <- function(scopes = NULL) {
-  ui_line("adding 'userinfo.email' scope")
+  gargle_debug("adding {.val userinfo.email} scope")
   url <- "https://www.googleapis.com/auth/userinfo.email"
   union(scopes %||% character(), url)
 }

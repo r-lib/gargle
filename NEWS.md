@@ -1,5 +1,115 @@
 # gargle (development version)
 
+## Workload identity federation
+
+`credentials_external_account()` is a new function that implements "workload identity federation", a new (as of April 2021) keyless authentication mechanism.
+This allows applications running on a non-Google Cloud platform, such as AWS, to access Google Cloud resources without using a conventional service account token, eliminating the security problem posed by long-lived, powerful service account credential files.
+
+`credentials_external_account()` has been inserted into the default registry of credential-fetchers tried by `token_fetch()`, which makes it automatically available in certain wrapper packages, such as bigrquery.
+`credentials_app_default()` recognizes the JSON configuration for an external account and passes such a call along to `credentials_external_account()`.
+
+This new feature is still experimental and currently only supports AWS.
+This [blog post](https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation) provides a good high-level introduction to workload identity federation.
+
+## Other changes
+
+The `email` argument of `credentials_user_oauth2()` accepts domain-only email specification via a glob pattern.
+The goal is to make it possible for code like `PKG_auth(email = "*@example.com")` to identify a suitable cached token when executed on the machine of either `alice@example.com` or `bob@example.com`.
+
+gargle now throws errors via `cli::cli_abort()`, which means error messages now have the same styling as informational messages.
+
+# gargle 1.1.0
+
+## OAuth token cache
+
+Two changes affect stored user OAuth tokens:
+
+* The default cache location has moved, to better align with general
+  conventions around where to cache user data. Here's how that looks for a
+  typical user:
+  - Typical before, macOS: `~/.R/gargle/gargle-oauth`
+  - Typical after, macOS: `~/Library/Caches/gargle`
+  - Typical before, Windows: `C:/Users/jane/.R/gargle/gargle-oauth`
+  - Typical after, Windows: `C:/Users/jane/AppData/Local/gargle/gargle/Cache`
+* Tokens created with one of the built-in OAuth apps provided by the tidyverse
+  packages are checked for validity. Tokens made with an old app are deleted.
+  Note that we introduced a new OAuth app in gargle v1.0.0 and the previous
+  app could be disabled at any time.
+  - Nickname of previous tidyverse OAuth app: `tidyverse-calliope`
+  - Nickname of tidyverse OAuth app as of gargle v1.0.0: `tidyverse-clio`
+  
+For users who accept all default behaviour around OAuth, these changes just mean you will see some messages about cleaning and moving the token cache.
+These users can also expect to go through interactive auth (approximately once per package / API), to obtain fresh tokens made with the current tidyverse OAuth app.
+
+If the rolling of the tidyverse OAuth app is highly disruptive to your workflow, this is a good wake-up call that you should be using your own OAuth app or, perhaps, an entirely different auth method, such as using a service account token in non-interactive settings.
+As always, these articles explain how to take more control of auth:
+ * <https://gargle.r-lib.org/articles/get-api-credentials.html>
+ * <https://gargle.r-lib.org/articles/non-interactive-auth.html>
+
+## User interface
+
+The user interface has gotten more stylish, thanks to the cli package (<https://cli.r-lib.org>).
+
+All errors thrown by gargle route through `rlang::abort()`, providing better access to the backtrace and, potentially, error data.
+These errors have, at the very least, the `gargle_error` class and may also have additional subclasses.
+
+`gargle_verbosity()` replaces `gargle_quiet()`.
+Each such function is (or was) a convenience wrapper to query the option with that name.
+Therefore, the option named "gargle_verbosity" now replaces "gargle_quiet".
+If "gargle_verbosity" is unset, the old "gargle_quiet" is still consulted, but the user is advised to update their usage.
+
+The new "gargle_verbosity" option is more expressive and has three levels:
+
+* "debug", equivalent to the previous `gargle_quiet = FALSE`. Use for debugging
+  and troubleshooting.
+* "info" (the default), basically equivalent to the previous
+  `gargle_quiet = TRUE`. Since gargle is not a user-facing package, it has very
+  little to say and only emits messages that end users really need to see.
+* "silent", no previous equivalent and of little practical significance. But it
+  can be used to suppress all gargle messages.
+  
+The helpers `with_gargle_verbosity()` and `local_gargle_verbosity()` make it easy to temporarily modify the verbosity level, in the spirit of the [withr package](https://withr.r-lib.org).
+
+## Other changes
+
+There is special error handling when OAuth token refresh fails, due to deletion of the associated OAuth app.
+This should help users who are relying on the default app provided by a package and, presumably, they need to update that package (#168).
+
+`gargle_oob_default()` returns `TRUE` unconditionally when running in RStudio Server.
+
+`response_process()` gains a `remember` argument.
+When `TRUE` (the default), gargle stores the most recent response internally (with auth tokens redacted).
+Unexported functions `gargle:::gargle_last_response()` and `gargle:::gargle_last_content()` facilitate *post mortem* analysis of, e.g., a failed request (#152).
+
+`google.rpc.ErrorInfo` errors are explicitly handled now, resulting in a more informative error message.
+
+`request_retry()` is better able to detect when the per-user quota has been exhausted (vs. the per-project quota), resulting in a more informed choice of backoff.
+
+## Dependency changes
+
+cli is new in Imports.
+
+rstudioapi is new in Imports.
+
+rappdirs is new in Imports.
+
+httpuv is new in Suggests. We encourage its installation in interactive sessions, if we're about to initiate OAuth flow, unless it's clear that out-of-band auth is inevitable.
+
+gargle now relies on testthat >= 3.0.0 and, specifically, uses third edition features.
+
+mockr is new in Suggests, since `testthat::use_mock()` is superseded.
+
+# gargle 1.0.0
+
+* Better handling of `BadRequest` errors, i.e. more specifics are revealed.
+
+* `oauth_app_from_json` now supports JSON files from the "Web application"
+  client type (#155).
+  
+* `request_retry()` is a drop-in substitute for `request_make()` that uses (modified) exponential backoff to retry requests that fail with error `429 RESOURCE_EXHAUSTED` (#63).
+
+* Credentials used in selected client packages have been rolled. Users of bigrquery, googledrive, and googlesheets4 can expect a prompt to re-authorize the "Tidyverse API Packages" when using an OAuth user token. This has no impact on users who use their own OAuth app (i.e. client ID and secret) or those who use service account tokens.
+
 # gargle 0.5.0
 
 * [Troubleshooting gargle auth](https://gargle.r-lib.org/articles/troubleshooting.html)

@@ -10,8 +10,10 @@
 #'   always determined from the token itself, never from this argument. Use `NA`
 #'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
 #'   `TRUE` to allow email auto-discovery, if exactly one matching token is
-#'   found in the cache. Defaults to the option named "gargle_oauth_email",
-#'   retrieved by [gargle::gargle_oauth_email()].
+#'   found in the cache. Specify just the domain with a glob pattern, e.g.
+#'   `"*@example.com"`, to create code that "just works" for both
+#'   `alice@example.com` and `bob@example.com`. Defaults to the option named
+#'   "gargle_oauth_email", retrieved by [gargle::gargle_oauth_email()].
 #' @param app An OAuth consumer application, created by [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
@@ -107,31 +109,30 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         credentials = NULL,
                         params = list(),
                         cache_path = gargle_oauth_cache()) {
-    ui_line("Gargle2.0 initialize")
+    gargle_debug("Gargle2.0 initialize")
     stopifnot(
-      is.null(email) || is_string(email) ||
-        isTRUE(email) || isFALSE(email) || is.na(email),
+      is.null(email) || is_scalar_character(email) ||
+        isTRUE(email) || isFALSE(email) || is_na(email),
       is.oauth_app(app),
       is_string(package),
       is.list(params)
     )
     if (identical(email, "")) {
-      abort(paste0(
-        "`email` must not be \"\" (the empty string)\n",
-        "Do you intend to consult an env var, but it's unset?"
-      ))
+      gargle_abort("
+        {.arg email} must not be \"\" (the empty string).
+        Do you intend to consult an env var, but it's unset?")
     }
     if (isTRUE(email)) {
       email <- "*"
     }
-    if (isFALSE(email) || isNA(email)) {
-      email <- NULL
+    if (isFALSE(email) || is_na(email)) {
+      email <- NA_character_
     }
-    ## https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
-    ## optional hint for the auth server to pre-fill the email box
-    login_hint <- if (is_string(email) && email != "*") email
+    # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
+    # optional hint for the auth server to pre-fill the email box
+    login_hint <- if (is_string(email) && !startsWith(email, "*")) email
 
-    self$endpoint   <- gargle_outh_endpoint()
+    self$endpoint   <- gargle_oauth_endpoint()
     self$email      <- email
     self$app        <- app
     self$package    <- package
@@ -142,7 +143,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
 
     if (!is.null(credentials)) {
       # Use credentials created elsewhere - usually for tests
-      ui_line("credentials provided directly")
+      gargle_debug("credentials provided directly")
       self$credentials <- credentials
       return(self$cache())
     }
@@ -151,23 +152,35 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     if (self$load_from_cache()) {
       self
     } else {
-      ui_line("no matching token in the cache")
+      gargle_debug("no matching token in the cache")
       self$init_credentials()
       self$email <- token_email(self) %||% NA_character_
       self$cache()
     }
   },
+  #' @description Format a Gargle2.0 token
+  #' @param ... Not used.
+  format = function(...) {
+    x <- list(
+      oauth_endpoint = "google",
+      app            = self$app$appname,
+      email          = cli_this("{.email {self$email}}"),
+      scopes         = commapse(base_scope(self$params$scope)),
+      credentials    = commapse(names(self$credentials))
+    )
+    c(
+      cli::cli_format_method(
+        cli::cli_h1("<Token (via {.pkg gargle})>")
+      ),
+      glue("{fr(names(x))}: {fl(x)}")
+    )
+  },
   #' @description Print a Gargle2.0 token
   #' @param ... Not used.
   print = function(...) {
-    withr::local_options(list(gargle_quiet = FALSE))
-    ui_line("<Token (via gargle)>")
-    ui_line("  <oauth_endpoint> google")
-    ui_line("             <app> ", self$app$appname)
-    ui_line("           <email> ", self$email)
-    ui_line("          <scopes> ", commapse(base_scope(self$params$scope)))
-    ui_line("     <credentials> ", commapse(names(self$credentials)))
-    ui_line("---")
+    # a format method is not sufficient for Gargle2.0 because the parent class
+    # has a print method
+    cli::cat_line(self$format())
   },
   #' @description Generate the email-augmented hash of a Gargle2.0 token
   hash = function() {
@@ -180,13 +193,13 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
-    ui_line("loading token from the cache")
-    if (is.null(self$cache_path)) return(FALSE)
+    gargle_debug("loading token from the cache")
+    if (is.null(self$cache_path) || is_na(self$email)) return(FALSE)
 
     cached <- token_from_cache(self)
     if (is.null(cached)) return(FALSE)
 
-    ui_line("matching token found in the cache")
+    gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
     self$app         <- cached$app
@@ -196,12 +209,16 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
-    cred <- get("refresh_oauth2.0", asNamespace("httr"))(
-      self$endpoint, self$app,
-      self$credentials, self$params$user_params, self$params$use_basic_auth
+    cred <- refresh_oauth2.0(
+      self$endpoint, self$app, self$credentials,
+      package = self$package
     )
     if (is.null(cred)) {
       token_remove_from_cache(self)
+      # TODO: why do we return the current, invalid, unrefreshed token?
+      # at the very least, let's clear the refresh_token, to prevent
+      # future refresh attempts
+      self$credentials$refresh_token <- NULL
     } else {
       self$credentials <- cred
       self$cache()
@@ -210,11 +227,36 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description Initiate a new Gargle2.0 token
   init_credentials = function() {
-    ui_line("initiating new token")
+    gargle_debug("initiating new token")
     if (is_interactive()) {
+      if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
+        encourage_httpuv()
+      }
       super$init_credentials()
     } else {
-      abort("OAuth2 flow requires an interactive session")
+      # TODO: good candidate for an eventual sub-classed gargle error
+      # would be useful in testing to know that this is exactly where we aborted
+      gargle_abort("OAuth2 flow requires an interactive session.")
     }
   }
 ))
+
+encourage_httpuv <- function() {
+  if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
+    return(invisible())
+  }
+  local_gargle_verbosity("info")
+  gargle_info(c(
+    "The {.pkg httpuv} package enables a nicer Google auth experience, \\
+     in many cases.",
+    "It doesn't seem to be installed.",
+    "Would you like to install it now?"))
+  if (utils::menu(c("Yes", "No")) == 1) {
+    utils::install.packages("httpuv")
+  }
+  invisible()
+}
+
+
+
+

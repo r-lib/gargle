@@ -1,12 +1,18 @@
 #' Load Application Default Credentials
 #'
+#' @description
+
 #' Loads credentials from a file identified via a search strategy known as
 #' Application Default Credentials (ADC). The hope is to make auth "just work"
 #' for someone working on Google-provided infrastructure or who has used Google
-#' tooling to get started. A sequence of paths is consulted, which we describe
-#' here, with some abuse of notation. ALL_CAPS represents the value of an
-#' environment variable and `%||%` is used in the spirit of a [null coalescing
+#' tooling to get started, such as the [`gcloud` command line
+#' tool](https://cloud.google.com/sdk/gcloud).
+#'
+#' A sequence of paths is consulted, which we describe here, with some abuse of
+#' notation. ALL_CAPS represents the value of an environment variable and `%||%`
+#' is used in the spirit of a [null coalescing
 #' operator](https://en.wikipedia.org/wiki/Null_coalescing_operator).
+
 #' ```
 #' GOOGLE_APPLICATION_CREDENTIALS
 #' CLOUDSDK_CONFIG/application_default_credentials.json
@@ -15,19 +21,24 @@
 #' # on not-Windows:
 #' ~/.config/gcloud/application_default_credentials.json
 #' ```
+
 #' If the above search successfully identifies a JSON file, it is parsed and
-#' ingested either as a service account token or a user OAuth2 credential.
+#' ingested as a service account, an external account ("workload identity
+#' federation"), or a user account. Literally, if the JSON describes a service
+#' account, we call [credentials_service_account()] and if it describes an
+#' external account, we call [credentials_external_account()].
 #'
 #' @inheritParams credentials_service_account
 #'
 #' @seealso
-#'
-#' <https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application>
-#'
-#' <https://cloud.google.com/sdk/docs/>
-#'
-#' @return An [`httr::TokenServiceAccount`][httr::Token-class] or an
-#'   [`httr::Token2.0`][httr::Token-class] or `NULL`.
+
+#' * <https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application>
+
+#' * <https://cloud.google.com/sdk/docs/>
+
+#' @return An [`httr::TokenServiceAccount`][httr::Token-class], a [`WifToken`],
+#'   an [`httr::Token2.0`][httr::Token-class] or `NULL`.
+
 #' @family credential functions
 #' @export
 #' @examples
@@ -35,17 +46,15 @@
 #' credentials_app_default()
 #' }
 credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
-  ui_line("trying credentials_app_default()")
+  gargle_debug("trying {.fun credentials_app_default}")
   # In general, application default credentials only include the cloud-platform
   # scope.
   path <- credentials_app_default_path()
   if (!file_exists(path)) {
     return(NULL)
   }
-  ui_line("file exists at ADC path: ", path)
+  gargle_debug(c("file exists at ADC path:", "{.file {path}}"))
 
-  # The JSON file stored on disk can be either a user credential or a service
-  # account.
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (info$type == "authorized_user") {
     # In the case of *user* credentials stored as the application default, only
@@ -61,7 +70,7 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
       return(NULL)
     }
-    ui_line("ADC cred type: authorized_user")
+    gargle_debug("ADC cred type: {.val authorized_user}")
     endpoint <- httr::oauth_endpoints("google")
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
     scope <- "https://www.googleapis.com/auth/cloud.platform"
@@ -75,9 +84,12 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     )
     token$refresh()
     token
-  } else {
-    ui_line("ADC cred type: service_account")
+  } else if (info$type == "service_account") {
+    gargle_debug("ADC cred type: {.val service_account}")
     credentials_service_account(scopes, path = path, subject = subject)
+  } else if (info$type == "external_account") {
+    gargle_debug("ADC cred type: {.val external_account}")
+    credentials_external_account(scopes, path = path)
   }
 }
 

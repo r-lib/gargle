@@ -29,14 +29,14 @@ credentials_service_account <- function(scopes = NULL,
                                         path = "",
                                         ...,
                                         subject = NULL) {
-  ui_line("trying credentials_service_account()")
+  gargle_debug("trying {.fun credentials_service_account}")
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (!identical(info[["type"]], "service_account")) {
-    ui_line(
-      "JSON does not appear to represent a service account\n",
-      "did you provide the JSON for an OAuth client instead of for a ",
-      "service account?"
-    )
+    gargle_debug(c(
+      "JSON does not appear to represent a service account",
+      "Did you provide the JSON for an OAuth client instead of for a \\
+       service account?"
+    ))
     return()
   }
 
@@ -46,7 +46,7 @@ credentials_service_account <- function(scopes = NULL,
   token <- httr::oauth_service_token(
     ## FIXME: not sure endpoint is truly necessary, but httr thinks it is.
     ## https://github.com/r-lib/httr/issues/576
-    endpoint = gargle_outh_endpoint(),
+    endpoint = gargle_oauth_endpoint(),
     secrets = info,
     scope = scopes,
     sub = subject
@@ -55,7 +55,7 @@ credentials_service_account <- function(scopes = NULL,
     !nzchar(token$credentials$access_token)) {
     NULL
   } else {
-    ui_line("service account email: ", token_email(token))
+    gargle_debug("service account email: {.email {token_email(token)}}")
     token
   }
 }

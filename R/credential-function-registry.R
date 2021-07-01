@@ -1,18 +1,3 @@
-#' Environment used for gargle global state
-#'
-#' Unfortunately, we're stuck having at least some state, in order to maintain a
-#' list of credential functions to try.
-#'
-#' This environment contains:
-#' * `$cred_funs` is the ordered list of credential functions to use when trying
-#'   to fetch credentials.
-#'
-#' @noRd
-#' @format An environment.
-#' @keywords internal
-gargle_env <- new.env(parent = emptyenv())
-gargle_env$cred_funs <- list()
-
 #' Check that f is a viable credential fetching function
 #'
 #' In the abstract, a credential fetching function is any function which takes a
@@ -102,9 +87,10 @@ cred_funs_clear <- function() {
 #' @export
 cred_funs_set_default <- function() {
   cred_funs_clear()
-  cred_funs_add(credentials_user_oauth2     = credentials_user_oauth2)
-  cred_funs_add(credentials_byo_oauth2      = credentials_byo_oauth2)
-  cred_funs_add(credentials_gce             = credentials_gce)
-  cred_funs_add(credentials_app_default     = credentials_app_default)
-  cred_funs_add(credentials_service_account = credentials_service_account)
+  cred_funs_add(credentials_user_oauth2      = credentials_user_oauth2)
+  cred_funs_add(credentials_byo_oauth2       = credentials_byo_oauth2)
+  cred_funs_add(credentials_gce              = credentials_gce)
+  cred_funs_add(credentials_app_default      = credentials_app_default)
+  cred_funs_add(credentials_external_account = credentials_external_account)
+  cred_funs_add(credentials_service_account  = credentials_service_account)
 }

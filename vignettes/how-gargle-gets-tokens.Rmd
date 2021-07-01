@@ -55,7 +55,7 @@ Note also that these credential functions are exported and can be called directl
 
 ## Get verbose output
 
-To see more information about what gargle is up to, set the option `gargle_quiet` to `FALSE`. Read more in the docs for `gargle_quiet()`.
+To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug". Read more in the docs for `gargle_verbosity()`.
 
 ## `credentials_service_account()`
 
@@ -83,9 +83,38 @@ The JSON key file must be managed securely. In particular, it should not be kept
 
 Note that fetching a token for a service account requires a reasonably accurate system clock. This is of particular importance for users running gargle inside a Docker container, as Docker for Windows has [intermittently seen problems with clock drift](https://github.com/docker/for-win/issues/4526). If your service account token requests fail with "Bad Request" inside a container but succeed locally, check that the container's system clock is accurate.
 
+## `credentials_external_account()`
+
+The second function tried is `credentials_external_account()`. Here's how a call to `token_fetch()` with an external account inputs plays out:
+
+```{r, eval = FALSE}
+token_fetch(scopes = <SCOPES>, path = "/path/to/your/external-account.json")
+
+# leads to this call:
+credentials_external_account(
+  scopes = <SCOPES>,
+  path = "/path/to/your/external-account.json"
+)
+```
+
+`credentials_external_account()` implements something called *workload identity federation* and is available to applications running on specific non-Google Cloud platforms.
+At the time of writing, gargle only supports AWS, but this could be expanded to other providers, such as Azure, if there is a documented need.
+
+Similar to `credentials_service_account()`, the `path` is treated as a JSON representation of the account's configuration and it's probably a file path.
+However, in contrast to `credentials_service_account()`, this JSON only contains non-sensitive metadata, which is, indeed, the main point of this flow.
+The secrets needed to complete auth are obtained "on-the-fly" from, e.g., the running EC2 instance.
+
+`credentials_service_account()` will fail for many reasons: there is no named `path` argument, the JSON at `path` can't be parsed as configuration for an external AWS account, we don't appear to running on AWS, suggested packages for AWS functionality are not installed, or the workload identity pool is misconfigured.
+If any of that happens, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+
+Here is some Google documentation about workload identity federation and the specifics for AWS:
+
+* Blog post: [Keyless API authentication — Better cloud security through workload identity federation, no service account keys necessary](https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/)
+* Documentation: [How to use identity federation to access Google Cloud resources from Amazon Web Services (AWS)](https://cloud.google.com/iam/docs/access-resources-aws)
+
 ## `credentials_app_default()`
 
-The second function tried is `credentials_app_default()`. Here's how a call to `token_fetch()` might work:
+The third function tried is `credentials_app_default()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
@@ -97,9 +126,11 @@ credentials_app_default(
 )
 ```
 
-`credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application). The credentials themselves are conventional service account or user credentials that happen to be stored in a pre-ordained location and format.
+`credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application).
+The credentials themselves are conventional service account, external account, or user credentials that happen to be stored in a pre-ordained location and format.
 
-The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started. A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable.
+ The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started, such as the [`gcloud` command line tool](https://cloud.google.com/sdk/gcloud).
+A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable.
 
 ```{r, eval = FALSE}
 ${GOOGLE_APPLICATION_CREDENTIALS}
@@ -115,17 +146,18 @@ C:\gcloud\application_default_credentials.json
 ```
 
 If the above search successfully identifies a JSON file, it is parsed and
-ingested either as a service account token or an OAuth2 user credential. In the case of an OAuth2 credential, the requested `scopes` must also meet certain criteria. Note that this will NOT work for OAuth2 credentials initiated by gargle, which are stored on disk in `.rds` files. The storage of OAuth2 user credentials as JSON is unique to certain Google tools -- possibly just the [`gcloud` CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) -- and should probably be regarded as deprecated.  It is recommended to use ADC with a service account. If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+ingested either as a service account token, an external account configuration, or an OAuth2 user credential. In the case of an OAuth2 credential, the requested `scopes` must also meet certain criteria. Note that this will NOT work for OAuth2 credentials initiated by gargle, which are stored on disk in `.rds` files. The storage of OAuth2 user credentials as JSON is unique to certain Google tools -- possibly just the [`gcloud` CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) -- and should probably be regarded as deprecated.  It is recommended to use ADC with a service account or workload identity federation. If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
 
 The main takeaway lesson:
 
-  * You can make auth "just work" by storing a service account token JSON key file at one of the filepaths listed above. It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
+  * You can make auth "just work" by storing the JSON for a service account or an external account at one of the filepaths listed above. It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
   
-Again, remember that the JSON key file must be managed securely and should NOT live in a directory that syncs to the cloud.
+Again, remember that the JSON key file for a conventional service account must be managed securely and should NOT live in a directory that syncs to the cloud.
+The JSON configuration for an external account is not actually sensitive and this is one of the benefits of this flow, but it's only available in a very narrow set of circumstances.
 
 ## `credentials_gce()`
 
-The third function tried is `credentials_gce()`. Here's how a call to `token_fetch()` might work:
+The next function tried is `credentials_gce()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
@@ -150,7 +182,7 @@ credentials_gce(
 
 ## `credentials_byo_oauth2()`
   
-The fourth function tried is `credentials_byo_oauth2()`. Here's how a call to `token_fetch()` might work:
+The next function tried is `credentials_byo_oauth2()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(token = <TOKEN2.0>)
@@ -172,7 +204,7 @@ If `token` is not provided or if it doesn't satisfy these requirements, we fail 
 
 ## `credentials_user_oauth2()`
   
-The fifth and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+The next and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)

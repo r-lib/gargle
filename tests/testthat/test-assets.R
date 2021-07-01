@@ -3,12 +3,13 @@ test_that("default options", {
     gargle_oauth_cache = NULL,
     gargle_oob_default = NULL, httr_oob_default = NULL,
     gargle_oauth_email = NULL,
+    gargle_verbosity   = NULL,
     gargle_quiet       = NULL
   ))
-  expect_identical(gargle_oauth_cache(), NA)
+  expect_equal(gargle_oauth_cache(), NA)
   expect_false(gargle_oob_default())
   expect_null(gargle_oauth_email())
-  expect_true(gargle_quiet())
+  expect_equal(gargle_verbosity(), "info")
 })
 
 test_that("gargle_oob_default() consults gargle's option before httr's", {

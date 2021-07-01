@@ -1,5 +1,0 @@
-> response_process(resp)
-Error: Client error: (404) NOT_FOUND
-  * A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting.
-  * Requested entity was not found.
-

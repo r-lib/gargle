@@ -24,8 +24,8 @@ secret_pw_get <- function(package) {
   pw_name <- secret_pw_name(package)
   pw <- Sys.getenv(pw_name, "")
   if (identical(pw, "")) {
-    stop_secret(
-      message = glue("Envvar {sq(pw_name)} is not defined"),
+    gargle_abort_secret(
+      message = "Env var {.envvar {pw_name}} is not defined.",
       package = package
     )
   }
@@ -44,7 +44,7 @@ secret_write <- function(package, name, input) {
   if (is.character(input)) {
     input <- readBin(input, "raw", file.size(input))
   } else if (!is.raw(input)) {
-    stop_bad_class(input, c("character", "raw"))
+    gargle_abort_bad_class(input, c("character", "raw"))
   }
 
   destdir <- fs::path("inst", "secret")
@@ -75,7 +75,7 @@ secret_path <- function(package, name) {
 # Returns a raw vector
 secret_read <- function(package, name) {
   if (!secret_can_decrypt(package)) {
-    stop_secret(message = "Decryption not available", package = package)
+    gargle_abort_secret(message = "Decryption not available.", package = package)
   }
 
   path <- secret_path(package, name)
@@ -88,9 +88,9 @@ secret_read <- function(package, name) {
   )
 }
 
-stop_secret <- function(message, package) {
-  abort(
-    "gargle_error_secret",
+gargle_abort_secret <- function(message, package) {
+  gargle_abort(
+    class = "gargle_error_secret",
     message = message,
     package = package
   )

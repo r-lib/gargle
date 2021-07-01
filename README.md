@@ -7,11 +7,9 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
-[![R build
-status](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/r-lib/gargle/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/gargle?branch=master)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
 <!-- badges: end -->
 
 The goal of gargle is to take some of the agonizing pain out of working
@@ -29,19 +27,19 @@ APIs, who are prepared to navigate the details of low-level API access.
 
 gargle’s functionality falls into two main domains:
 
-  - **Auth.** The `token_fetch()` function calls a series of concrete
+-   **Auth.** The `token_fetch()` function calls a series of concrete
     credential-fetching functions to obtain a valid access token (or it
     quietly dies trying).
-      - This covers explicit service accounts, application default
-        credentials, Google Compute Engine, and the standard OAuth2
-        browser flow.
-      - gargle offers the `Gargle2.0` class, which extends
+    -   This covers explicit service accounts, application default
+        credentials, Google Compute Engine, (experimentally) workload
+        identity federation, and the standard OAuth2 browser flow.
+    -   gargle offers the `Gargle2.0` class, which extends
         `httr::Token2.0`. It is the default class for user OAuth 2.0
         credentials. There are two main differences from
         `httr::Token2.0`: greater emphasis on the user’s email
         (e.g. Google identity) and default token caching is at the user
         level.
-  - **Requests and responses**. A family of functions helps to prepare
+-   **Requests and responses**. A family of functions helps to prepare
     HTTP requests, (possibly with reference to an API spec derived from
     a Discovery Document), make requests, and process the response.
 
@@ -114,9 +112,9 @@ resp <- request_make(req)
 out <- response_process(resp)
 
 out <- out[["items"]][1:8]
-vapply(out, function(x) x[["family"]], character(1))
-#> [1] "Roboto"           "Open Sans"        "Lato"             "Montserrat"      
-#> [5] "Noto Sans JP"     "Source Sans Pro"  "Roboto Condensed" "Oswald"
+sort(vapply(out, function(x) x[["family"]], character(1)))
+#> [1] "Lato"             "Montserrat"       "Noto Sans JP"     "Open Sans"       
+#> [5] "Oswald"           "Roboto"           "Roboto Condensed" "Source Sans Pro"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor

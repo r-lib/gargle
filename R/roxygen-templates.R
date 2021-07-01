@@ -16,6 +16,14 @@
 #   PREFIX      = "drive",
 # )
 
+glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
+  # work around name collision of `.x` of map_chr() vs. of glue_data()
+  # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
+  # plus: I've only got compat-purrr here, so I have to write a function
+  gd <- function(line) glue_data(.x = .data, line, ..., .envir = .envir)
+  map_chr(lines, gd)
+}
+
 # PREFIX_auth() ----------------------------------------------------------
 
 PREFIX_auth_description <- function(.data = list(
@@ -30,17 +38,18 @@ PREFIX_auth_description <- function(.data = list(
     "",
     "By default, you are directed to a web browser, asked to sign in to your",
     "Google account, and to grant {PACKAGE} permission to operate on your",
-    "behalf with {PRODUCT}. By default, these user credentials are cached in a",
-    "folder below your home directory, `~/.R/gargle/gargle-oauth`, from where",
+    "behalf with {PRODUCT}. By default, with your permission, these user",
+    "credentials are cached in a folder below your home directory, from where",
     "they can be automatically refreshed, as necessary. Storage at the user",
     "level means the same token can be used across multiple projects and",
     "tokens are less likely to be synced to the cloud by accident.",
     "",
-    "If you are interacting with R from a web-based platform, like RStudio",
-    "Server or Cloud, you need to use a variant of this flow, known as",
-    "out-of-band auth (\"oob\"). If this does not happen automatically, you",
-    "can request it yourself with `use_oob = TRUE` or, more persistently, by",
-    "setting an option via `options(gargle_oob_default = TRUE)`."
+    "If you are interacting with R within a browser (applies to RStudio Server,",
+    "RStudio Workbench, and RStudio Cloud), you need a variant of this flow,",
+    "known as out-of-band auth (\"oob\"). If this does not happen",
+    "automatically, you can request it yourself with `use_oob = TRUE` or,",
+    "more persistently, by setting an option via",
+    "`options(gargle_oob_default = TRUE)`."
   ), .data = .data)
 }
 
@@ -58,11 +67,16 @@ PREFIX_auth_details <- function(.data = list(
     "    are multiple cached tokens, this can clarify which one to use. It can",
     "    also force {PACKAGE} to switch from one identity to another. If",
     "    there's no cached token for the email, this triggers a return to the",
-    "    browser to choose the identity and give consent.",
-    "  * Use a service account token.",
+    "    browser to choose the identity and give consent. You can specify just",
+    "    the domain by using a glob pattern. This means that a script",
+    "    containing `email = \"*@example.com\"` can be run without further",
+    "    tweaks on the machine of either `alice@example.com` or",
+    "    `bob@example.com`.",
+    "  * Use a service account token or workload identity federation.",
     "  * Bring their own [Token2.0][httr::Token-class].",
     "  * Specify non-default behavior re: token caching and out-of-bound",
     "    authentication.",
+    "  * Customize scopes.",
     "",
     "For details on the many ways to find a token, see",
     "[gargle::token_fetch()]. For deeper control over auth, use",
@@ -73,6 +87,7 @@ PREFIX_auth_details <- function(.data = list(
 
 PREFIX_auth_params <- function() {c(
   "@inheritParams gargle::credentials_service_account",
+  "@inheritParams gargle::credentials_external_account",
   "@inheritParams gargle::credentials_app_default",
   "@inheritParams gargle::credentials_gce",
   "@inheritParams gargle::credentials_byo_oauth2",

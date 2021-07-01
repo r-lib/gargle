@@ -1,20 +1,18 @@
 test_that("request_develop() errors for unrecognized parameters", {
-  expect_error(
+  expect_snapshot_error(
     request_develop(
       endpoint = list(parameters = list(a = list())),
       params = list(b = list(), c = list())
-    ),
-    class = "gargle_error_bad_params"
+    )
   )
 })
 
 test_that("request_develop() errors if required parameter is missing", {
-  expect_error(
+  expect_snapshot_error(
     request_develop(
       endpoint = list(parameters = list(a = list(required = TRUE))),
       params = list(b = list())
-    ),
-    class = "gargle_error_bad_params"
+    )
   )
 })
 
@@ -28,8 +26,8 @@ test_that("request_develop() separates body params from query", {
     ),
     params = list(a = list(), b = list())
   )
-  expect_identical(req$body, list(a = list()))
-  expect_identical(req$params, list(b = list()))
+  expect_equal(req$body, list(a = list()))
+  expect_equal(req$params, list(b = list()))
 })
 
 # https://github.com/r-lib/gargle/issues/122
@@ -46,8 +44,8 @@ test_that("request_develop() copes with a param that goes to path and body", {
     ),
     params = list(two_places = list(), just_path = list(), just_body = list())
   )
-  expect_identical(req$params, list(two_places = list(), just_path = list()))
-  expect_identical(req$body,   list(two_places = list(), just_body = list()))
+  expect_equal(req$params, list(two_places = list(), just_path = list()))
+  expect_equal(req$body,   list(two_places = list(), just_body = list()))
 })
 
 test_that("request_build() does substitution and puts remainder in query", {
@@ -55,7 +53,7 @@ test_that("request_build() does substitution and puts remainder in query", {
     path = "/{a}/xx/{b}",
     params = list(a = "A", b = "B", c = "C")
   )
-  expect_identical(req$url, "https://www.googleapis.com/A/xx/B?c=C")
+  expect_equal(req$url, "https://www.googleapis.com/A/xx/B?c=C")
 })
 
 test_that("request_build() suppresses API key if token is non-NULL", {

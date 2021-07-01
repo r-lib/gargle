@@ -26,3 +26,4 @@ vignette for more details.
 gargle_app()
 }
 }
+\keyword{internal}

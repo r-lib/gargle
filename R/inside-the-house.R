@@ -5,22 +5,24 @@ from_permitted_package <- function(env = parent.frame()) {
   }
 
   nm <- getNamespaceName(env)
-  ui_line("attempt from: ", nm)
+  gargle_debug("attempt to access internal gargle data from: {.pkg {nm}}")
   nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 
 check_permitted_package <- function(env = parent.frame()) {
   if (!from_permitted_package(env)) {
-    msg <- paste(
-      "Attempt to directly access a credential that can only be used within tidyverse packages.",
+    msg <- c(
+      "Attempt to directly access a credential that can only be used within \\
+       tidyverse packages.",
       "This error may mean that you need to:",
-      "  * Create a new project on Google Cloud Platform",
-      "  * Enable relevant APIs for your project",
-      "  * Create an API key and/or an OAuth client ID",
-      "  * Configure your requests to use your API key and OAuth client ID",
-      sep = "\n"
+      "*" = "Create a new project on Google Cloud Platform.",
+      "*" = "Enable relevant APIs for your project.",
+      "*" = "Create an API key and/or an OAuth client ID.",
+      "*" = "Configure your requests to use your API key and OAuth client ID.",
+      "i" = "See gargle's \"How to get your own API credentials\" vignette for more details:",
+      "i" = "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}"
     )
-    abort(msg)
+    gargle_abort(msg)
   }
   invisible(env)
 }

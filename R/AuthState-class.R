@@ -104,12 +104,12 @@ AuthState <- R6::R6Class("AuthState", list(
                         api_key = NULL,
                         auth_active = TRUE,
                         cred = NULL) {
-    ui_line("initializing AuthState")
+    gargle_debug("initializing AuthState")
     stopifnot(
-      is_string(package),
+      is_scalar_character(package),
       is.null(app) || is.oauth_app(app),
       is.null(api_key) || is_string(api_key),
-      isTRUE(auth_active) || isFALSE(auth_active),
+      is_bool(auth_active),
       is.null(cred) || inherits(cred, "Token2.0")
     )
     self$package     <- package
@@ -119,17 +119,22 @@ AuthState <- R6::R6Class("AuthState", list(
     self$cred        <- cred
     self
   },
-  #' @description Print an AuthState
+  #' @description Format an AuthState
   #' @param ... Not used.
-  print = function(...) {
-    withr::local_options(list(gargle_quiet = FALSE))
-    ui_line("<AuthState (via gargle)>")
-    ui_line("         <package> ", self$package)
-    ui_line("             <app> ", self$app$appname)
-    ui_line("         <api_key> ", obfuscate(self$api_key))
-    ui_line("     <auth_active> ", self$auth_active)
-    ui_line("     <credentials> ", class(self$cred)[[1]])
-    ui_line("---")
+  format = function(...) {
+    x <- list(
+      package     = cli_this("{.pkg {self$package}}"),
+      app         = self$app$appname,
+      api_key     = obfuscate(self$api_key),
+      auth_active = self$auth_active,
+      credentials = cli_this("{.cls {class(self$cred)[[1]]}}")
+    )
+    c(
+      cli::cli_format_method(
+        cli::cli_h1("<AuthState (via {.pkg gargle})>")
+      ),
+      glue("{fr(names(x))}: {fl(x)}")
+    )
   },
   #' @description Set the OAuth app
   set_app = function(app) {

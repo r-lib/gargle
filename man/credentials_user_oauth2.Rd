@@ -13,14 +13,14 @@ credentials_user_oauth2(
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
-at \url{https://developers.google.com/identity/protocols/googlescopes}.
+at \url{https://developers.google.com/identity/protocols/oauth2/scopes}.
 
 For certain token flows, the
 \code{"https://www.googleapis.com/auth/userinfo.email"} scope is unconditionally
 included. This grants permission to retrieve the email address associated
 with a token; gargle uses this to index cached OAuth tokens. This grants no
-permission to view or send email. It is considered a low value scope and
-does not appear on the consent screen.}
+permission to view or send email and is generally considered a low-value
+scope.}
 
 \item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
@@ -37,8 +37,10 @@ Note, however, that the email associated with a token when it's cached is
 always determined from the token itself, never from this argument. Use \code{NA}
 or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
 \code{TRUE} to allow email auto-discovery, if exactly one matching token is
-found in the cache. Defaults to the option named "gargle_oauth_email",
-retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
+found in the cache. Specify just the domain with a glob pattern, e.g.
+\code{"*@example.com"}, to create code that "just works" for both
+\code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
+"gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
     \item{\code{use_oob}}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
 \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
@@ -62,7 +64,8 @@ if it's compatible with the user's request in this sense:
 \itemize{
 \item OAuth app must be same.
 \item Scopes must be same.
-\item Email, if provided, must be same.
+\item Email, if provided, must be same. If specified email is a glob pattern
+like \code{"*@example.com"}, email matching is done at the domain level.
 }
 
 gargle is very conservative about using OAuth tokens discovered in the user's
@@ -70,7 +73,7 @@ cache and will generally seek interactive confirmation. Therefore, in a
 non-interactive setting, it's important to explicitly specify the \code{"email"}
 of the target account or to explicitly authorize automatic discovery. See
 \code{\link[=gargle2.0_token]{gargle2.0_token()}}, which this function wraps, for more. Non-interactive use
-also suggests it might be time to use a \link[=credentials_service_account]{service account token}.
+also suggests it might be time to use a \link[=credentials_service_account]{service account token} or \link[=credentials_external_account]{workload identity federation}.
 }
 \examples{
 \dontrun{
@@ -91,6 +94,7 @@ credentials_user_oauth2(scopes, app)
 Other credential functions: 
 \code{\link{credentials_app_default}()},
 \code{\link{credentials_byo_oauth2}()},
+\code{\link{credentials_external_account}()},
 \code{\link{credentials_gce}()},
 \code{\link{credentials_service_account}()},
 \code{\link{token_fetch}()}

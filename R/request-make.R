@@ -47,7 +47,7 @@ request_make <- function(x,
     PATCH  = httr::PATCH,
     PUT    = httr::PUT,
     DELETE = httr::DELETE,
-    abort(glue("Not a recognized HTTP method: {bt(x$method)}"))
+    gargle_abort("Not a recognized HTTP method: {.code {x$method}}.")
   )
   method(
     url = x$url,

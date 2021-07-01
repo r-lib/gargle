@@ -8,7 +8,7 @@
 #' @noRd
 #' @examples
 #' gargle_oauth_endpoint()
-gargle_outh_endpoint <- function() {
+gargle_oauth_endpoint <- function() {
   httr::oauth_endpoint(
     base_url = "https://accounts.google.com/o/oauth2",
     authorize = "auth",

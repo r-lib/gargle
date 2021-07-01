@@ -39,7 +39,7 @@ We present several ways to achieve this, basically in order of preference.
 
 First, a word about deployed environments. If this doesn't apply to you, skip this section.
 
-Let's identify a specific type of project: it is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [RStudio Connect](https://www.rstudio.com/products/connect/) or [shinyapps.io](https://www.shinyapps.io). In this context, it may make sense to depart from gargle's default behaviour, which is to store tokens outside the project, and to embed them in the project instead. An example at the end of this vignette demonstrates the use of a project-level OAuth cache. A service account token could also be stored in the project. When you embed tokens in the project and deploy, remember, that they are no more secure or hidden than the other source files in the project.
+Let's identify a specific type of project: it is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [RStudio Connect](https://rstudio.com/products/connect//) or [shinyapps.io](https://www.shinyapps.io). In this context, it may make sense to depart from gargle's default behaviour, which is to store tokens outside the project, and to embed them in the project instead. An example at the end of this vignette demonstrates the use of a project-level OAuth cache. A service account token could also be stored in the project. When you embed tokens in the project and deploy, remember, that they are no more secure or hidden than the other source files in the project.
 
 The vignette [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html) describes a method for embedding an encrypted token in the project, which is an extra level of care needed to work with, e.g., continuous integration services, such as GitHub Actions, Travis-CI, or AppVeyor.
 
@@ -50,14 +50,14 @@ TL;DR is that you need to successfully authenticate *once* in an interactive ses
 ```{r}
 # Approach #1: use an option.
 # Either specify the user:
-options(gargle_oauth_email = "jenny@example.org")
+options(gargle_oauth_email = "jenny@example.com")
 # Or, if you don't use multiple Google identities, you can be more vague:
 options(gargle_oauth_email = TRUE)
 
 # Approach #2: call PACKAGE_auth() proactively.
 library(googledrive)
 # Either specify the user:
-drive_auth(email = "jenny@example.org")
+drive_auth(email = "jenny@example.com")
 # Or, if you don't use multiple Google identities, you can be more vague:
 drive_auth(email = TRUE)
 ```
@@ -82,6 +82,9 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 
 If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
 
+If the code is running on AWS, a special auth flow is available called workload identity federation.
+Learn more in the documentation for `credentials_external_account()`.
+
 For certain APIs, service accounts are inherently awkward, because you often want to do things *on behalf of a specific user*. Gmail is a good example. If you are sending email programmatically, there's a decent chance you want to send it as yourself (or from some other specific email account) instead of from `zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com`. This is described as "impersonation", which should tip you off that Google does not exactly encourage this workflow. Some details:
 
 * This requires "delegating domain-wide authority " to the service account.
@@ -101,21 +104,23 @@ For certain APIs, service accounts are inherently awkward, because you often wan
 
 If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
 
-## Rig a service account token as Application Default Credentials
+## Rig a service or external account for use with Application Default Credentials
 
 Wrapper packages that use `gargle::token_fetch()` in the recommended way have access to the token search strategy known as **Application Default Credentials**.
 
-You need to put your service token in a very specific location or, alternatively, record the location of your service token in a specific environment variable.
+You need to put the JSON corresponding to your service or external account in a very specific location or, alternatively, record the location of this JSON file in a specific environment variable.
 
 Full details are in the [`credentials_app_default()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
 
 If you have your token rigged properly, you **do not** need to do anything else, i.e. you do not need to call `PACKAGE_auth()` explicitly. Your token should just get discovered upon first need.
 
-For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
 ```{r}
-options(gargle_quiet = FALSE)
+options(gargle_verbosity = "debug")
 ```
+
+withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 ## Provide an OAuth token directly
 
@@ -170,8 +175,14 @@ You have two choices to make:
   * Set the `gargle_oauth_email` option or call `PACKAGE_auth(email = ...)`.
     - The option-based approach can be implemented in each `.Rmd` or `.R` or
       in a user-level or project level `.Rprofile` startup file.
-  * Authorize the use of the "matching token", in general, (email is `TRUE`) or
-    give a specific identity (email is an actual address).
+  * Authorize the use of the "matching token":
+    - `email = TRUE` works if we're only going to find, at most, 1 token, i.e.
+      you always auth with the same identity
+    - `email = "jane@example.com"` pre-authorizes use of a token associated with
+      a specific identity
+    - `email = "*@example.com"` pre-authorizes use of a token associated with an
+      identity from a specific domain; good for code that might be executed on
+      the machines of both `alice@example.com` and `bob@example.com`
 
 This sets an option that allows gargle to use cached tokens whenever there's a unique match:
 
@@ -182,7 +193,13 @@ options(gargle_oauth_email = TRUE)
 This sets an option to use tokens associated with a specific email address:
 
 ```{r}
-options(gargle_oauth_email = "jenny@example.org")
+options(gargle_oauth_email = "jenny@example.com")
+```
+
+This sets an option to use tokens associated with an email address with a specific domain:
+
+```{r}
+options(gargle_oauth_email = "*@example.com")
 ```
 
 This gets a token *right now* and allows the use of a matching token, using googledrive as an example:
@@ -194,7 +211,13 @@ drive_auth(email = TRUE)
 This gets a token *right now*, for the user with a specific email address:
 
 ```{r}
-drive_auth(email = "jenny@example.org")
+drive_auth(email = "jenny@example.com")
+```
+
+This gets a token *right now*, first checking the cache for a token associated with a specific domain:
+
+```{r}
+drive_auth(email = "*@example.com")
 ```
 
 ### Project-level OAuth cache
@@ -255,7 +278,7 @@ library(googledrive)
 
 options(
   gargle_oauth_cache = ".secrets",
-  gargle_oauth_email = "jenny@example.org"
+  gargle_oauth_email = "jenny@example.com"
 )
 
 # now use googledrive with no need for explicit auth
@@ -270,15 +293,15 @@ library(googledrive)
 drive_auth(cache = ".secrets", email = TRUE)
 
 # now use googledrive with no need for explicit auth
-drive_fine(n_max = 5)
+drive_find(n_max = 5)
 ```
 
-Here's one last variation that applicable when the local cache could contain multiple tokens:
+Here's one last variation that's applicable when the local cache could contain multiple tokens:
 
 ```{r}
 library(googledrive)
 
-drive_auth(cache = ".secrets", email = "jenny@example.org")
+drive_auth(cache = ".secrets", email = "jenny@example.com")
 
 # now use googledrive with no need for explicit auth
 drive_auth(n_max = 5)
@@ -286,10 +309,12 @@ drive_auth(n_max = 5)
 
 Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
 
-For troubleshooting purposes, you can temporarily toggle a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
 ```{r}
-options(gargle_quiet = FALSE)
+options(gargle_verbosity = "debug")
 ```
+
+withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 For a cached token to be considered a "match", it must match the current request with respect to user's email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.

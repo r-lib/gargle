@@ -42,7 +42,7 @@
 field_mask <- function(x) {
   stopifnot(is_dictionaryish(x))
   explicit_mask <- imap(x, field_mask_impl_)
-  glue_collapse(unname(unlist(explicit_mask)), ",")
+  as.character(glue_collapse(unname(unlist(explicit_mask)), ","))
 }
 
 field_mask_impl_ <- function(x, y = "") {

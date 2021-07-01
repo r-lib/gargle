@@ -15,11 +15,13 @@ test_that("cache_establish() insists on sensible input", {
   )
 })
 
-test_that("`cache = TRUE` withr::defers to default cache path", {
+test_that("`cache = TRUE` uses default cache path", {
   with_mock(
     ## we don't want to actually initialize a cache
-    `gargle:::cache_create` = function(path) NULL,
-    expect_identical(cache_establish(TRUE), gargle_default_oauth_cache_path())
+    cache_create = function(path) NULL,
+    {
+      expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
+    }
   )
 })
 
@@ -29,9 +31,13 @@ test_that("`cache = FALSE` does nothing", {
 
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
   with_mock(
-    `gargle:::gargle_default_oauth_cache_path` = function() file_temp(),
-    `gargle:::cache_allowed` = function(path) FALSE,
-    expect_identical(cache_establish(NA), cache_establish(FALSE))
+    # we want no existing cache to be found, be it current or legacy
+    gargle_default_oauth_cache_path = function() file_temp(),
+    gargle_legacy_default_oauth_cache_path = function() file_temp(),
+    cache_allowed = function(path) FALSE,
+    {
+      expect_equal(cache_establish(NA), cache_establish(FALSE))
+    }
   )
 })
 
@@ -46,6 +52,8 @@ test_that("`cache = <filepath>` creates cache folder, recursively", {
 test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   tmpproj <- file_temp()
   withr::defer(dir_delete(tmpproj))
+  local_gargle_verbosity("silent")
+
   dir_create(tmpproj)
   writeLines("", path(tmpproj, "DESCRIPTION"))
   writeLines("", path(tmpproj, ".gitignore"))
@@ -58,13 +66,16 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
   )
 })
 
-test_that("default is to consult and write the oauth cache option", {
+test_that("default is to consult and set the oauth cache option", {
   withr::with_options(
     list(gargle_oauth_cache = NA),
     with_mock(
-      `gargle:::gargle_default_oauth_cache_path` = function() file_temp(),
-      `gargle:::cache_allowed` = function(path) FALSE, {
-        expect_identical(getOption("gargle_oauth_cache"), NA)
+      # we want no existing cache to be found, be it current or legacy
+      gargle_default_oauth_cache_path = function() file_temp(),
+      gargle_legacy_default_oauth_cache_path = function() file_temp(),
+      cache_allowed = function(path) FALSE,
+      {
+        expect_equal(getOption("gargle_oauth_cache"), NA)
         cache_establish()
         expect_false(getOption("gargle_oauth_cache"))
       }
@@ -72,10 +83,43 @@ test_that("default is to consult and write the oauth cache option", {
   )
 })
 
-# cache_allowed() ---------------------------------------------------------
+# cache_allowed() --------------------------------------------------------------
 
 test_that("cache_allowed() returns false when non-interactive (or testing)", {
   expect_false(cache_allowed(getwd()))
+})
+
+# cache_clean() --------------------------------------------------------------
+
+test_that("cache_clean() works", {
+  cache_folder <- path_temp("cache_clean-test")
+  withr::defer(dir_delete(cache_folder))
+
+  fauxen_a <- gargle2.0_token(
+    email = "a@example.org",
+    app = httr::oauth_app("apple", key = "KEY", secret = "SECRET"),
+    credentials = list(a = 1),
+    cache = cache_folder
+  )
+  fauxen_b <- gargle2.0_token(
+    email = "b@example.org",
+    app = httr::oauth_app("banana", key = "KEY", secret = "SECRET"),
+    credentials = list(b = 1),
+    cache = cache_folder
+  )
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(nrow(dat), 2)
+
+  expect_snapshot(
+    cache_clean(cache_folder, "apple")
+  )
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(dat$app, "banana")
+
+  local_gargle_verbosity("silent")
+  cache_clean(cache_folder, "banana")
+  dat <- gargle_oauth_dat(cache_folder)
+  expect_equal(nrow(dat), 0)
 })
 
 # validate_token_list() ------------------------------------------------------
@@ -97,10 +141,16 @@ test_that("cache_load() repairs tokens stored with names != their hash", {
     dir_ls(cache_folder),
     path(cache_folder, c("abc123_c@example.org", "def456_d@example.org"))
   )
-  withr::local_options(list(gargle_quiet = FALSE))
-  expect_info(
+  local_gargle_verbosity("debug")
+
+  # bit of fiddliness to deal with hashes that can vary by OS
+  out <- capture.output(
     tokens <- cache_load(cache_folder),
-    "do not match their hash"
+    type = "message"
+  )
+  out <- sub("[[:xdigit:]]+(?=.+\\(hash\\)$)", "{TOKEN_HASH}", out, perl = TRUE)
+  expect_snapshot(
+    writeLines(out)
   )
   expect_gargle2.0_token(tokens[[1]], fauxen_a)
   expect_gargle2.0_token(tokens[[2]], fauxen_b)
@@ -134,7 +184,7 @@ test_that("token_into_cache(), token_from_cache() roundtrip", {
   )
 
   expect_gargle2.0_token(token_in, token_out)
-  expect_identical(token_out$credentials, list(a = 1))
+  expect_equal(token_out$credentials, list(a = 1))
 })
 
 # token_match() ----------------------------------------
@@ -146,11 +196,11 @@ test_that("token_match() returns the full match", {
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "def_b@example.com")
 
-  expect_identical(
+  expect_equal(
     one_existing,
     token_match(one_existing, one_existing)
   )
-  expect_identical(
+  expect_equal(
     one_existing,
     token_match(one_existing, two_existing)
   )
@@ -170,50 +220,46 @@ test_that("token_match() returns NULL if no email and no short hash match", {
   expect_null(token_match("abc_*", "def_a@example.org"))
 })
 
+test_that("token_match() finds a match based on domain", {
+  one_match_of_two <- c("abc_jane@example.org", "abc_jane@gmail.com")
+  expect_snapshot(
+    m <- token_match("abc_*@example.org", one_match_of_two)
+  )
+  expect_equal(m, one_match_of_two[[1]])
+})
+
 test_that("token_match() scolds but returns short hash match when non-interactive", {
-  withr::local_options(list(rlang_interactive = FALSE))
+  local_interactive(FALSE)
 
   one_existing <- "abc_a@example.com"
   two_existing <- c(one_existing, "abc_b@example.com")
 
-  expect_info(
-    m <- token_match("abc_", one_existing),
-    "modify your code or options"
+  expect_snapshot(
+    m <- token_match("abc_", one_existing)
   )
-  expect_identical(m, one_existing)
+  expect_equal(m, one_existing)
 
-  expect_info(
-    m <- token_match("abc_*", one_existing),
-    "modify your code or options"
+  expect_snapshot(
+    m <- token_match("abc_*", one_existing)
   )
-  expect_identical(m, one_existing)
+  expect_equal(m, one_existing)
 
-  expect_info(
-    m <- token_match("abc_", two_existing),
-    "first will be used"
+  expect_snapshot(
+    m <- token_match("abc_", two_existing)
   )
-  expect_identical(m, one_existing)
+  expect_equal(m, one_existing)
 
-  expect_info(
-    m <- token_match("abc_*", two_existing),
-    "first will be used"
+  expect_snapshot(
+    m <- token_match("abc_*", two_existing)
   )
-  expect_identical(m, one_existing)
+  expect_equal(m, one_existing)
 })
 # 1 short hash match, interactive
 # >1 short hash match, interactive
 
 # situation report ----------------------------------------------------------
 
-test_that("gargle_oauth_sitrep() does not initiate cache establishment", {
-  expect_info(
-    cache <- gargle_oauth_sitrep(cache = FALSE),
-    "No"
-  )
-  expect_null(cache)
-})
-
-test_that("gargle_oauth_sitrep() reports on specified cache", {
+test_that("gargle_oauth_dat() reports on specified cache", {
   tmp_cache <- file_temp()
   withr::defer(dir_delete(tmp_cache))
 
@@ -228,25 +274,100 @@ test_that("gargle_oauth_sitrep() reports on specified cache", {
     cache = tmp_cache
   )
 
-  expect_info(
-    out <- gargle_oauth_sitrep(tmp_cache),
-    "2 tokens found"
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "gargle_oauth_dat")
+  expect_equal(nrow(dat), 2)
+  expect_equal(dat$email, c("a@example.org", "b@example.org"))
+})
+
+test_that("gargle_oauth_dat() is OK with nonexistent or empty cache", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  columns <- c("email", "app", "scopes", "hash", "filepath")
+
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "gargle_oauth_dat")
+  expect_equal(nrow(dat), 0)
+  expect_setequal(names(dat), columns)
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
   )
-  expect_is(out, "data.frame")
-  expect_identical(nrow(out), 2L)
+  file_delete(dir_ls(tmp_cache))
+
+  dat <- gargle_oauth_dat(tmp_cache)
+  expect_s3_class(dat, "gargle_oauth_dat")
+  expect_equal(nrow(dat), 0)
+  expect_setequal(names(dat), columns)
+})
+
+test_that("gargle_oauth_sitrep() works with a cache", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
+  )
+  gargle2.0_token(
+    email = "b@example.org",
+    credentials = list(b = 2),
+    cache = tmp_cache
+  )
+
+  # bit of fiddliness to remove the volatile path and the hashes that can vary
+  # by OS
+  out <- capture.output(
+    gargle_oauth_sitrep(tmp_cache),
+    type = "message"
+  )
+  out <- sub(tmp_cache, "{path to gargle oauth cache}", out, fixed = TRUE)
+  out <- sub("[[:xdigit:]]{7}[.]{3}", "{hash...}", out)
+  expect_snapshot(
+    writeLines(out)
+  )
+})
+
+test_that("gargle_oauth_sitrep() consults the option for cache location", {
+  tmp_cache <- file_temp()
+  withr::defer(dir_delete(tmp_cache))
+
+  gargle2.0_token(
+    email = "a@example.org",
+    credentials = list(a = 1),
+    cache = tmp_cache
+  )
+
+  withr::local_options(list(gargle_oauth_cache = tmp_cache))
+  local_gargle_verbosity("debug")
+  out <- capture.output(
+    gargle_oauth_sitrep(),
+    type = "message"
+  )
+  # bit of fiddliness to remove the volatile path and the hashes that can vary
+  # by OS
+  out <- sub(tmp_cache, "{path to gargle oauth cache}", out, fixed = TRUE)
+  out <- sub("[[:xdigit:]]{7}[.]{3}", "{hash...}", out)
+  expect_snapshot(
+    writeLines(out)
+  )
 })
 
 # helpers -----------------------------------------------------------
 
 test_that("match2() works", {
-  expect_identical(match2("a", c("a", "b", "a")), c(1L, 3L))
-  expect_identical(match2("b", c("a", "b", "a")), 2L)
+  expect_equal(match2("a", c("a", "b", "a")), c(1L, 3L))
+  expect_equal(match2("b", c("a", "b", "a")), 2L)
   expect_true(is.na(match2("c", c("a", "b", "a"))))
 })
 
 test_that("mask_email() works", {
   hash <- "2a46e6750476326f7085ebdab4ad103d"
-  expect_identical(
+  expect_equal(
     mask_email(c(
       "2a46e6750476326f7085ebdab4ad103d_jenny@example.com",
       "2a46e6750476326f7085ebdab4ad103d_NA",
@@ -258,13 +379,13 @@ test_that("mask_email() works", {
 })
 
 test_that("extract_email() works", {
-  expect_identical(extract_email("abc123_a"), "a")
-  expect_identical(extract_email("abc123_b@example.com"), "b@example.com")
-  expect_identical(extract_email("abc123_"), "")
-  expect_identical(extract_email("abc123_FIRST_LAST@a.com"), "FIRST_LAST@a.com")
+  expect_equal(extract_email("abc123_a"), "a")
+  expect_equal(extract_email("abc123_b@example.com"), "b@example.com")
+  expect_equal(extract_email("abc123_"), "")
+  expect_equal(extract_email("abc123_FIRST_LAST@a.com"), "FIRST_LAST@a.com")
 })
 
 test_that("keep_hash_paths() works", {
   x <- c("aa_bb_cc", "a.md", "b.rds", "c.txt", "dd123_e@example.org")
-  expect_identical(keep_hash_paths(x), x[c(1, 5)])
+  expect_equal(keep_hash_paths(x), x[c(1, 5)])
 })

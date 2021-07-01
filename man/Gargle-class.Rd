@@ -41,6 +41,7 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-new}{\code{Gargle2.0$new()}}
+\item \href{#method-format}{\code{Gargle2.0$format()}}
 \item \href{#method-print}{\code{Gargle2.0$print()}}
 \item \href{#method-hash}{\code{Gargle2.0$hash()}}
 \item \href{#method-cache}{\code{Gargle2.0$cache()}}
@@ -99,6 +100,23 @@ actively use in gargle: \code{scope}, \code{use_oob}. Most we do not:
 }
 \subsection{Returns}{
 A Gargle2.0 token.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-format"></a>}}
+\if{latex}{\out{\hypertarget{method-format}{}}}
+\subsection{Method \code{format()}}{
+Format a Gargle2.0 token
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$format(...)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Not used.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

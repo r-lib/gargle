@@ -269,6 +269,7 @@ Functions useful for these conversions:
   * `writeBin()` / `readBin()`
   * `charToRaw()` / `rawToChar()`
   * `sodium::data_encrypt()` / `sodium::data_decrypt`
+  * `sodium::bin2hex()` / `sodium::hex2bin()`
 
 ## Resources
 

@@ -42,17 +42,17 @@
 #' credentials_byo_oauth2(token = my_token)
 #' }
 credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
-  ui_line("trying credentials_byo_oauth()")
+  gargle_debug("trying {.fun credentials_byo_oauth}")
   if (inherits(token, "request")) {
     token <- token$auth_token
   }
   stopifnot(inherits(token, "Token2.0"))
 
   if (!is.null(scopes)) {
-    ui_line(
-      "`scopes` cannot be specified when user brings their own OAuth token; ",
-      "`scopes` are already implicit in the token"
-    )
+    gargle_debug(c(
+      "{.arg scopes} cannot be specified when user brings their own OAuth token",
+      "{.arg scopes} are already implicit in the token"
+    ))
   }
 
   check_endpoint(token$endpoint)
@@ -67,7 +67,7 @@ check_endpoint <- function(endpoint) {
   urls <- endpoint[c("authorize", "access", "validate", "revoke")]
   urls_ok <- all(grepl("google", urls))
   if (!urls_ok) {
-    abort("token doesn't use Google's OAuth endpoint")
+    gargle_abort("Token doesn't use Google's OAuth endpoint.")
   }
   endpoint
 }

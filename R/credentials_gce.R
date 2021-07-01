@@ -16,7 +16,7 @@
 #' }
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
-  ui_line("trying credentials_gce()")
+  gargle_debug("trying {.fun credentials_gce}")
   if (!detect_gce() || is.null(scopes)) {
     return(NULL)
   }
@@ -32,7 +32,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     return(NULL)
   }
 
-  gce_token <- fetch_access_token(scopes, service_account = service_account)
+  gce_token <- fetch_gce_access_token(scopes, service_account = service_account)
 
   params <- list(
     as_header = TRUE,
@@ -63,6 +63,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 #'
 #' @param ... Not used.
 #'
+#' @keywords internal
 #' @export
 GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   #' @description Print token
@@ -86,7 +87,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     # The access_token can only include the token itself, not the expiration and
     # type. Otherwise, the httr code will create extra header lines that bust
     # the POST request:
-    gce_token <- fetch_access_token(
+    gce_token <- fetch_gce_access_token(
       self$params$scope,
       service_account = self$params$service_account
     )
@@ -122,12 +123,15 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
 
   if (stop_on_error) {
     if (inherits(response, "try-error")) {
-      stop(paste0("Error fetching GCE metadata: ", attr(response, "condition")$message))
+      gargle_abort("
+        Error fetching GCE metadata: {attr(response, 'condition')$message}")
     } else if (httr::http_error(response)) {
-      stop(paste0("Error fetching GCE metadata: ", httr::http_status(response)$message))
+      gargle_abort("
+        Error fetching GCE metadata: {httr::http_status(response)$message}")
     }
     if (response$headers$`metadata-flavor` != "Google") {
-      stop(paste0("Error fetching GCE metadata: missing/invalid metadata-flavor header"))
+      gargle_abort("
+        Error fetching GCE metadata: missing/invalid metadata-flavor header")
     }
   }
   response
@@ -143,18 +147,19 @@ detect_gce <- function() {
 # @return A list of service account names.
 list_service_accounts <- function() {
   accounts <- gce_metadata_request("instance/service-accounts")
-  ct <- httr::content(accounts, as = "text", encoding = "utf8")
+  ct <- httr::content(accounts, as = "text", encoding = "UTF-8")
   strsplit(ct, split = "/\n", fixed = TRUE)[[1]]
 }
 
 get_instance_scopes <- function(service_account) {
   path <- glue("instance/service-accounts/{service_account}/scopes")
   scopes <- gce_metadata_request(path)
-  ct <- httr::content(scopes, as = "text", encoding = "utf8")
+  ct <- httr::content(scopes, as = "text", encoding = "UTF-8")
   strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
-fetch_access_token <- function(scopes, service_account) {
+# TODO: why isn't scopes used here at all?
+fetch_gce_access_token <- function(scopes, service_account) {
   path <- glue("instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)
   httr::content(response, as = "parsed", type = "application/json")
