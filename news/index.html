@@ -174,6 +174,11 @@
 <p>The <code>email</code> argument of <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> accepts domain-only email specification via a glob pattern. The goal is to make it possible for code like <code>PKG_auth(email = "*@example.com")</code> to identify a suitable cached token when executed on the machine of either <code>alice@example.com</code> or <code>bob@example.com</code>.</p>
 <p>gargle now throws errors via <code><a href="https://cli.r-lib.org/reference/cli_abort.html">cli::cli_abort()</a></code>, which means error messages now have the same styling as informational messages.</p>
 </div>
+<div id="dependency-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependency-changes" class="anchor"></a>Dependency changes</h2>
+<p>aws.ec2metadata and aws.signature are new in Suggests.</p>
+</div>
 </div>
     <div id="gargle-110" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.0">
@@ -235,9 +240,9 @@
 <p><code>google.rpc.ErrorInfo</code> errors are explicitly handled now, resulting in a more informative error message.</p>
 <p><code><a href="../reference/request_retry.html">request_retry()</a></code> is better able to detect when the per-user quota has been exhausted (vs. the per-project quota), resulting in a more informed choice of backoff.</p>
 </div>
-<div id="dependency-changes" class="section level2">
+<div id="dependency-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#dependency-changes" class="anchor"></a>Dependency changes</h2>
+<a href="#dependency-changes-1" class="anchor"></a>Dependency changes</h2>
 <p>cli is new in Imports.</p>
 <p>rstudioapi is new in Imports.</p>
 <p>rappdirs is new in Imports.</p>
