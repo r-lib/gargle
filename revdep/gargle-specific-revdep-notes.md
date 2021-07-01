@@ -29,6 +29,11 @@ Wow, no problems at all. :)
 ```
 
 But you really should dig into these and figure out what's up.
+Do this to get more details dumped into `problems.md`:
+
+```
+revdepcheck::revdep_report(all = TRUE)
+```
 
 ### bigrquery
 
@@ -74,6 +79,12 @@ There's a new "look" on the second and third runs that I suspect is due to detri
       Error: Test failures
       Execution halted
 ```
+
+### No auth
+
+For all 3 of these files, I did revdepchecks with the necessary env vars set, because I genuinely wanted to test them with auth.
+
+But CRAN will not have tokens, so I also reran revdepchecks with no env vars.
 
 ## Notes from revdepchecks 2020-05-05 for v0.5.0
 

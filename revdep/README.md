@@ -44,7 +44,7 @@
 |[daiR](problems.md#dair)                   |0.9.0   |      |        |1    |
 |gmailr                                     |1.0.0   |      |        |     |
 |googleAuthR                                |1.4.0   |      |        |     |
-|[googledrive](problems.md#googledrive)     |1.0.1   |1     |        |1    |
-|[googlesheets4](problems.md#googlesheets4) |0.3.0   |1     |        |1    |
+|[googledrive](problems.md#googledrive)     |1.0.1   |      |        |1    |
+|[googlesheets4](problems.md#googlesheets4) |0.3.0   |      |        |1    |
 |[ReviewR](problems.md#reviewr)             |2.3.6   |      |        |2    |
 

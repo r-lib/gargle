@@ -58,28 +58,6 @@ Run `revdep_details(, "googledrive")` for more info
 
 ## In both
 
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-        6.         └─googledrive::drive_get(path = x)
-        7.           └─googledrive:::dribble_from_path(path, team_drive, corpus)
-        8.             └─googledrive:::get_nodes(path, team_drive, corpus)
-        9.               └─googledrive::drive_find(...)
-       10.                 └─googledrive::do_paginated_request(...)
-       11.                   └─gargle::response_process(page)
-       12.                     └─gargle:::gargle_abort_request_failed(error_message(resp), resp)
-       13.                       └─gargle:::gargle_abort(...)
-       14.                         └─cli::cli_abort(...)
-      ── Failure (test-path-utils.R:237:3): check_for_overwrite() copes with `parent = NULL` ──
-      `check_for_overwrite(parent = NULL, nm_("create-in-me"), overwrite = FALSE)` did not throw an error.
-      
-      [ FAIL 49 | WARN 0 | SKIP 0 | PASS 348 ]
-      Error: Test failures
-      Execution halted
-    ```
-
 *   checking LazyData ... NOTE
     ```
       'LazyData' is specified without a 'data' directory
@@ -100,28 +78,6 @@ Run `revdep_details(, "googlesheets4")` for more info
 </details>
 
 ## In both
-
-*   checking tests ...
-    ```
-     ERROR
-    Running the tests in ‘tests/testthat.R’ failed.
-    Last 13 lines of output:
-      Error: A spreadsheet named 'TEST-sheet_relocate-jenny' already exists.
-      Backtrace:
-          █
-       1. └─googlesheets4:::local_ss(me_(), sheets = sheet_names) test-sheet_relocate.R:10:2
-       2.   └─googlesheets4:::stop_glue("A spreadsheet named {sq(name)} already exists.") helper.R:50:4
-      ── Error (test-sheet_resize.R:9:3): sheet_resize() works ───────────────────────
-      Error: A spreadsheet named 'TEST-sheet_resize-jenny' already exists.
-      Backtrace:
-          █
-       1. └─googlesheets4:::local_ss(me_()) test-sheet_resize.R:9:2
-       2.   └─googlesheets4:::stop_glue("A spreadsheet named {sq(name)} already exists.") helper.R:50:4
-      
-      [ FAIL 3 | WARN 0 | SKIP 4 | PASS 512 ]
-      Error: Test failures
-      Execution halted
-    ```
 
 *   checking LazyData ... NOTE
     ```
