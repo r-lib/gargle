@@ -21,9 +21,9 @@
     Output
       ! Cache contains tokens with names that do not match their hash:
       * "abc123_c@example.org" (name)
-      * {TOKEN_HASH}_a@example.org (hash)
+      * '{TOKEN_HASH}_a@example.org' (hash)
       * "def456_d@example.org" (name)
-      * {TOKEN_HASH}_b@example.org (hash)
+      * '{TOKEN_HASH}_b@example.org' (hash)
         Will attempt to repair by renaming
 
 # token_match() finds a match based on domain

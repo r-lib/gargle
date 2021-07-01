@@ -115,20 +115,20 @@ cache_load <- function(path) {
     n <- sum(mismatch)
     mismatch_name <- names(hashes)[mismatch]
     mismatch_hash <- hashes[mismatch]
-    mismatch_name_fmt <- lapply(
+    mismatch_name_fmt <- gargle_map_cli(
       mismatch_name,
-      function(x) cli_this("{.val {x}} (name)")
+      template = "{.val <<x>>} (name)"
     )
-    mismatch_hash_fmt <- lapply(
+    mismatch_hash_fmt <- gargle_map_cli(
       mismatch_hash,
-      function(x) cli_this("{.field {x}} (hash)")
+      template = "{.field <<x>>} (hash)"
     )
     msg <- c(
       "!" = "Cache contains {cli::qty(n)}{?a /}token{?s} with {?a /}name{?s} \\
              that do{?es/} not match {?its/their} hash:",
-      set_names(
+      bulletize(
         as.vector(rbind(mismatch_name_fmt, mismatch_hash_fmt)),
-        ~ rep_along(., "*")
+        n_show = 100
       ),
       " " = "Will attempt to repair by renaming"
     )
