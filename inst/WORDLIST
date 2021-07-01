@@ -35,6 +35,7 @@ appveyor
 auth
 authed
 automagically
+aws
 backoff
 backtrace
 behaviour
@@ -54,12 +55,12 @@ dbi
 de
 decrypt
 decrypted
+ec
 emptively
 filepath
 funder
 gargle’
 gcalendr
-gcp
 github
 gmailr
 googledrive
