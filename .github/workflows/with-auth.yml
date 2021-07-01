@@ -52,7 +52,7 @@ jobs:
 
       - name: Check
         env:
-         GARGLE_PASSWORD: ${{ secrets.GARGLE_PASSWORD }}
+          GARGLE_PASSWORD: ${{ secrets.GARGLE_PASSWORD }}
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
           _R_CHECK_CRAN_INCOMING_: false
         run: |
