@@ -35,6 +35,9 @@ An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 \description{
 Load a service account token
 }
+\details{
+Note that fetching a token for a service account requires a reasonably accurate system clock. For more information, see the vignette \href{https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html}{How gargle gets tokens}.
+}
 \examples{
 \dontrun{
 token <- credentials_service_account(

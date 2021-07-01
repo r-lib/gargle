@@ -81,6 +81,8 @@ For R users, a service account is a great option for credentials that will be us
 
 The JSON key file must be managed securely. In particular, it should not be kept in, e.g., a GitHub repository (unless it is encrypted). The encryption strategy used by gargle and other packages is described in the article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
 
+Note that fetching a token for a service account requires a reasonably accurate system clock. This is of particular importance for users running gargle inside a Docker container, as Docker for Windows has [intermittently seen problems with clock drift](https://github.com/docker/for-win/issues/4526). If your service account token requests fail with "Bad Request" inside a container but succeed locally, check that the container's system clock is accurate.
+
 ## `credentials_external_account()`
 
 The second function tried is `credentials_external_account()`. Here's how a call to `token_fetch()` with an external account inputs plays out:
