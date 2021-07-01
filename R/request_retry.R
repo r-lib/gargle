@@ -83,7 +83,7 @@
 #' * <https://github.com/channable/opnieuw>
 #' * <https://cloud.google.com/storage/docs/retry-strategy>
 #' * <https://tools.ietf.org/html/rfc7231#section-7.1.3>
-#' * <https://developers.google.com/sheets/api/limits>
+#' * <https://developers.google.com/sheets/api/reference/limits>
 #' * <https://googleapis.dev/python/google-api-core/latest/retry.html>
 #'
 #' @inherit request_make return
