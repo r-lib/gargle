@@ -1,4 +1,56 @@
-Notes from revdepchecks 2020-05-05 for v0.5.0
+## Notes from revdepchecks 2021-07-01 for v1.2.0
+
+I once again got an overly rosy picture of how things went (see notes below from earlier releases):
+
+```
+Installing DEV version of gargle
+Installing 15 packages: sys, askpass, R6, openssl, mime, jsonlite, curl, glue, withr, rstudioapi, rlang, rappdirs, httr, fs, cli
+── CHECK ──────────────────────────────────────────────────────────────────────────── 8 packages ──
+✓ gmailr 1.0.0                           ── E: 0     | W: 0     | N: 0          
+✓ daiR 0.9.0                             ── E: 0     | W: 0     | N: 1          
+✓ boxr 0.3.6                             ── E: 0     | W: 0     | N: 0          
+✓ googleAuthR 1.4.0                      ── E: 0     | W: 0     | N: 0          
+✓ googledrive 1.0.1                      ── E: 1     | W: 0     | N: 1          
+✓ bigrquery 1.3.2                        ── E: 1     | W: 0     | N: 1          
+✓ ReviewR 2.3.6                          ── E: 0     | W: 0     | N: 2          
+✓ googlesheets4 0.3.0                    ── E: 0-1   | W: 0     | N: 1          
+OK: 8                                                                         
+BROKEN: 0
+```
+
+Notice the 2 instances of `E: 1`, 1 instance of `E: 0-1` but also `OK: 8`.
+
+`E: 1` means the error happens with both CRAN and dev (old and new), so it looks like no change for the worse.
+
+Again, in `problems.md`, I saw happy talk like:
+
+```
+Wow, no problems at all. :)
+```
+
+But you really should dig into these and figure out what's up.
+
+### bigrquery
+
+This package was failing checks, unrelated to gargle, due to a messed up test project. Fixed that.
+
+### googledrive
+
+Can't say what's up there yet, but it's lots of failures:
+
+```
+      [ FAIL 50 | WARN 0 | SKIP 0 | PASS 346 ]
+```
+
+### googlesheets4
+
+Transient error.
+
+```
+Error: Server error: (500) INTERNAL
+```
+
+## Notes from revdepchecks 2020-05-05 for v0.5.0
 
 Two challenges:
 
