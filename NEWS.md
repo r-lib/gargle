@@ -18,6 +18,10 @@ The goal is to make it possible for code like `PKG_auth(email = "*@example.com")
 
 gargle now throws errors via `cli::cli_abort()`, which means error messages now have the same styling as informational messages.
 
+## Dependency changes
+
+aws.ec2metadata and aws.signature are new in Suggests.
+
 # gargle 1.1.0
 
 ## OAuth token cache
