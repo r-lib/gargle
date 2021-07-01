@@ -3,9 +3,9 @@
 |field    |value                        |
 |:--------|:----------------------------|
 |version  |R version 4.1.0 (2021-05-18) |
-|os       |macOS Big Sur 11.4           |
+|os       |macOS Big Sur 10.16          |
 |system   |x86_64, darwin17.0           |
-|ui       |RStudio                      |
+|ui       |X11                          |
 |language |(EN)                         |
 |collate  |en_CA.UTF-8                  |
 |ctype    |en_CA.UTF-8                  |
@@ -39,12 +39,12 @@
 
 |package                                    |version |error |warning |note |
 |:------------------------------------------|:-------|:-----|:-------|:----|
-|[bigrquery](problems.md#bigrquery)         |1.3.2   |1     |        |1    |
+|[bigrquery](problems.md#bigrquery)         |1.3.2   |      |        |1    |
 |boxr                                       |0.3.6   |      |        |     |
 |[daiR](problems.md#dair)                   |0.9.0   |      |        |1    |
 |gmailr                                     |1.0.0   |      |        |     |
 |googleAuthR                                |1.4.0   |      |        |     |
 |[googledrive](problems.md#googledrive)     |1.0.1   |1     |        |1    |
-|[googlesheets4](problems.md#googlesheets4) |0.3.0   |-1    |        |1    |
+|[googlesheets4](problems.md#googlesheets4) |0.3.0   |1     |        |1    |
 |[ReviewR](problems.md#reviewr)             |2.3.6   |      |        |2    |
 

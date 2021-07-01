@@ -32,7 +32,7 @@ But you really should dig into these and figure out what's up.
 
 ### bigrquery
 
-This package was failing checks, unrelated to gargle, due to a messed up test project. Fixed that.
+This package was failing checks, unrelated to gargle, due to a messed up test project. Fixed that. bigrquery was fine on the next run.
 
 ### googledrive
 
@@ -42,12 +42,37 @@ Can't say what's up there yet, but it's lots of failures:
       [ FAIL 50 | WARN 0 | SKIP 0 | PASS 346 ]
 ```
 
+Update: lots of test fixtures have changed (especially, have been renamed), so this is no surprise.
+
 ### googlesheets4
 
 Transient error.
 
 ```
 Error: Server error: (500) INTERNAL
+```
+
+There's a new "look" on the second and third runs that I suspect is due to detritus from these very test runs. I should re-check test file hygiene when I'm working on googlesheets4. But I'm not too worried about this.
+
+```
+     ERROR
+    Running the tests in ‘tests/testthat.R’ failed.
+    Last 13 lines of output:
+      > test_check("googlesheets4")
+      ══ Skipped tests ═══════════════════════════════════════════════════════════════
+      • On CRAN (4)
+      
+      ══ Failed tests ════════════════════════════════════════════════════════════════
+      ── Error (test-sheet_resize.R:9:3): sheet_resize() works ───────────────────────
+      Error: A spreadsheet named 'TEST-sheet_resize-jenny' already exists.
+      Backtrace:
+          █
+       1. └─googlesheets4:::local_ss(me_()) test-sheet_resize.R:9:2
+       2.   └─googlesheets4:::stop_glue("A spreadsheet named {sq(name)} already exists.") helper.R:50:4
+      
+      [ FAIL 1 | WARN 2 | SKIP 4 | PASS 514 ]
+      Error: Test failures
+      Execution halted
 ```
 
 ## Notes from revdepchecks 2020-05-05 for v0.5.0
