@@ -171,6 +171,7 @@
 </ul>
 <p>For R users, a service account is a great option for credentials that will be used in a script or application running remotely or in an unattended fashion. In particular, this is a better approach than trying to move OAuth2 credentials from one machine to another. For example, a service account is the preferred method of auth when testing and documenting a package on a continuous integration service.</p>
 <p>The JSON key file must be managed securely. In particular, it should not be kept in, e.g., a GitHub repository (unless it is encrypted). The encryption strategy used by gargle and other packages is described in the article <a href="https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html">Managing tokens securely</a>.</p>
+<p>Note that fetching a token for a service account requires a reasonably accurate system clock. This is of particular importance for users running gargle inside a Docker container, as Docker for Windows has <a href="https://github.com/docker/for-win/issues/4526">intermittently seen problems with clock drift</a>. If your service account token requests fail with “Bad Request” inside a container but succeed locally, check that the container’s system clock is accurate.</p>
 </div>
 <div id="credentials_external_account" class="section level2">
 <h2 class="hasAnchor">
