@@ -127,8 +127,7 @@ AuthState <- R6::R6Class("AuthState", list(
       app         = self$app$appname,
       api_key     = obfuscate(self$api_key),
       auth_active = self$auth_active,
-      # TODO: implement .class angle brackets
-      credentials = glue("<{class(self$cred)[[1]]}>")
+      credentials = cli_this("{.cls {class(self$cred)[[1]]}}")
     )
     c(
       cli::cli_format_method(
