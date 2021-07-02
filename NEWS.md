@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 1.2.0
 
 ## Workload identity federation
 
