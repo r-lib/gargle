@@ -17,18 +17,7 @@
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
   gargle_debug("trying {.fun credentials_gce}")
-  if (!detect_gce() || is.null(scopes)) {
-    return(NULL)
-  }
-  instance_scopes <- get_instance_scopes(service_account = service_account)
-  # We add a special case for the cloud-platform -> bigquery scope implication.
-  if ("https://www.googleapis.com/auth/cloud-platform" %in% instance_scopes) {
-    instance_scopes <- c(
-      "https://www.googleapis.com/auth/bigquery",
-      instance_scopes
-    )
-  }
-  if (!all(scopes %in% instance_scopes)) {
+  if (!detect_gce()) {
     return(NULL)
   }
 
@@ -149,13 +138,6 @@ list_service_accounts <- function() {
   accounts <- gce_metadata_request("instance/service-accounts")
   ct <- httr::content(accounts, as = "text", encoding = "UTF-8")
   strsplit(ct, split = "/\n", fixed = TRUE)[[1]]
-}
-
-get_instance_scopes <- function(service_account) {
-  path <- glue("instance/service-accounts/{service_account}/scopes")
-  scopes <- gce_metadata_request(path)
-  ct <- httr::content(scopes, as = "text", encoding = "UTF-8")
-  strsplit(ct, split = "\n", fixed = TRUE)[[1]]
 }
 
 # TODO: why isn't scopes used here at all?
