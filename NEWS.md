@@ -1,5 +1,8 @@
 # gargle (development version)
 
+`credentials_gce()` no longer validates the requested scopes against instance scopes.
+In practice, it's easy for this check to be more of a nuisance than a help (#161, #185 @craigcitro).
+
 # gargle 1.2.0
 
 ## Workload identity federation
