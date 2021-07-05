@@ -18,6 +18,8 @@ navbar:
       text: News
       menu:
       - text: "Blog posts"
+      - text: "gargle 1.2.0"
+        href: https://www.tidyverse.org/blog/2021/07/gargle-1-2-0/
       - text: "gargle's debut on CRAN"
         href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
       - text: "------------------"
