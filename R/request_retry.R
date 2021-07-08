@@ -2,7 +2,8 @@
 #'
 #' Intended primarily for internal use in client packages that provide
 #' high-level wrappers for users. It is a drop-in substitute for
-#' [request_make()] that also has the ability to retry the request.
+#' [request_make()] that also has the ability to retry the request. Codes that
+#' are considered retryable: 408, 429, 500, 502, 503.
 #'
 #' Consider an example where we are willing to make a request up to 5 times.
 #'
@@ -119,10 +120,12 @@ request_retry <- function(...,
   invisible(resp)
 }
 
+retryable_codes <- c("408", "429", "500", "502", "503")
+
 we_should_retry <- function(tries_made, max_tries_total, resp) {
   if (tries_made >= max_tries_total) {
     FALSE
-  } else if (httr::status_code(resp) == "429") {
+  } else if (httr::status_code(resp) %in% retryable_codes) {
     TRUE
   } else {
     FALSE

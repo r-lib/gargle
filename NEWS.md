@@ -3,6 +3,8 @@
 `credentials_gce()` no longer validates the requested scopes against instance scopes.
 In practice, it's easy for this check to be more of a nuisance than a help (#161, #185 @craigcitro).
 
+`request_retry()` retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (#169).
+
 # gargle 1.2.0
 
 ## Workload identity federation

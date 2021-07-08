@@ -21,7 +21,8 @@ Object of class \code{response} from \link{httr}.
 \description{
 Intended primarily for internal use in client packages that provide
 high-level wrappers for users. It is a drop-in substitute for
-\code{\link[=request_make]{request_make()}} that also has the ability to retry the request.
+\code{\link[=request_make]{request_make()}} that also has the ability to retry the request. Codes that
+are considered retryable: 408, 429, 500, 502, 503.
 }
 \details{
 Consider an example where we are willing to make a request up to 5 times.\preformatted{try  1  2    3        4                5
