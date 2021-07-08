@@ -42,7 +42,8 @@
 <meta property="og:title" content="Make a Google API request, repeatedly — request_retry" />
 <meta property="og:description" content="Intended primarily for internal use in client packages that provide
 high-level wrappers for users. It is a drop-in substitute for
-request_make() that also has the ability to retry the request." />
+request_make() that also has the ability to retry the request. Codes that
+are considered retryable: 408, 429, 500, 502, 503." />
 
 
 
@@ -167,7 +168,8 @@ request_make() that also has the ability to retry the request." />
     <div class="ref-description">
     <p>Intended primarily for internal use in client packages that provide
 high-level wrappers for users. It is a drop-in substitute for
-<code><a href='request_make.html'>request_make()</a></code> that also has the ability to retry the request.</p>
+<code><a href='request_make.html'>request_make()</a></code> that also has the ability to retry the request. Codes that
+are considered retryable: 408, 429, 500, 502, 503.</p>
     </div>
 
     <pre class="usage"><span class='fu'>request_retry</span><span class='op'>(</span><span class='va'>...</span>, max_tries_total <span class='op'>=</span> <span class='fl'>5</span>, max_total_wait_time_in_seconds <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></pre>
