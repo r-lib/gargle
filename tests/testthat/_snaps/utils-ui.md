@@ -50,3 +50,99 @@
     Code
       gargle_debug(c("99 {.field {foo}} 00", "11 {.file a/b/c} 22"))
 
+# bulletize() works
+
+    Code
+      cli::cli_bullets(bulletize(letters))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+        ... and 21 more
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters, bullet = "x"))
+    Message <cliMessage>
+      x a
+      x b
+      x c
+      x d
+      x e
+        ... and 21 more
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters, n_show = 2))
+    Message <cliMessage>
+      * a
+      * b
+        ... and 24 more
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters[1:6]))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+      * f
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters[1:7]))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+      * f
+      * g
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters[1:8]))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+        ... and 3 more
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters[1:6], n_fudge = 0))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+        ... and 1 more
+
+---
+
+    Code
+      cli::cli_bullets(bulletize(letters[1:8], n_fudge = 3))
+    Message <cliMessage>
+      * a
+      * b
+      * c
+      * d
+      * e
+      * f
+      * g
+      * h
+

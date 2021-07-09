@@ -47,3 +47,14 @@ test_that("gargle_debug() works", {
   local_gargle_verbosity("silent")
   expect_snapshot(gargle_debug(c("99 {.field {foo}} 00", "11 {.file a/b/c} 22")))
 })
+
+test_that("bulletize() works", {
+  expect_snapshot(cli::cli_bullets(bulletize(letters)))
+  expect_snapshot(cli::cli_bullets(bulletize(letters, bullet = "x")))
+  expect_snapshot(cli::cli_bullets(bulletize(letters, n_show = 2)))
+  expect_snapshot(cli::cli_bullets(bulletize(letters[1:6])))
+  expect_snapshot(cli::cli_bullets(bulletize(letters[1:7])))
+  expect_snapshot(cli::cli_bullets(bulletize(letters[1:8])))
+  expect_snapshot(cli::cli_bullets(bulletize(letters[1:6], n_fudge = 0)))
+  expect_snapshot(cli::cli_bullets(bulletize(letters[1:8], n_fudge = 3)))
+})
