@@ -25,7 +25,7 @@
 #' library(googledrive)
 #' library(googlesheets4)
 #' drive_auth(email = "jane_doe@example.com")
-#' sheets_auth(token = drive_token())
+#' gs4_auth(token = drive_token())
 #' # work with both packages freely now
 #' ```
 #'

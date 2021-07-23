@@ -52,7 +52,7 @@ requested by googledrive is also sufficient for operations available in
 googlesheets4. You could use a shared token like so:\preformatted{library(googledrive)
 library(googlesheets4)
 drive_auth(email = "jane_doe@example.com")
-sheets_auth(token = drive_token())
+gs4_auth(token = drive_token())
 # work with both packages freely now
 }
 }
