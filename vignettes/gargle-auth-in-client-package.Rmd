@@ -253,7 +253,7 @@ drive_auth(email = "jane_doe@example.com") # gets a suitably scoped token
 gs4_auth(token = drive_token())            # registers token with googlesheets4
 
 # now work with both packages freely ...
-````
+```
 
 It is important to make sure that the token-requesting package (googledrive, above) is using an OAuth app (client ID and secret) for which all the necessary APIs and scopes are enabled.
     
