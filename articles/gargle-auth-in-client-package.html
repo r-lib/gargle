@@ -256,7 +256,7 @@
 <li>Add gargle to your package’s <code>Imports</code>.</li>
 <li>Create a file <code>R/YOURPKG_auth.R</code>.</li>
 <li>Create an internal <code>gargle::AuthClass</code> object to hold auth state. <code>R/YOURPKG_auth.R</code> is a good place to do this.</li>
-<li>Define standard functions for the auth interface between gargle and your package; do this in <code>R/YOURPKG_auth.R</code>. Examples: <a href="https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R"><code>tidyverse/googledrive/R/drive_auth.R</code></a> and <a href="https://github.com/r-dbi/bigrquery/blob/master/R/bq-auth.R"><code>r-dbi/bigrquery/R/bq_auth.R</code></a>.</li>
+<li>Define standard functions for the auth interface between gargle and your package; do this in <code>R/YOURPKG_auth.R</code>. Examples: <a href="https://github.com/tidyverse/googledrive/blob/main/R/drive_auth.R"><code>tidyverse/googledrive/R/drive_auth.R</code></a> and <a href="https://github.com/r-dbi/bigrquery/blob/main/R/bq-auth.R"><code>r-dbi/bigrquery/R/bq_auth.R</code></a>.</li>
 <li>Use gargle’s roxygen helpers to create the docs for your auth functions. This relieves you from writing docs and you inherit standard wording. See previously cited examples for inspiration.</li>
 <li>Use the functions <code>YOURPKG_token()</code> and <code>YOURPKG_api_key()</code> (defined in the standard auth interface) to insert a token or API key in your package’s requests.</li>
 </ol>
@@ -328,7 +328,7 @@
 <div id="auth-interface" class="section level2">
 <h2 class="hasAnchor">
 <a href="#auth-interface" class="anchor"></a>Auth interface</h2>
-<p>The exported functions like <code>drive_auth()</code>, <code>drive_token()</code>, etc. constitute the auth interface between googledrive and gargle and are centralized in <a href="https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R"><code>tidyverse/googledrive/R/drive_auth.R</code></a>. That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.</p>
+<p>The exported functions like <code>drive_auth()</code>, <code>drive_token()</code>, etc. constitute the auth interface between googledrive and gargle and are centralized in <a href="https://github.com/tidyverse/googledrive/blob/main/R/drive_auth.R"><code>tidyverse/googledrive/R/drive_auth.R</code></a>. That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.</p>
 <ul>
 <li>
 <code>drive_token()</code> retrieves the current credential, in a form that is ready for inclusion in HTTP requests. If <code>auth_active</code> is <code>TRUE</code> and <code>cred</code> is <code>NULL</code>, <code>drive_auth()</code> is called to obtain a credential. If <code>auth_active</code> is <code>FALSE</code>, <code>NULL</code> is returned; client packages should be designed to fall back to including an API key in affected HTTP requests, if sensible for the API.</li>
