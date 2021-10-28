@@ -169,8 +169,8 @@ Here's a concrete outline of how one could set up a client package to get its au
      `R/YOURPKG_auth.R` is a good place to do this.
   1. Define standard functions for the auth interface between gargle and your
      package; do this in `R/YOURPKG_auth.R`. Examples:
-     [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R) and
-     [`r-dbi/bigrquery/R/bq_auth.R`](https://github.com/r-dbi/bigrquery/blob/master/R/bq-auth.R).
+     [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/main/R/drive_auth.R) and
+     [`r-dbi/bigrquery/R/bq_auth.R`](https://github.com/r-dbi/bigrquery/blob/main/R/bq-auth.R).
   1. Use gargle's roxygen helpers to create the docs for your auth functions.
      This relieves you from writing docs and you inherit standard wording. See
      previously cited examples for inspiration.
@@ -259,7 +259,7 @@ It is important to make sure that the token-requesting package (googledrive, abo
     
 ## Auth interface
 
-The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/master/R/drive_auth.R). That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.
+The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/main/R/drive_auth.R). That is a good template for how to use gargle to manage auth in a client package. In addition, the docs for these gargle-backed functions are generated automatically from standard information maintained in the gargle package.
 
   * `drive_token()` retrieves the current credential, in a form that is ready
     for inclusion in HTTP requests. If `auth_active` is `TRUE` and `cred` is

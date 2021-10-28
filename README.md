@@ -8,7 +8,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
 [![Codecov test
-coverage](https://codecov.io/gh/r-lib/gargle/branch/master/graph/badge.svg)](https://codecov.io/gh/r-lib/gargle?branch=master)
+coverage](https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg)](https://codecov.io/gh/r-lib/gargle?branch=main)
 [![R-CMD-check](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
 <!-- badges: end -->
 
