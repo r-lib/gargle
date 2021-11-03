@@ -103,7 +103,7 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
     path <- substring(path, 2)
   }
   url <- paste0(root_url, "computeMetadata/v1/", path)
-  timeout <- getOption("gargle.gce.timeout", default = 2)
+  timeout <- getOption("gargle.gce.timeout", default = ifelse(!detect_gce(), 0.8, 2))
   response <- try({
     httr::with_config(httr::timeout(timeout), {
       httr::GET(url, httr::add_headers("Metadata-Flavor" = "Google"))
