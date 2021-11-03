@@ -71,11 +71,10 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
       return(NULL)
     }
     gargle_debug("ADC cred type: {.val authorized_user}")
-    endpoint <- httr::oauth_endpoints("google")
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
     scope <- "https://www.googleapis.com/auth/cloud.platform"
     token <- httr::Token2.0$new(
-        endpoint = endpoint,
+        endpoint = gargle_oauth_endpoint(),
         app = app,
         credentials = list(refresh_token = info$refresh_token),
         # ADC is already cached.

@@ -1,5 +1,7 @@
 # gargle (development version)
 
+We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.
+
 `credentials_gce()` no longer validates the requested scopes against instance scopes.
 In practice, it's easy for this check to be more of a nuisance than a help (#161, #185 @craigcitro).
 
