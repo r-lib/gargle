@@ -9,11 +9,13 @@
 #' @examples
 #' gargle_oauth_endpoint()
 gargle_oauth_endpoint <- function() {
-  httr::oauth_endpoint(
-    base_url = "https://accounts.google.com/o/oauth2",
-    authorize = "auth",
+  out <- httr::oauth_endpoint(
+    base_url = "https://oauth2.googleapis.com",
+    authorize = "",
     access = "token",
-    validate = "https://www.googleapis.com/oauth2/v1/tokeninfo",
+    validate = "tokeninfo",
     revoke = "revoke"
   )
+  out$authorize <- "https://accounts.google.com/o/oauth2/v2/auth"
+  out
 }
