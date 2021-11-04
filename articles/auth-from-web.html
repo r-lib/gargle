@@ -147,7 +147,7 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 <a href="#request-oob-auth-in-the-pkg_auth-call" class="anchor"></a>Request oob auth in the <code>PKG_auth()</code> call</h2>
 <p>These packages aim to make auth “just work” for most users, i.e. it’s automatically triggered upon first need. However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters. Here’s how you request oob auth, using googledrive as an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">googledrive</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org">googledrive</a></span><span class="op">)</span>
 
 <span class="fu">drive_auth</span><span class="op">(</span>use_oob <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 

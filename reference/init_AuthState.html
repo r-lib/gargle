@@ -212,24 +212,25 @@ probably not an API key). <code>FALSE</code> means requests should include an AP
     <p>An object of class <a href='AuthState-class.html'>AuthState</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>my_app</span> <span class='op'>&lt;-</span> <span class='fu'>httr</span><span class='fu'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/oauth_app.html'>oauth_app</a></span><span class='op'>(</span>
-  appname <span class='op'>=</span> <span class='st'>"my_package"</span>,
-  key <span class='op'>=</span> <span class='st'>"keykeykeykeykeykey"</span>,
-  secret <span class='op'>=</span> <span class='st'>"secretsecretsecret"</span>
-<span class='op'>)</span>
-
-<span class='fu'>init_AuthState</span><span class='op'>(</span>
-  package <span class='op'>=</span> <span class='st'>"my_package"</span>,
-  app <span class='op'>=</span> <span class='va'>my_app</span>,
-  api_key <span class='op'>=</span> <span class='st'>"api_key_api_key_api_key"</span>,
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>&lt;AuthState (via </span><span style='color: #0000BB; font-weight: bold;'>gargle</span><span style='font-weight: bold;'>)&gt;</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────</span>
-#&gt;     package: <span style='color: #0000BB;'>my_package</span>
-#&gt;         app: my_package
-#&gt;     api_key: api_key...
-#&gt; auth_active: TRUE
-#&gt; credentials: <span style='color: #0000BB;'>&lt;NULL&gt;</span></div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>my_app</span> <span class='op'>&lt;-</span> <span class='fu'>httr</span><span class='fu'>::</span><span class='fu'><a href='https://httr.r-lib.org/reference/oauth_app.html'>oauth_app</a></span><span class='op'>(</span></span>
+<span class='r-in'>  appname <span class='op'>=</span> <span class='st'>"my_package"</span>,</span>
+<span class='r-in'>  key <span class='op'>=</span> <span class='st'>"keykeykeykeykeykey"</span>,</span>
+<span class='r-in'>  secret <span class='op'>=</span> <span class='st'>"secretsecretsecret"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>init_AuthState</span><span class='op'>(</span></span>
+<span class='r-in'>  package <span class='op'>=</span> <span class='st'>"my_package"</span>,</span>
+<span class='r-in'>  app <span class='op'>=</span> <span class='va'>my_app</span>,</span>
+<span class='r-in'>  api_key <span class='op'>=</span> <span class='st'>"api_key_api_key_api_key"</span>,</span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>──</span> <span style='font-weight: bold;'>&lt;AuthState (via </span><span style='color: #0000BB; font-weight: bold;'>gargle</span><span style='font-weight: bold;'>)&gt;</span> <span style='color: #00BBBB;'>────────────────────────────────────────────────────</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     package: <span style='color: #0000BB;'>my_package</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         app: my_package</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     api_key: api_key...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> auth_active: TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> credentials: <span style='color: #0000BB;'>&lt;NULL&gt;</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

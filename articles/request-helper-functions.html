@@ -124,9 +124,9 @@
     
 <p>This vignette explains the purpose and usage of:</p>
 <ul>
-<li><code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code></li>
-<li><code><a href="../reference/request_develop.html">request_build(method, path, params, body, token, key, base_url)</a></code></li>
-<li><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code></li>
+<li><code>request_develop(endpoint, params, base_url)</code></li>
+<li><code>request_build(method, path, params, body, token, key, base_url)</code></li>
+<li><code>request_make(x, ..., user_agent)</code></li>
 </ul>
 <p>The target audience is someone writing an R package to wrap a Google API.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -168,20 +168,20 @@
 <h2 class="hasAnchor">
 <a href="#gargles-http-request-helpers" class="anchor"></a>gargle’s HTTP request helpers</h2>
 <p>gargle provides support for creating and sending HTTP requests via these functions:</p>
-<p><code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>: a.k.a. The Smart One.</p>
+<p><code>request_develop(endpoint, params, base_url)</code>: a.k.a. The Smart One.</p>
 <ul>
 <li>Processes the info in <code>params</code> relative to detailed knowledge about the <code>endpoint</code>, derived from an API Discovery Document.</li>
 <li>Checks for required and unrecognized parameters.</li>
 <li>Peels off <code>params</code> destined for the body into their own part.</li>
 <li>Returns request data in a form that anticipates the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> call that is on the horizon.</li>
 </ul>
-<p><code><a href="../reference/request_develop.html">request_build(method, path, params, body, token, key, base_url)</a></code>: a.k.a. The Dumb One.</p>
+<p><code>request_build(method, path, params, body, token, key, base_url)</code>: a.k.a. The Dumb One.</p>
 <ul>
 <li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_develop()</a></code>, although that is not required. It can be called directly to enjoy a few luxuries even when making one-off API calls in the absence of an ingested Discovery Document.</li>
 <li>Integrates <code>params</code> into a URL via substitution and the query string.</li>
 <li>Sends either an API key or an OAuth token, but it provides no default values or logic for either.</li>
 </ul>
-<p><code><a href="../reference/request_make.html">request_make(x, ..., user_agent)</a></code>: actually makes the HTTP request.</p>
+<p><code>request_make(x, ..., user_agent)</code>: actually makes the HTTP request.</p>
 <ul>
 <li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>, although that is not required. However, if you have enough info to form a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> call yourself.</li>
 <li>Consults <code>x$method</code> to determine which <code><a href="https://httr.r-lib.org/reference/VERB.html">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code>, <code>...</code>, and <code>user_agent</code> passed as arguments.</li>
@@ -226,7 +226,7 @@ sheets.spreadsheets.sheets.copyTo</code></pre>
 <p>Retrieve the metadata for one endpoint by name, e.g.:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">.endpoints</span><span class="op">[[</span><span class="st">"drive.files.create"</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<p>That info can be passed along to <code><a href="../reference/request_develop.html">request_develop(endpoint, params, base_url)</a></code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
+<p>That info can be passed along to <code>request_develop(endpoint, params, base_url)</code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
 </div>
 <div id="design-suggestion-forming-requests" class="section level2">
 <h2 class="hasAnchor">
