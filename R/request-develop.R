@@ -190,16 +190,16 @@ request_build <- function(method = "GET",
 ## check params provided by user against spec
 ##   * error if required params are missing
 ##   * error for unknown params
-check_params <- function(provided, spec) {
+check_params <- function(provided, spec, call = caller_env()) {
   required <- Filter(function(x) isTRUE(x$required), spec)
   missing <- setdiff(names(required), names(provided))
   if (length(missing)) {
-    gargle_abort_bad_params(missing, reason = "missing")
+    gargle_abort_bad_params(missing, reason = "missing", call = call)
   }
 
   unknown <- setdiff(names(provided), names(spec))
   if (length(unknown)) {
-    gargle_abort_bad_params(unknown, reason = "unknown")
+    gargle_abort_bad_params(unknown, reason = "unknown", call = call)
   }
 
   invisible(provided)

@@ -6,7 +6,7 @@
 
     Code
       out <- gargle_verbosity()
-    Message <cliMessage>
+    Message
       ! Option "gargle_quiet" is deprecated in favor of "gargle_verbosity"
       i Instead of: `options(gargle_quiet = FALSE)`
         Now do: `options(gargle_verbosity = "debug")`
@@ -15,7 +15,7 @@
 
     Code
       gargle_info(c("aa {.field {blah}} bb", "cc {.emph xyz} dd"))
-    Message <cliMessage>
+    Message
       aa 'BLAH' bb
       cc xyz dd
 
@@ -23,7 +23,7 @@
 
     Code
       gargle_info(c("ee {.field {blah}} ff", "gg {.emph xyz} hh"))
-    Message <cliMessage>
+    Message
       ee 'BLAH' ff
       gg xyz hh
 
@@ -36,7 +36,7 @@
 
     Code
       gargle_debug(c("11 {.field {foo}} 22", "33 {.file a/b/c} 44"))
-    Message <cliMessage>
+    Message
       11 'FOO' 22
       33 'a/b/c' 44
 
@@ -54,7 +54,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c
@@ -66,7 +66,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters, bullet = "x"))
-    Message <cliMessage>
+    Message
       x a
       x b
       x c
@@ -78,7 +78,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters, n_show = 2))
-    Message <cliMessage>
+    Message
       * a
       * b
         ... and 24 more
@@ -87,7 +87,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters[1:6]))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c
@@ -99,7 +99,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters[1:7]))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c
@@ -112,7 +112,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters[1:8]))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c
@@ -124,7 +124,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters[1:6], n_fudge = 0))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c
@@ -136,7 +136,7 @@
 
     Code
       cli::cli_bullets(bulletize(letters[1:8], n_fudge = 3))
-    Message <cliMessage>
+    Message
       * a
       * b
       * c

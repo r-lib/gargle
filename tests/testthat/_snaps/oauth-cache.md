@@ -2,7 +2,7 @@
 
     Code
       cache_clean(cache_folder, "apple")
-    Message <cliMessage>
+    Message
       v Deleting 1 token obtained with an old tidyverse OAuth app.
       i Expect interactive prompts to re-auth with the new app.
       ! Is this rolling of credentials highly disruptive to your workflow?
@@ -30,14 +30,14 @@
 
     Code
       m <- token_match("abc_*@example.org", one_match_of_two)
-    Message <cliMessage>
+    Message
       i The gargle package is using a cached token for 'jane@example.org'.
 
 # token_match() scolds but returns short hash match when non-interactive
 
     Code
       m <- token_match("abc_", one_existing)
-    Message <cliMessage>
+    Message
       ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
         the use of a cached token.
@@ -49,7 +49,7 @@
 
     Code
       m <- token_match("abc_*", one_existing)
-    Message <cliMessage>
+    Message
       ! Using an auto-discovered, cached token.
         To suppress this message, modify your code or options to clearly consent to
         the use of a cached token.
@@ -61,7 +61,7 @@
 
     Code
       m <- token_match("abc_", two_existing)
-    Message <cliMessage>
+    Message
       i Suitable tokens found in the cache, associated with these emails:
       * 'a@example.com'
       * 'b@example.com'
@@ -77,7 +77,7 @@
 
     Code
       m <- token_match("abc_*", two_existing)
-    Message <cliMessage>
+    Message
       i Suitable tokens found in the cache, associated with these emails:
       * 'a@example.com'
       * 'b@example.com'

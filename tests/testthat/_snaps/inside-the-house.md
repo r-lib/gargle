@@ -2,8 +2,9 @@
 
     Code
       local(gargle:::check_permitted_package(), envir = globalenv())
-    Error <gargle_error>
-      Attempt to directly access a credential that can only be used within tidyverse packages.
+    Condition
+      Error:
+      ! Attempt to directly access a credential that can only be used within tidyverse packages.
       This error may mean that you need to:
       * Create a new project on Google Cloud Platform.
       * Enable relevant APIs for your project.
@@ -16,8 +17,9 @@
 
     Code
       local(tidyverse_api_key(), envir = globalenv())
-    Error <gargle_error>
-      Attempt to directly access a credential that can only be used within tidyverse packages.
+    Condition
+      Error in `tidyverse_api_key()`:
+      ! Attempt to directly access a credential that can only be used within tidyverse packages.
       This error may mean that you need to:
       * Create a new project on Google Cloud Platform.
       * Enable relevant APIs for your project.

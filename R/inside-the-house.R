@@ -9,7 +9,7 @@ from_permitted_package <- function(env = parent.frame()) {
   nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 
-check_permitted_package <- function(env = parent.frame()) {
+check_permitted_package <- function(env = parent.frame(), call = caller_env()) {
   if (!from_permitted_package(env)) {
     msg <- c(
       "Attempt to directly access a credential that can only be used within \\
@@ -22,7 +22,7 @@ check_permitted_package <- function(env = parent.frame()) {
       "i" = "See gargle's \"How to get your own API credentials\" vignette for more details:",
       "i" = "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}"
     )
-    gargle_abort(msg)
+    gargle_abort(msg, call = call)
   }
   invisible(env)
 }

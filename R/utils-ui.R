@@ -150,12 +150,16 @@ message <- function(...) {
 #' @noRd
 NULL
 
-gargle_abort <- function(message, ..., class = NULL, .envir = parent.frame()) {
+gargle_abort <- function(message, ...,
+                         class = NULL,
+                         .envir = parent.frame(),
+                         call = caller_env()) {
   cli::cli_div(theme = gargle_theme())
   cli::cli_abort(
     message,
     class = c(class, "gargle_error"),
     .envir = .envir,
+    call = call,
     ...
   )
 }
@@ -169,7 +173,9 @@ gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
   cli::cli_warn(message, .envir = .envir, ...)
 }
 
-gargle_abort_bad_class <- function(object, expected_class) {
+gargle_abort_bad_class <- function(object,
+                                   expected_class,
+                                   call = caller_env()) {
   nm <- as_name(ensym(object))
   actual_class <- class(object)
   expected <- glue_collapse(
@@ -182,19 +188,21 @@ gargle_abort_bad_class <- function(object, expected_class) {
   gargle_abort(
     msg,
     class = "gargle_error_bad_class",
+    call = call,
     object_name = nm,
     actual_class = actual_class,
     expected_class = expected_class
   )
 }
 
-gargle_abort_bad_params <- function(names, reason) {
+gargle_abort_bad_params <- function(names, reason, call = caller_env()) {
   gargle_abort(
     c(
       "These parameters are {reason}:",
       bulletize(gargle_map_cli(names))
     ),
     class = "gargle_error_bad_params",
+    call = call,
     names = names,
     reason = reason
   )

@@ -101,7 +101,7 @@ response_as_json <- function(resp) {
   jsonlite::fromJSON(content, simplifyVector = FALSE)
 }
 
-check_for_json <- function(resp) {
+check_for_json <- function(resp, call = caller_env()) {
   type <- httr::http_type(resp)
   if (grepl("^application/json", type)) {
     return(invisible(resp))
@@ -117,6 +117,7 @@ check_for_json <- function(resp) {
       ),
       "*" = obfuscate(content, first = 197, last = 0)
     ),
+    call = call,
     resp = resp
   )
 }
@@ -124,13 +125,14 @@ check_for_json <- function(resp) {
 # personal policy: a wrapper around a wrapper around cli_abort() should not
 # capture/pass an environment
 # if you really want cli styling, you have to pre-interpolate
-gargle_abort_request_failed <- function(message, resp) {
+gargle_abort_request_failed <- function(message, resp, call = caller_env()) {
   gargle_abort(
     message,
     class = c(
       "gargle_error_request_failed",
       glue("http_error_{httr::status_code(resp)}")
     ),
+    call = call,
     resp = redact_response(resp)
   )
 }
