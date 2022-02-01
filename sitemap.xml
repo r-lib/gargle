@@ -1,7 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://gargle.r-lib.org/404.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/ISSUE_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/auth-from-web.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/managing-tokens-securely.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/non-interactive-auth.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/request-helper-functions.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/articles/troubleshooting.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/authors.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/index.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/news/index.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/AuthState-class.html</loc>
@@ -64,6 +118,9 @@
     <loc>https://gargle.r-lib.org/reference/gargle_options.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/reference/init_AuthState.html</loc>
   </url>
   <url>
@@ -92,29 +149,5 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/token_fetch.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/auth-from-web.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/non-interactive-auth.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/request-helper-functions.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/articles/troubleshooting.html</loc>
   </url>
 </urlset>

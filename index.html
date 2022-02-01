@@ -28,6 +28,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gargle</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0.9001</span>
       </span>
     </div>
 
@@ -69,8 +71,9 @@
       <a href="articles/get-api-credentials.html">How to get your own API credentials</a>
     </li>
     <li class="divider">
-    <li>
-      <a href="articles/index.html">More...</a>
+    </li>
+<li>
+      <a href="articles/index.html">More articles...</a>
     </li>
   </ul>
 </li>
@@ -83,13 +86,14 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Blog posts</li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2021/07/gargle-1-2-0/">gargle 1.2.0</a>
+      <a href="https://www.tidyverse.org/blog/2021/07/gargle-1-2-0/" class="external-link">gargle 1.2.0</a>
     </li>
     <li>
-      <a href="https://www.tidyverse.org/blog/2019/08/gargle-hello-world/">gargle's debut on CRAN</a>
+      <a href="https://www.tidyverse.org/blog/2019/08/gargle-hello-world/" class="external-link">gargle's debut on CRAN</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="news/index.html">Change log</a>
     </li>
   </ul>
@@ -97,7 +101,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/r-lib/gargle/">
+  <a href="https://github.com/r-lib/gargle/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -114,42 +118,42 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="gargle" class="section level1">
+<div class="section level1">
 
 <!-- badges: start -->
 
 <p>The goal of gargle is to take some of the agonizing pain out of working with Google APIs. This includes functions and classes for handling common credential types and for preparing, executing, and processing HTTP requests.</p>
-<p>The target user of gargle is an <em>R package author</em> who is wrapping one of the ~250 Google APIs listed in the <a href="https://developers.google.com/apis-explorer">APIs Explorer</a>. gargle aims to play roughly the same role as <a href="https://developers.google.com/api-client-library/">Google’s official client libraries</a>, but for R. gargle may also be useful to useRs making direct calls to Google APIs, who are prepared to navigate the details of low-level API access.</p>
+<p>The target user of gargle is an <em>R package author</em> who is wrapping one of the ~250 Google APIs listed in the <a href="https://developers.google.com/apis-explorer" class="external-link">APIs Explorer</a>. gargle aims to play roughly the same role as <a href="https://developers.google.com/api-client-library/" class="external-link">Google’s official client libraries</a>, but for R. gargle may also be useful to useRs making direct calls to Google APIs, who are prepared to navigate the details of low-level API access.</p>
 <p>gargle’s functionality falls into two main domains:</p>
 <ul>
 <li>
 <strong>Auth.</strong> The <code><a href="reference/token_fetch.html">token_fetch()</a></code> function calls a series of concrete credential-fetching functions to obtain a valid access token (or it quietly dies trying).
 <ul>
 <li>This covers explicit service accounts, application default credentials, Google Compute Engine, (experimentally) workload identity federation, and the standard OAuth2 browser flow.</li>
-<li>gargle offers the <code>Gargle2.0</code> class, which extends <code><a href="https://httr.r-lib.org/reference/Token-class.html">httr::Token2.0</a></code>. It is the default class for user OAuth 2.0 credentials. There are two main differences from <code><a href="https://httr.r-lib.org/reference/Token-class.html">httr::Token2.0</a></code>: greater emphasis on the user’s email (e.g. Google identity) and default token caching is at the user level.</li>
+<li>gargle offers the <code>Gargle2.0</code> class, which extends <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>. It is the default class for user OAuth 2.0 credentials. There are two main differences from <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>: greater emphasis on the user’s email (e.g. Google identity) and default token caching is at the user level.</li>
 </ul>
 </li>
 <li>
 <strong>Requests and responses</strong>. A family of functions helps to prepare HTTP requests, (possibly with reference to an API spec derived from a Discovery Document), make requests, and process the response.</li>
 </ul>
 <p>See the <a href="https://gargle.r-lib.org/articles/">articles</a> for holistic advice on how to use gargle.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of gargle from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of gargle from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"gargle"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gargle"</span><span class="op">)</span></code></pre></div>
+<p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-lib/gargle"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="basic-usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-usage" class="anchor"></a>Basic usage</h2>
+<div class="section level2">
+<h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
+</h2>
 <p>gargle is a low-level package and does not do anything visibly exciting on its own. But here’s a bit of usage in an interactive scenario where a user confirms they want to use a specific Google identity and loads an OAuth2 token.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
 
 <span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/token_fetch.html">token_fetch</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; The gargle package is requesting access to your Google account. Select a</span>
@@ -168,14 +172,14 @@
 <span class="co">#&gt;            &lt;email&gt; janedoe_personal@gmail.com</span>
 <span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span>
 <span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></code></pre></div>
-<p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/fonts/docs/developer_api">Web Fonts Developer API</a>. We show the most popular web font families served by Google Fonts.</p>
+<p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/fonts/docs/developer_api" class="external-link">Web Fonts Developer API</a>. We show the most popular web font families served by Google Fonts.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span>
 
 <span class="va">req</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_develop.html">request_build</a></span><span class="op">(</span>
   method <span class="op">=</span> <span class="st">"GET"</span>,
   path <span class="op">=</span> <span class="st">"webfonts/v1/webfonts"</span>,
-  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     sort <span class="op">=</span> <span class="st">"popularity"</span>
   <span class="op">)</span>,
   key <span class="op">=</span> <span class="fu"><a href="reference/gargle_api_key.html">gargle_api_key</a></span><span class="op">(</span><span class="op">)</span>,
@@ -185,73 +189,81 @@
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span>
 
 <span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[[</span><span class="st">"items"</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[[</span><span class="st">"family"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">[[</span><span class="st">"family"</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Lato"             "Montserrat"       "Noto Sans JP"     "Open Sans"       </span>
 <span class="co">#&gt; [5] "Poppins"          "Roboto"           "Roboto Condensed" "Source Sans Pro"</span></code></pre></div>
 <p>Please note that the ‘gargle’ project is released with a <a href="https://gargle.r-lib.org/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-<p><a href="https://www.tidyverse.org/google_privacy_policy">Privacy policy</a></p>
+<p><a href="https://www.tidyverse.org/google_privacy_policy" class="external-link">Privacy policy</a></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=gargle">https://​cloud.r-project.org/​package=gargle</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/r-lib/gargle/">https://​github.com/​r-lib/​gargle/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/r-lib/gargle/issues">https://​github.com/​r-lib/​gargle/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=gargle" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/r-lib/gargle/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/r-lib/gargle/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://jennybryan.org">Jennifer Bryan</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6983-2759" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Craig Citro <br><small class="roles"> Author </small>  </li>
-<li>
-<a href="http://hadley.nz">Hadley Wickham</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing gargle</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=gargle"><img src="https://www.r-pkg.org/badges/version/gargle" alt="CRAN status"></a></li>
-<li><a href="https://codecov.io/gh/r-lib/gargle?branch=main"><img src="https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/r-lib/gargle/actions"><img src="https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li>
+<a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6983-2759" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Craig Citro <br><small class="roles"> Author </small>  </li>
+<li>Hadley Wickham <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4757-117X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>RStudio <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=gargle" class="external-link"><img src="https://www.r-pkg.org/badges/version/gargle" alt="CRAN status"></a></li>
+<li><a href="https://codecov.io/gh/r-lib/gargle?branch=main" class="external-link"><img src="https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/r-lib/gargle/actions" class="external-link"><img src="https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://jennybryan.org">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz">Hadley Wickham</a>, <a href="https://www.rstudio.com"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" height="24"></a>.</p>
+  <p></p>
+<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, Hadley Wickham, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -259,6 +271,8 @@
 
   
 
+
+  
 
   </body>
 </html>
