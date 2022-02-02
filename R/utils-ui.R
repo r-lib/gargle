@@ -195,11 +195,18 @@ gargle_abort_bad_class <- function(object,
   )
 }
 
-gargle_abort_bad_params <- function(names, reason, call = caller_env()) {
+gargle_abort_bad_params <- function(names,
+                                    reason,
+                                    endpoint_id,
+                                    call = caller_env()) {
   gargle_abort(
     c(
       "These parameters are {reason}:",
-      bulletize(gargle_map_cli(names))
+      bulletize(gargle_map_cli(names), bullet = "x"),
+      "i" = gargle_map_cli(
+        endpoint_id,
+        template = "API endpoint: {.field <<x>>}"
+      )
     ),
     class = "gargle_error_bad_params",
     call = call,

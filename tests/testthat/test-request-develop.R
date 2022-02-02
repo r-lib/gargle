@@ -1,7 +1,7 @@
 test_that("request_develop() errors for unrecognized parameters", {
   expect_snapshot_error(
     request_develop(
-      endpoint = list(parameters = list(a = list())),
+      endpoint = list(parameters = list(a = list()), id = "some.api.endpoint"),
       params = list(b = list(), c = list())
     )
   )
@@ -10,7 +10,10 @@ test_that("request_develop() errors for unrecognized parameters", {
 test_that("request_develop() errors if required parameter is missing", {
   expect_snapshot_error(
     request_develop(
-      endpoint = list(parameters = list(a = list(required = TRUE))),
+      endpoint = list(
+        parameters = list(a = list(required = TRUE)),
+        id = "some.api.endpoint"
+      ),
       params = list(b = list())
     )
   )

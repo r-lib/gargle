@@ -1,11 +1,13 @@
 # request_develop() errors for unrecognized parameters
 
     These parameters are unknown:
-    * 'b'
-    * 'c'
+    x 'b'
+    x 'c'
+    i API endpoint: 'some.api.endpoint'
 
 # request_develop() errors if required parameter is missing
 
     These parameters are missing:
-    * 'a'
+    x 'a'
+    i API endpoint: 'some.api.endpoint'
 

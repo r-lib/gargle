@@ -136,7 +136,7 @@
 request_develop <- function(endpoint,
                             params = list(),
                             base_url = "https://www.googleapis.com") {
-  check_params(params, endpoint$parameters)
+  check_params(params, endpoint$parameters, endpoint$id)
   in_body <- vapply(
     endpoint$parameters,
     function(x) x$location == "body",
@@ -190,16 +190,16 @@ request_build <- function(method = "GET",
 ## check params provided by user against spec
 ##   * error if required params are missing
 ##   * error for unknown params
-check_params <- function(provided, spec, call = caller_env()) {
+check_params <- function(provided, spec, id, call = caller_env()) {
   required <- Filter(function(x) isTRUE(x$required), spec)
   missing <- setdiff(names(required), names(provided))
   if (length(missing)) {
-    gargle_abort_bad_params(missing, reason = "missing", call = call)
+    gargle_abort_bad_params(missing, reason = "missing", id, call = call)
   }
 
   unknown <- setdiff(names(provided), names(spec))
   if (length(unknown)) {
-    gargle_abort_bad_params(unknown, reason = "unknown", call = call)
+    gargle_abort_bad_params(unknown, reason = "unknown", id, call = call)
   }
 
   invisible(provided)
