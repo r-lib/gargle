@@ -14,7 +14,7 @@ oauth_external_token(
 external account, in one of the forms supported for the \code{txt} argument of
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (probably, a file path, although it could be a JSON
 string). The instructions for generating this configuration are given at
-\href{https://cloud.google.com/iam/docs/access-resources-aws#generate}{Automatically generate credentials}.
+\href{https://cloud.google.com/iam/docs/configuring-workload-identity-federation}{Configuring workload identity federation}.
 
 Note that external account tokens are a natural fit for use as Application
 Default Credentials, so consider storing the configuration file in one of

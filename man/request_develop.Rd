@@ -47,7 +47,8 @@ by \code{request_build()}, using named parameters found in \code{params}.}
 \code{\link[httr:config]{httr::config()}}.}
 
 \item{key}{API key. Needed for requests that don't contain a token. For more,
-see Google's document \href{https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279}{Credentials, access, security, and identity}.
+see Google's document Credentials, access, security, and identity
+(\verb{https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279}).
 A key can be passed as a named component of \code{params}, but note that the
 formal argument \code{key} will clobber it, if non-\code{NULL}.}
 }

@@ -37,7 +37,7 @@ credentials_gce()
 }
 }
 \seealso{
-\url{https://cloud.google.com/compute/docs/storing-retrieving-metadata}
+\url{https://cloud.google.com/compute/docs/metadata/overview}
 
 Other credential functions: 
 \code{\link{credentials_app_default}()},

@@ -110,7 +110,7 @@ If any of that happens, we fail and `token_fetch()`'s execution moves on to the 
 Here is some Google documentation about workload identity federation and the specifics for AWS:
 
 * Blog post: [Keyless API authentication — Better cloud security through workload identity federation, no service account keys necessary](https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/)
-* Documentation: [How to use identity federation to access Google Cloud resources from Amazon Web Services (AWS)](https://cloud.google.com/iam/docs/access-resources-aws)
+* Documentation: [Configuring workload identity federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation)
 
 ## `credentials_app_default()`
 

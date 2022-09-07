@@ -22,9 +22,9 @@
 #'   by `request_build()`, using named parameters found in `params`.
 #' @param body List. Values to send in the API request body.
 #' @param key API key. Needed for requests that don't contain a token. For more,
-#'   see Google's document [Credentials, access, security, and
-#'   identity](https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279).
-#'   A key can be passed as a named component of `params`, but note that the
+#'   see Google's document Credentials, access, security, and identity
+#'   (`https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279`).
+#'    A key can be passed as a named component of `params`, but note that the
 #'   formal argument `key` will clobber it, if non-`NULL`.
 #' @param token Token, ready for inclusion in a request, i.e. prepared with
 #'   [httr::config()].

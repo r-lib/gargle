@@ -5,7 +5,7 @@
 #' @inheritParams token_fetch
 #' @param service_account Name of the GCE service account to use.
 #'
-#' @seealso <https://cloud.google.com/compute/docs/storing-retrieving-metadata>
+#' @seealso <https://cloud.google.com/compute/docs/metadata/overview>
 #'
 #' @return A [GceToken()] or `NULL`.
 #' @family credential functions

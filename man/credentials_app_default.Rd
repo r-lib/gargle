@@ -60,7 +60,7 @@ credentials_app_default()
 }
 \seealso{
 \itemize{
-\item \url{https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application}
+\item \url{https://cloud.google.com/docs/authentication#service-accounts}
 \item \url{https://cloud.google.com/sdk/docs/}
 }
 
