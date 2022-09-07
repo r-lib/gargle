@@ -25,10 +25,12 @@ high-level wrappers for users. It is a drop-in substitute for
 are considered retryable: 408, 429, 500, 502, 503.
 }
 \details{
-Consider an example where we are willing to make a request up to 5 times.\preformatted{try  1  2    3        4                5
+Consider an example where we are willing to make a request up to 5 times.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{try  1  2    3        4                5
      |--|----|--------|----------------|
 wait  1   2      3           4
-}
+}\if{html}{\out{</div>}}
 
 There will be up to 5 - 1 = 4 waits and we generally want the waiting period
 to get longer, in an exponential way. Such schemes are called exponential
@@ -39,9 +41,11 @@ jitter", which adds some noise to fixed, exponentially increasing waiting
 times.
 
 Either way our waiting times are based on a geometric series, which, by
-convention, is usually written in terms of powers of 2:\preformatted{b , 2b, 4b, 8b, ...
+convention, is usually written in terms of powers of 2:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{b , 2b, 4b, 8b, ...
   = b * 2^0, b * 2^1, b * 2^2, b * 2^3, ...
-}
+}\if{html}{\out{</div>}}
 
 The terms in this series require knowledge of \code{b}, the so-called exponential
 base, and many retry functions and libraries require the user to specify
@@ -60,11 +64,13 @@ Are we counting tries or just the retries?
 Let \emph{n} be the total number of tries we're willing to make (the argument
 \code{max_tries_total}) and let \emph{W} be the total amount of seconds we're willing
 to dedicate to making and retrying this request (the argument
-\code{max_total_wait_time_in_seconds}). Here's how we determine \emph{b}:\preformatted{sum_\{i=0\}^(n - 1) b * 2^i = W
+\code{max_total_wait_time_in_seconds}). Here's how we determine \emph{b}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{sum_\{i=0\}^(n - 1) b * 2^i = W
 b * sum_\{i=0\}^(n - 1) 2^i = W
        b * ( (2 ^ n) - 1) = W
                         b = W / ( (2 ^ n) - 1)
-}
+}\if{html}{\out{</div>}}
 }
 \section{Special cases}{
 

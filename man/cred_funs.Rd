@@ -34,20 +34,22 @@ consulted by \code{\link[=token_fetch]{token_fetch()}}.
 }
 \section{Functions}{
 \itemize{
-\item \code{cred_funs_list}: Get the list of registered credential functions.
+\item \code{cred_funs_list()}: Get the list of registered credential functions.
 
-\item \code{cred_funs_add}: Register one or more new credential fetching functions.
-Function(s) are added to the \emph{front} of the list. So:\preformatted{* "First registered, last tried."
+\item \code{cred_funs_add()}: Register one or more new credential fetching functions.
+Function(s) are added to the \emph{front} of the list. So:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{* "First registered, last tried."
 * "Last registered, first tried."
-}
+}\if{html}{\out{</div>}}
 
-\item \code{cred_funs_set}: Register a list of credential fetching functions.
+\item \code{cred_funs_set()}: Register a list of credential fetching functions.
 
-\item \code{cred_funs_clear}: Clear the credential function registry.
+\item \code{cred_funs_clear()}: Clear the credential function registry.
 
-\item \code{cred_funs_set_default}: Reset the registry to the gargle default.
+\item \code{cred_funs_set_default()}: Reset the registry to the gargle default.
+
 }}
-
 \examples{
 names(cred_funs_list())
 

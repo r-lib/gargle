@@ -38,11 +38,13 @@ Wrapper functions around options consulted by gargle, which provide:
 
 If the built-in defaults don't suit you, set one or more of these options.
 Typically, this is done in the \code{.Rprofile} startup file, with code along
-these lines:\preformatted{options(
+these lines:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{options(
   gargle_oauth_email = "jane@example.com",
   gargle_oauth_cache = "/path/to/folder/that/does/not/sync/to/cloud"
 )
-}
+}\if{html}{\out{</div>}}
 }
 \section{\code{gargle_oauth_email}}{
 

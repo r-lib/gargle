@@ -18,30 +18,30 @@ Not intended for direct use. See \code{\link[=credentials_external_account]{cred
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{WifToken$new()}}
-\item \href{#method-init_credentials}{\code{WifToken$init_credentials()}}
-\item \href{#method-refresh}{\code{WifToken$refresh()}}
-\item \href{#method-format}{\code{WifToken$format()}}
-\item \href{#method-print}{\code{WifToken$print()}}
-\item \href{#method-can_refresh}{\code{WifToken$can_refresh()}}
-\item \href{#method-cache}{\code{WifToken$cache()}}
-\item \href{#method-load_from_cache}{\code{WifToken$load_from_cache()}}
-\item \href{#method-validate}{\code{WifToken$validate()}}
-\item \href{#method-revoke}{\code{WifToken$revoke()}}
-\item \href{#method-clone}{\code{WifToken$clone()}}
+\item \href{#method-WifToken-new}{\code{WifToken$new()}}
+\item \href{#method-WifToken-init_credentials}{\code{WifToken$init_credentials()}}
+\item \href{#method-WifToken-refresh}{\code{WifToken$refresh()}}
+\item \href{#method-WifToken-format}{\code{WifToken$format()}}
+\item \href{#method-WifToken-print}{\code{WifToken$print()}}
+\item \href{#method-WifToken-can_refresh}{\code{WifToken$can_refresh()}}
+\item \href{#method-WifToken-cache}{\code{WifToken$cache()}}
+\item \href{#method-WifToken-load_from_cache}{\code{WifToken$load_from_cache()}}
+\item \href{#method-WifToken-validate}{\code{WifToken$validate()}}
+\item \href{#method-WifToken-revoke}{\code{WifToken$revoke()}}
+\item \href{#method-WifToken-clone}{\code{WifToken$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash">}\href{../../httr/html/Token.html#method-hash}{\code{httr::Token$hash()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign">}\href{../../httr/html/Token2.0.html#method-sign}{\code{httr::Token2.0$sign()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href='../../httr/html/Token.html#method-Token-hash'><code>httr::Token$hash()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-Token2.0-sign'><code>httr::Token2.0$sign()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-WifToken-new"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-new}{}}}
 \subsection{Method \code{new()}}{
 Get a token via workload identity federation
 \subsection{Usage}{
@@ -60,8 +60,8 @@ A WifToken.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-init_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-init_credentials}{}}}
+\if{html}{\out{<a id="method-WifToken-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-init_credentials}{}}}
 \subsection{Method \code{init_credentials()}}{
 Enact the actual token exchange for workload identity
 federation.
@@ -71,8 +71,8 @@ federation.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-WifToken-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 Refreshes the token, which means re-doing the entire token
 flow in this case.
@@ -82,8 +82,8 @@ flow in this case.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format"></a>}}
-\if{latex}{\out{\hypertarget{method-format}{}}}
+\if{html}{\out{<a id="method-WifToken-format"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-format}{}}}
 \subsection{Method \code{format()}}{
 Format a \code{\link[=WifToken]{WifToken()}}.
 \subsection{Usage}{
@@ -99,8 +99,8 @@ Format a \code{\link[=WifToken]{WifToken()}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-WifToken-print"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-print}{}}}
 \subsection{Method \code{print()}}{
 Print a \code{\link[=WifToken]{WifToken()}}.
 \subsection{Usage}{
@@ -116,8 +116,8 @@ Print a \code{\link[=WifToken]{WifToken()}}.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-can_refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-can_refresh}{}}}
+\if{html}{\out{<a id="method-WifToken-can_refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-can_refresh}{}}}
 \subsection{Method \code{can_refresh()}}{
 Placeholder implementation of required method. Returns \code{TRUE}.
 \subsection{Usage}{
@@ -126,8 +126,8 @@ Placeholder implementation of required method. Returns \code{TRUE}.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cache"></a>}}
-\if{latex}{\out{\hypertarget{method-cache}{}}}
+\if{html}{\out{<a id="method-WifToken-cache"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-cache}{}}}
 \subsection{Method \code{cache()}}{
 Placeholder implementation of required method. Returns self.
 \subsection{Usage}{
@@ -136,8 +136,8 @@ Placeholder implementation of required method. Returns self.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-load_from_cache"></a>}}
-\if{latex}{\out{\hypertarget{method-load_from_cache}{}}}
+\if{html}{\out{<a id="method-WifToken-load_from_cache"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-load_from_cache}{}}}
 \subsection{Method \code{load_from_cache()}}{
 Placeholder implementation of required method. Returns self.
 \subsection{Usage}{
@@ -146,8 +146,8 @@ Placeholder implementation of required method. Returns self.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-validate"></a>}}
-\if{latex}{\out{\hypertarget{method-validate}{}}}
+\if{html}{\out{<a id="method-WifToken-validate"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-validate}{}}}
 \subsection{Method \code{validate()}}{
 Placeholder implementation of required method.
 \subsection{Usage}{
@@ -156,8 +156,8 @@ Placeholder implementation of required method.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-revoke"></a>}}
-\if{latex}{\out{\hypertarget{method-revoke}{}}}
+\if{html}{\out{<a id="method-WifToken-revoke"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-revoke}{}}}
 \subsection{Method \code{revoke()}}{
 Placeholder implementation of required method.
 \subsection{Usage}{
@@ -166,8 +166,8 @@ Placeholder implementation of required method.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-WifToken-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-WifToken-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

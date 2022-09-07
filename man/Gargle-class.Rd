@@ -40,30 +40,30 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Gargle2.0$new()}}
-\item \href{#method-format}{\code{Gargle2.0$format()}}
-\item \href{#method-print}{\code{Gargle2.0$print()}}
-\item \href{#method-hash}{\code{Gargle2.0$hash()}}
-\item \href{#method-cache}{\code{Gargle2.0$cache()}}
-\item \href{#method-load_from_cache}{\code{Gargle2.0$load_from_cache()}}
-\item \href{#method-refresh}{\code{Gargle2.0$refresh()}}
-\item \href{#method-init_credentials}{\code{Gargle2.0$init_credentials()}}
-\item \href{#method-clone}{\code{Gargle2.0$clone()}}
+\item \href{#method-Gargle2.0-new}{\code{Gargle2.0$new()}}
+\item \href{#method-Gargle2.0-format}{\code{Gargle2.0$format()}}
+\item \href{#method-Gargle2.0-print}{\code{Gargle2.0$print()}}
+\item \href{#method-Gargle2.0-hash}{\code{Gargle2.0$hash()}}
+\item \href{#method-Gargle2.0-cache}{\code{Gargle2.0$cache()}}
+\item \href{#method-Gargle2.0-load_from_cache}{\code{Gargle2.0$load_from_cache()}}
+\item \href{#method-Gargle2.0-refresh}{\code{Gargle2.0$refresh()}}
+\item \href{#method-Gargle2.0-init_credentials}{\code{Gargle2.0$init_credentials()}}
+\item \href{#method-Gargle2.0-clone}{\code{Gargle2.0$clone()}}
 }
 }
-\if{html}{
-\out{<details open ><summary>Inherited methods</summary>}
-\itemize{
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="can_refresh">}\href{../../httr/html/Token2.0.html#method-can_refresh}{\code{httr::Token2.0$can_refresh()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="revoke">}\href{../../httr/html/Token2.0.html#method-revoke}{\code{httr::Token2.0$revoke()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign">}\href{../../httr/html/Token2.0.html#method-sign}{\code{httr::Token2.0$sign()}}\out{</span>}
-\item \out{<span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate">}\href{../../httr/html/Token2.0.html#method-validate}{\code{httr::Token2.0$validate()}}\out{</span>}
-}
-\out{</details>}
-}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="can_refresh"><a href='../../httr/html/Token2.0.html#method-Token2.0-can_refresh'><code>httr::Token2.0$can_refresh()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="revoke"><a href='../../httr/html/Token2.0.html#method-Token2.0-revoke'><code>httr::Token2.0$revoke()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-Token2.0-sign'><code>httr::Token2.0$sign()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href='../../httr/html/Token2.0.html#method-Token2.0-validate'><code>httr::Token2.0$validate()</code></a></span></li>
+</ul>
+</details>
+}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-new}{}}}
 \subsection{Method \code{new()}}{
 Create a Gargle2.0 token
 \subsection{Usage}{
@@ -103,8 +103,8 @@ A Gargle2.0 token.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-format"></a>}}
-\if{latex}{\out{\hypertarget{method-format}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-format"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-format}{}}}
 \subsection{Method \code{format()}}{
 Format a Gargle2.0 token
 \subsection{Usage}{
@@ -120,8 +120,8 @@ Format a Gargle2.0 token
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-print"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-print}{}}}
 \subsection{Method \code{print()}}{
 Print a Gargle2.0 token
 \subsection{Usage}{
@@ -137,8 +137,8 @@ Print a Gargle2.0 token
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-hash"></a>}}
-\if{latex}{\out{\hypertarget{method-hash}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-hash"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-hash}{}}}
 \subsection{Method \code{hash()}}{
 Generate the email-augmented hash of a Gargle2.0 token
 \subsection{Usage}{
@@ -147,8 +147,8 @@ Generate the email-augmented hash of a Gargle2.0 token
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-cache"></a>}}
-\if{latex}{\out{\hypertarget{method-cache}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-cache"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-cache}{}}}
 \subsection{Method \code{cache()}}{
 Put a Gargle2.0 token into the cache
 \subsection{Usage}{
@@ -157,8 +157,8 @@ Put a Gargle2.0 token into the cache
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-load_from_cache"></a>}}
-\if{latex}{\out{\hypertarget{method-load_from_cache}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-load_from_cache"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-load_from_cache}{}}}
 \subsection{Method \code{load_from_cache()}}{
 (Attempt to) get a Gargle2.0 token from the cache
 \subsection{Usage}{
@@ -167,8 +167,8 @@ Put a Gargle2.0 token into the cache
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-refresh}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-refresh}{}}}
 \subsection{Method \code{refresh()}}{
 (Attempt to) refresh a Gargle2.0 token
 \subsection{Usage}{
@@ -177,8 +177,8 @@ Put a Gargle2.0 token into the cache
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-init_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-init_credentials}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-init_credentials}{}}}
 \subsection{Method \code{init_credentials()}}{
 Initiate a new Gargle2.0 token
 \subsection{Usage}{
@@ -187,8 +187,8 @@ Initiate a new Gargle2.0 token
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-Gargle2.0-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

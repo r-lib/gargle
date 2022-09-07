@@ -49,12 +49,14 @@ wrap it) to accommodate a "bring your own token" workflow.
 This also makes it possible to obtain a token with one package and then
 register it for use with another package. For example, the default scope
 requested by googledrive is also sufficient for operations available in
-googlesheets4. You could use a shared token like so:\preformatted{library(googledrive)
+googlesheets4. You could use a shared token like so:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{library(googledrive)
 library(googlesheets4)
 drive_auth(email = "jane_doe@example.com")
 gs4_auth(token = drive_token())
 # work with both packages freely now
-}
+}\if{html}{\out{</div>}}
 }
 \examples{
 \dontrun{
