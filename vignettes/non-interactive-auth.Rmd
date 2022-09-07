@@ -304,7 +304,7 @@ library(googledrive)
 drive_auth(cache = ".secrets", email = "jenny@example.com")
 
 # now use googledrive with no need for explicit auth
-drive_auth(n_max = 5)
+drive_find(n_max = 5)
 ```
 
 Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
