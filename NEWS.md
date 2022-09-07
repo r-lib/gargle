@@ -1,16 +1,15 @@
 # gargle (development version)
 
-We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.
+* We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.
 
-`credentials_gce()` no longer validates the requested scopes against instance scopes.
+* `credentials_gce()` no longer validates the requested scopes against instance scopes.
 In practice, it's easy for this check to be more of a nuisance than a help (#161, #185 @craigcitro).
 
-`request_retry()` retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (#169).
+* `request_retry()` retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (#169).
 
 ## Dependency changes
 
-The minimum versions of rlang and testthat have been bumped.
-The motivation is to exploit and adapt to the changes to the display of error messages.
+* The minimum versions of rlang and testthat have been bumped. The motivation is to exploit and adapt to the changes to the display of error messages.
 
 # gargle 1.2.0
 
