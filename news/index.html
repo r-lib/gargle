@@ -93,7 +93,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
-<ul><li><p>We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.</p></li>
+<ul><li><p>Help files below <code>man/</code> have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)</p></li>
+<li><p>We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.</p></li>
 <li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> no longer validates the requested scopes against instance scopes. In practice, it’s easy for this check to be more of a nuisance than a help (<a href="https://github.com/r-lib/gargle/issues/161" class="external-link">#161</a>, <a href="https://github.com/r-lib/gargle/issues/185" class="external-link">#185</a> <a href="https://github.com/craigcitro" class="external-link">@craigcitro</a>).</p></li>
 <li><p><code><a href="../reference/request_retry.html">request_retry()</a></code> retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (<a href="https://github.com/r-lib/gargle/issues/169" class="external-link">#169</a>).</p></li>
 </ul><div class="section level3">
@@ -216,7 +217,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.0" id="gargle-020">gargle 0.2.0<small>2019-06-11</small><a class="anchor" aria-label="anchor" href="#gargle-020"></a></h2>
-<ul><li><p>All built-in API credentials have been rotated and are stored internally in a way that reinforces appropriate use. There is a new <a href="https://www.tidyverse.org/google_privacy_policy/" class="external-link">Privacy policy</a> as well as a <a href="https://www.tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications" class="external-link">policy for authors of packages or other applications</a>. This is related to a process to get the gargle project <a href="https://support.google.com/cloud/answer/7454865?hl=en" class="external-link">verified</a>, which affects the OAuth2 capabilities and the consent screen.</p></li>
+<ul><li><p>All built-in API credentials have been rotated and are stored internally in a way that reinforces appropriate use. There is a new <a href="https://www.tidyverse.org/google_privacy_policy/" class="external-link">Privacy policy</a> as well as a <a href="https://www.tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications" class="external-link">policy for authors of packages or other applications</a>. This is related to a process to get the gargle project verified, which affects the OAuth2 capabilities and the consent screen.</p></li>
 <li><p>New vignette on “How to get your own API credentials”, to help other package authors or users obtain their own API key or OAuth client ID and secret.</p></li>
 <li><p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> is a new credential function. It is included in the default registry consulted by <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and is tried just before <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>.</p></li>
 </ul></div>
