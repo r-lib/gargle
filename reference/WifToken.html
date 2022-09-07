@@ -113,20 +113,20 @@ Token for use with workload identity federation"><!-- mathjax --><script src="ht
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-new"><code>WifToken$new()</code></a></p></li>
-<li><p><a href="#method-init_credentials"><code>WifToken$init_credentials()</code></a></p></li>
-<li><p><a href="#method-refresh"><code>WifToken$refresh()</code></a></p></li>
-<li><p><a href="#method-format"><code>WifToken$format()</code></a></p></li>
-<li><p><a href="#method-print"><code>WifToken$print()</code></a></p></li>
-<li><p><a href="#method-can_refresh"><code>WifToken$can_refresh()</code></a></p></li>
-<li><p><a href="#method-cache"><code>WifToken$cache()</code></a></p></li>
-<li><p><a href="#method-load_from_cache"><code>WifToken$load_from_cache()</code></a></p></li>
-<li><p><a href="#method-validate"><code>WifToken$validate()</code></a></p></li>
-<li><p><a href="#method-revoke"><code>WifToken$revoke()</code></a></p></li>
-<li><p><a href="#method-clone"><code>WifToken$clone()</code></a></p></li>
-</ul></div><p><details open><summary>Inherited methods</summary><ul><li><p><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href="../../httr/html/Token.html#method-hash"><code>httr::Token$hash()</code></a></span></p></li>
-<li><p><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href="../../httr/html/Token2.0.html#method-sign"><code>httr::Token2.0$sign()</code></a></span></p></li>
-</ul></details></p><hr><a id="method-new"></a><div class="section">
+<ul><li><p><a href="#method-WifToken-new"><code>WifToken$new()</code></a></p></li>
+<li><p><a href="#method-WifToken-init_credentials"><code>WifToken$init_credentials()</code></a></p></li>
+<li><p><a href="#method-WifToken-refresh"><code>WifToken$refresh()</code></a></p></li>
+<li><p><a href="#method-WifToken-format"><code>WifToken$format()</code></a></p></li>
+<li><p><a href="#method-WifToken-print"><code>WifToken$print()</code></a></p></li>
+<li><p><a href="#method-WifToken-can_refresh"><code>WifToken$can_refresh()</code></a></p></li>
+<li><p><a href="#method-WifToken-cache"><code>WifToken$cache()</code></a></p></li>
+<li><p><a href="#method-WifToken-load_from_cache"><code>WifToken$load_from_cache()</code></a></p></li>
+<li><p><a href="#method-WifToken-validate"><code>WifToken$validate()</code></a></p></li>
+<li><p><a href="#method-WifToken-revoke"><code>WifToken$revoke()</code></a></p></li>
+<li><p><a href="#method-WifToken-clone"><code>WifToken$clone()</code></a></p></li>
+</ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href="../../httr/html/Token.html#method-Token-hash"><code>httr::Token$hash()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href="../../httr/html/Token2.0.html#method-Token2.0-sign"><code>httr::Token2.0$sign()</code></a></span></li>
+</ul></details></p><hr><a id="method-WifToken-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Get a token via workload identity federation</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
@@ -146,7 +146,7 @@ Token for use with workload identity federation"><!-- mathjax --><script src="ht
 <p>A WifToken.</p>
 </div>
 
-</div><p></p><hr><a id="method-init_credentials"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-init_credentials"></a><div class="section">
 <h3 id="method-init-credentials-">Method <code>init_credentials()</code><a class="anchor" aria-label="anchor" href="#method-init-credentials-"></a></h3>
 <p>Enact the actual token exchange for workload identity
 federation.</p><div class="section">
@@ -155,7 +155,7 @@ federation.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-refresh"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-refresh"></a><div class="section">
 <h3 id="method-refresh-">Method <code>refresh()</code><a class="anchor" aria-label="anchor" href="#method-refresh-"></a></h3>
 <p>Refreshes the token, which means re-doing the entire token
 flow in this case.</p><div class="section">
@@ -164,7 +164,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-format"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-format"></a><div class="section">
 <h3 id="method-format-">Method <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code><a class="anchor" aria-label="anchor" href="#method-format-"></a></h3>
 <p>Format a <code>WifToken()</code>.</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
@@ -180,7 +180,7 @@ flow in this case.</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-print"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-print"></a><div class="section">
 <h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
 <p>Print a <code>WifToken()</code>.</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
@@ -196,7 +196,7 @@ flow in this case.</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-can_refresh"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-can_refresh"></a><div class="section">
 <h3 id="method-can-refresh-">Method <code>can_refresh()</code><a class="anchor" aria-label="anchor" href="#method-can-refresh-"></a></h3>
 <p>Placeholder implementation of required method. Returns <code>TRUE</code>.</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
@@ -204,7 +204,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-cache"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-cache"></a><div class="section">
 <h3 id="method-cache-">Method <code>cache()</code><a class="anchor" aria-label="anchor" href="#method-cache-"></a></h3>
 <p>Placeholder implementation of required method. Returns self.</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
@@ -212,7 +212,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-load_from_cache"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-load_from_cache"></a><div class="section">
 <h3 id="method-load-from-cache-">Method <code>load_from_cache()</code><a class="anchor" aria-label="anchor" href="#method-load-from-cache-"></a></h3>
 <p>Placeholder implementation of required method. Returns self.</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
@@ -220,7 +220,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-validate"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-validate"></a><div class="section">
 <h3 id="method-validate-">Method <code>validate()</code><a class="anchor" aria-label="anchor" href="#method-validate-"></a></h3>
 <p>Placeholder implementation of required method.</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
@@ -228,7 +228,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-revoke"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-revoke"></a><div class="section">
 <h3 id="method-revoke-">Method <code>revoke()</code><a class="anchor" aria-label="anchor" href="#method-revoke-"></a></h3>
 <p>Placeholder implementation of required method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
@@ -236,7 +236,7 @@ flow in this case.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-clone"></a><div class="section">
+</div><p></p><hr><a id="method-WifToken-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>

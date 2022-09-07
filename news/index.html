@@ -93,13 +93,12 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
-<p>We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.</p>
-<p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> no longer validates the requested scopes against instance scopes. In practice, it’s easy for this check to be more of a nuisance than a help (<a href="https://github.com/r-lib/gargle/issues/161" class="external-link">#161</a>, <a href="https://github.com/r-lib/gargle/issues/185" class="external-link">#185</a> <a href="https://github.com/craigcitro" class="external-link">@craigcitro</a>).</p>
-<p><code><a href="../reference/request_retry.html">request_retry()</a></code> retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (<a href="https://github.com/r-lib/gargle/issues/169" class="external-link">#169</a>).</p>
-<div class="section level3">
+<ul><li><p>We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.</p></li>
+<li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> no longer validates the requested scopes against instance scopes. In practice, it’s easy for this check to be more of a nuisance than a help (<a href="https://github.com/r-lib/gargle/issues/161" class="external-link">#161</a>, <a href="https://github.com/r-lib/gargle/issues/185" class="external-link">#185</a> <a href="https://github.com/craigcitro" class="external-link">@craigcitro</a>).</p></li>
+<li><p><code><a href="../reference/request_retry.html">request_retry()</a></code> retries for an expanded set of HTTP codes: 408, 429, 500, 502, 503. Previously, retries were limited to 429 (<a href="https://github.com/r-lib/gargle/issues/169" class="external-link">#169</a>).</p></li>
+</ul><div class="section level3">
 <h3 id="dependency-changes-development-version">Dependency changes<a class="anchor" aria-label="anchor" href="#dependency-changes-development-version"></a></h3>
-<p>The minimum versions of rlang and testthat have been bumped. The motivation is to exploit and adapt to the changes to the display of error messages.</p>
-</div>
+<ul><li>The minimum versions of rlang and testthat have been bumped. The motivation is to exploit and adapt to the changes to the display of error messages.</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="gargle-120">gargle 1.2.0<small>2021-07-02</small><a class="anchor" aria-label="anchor" href="#gargle-120"></a></h2>

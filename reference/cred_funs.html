@@ -130,14 +130,14 @@ is named <code>scopes</code>, and it includes <code>...</code> as an argument.</
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>cred_funs_list</code>: Get the list of registered credential functions.</p></li>
-<li><p><code>cred_funs_add</code>: Register one or more new credential fetching functions.
-Function(s) are added to the <em>front</em> of the list. So:</p><div class="sourceCode"><pre><code>* "First registered, last tried."
-* "Last registered, first tried."
-</code></pre></div></li>
-<li><p><code>cred_funs_set</code>: Register a list of credential fetching functions.</p></li>
-<li><p><code>cred_funs_clear</code>: Clear the credential function registry.</p></li>
-<li><p><code>cred_funs_set_default</code>: Reset the registry to the gargle default.</p></li>
+<ul><li><p><code>cred_funs_list()</code>: Get the list of registered credential functions.</p></li>
+<li><p><code>cred_funs_add()</code>: Register one or more new credential fetching functions.
+Function(s) are added to the <em>front</em> of the list. So:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1"></a><span class="op">*</span><span class="st"> "First registered, last tried."</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">*</span><span class="st"> "Last registered, first tried."</span></span></code></pre><p></p></div></li>
+<li><p><code>cred_funs_set()</code>: Register a list of credential fetching functions.</p></li>
+<li><p><code>cred_funs_clear()</code>: Clear the credential function registry.</p></li>
+<li><p><code>cred_funs_set_default()</code>: Reset the registry to the gargle default.</p></li>
 </ul></div>
     <div id="see-also">
     <h2>See also</h2>

@@ -130,11 +130,10 @@ bound and actual cumulative waiting will be less.</p></dd>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>Consider an example where we are willing to make a request up to 5 times.</p><div class="sourceCode"><pre><code>try  1  2    3        4                5
-     |--|----|--------|----------------|
-wait  1   2      3           4
-</code></pre></div>
-
+    <p>Consider an example where we are willing to make a request up to 5 times.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1"></a>try  <span class="dv">1</span>  <span class="dv">2</span>    <span class="dv">3</span>        <span class="dv">4</span>                <span class="dv">5</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>     <span class="op">|--</span><span class="er">|</span><span class="op">----</span><span class="er">|</span><span class="op">--------</span><span class="er">|</span><span class="op">----------------</span><span class="er">|</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>wait  <span class="dv">1</span>   <span class="dv">2</span>      <span class="dv">3</span>           <span class="dv">4</span></span></code></pre><p></p></div>
 <p>There will be up to 5 - 1 = 4 waits and we generally want the waiting period
 to get longer, in an exponential way. Such schemes are called exponential
 backoff. <code>request_retry()</code> implements exponential backoff with "full jitter",
@@ -143,10 +142,9 @@ interval of support grows exponentially. A common alternative is "equal
 jitter", which adds some noise to fixed, exponentially increasing waiting
 times.</p>
 <p>Either way our waiting times are based on a geometric series, which, by
-convention, is usually written in terms of powers of 2:</p><div class="sourceCode"><pre><code>b , 2b, 4b, 8b, ...
-  = b * 2^0, b * 2^1, b * 2^2, b * 2^3, ...
-</code></pre></div>
-
+convention, is usually written in terms of powers of 2:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1"></a>b , 2b, 4b, 8b, ...</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  =<span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">^</span><span class="dv">0</span>, b <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">^</span><span class="dv">1</span>, b <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">^</span><span class="dv">2</span>, b <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">^</span><span class="dv">3</span>, ...</span></code></pre><p></p></div>
 <p>The terms in this series require knowledge of <code>b</code>, the so-called exponential
 base, and many retry functions and libraries require the user to specify
 this. But most users find it easier to declare the total amount of waiting
@@ -160,12 +158,11 @@ Are we counting tries or just the retries?</p></li>
 </ul><p>Let <em>n</em> be the total number of tries we're willing to make (the argument
 <code>max_tries_total</code>) and let <em>W</em> be the total amount of seconds we're willing
 to dedicate to making and retrying this request (the argument
-<code>max_total_wait_time_in_seconds</code>). Here's how we determine <em>b</em>:</p><div class="sourceCode"><pre><code>sum_{i=0}^(n - 1) b * 2^i = W
-b * sum_{i=0}^(n - 1) 2^i = W
-       b * ( (2 ^ n) - 1) = W
-                        b = W / ( (2 ^ n) - 1)
-</code></pre></div>
-
+<code>max_total_wait_time_in_seconds</code>). Here's how we determine <em>b</em>:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1"></a>sum_{i=<span class="dv">0</span>}<span class="op">^</span>(n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) b <span class="op">*</span><span class="st"> </span><span class="dv">2</span><span class="op">^</span>i =<span class="st"> </span>W</span>
+<span id="cb1-2"><a href="#cb1-2"></a>b <span class="op">*</span><span class="st"> </span>sum_{i=<span class="dv">0</span>}<span class="op">^</span>(n <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="dv">2</span><span class="op">^</span>i =<span class="st"> </span>W</span>
+<span id="cb1-3"><a href="#cb1-3"></a>       b <span class="op">*</span><span class="st"> </span>( (<span class="dv">2</span> <span class="op">^</span><span class="st"> </span>n) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) =<span class="st"> </span>W</span>
+<span id="cb1-4"><a href="#cb1-4"></a>                        b =<span class="st"> </span>W <span class="op">/</span><span class="st"> </span>( (<span class="dv">2</span> <span class="op">^</span><span class="st"> </span>n) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span></code></pre><p></p></div>
     </div>
     <div id="special-cases">
     <h2>Special cases</h2>
