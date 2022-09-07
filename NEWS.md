@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* Help files below `man/` have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)
+
 * We have switched to newer oauth2.googleapis.com-based OAuth2 URIs, moving away from the accounts.google.com and googleapis.com/oauth2 equivalents.
 
 * `credentials_gce()` no longer validates the requested scopes against instance scopes.
