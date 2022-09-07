@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -97,18 +97,18 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gargle2.0_token</span><span class="op">(</span>
-  email <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,
-  app <span class="op">=</span> <span class="fu"><a href="gargle_app.html">gargle_app</a></span><span class="op">(</span><span class="op">)</span>,
-  package <span class="op">=</span> <span class="st">"gargle"</span>,
-  scope <span class="op">=</span> <span class="cn">NULL</span>,
-  user_params <span class="op">=</span> <span class="cn">NULL</span>,
-  type <span class="op">=</span> <span class="cn">NULL</span>,
-  use_oob <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,
-  credentials <span class="op">=</span> <span class="cn">NULL</span>,
-  cache <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">credentials</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gargle2.0_token</span><span class="op">(</span></span>
+<span>  email <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  app <span class="op">=</span> <span class="fu"><a href="gargle_app.html">gargle_app</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  package <span class="op">=</span> <span class="st">"gargle"</span>,</span>
+<span>  scope <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  user_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  use_oob <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">credentials</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -126,42 +126,63 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 <code>"*@example.com"</code>, to create code that "just works" for both
 <code>alice@example.com</code> and <code>bob@example.com</code>. Defaults to the option named
 "gargle_oauth_email", retrieved by <code><a href="gargle_options.html">gargle_oauth_email()</a></code>.</p></dd>
+
+
 <dt>app</dt>
 <dd><p>An OAuth consumer application, created by <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>.</p></dd>
+
+
 <dt>package</dt>
 <dd><p>Name of the package requesting a token. Used in messages.</p></dd>
+
+
 <dt>scope</dt>
 <dd><p>A character vector of scopes to request.</p></dd>
+
+
 <dt>user_params</dt>
 <dd><p>Named list holding endpoint specific parameters to pass to
 the server when posting the request for obtaining or refreshing the
 access token.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>content type used to override incorrect server response</p></dd>
+
+
 <dt>use_oob</dt>
 <dd><p>Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via
 <code><a href="gargle_options.html">gargle_oob_default()</a></code>.</p></dd>
+
+
 <dt>credentials</dt>
 <dd><p>Advanced use only: allows you to completely customise
 token generation.</p></dd>
+
+
 <dt>cache</dt>
 <dd><p>Specifies the OAuth token cache. Defaults to the option named
 "gargle_oauth_cache", retrieved via <code><a href="gargle_options.html">gargle_oauth_cache()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Absorbs arguments intended for use by other credential functions.
 Not used.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <a href="Gargle-class.html">Gargle2.0</a>, either new or loaded from the cache.</p>
+    
+
+<p>An object of class <a href="Gargle-class.html">Gargle2.0</a>, either new or loaded from the cache.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">gargle2.0_token</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">gargle2.0_token</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -176,7 +197,7 @@ Not used.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

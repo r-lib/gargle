@@ -41,7 +41,7 @@ processed with response_process()."><!-- mathjax --><script src="https://cdnjs.c
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +64,7 @@ processed with response_process()."><!-- mathjax --><script src="https://cdnjs.c
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -112,7 +112,7 @@ processed with <code><a href="response_process.html">response_process()</a></cod
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">request_make</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, encode <span class="op">=</span> <span class="st">"json"</span>, user_agent <span class="op">=</span> <span class="fu">gargle_user_agent</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">request_make</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, encode <span class="op">=</span> <span class="st">"json"</span>, user_agent <span class="op">=</span> <span class="fu">gargle_user_agent</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,10 +121,14 @@ processed with <code><a href="response_process.html">response_process()</a></cod
 <dd><p>List. Holds the components for an HTTP request, presumably created
 with <code><a href="request_develop.html">request_develop()</a></code> or <code><a href="request_develop.html">request_build()</a></code>. Must contain a <code>method</code> and
 <code>url</code>. If present, <code>body</code> and <code>token</code> are used.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Optional arguments passed through to the HTTP method. Currently
 neither gargle nor httr checks that all are used, so be aware that unused
 arguments may be silently ignored.</p></dd>
+
+
 <dt>encode</dt>
 <dd><p>If the body is a named list, how should it be encoded? Can be
 one of form (application/x-www-form-urlencoded), multipart,
@@ -136,15 +140,20 @@ parameters are automatically "unboxed" (i.e. length 1 vectors are
 converted to scalars). To preserve a length 1 vector as a vector,
 wrap in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>. For "raw", either a character or raw vector. You'll
 need to make sure to set the <code><a href="https://httr.r-lib.org/reference/content_type.html" class="external-link">content_type()</a></code> yourself.</p></dd>
+
+
 <dt>user_agent</dt>
 <dd><p>A user agent string, prepared by <code><a href="https://httr.r-lib.org/reference/user_agent.html" class="external-link">httr::user_agent()</a></code>. When
 in doubt, a client package should have an internal function that extends
 <code>gargle_user_agent()</code> by prepending its return value with the client
 package's name and version.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Object of class <code>response</code> from httr.</p>
+    
+
+<p>Object of class <code>response</code> from httr.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -155,14 +164,14 @@ package's name and version.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="request_develop.html">request_build</a></span><span class="op">(</span></span>
-<span class="r-in">  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
-<span class="r-in">  path <span class="op">=</span> <span class="st">"path/to/the/resource"</span>,</span>
-<span class="r-in">  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_TOKEN"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">gargle</span><span class="fu">::</span><span class="fu">request_make</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="request_develop.html">request_build</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"path/to/the/resource"</span>,</span></span>
+<span class="r-in"><span>  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_TOKEN"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gargle</span><span class="fu">::</span><span class="fu">request_make</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -177,7 +186,7 @@ package's name and version.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

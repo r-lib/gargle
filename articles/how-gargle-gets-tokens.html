@@ -49,7 +49,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -75,7 +75,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -134,7 +134,7 @@
 </ul>
 <p><code><a href="../reference/token_fetch.html">token_fetch()</a></code> is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests. It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens. We give a few design suggestions here and cover this in more depth in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How to use gargle for auth in a client package</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="token_fetch">
 <code>token_fetch()</code><a class="anchor" aria-label="anchor" href="#token_fetch"></a>
@@ -142,14 +142,14 @@
 <p><code><a href="../reference/token_fetch.html">token_fetch()</a></code> is a rather magical function for getting a token. The goal is to make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with <code><a href="../reference/token_fetch.html">token_fetch()</a></code> only in an indirect way, mediated through an API wrapper package. That is not because the interface of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is unfriendly – it’s very flexible! The objective of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is to allow package developers to take responsibility for <em>managing</em> the user’s token, without having to implement all the different ways of <em>obtaining</em> that token in the first place.</p>
 <p>The signature of <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is very simple and, therefore, not very informative:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/token_fetch.html">token_fetch</a></span><span class="op">(</span><span class="va">scopes</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/token_fetch.html">token_fetch</a></span><span class="op">(</span><span class="va">scopes</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <p>Under the hood, <code><a href="../reference/token_fetch.html">token_fetch()</a></code> calls a sequence of much more specific credential functions, each wrapped in a <code><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch()</a></code> and returning <code>NULL</code> if unsuccessful. The only formal argument these functions have in common is <code>scopes</code>, with the rest being passed via <code>...</code>.</p>
 <p>This gives a sense of the credential functions and reflects the order in which they are called:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/cred_funs.html">cred_funs_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] "credentials_service_account"  "credentials_external_account"</span>
-<span class="co">#&gt; [3] "credentials_app_default"      "credentials_gce"             </span>
-<span class="co">#&gt; [5] "credentials_byo_oauth2"       "credentials_user_oauth2"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/cred_funs.html">cred_funs_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "credentials_service_account"  "credentials_external_account"</span></span>
+<span><span class="co">#&gt; [3] "credentials_app_default"      "credentials_gce"             </span></span>
+<span><span class="co">#&gt; [5] "credentials_byo_oauth2"       "credentials_user_oauth2"</span></span></code></pre></div>
 <p>It is possible to manipulate this registry of functions. The help for <code><a href="../reference/cred_funs.html">cred_funs_list()</a></code> is a good place to learn more.</p>
 <p>From now on, however, we assume you’re working with the default registry that ships with gargle.</p>
 <p>Note also that these credential functions are exported and can be called directly.</p>
@@ -334,32 +334,32 @@
 <p>If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow <em>de novo</em>.</p>
 <p>A user can reduce the need for interaction by passing the target <code>email</code> to <code>thingy_auth()</code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">thingy_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"janedoe_work@gmail.com"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">thingy_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"janedoe_work@gmail.com"</span><span class="op">)</span></span></code></pre></div>
 <p>or by specifying same in the <code>gargle_oauth_email</code> option. A value of <code>email = TRUE</code>, passed directly or via the option, is an alternative strategy: <code>TRUE</code> means that gargle is allowed to use a matching token whenever there is exactly one match.</p>
 <p>The elevated status of <code>email</code> for <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code> tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs. This is one of the main motivations for <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code>, which extends <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>. The <code><a href="../reference/Gargle-class.html">gargle::Gargle2.0</a></code> class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via <code><a href="../reference/gargle_options.html">gargle_oauth_cache()</a></code> and the output looks something like this:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#' gargle OAuth cache path:</span>
-<span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span>
-<span class="co">#' </span>
-<span class="co">#' 14 tokens found</span>
-<span class="co">#' </span>
-<span class="co">#' email                         app         scope                          hash...   </span>
-<span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span>
-<span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span>
-<span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span>
-<span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span>
-<span class="co">#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...</span>
-<span class="co">#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...</span>
-<span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...</span>
-<span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...</span>
-<span class="co">#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...</span>
-<span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...</span>
-<span class="co">#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...</span>
-<span class="co">#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...</span>
-<span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span>
-<span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span>
-<span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#' gargle OAuth cache path:</span></span>
+<span><span class="co">#' /Users/janedoe/.R/gargle/gargle-oauth</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' 14 tokens found</span></span>
+<span><span class="co">#' </span></span>
+<span><span class="co">#' email                         app         scope                          hash...   </span></span>
+<span><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></span>
+<span><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></span>
+<span><span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...</span></span>
+<span><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...</span></span>
+<span><span class="co">#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...</span></span>
+<span><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...</span></span>
+<span><span class="co">#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...</span></span>
+<span><span class="co">#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span></span>
+<span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span></span>
+<span><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></span></code></pre></div>
 </div>
   </div>
 
@@ -380,7 +380,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

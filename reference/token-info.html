@@ -33,7 +33,7 @@ token or a user."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -56,7 +56,7 @@ token or a user."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -99,11 +99,11 @@ token or a user.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">token_userinfo</span><span class="op">(</span><span class="va">token</span><span class="op">)</span>
-
-<span class="fu">token_email</span><span class="op">(</span><span class="va">token</span><span class="op">)</span>
-
-<span class="fu">token_tokeninfo</span><span class="op">(</span><span class="va">token</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">token_userinfo</span><span class="op">(</span><span class="va">token</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">token_email</span><span class="op">(</span><span class="va">token</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">token_tokeninfo</span><span class="op">(</span><span class="va">token</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -113,10 +113,13 @@ token or a user.</p>
 httr's class <code>request</code>, i.e. a token that has been prepared with
 <code><a href="https://httr.r-lib.org/reference/config.html" class="external-link">httr::config()</a></code> and has a <a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">Token2.0</a> in the
 <code>auth_token</code> component.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list containing:</p><ul><li><p><code>token_userinfo()</code>: user info</p></li>
+    
+
+<p>A list containing:</p><ul><li><p><code>token_userinfo()</code>: user info</p></li>
 <li><p><code>token_email()</code>: user's email (obtained from a call to <code>token_userinfo()</code>)</p></li>
 <li><p><code>token_tokeninfo()</code>: token info</p></li>
 </ul></div>
@@ -134,21 +137,21 @@ we can't make any promises about what information will be returned.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># with service account token</span></span>
-<span class="r-in"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="token_fetch.html">token_fetch</a></span><span class="op">(</span></span>
-<span class="r-in">  scopes <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
-<span class="r-in">  path   <span class="op">=</span> <span class="st">"path/to/service/account/token/blah-blah-blah.json"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># or with an OAuth token</span></span>
-<span class="r-in"><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="token_fetch.html">token_fetch</a></span><span class="op">(</span></span>
-<span class="r-in">  scopes <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
-<span class="r-in">  email  <span class="op">=</span> <span class="st">"janedoe@example.com"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">token_userinfo</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">token_email</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">tokens_tokeninfo</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># with service account token</span></span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="token_fetch.html">token_fetch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  scopes <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span></span>
+<span class="r-in"><span>  path   <span class="op">=</span> <span class="st">"path/to/service/account/token/blah-blah-blah.json"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># or with an OAuth token</span></span></span>
+<span class="r-in"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu"><a href="token_fetch.html">token_fetch</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  scopes <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span></span>
+<span class="r-in"><span>  email  <span class="op">=</span> <span class="st">"janedoe@example.com"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">token_userinfo</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">token_email</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tokens_tokeninfo</span><span class="op">(</span><span class="va">t</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -163,7 +166,7 @@ we can't make any promises about what information will be returned.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

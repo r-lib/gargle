@@ -34,7 +34,7 @@ describes how one might use these functions inside a wrapper package."><!-- math
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -57,7 +57,7 @@ describes how one might use these functions inside a wrapper package."><!-- math
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -101,21 +101,21 @@ describes how one might use these functions inside a wrapper package.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">request_develop</span><span class="op">(</span>
-  <span class="va">endpoint</span>,
-  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  base_url <span class="op">=</span> <span class="st">"https://www.googleapis.com"</span>
-<span class="op">)</span>
-
-<span class="fu">request_build</span><span class="op">(</span>
-  method <span class="op">=</span> <span class="st">"GET"</span>,
-  path <span class="op">=</span> <span class="st">""</span>,
-  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  token <span class="op">=</span> <span class="cn">NULL</span>,
-  key <span class="op">=</span> <span class="cn">NULL</span>,
-  base_url <span class="op">=</span> <span class="st">"https://www.googleapis.com"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">request_develop</span><span class="op">(</span></span>
+<span>  <span class="va">endpoint</span>,</span>
+<span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  base_url <span class="op">=</span> <span class="st">"https://www.googleapis.com"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">request_build</span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
+<span>  path <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  token <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  base_url <span class="op">=</span> <span class="st">"https://www.googleapis.com"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -125,36 +125,58 @@ describes how one might use these functions inside a wrapper package.</p>
 Google's vocabulary, the target "method". Presumably prepared from the
 <a href="https://developers.google.com/discovery/v1/getting_started#background-resources" class="external-link">Discovery Document</a>
 for the target API.</p></dd>
+
+
 <dt>params</dt>
 <dd><p>Named list. Values destined for URL substitution, the query,
 or, for <code>request_develop()</code> only, the body. For <code>request_build()</code>, body
 parameters must be passed via the <code>body</code> argument.</p></dd>
+
+
 <dt>base_url</dt>
 <dd><p>Character.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Character. An HTTP verb, such as <code>GET</code> or <code>POST</code>.</p></dd>
+
+
 <dt>path</dt>
 <dd><p>Character. Path to the resource, not including the API's
 <code>base_url</code>. Examples: <code>drive/v3/about</code> or <code>drive/v3/files/{fileId}</code>. The
 <code>path</code> can be a template, i.e. it can include variables inside curly
 brackets, such as <code>{fileId}</code> in the example. Such variables are substituted
 by <code>request_build()</code>, using named parameters found in <code>params</code>.</p></dd>
+
+
 <dt>body</dt>
 <dd><p>List. Values to send in the API request body.</p></dd>
+
+
 <dt>token</dt>
 <dd><p>Token, ready for inclusion in a request, i.e. prepared with
 <code><a href="https://httr.r-lib.org/reference/config.html" class="external-link">httr::config()</a></code>.</p></dd>
+
+
 <dt>key</dt>
 <dd><p>API key. Needed for requests that don't contain a token. For more,
 see Google's document <a href="https://support.google.com/googleapi/answer/6158857?hl=en&amp;ref_topic=7013279" class="external-link">Credentials, access, security, and identity</a>.
 A key can be passed as a named component of <code>params</code>, but note that the
 formal argument <code>key</code> will clobber it, if non-<code>NULL</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>request_develop()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code>, <code>params</code>,
-<code>body</code>, and <code>base_url</code>.
-<code>request_build()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code>(post-substitution), <code>query</code> (the input <code>params</code> not used in URL
+    
+
+<p><code>request_develop()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code>, <code>params</code>,
+<code>body</code>, and <code>base_url</code>.</p>
+
+
+<p><code>request_build()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code></p>
+
+
+<p>(post-substitution), <code>query</code> (the input <code>params</code> not used in URL
 substitution), <code>body</code>, <code>token</code>, <code>url</code> (the full URL, post-substitution,
 including the query).</p>
     </div>
@@ -204,62 +226,62 @@ functions use <code>googledrive::generate_request()</code> under the hood.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">## Example with a prepared endpoint</span></span>
-<span class="r-in"><span class="va">ept</span> <span class="op">&lt;-</span> <span class="fu">googledrive</span><span class="fu">::</span><span class="fu">drive_endpoints</span><span class="op">(</span><span class="st">"drive.files.update"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_develop</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">ept</span>,</span>
-<span class="r-in">  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    fileId <span class="op">=</span> <span class="st">"abc"</span>,</span>
-<span class="r-in">    addParents <span class="op">=</span> <span class="st">"123"</span>,</span>
-<span class="r-in">    description <span class="op">=</span> <span class="st">"Exciting File"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">req</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span>
-<span class="r-in">  method <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">method</span>,</span>
-<span class="r-in">  path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">path</span>,</span>
-<span class="r-in">  params <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">params</span>,</span>
-<span class="r-in">  body <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">body</span>,</span>
-<span class="r-in">  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_A_TOKEN"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">req</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## Example with no previous knowledge of the endpoint</span></span>
-<span class="r-in"><span class="co">## List a file's comments</span></span>
-<span class="r-in"><span class="co">## https://developers.google.com/drive/v3/reference/comments/list</span></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span>
-<span class="r-in">  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
-<span class="r-in">  path <span class="op">=</span> <span class="st">"drive/v3/files/{fileId}/comments"</span>,</span>
-<span class="r-in">  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    fileId <span class="op">=</span> <span class="st">"your-file-id-goes-here"</span>,</span>
-<span class="r-in">    fields <span class="op">=</span> <span class="st">"*"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_A_TOKEN"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">req</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example with no previous knowledge of the endpoint and no token</span></span>
-<span class="r-in"><span class="co"># use an API key for which the Places API is enabled!</span></span>
-<span class="r-in"><span class="va">API_KEY</span> <span class="op">&lt;-</span> <span class="st">"1234567890"</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get restaurants close to a location in Vancouver, BC</span></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span>
-<span class="r-in">  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
-<span class="r-in">  path <span class="op">=</span> <span class="st">"maps/api/place/nearbysearch/json"</span>,</span>
-<span class="r-in">  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    location <span class="op">=</span> <span class="st">"49.268682,-123.167117"</span>,</span>
-<span class="r-in">    radius <span class="op">=</span> <span class="fl">100</span>,</span>
-<span class="r-in">    type <span class="op">=</span> <span class="st">"restaurant"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  key <span class="op">=</span> <span class="va">API_KEY</span>,</span>
-<span class="r-in">  base_url <span class="op">=</span> <span class="st">"https://maps.googleapis.com"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">## Example with a prepared endpoint</span></span></span>
+<span class="r-in"><span><span class="va">ept</span> <span class="op">&lt;-</span> <span class="fu">googledrive</span><span class="fu">::</span><span class="fu">drive_endpoints</span><span class="op">(</span><span class="st">"drive.files.update"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_develop</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">ept</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    fileId <span class="op">=</span> <span class="st">"abc"</span>,</span></span>
+<span class="r-in"><span>    addParents <span class="op">=</span> <span class="st">"123"</span>,</span></span>
+<span class="r-in"><span>    description <span class="op">=</span> <span class="st">"Exciting File"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">req</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">method</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">path</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">params</span>,</span></span>
+<span class="r-in"><span>  body <span class="op">=</span> <span class="va">req</span><span class="op">$</span><span class="va">body</span>,</span></span>
+<span class="r-in"><span>  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_A_TOKEN"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">req</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Example with no previous knowledge of the endpoint</span></span></span>
+<span class="r-in"><span><span class="co">## List a file's comments</span></span></span>
+<span class="r-in"><span><span class="co">## https://developers.google.com/drive/v3/reference/comments/list</span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"drive/v3/files/{fileId}/comments"</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    fileId <span class="op">=</span> <span class="st">"your-file-id-goes-here"</span>,</span></span>
+<span class="r-in"><span>    fields <span class="op">=</span> <span class="st">"*"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_A_TOKEN"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">req</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example with no previous knowledge of the endpoint and no token</span></span></span>
+<span class="r-in"><span><span class="co"># use an API key for which the Places API is enabled!</span></span></span>
+<span class="r-in"><span><span class="va">API_KEY</span> <span class="op">&lt;-</span> <span class="st">"1234567890"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># get restaurants close to a location in Vancouver, BC</span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"maps/api/place/nearbysearch/json"</span>,</span></span>
+<span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    location <span class="op">=</span> <span class="st">"49.268682,-123.167117"</span>,</span></span>
+<span class="r-in"><span>    radius <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>    type <span class="op">=</span> <span class="st">"restaurant"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  key <span class="op">=</span> <span class="va">API_KEY</span>,</span></span>
+<span class="r-in"><span>  base_url <span class="op">=</span> <span class="st">"https://maps.googleapis.com"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -274,7 +296,7 @@ functions use <code>googledrive::generate_request()</code> under the hood.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

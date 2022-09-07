@@ -59,7 +59,7 @@ init_AuthState(), which has more details on the arguments."><!-- mathjax --><scr
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -82,7 +82,7 @@ init_AuthState(), which has more details on the arguments."><!-- mathjax --><scr
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -192,13 +192,13 @@ fetching functions).</p></li>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new AuthState</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va"><a href="../reference/AuthState-class.html">AuthState</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>
-  package <span class="op">=</span> <span class="cn">NA_character_</span>,
-  app <span class="op">=</span> <span class="cn">NULL</span>,
-  api_key <span class="op">=</span> <span class="cn">NULL</span>,
-  auth_active <span class="op">=</span> <span class="cn">TRUE</span>,
-  cred <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/AuthState-class.html">AuthState</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  package <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  app <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  api_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  auth_active <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  cred <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -235,7 +235,7 @@ fetching functions).</p></li>
 <h3 id="method-format-">Method <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code><a class="anchor" aria-label="anchor" href="#method-format-"></a></h3>
 <p>Format an AuthState</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">format</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">format</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -251,7 +251,7 @@ fetching functions).</p></li>
 <h3 id="method-set-app-">Method <code>set_app()</code><a class="anchor" aria-label="anchor" href="#method-set-app-"></a></h3>
 <p>Set the OAuth app</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_app</span><span class="op">(</span><span class="va">app</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_app</span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -267,7 +267,7 @@ fetching functions).</p></li>
 <h3 id="method-set-api-key-">Method <code>set_api_key()</code><a class="anchor" aria-label="anchor" href="#method-set-api-key-"></a></h3>
 <p>Set the API key</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_api_key</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_api_key</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -283,7 +283,7 @@ fetching functions).</p></li>
 <h3 id="method-set-auth-active-">Method <code>set_auth_active()</code><a class="anchor" aria-label="anchor" href="#method-set-auth-active-"></a></h3>
 <p>Set whether auth is (in)active</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_auth_active</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_auth_active</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -300,7 +300,7 @@ user credentials.</p></dd>
 <h3 id="method-set-cred-">Method <code>set_cred()</code><a class="anchor" aria-label="anchor" href="#method-set-cred-"></a></h3>
 <p>Set credentials</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_cred</span><span class="op">(</span><span class="va">cred</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_cred</span><span class="op">(</span><span class="va">cred</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -316,7 +316,7 @@ user credentials.</p></dd>
 <h3 id="method-clear-cred-">Method <code>clear_cred()</code><a class="anchor" aria-label="anchor" href="#method-clear-cred-"></a></h3>
 <p>Clear credentials</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">clear_cred</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">clear_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -324,7 +324,7 @@ user credentials.</p></dd>
 <h3 id="method-get-cred-">Method <code>get_cred()</code><a class="anchor" aria-label="anchor" href="#method-get-cred-"></a></h3>
 <p>Get credentials</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">get_cred</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">get_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -332,7 +332,7 @@ user credentials.</p></dd>
 <h3 id="method-has-cred-">Method <code>has_cred()</code><a class="anchor" aria-label="anchor" href="#method-has-cred-"></a></h3>
 <p>Report if we have credentials</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">has_cred</span><span class="op">(</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">has_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
@@ -340,7 +340,7 @@ user credentials.</p></dd>
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span class="va">AuthState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -368,7 +368,7 @@ user credentials.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

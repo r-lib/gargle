@@ -49,7 +49,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -75,7 +75,7 @@
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -151,12 +151,12 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 </h2>
 <p>These packages aim to make auth “just work” for most users, i.e. it’s automatically triggered upon first need. However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters. Here’s how you request oob auth, using googledrive as an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span>
-
-<span class="fu">drive_auth</span><span class="op">(</span>use_oob <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># now carry on with your work</span>
-<span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">drive_auth</span><span class="op">(</span>use_oob <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># now carry on with your work</span></span>
+<span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>This code is tailored to an interactive session and assumes that a user is present to respond. If you <em>also</em> need to setup a token for non-interactive use, see the article <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">Non-interactive auth</a>. A key point is that oob auth is relevant to how you <em>initially</em> obtain a token. It is orthogonal to downstream use and refreshing. So it is possible that you need to attend to both!</p>
 </div>
 <div class="section level2">
@@ -164,16 +164,16 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 </h2>
 <p>If you know that you <em>always</em> want to use oob auth, as a user or within a project, the best way to express this is to set the <code>gargle_oob_default</code> option.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oob_default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oob_default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This code could appear at the top of a script, in a setup chunk for <code>.Rmd</code>, or in a Shiny app. But it probably makes even more sense in a <code>.Rprofile</code> startup file, at the user- or project-level.</p>
 <p>Once that option has been set, it is honoured by downstream calls to <code>PKG_auth()</code>, explicit or implicit, because the default behaviour of <code>use_oob</code> is to consult the option:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">email</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,
-                       <span class="va">path</span> <span class="op">=</span> <span class="cn">NULL</span>,
-                       <span class="va">scopes</span> <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,
-                       <span class="va">cache</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,
-                       <span class="va">use_oob</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,
-                       <span class="va">token</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span><span class="va">...</span><span class="op">}</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">email</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                       <span class="va">path</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                       <span class="va">scopes</span> <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
+<span>                       <span class="va">cache</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                       <span class="va">use_oob</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                       <span class="va">token</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span><span class="va">...</span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="but-i-didnt-need-oob-yesterday">But I didn’t need oob yesterday!<a class="anchor" aria-label="anchor" href="#but-i-didnt-need-oob-yesterday"></a>
@@ -225,7 +225,7 @@ R       16664 jenny   20u  IPv4 0x63761a50856c65f      0t0  TCP localhost:hiq (L
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

@@ -43,7 +43,7 @@ Mostly useful for the development of gargle and client packages.
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -66,7 +66,7 @@ Mostly useful for the development of gargle and client packages.
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -115,7 +115,7 @@ Mostly useful for the development of gargle and client packages.</p></li>
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gargle_oauth_sitrep</span><span class="op">(</span>cache <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gargle_oauth_sitrep</span><span class="op">(</span>cache <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -123,17 +123,20 @@ Mostly useful for the development of gargle and client packages.</p></li>
     <dl><dt>cache</dt>
 <dd><p>Specifies the OAuth token cache. Defaults to the option named
 "gargle_oauth_cache", retrieved via <code><a href="gargle_options.html">gargle_oauth_cache()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data frame with one row per cached token, invisibly. Note this data
+    
+
+<p>A data frame with one row per cached token, invisibly. Note this data
 frame may contain more columns than it seems, e.g. the <code>filepath</code> column
 isn't printed by default.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">gargle_oauth_sitrep</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gargle_oauth_sitrep</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No gargle OAuth cache found at <span style="color: #0000BB;">~/.cache/gargle</span>.</span>
 </code></pre></div>
     </div>
@@ -149,7 +152,7 @@ isn't printed by default.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

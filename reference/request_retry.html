@@ -35,7 +35,7 @@ are considered retryable: 408, 429, 500, 502, 503."><!-- mathjax --><script src=
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,7 +58,7 @@ are considered retryable: 408, 429, 500, 502, 503."><!-- mathjax --><script src=
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -103,23 +103,30 @@ are considered retryable: 408, 429, 500, 502, 503.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">request_retry</span><span class="op">(</span><span class="va">...</span>, max_tries_total <span class="op">=</span> <span class="fl">5</span>, max_total_wait_time_in_seconds <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">request_retry</span><span class="op">(</span><span class="va">...</span>, max_tries_total <span class="op">=</span> <span class="fl">5</span>, max_total_wait_time_in_seconds <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>Passed along to <code><a href="request_make.html">request_make()</a></code>.</p></dd>
+
+
 <dt>max_tries_total</dt>
 <dd><p>Maximum number of tries.</p></dd>
+
+
 <dt>max_total_wait_time_in_seconds</dt>
 <dd><p>Total seconds we are willing to
 dedicate to waiting, summed across all tries. This is a technical upper
 bound and actual cumulative waiting will be less.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Object of class <code>response</code> from httr.</p>
+    
+
+<p>Object of class <code>response</code> from httr.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -196,14 +203,14 @@ then we revert to exponential backoff.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="request_develop.html">request_build</a></span><span class="op">(</span></span>
-<span class="r-in">  method <span class="op">=</span> <span class="st">"GET"</span>,</span>
-<span class="r-in">  path <span class="op">=</span> <span class="st">"path/to/the/resource"</span>,</span>
-<span class="r-in">  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_TOKEN"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">gargle</span><span class="fu">::</span><span class="fu">request_retry</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="request_develop.html">request_build</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"path/to/the/resource"</span>,</span></span>
+<span class="r-in"><span>  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_TOKEN"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gargle</span><span class="fu">::</span><span class="fu">request_retry</span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -218,7 +225,7 @@ then we revert to exponential backoff.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

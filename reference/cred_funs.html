@@ -33,7 +33,7 @@ consulted by token_fetch()."><!-- mathjax --><script src="https://cdnjs.cloudfla
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -56,7 +56,7 @@ consulted by token_fetch()."><!-- mathjax --><script src="https://cdnjs.cloudfla
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -99,15 +99,15 @@ consulted by <code><a href="token_fetch.html">token_fetch()</a></code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">cred_funs_add</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-
-<span class="fu">cred_funs_set</span><span class="op">(</span><span class="va">ls</span><span class="op">)</span>
-
-<span class="fu">cred_funs_clear</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cred_funs_add</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cred_funs_set</span><span class="op">(</span><span class="va">ls</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cred_funs_clear</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -115,12 +115,17 @@ consulted by <code><a href="token_fetch.html">token_fetch()</a></code>.</p>
     <dl><dt>...</dt>
 <dd><p>One or more functions with the right signature: its first argument
 is named <code>scopes</code>, and it includes <code>...</code> as an argument.</p></dd>
+
+
 <dt>ls</dt>
 <dd><p>A list of credential functions.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of credential functions or <code>NULL</code>.</p>
+    
+
+<p>A list of credential functions or <code>NULL</code>.</p>
     </div>
     <div id="functions">
     <h2>Functions</h2>
@@ -141,19 +146,19 @@ Function(s) are added to the <em>front</em> of the list. So:</p><div class="sour
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "credentials_service_account"  "credentials_external_account"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "credentials_app_default"      "credentials_gce"             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "credentials_byo_oauth2"       "credentials_user_oauth2"     </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">creds_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scopes</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
-<span class="r-in"><span class="fu">cred_funs_add</span><span class="op">(</span><span class="va">creds_one</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span>, two <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span>, <span class="va">creds_one</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># undo all of the above and return to default</span></span>
-<span class="r-in"><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">creds_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">scopes</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="fu">cred_funs_add</span><span class="op">(</span><span class="va">creds_one</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span>, two <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">cred_funs_add</span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span>, <span class="va">creds_one</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># undo all of the above and return to default</span></span></span>
+<span class="r-in"><span><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -168,7 +173,7 @@ Function(s) are added to the <em>front</em> of the list. So:</p><div class="sour
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

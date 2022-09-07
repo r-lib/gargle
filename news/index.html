@@ -32,7 +32,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
     </li>
   </ul></li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -124,8 +124,7 @@
 <div class="section level3">
 <h3 id="oauth-token-cache-1-1-0">OAuth token cache<a class="anchor" aria-label="anchor" href="#oauth-token-cache-1-1-0"></a></h3>
 <p>Two changes affect stored user OAuth tokens:</p>
-<ul><li>The default cache location has moved, to better align with general conventions around where to cache user data. Here’s how that looks for a typical user:
-<ul><li>Typical before, macOS: <code>~/.R/gargle/gargle-oauth</code>
+<ul><li>The default cache location has moved, to better align with general conventions around where to cache user data. Here’s how that looks for a typical user:<ul><li>Typical before, macOS: <code>~/.R/gargle/gargle-oauth</code>
 </li>
 <li>Typical after, macOS: <code>~/Library/Caches/gargle</code>
 </li>
@@ -134,8 +133,7 @@
 <li>Typical after, Windows: <code>C:/Users/jane/AppData/Local/gargle/gargle/Cache</code>
 </li>
 </ul></li>
-<li>Tokens created with one of the built-in OAuth apps provided by the tidyverse packages are checked for validity. Tokens made with an old app are deleted. Note that we introduced a new OAuth app in gargle v1.0.0 and the previous app could be disabled at any time.
-<ul><li>Nickname of previous tidyverse OAuth app: <code>tidyverse-calliope</code>
+<li>Tokens created with one of the built-in OAuth apps provided by the tidyverse packages are checked for validity. Tokens made with an old app are deleted. Note that we introduced a new OAuth app in gargle v1.0.0 and the previous app could be disabled at any time.<ul><li>Nickname of previous tidyverse OAuth app: <code>tidyverse-calliope</code>
 </li>
 <li>Nickname of tidyverse OAuth app as of gargle v1.0.0: <code>tidyverse-clio</code>
 </li>
@@ -225,8 +223,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.3" id="gargle-013">gargle 0.1.3<small>2019-06-03</small><a class="anchor" aria-label="anchor" href="#gargle-013"></a></h2>
-<ul><li>Initial CRAN release</li>
-</ul></div>
+<ul><li>Initial CRAN release</li></ul></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -241,7 +238,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
