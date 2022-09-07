@@ -26,11 +26,11 @@ SDK
 Testthat
 Tidyverse
 UI
+URIs
 VMs
 WifToken
 YAML
 api
-apis
 appveyor
 auth
 authed
@@ -63,6 +63,7 @@ gargle’
 gcalendr
 github
 gmailr
+googleapis
 googledrive
 googledrive's
 googlesheets
@@ -93,6 +94,7 @@ refreshable
 repo
 repo's
 repos
+retryable
 rlang
 ropensci
 roxygen
