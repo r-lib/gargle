@@ -32,7 +32,7 @@
 #'
 #' @seealso
 
-#' * <https://cloud.google.com/docs/authentication#service-accounts>
+#' * <https://cloud.google.com/docs/authentication#adc>
 
 #' * <https://cloud.google.com/sdk/docs/>
 

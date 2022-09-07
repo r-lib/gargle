@@ -126,7 +126,7 @@ credentials_app_default(
 )
 ```
 
-`credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application).
+`credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication#adc).
 The credentials themselves are conventional service account, external account, or user credentials that happen to be stored in a pre-ordained location and format.
 
  The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started, such as the [`gcloud` command line tool](https://cloud.google.com/sdk/gcloud).
