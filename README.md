@@ -9,7 +9,7 @@
 status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
 [![Codecov test
 coverage](https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/gargle?branch=main)
-[![R-CMD-check](https://github.com/r-lib/gargle/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/gargle/actions)
+[![R-CMD-check](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of gargle is to take some of the agonizing pain out of working
