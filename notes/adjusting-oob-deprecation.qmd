@@ -1,0 +1,63 @@
+---
+title: "Adjusting to the deprecation of out-of-bound auth"
+format: gfm
+editor: visual
+---
+
+## Background
+
+### gargle context
+
+Google is deprecating the out-of-bound (OOB) auth flow.
+
+Out-of-bound auth has been important to gargle users working interactively on RStudio Cloud, RStudio Server, and RStudio Workbench (formerly RStudio Server Pro).
+Building on its origins in the httr package, gargle has always used the flow documented as [OAuth 2.0 for Mobile & Desktop Apps](https://developers.google.com/identity/protocols/oauth2/native-app).
+
+> Installed apps are distributed to individual devices, and it is assumed that these apps cannot keep secrets. They can access Google APIs while the user is present at the app or when the app is running in the background.
+>
+> This authorization flow is similar to the one used for web server applications. The main difference is that installed apps must open the system browser and supply a local redirect URI to handle responses from Google's authorization server.
+
+When the user is interacting with server-hosted RStudio via their web browser, we can't execute our preferred OAuth flow for "normal" users, which is to point their web browser to a specific URL (Google's authorization server) and open a local webserver on port 1410 to listen for the response (achieved via the httpuv package).
+
+Instead, in the server setting, gargle has used OOB auth.
+After concluding their business with Google's authorization server, the user is prompted to copy a validation code and paste it back into the waiting R session.
+
+This OOB flow is what's being deprecated.
+OOB **will still work** in many contexts, if the user is willing and able to configure their own OAuth app (client id and secret) and can accept that the app will be limited to a well-defined set of users.
+*I am actively conducting experiments here and will obviously be writing more about this.*
+
+Unfortunately, that leaves a lot of users who will still want to use the built-in OAuth app that is magically available to them in packages like bigrquery, googledrive, and googlesheets4.
+
+gargle issue where we are tracking this:
+<https://github.com/r-lib/gargle/issues/202>
+
+### Communications from Google
+
+The best, current developer-facing document about OOB deprecation: <https://developers.google.com/identity/protocols/oauth2/resources/oob-migration>
+
+Key dates:
+
+* February 28, 2022 - new OAuth usage blocked for the OOB flow.
+  *This means that OAuth apps (a client id + secret) created after
+  this date are incapable of OOB, out of the gate. I have
+  confirmed this behaviour.*
+* September 5, 2022 - a user-facing warning message may be
+  displayed to non-compliant OAuth requests.
+  *FWIW I have not seen this (yet) in my limited experiments.*
+* October 3, 2022 - the OOB flow is deprecated for OAuth clients
+  created before February 28, 2022.
+  *This will impact some R/RStudio users who have been using
+  gargle with their own OAuth app created before Feb 28 2022.*
+* February 1, 2023 - the OOB flow is deprecated "with no
+  exceptions or extensions".
+  *I applied for and was granted an OOB extension for the verified
+  GCP project / OAuth app used in
+  bigrquery/googledrive/googesheets4.
+  This is when I expect OOB to stop working for that app.*
+
+The only migration strategy provided by Google for the "Desktop client" flow that we use is exactly what we've always done and precisely the thing we can't do on our server products:
+
+> If you determine that your app is using the OOB flow on a desktop client, you should migrate to using the loopback IP address (localhost or 127.0.0.1) flow.
+
+## More content
+
