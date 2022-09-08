@@ -1,46 +1,22 @@
-url: https://gargle.r-lib.org
+url: https://gargle.r-lib.org/
 
-authors:
-  Jennifer Bryan:
-    href: https://jennybryan.org
+development:
+  mode: auto
 
 template:
-  params:
-    ganalytics: UA-115082821-1
+  package: tidytemplate
+  bootstrap: 5
 
-home:
-  strip_header: true
+  includes:
+    in_header: |
+      <script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
-navbar:
-  components:
-    home: ~
-    news:
-      text: News
-      menu:
-      - text: "Blog posts"
-      - text: "gargle 1.2.0"
-        href: https://www.tidyverse.org/blog/2021/07/gargle-1-2-0/
-      - text: "gargle's debut on CRAN"
-        href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
-      - text: "------------------"
-      - text: "Change log"
-        href: news/index.html
-
-articles:
-  - title: For users of packages that use gargle for auth
-    navbar: ~
-    contents:
-    - non-interactive-auth
-    - troubleshooting
-    - auth-from-web
-    - get-api-credentials
-
-  - title: For package developers and advanced users
-    contents:
-    - how-gargle-gets-tokens
-    - gargle-auth-in-client-package
-    - articles/managing-tokens-securely
-    - request-helper-functions
+news:
+  releases:
+  - text: "gargle 1.2.0"
+    href: https://www.tidyverse.org/blog/2021/07/gargle-1-2-0/
+  - text: "gargle's debut on CRAN"
+    href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
 
 reference:
   - title: "Fetching credentials"
@@ -76,3 +52,20 @@ reference:
       Assets to aid experimentation during development (not for production use!)
     contents:
       - gargle_api_key
+
+articles:
+  - title: For users of packages that use gargle for auth
+    navbar: ~
+    contents:
+    - non-interactive-auth
+    - troubleshooting
+    - auth-from-web
+    - get-api-credentials
+
+  - title: For package developers and advanced users
+    contents:
+    - how-gargle-gets-tokens
+    - gargle-auth-in-client-package
+    - articles/managing-tokens-securely
+    - request-helper-functions
+
