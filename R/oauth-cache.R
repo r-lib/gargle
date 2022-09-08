@@ -202,7 +202,9 @@ token_into_cache <- function(candidate) {
 
 token_remove_from_cache <- function(candidate) {
   cache_path <- candidate$cache_path
-  if (is.null(cache_path)) return()
+  if (is.null(cache_path)) {
+    return()
+  }
   token_path <- path(cache_path, candidate$hash())
   # when does token_path not exist?
   # the first time a token fails to refresh it is removed on disk,
@@ -264,7 +266,8 @@ token_match <- function(candidate, existing, package = "gargle") {
     if (length(existing) == 1) {
       gargle_info(c(
         "i" = "The {.pkg {package}} package is using a cached token for \\
-               {.email {extract_email(existing)}}."))
+               {.email {extract_email(existing)}}."
+      ))
       return(existing)
     }
   }
@@ -305,7 +308,8 @@ token_match <- function(candidate, existing, package = "gargle") {
   if (length(existing) == 1 && candidate_email == "*") {
     gargle_info(c(
       "i" = "The {.pkg {package}} package is using a cached token for \\
-             {.email {extract_email(existing)}}."))
+             {.email {extract_email(existing)}}."
+    ))
     return(existing)
   }
 
@@ -315,7 +319,8 @@ token_match <- function(candidate, existing, package = "gargle") {
   gargle_info(c(
     "The {.pkg {package}} package is requesting access to your Google account.",
     "Select a pre-authorised account or enter '0' to obtain a new token.",
-    "Press Esc/Ctrl + C to cancel."))
+    "Press Esc/Ctrl + C to cancel."
+  ))
   choice <- utils::menu(emails)
 
   if (choice == 0) {
@@ -441,8 +446,8 @@ format.gargle_oauth_dat <- function(x, ...) {
 
 #' @export
 print.gargle_oauth_dat <- function(x, ...) {
- cli::cat_line(format(x))
- invisible(x)
+  cli::cat_line(format(x))
+  invisible(x)
 }
 
 # cache relocation, implemented in v1.1.0 --------------------------------------

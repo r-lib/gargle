@@ -58,7 +58,7 @@ test_that("Request for nonexistent resource (Sheets)", {
 test_that("Request with invalid value (tokeninfo, stale token)", {
   expect_recorded_error(
     "tokeninfo-stale_400",
-      400
+    400
   )
 })
 

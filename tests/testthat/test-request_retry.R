@@ -4,8 +4,10 @@ test_that("request_retry() logic works as advertised", {
 
   faux_response <- function(status_code = 200, h = NULL) {
     structure(
-      list(status_code = status_code,
-           headers = if (!is.null(h)) httr::insensitive(h)),
+      list(
+        status_code = status_code,
+        headers = if (!is.null(h)) httr::insensitive(h)
+      ),
       class = "response"
     )
   }
@@ -26,7 +28,8 @@ test_that("request_retry() logic works as advertised", {
     sub(
       "(?<=in )[[:digit:]]+([.][[:digit:]]+)?(?= seconds)",
       "{WAIT_TIME}",
-      x, perl = TRUE
+      x,
+      perl = TRUE
     )
   }
   # turn this: (strategy: exponential backoff, full jitter, clipped to floor of 1 seconds)
@@ -36,7 +39,8 @@ test_that("request_retry() logic works as advertised", {
     sub(
       ", clipped to (floor|ceiling) of [[:digit:]]+([.][[:digit:]]+)? seconds",
       "",
-      x, perl = TRUE
+      x,
+      perl = TRUE
     )
   }
   local_gargle_verbosity("debug")
@@ -50,7 +54,8 @@ test_that("request_retry() logic works as advertised", {
 
   # succeed on first try
   out <- with_mock(
-    request_make = faux_request_make(), {
+    request_make = faux_request_make(),
+    {
       request_retry()
     }
   )
@@ -60,7 +65,8 @@ test_that("request_retry() logic works as advertised", {
   r <- list(faux_response(429), faux_response())
   with_mock(
     request_make = faux_request_make(r),
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       msg_fail_once <- capture.output(
         out <- request_retry(max_total_wait_time_in_seconds = 5),
         type = "message"
@@ -79,7 +85,8 @@ test_that("request_retry() logic works as advertised", {
   )
   with_mock(
     request_make = faux_request_make(r),
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       msg_retry_after <- capture.output(
         out <- request_retry(),
         type = "message"
@@ -100,7 +107,8 @@ test_that("request_retry() logic works as advertised", {
   )
   with_mock(
     request_make = faux_request_make(r[1:3]),
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       msg_max_tries <- capture.output(
         out <- request_retry(max_tries_total = 3, max_total_wait_time_in_seconds = 6),
         type = "message"
@@ -120,7 +128,8 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
 
   # raw wait_times in U[0,1], therefore all become min_wait + U[0,1]
   with_mock(
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       wait_times <- vapply(
         rep.int(1, 100),
         backoff,
@@ -135,7 +144,8 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
   # raw wait_times in U[0,6], those that are < 1 become min_wait + U[0,1] and
   # those > 3 become max_wait + U[0,1]
   with_mock(
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       wait_times <- vapply(
         rep.int(1, 100),
         backoff,
@@ -151,22 +161,26 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
 test_that("backoff() honors Retry-After header", {
   faux_429 <- function(h) {
     structure(
-      list(status_code = 429,
-           headers = httr::insensitive(h)),
+      list(
+        status_code = 429,
+        headers = httr::insensitive(h)
+      ),
       class = "response"
     )
   }
 
   # play with capitalization and character vs numeric
   out <- with_mock(
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       backoff(1, faux_429(list(`Retry-After` = "1.2")))
     }
   ) %>% suppressMessages()
   expect_equal(out, 1.2)
 
   out <- with_mock(
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       backoff(1, faux_429(list(`retry-after` = 2.4)))
     }
   ) %>% suppressMessages()
@@ -174,7 +188,8 @@ test_that("backoff() honors Retry-After header", {
 
   # should work even when tries_made > 1
   out <- with_mock(
-    gargle_error_message = function(...) "oops", {
+    gargle_error_message = function(...) "oops",
+    {
       backoff(3, faux_429(list(`reTry-aFteR` = 3.6)))
     }
   ) %>% suppressMessages()

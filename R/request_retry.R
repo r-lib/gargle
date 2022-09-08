@@ -178,7 +178,8 @@ backoff <- function(tries_made,
   } else {
     gargle_info(c(
       "x" = "Request failed [{status_code}]. Retry {tries_made} happens in \\
-             {round(wait_time, 1)} seconds ..."))
+             {round(wait_time, 1)} seconds ..."
+    ))
   }
   wait_time
 }
@@ -209,5 +210,5 @@ sheets_per_user_quota_exhaustion <- function(resp) {
 calculate_base_wait <- function(n_waits, total_wait_time) {
   stopifnot(is.numeric(n_waits), length(n_waits) == 1L, n_waits > 0)
   stopifnot(is.numeric(total_wait_time), length(total_wait_time) == 1L, total_wait_time > 0)
-  total_wait_time / (2 ^ (n_waits) - 1)
+  total_wait_time / (2^(n_waits) - 1)
 }

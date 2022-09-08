@@ -27,10 +27,10 @@ glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
 # PREFIX_auth() ----------------------------------------------------------
 
 PREFIX_auth_description <- function(.data = list(
-  PACKAGE    = "PACKAGE",
-  YOUR_STUFF = "YOUR STUFF",
-  PRODUCT    = "A GOOGLE PRODUCT"
-)) {
+                                      PACKAGE    = "PACKAGE",
+                                      YOUR_STUFF = "YOUR STUFF",
+                                      PRODUCT    = "A GOOGLE PRODUCT"
+                                    )) {
   glue_data_lines(c(
     "@description",
     "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. This function is a",
@@ -54,9 +54,9 @@ PREFIX_auth_description <- function(.data = list(
 }
 
 PREFIX_auth_details <- function(.data = list(
-  PACKAGE = "PACKAGE",
-  PREFIX  = "PREFIX"
-)) {
+                                  PACKAGE = "PACKAGE",
+                                  PREFIX  = "PREFIX"
+                                )) {
   glue_data_lines(c(
     "@details",
     "Most users, most of the time, do not need to call `{PREFIX}_auth()`",
@@ -85,22 +85,24 @@ PREFIX_auth_details <- function(.data = list(
   ), .data = .data)
 }
 
-PREFIX_auth_params <- function() {c(
-  "@inheritParams gargle::credentials_service_account",
-  "@inheritParams gargle::credentials_external_account",
-  "@inheritParams gargle::credentials_app_default",
-  "@inheritParams gargle::credentials_gce",
-  "@inheritParams gargle::credentials_byo_oauth2",
-  "@inheritParams gargle::credentials_user_oauth2",
-  "@inheritParams gargle::gargle2.0_token"
-)}
+PREFIX_auth_params <- function() {
+  c(
+    "@inheritParams gargle::credentials_service_account",
+    "@inheritParams gargle::credentials_external_account",
+    "@inheritParams gargle::credentials_app_default",
+    "@inheritParams gargle::credentials_gce",
+    "@inheritParams gargle::credentials_byo_oauth2",
+    "@inheritParams gargle::credentials_user_oauth2",
+    "@inheritParams gargle::gargle2.0_token"
+  )
+}
 
 # PREFIX_deauth() ----------------------------------------------------------
 
 PREFIX_deauth_description_with_api_key <- function(.data = list(
-  PACKAGE = "PACKAGE",
-  PREFIX  = "PREFIX"
-), .fallback_api_key = TRUE) {
+                                                     PACKAGE = "PACKAGE",
+                                                     PREFIX  = "PREFIX"
+                                                   ), .fallback_api_key = TRUE) {
   lines <- c(
     "@description",
     "Put {PACKAGE} into a de-authorized state. Instead of sending a token,",
@@ -112,16 +114,16 @@ PREFIX_deauth_description_with_api_key <- function(.data = list(
     "via [{PREFIX}_auth_configure()] and retrieve that key via",
     "[{PREFIX}_api_key()].",
     if (.fallback_api_key) {
-    "In the absence of a user-configured key, a built-in default key is used."
+      "In the absence of a user-configured key, a built-in default key is used."
     }
-    )
+  )
   glue_data_lines(lines, .data = .data)
 }
 
 PREFIX_deauth_description_no_api_key <- function(.data = list(
-  PACKAGE = "PACKAGE",
-  PREFIX  = "PREFIX"
-), .fallback_api_key = TRUE) {
+                                                   PACKAGE = "PACKAGE",
+                                                   PREFIX  = "PREFIX"
+                                                 ), .fallback_api_key = TRUE) {
   lines <- c(
     "@description",
     "Clears any currently stored token. The next time {PACKAGE} needs a token,",
@@ -138,9 +140,9 @@ PREFIX_deauth_description_no_api_key <- function(.data = list(
 # PREFIX_token() ----------------------------------------------------------
 
 PREFIX_token_description <- function(.data = list(
-  API    = "GOOGLE API",
-  PREFIX = "PREFIX"
-), .deauth_possible = TRUE) {
+                                       API    = "GOOGLE API",
+                                       PREFIX = "PREFIX"
+                                     ), .deauth_possible = TRUE) {
   lines <- c(
     "@description",
     "For internal use or for those programming around the {API}.",
@@ -151,8 +153,8 @@ PREFIX_token_description <- function(.data = list(
     "initiate OAuth2.0 flow.",
     if (.deauth_possible) {
       c(
-    "If auth has been deactivated via [{PREFIX}_deauth()], `{PREFIX}_token()`",
-    "returns `NULL`."
+        "If auth has been deactivated via [{PREFIX}_deauth()], `{PREFIX}_token()`",
+        "returns `NULL`."
       )
     }
   )
@@ -180,9 +182,9 @@ PREFIX_has_token_return <- function() {
 # PREFIX_auth_configure() -------------------------------------------------------
 
 PREFIX_auth_configure_description <- function(.data = list(
-  PACKAGE = "PACKAGE",
-  PREFIX  = "PREFIX"
-), .has_api_key = TRUE, .fallbacks = TRUE) {
+                                                PACKAGE = "PACKAGE",
+                                                PREFIX  = "PREFIX"
+                                              ), .has_api_key = TRUE, .fallbacks = TRUE) {
   lines <- c(
     "@description",
     "These functions give more control over and visibility into the auth",
@@ -191,8 +193,8 @@ PREFIX_auth_configure_description <- function(.data = list(
     "  * OAuth app, which is used when obtaining a user token.",
     if (.has_api_key) {
       c(
-    "  * API key. If {PACKAGE} is de-authorized via [{PREFIX}_deauth()], all",
-    "    requests are sent with an API key in lieu of a token."
+        "  * API key. If {PACKAGE} is de-authorized via [{PREFIX}_deauth()], all",
+        "    requests are sent with an API key in lieu of a token."
       )
     },
     "See the vignette",
@@ -200,17 +202,17 @@ PREFIX_auth_configure_description <- function(.data = list(
     "for more.",
     if (.fallbacks) {
       c(
-    "If the user does not configure these settings, internal defaults",
-    "are used."
+        "If the user does not configure these settings, internal defaults",
+        "are used."
       )
     },
     if (.has_api_key) {
       c(
-    "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
-    "currently configured OAuth app and API key, respectively."
+        "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
+        "currently configured OAuth app and API key, respectively."
       )
     } else {
-    "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth app."
+      "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth app."
     }
   )
   glue_data_lines(lines, .data = .data)
@@ -221,14 +223,14 @@ PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
     "@param app OAuth app, in the sense of [httr::oauth_app()].",
     "@inheritParams gargle::oauth_app_from_json",
     if (.has_api_key) {
-    "@param api_key API key."
+      "@param api_key API key."
     }
   )
 }
 
 PREFIX_auth_configure_return <- function(.data = list(
-  PREFIX = "PREFIX"
-), .has_api_key = TRUE) {
+                                           PREFIX = "PREFIX"
+                                         ), .has_api_key = TRUE) {
   lines <- c(
     "@return",
     "  * `{PREFIX}_auth_configure()`: An object of R6 class",
@@ -236,7 +238,7 @@ PREFIX_auth_configure_return <- function(.data = list(
     "  * `{PREFIX}_oauth_app()`: the current user-configured",
     "    [httr::oauth_app()].",
     if (.has_api_key) {
-    "  * `{PREFIX}_api_key()`: the current user-configured API key."
+      "  * `{PREFIX}_api_key()`: the current user-configured API key."
     }
   )
   glue_data_lines(lines, .data = .data)

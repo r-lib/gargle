@@ -11,7 +11,8 @@ test_that("Can list service accounts", {
   }
 
   with_mock(
-    gce_metadata_request = request_mock, {
+    gce_metadata_request = request_mock,
+    {
       expect_equal(service_accounts, list_service_accounts())
     }
   )
@@ -19,29 +20,35 @@ test_that("Can list service accounts", {
 
 test_that("GCE metadata env vars are respected", {
   # TODO: use withr here
-  tryCatch({
-    expect_equal("http://metadata.google.internal/", gce_metadata_url())
-    Sys.setenv(GCE_METADATA_URL = "fake.url")
-    expect_equal("http://fake.url/", gce_metadata_url())
+  tryCatch(
+    {
+      expect_equal("http://metadata.google.internal/", gce_metadata_url())
+      Sys.setenv(GCE_METADATA_URL = "fake.url")
+      expect_equal("http://fake.url/", gce_metadata_url())
 
-    options(gargle.gce.use_ip = TRUE)
-    expect_equal("http://169.254.169.254/", gce_metadata_url())
-    Sys.setenv(GCE_METADATA_IP = "1.2.3.4")
-    expect_equal("http://1.2.3.4/", gce_metadata_url())
-  }, finally = {
-    # We could save and restore these values, but there's no reason they should
-    # be set in tests.
-    Sys.unsetenv("GCE_METADATA_IP")
-    Sys.unsetenv("GCE_METADATA_URL")
-    options(gargle.gce.use_ip = NULL)
-  })
+      options(gargle.gce.use_ip = TRUE)
+      expect_equal("http://169.254.169.254/", gce_metadata_url())
+      Sys.setenv(GCE_METADATA_IP = "1.2.3.4")
+      expect_equal("http://1.2.3.4/", gce_metadata_url())
+    },
+    finally = {
+      # We could save and restore these values, but there's no reason they should
+      # be set in tests.
+      Sys.unsetenv("GCE_METADATA_IP")
+      Sys.unsetenv("GCE_METADATA_URL")
+      options(gargle.gce.use_ip = NULL)
+    }
+  )
 })
 
 test_that("GCE metadata detection fails not on GCE", {
-  tryCatch({
-    Sys.setenv(GCE_METADATA_URL = "some.fake.address")
-    expect_false(detect_gce())
-  }, finally = {
-    Sys.unsetenv("GCE_METADATA_URL")
-  })
+  tryCatch(
+    {
+      Sys.setenv(GCE_METADATA_URL = "some.fake.address")
+      expect_false(detect_gce())
+    },
+    finally = {
+      Sys.unsetenv("GCE_METADATA_URL")
+    }
+  )
 })

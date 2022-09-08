@@ -72,9 +72,9 @@ gargle_oob_default <- function() {
     # e.g. https://unix.stackexchange.com/questions/9605/how-can-i-detect-if-the-shell-is-controlled-from-ssh/9607#9607
     TRUE
   } else {
-  getOption("gargle_oob_default") %||%
-    getOption("httr_oob_default") %||%
-    FALSE
+    getOption("gargle_oob_default") %||%
+      getOption("httr_oob_default") %||%
+      FALSE
   }
 }
 

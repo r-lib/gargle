@@ -1,7 +1,13 @@
 # These are used in several tests below.
-creds_always <- function(scopes, ...) { 1 }
-creds_never <- function(scopes, ...) { NULL }
-creds_failure <- function(scopes, ...) { stop("no creds") }
+creds_always <- function(scopes, ...) {
+  1
+}
+creds_never <- function(scopes, ...) {
+  NULL
+}
+creds_failure <- function(scopes, ...) {
+  stop("no creds")
+}
 creds_maybe <- function(scopes, arg1 = "", ...) {
   if (arg1 != "") {
     2

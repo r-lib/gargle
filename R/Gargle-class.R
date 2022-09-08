@@ -194,10 +194,14 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @description (Attempt to) get a Gargle2.0 token from the cache
   load_from_cache = function() {
     gargle_debug("loading token from the cache")
-    if (is.null(self$cache_path) || is_na(self$email)) return(FALSE)
+    if (is.null(self$cache_path) || is_na(self$email)) {
+      return(FALSE)
+    }
 
     cached <- token_from_cache(self)
-    if (is.null(cached)) return(FALSE)
+    if (is.null(cached)) {
+      return(FALSE)
+    }
 
     gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
@@ -250,13 +254,10 @@ encourage_httpuv <- function() {
     "The {.pkg httpuv} package enables a nicer Google auth experience, \\
      in many cases.",
     "It doesn't seem to be installed.",
-    "Would you like to install it now?"))
+    "Would you like to install it now?"
+  ))
   if (utils::menu(c("Yes", "No")) == 1) {
     utils::install.packages("httpuv")
   }
   invisible()
 }
-
-
-
-

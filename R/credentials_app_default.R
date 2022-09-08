@@ -74,12 +74,12 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
     scope <- "https://www.googleapis.com/auth/cloud.platform"
     token <- httr::Token2.0$new(
-        endpoint = gargle_oauth_endpoint(),
-        app = app,
-        credentials = list(refresh_token = info$refresh_token),
-        # ADC is already cached.
-        cache_path = FALSE,
-        params = list(scope = scope, as_header = TRUE)
+      endpoint = gargle_oauth_endpoint(),
+      app = app,
+      credentials = list(refresh_token = info$refresh_token),
+      # ADC is already cached.
+      cache_path = FALSE,
+      params = list(scope = scope, as_header = TRUE)
     )
     token$refresh()
     token

@@ -20,7 +20,7 @@ f <- function(ssid = deaths_id, i = 0) {
 n <- 300
 i <- 0
 resp <- TRUE
-while(isTRUE(resp) && i < n) {
+while (isTRUE(resp) && i < n) {
   i <- i + 1
   resp <- f(i = i)
 }

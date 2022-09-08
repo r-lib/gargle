@@ -48,7 +48,7 @@ test_that("request_develop() copes with a param that goes to path and body", {
     params = list(two_places = list(), just_path = list(), just_body = list())
   )
   expect_equal(req$params, list(two_places = list(), just_path = list()))
-  expect_equal(req$body,   list(two_places = list(), just_body = list()))
+  expect_equal(req$body, list(two_places = list(), just_body = list()))
 })
 
 test_that("request_build() does substitution and puts remainder in query", {

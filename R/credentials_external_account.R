@@ -75,7 +75,7 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
   token <- oauth_external_token(path = path, scopes = scopes)
 
   if (is.null(token$credentials$access_token) ||
-      !nzchar(token$credentials$access_token)) {
+    !nzchar(token$credentials$access_token)) {
     NULL
   } else {
     gargle_debug("service account email: {.email {token_email(token)}}")
@@ -91,7 +91,6 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
 #' @export
 oauth_external_token <- function(path = "",
                                  scopes = "https://www.googleapis.com/auth/cloud-platform") {
-
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (!identical(info[["type"]], "external_account")) {
     gargle_debug("JSON does not appear to represent an external account")
@@ -283,7 +282,7 @@ aws_subject_token <- function(credential_source, audience) {
     host = parsed_url$hostname,
     # for some reason, this is not included as a signed header unless I provide
     # it
-    `x-amz-date` = format(Sys.time(),"%Y%m%dT%H%M%SZ", tz = "UTC"),
+    `x-amz-date` = format(Sys.time(), "%Y%m%dT%H%M%SZ", tz = "UTC"),
     # in contrast, session token IS automatically included if it exists, which
     # it should
     `x-goog-cloud-target-resource` = audience

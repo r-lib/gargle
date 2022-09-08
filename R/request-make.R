@@ -40,8 +40,7 @@ request_make <- function(x,
                          encode = "json",
                          user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
-  method <- switch(
-    x$method,
+  method <- switch(x$method,
     GET    = httr::GET,
     POST   = httr::POST,
     PATCH  = httr::PATCH,

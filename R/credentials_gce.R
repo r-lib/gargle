@@ -38,7 +38,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
   )
   token$refresh()
   if (is.null(token$credentials$access_token) ||
-      !nzchar(token$credentials$access_token)) {
+    !nzchar(token$credentials$access_token)) {
     NULL
   } else {
     token
@@ -104,11 +104,14 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
   }
   url <- paste0(root_url, "computeMetadata/v1/", path)
   timeout <- getOption("gargle.gce.timeout", default = 0.8)
-  response <- try({
-    httr::with_config(httr::timeout(timeout), {
-      httr::GET(url, httr::add_headers("Metadata-Flavor" = "Google"))
-    })
-  }, silent = TRUE)
+  response <- try(
+    {
+      httr::with_config(httr::timeout(timeout), {
+        httr::GET(url, httr::add_headers("Metadata-Flavor" = "Google"))
+      })
+    },
+    silent = TRUE
+  )
 
   if (stop_on_error) {
     if (inherits(response, "try-error")) {

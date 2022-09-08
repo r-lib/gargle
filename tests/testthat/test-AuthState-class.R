@@ -8,14 +8,14 @@ test_that("inputs are checked when creating AuthState", {
       api_key = "API_KEY",
       auth_active = TRUE
     ),
-    'is_scalar_character(package) is not TRUE',
+    "is_scalar_character(package) is not TRUE",
     fixed = TRUE
   )
-  expect_error(init_AuthState(app = "not_an_oauth_app"), 'is not TRUE')
-  expect_error(init_AuthState(app = app, api_key = 1234), 'is not TRUE')
+  expect_error(init_AuthState(app = "not_an_oauth_app"), "is not TRUE")
+  expect_error(init_AuthState(app = app, api_key = 1234), "is not TRUE")
   expect_error(
     init_AuthState(app = app, api_key = "API_KEY", auth_active = NULL),
-    'is not TRUE'
+    "is not TRUE"
   )
 
   a <- init_AuthState(

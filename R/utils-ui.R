@@ -106,7 +106,7 @@ gargle_info <- function(text, .envir = parent.frame()) {
 # https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
 # more discussion at
 # https://github.com/r-lib/cli/issues/222
-cli_this = function(..., .envir = parent.frame()) {
+cli_this <- function(..., .envir = parent.frame()) {
   txt <- cli::cli_format_method(cli::cli_text(..., .envir = .envir))
   # @rundel does this to undo wrapping done by cli_format_method()
   # I haven't had this need yet
@@ -115,8 +115,8 @@ cli_this = function(..., .envir = parent.frame()) {
 }
 
 commapse <- function(...) paste0(..., collapse = ", ")
-fr <- function(x) format(x, justify = 'right')
-fl <- function(x) format(x, justify = 'left')
+fr <- function(x) format(x, justify = "right")
+fl <- function(x) format(x, justify = "left")
 
 ## obscure part of (sensitive?) strings with '...'
 ## obfuscate("sensitive", first = 3, last = 2) = "sen...ve"
@@ -129,8 +129,8 @@ obfuscate <- function(x, first = 7, last = 0) {
       substr(x[ellipsize], start = 1, stop = first),
       "...",
       substr(x[ellipsize],
-             start = nc[ellipsize] - last + 1,
-             stop = nc[ellipsize]
+        start = nc[ellipsize] - last + 1,
+        stop = nc[ellipsize]
       )
     )
   out
@@ -184,7 +184,8 @@ gargle_abort_bad_class <- function(object,
   )
   msg <- glue("
     {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}.",
-    .open = "<<", .close =">>")
+    .open = "<<", .close = ">>"
+  )
   gargle_abort(
     msg,
     class = "gargle_error_bad_class",
