@@ -127,6 +127,6 @@ The normal, non-oob auth web flow should work again now.
 
 ## Further reading
 
-[Generating OAuth tokens for a server using httr](https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. gargle first consults the `gargle_oob_default` option and, if that is undefined, also consults the `httr_oob_default` option.
+Generating OAuth tokens for a server using httr (`https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server`) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. gargle first consults the `gargle_oob_default` option and, if that is undefined, also consults the `httr_oob_default` option.
 
 If you're creating content to be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [RStudio Connect](https://www.rstudio.com/products/connect/)), you will also need to consider how the [deployed content will authenticate non-interactively](https://gargle.r-lib.org/articles/non-interactive-auth.html). 
