@@ -154,13 +154,13 @@
 <p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pw</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_gen</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "WS3cEYKsXmHflwxwqXVwVTHkiMPn4vqFi5h2mRejVPev8G7cWy"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "GZjFVEra2lqzts1pQIaN38V3WZx6Ilcq6pDl4jBCTWjAKC6Yin"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="define-environment-variable-in--renviron">Define environment variable in <code>.Renviron</code><a class="anchor" aria-label="anchor" href="#define-environment-variable-in--renviron"></a>
 </h3>
 <p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">WS3cEYKsXmHflwxwqXVwVTHkiMPn4vqFi5h2mRejVPev8G7cWy</span></span></code></pre>
+<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">GZjFVEra2lqzts1pQIaN38V3WZx6Ilcq6pDl4jBCTWjAKC6Yin</span></span></code></pre>
 <p><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link"><code>usethis::edit_r_environ()</code></a> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
 <p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code>readRenviron("~/.Renviron")</code> for the newly defined environment variable to take effect.</p>
 </div>
