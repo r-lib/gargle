@@ -7,3 +7,4 @@ internal
 .RData
 .httr-oauth
 scratch.R
+notes/*.html
