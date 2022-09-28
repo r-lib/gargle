@@ -25,6 +25,7 @@ Imports:
     glue (>= 1.3.0),
     httr (>= 1.4.0),
     jsonlite,
+    lifecycle,
     rappdirs,
     rlang (>= 1.0.0),
     rstudioapi,
