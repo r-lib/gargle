@@ -52,6 +52,21 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
     config_init = list(),
     client_credentials = FALSE
   )
+
+  # pseudo-oob flow
+  client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
+  if (use_oob && identical(client_type, "web")) {
+    # we need a better mechanism for picking 1 if there are multiple URIs
+    params$oob_value <- app$redirect_uris[[1]]
+  }
+
+  # adapt the new gargle_oauth_client to httr
+  app <- httr::oauth_app(
+    appname = app$appname,
+    key = app$key,
+    secret = app$secret
+  )
+
   Gargle2.0$new(
     email = email,
     app = app,
