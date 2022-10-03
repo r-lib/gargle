@@ -1,5 +1,19 @@
 # gargle (development version)
 
+* `gargle_oauth_client()` is a new constructor for an S3 list by the same name.
+  There are two motivations:
+  - To adjust to Google's deprecation of the out-of-bound (OOB) auth flow, it is
+    helpful for gargle to know whether an OAuth client ID is of type "Web
+    application" or "Desktop app". That means we need a Google- and
+    gargle-specific notion of an OAuth client, so we can introduce a `type`
+    field.
+  - A transition from httr and httr2 is on the horizon, so it makes sense to
+    look more toward `httr2:oauth_client()` than to `httr::oauth_app()`.
+  
+  `oauth_app_from_json()` has therefore been (soft) deprecated, in favor of a
+  new function `gargle_oauth_client_from_json()`. As a bridging measure,
+  `gargle_oauth_client` currently inherits from httr's `oauth_app`.
+
 # gargle 1.2.1
 
 * Help files below `man/` have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)

@@ -27,7 +27,7 @@ reference:
       - starts_with("credentials")
       - gargle_oauth_sitrep
       - starts_with("cred_funs")
-      - oauth_app_from_json
+      - starts_with("gargle_oauth_client")
       - starts_with("token")
   - title: "Requests and responses"
     desc: >
