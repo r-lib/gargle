@@ -59,12 +59,17 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
     params$oob_value <- select_pseudo_oob_value(app$redirect_uris)
   }
 
-  # adapt the new gargle_oauth_client to httr
-  app <- httr::oauth_app(
-    appname = app$appname,
-    key = app$key,
-    secret = app$secret
-  )
+  if (!identical(client_type, "web")) {
+    # don't use the new client type!
+    # specifically, for an installed / desktop app client, we want to use httr's
+    # default logic for the redirect URI (as opposed to any redirect URIs we
+    # might have read out of a JSON file)
+    app <- httr::oauth_app(
+      appname = app$appname,
+      key = app$key,
+      secret = app$secret
+    )
+  }
 
   Gargle2.0$new(
     email = email,
