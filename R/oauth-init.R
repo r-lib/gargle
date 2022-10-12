@@ -44,6 +44,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
   client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
+    # TODO: should this be conditional on using the tidyverse client?
     query_authorize_extra[["ack_oob_shutdown"]] <- "2022-10-03"
     if (identical(client_type, "web")) { # pseudo-oob flow
       # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
