@@ -17,7 +17,7 @@
 #'   APIs.
 #' @noRd
 init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
-                          app,
+                          app = gargle_app(),
                           scope = NULL,
                           use_oob = gargle_oob_default(),
                           oob_value = NULL,
