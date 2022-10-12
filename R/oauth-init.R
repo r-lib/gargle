@@ -41,9 +41,35 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
                           query_authorize_extra = list()) {
   scope <- check_scope(scope)
   use_oob <- check_oob(use_oob, oob_value)
+  client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
   if (use_oob) {
-    redirect_uri <- if (!is.null(oob_value)) oob_value else "urn:ietf:wg:oauth:2.0:oob"
-    state <- NULL
+    redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
+    query_authorize_extra[["ack_oob_shutdown"]] <- "2022-10-03"
+    if (identical(client_type, "web")) { # pseudo-oob flow
+      # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
+
+      # We need so-called "offline" access, so the access token can be
+      # refreshed without re-prompting the user for permission.
+      # Specifically, this is necessary (though not sufficient!) to make the
+      # authorization server return a **refresh token** in addition to an
+      # access token.
+      # Offline access is the default for installed applications, but it is NOT
+      # the default for web apps, so we must explicitly request it.
+      query_authorize_extra[["access_type"]] <- "offline"
+
+      # https://stackoverflow.com/questions/10827920/not-receiving-google-oauth-refresh-token
+      # https://developers.google.com/identity/protocols/oauth2/openid-connect#re-consent
+
+      # By default, for a web app, the user is only prompted for consent once
+      # per project. And this is necessary in order to get a refresh token.
+      # So we must explicitly ask for re-consent.
+      query_authorize_extra[["prompt"]] <- "consent"
+
+      # TODO: replace this with a call to openssl::rand_bytes()
+      state <- "123testing"
+    } else { # conventional oob
+      state <- NULL
+    }
   } else {
     redirect_uri <- app$redirect_uri
     # TODO: should we use openssl::rand_bytes() here too?
@@ -58,7 +84,12 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
     state = state,
     query_extra = query_authorize_extra
   )
-  code <- oauth_authorize(authorize_url, use_oob)
+  code <- oauth_authorize(
+    authorize_url,
+    oob = use_oob,
+    client_type = client_type,
+    state = state
+  )
 
   # Use authorisation code to get (temporary) access token
   httr::oauth2.0_access_token(
@@ -76,12 +107,27 @@ nonce <- function(length = 10) {
   )
 }
 
-oauth_authorize <- function(url, oob = FALSE) {
+oauth_authorize <- function(url, oob = FALSE, client_type = NA, state = NULL) {
   if (oob) {
-    httr::oauth_exchanger(url)$code
+    if (identical(client_type, "web")) { # pseudo oob
+      oauth_exchanger_with_state(url, state)$code
+    } else {
+      httr::oauth_exchanger(url)$code
+    }
   } else {
     httr::oauth_listener(url)$code
   }
+}
+
+oauth_exchanger_with_state <- function(request_url, state) {
+  httr::BROWSE(request_url)
+
+  info_enc <- trimws(readline("Enter authorization code: "))
+  info <- jsonlite::fromJSON(rawToChar(openssl::base64_decode(info_enc)))
+  if (!identical(info$state, state)) {
+    stop("state did not match")
+  }
+  list(code = info$code)
 }
 
 # Parameter checking ------------------------------------------------------

@@ -26,6 +26,7 @@ Imports:
     httr (>= 1.4.0),
     jsonlite,
     lifecycle,
+    openssl,
     rappdirs,
     rlang (>= 1.0.0),
     rstudioapi,
