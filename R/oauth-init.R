@@ -65,15 +65,13 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
       # So we must explicitly ask for re-consent.
       query_authorize_extra[["prompt"]] <- "consent"
 
-      # TODO: replace this with a call to openssl::rand_bytes()
-      state <- "123testing"
+      state <- csrf_token()
     } else { # conventional oob
       state <- NULL
     }
   } else {
     redirect_uri <- app$redirect_uri
-    # TODO: should we use openssl::rand_bytes() here too?
-    state <- nonce()
+    state <- csrf_token()
   }
 
   authorize_url <- httr::oauth2.0_authorize_url(
@@ -100,11 +98,14 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
   )
 }
 
-# need this temporarily
-nonce <- function(length = 10) {
-  paste(sample(c(letters, LETTERS, 0:9), length, replace = TRUE),
-    collapse = ""
-  )
+# https://developers.google.com/identity/protocols/oauth2/openid-connect#createxsrftoken
+# "These tokens are often referred to as cross-site request forgery (CSRF)
+# tokens.
+#
+# One good choice for a state token is a string of 30 or so characters
+# constructed using a high-quality random-number generator."
+csrf_token <- function(n_bytes = 15) {
+  paste0(as.character(openssl::rand_bytes(n_bytes)), collapse = "")
 }
 
 oauth_authorize <- function(url, oob = FALSE, client_type = NA, state = NULL) {
