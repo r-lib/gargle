@@ -56,8 +56,7 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
   # pseudo-oob flow
   client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
   if (use_oob && identical(client_type, "web")) {
-    # we need a better mechanism for picking 1 if there are multiple URIs
-    params$oob_value <- app$redirect_uris[[1]]
+    params$oob_value <- select_pseudo_oob_value(app$redirect_uris)
   }
 
   # adapt the new gargle_oauth_client to httr
@@ -275,4 +274,47 @@ encourage_httpuv <- function() {
     utils::install.packages("httpuv")
   }
   invisible()
+}
+
+# I want to encourage users to create an OAuth app (older httr-y language) or
+# client (newer httr2-y language) directly from downloaded JSON, using
+# gargle_oauth_client_from_json(). Sometimes there are multiple URIs and I think
+# we can usually figure out which one to use for the pseudo-oob flow.
+select_pseudo_oob_value <- function(redirect_uris) {
+  # https://developers.google.com/identity/protocols/oauth2/resources/oob-migration#inspect-your-application-code
+  bad_values <- c(
+    "urn:ietf:wg:oauth:2.0:oob",
+    "urn:ietf:wg:oauth:2.0:oob:auto",
+    "oob"
+  )
+  redirect_uris <- setdiff(redirect_uris, bad_values)
+
+  # https://developers.google.com/identity/protocols/oauth2/web-server#uri-validation
+  bad_regex <- "^http[s]?://(localhost|127.0.0.1)"
+  redirect_uris <- grep(bad_regex, redirect_uris, value = TRUE, invert = TRUE)
+  redirect_uris <- grep("^https", redirect_uris, value = TRUE)
+
+  # inspired by these guidelines re: URIs associated with URL shorteners:
+  # 'redirect URI must either contain "/google-callback/" in its path or end
+  # with "/google-callback"'
+  m <- grep("/google-callback(/|$)", redirect_uris)
+  if (length(m) > 0) {
+    redirect_uris <- redirect_uris[m]
+  }
+
+  if (length(redirect_uris) == 0) {
+    gargle_abort('
+      OAuth client (a.k.a "app") does not have a redirect URI suitable for \\
+      the pseudo-OOB flow.')
+  }
+
+  if (length(redirect_uris) > 1) {
+    msg <- c(
+      "Can't determine which redirect URI to use for the pseudo-OOB flow:",
+      set_names(redirect_uris, ~ rep_along(., "*"))
+    )
+    gargle_abort(msg)
+  }
+
+  redirect_uris
 }
