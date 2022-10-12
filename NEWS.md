@@ -1,5 +1,38 @@
 # gargle (development version)
 
+## Out-Of-Band (OOB) flow deprecation
+
+On February 16, 2022, Google announced the deprecation of the OAuth out-of-band (OOB) flow.
+The deprecation is happening in phases and OOB still works for some specific use cases.
+The deprecation can impact gargle users who are accessing R/RStudio via the browser, such as those using RStudio Server, Workbench, or Cloud.
+With the OOB flow, after the user authenticates themselves and authorizes the app to access certain resources, they are prompted to copy an authorization code and paste it back into the R process.
+This code is then exchanged for aaccess and refresh tokens.
+(This entire exchange can be handled automatically when the user is running R locally, using a local webserver, but that option is not available in the RStudio Server/Workbench/Cloud context.)
+
+In response to this deprecation, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB).
+The pseudo-OOB flow is triggered when `use_oob = TRUE` (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of "web application" type.
+
+Timeline:
+
+* 2022 February 16: Google announced OOB deprecation.
+* 2022 February 28: New OAuth clients cannot use conventional OOB when in
+  production mode.
+* 2022 October 3: Existing clients cannot use conventional OOB when in
+  production mode. NOTE: the client used by the tidyverse has been granted an
+  extension and conventional OOB still works (for now).
+* 2023 February 1: Conventional OOB will no longer work for the tidyverse OAuth
+  client. Users on RStudio Server/Workbench/Cloud will need to use the
+  pseudo-OOB flow or, as has always been true, non-interactive methods of auth,
+  like using a service account token or uploading a user token obtained
+  elsewhere.
+
+Key links:
+
+* Blog post: [Making Google OAuth interactions safer by using more secure OAuth flows](https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html)
+* [Out-Of-Band (OOB) flow Migration Guide](https://developers.google.com/identity/protocols/oauth2/resources/oob-migration#web-application)
+
+## Other
+
 * `gargle_oauth_client()` is a new constructor for an S3 list by the same name.
   There are two motivations:
   - To adjust to Google's deprecation of the out-of-bound (OOB) auth flow, it is
