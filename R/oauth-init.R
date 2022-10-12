@@ -10,6 +10,9 @@
 #   exchange *with state*, by calling the new function
 #   oauth_exchanger_with_state().
 # - Added: oauth_exchanger_with_state()
+# - Added: csrf_token(). Used to create the `state` token (example of a
+#   cross-site request forgery token). Switched one existing use of
+#   httr:::nonce() to this, now that I can.
 # - The internal helpers check_scope() and check_oob() came along for the ride,
 #   to support init_oauth2.0(). These got modified to use gargle conventions,
 #   e.g. gargle_abort() instead of stop().
@@ -21,13 +24,16 @@
 #'   because this function is based on `httr::init_oauth2.0()`.
 #' @param app An OAuth consumer application
 #' @param scope a character vector of scopes to request.
-#' @param use_oob if FALSE, use a local webserver for the OAuth dance.
-#'   Otherwise, provide a URL to the user and prompt for a validation code.
-#'   Defaults to the of the `"httr_oob_default"` default, or `TRUE` if `httpuv`
-#'   is not installed.
+#' @param use_oob Whether to prefer "out of band" authentication. Defaults to
+#'   the option named "gargle_oob_default", retrieved via
+#'   [gargle::gargle_oob_default()]. Results in conventional OOB if the `app` is
+#'   of type `"installed"` (or if type is unknown) and pseudo-OOB if the `app`
+#'   is of type `"web"`.
 #' @param oob_value if provided, specifies the value to use for the redirect_uri
-#'   parameter when retrieving an authorization URL. Defaults to
-#'   "urn:ietf:wg:oauth:2.0:oob". Requires `use_oob = TRUE`.
+#'   parameter when retrieving an authorization URL. For conventional OOB, this
+#'   defaults to "urn:ietf:wg:oauth:2.0:oob". For pseudo-OOB, this should be the
+#'   (or a) redirect URI configured for the OAuth client. Consulted only when
+#'   `use_oob = TRUE`.
 #' @param query_authorize_extra Default to `list()`. Set to named list holding
 #'   query parameters to append to initial auth page query. Useful for some
 #'   APIs.
