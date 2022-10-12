@@ -105,7 +105,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
 #
 # One good choice for a state token is a string of 30 or so characters
 # constructed using a high-quality random-number generator."
-csrf_token <- function(n_bytes = 15) {
+csrf_token <- function(n_bytes = 16) {
   paste0(as.character(openssl::rand_bytes(n_bytes)), collapse = "")
 }
 
