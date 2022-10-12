@@ -18,7 +18,7 @@
 init_oauth2.0 <- function(endpoint,
                           app,
                           scope = NULL,
-                          use_oob = getOption("httr_oob_default"),
+                          use_oob = gargle_oob_default(),
                           oob_value = NULL,
                           is_interactive = interactive(),
                           query_authorize_extra = list()) {
