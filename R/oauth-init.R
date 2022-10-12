@@ -59,6 +59,14 @@ nonce <- function(length = 10) {
   )
 }
 
+oauth_authorize <- function(url, oob = FALSE) {
+  if (oob) {
+    httr::oauth_exchanger(url)$code
+  } else {
+    httr::oauth_listener(url)$code
+  }
+}
+
 # Parameter checking ------------------------------------------------------
 
 check_scope <- function(x) {
@@ -104,13 +112,4 @@ check_oob <- function(use_oob, oob_value = NULL) {
   }
 
   use_oob
-}
-
-
-oauth_authorize <- function(url, oob = FALSE) {
-  if (oob) {
-    httr::oauth_exchanger(url)$code
-  } else {
-    httr::oauth_listener(url)$code
-  }
 }
