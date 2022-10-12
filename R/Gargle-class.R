@@ -36,21 +36,15 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
                             package = "gargle",
                             ## params start
                             scope = NULL,
-                            user_params = NULL,
-                            type = NULL,
                             use_oob = gargle_oob_default(),
                             ## params end
                             credentials = NULL,
-                            cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE, ...) {
+                            cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
+                            ...) {
   params <- list(
     scope = scope,
-    user_params = user_params,
-    type = type,
     use_oob = use_oob,
-    as_header = TRUE,
-    use_basic_auth = FALSE,
-    config_init = list(),
-    client_credentials = FALSE
+    as_header = TRUE
   )
 
   # pseudo-oob flow
@@ -115,10 +109,12 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @description Create a Gargle2.0 token
   #' @param app An OAuth consumer application.
   #' @param credentials Exists largely for testing purposes.
-  #' @param params A list of parameters for [httr::init_oauth2.0()]. Some we
-  #'   actively use in gargle: `scope`, `use_oob`. Most we do not:
-  #'   `user_params`, `type`, `as_header`, `use_basic_auth`, `config_init`,
-  #'   `client_credentials`.
+  #' @param params A list of parameters for the internal function
+  #'   `init_oauth2.0()`, which is a modified version of
+  #'   [httr::init_oauth2.0()]. gargle actively uses `scope` and `use_oob`, but
+  #'   does not use `user_params`, `type`, `as_header` (hard-wired to `TRUE`),
+  #'   `use_basic_auth` (accept default of `use_basic_auth = FALSE`),
+  #'   `config_init`, or `client_credentials`.
   #' @param cache_path Specifies the OAuth token cache. Read more in
   #'   [gargle::gargle_oauth_cache()].
   #' @return A Gargle2.0 token.
@@ -255,7 +251,14 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
         encourage_httpuv()
       }
-      super$init_credentials()
+      self$credentials <- init_oauth2.0(
+        self$endpoint,
+        self$app,
+        scope = self$params$scope,
+        use_oob = self$params$use_oob,
+        oob_value = self$params$oob_value,
+        query_authorize_extra = self$params$query_authorize_extra
+      )
     } else {
       # TODO: good candidate for an eventual sub-classed gargle error
       # would be useful in testing to know that this is exactly where we aborted

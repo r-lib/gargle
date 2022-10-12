@@ -9,8 +9,6 @@ gargle2.0_token(
   app = gargle_app(),
   package = "gargle",
   scope = NULL,
-  user_params = NULL,
-  type = NULL,
   use_oob = gargle_oob_default(),
   credentials = NULL,
   cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
@@ -36,12 +34,6 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 \item{package}{Name of the package requesting a token. Used in messages.}
 
 \item{scope}{A character vector of scopes to request.}
-
-\item{user_params}{Named list holding endpoint specific parameters to pass to
-the server when posting the request for obtaining or refreshing the
-access token.}
-
-\item{type}{content type used to override incorrect server response}
 
 \item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
 the option named "gargle_oob_default", retrieved via

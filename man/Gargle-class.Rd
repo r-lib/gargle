@@ -88,10 +88,12 @@ Create a Gargle2.0 token
 
 \item{\code{credentials}}{Exists largely for testing purposes.}
 
-\item{\code{params}}{A list of parameters for \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}. Some we
-actively use in gargle: \code{scope}, \code{use_oob}. Most we do not:
-\code{user_params}, \code{type}, \code{as_header}, \code{use_basic_auth}, \code{config_init},
-\code{client_credentials}.}
+\item{\code{params}}{A list of parameters for the internal function
+\code{init_oauth2.0()}, which is a modified version of
+\code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}. gargle actively uses \code{scope} and \code{use_oob}, but
+does not use \code{user_params}, \code{type}, \code{as_header} (hard-wired to \code{TRUE}),
+\code{use_basic_auth} (accept default of \code{use_basic_auth = FALSE}),
+\code{config_init}, or \code{client_credentials}.}
 
 \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
 \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}

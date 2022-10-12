@@ -46,10 +46,6 @@ the option named "gargle_oob_default", retrieved via
 \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
     \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
 "gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
-    \item{\code{user_params}}{Named list holding endpoint specific parameters to pass to
-the server when posting the request for obtaining or refreshing the
-access token.}
-    \item{\code{type}}{content type used to override incorrect server response}
     \item{\code{credentials}}{Advanced use only: allows you to completely customise
 token generation.}
   }}
