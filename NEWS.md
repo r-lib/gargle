@@ -6,8 +6,8 @@ On February 16, 2022, Google announced the deprecation of the OAuth out-of-band 
 The deprecation is happening in phases and OOB still works for some specific use cases.
 The deprecation can impact gargle users who are accessing R/RStudio via the browser, such as those using RStudio Server, Workbench, or Cloud.
 With the OOB flow, after the user authenticates themselves and authorizes the app to access certain resources, they are prompted to copy an authorization code and paste it back into the R process.
-This code is then exchanged for aaccess and refresh tokens.
-(This entire exchange can be handled automatically when the user is running R locally, using a local webserver, but that option is not available in the RStudio Server/Workbench/Cloud context.)
+This code is then exchanged for access and refresh tokens.
+(This entire exchange can be handled automatically when the user is running R locally, using a local web server, but that option is not available in the RStudio Server/Workbench/Cloud context.)
 
 In response to this deprecation, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB).
 The pseudo-OOB flow is triggered when `use_oob = TRUE` (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of "web application" type.
