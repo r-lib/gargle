@@ -1,3 +1,19 @@
+# This file has its origins in oauth-init.R in httr.
+# Motivated by the need to support the pseudo-OOB flow.
+#
+# Affected functions:
+# - Modified: init_oauth2.0(). This function is the workhorse for the
+#   $init_credentials() method of the Token2.0/Gargle2.0 class. Previously,
+#   Gargle2.0 ultimately delegated to the Token2.0 method, but now the method is
+#   fully implemented for Gargle2.0.
+# - Modified: oauth_authorize(). This function gains the ability to do code
+#   exchange *with state*, by calling the new function
+#   oauth_exchanger_with_state().
+# - Added: oauth_exchanger_with_state()
+# - The internal helpers check_scope() and check_oob() came along for the ride,
+#   to support init_oauth2.0(). These got modified to use gargle conventions,
+#   e.g. gargle_abort() instead of stop().
+
 #' Retrieve OAuth 2.0 access token, but specific to gargle
 #'
 #' @param endpoint An OAuth endpoint, presumably the one returned by
