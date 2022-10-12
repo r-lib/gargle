@@ -1,7 +1,8 @@
 #' Retrieve OAuth 2.0 access token, but specific to gargle
 #'
 #' @param endpoint An OAuth endpoint, presumably the one returned by
-#'   `gargle_oauth_endpoint()`
+#'   `gargle_oauth_endpoint()`. The fact that this is even an argument is
+#'   because this function is based on `httr::init_oauth2.0()`.
 #' @param app An OAuth consumer application
 #' @param scope a character vector of scopes to request.
 #' @param use_oob if FALSE, use a local webserver for the OAuth dance.
@@ -15,7 +16,7 @@
 #'   query parameters to append to initial auth page query. Useful for some
 #'   APIs.
 #' @noRd
-init_oauth2.0 <- function(endpoint,
+init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
                           app,
                           scope = NULL,
                           use_oob = gargle_oob_default(),
