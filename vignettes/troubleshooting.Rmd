@@ -116,20 +116,20 @@ If you've cached a token and used it successfully, why would it stop working?
 
 An existing token can go bad if you've created too many Google tokens, causing your oldest tokens to "fall off the edge".
 
-A specific Google user (email) can only have a certain number of OAuth tokens at a time (something like 50 per OAuth app or client).
+A specific Google user (email) can only have a certain number of OAuth tokens at a time (something like 50 per OAuth client).
 So, whenever you get a new token (as opposed to refreshing an existing token), there is the potential for it to invalidate an older token.
 This is unlikely to be an issue for a casual user, but it can absolutely become noticeable for someone who is developing against a Google API or someone working from many different machines / caches.
 
 ### Credential rolling
 
-Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth app used by those packages.
-Periodically the maintainer of such a package will need to roll the app, i.e. create a new OAuth app and disable the old one.
-This will make it impossible to refresh existing tokens, made with the old, disabled app.
+Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth client used by those packages.
+Periodically the maintainer of such a package will need to roll the client, i.e. create a new OAuth client and disable the old one.
+This will make it impossible to refresh existing tokens, made with the old, disabled client
 Those tokens will stop working.
 
-*In gargle v1.0.0, in March 2021, we rolled the app used in googlesheets4, googledrive, and bigrquery.
-At some point in 2021, we plan to disable the old app.
-Anyone relying on the default app will have to upgrade.*
+*In gargle v1.0.0, in March 2021, we rolled the client used in googlesheets4, googledrive, and bigrquery.
+At some point in 2021, we plan to disable the old client.
+Anyone relying on the default client will have to upgrade.*
 
 The solution is to update the package in question, e.g. googlesheets4:
 
@@ -139,7 +139,7 @@ install.packages("googlesheets4")
 
 **Restart R!**
 Resume your work.
-Chances are you'll be prompted to re-auth with the new app and you'll be back in business.
+Chances are you'll be prompted to re-auth with the new client and you'll be back in business.
 
 What does this problem look like in the wild?
 
@@ -188,6 +188,6 @@ This is why cached user tokens are a poor fit for such applications.
 
 If you choose to use a cached user token anyway, be prepared to deal with this
 headache periodically.
-Consider using your own OAuth app to eliminate your exposure to a third-party deciding to roll their app.
+Consider using your own OAuth client to eliminate your exposure to a third-party deciding to roll their client
 Be prepared to generate a fresh token interactively and upload it to the token cache consulted by your remote mission critical thing.
 Better yet, upgrade to a more robust strategy for [non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html), such as a service account token.
