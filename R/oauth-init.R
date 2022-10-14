@@ -44,11 +44,20 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
                           query_authorize_extra = list()) {
   scope <- check_scope(scope)
   use_oob <- check_oob(use_oob, oob_value)
+
   client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
+
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
-    # TODO: should this be conditional on using the tidyverse client?
-    query_authorize_extra[["ack_oob_shutdown"]] <- "2022-10-03"
+
+    # https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html#warning-message
+    # "The developers can acknowledge the user-facing warning message and
+    # suppress it by passing a query parameter in the authorization call ..."
+    client_name <- app$name %||% app$appname %||% ""
+    if (client_name %in% c("tidyverse-clio", "gargle-clio")) {
+      query_authorize_extra[["ack_oob_shutdown"]] <- "2022-10-03"
+    }
+
     if (identical(client_type, "web")) { # pseudo-oob flow
       # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
 
