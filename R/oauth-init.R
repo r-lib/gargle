@@ -22,21 +22,18 @@
 #' @param endpoint An OAuth endpoint, presumably the one returned by
 #'   `gargle_oauth_endpoint()`. The fact that this is even an argument is
 #'   because this function is based on `httr::init_oauth2.0()`.
-#' @param app An OAuth consumer application
+#' @param app An OAuth client, preferably an instance of `gargle_oauth_client`.
 #' @param scope a character vector of scopes to request.
-#' @param use_oob Whether to prefer "out of band" authentication. Defaults to
-#'   the option named "gargle_oob_default", retrieved via
-#'   [gargle::gargle_oob_default()]. Results in conventional OOB if the `app` is
-#'   of type `"installed"` (or if type is unknown) and pseudo-OOB if the `app`
-#'   is of type `"web"`.
+#' @param use_oob Whether to use out-of-band auth. Results in conventional OOB
+#'   if the `app` is of type `"installed"` (or if type is unknown) and
+#'   pseudo-OOB if the `app` is of type `"web"`.
 #' @param oob_value if provided, specifies the value to use for the redirect_uri
 #'   parameter when retrieving an authorization URL. For conventional OOB, this
 #'   defaults to "urn:ietf:wg:oauth:2.0:oob". For pseudo-OOB, this should be the
 #'   (or a) redirect URI configured for the OAuth client. Consulted only when
 #'   `use_oob = TRUE`.
-#' @param query_authorize_extra Default to `list()`. Set to named list holding
-#'   query parameters to append to initial auth page query. Useful for some
-#'   APIs.
+#' @param query_authorize_extra Named list of query parameters to include in the
+#'   initial request to the authorization server.
 #' @noRd
 init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
                           app = gargle_app(),
