@@ -77,13 +77,14 @@ since the details of this transition are necessarily uncertain.
 \examples{
 \dontrun{
 gargle_oauth_client_from_json(
-  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
+  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json",
+  name = "my-nifty-oauth-client"
 )
 }
 
 gargle_oauth_client(
   id = "some_long_id",
   secret = "ssshhhhh_its_a_secret",
-  name = "my google client"
+  name = "my-nifty-oauth-client"
 )
 }
