@@ -21,6 +21,16 @@
 #' specialized for Google APIs. This function and class is marked "experimental"
 #' since the details of this transition are necessarily uncertain.
 
+#' @param path JSON downloaded from [Google Cloud
+#'   Console](https://console.cloud.google.com), containing a client id and
+#'   secret, in one of the forms supported for the `txt` argument of
+#'   [jsonlite::fromJSON()] (typically, a file path or JSON string).
+
+#' @param name A label for this specific client, presumably the same name used
+#'   to label it in Google Cloud Console. Unfortunately there is no way to
+#'   make that true programmatically, i.e. the JSON representation does not
+#'   contain this information.
+
 #' @param id Client ID
 #' @param secret Client secret
 
@@ -36,12 +46,6 @@
 #'   * `"installed"` is associated with a "Desktop app"
 #'   * `"web"` is associated with a "Web application"
 
-#' @param name A label for this specific client, presumably the same name used
-#'   to label it in Google Developer Console. Unfortunately there is no way to
-#'   make that true programmatically, i.e. the JSON representation does not
-#'   contain this information.
-#'
-
 #' @return An OAuth client: An S3 list with class `gargle_oauth_client`. For
 #'   backwards compatibility reasons, this currently also inherits from the httr
 #'   S3 class `oauth_app`, but that is a temporary measure. An instance of
@@ -53,30 +57,57 @@
 #'   transition period. The legacy fields `appname` and `key` repeat the
 #'   information in the future-facing fields `name` and (client) `id`. Prefer
 #'   `name` and `id` to `appname` and `key` in downstream code. Prefer the
-#'   constructors `gargle_oauth_client()` and `gargle_oauth_client_from_json()`
+#'   constructors `gargle_oauth_client_from_json()` and `gargle_oauth_client()`
 #'   to [httr::oauth_app()] and [oauth_app_from_json()].
 
 #' @export
 #'
 #' @examples
-#' gargle_oauth_client(
-#'   id = "some_long_id",
-#'   secret = "ssshhhhh_its_a_secret",
-#'   name = "my google client"
-#' )
-#'
 #' \dontrun{
 #' gargle_oauth_client_from_json(
 #'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
 #' )
 #' }
-gargle_oauth_client <- function(
-    id,
-    secret,
-    redirect_uris = NULL,
-    type = c("installed", "web"),
-    name = hash(id)
-) {
+#'
+#' gargle_oauth_client(
+#'   id = "some_long_id",
+#'   secret = "ssshhhhh_its_a_secret",
+#'   name = "my google client"
+#' )
+gargle_oauth_client_from_json <- function(path, name = NULL) {
+  check_string(path)
+  if (!is.null(name)) {
+    check_string(name)
+  }
+
+  json <- jsonlite::fromJSON(path, simplifyVector = FALSE)
+  if (length(json) != 1) {
+    gargle_abort(c(
+      "JSON has an unexpected form",
+      "i" = "Are you sure this is the JSON downloaded for an OAuth client?",
+      "i" = "It is easy to confuse the JSON for an OAuth client and a service account."
+    ))
+  }
+
+  info <- json[[1]]
+
+  gargle_oauth_client(
+    id = info$client_id,
+    secret = info$client_secret,
+    redirect_uris = info$redirect_uris,
+    type = names(json),
+    name = name %||% glue("{info$project_id}_{hash(info$project_id)}")
+  )
+}
+
+
+#' @export
+#' @rdname gargle_oauth_client_from_json
+gargle_oauth_client <- function(id,
+                                secret,
+                                redirect_uris = NULL,
+                                type = c("installed", "web"),
+                                name = hash(id)) {
   check_string(id)
   check_string(secret)
   check_string(name)
@@ -115,39 +146,6 @@ gargle_oauth_client <- function(
     # class = c("gargle_oauth_client", "httr2_oauth_client")
   )
 }
-
-#' @param path JSON downloaded from [Google Cloud Platform
-#'   Console](https://console.cloud.google.com), containing a client id and
-#'   secret, in one of the forms supported for the `txt` argument of
-#'   [jsonlite::fromJSON()] (typically, a file path or JSON string).
-#' @export
-#' @rdname gargle_oauth_client
-gargle_oauth_client_from_json <- function(path, name = NULL) {
-  check_string(path)
-  if (!is.null(name)) {
-    check_string(name)
-  }
-
-  json <- jsonlite::fromJSON(path, simplifyVector = FALSE)
-  if (length(json) != 1) {
-    gargle_abort(c(
-      "JSON has an unexpected form",
-      "i" = "Are you sure this is the JSON downloaded for an OAuth client?",
-      "i" = "It is easy to confuse the JSON for an OAuth client and a service account."
-    ))
-  }
-
-  info <- json[[1]]
-
-  gargle_oauth_client(
-    id = info$client_id,
-    secret = info$client_secret,
-    redirect_uris = info$redirect_uris,
-    type = names(json),
-    name = name %||% glue("{info$project_id}_{hash(info$project_id)}")
-  )
-}
-
 # adapted from httr2 ----
 #' @export
 print.gargle_oauth_client <- function(x, ...) {

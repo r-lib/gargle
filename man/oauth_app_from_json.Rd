@@ -7,7 +7,7 @@
 oauth_app_from_json(path, appname = NULL)
 }
 \arguments{
-\item{path}{JSON downloaded from \href{https://console.cloud.google.com}{Google Cloud Platform Console}, containing a client id and
+\item{path}{JSON downloaded from \href{https://console.cloud.google.com}{Google Cloud Console}, containing a client id and
 secret, in one of the forms supported for the \code{txt} argument of
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} (typically, a file path or JSON string).}
 
