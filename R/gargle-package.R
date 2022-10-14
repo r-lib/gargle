@@ -55,16 +55,18 @@ gargle_oauth_email <- function() {
 #' @rdname gargle_options
 #' @export
 #' @section `gargle_oob_default`:
-#' `gargle_oob_default()` returns the option named "gargle_oob_default", falls
-#' back to the option named "httr_oob_default", and eventually defaults to
-#' `FALSE`. This controls whether to prefer "out of band" authentication. We
-#' also return `FALSE` unconditionally on RStudio Server or Cloud. This value is
-#' ultimately passed to [httr::init_oauth2.0()] as `use_oob`. If `FALSE` (and
-#' httpuv is installed), a local webserver is used for the OAuth dance.
-#' Otherwise, user gets a URL and prompt for a validation code.
+#' `gargle_oob_default()` returns `TRUE` unconditionally on RStudio Server,
+#' Workbench, or Cloud, since it is not possible to launch a local web server in
+#' these contexts. In this case, for the final step of the OAuth dance, the user
+#' is redirected to a specific URL where they must copy a code and paste it back
+#' into the R session.
 #'
-#' Read more about "out of band" authentication in the vignette [Auth when using
-#' R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
+#' In all other contexts, `gargle_oob_default()` consults the option named
+#' `"gargle_oob_default"`, then the option named `"httr_oob_default"`, and
+#' eventually defaults to `FALSE`.
+#'
+#' "oob" stands for out-of-band. Read more about out-of-band authentication in
+#' the vignette `vignette("auth-from-web")`.
 gargle_oob_default <- function() {
   if (is_rstudio_server()) {
     # TODO: Is there a better, more general condition we could use to detect

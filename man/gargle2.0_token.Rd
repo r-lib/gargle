@@ -29,21 +29,23 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 \code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
 "gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
 
-\item{app}{An OAuth consumer application, created by \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+\item{app}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
 \item{package}{Name of the package requesting a token. Used in messages.}
 
 \item{scope}{A character vector of scopes to request.}
 
-\item{use_oob}{Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-\code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
+\item{use_oob}{Whether to prefer out-of-band authentication. Defaults to the
+value returned by \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
 
 \item{credentials}{Advanced use only: allows you to completely customise
 token generation.}
 
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+\code{"gargle_oauth_cache"}, retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 
 \item{...}{Absorbs arguments intended for use by other credential functions.
 Not used.}

@@ -14,14 +14,16 @@
 #'   `"*@example.com"`, to create code that "just works" for both
 #'   `alice@example.com` and `bob@example.com`. Defaults to the option named
 #'   "gargle_oauth_email", retrieved by [gargle::gargle_oauth_email()].
-#' @param app An OAuth consumer application, created by [httr::oauth_app()].
+#' @param app A Google OAuth client, preferably constructed via
+#'   [gargle::gargle_oauth_client_from_json()], which returns an instance of
+#'   `gargle_oauth_client`. For backwards compatibility, for a limited time,
+#'   gargle will still accept an "OAuth app" created with [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
-#' @param use_oob Whether to prefer "out of band" authentication. Defaults to
-#'   the option named "gargle_oob_default", retrieved via
-#'   [gargle::gargle_oob_default()].
+#' @param use_oob Whether to prefer out-of-band authentication. Defaults to the
+#'   value returned by [gargle::gargle_oob_default()].
 #' @param cache Specifies the OAuth token cache. Defaults to the option named
-#'   "gargle_oauth_cache", retrieved via [gargle::gargle_oauth_cache()].
+#'   `"gargle_oauth_cache"`, retrieved via [gargle::gargle_oauth_cache()].
 #' @inheritParams httr::oauth2.0_token
 #' @param ... Absorbs arguments intended for use by other credential functions.
 #'   Not used.

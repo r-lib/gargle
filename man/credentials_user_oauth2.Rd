@@ -41,11 +41,10 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 \code{"*@example.com"}, to create code that "just works" for both
 \code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
 "gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
-    \item{\code{use_oob}}{Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-\code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
+    \item{\code{use_oob}}{Whether to prefer out-of-band authentication. Defaults to the
+value returned by \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
     \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+\code{"gargle_oauth_cache"}, retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
     \item{\code{credentials}}{Advanced use only: allows you to completely customise
 token generation.}
   }}
