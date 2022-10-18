@@ -34,7 +34,7 @@
 #' gargle2.0_token()
 #' }
 gargle2.0_token <- function(email = gargle_oauth_email(),
-                            app = gargle_app(),
+                            app = gargle_client(),
                             package = "gargle",
                             ## params start
                             scope = NULL,
@@ -121,7 +121,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #'   [gargle::gargle_oauth_cache()].
   #' @return A Gargle2.0 token.
   initialize = function(email = gargle_oauth_email(),
-                        app = gargle_app(),
+                        app = gargle_client(),
                         package = "gargle",
                         credentials = NULL,
                         params = list(),

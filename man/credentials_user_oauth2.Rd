@@ -6,7 +6,7 @@
 \usage{
 credentials_user_oauth2(
   scopes = NULL,
-  app = gargle_app(),
+  app = gargle_client(),
   package = "gargle",
   ...
 )
@@ -72,17 +72,16 @@ also suggests it might be time to use a \link[=credentials_service_account]{serv
 }
 \examples{
 \dontrun{
-## Drive scope, built-in gargle demo app
+# Drive scope, built-in gargle demo app
 scopes <- "https://www.googleapis.com/auth/drive"
-credentials_user_oauth2(scopes, app = gargle_app())
+credentials_user_oauth2(scopes, app = gargle_client())
 
-## bring your own app
-app <- httr::oauth_app(
-  appname = "my_awesome_app",
-  key = "keykeykeykeykeykey",
-  secret = "secretsecretsecret"
+# bring your own client
+client <- gargle_oauth_client_from_json(
+  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json",
+  name = "my-nifty-oauth-client"
 )
-credentials_user_oauth2(scopes, app)
+credentials_user_oauth2(scopes, client)
 }
 }
 \seealso{

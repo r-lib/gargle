@@ -69,7 +69,7 @@ Create a Gargle2.0 token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
   email = gargle_oauth_email(),
-  app = gargle_app(),
+  app = gargle_client(),
   package = "gargle",
   credentials = NULL,
   params = list(),

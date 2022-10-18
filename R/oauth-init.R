@@ -36,7 +36,7 @@
 #'   initial request to the authorization server.
 #' @noRd
 init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
-                          app = gargle_app(),
+                          app = gargle_client(),
                           scope = NULL,
                           use_oob = gargle_oob_default(),
                           oob_value = NULL,

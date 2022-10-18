@@ -6,7 +6,7 @@
 \usage{
 gargle2.0_token(
   email = gargle_oauth_email(),
-  app = gargle_app(),
+  app = gargle_client(),
   package = "gargle",
   scope = NULL,
   use_oob = gargle_oob_default(),
