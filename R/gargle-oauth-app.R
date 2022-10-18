@@ -26,7 +26,27 @@ gargle_app <- function() {
 #' @export
 #' @keywords internal
 #' @rdname internal-assets
-tidyverse_app <- function() {
+tidyverse_client <- function(type = NULL) {
   check_permitted_package(parent.frame())
-  toa()
+
+  if (is.null(type)) {
+    type <- if(is_rstudio_server()) "web" else "installed"
+  }
+  check_string(type)
+
+  switch(
+    type,
+    web       = toc_web(),
+    installed = toc_installed()
+  )
+}
+
+#' @export
+#' @keywords internal
+#' @rdname internal-assets
+tidyverse_app <- function() {
+  lifecycle::deprecate_soft(
+    "1.3.0", "tidyverse_app()", "tidyverse_client()"
+  )
+  tidyverse_client()
 }
