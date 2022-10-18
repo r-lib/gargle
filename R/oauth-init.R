@@ -13,9 +13,9 @@
 # - Added: csrf_token(). Used to create the `state` token (example of a
 #   cross-site request forgery token). Switched one existing use of
 #   httr:::nonce() to this, now that I can.
-# - The internal helpers check_scope() and check_oob() came along for the ride,
-#   to support init_oauth2.0(). These got modified to use gargle conventions,
-#   e.g. gargle_abort() instead of stop().
+# - The internal helper check_scope() got inlined (it was a mix of a checker
+#   and a processor).
+# - The internal helper check_oob() got modified to use gargle conventions.
 
 #' Retrieve OAuth 2.0 access token, but specific to gargle
 #'
@@ -146,33 +146,26 @@ oauth_exchanger_with_state <- function(request_url, state) {
   list(code = info$code)
 }
 
-# Parameter checking ------------------------------------------------------
 check_oob <- function(use_oob, oob_value = NULL) {
-  if (!is.logical(use_oob) || length(use_oob) != 1) {
-    stop("`use_oob` must be a length-1 logical vector", call. = FALSE)
-  }
+  check_bool(use_oob)
 
   if (!use_oob && !is_installed("httpuv")) {
-    message("httpuv not installed, defaulting to out-of-band authentication")
+    gargle_info(
+      "The {.pkg httpuv} package is not installed; using out-of-band auth.")
     use_oob <- TRUE
   }
 
-  if (use_oob) {
-    if (!is_interactive()) {
-      stop(
-        "Can only use oob authentication in an interactive session",
-        call. = FALSE
-      )
-    }
+  if (use_oob && !is_interactive()) {
+    gargle_abort("Out-of-band auth only works in an interactive session.")
   }
 
-  if (!is.null(oob_value)) {
-    if (!use_oob) {
-      stop(
-        "Can only use custom oob value if use_oob is enabled",
-        call. = FALSE
-      )
-    }
+  if (!is.null(oob_value) && !use_oob) {
+    gargle_abort("
+      The {.arg oob_value} argument can only be used when {.code use_oob = TRUE}.")
+  }
+
+  if (use_oob && !is.null(oob_value)) {
+    check_string(oob_value)
   }
 
   use_oob
