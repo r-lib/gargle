@@ -1,26 +1,29 @@
 # gargle (development version)
 
-## (Partial) deprecation out-Of-Band (OOB) auth flow
+## (Partial) deprecation out-of-band (OOB) auth flow
 
 On February 16, 2022, Google announced the gradual deprecation of the out-of-band (OOB) OAuth flow.
-OOB still works if the OAuth client is associated with a GCP project that is in testing mode, but it does not work for projects in production mode.
-(Or, to be more accurate, it might work now in specific cases, but it won't work for much longer.)
+OOB **still works** if the OAuth client is associated with a GCP project that is in testing mode and this is not going away.
+But OOB is no longer supported for projects in production mode.
+To be more accurate, some production-mode projects have gotten an extension to permit the use of OOB auth for a bit longer, but that's just a temporary reprieve.
 
 The typical user who will (eventually) be impacted is:
 
-* Using R via RStudio Server/Workbench/Cloud
-* Using tidyverse packages such as googledrive, googlesheets4, or bigrquery
-* Relying on the built-in OAuth client (this client is associated with a GCP
-  project in production mode)
+* Using R via RStudio Server/Workbench/Cloud.
+* Using tidyverse packages such as googledrive, googlesheets4, or bigrquery.
+* Relying on the built-in OAuth client. Importantly, this client is associated
+  with a GCP project that is in production mode.
 
-The phased deprecation of OOB is nearly complete and we expect it to affect the built-in tidyverse OAuth client on Feburary 1, 2023, at the latest.
+The phased deprecation of OOB is nearly complete and we expect conventional OOB to stop working with the built-in tidyverse OAuth client on February 1, 2023, at the latest.
 
 **In preparation for this, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB)**.
 The pseudo-OOB flow is triggered when `use_oob = TRUE` (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of "Web application" type.
+The gargle/googledrive/googlesheets4/bigrquery packages should default to a "Web application" client on RStudio Server/Workbench/Cloud now, leading the user through the pseudo-OOB flow.
+Other than needing to re-auth once, affected users should still find that things "just work".
 
 Read the `vignette("auth-from-web")` for more.
 
-## Other
+## gargle-specific notion of OAuth client
 
 `gargle_oauth_client()` is a new constructor for an S3 class by the same name.
 There are two motivations:
@@ -31,9 +34,13 @@ There are two motivations:
     introduce a `type` field.
   - A transition from httr and httr2 is on the horizon, so it makes sense to
     look more toward `httr2:oauth_client()` than to `httr::oauth_app()`.
+    gargle's vocabulary is generally shifting towards "client" and away from
+    "app".
   
 `oauth_app_from_json()` has therefore been (soft) deprecated, in favor of a new function `gargle_oauth_client_from_json()`, which is the preferred way to instantiate an OAuth client, since the downloaded JSON conveys the client type and redirect URI(s).
-As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oauth_app`.
+As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oauth_app`, but this probably won't be true in the long-term.
+
+`gargle_client(type =)` replaces `gargle_app()`.
 
 # gargle 1.2.1
 
