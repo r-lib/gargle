@@ -2,9 +2,12 @@
 % Please edit documentation in R/gargle-oauth-client.R
 \name{oauth_app_from_json}
 \alias{oauth_app_from_json}
+\alias{gargle_app}
 \title{Create an OAuth app from JSON}
 \usage{
 oauth_app_from_json(path, appname = NULL)
+
+gargle_app()
 }
 \arguments{
 \item{path}{JSON downloaded from \href{https://console.cloud.google.com}{Google Cloud Console}, containing a client id and
@@ -18,16 +21,11 @@ used to make it easier to identify different applications.}
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
 \code{oauth_app_from_json()} is being replaced with
-\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, anticipating gargle's future migration
-from httr to httr2. Now \code{oauth_app_from_json()} potentially warns about this
-deprecation and immediately passes its inputs through to
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, in light of the new
+\code{gargle_oauth_client} class. Now \code{oauth_app_from_json()} potentially warns
+about this deprecation and immediately passes its inputs through to
 \code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}.
-}
-\examples{
-\dontrun{
-oauth_app(
-  path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
-)
-}
+
+\code{gargle_app()} is being replaced with \code{\link[=gargle_client]{gargle_client()}}.
 }
 \keyword{internal}

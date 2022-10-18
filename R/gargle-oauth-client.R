@@ -174,6 +174,62 @@ list_redact <- function(x, names, case_sensitive = TRUE) {
   x
 }
 
+#' OAuth client for demonstration purposes
+#'
+#' @description
+
+#' Invisibly returns an instance of
+#' [`gargle_oauth_client`][gargle_oauth_client()] that can be used to test drive
+#' gargle before obtaining your own client ID and secret. This OAuth client may
+#' be deleted or rotated at any time. There are no guarantees about which APIs
+#' are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than
+#' interactive, small-scale experimentation.
+#'
+#' You can get your own OAuth client ID and secret, without these limitations.
+#' See the `vignette("get-api-credentials")` for more details.
+#'
+#' @inheritParams gargle_oauth_client_from_json
+#'
+#' @return An OAuth client, produced by [gargle_oauth_client()], invisibly.
+#' @export
+#' @keywords internal
+#' @examples
+#' \dontrun{
+#' gargle_client()
+#' }
+gargle_client <- function(type = NULL) {
+  if (is.null(type) || is.na(type)) {
+    type <- if(is_rstudio_server()) "web" else "installed"
+  }
+  check_string(type)
+  type <- arg_match(type, values = c("installed", "web"))
+
+  switch(
+    type,
+    web       = goc_web(),
+    installed = goc_installed()
+  )
+}
+
+#' @export
+#' @keywords internal
+#' @rdname internal-assets
+tidyverse_client <- function(type = NULL) {
+  check_permitted_package(parent.frame())
+
+  if (is.null(type) || is.na(type)) {
+    type <- if(is_rstudio_server()) "web" else "installed"
+  }
+  check_string(type)
+  type <- arg_match(type, values = c("installed", "web"))
+
+  switch(
+    type,
+    web       = toc_web(),
+    installed = toc_installed()
+  )
+}
+
 # deprecated functions ----
 
 #' Create an OAuth app from JSON
@@ -183,25 +239,41 @@ list_redact <- function(x, names, case_sensitive = TRUE) {
 #'
 
 #' `oauth_app_from_json()` is being replaced with
-#' [`gargle_oauth_client_from_json()`], anticipating gargle's future migration
-#' from httr to httr2. Now `oauth_app_from_json()` potentially warns about this
-#' deprecation and immediately passes its inputs through to
+#' [`gargle_oauth_client_from_json()`], in light of the new
+#' `gargle_oauth_client` class. Now `oauth_app_from_json()` potentially warns
+#' about this deprecation and immediately passes its inputs through to
 #' [`gargle_oauth_client_from_json()`].
+#'
+#' `gargle_app()` is being replaced with [gargle_client()].
 #'
 #' @inheritParams gargle_oauth_client
 #' @inheritParams httr::oauth_app
 #' @keywords internal
 #' @export
-#' @examples
-#' \dontrun{
-#' oauth_app(
-#'   path = "/path/to/the/JSON/you/downloaded/from/gcp/console.json"
-#' )
-#' }
 oauth_app_from_json <- function(path,
                                 appname = NULL) {
   lifecycle::deprecate_soft(
     "1.3.0", "oauth_app_from_json()", "gargle_oauth_client_from_json()"
   )
   gargle_oauth_client_from_json(path = path, name = appname)
+}
+
+#' @export
+#' @keywords internal
+#' @rdname internal-assets
+tidyverse_app <- function() {
+  lifecycle::deprecate_soft(
+    "1.3.0", "tidyverse_app()", "tidyverse_client()"
+  )
+  tidyverse_client()
+}
+
+#' @export
+#' @keywords internal
+#' @rdname oauth_app_from_json
+gargle_app <- function() {
+  lifecycle::deprecate_soft(
+    "1.3.0", "gargle_app()", "gargle_client()"
+  )
+  gargle_client()
 }
