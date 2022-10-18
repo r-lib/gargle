@@ -42,7 +42,9 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
                           oob_value = NULL,
                           is_interactive = interactive(),
                           query_authorize_extra = list()) {
-  scope <- check_scope(scope)
+  check_character(scope, allow_null = TRUE)
+  scope <- glue_collapse(scope, sep = " ")
+
   use_oob <- check_oob(use_oob, oob_value)
 
   client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
@@ -145,18 +147,6 @@ oauth_exchanger_with_state <- function(request_url, state) {
 }
 
 # Parameter checking ------------------------------------------------------
-
-check_scope <- function(x) {
-  if (is.null(x)) {
-    return(NULL)
-  }
-
-  if (!is.character(x)) {
-    stop("`scope` must be a character vector", call. = FALSE)
-  }
-  paste(x, collapse = " ")
-}
-
 check_oob <- function(use_oob, oob_value = NULL) {
   if (!is.logical(use_oob) || length(use_oob) != 1) {
     stop("`use_oob` must be a length-1 logical vector", call. = FALSE)
