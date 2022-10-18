@@ -9,12 +9,12 @@
 httr. The preferred way to create a \code{Gargle2.0} token is through the
 constructor function \code{\link[=gargle2.0_token]{gargle2.0_token()}}. Key differences with \code{Token2.0}:
 \itemize{
-\item The key for a cached \code{Token2.0} comes from hashing the endpoint, app, and
-scopes. For the \code{Gargle2.0} subclass, the identifier or key is expanded to
-include the email address associated with the token. This makes it easier to
-work with Google APIs with multiple identities.
-\item \code{Gargle2.0} tokens are cached, by default, below
-\code{"~/.R/gargle/gargle-oauth"}, i.e. at the user level. In contrast, the
+\item The key for a cached \code{Token2.0} comes from hashing the endpoint, client,
+and scopes. For the \code{Gargle2.0} subclass, the identifier or key is expanded
+to include the email address associated with the token. This makes it easier
+to work with Google APIs with multiple identities.
+\item \code{Gargle2.0} tokens are cached, by default, at the user level, following the
+XDG spec for storing user-specific data and cache files. In contrast, the
 default location for \code{Token2.0} is \code{./.httr-oauth}, i.e. in current working
 directory. \code{Gargle2.0} behaviour makes it easier to reuse tokens across
 projects and makes it less likely that tokens are accidentally synced to a

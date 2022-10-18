@@ -3,7 +3,7 @@
 #' @description Consults the token cache for a suitable OAuth token and, if
 #'   unsuccessful, gets a token via the browser flow. A cached token is suitable
 #'   if it's compatible with the user's request in this sense:
-#'   * OAuth app must be same.
+#'   * OAuth client must be same.
 #'   * Scopes must be same.
 #'   * Email, if provided, must be same. If specified email is a glob pattern
 #'     like `"*@example.com"`, email matching is done at the domain level.
@@ -28,16 +28,14 @@
 #'   with a token; gargle uses this to index cached OAuth tokens. This grants no
 #'   permission to view or send email and is generally considered a low-value
 #'   scope.
-#' @param app An OAuth consumer application, created by [httr::oauth_app()].
-#' @param package Name of the package requesting a token. Used in messages.
-#' @inheritDotParams gargle2.0_token -scope -app -package
+#' @inheritDotParams gargle2.0_token -scope
 #'
 #' @return A [Gargle2.0] token.
 #' @family credential functions
 #' @export
 #' @examples
 #' \dontrun{
-#' # Drive scope, built-in gargle demo app
+#' # Drive scope, built-in gargle demo client
 #' scopes <- "https://www.googleapis.com/auth/drive"
 #' credentials_user_oauth2(scopes, app = gargle_client())
 #'
