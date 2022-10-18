@@ -298,7 +298,7 @@ For an API that can be used without a token: `drive_deauth()` can be used at any
 
 For an API that cannot be used without a token: BigQuery is an example of such an API. `bq_deauth()` just clears the current token, so that the auth flow starts over the next time a token is needed.
 
-## BYOCK = Bring Your Own Client and Key
+## Bring Your Own Client and Key
 
 Advanced users can use their own OAuth client and API key. `drive_auth_configure()` lives in `R/drive_auth()` and it provides the ability to modify the current `app` and `api_key`. Recall that `drive_oauth_app()` and `drive_api_key()` also exist for targeted, read-only access.
 
