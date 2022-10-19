@@ -18,8 +18,10 @@ generally by implied by the namespace within which the \code{AuthState} is
 defined. But it's possible to record the package name explicitly and seems
 like a good practice.}
 
-\item{app}{Optional. An OAuth consumer application, as produced by
-\code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+\item{app}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
 \item{api_key}{Optional. API key (a string). Some APIs accept unauthorized,
 "token-free" requests for public resources, but only if the request
@@ -38,15 +40,15 @@ An object of class \link{AuthState}.
 Constructor function for objects of class \link{AuthState}.
 }
 \examples{
-my_app <- httr::oauth_app(
-  appname = "my_package",
-  key = "keykeykeykeykeykey",
-  secret = "secretsecretsecret"
+my_client <- gargle_oauth_client(
+  id = "some_long_client_id",
+  secret = "ssshhhhh_its_a_secret",
+  name = "my-nifty-oauth-client"
 )
 
 init_AuthState(
   package = "my_package",
-  app = my_app,
+  app = my_client,
   api_key = "api_key_api_key_api_key",
 )
 }

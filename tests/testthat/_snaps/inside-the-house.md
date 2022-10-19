@@ -28,3 +28,21 @@
       i See gargle's "How to get your own API credentials" vignette for more details:
       i <https://gargle.r-lib.org/articles/get-api-credentials.html>
 
+# gargle oauth app (deprecated)
+
+    Code
+      oa <- gargle_app()
+    Condition
+      Warning:
+      `gargle_app()` was deprecated in gargle 1.3.0.
+      i Please use `gargle_client()` instead.
+
+# tidyverse oauth app (deprecated)
+
+    Code
+      oa <- tidyverse_app()
+    Condition
+      Warning:
+      `tidyverse_app()` was deprecated in gargle 1.3.0.
+      i Please use `tidyverse_client()` instead.
+

@@ -9,12 +9,12 @@
 httr. The preferred way to create a \code{Gargle2.0} token is through the
 constructor function \code{\link[=gargle2.0_token]{gargle2.0_token()}}. Key differences with \code{Token2.0}:
 \itemize{
-\item The key for a cached \code{Token2.0} comes from hashing the endpoint, app, and
-scopes. For the \code{Gargle2.0} subclass, the identifier or key is expanded to
-include the email address associated with the token. This makes it easier to
-work with Google APIs with multiple identities.
-\item \code{Gargle2.0} tokens are cached, by default, below
-\code{"~/.R/gargle/gargle-oauth"}, i.e. at the user level. In contrast, the
+\item The key for a cached \code{Token2.0} comes from hashing the endpoint, client,
+and scopes. For the \code{Gargle2.0} subclass, the identifier or key is expanded
+to include the email address associated with the token. This makes it easier
+to work with Google APIs with multiple identities.
+\item \code{Gargle2.0} tokens are cached, by default, at the user level, following the
+XDG spec for storing user-specific data and cache files. In contrast, the
 default location for \code{Token2.0} is \code{./.httr-oauth}, i.e. in current working
 directory. \code{Gargle2.0} behaviour makes it easier to reuse tokens across
 projects and makes it less likely that tokens are accidentally synced to a
@@ -69,7 +69,7 @@ Create a Gargle2.0 token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
   email = gargle_oauth_email(),
-  app = gargle_app(),
+  app = gargle_client(),
   package = "gargle",
   credentials = NULL,
   params = list(),
@@ -88,10 +88,12 @@ Create a Gargle2.0 token
 
 \item{\code{credentials}}{Exists largely for testing purposes.}
 
-\item{\code{params}}{A list of parameters for \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}. Some we
-actively use in gargle: \code{scope}, \code{use_oob}. Most we do not:
-\code{user_params}, \code{type}, \code{as_header}, \code{use_basic_auth}, \code{config_init},
-\code{client_credentials}.}
+\item{\code{params}}{A list of parameters for the internal function
+\code{init_oauth2.0()}, which is a modified version of
+\code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}. gargle actively uses \code{scope} and \code{use_oob}, but
+does not use \code{user_params}, \code{type}, \code{as_header} (hard-wired to \code{TRUE}),
+\code{use_basic_auth} (accept default of \code{use_basic_auth = FALSE}),
+\code{config_init}, or \code{client_credentials}.}
 
 \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
 \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}

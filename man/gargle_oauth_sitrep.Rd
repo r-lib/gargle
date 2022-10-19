@@ -8,7 +8,7 @@ gargle_oauth_sitrep(cache = NULL)
 }
 \arguments{
 \item{cache}{Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+\code{"gargle_oauth_cache"}, retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
 }
 \value{
 A data frame with one row per cached token, invisibly. Note this data
@@ -23,7 +23,7 @@ Get a human-oriented overview of the existing gargle OAuth tokens:
 \item Compact summary of the associated
 \itemize{
 \item Email = Google identity
-\item OAuth app (actually, just its nickname)
+\item OAuth client (actually, just its nickname)
 \item Scopes
 \item Hash (actually, just the first 7 characters)
 Mostly useful for the development of gargle and client packages.

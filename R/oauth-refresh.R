@@ -73,32 +73,32 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
   app_name <- app$appname %||% ""
   is_legacy_app <- grepl(gargle_legacy_app_pattern(), app_name)
 
-  # app looks like one of "ours"
+  # client looks like one of "ours"
   if (is_legacy_app) {
     main_pkg <- package %||% "gargle"
     all_pkgs <- if (main_pkg == "gargle") "gargle" else c(main_pkg, "gargle")
     gargle_warn(c(
-      "Unable to refresh token, because the associated OAuth app \\
+      "Unable to refresh token, because the associated OAuth client \\
        has been deleted.",
-      "i" = "You appear to be relying on the default app used by the \\
+      "i" = "You appear to be relying on the default client used by the \\
              {.pkg {main_pkg}} package.",
       " " = "Consider re-installing {.pkg {all_pkgs}}, \\
-             in case the default app has been updated."
+             in case the default client has been updated."
     ))
     return(invisible())
   }
 
-  # deleted app doesn't seem to be one of "ours"
+  # deleted client doesn't seem to be one of "ours"
   gargle_warn(c(
-    "Unable to refresh token, because the associated OAuth app \\
+    "Unable to refresh token, because the associated OAuth client \\
      has been deleted.",
-    "*" = if (nzchar(app_name)) "App name: {.field {app_name}}",
+    "*" = if (nzchar(app_name)) "Client name: {.field {app_name}}",
     if (!is.null(package)) {
       c(
-        "i" = "If you did not configure this OAuth app, it may be built into \\
+        "i" = "If you did not configure this OAuth client, it may be built into \\
                the {.pkg {package}} package.",
         " " = "If so, consider re-installing {.pkg {package}} to get an updated \\
-               app."
+               client."
       )
     }
   ))

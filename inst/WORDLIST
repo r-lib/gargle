@@ -2,7 +2,6 @@ API's
 AppVeyor
 Auth
 AuthState
-BYOAK
 CLI
 CMD
 Codecov
@@ -17,6 +16,7 @@ IAM
 JSON
 Keyless
 OAuth
+OOB
 ORCID
 OpenID
 Opnieuw
@@ -26,9 +26,11 @@ SDK
 Testthat
 Tidyverse
 UI
+URI
 URIs
 VMs
 WifToken
+XDG
 YAML
 api
 appveyor

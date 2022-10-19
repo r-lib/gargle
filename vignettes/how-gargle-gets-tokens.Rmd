@@ -223,7 +223,7 @@ credentials_user_oauth2(
 
 `credentials_user_oauth2()` is where the vast majority of users will end up. This is the function that choreographs the traditional "OAuth dance" in the browser. User credentials are cached locally, at the user level, by default. Therefore, after first use, there are scenarios in which gargle can determine unequivocally that it already has a suitable token on hand and can load (and possibly refresh) it, without additional user intervention.
 
-The `scopes`, `app`, and `package` are generally provided by the API wrapper function that is mediating the calls to `token_fetch()`. Do not "borrow" an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your application must accurately represent itself when authenticating to Google API services.
+The `scopes`, `app`, and `package` are generally provided by the API wrapper function that is mediating the calls to `token_fetch()`. Do not "borrow" an OAuth client from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your application must accurately represent itself when authenticating to Google API services.
 
 The wrapper package would presumably also declare itself as the package requesting a token (this is used in messages). So here's how a call to `token_fetch()` and `credentials_user_oauth2()` might look when initiated from `THINGY_auth()`, a function in the fictional thingyr wrapper package:
 
