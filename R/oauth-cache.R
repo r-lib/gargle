@@ -154,11 +154,11 @@ cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
   }
 
   gargle_info(c(
-    "v" = "Deleting {n} token{?s} obtained with an old tidyverse OAuth app.",
-    "i" = "Expect interactive prompts to re-auth with the new app.",
+    "v" = "Deleting {n} token{?s} obtained with an old tidyverse OAuth client.",
+    "i" = "Expect interactive prompts to re-auth with the new client.",
     "!" = "Is this rolling of credentials highly disruptive to your \\
            workflow?",
-    " " = "That means you should rely on your own OAuth app \\
+    " " = "That means you should rely on your own OAuth client \\
            (or switch to a service account token).",
     " " = "Learn more these in these articles:",
     " " = "{.url https://gargle.r-lib.org/articles/get-api-credentials.html}",
@@ -357,7 +357,7 @@ match2 <- function(needle, haystack) {
 #'   * Number of tokens found there
 #'   * Compact summary of the associated
 #'     - Email = Google identity
-#'     - OAuth app (actually, just its nickname)
+#'     - OAuth client (actually, just its nickname)
 #'     - Scopes
 #'     - Hash (actually, just the first 7 characters)
 #' Mostly useful for the development of gargle and client packages.

@@ -80,7 +80,7 @@ PREFIX_auth_details <- function(.data = list(
     "",
     "For details on the many ways to find a token, see",
     "[gargle::token_fetch()]. For deeper control over auth, use",
-    "[{PREFIX}_auth_configure()] to bring your own OAuth app or API key.",
+    "[{PREFIX}_auth_configure()] to bring your own OAuth client or API key.",
     "Read more about gargle options, see [gargle::gargle_options]."
   ), .data = .data)
 }
@@ -190,7 +190,7 @@ PREFIX_auth_configure_description <- function(.data = list(
     "These functions give more control over and visibility into the auth",
     "configuration than [{PREFIX}_auth()] does. `{PREFIX}_auth_configure()`",
     "lets the user specify their own:",
-    "  * OAuth app, which is used when obtaining a user token.",
+    "  * OAuth client, which is used when obtaining a user token.",
     if (.has_api_key) {
       c(
         "  * API key. If {PACKAGE} is de-authorized via [{PREFIX}_deauth()], all",
@@ -209,10 +209,10 @@ PREFIX_auth_configure_description <- function(.data = list(
     if (.has_api_key) {
       c(
         "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
-        "currently configured OAuth app and API key, respectively."
+        "currently configured OAuth client and API key, respectively."
       )
     } else {
-      "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth app."
+      "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth client."
     }
   )
   glue_data_lines(lines, .data = .data)
@@ -220,8 +220,9 @@ PREFIX_auth_configure_description <- function(.data = list(
 
 PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
   c(
-    "@param app OAuth app, in the sense of [httr::oauth_app()].",
-    "@inheritParams gargle::oauth_app_from_json",
+    "@param app A Google OAuth client, preferably constructed via",
+    "[gargle::gargle_oauth_client_from_json()]",
+    "@inheritParams gargle::gargle_oauth_client_from_json",
     if (.has_api_key) {
       "@param api_key API key."
     }
@@ -235,8 +236,7 @@ PREFIX_auth_configure_return <- function(.data = list(
     "@return",
     "  * `{PREFIX}_auth_configure()`: An object of R6 class",
     "    [gargle::AuthState], invisibly.",
-    "  * `{PREFIX}_oauth_app()`: the current user-configured",
-    "    [httr::oauth_app()].",
+    "  * `{PREFIX}_oauth_app()`: the current user-configured OAuth client.",
     if (.has_api_key) {
       "  * `{PREFIX}_api_key()`: the current user-configured API key."
     }

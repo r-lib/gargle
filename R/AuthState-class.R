@@ -6,8 +6,6 @@
 #'   generally by implied by the namespace within which the `AuthState` is
 #'   defined. But it's possible to record the package name explicitly and seems
 #'   like a good practice.
-#' @param app Optional. An OAuth consumer application, as produced by
-#'   [httr::oauth_app()].
 #' @param api_key Optional. API key (a string). Some APIs accept unauthorized,
 #'   "token-free" requests for public resources, but only if the request
 #'   includes an API key.
@@ -15,19 +13,20 @@
 #'   probably not an API key). `FALSE` means requests should include an API key
 #'   (and probably not a token).
 #' @param cred Credentials. Typically populated indirectly via [token_fetch()].
+#' @inheritParams gargle2.0_token
 #'
 #' @return An object of class [AuthState].
 #' @export
 #' @examples
-#' my_app <- httr::oauth_app(
-#'   appname = "my_package",
-#'   key = "keykeykeykeykeykey",
-#'   secret = "secretsecretsecret"
+#' my_client <- gargle_oauth_client(
+#'   id = "some_long_client_id",
+#'   secret = "ssshhhhh_its_a_secret",
+#'   name = "my-nifty-oauth-client"
 #' )
 #'
 #' init_AuthState(
 #'   package = "my_package",
-#'   app = my_app,
+#'   app = my_client,
 #'   api_key = "api_key_api_key_api_key",
 #' )
 init_AuthState <- function(package = NA_character_,
@@ -48,7 +47,7 @@ init_AuthState <- function(package = NA_character_,
 #'
 #' @description
 #' An `AuthState` object manages an authorization state, typically on behalf of
-#' a client package that makes requests to a Google API.
+#' a wrapper package that makes requests to a Google API.
 #'
 #' The [How to use gargle for auth in a client
 #' package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html)
@@ -60,10 +59,10 @@ init_AuthState <- function(package = NA_character_,
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 #'     with an API key, but this is the exception.
-#'   * `app` is an OAuth app associated with a specific Google Cloud Platform
-#'     [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
+#'   * `app` is an OAuth client ID (and secret) associated with a specific
+#'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     This is used in the OAuth flow, in which an authenticated user authorizes
-#'     the app to access or manipulate data on their behalf.
+#'     the client to access or manipulate data on their behalf.
 #'   * `auth_active` reflects whether outgoing requests will be authorized by an
 #'     authenticated user or are unauthorized requests for public resources.
 #'     These two states correspond to sending a request with a token versus an
@@ -79,7 +78,7 @@ init_AuthState <- function(package = NA_character_,
 #' [init_AuthState()], which has more details on the arguments.
 #'
 #' @param package Package name.
-#' @param app An OAuth consumer application.
+#' @param app An OAuth client.
 #' @param api_key An API key.
 #' @param auth_active Logical, indicating whether auth is active.
 #' @param cred Credentials.
@@ -89,7 +88,7 @@ init_AuthState <- function(package = NA_character_,
 AuthState <- R6::R6Class("AuthState", list(
   #' @field package Package name.
   package = NULL,
-  #' @field app An OAuth consumer application.
+  #' @field app An OAuth client.
   app = NULL,
   #' @field api_key An API key.
   api_key = NULL,

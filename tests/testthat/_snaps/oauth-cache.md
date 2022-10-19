@@ -3,10 +3,10 @@
     Code
       cache_clean(cache_folder, "apple")
     Message
-      v Deleting 1 token obtained with an old tidyverse OAuth app.
-      i Expect interactive prompts to re-auth with the new app.
+      v Deleting 1 token obtained with an old tidyverse OAuth client.
+      i Expect interactive prompts to re-auth with the new client.
       ! Is this rolling of credentials highly disruptive to your workflow?
-        That means you should rely on your own OAuth app (or switch to a service
+        That means you should rely on your own OAuth client (or switch to a service
         account token).
         Learn more these in these articles:
         <https://gargle.r-lib.org/articles/get-api-credentials.html>
