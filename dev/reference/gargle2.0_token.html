@@ -71,11 +71,9 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gargle2.0_token</span><span class="op">(</span></span>
 <span>  email <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  app <span class="op">=</span> <span class="fu"><a href="gargle_app.html">gargle_app</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  app <span class="op">=</span> <span class="fu"><a href="gargle_client.html">gargle_client</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"gargle"</span>,</span>
 <span>  scope <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  user_params <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  use_oob <span class="op">=</span> <span class="fu"><a href="gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  cache <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">credentials</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span> <span class="kw">else</span> <span class="cn">FALSE</span>,</span>
@@ -101,7 +99,10 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 
 
 <dt>app</dt>
-<dd><p>An OAuth consumer application, created by <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>.</p></dd>
+<dd><p>A Google OAuth client, preferably constructed via
+<code><a href="gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which returns an instance of
+<code>gargle_oauth_client</code>. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>.</p></dd>
 
 
 <dt>package</dt>
@@ -112,20 +113,9 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 <dd><p>A character vector of scopes to request.</p></dd>
 
 
-<dt>user_params</dt>
-<dd><p>Named list holding endpoint specific parameters to pass to
-the server when posting the request for obtaining or refreshing the
-access token.</p></dd>
-
-
-<dt>type</dt>
-<dd><p>content type used to override incorrect server response</p></dd>
-
-
 <dt>use_oob</dt>
-<dd><p>Whether to prefer "out of band" authentication. Defaults to
-the option named "gargle_oob_default", retrieved via
-<code><a href="gargle_options.html">gargle_oob_default()</a></code>.</p></dd>
+<dd><p>Whether to prefer out-of-band authentication. Defaults to the
+value returned by <code><a href="gargle_options.html">gargle_oob_default()</a></code>.</p></dd>
 
 
 <dt>credentials</dt>
@@ -135,7 +125,7 @@ token generation.</p></dd>
 
 <dt>cache</dt>
 <dd><p>Specifies the OAuth token cache. Defaults to the option named
-"gargle_oauth_cache", retrieved via <code><a href="gargle_options.html">gargle_oauth_cache()</a></code>.</p></dd>
+<code>"gargle_oauth_cache"</code>, retrieved via <code><a href="gargle_options.html">gargle_oauth_cache()</a></code>.</p></dd>
 
 
 <dt>...</dt>

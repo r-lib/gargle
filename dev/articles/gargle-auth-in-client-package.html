@@ -102,7 +102,7 @@
 </h2>
 <p>Getting a token requires several pieces of information and there are stark differences in how much users (need to) know or control about this process. Let’s review them, with an eye towards identifying the responsibilities of the package author versus the user.</p>
 <ul>
-<li>Overall config: OAuth app and API key. Who provides?</li>
+<li>Overall config: OAuth client and API key. Who provides?</li>
 <li>Token-level properties: Google identity (email) and scopes.</li>
 <li>Request-level: Who manages tokens and injects them into requests?</li>
 </ul>
@@ -152,31 +152,33 @@
 <p>The OAuth <code>app</code> and <code>api_key</code> are configurable by the user and, when <code>NULL</code>, downstream functions can fall back to internal credentials. The <code>cred</code> field is populated by the first call to <code>drive_auth()</code> (direct or indirectly via <code>drive_token()</code>).</p>
 </div>
 <div class="section level3">
-<h3 id="oauth-app">OAuth app<a class="anchor" aria-label="anchor" href="#oauth-app"></a>
+<h3 id="oauth-client">OAuth client<a class="anchor" aria-label="anchor" href="#oauth-client"></a>
 </h3>
-<p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared the fiddly details surrounding this. The OAuth app is one example. The app is a component that most users do not even know about and they are content to use the same app for all work through a client package: possibly, the app built into the package.</p>
-<p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code>. Exported auth helpers, <code>drive_oauth_app()</code> and <code>drive_auth_configure()</code>, retrieve and modify the current app to support users ready to take that level of control.</p>
+<p>Most users should present OAuth user credentials to Google APIs. However, most users can also be spared the fiddly details surrounding this. The OAuth client is one example. (Historically, following the lead of the httr package, we have used the term OAuth <em>app</em>, but we are pivoting towards the term OAuth <em>client</em>.) The client is a component that most users do not even know about and they are content to use the same client for all work through a wrapper package: possibly, the client built into the package.</p>
+<p>There is a field in the <code>.auth</code> auth state to hold the OAuth <code>app</code> (client). Exported auth helpers, <code>drive_oauth_app()</code> and <code>drive_auth_configure()</code>, retrieve and modify the current client to support the minority of users wishing to take that level of control.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">google_app</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">oauth_app</a></span><span class="op">(</span></span>
-<span>  appname <span class="op">=</span> <span class="st">"acme-corp"</span>,</span>
-<span>  key     <span class="op">=</span> <span class="st">"123456789.apps.googleusercontent.com"</span>,</span>
-<span>  secret  <span class="op">=</span> <span class="st">"abcdefghijklmnopqrstuvwxyz"</span></span>
+<span><span class="va">google_client</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json</a></span><span class="op">(</span></span>
+<span>  path <span class="op">=</span> <span class="st">"/path/to/the/JSON/that/was/downloaded/from/gcp/console.json"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"acme-corp-google-client"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">drive_auth_configure</span><span class="op">(</span>app <span class="op">=</span> <span class="va">google_app</span><span class="op">)</span></span>
+<span><span class="fu">drive_auth_configure</span><span class="op">(</span>app <span class="op">=</span> <span class="va">google_client</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_oauth_app</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;oauth_app&gt; acme-corp</span></span>
-<span><span class="co">#&gt;   key:    123456789.apps.googleusercontent.com</span></span>
-<span><span class="co">#&gt;   secret: &lt;hidden&gt;</span></span></code></pre></div>
-<p>Do not “borrow” an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="external-link uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
+<span><span class="co">#&gt; &lt;gargle_oauth_client&gt;</span></span>
+<span><span class="co">#&gt; name: acme-corp-google-client</span></span>
+<span><span class="co">#&gt; id: 123456789.apps.googleusercontent.com</span></span>
+<span><span class="co">#&gt; secret: &lt;REDACTED&gt;</span></span>
+<span><span class="co">#&gt; type: installed</span></span>
+<span><span class="co">#&gt; redirect_uris: http://localhost</span></span></code></pre></div>
+<p>Do not “borrow” an OAuth client ID and secret from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="external-link uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
 </div>
 <div class="section level3">
 <h3 id="api-key">API key<a class="anchor" aria-label="anchor" href="#api-key"></a>
 </h3>
 <p>Some Google APIs can be used in an unauthenticated state, if and only if requests include an API key. For example, this is a great way to read a Google Sheet that is world-readable or readable by “anyone with a link” from a Shiny app, thereby designing away the need to manage user credentials on the server.</p>
-<p>The user can provide their own API key via <code>drive_auth_configure()</code> and retrieve that value with <code>drive_api_key()</code>, just like the OAuth app. The API key is stored in the <code>api_key</code> field of the <code>.auth</code> auth state.</p>
+<p>The user can provide their own API key via <code>drive_auth_configure()</code> and retrieve that value with <code>drive_api_key()</code>, just like the OAuth client. The API key is stored in the <code>api_key</code> field of the <code>.auth</code> auth state.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
@@ -184,18 +186,18 @@
 <span></span>
 <span><span class="fu">drive_api_key</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; "123456789"</span></span></code></pre></div>
-<p>Many users aren’t motivated to take this level of control and appreciate when a package provides a built-in default API key. As with the app, packages should obtain their own API key and not borrow the gargle or tidyverse key.</p>
+<p>Many users aren’t motivated to take this level of control and appreciate when a package provides a built-in default API key. As with the client, packages should obtain their own API key and not borrow the gargle or tidyverse key.</p>
 <p>Some APIs are not usable without a token, in which case a wrapper package may not even expose functionality for managing an API key. Among the packages mentioned as examples, this is true of bigrquery.</p>
 </div>
 <div class="section level3">
 <h3 id="email-or-google-identity">Email or Google identity<a class="anchor" aria-label="anchor" href="#email-or-google-identity"></a>
 </h3>
-<p>In contrast to the OAuth app and API key, every user must express which identity they wish to present to the API. This is a familiar concept and users expect to specify this. Since users may have more than one Google account, it’s quite likely that they will want to switch between accounts, even within a single R session, or that they might want to explicitly declare the identity to be used in a specific script or app.</p>
+<p>In contrast to the OAuth client and API key, every user must express which identity they wish to present to the API. This is a familiar concept and users expect to specify this. Since users may have more than one Google account, it’s quite likely that they will want to switch between accounts, even within a single R session, or that they might want to explicitly declare the identity to be used in a specific script or app.</p>
 <p>That explains why <code>drive_auth()</code> has the optional <code>email</code> argument that lets users proactively specify their identity. <code>drive_auth()</code> is usually called indirectly upon first need, but a user can also call it proactively in order to specify their target <code>email</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive::</span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"janedoe_work@gmail.com"</span><span class="op">)</span></span></code></pre></div>
-<p>If <code>email</code> is not given, gargle also checks for an option named “gargle_oauth_email”. The <code>email</code> is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser. Read more in the help for <code><a href="../reference/gargle_options.html">gargle::gargle_oauth_email()</a></code>.</p>
+<p>If <code>email</code> is not given, gargle also checks for an option named <code>"gargle_oauth_email"</code>. The <code>email</code> is used to look up tokens in the cache and, if no suitable token is found, it is used to pre-configure the OAuth chooser in the browser. Read more in the help for <code><a href="../reference/gargle_options.html">gargle::gargle_oauth_email()</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="scopes">Scopes<a class="anchor" aria-label="anchor" href="#scopes"></a>
@@ -218,7 +220,7 @@
 <div class="section level3">
 <h3 id="oauth-cache-and-out-of-bound-auth">OAuth cache and Out-of-bound auth<a class="anchor" aria-label="anchor" href="#oauth-cache-and-out-of-bound-auth"></a>
 </h3>
-<p>The location of the token cache and whether to prefer out-of-bound auth are two aspects of OAuth where most users are content to go along with sensible default behaviour. For those who want to exert control, that can be done in direct calls to <code>drive_auth()</code> or by configuring an option. Read the help for <code><a href="../reference/gargle_options.html">gargle::gargle_oauth_cache()</a></code> and <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code> for more about these options.</p>
+<p>The location of the token cache and whether to prefer out-of-bound auth are two aspects of OAuth where most users are content to go along with sensible default behaviour. For those who want to exert control, that can be done in direct calls to <code>drive_auth()</code> or by configuring an option. Read the help for <code><a href="../reference/gargle_options.html">gargle::gargle_oauth_cache()</a></code> and <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code> and <code><a href="../articles/auth-from-web.html">vignette("auth-from-web")</a></code> for more.</p>
 </div>
 </div>
 <div class="section level2">
@@ -296,7 +298,7 @@
 <span><span class="fu">gs4_auth</span><span class="op">(</span>token <span class="op">=</span> <span class="fu">drive_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>            <span class="co"># registers token with googlesheets4</span></span>
 <span></span>
 <span><span class="co"># now work with both packages freely ...</span></span></code></pre></div>
-<p>It is important to make sure that the token-requesting package (googledrive, above) is using an OAuth app (client ID and secret) for which all the necessary APIs and scopes are enabled.</p>
+<p>It is important to make sure that the token-requesting package (googledrive, above) is using an OAuth client for which all the necessary APIs and scopes are enabled.</p>
 </div>
 <div class="section level2">
 <h2 id="auth-interface">Auth interface<a class="anchor" aria-label="anchor" href="#auth-interface"></a>
@@ -314,7 +316,7 @@
 <li>
 <code>drive_api_key()</code> returns <code>.auth$key</code>.</li>
 <li>
-<code>drive_auth_configure()</code> can be used to configure auth. This is how an advanced user would enter their own OAuth app and API key into auth config, in order to affect all subsequent requests.</li>
+<code>drive_auth_configure()</code> can be used to configure auth. This is how an advanced user would enter their own OAuth client and API key into auth config, in order to affect all subsequent requests.</li>
 <li>
 <code>drive_user()</code> reports some information about the user associated with the current token. The Drive API offers an actual endpoint for this, which is not true for most Google APIs. Therefore the analogous function in bigrquery, <code>bq_user()</code> is a better general reference.</li>
 </ul>
@@ -327,11 +329,11 @@
 <p>For an API that cannot be used without a token: BigQuery is an example of such an API. <code>bq_deauth()</code> just clears the current token, so that the auth flow starts over the next time a token is needed.</p>
 </div>
 <div class="section level2">
-<h2 id="byoak-bring-your-own-app-and-key">BYOAK = Bring Your Own App and Key<a class="anchor" aria-label="anchor" href="#byoak-bring-your-own-app-and-key"></a>
+<h2 id="bring-your-own-client-and-key">Bring Your Own Client and Key<a class="anchor" aria-label="anchor" href="#bring-your-own-client-and-key"></a>
 </h2>
-<p>Advanced users can use their own OAuth app and API key. <code>drive_auth_configure()</code> lives in <code>R/drive_auth()</code> and it provides the ability to modify the current <code>app</code> and <code>api_key</code>. Recall that <code>drive_oauth_app()</code> and <code>drive_api_key()</code> also exist for targeted, read-only access.</p>
-<p>The vignette <a href="https://gargle.r-lib.org/articles/get-api-credentials.html">How to get your own API credentials</a>” describes how to an API key and OAuth app.</p>
-<p>Packages that always send token will omit the API key functionality here.</p>
+<p>Advanced users can use their own OAuth client and API key. <code>drive_auth_configure()</code> lives in <code>R/drive_auth()</code> and it provides the ability to modify the current <code>app</code> and <code>api_key</code>. Recall that <code>drive_oauth_app()</code> and <code>drive_api_key()</code> also exist for targeted, read-only access.</p>
+<p>The <code><a href="../articles/get-api-credentials.html">vignette("get-api-credentials")</a></code> describes how to get an API key and OAuth client.</p>
+<p>Packages that always send a token will omit the API key functionality here.</p>
 </div>
 <div class="section level2">
 <h2 id="changing-identities-and-more">Changing identities (and more)<a class="anchor" aria-label="anchor" href="#changing-identities-and-more"></a>

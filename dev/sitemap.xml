@@ -103,10 +103,13 @@
     <loc>https://gargle.r-lib.org/dev/reference/gargle_api_key.html</loc>
   </url>
   <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_app.html</loc>
+    <loc>https://gargle.r-lib.org/dev/reference/gargle_client.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/dev/reference/gargle_map_cli.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.html</loc>

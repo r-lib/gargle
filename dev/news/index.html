@@ -62,7 +62,26 @@
       <small>Source: <a href="https://github.com/r-lib/gargle/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
+<div class="section level3">
+<h3 id="partial-deprecation-out-of-band-oob-auth-flow-development-version">(Partial) deprecation out-of-band (OOB) auth flow<a class="anchor" aria-label="anchor" href="#partial-deprecation-out-of-band-oob-auth-flow-development-version"></a></h3>
+<p>On February 16, 2022, Google announced the gradual deprecation of the out-of-band (OOB) OAuth flow. OOB <strong>still works</strong> if the OAuth client is associated with a GCP project that is in testing mode and this is not going away. But OOB is no longer supported for projects in production mode. To be more accurate, some production-mode projects have gotten an extension to permit the use of OOB auth for a bit longer, but that’s just a temporary reprieve.</p>
+<p>The typical user who will (eventually) be impacted is:</p>
+<ul><li>Using R via RStudio Server/Workbench/Cloud.</li>
+<li>Using tidyverse packages such as googledrive, googlesheets4, or bigrquery.</li>
+<li>Relying on the built-in OAuth client. Importantly, this client is associated with a GCP project that is in production mode.</li>
+</ul><p>The phased deprecation of OOB is nearly complete and we expect conventional OOB to stop working with the built-in tidyverse OAuth client on February 1, 2023, at the latest.</p>
+<p><strong>In preparation for this, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB)</strong>. The pseudo-OOB flow is triggered when <code>use_oob = TRUE</code> (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of “Web application” type. The gargle/googledrive/googlesheets4/bigrquery packages should default to a “Web application” client on RStudio Server/Workbench/Cloud now, leading the user through the pseudo-OOB flow. Other than needing to re-auth once, affected users should still find that things “just work”.</p>
+<p>Read the <code><a href="../articles/auth-from-web.html">vignette("auth-from-web")</a></code> for more.</p>
+</div>
+<div class="section level3">
+<h3 id="gargle-specific-notion-of-oauth-client-development-version">gargle-specific notion of OAuth client<a class="anchor" aria-label="anchor" href="#gargle-specific-notion-of-oauth-client-development-version"></a></h3>
+<p><code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> is a new constructor for an S3 class by the same name. There are two motivations: - To adjust to Google’s deprecation of conventional OOB and to support gargle’s new pseudo-OOB flow, it is helpful for gargle to know whether an OAuth client ID is of type “Web application” or “Desktop app”. That means we need a Google- and gargle-specific notion of an OAuth client, so we can introduce a <code>type</code> field. - A transition from httr and httr2 is on the horizon, so it makes sense to look more toward <code>httr2:oauth_client()</code> than to <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>. gargle’s vocabulary is generally shifting towards “client” and away from “app”.</p>
+<p><code><a href="../reference/oauth_app_from_json.html">oauth_app_from_json()</a></code> has therefore been (soft) deprecated, in favor of a new function <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which is the preferred way to instantiate an OAuth client, since the downloaded JSON conveys the client type and redirect URI(s). As a bridging measure, <code>gargle_oauth_client</code> currently inherits from httr’s <code>oauth_app</code>, but this probably won’t be true in the long-term.</p>
+<p><code>gargle_client(type =)</code> replaces <code><a href="../reference/oauth_app_from_json.html">gargle_app()</a></code>.</p>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.1" id="gargle-121">gargle 1.2.1<a class="anchor" aria-label="anchor" href="#gargle-121"></a></h2><p class="text-muted">CRAN release: 2022-09-08</p>
 <ul><li><p>Help files below <code>man/</code> have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)</p></li>

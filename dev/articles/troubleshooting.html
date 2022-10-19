@@ -183,17 +183,17 @@
 <h3 id="too-many-tokens">Too many tokens<a class="anchor" aria-label="anchor" href="#too-many-tokens"></a>
 </h3>
 <p>An existing token can go bad if you’ve created too many Google tokens, causing your oldest tokens to “fall off the edge”.</p>
-<p>A specific Google user (email) can only have a certain number of OAuth tokens at a time (something like 50 per OAuth app or client). So, whenever you get a new token (as opposed to refreshing an existing token), there is the potential for it to invalidate an older token. This is unlikely to be an issue for a casual user, but it can absolutely become noticeable for someone who is developing against a Google API or someone working from many different machines / caches.</p>
+<p>A specific Google user (email) can only have a certain number of OAuth tokens at a time (something like 50 per OAuth client). So, whenever you get a new token (as opposed to refreshing an existing token), there is the potential for it to invalidate an older token. This is unlikely to be an issue for a casual user, but it can absolutely become noticeable for someone who is developing against a Google API or someone working from many different machines / caches.</p>
 </div>
 <div class="section level3">
 <h3 id="credential-rolling">Credential rolling<a class="anchor" aria-label="anchor" href="#credential-rolling"></a>
 </h3>
-<p>Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth app used by those packages. Periodically the maintainer of such a package will need to roll the app, i.e. create a new OAuth app and disable the old one. This will make it impossible to refresh existing tokens, made with the old, disabled app. Those tokens will stop working.</p>
-<p><em>In gargle v1.0.0, in March 2021, we rolled the app used in googlesheets4, googledrive, and bigrquery. At some point in 2021, we plan to disable the old app. Anyone relying on the default app will have to upgrade.</em></p>
+<p>Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth client used by those packages. Periodically the maintainer of such a package will need to roll the client, i.e. create a new OAuth client and disable the old one. This will make it impossible to refresh existing tokens, made with the old, disabled client Those tokens will stop working.</p>
+<p><em>In gargle v1.0.0, in March 2021, we rolled the client used in googlesheets4, googledrive, and bigrquery. At some point in 2021, we plan to disable the old client. Anyone relying on the default client will have to upgrade.</em></p>
 <p>The solution is to update the package in question, e.g. googlesheets4:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"googlesheets4"</span><span class="op">)</span></span></code></pre></div>
-<p><strong>Restart R!</strong> Resume your work. Chances are you’ll be prompted to re-auth with the new app and you’ll be back in business.</p>
+<p><strong>Restart R!</strong> Resume your work. Chances are you’ll be prompted to re-auth with the new client and you’ll be back in business.</p>
 <p>What does this problem look like in the wild?</p>
 <p>With gargle versions up to v1.0.0, you will probably see this:</p>
 <pre><code>Auto-refreshing stale OAuth token.
@@ -222,7 +222,7 @@ Unable to refresh token, because the associated OAuth app has been deleted
 <h2 id="how-to-avoid-auth-pain">How to avoid auth pain<a class="anchor" aria-label="anchor" href="#how-to-avoid-auth-pain"></a>
 </h2>
 <p>If you have rigged some remote mission critical thing (e.g. a Shiny app or cron job) to use a cached user OAuth token, one day, one of the problems described above will happen and your mission critical token will stop working. Your thing (e.g. the Shiny app or cron job) will mysteriously fail because the OAuth token can’t be refreshed and a new token can’t be obtained in a non-interactive setting. This is why cached user tokens are a poor fit for such applications.</p>
-<p>If you choose to use a cached user token anyway, be prepared to deal with this headache periodically. Consider using your own OAuth app to eliminate your exposure to a third-party deciding to roll their app. Be prepared to generate a fresh token interactively and upload it to the token cache consulted by your remote mission critical thing. Better yet, upgrade to a more robust strategy for <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">non-interactive auth</a>, such as a service account token.</p>
+<p>If you choose to use a cached user token anyway, be prepared to deal with this headache periodically. Consider using your own OAuth client to eliminate your exposure to a third-party deciding to roll their client Be prepared to generate a fresh token interactively and upload it to the token cache consulted by your remote mission critical thing. Better yet, upgrade to a more robust strategy for <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">non-interactive auth</a>, such as a service account token.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

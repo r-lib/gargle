@@ -95,30 +95,41 @@
 
     
     
-<p>If you are working with R in a web-based context, such as <a href="https://www.rstudio.com/products/rstudio/download-server/" class="external-link">RStudio Server</a>, <a href="https://rstudio.cloud" class="external-link">RStudio Cloud</a>, or <a href="https://www.rstudio.com/products/workbench/" class="external-link">RStudio Workbench</a>, your experience of browser-based auth flows will be different from those using R on their local machine. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session.</p>
-<p>The need to use oob auth can sometimes be detected automatically. For example, oob auth is always used when the httpuv package is not installed. gargle also tries to detect usage via RStudio Server, Cloud, or Workbench, but this still may not catch 100% of situations where oob auth is necessary.</p>
-<p>Therefore, some users may still need to recognize this situation and explicitly request oob auth.</p>
-<p>Here’s a typical presentation of this problem: during auth, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
-<pre><code>Chrome: This site can't be reached; localhost refused to connect.
-Firefox: Unable to connect; can't establish a connection.</code></pre>
-<p>This is a sign that you need to explicitly request oob auth.</p>
-<p>This article describes how to do so in a package that uses gargle for auth, which includes:</p>
+<p>If you are working with R in a web-based context, such as <a href="https://www.rstudio.com/products/rstudio/download-server/" class="external-link">RStudio Server</a>, <a href="https://rstudio.cloud" class="external-link">RStudio Cloud</a>, or <a href="https://www.rstudio.com/products/workbench/" class="external-link">RStudio Workbench</a>, your experience of browser-based auth flows will be different from those using R on their local machine. You need to use <strong>out-of-band authentication</strong>, sometimes denoted “oob” or “OOB”. After the usual auth dance, instead of seeing “authentication successful, return to R!”, you are presented with an authorization code to copy and paste back into your R session. For folks who are running R on their local machine, this final exchange can be done automagically, using a temporary local webserver, but that is not possible for those accessing a remote R session through the browser.</p>
+<p>On February 16, 2022, Google announced the deprecation of the OAuth out-of-band (OOB) flow. The deprecation is happening in phases and it only applies to Google Cloud Platform (GCP) projects that are in production mode. OOB still works for projects that are in testing mode.</p>
+<p>However, in particular, we expect that conventional OOB auth will stop working for the built-in tidyverse client (used by googledrive, googlesheets4, and bigrquery) no later than February 1, 2023. Therefore, gargle has gained a new auth flow that we call “pseudo-OOB”, which should allow casual users to continue to enjoy a low-friction auth experience even from RStudio Server/Cloud/Workbench.</p>
+<p>This vignette documents various matters around OOB auth, both conventional and pseudo-OOB, for users who want to understand this more deeply.</p>
+<p>Some of the packages that use gargle for auth and for which this article applies:</p>
 <ul>
-<li>
-<a href="https://bigrquery.r-dbi.org" class="external-link">bigrquery</a> (&gt;= v1.2.0)</li>
-<li>
-<a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a> (&gt;= v1.0.0)</li>
-<li>
-<a href="https://gmailr.r-lib.org" class="external-link">gmailr</a> (&gt;= v1.0.0)</li>
+<li><a href="https://bigrquery.r-dbi.org" class="external-link">bigrquery</a></li>
+<li><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></li>
+<li><a href="https://gmailr.r-lib.org" class="external-link">gmailr</a></li>
 <li><a href="https://googlesheets4.tidyverse.org" class="external-link">googlesheets4</a></li>
 <li>
 <a href="https://github.com/andrie/gcalendr" class="external-link">gcalendr</a> <em>GitHub only</em>
 </li>
 </ul>
 <div class="section level2">
+<h2 id="consider-using-a-service-account-token-or-no-token">Consider using a service account token (or no token!)<a class="anchor" aria-label="anchor" href="#consider-using-a-service-account-token-or-no-token"></a>
+</h2>
+<p>If you have concerns about using OOB auth, consider whether your task truly requires auth as a specific, normal user.</p>
+<p>Can the task be completed with <em>no auth</em>, i.e. you are accessing something that is world readable or to “anyone with a link”? In that case, the wrapper package probably provides a function to go into a de-authorized state, such as <code>googledrive::drive_deauth()</code> or <code>googlesheets4::gs4_deauth()</code>.</p>
+<p>If the task requires auth, consider whether it really must be as a specific user. You may be able to accomplish the task with a service account, which you create for this specific purpose. A service account token is much easier to work with on a server and in non-interactive contexts than a user token. A service account can also be given much more selective permissions than a user account and can be more easily deleted, once it is no longer needed. Remember that the service account will need to be explicitly given permission to access any necessary resources (e.g. permission to read or write a specific Drive file or Sheet). A service account doesn’t somehow inherit permission indirectly from the user who owns the GCP project in which it lives. To learn more about using a service account, see <code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="when-and-how-to-use-oob">When and how to use OOB<a class="anchor" aria-label="anchor" href="#when-and-how-to-use-oob"></a>
+</h2>
+<p>In the absence of any user instructions, the function <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code> is used to decide whether to use OOB auth. By default, OOB auth is used on RStudio Server/Cloud/Workbench or if the option <code>"gargle_oob_default"</code> is set to <code>TRUE</code>. (Note that we use the term “OOB auth” here to include both the existing, conventional form of OOB and gargle’s new pseudo-OOB.)</p>
+<p>Wrapper packages generally also allow the user to opt-in to OOB auth when making a direct call to an auth function. For example, the functions <code>googledrive::drive_auth()</code>, <code>googlesheets4::gs4_auth()</code>, <code>bigrquery::bq_auth()</code>, and <code>gmailr::gm_auth()</code> all have a <code>use_oob</code> argument. Notably, all of these <code>use_oob</code> arguments default to <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code>.</p>
+<p>gargle usually automatically detects when it should use OOB auth, but here is what it could look like if we are not using OOB, but should be. During auth, you are redirected to localhost on port 1410 and receive an error along these lines:</p>
+<pre><code>Chrome: This site can't be reached; localhost refused to connect.
+Firefox: Unable to connect; can't establish a connection.</code></pre>
+<p>If this happens you might need to explicitly request OOB. Below we review two different methods.</p>
+</div>
+<div class="section level2">
 <h2 id="request-oob-auth-in-the-pkg_auth-call">Request oob auth in the <code>PKG_auth()</code> call<a class="anchor" aria-label="anchor" href="#request-oob-auth-in-the-pkg_auth-call"></a>
 </h2>
-<p>These packages aim to make auth “just work” for most users, i.e. it’s automatically triggered upon first need. However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters. Here’s how you request oob auth, using googledrive as an example:</p>
+<p>Packages like googledrive and bigrquery aim to make auth “just work” for most users, i.e. it’s automatically triggered upon first need. However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters. Here’s how you could request OOB auth, using googledrive as an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
@@ -126,34 +137,68 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 <span></span>
 <span><span class="co"># now carry on with your work</span></span>
 <span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p>This code is tailored to an interactive session and assumes that a user is present to respond. If you <em>also</em> need to setup a token for non-interactive use, see the article <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">Non-interactive auth</a>. A key point is that oob auth is relevant to how you <em>initially</em> obtain a token. It is orthogonal to downstream use and refreshing. So it is possible that you need to attend to both!</p>
 </div>
 <div class="section level2">
-<h2 id="set-the-gargle_oob_default-option">Set the <code>gargle_oob_default</code> option<a class="anchor" aria-label="anchor" href="#set-the-gargle_oob_default-option"></a>
+<h2 id="set-the-gargle_oob_default-option">Set the <code>"gargle_oob_default"</code> option<a class="anchor" aria-label="anchor" href="#set-the-gargle_oob_default-option"></a>
 </h2>
-<p>If you know that you <em>always</em> want to use oob auth, as a user or within a project, the best way to express this is to set the <code>gargle_oob_default</code> option.</p>
+<p>If you know that you <em>always</em> want to use OOB, as a user or within a project, the best way to express this is to set the <code>"gargle_oob_default"</code> option.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oob_default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This code could appear at the top of a script, in a setup chunk for <code>.Rmd</code>, or in a Shiny app. But it probably makes even more sense in a <code>.Rprofile</code> startup file, at the user- or project-level.</p>
-<p>Once that option has been set, it is honoured by downstream calls to <code>PKG_auth()</code>, explicit or implicit, because the default behaviour of <code>use_oob</code> is to consult the option:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">email</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">path</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                       <span class="va">scopes</span> <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
-<span>                       <span class="va">cache</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">use_oob</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">token</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span><span class="va">...</span><span class="op">}</span></span></code></pre></div>
+<p>Once that option has been set, it is honoured by downstream calls to <code>PKG_auth()</code>, explicit or implicit, because the default value of <code>use_oob</code> is <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code>, which consults the option.</p>
 </div>
 <div class="section level2">
-<h2 id="but-i-didnt-need-oob-yesterday">But I didn’t need oob yesterday!<a class="anchor" aria-label="anchor" href="#but-i-didnt-need-oob-yesterday"></a>
+<h2 id="conventional-vs--pseudo-oob-auth">Conventional vs. pseudo-OOB auth<a class="anchor" aria-label="anchor" href="#conventional-vs--pseudo-oob-auth"></a>
 </h2>
-<p>Sometimes the usual oauth web flow suddenly stops working for people working directly with R (so NOT via the browser) and they use oob auth to get unstuck again. What’s going on in this case?</p>
+<p>gargle now supports two OOB flows, which we call “conventional OOB” (the existing, legacy OOB flow) and “pseudo-OOB” (the new flow introduced in response to the partial deprecation of conventional OOB). If we are using OOB auth, the decision between conventional or pseudo-OOB is made based on the currently configured OAuth client.</p>
+<ul>
+<li>If the OAuth client is of type <code>"installed"</code> (shows as “Desktop” in Google Cloud Console) or is of unknown type, gargle uses conventional OOB. Note that this will not necessarily succeed, due to the deprecation process described above.</li>
+<li>If the OAuth client is of type <code>"web"</code> (shows as “Web application” in Google Cloud Console), gargle uses the new pseudo-OOB flow.</li>
+</ul>
+<p>Packages that use a built-in tidyverse OAuth client (googledrive, googlesheets4, and bigrquery) should automatically select a “web” client on RStudio Server/Cloud/Workbench and an “installed” client otherwise.</p>
+<p>Users who configure their own OAuth client will need to be intentional when choosing the client type, depending on where the code is running.</p>
+<p>On the R side, it is recommended to setup an OAuth client using <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which allows the client type (<code>"installed"</code> vs. <code>"web"</code>) to be detected programmatically from the downloaded JSON. The less-preferred approach is to use <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> and provide the information yourself.</p>
+</div>
+<div class="section level2">
+<h2 id="how-pseudo-oob-works">How pseudo-OOB works<a class="anchor" aria-label="anchor" href="#how-pseudo-oob-works"></a>
+</h2>
+<p>Pseudo-OOB works just like non-OOB and conventional OOB in terms of the user’s interactions with Google authorization server. This is where the user authenticates themselves with Google and consents to the type of access being requested by the R code.</p>
+<p>These flows differ in how they handle a successful response from the authorization server. Specifically, the flows use different redirect URIs.</p>
+<ul>
+<li>A (temporary) local webserver is used to listen for this response at, e.g., <code>http://localhost:1410/</code> if R is running locally and the httpuv package is available (i.e. a non-OOB flow).</li>
+<li>In conventional OOB, a special redirect value is used, typically <code>urn:ietf:wg:oauth:2.0:oob</code>, and the authorization code is provided to the user via a browser window for manual copy/paste. This page is served by Google. Google is deprecating conventional OOB for projects in production mode.</li>
+<li>In gargle’s pseudo-OOB, a redirect URI from the configured OAuth client is used to receive the response. This page is responsible for exposing a code that the user can copy/paste, similar to conventional OOB (except the page is <em>not</em> served by Google). Unlike conventional OOB, this is not the authorization code itself, but is something from which the code can be extracted, along with a state token to mitigate cross-site request forgery. This is actually implemented using an <a href="https://developers.google.com/identity/protocols/oauth2/web-server" class="external-link">OAuth flow for web server applications</a>. Note that we (gargle) call this pseudo-OOB, but it is not technically OOB from Google’s point-of-view.</li>
+</ul>
+<p>The built-in OAuth client used for pseudo-OOB by tidyverse packages redirects to <a href="https://www.tidyverse.org/google-callback/" class="external-link uri">https://www.tidyverse.org/google-callback/</a>. This is a static landing page that does not collect any data and exists solely to give the interactive R user a way to convey the authorization token back to the waiting R process and thereby complete the auth process.</p>
+<div class="section level3">
+<h3 id="more-details-about-the-deprecation-of-conventional-oob">More details about the deprecation of conventional OOB<a class="anchor" aria-label="anchor" href="#more-details-about-the-deprecation-of-conventional-oob"></a>
+</h3>
+<p>Timeline:</p>
+<ul>
+<li>2022 February 16: Google announced OOB deprecation.</li>
+<li>2022 February 28: New OAuth clients cannot use conventional OOB when in production mode.</li>
+<li>2022 October 3: Existing clients cannot use conventional OOB when in production mode. NOTE: the client used by the tidyverse has been granted an extension and conventional OOB still works (for now).</li>
+<li>2023 February 1: Conventional OOB will no longer work for the tidyverse OAuth client. Users on RStudio Server/Workbench/Cloud will need to use the pseudo-OOB flow or, as has always been true, non-interactive methods of auth, like using a service account token or uploading a user token obtained elsewhere.</li>
+</ul>
+<p>Key links:</p>
+<ul>
+<li>Blog post: <a href="https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html" class="external-link">Making Google OAuth interactions safer by using more secure OAuth flows</a>
+</li>
+<li><a href="https://developers.google.com/identity/protocols/oauth2/resources/oob-migration#web-application" class="external-link">Out-Of-Band (OOB) flow Migration Guide</a></li>
+<li><a href="https://developers.google.com/identity/protocols/oauth2" class="external-link">Using OAuth 2.0 to Access Google APIs</a></li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="but-i-didnt-need-oob-yesterday">But I didn’t need OOB yesterday!<a class="anchor" aria-label="anchor" href="#but-i-didnt-need-oob-yesterday"></a>
+</h2>
+<p>Sometimes the usual oauth web flow suddenly stops working for people working directly with R (so NOT via the browser) and they use OOB auth to get unstuck again. What’s going on in this case?</p>
 <p>The initial error looks something like this:</p>
 <pre><code>createTcpServer: address already in use
 Error in httpuv::startServer(use$host, use$port, list(call = listen)) : 
   Failed to create server</code></pre>
-<p>It’s characteristic of some other process sitting on port 1410, which is what httr is trying to use for auth.</p>
-<p>It’s true that using oob auth is a workaround. But oob auth is, frankly, more clunky, so why use if you don’t have to? Here are ways to fix.</p>
+<p>It’s characteristic of some other process sitting on port 1410, which is what gargle is trying to use for auth.</p>
+<p>It’s true that using OOB auth is a workaround. But OOB auth is, frankly, more clunky, so why use it if you don’t have to? Here are ways to fix this.</p>
 <ul>
 <li>Restart your system. This will almost certainly kill the offending process, which is usually a zombie process.</li>
 <li>Hunt down the offending process, verify it looks expendable, and kill it.</li>
@@ -167,13 +212,13 @@ R       16664 jenny   20u  IPv4 0x63761a50856c65f      0t0  TCP localhost:hiq (L
 <pre><code>kill -9 &lt;PID&gt;</code></pre>
 <p>So, to be clear, in this example, the command would be:</p>
 <pre><code>kill -9 16664</code></pre>
-<p>The normal, non-oob auth web flow should work again now.</p>
+<p>The normal, non-OOB auth web flow should work again now.</p>
 </div>
 <div class="section level2">
 <h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
-<p>Generating OAuth tokens for a server using httr (<code>https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server</code>) covers some of the same ground, although for the httr package. gargle provides a Google-specific interface to httr. gargle first consults the <code>gargle_oob_default</code> option and, if that is undefined, also consults the <code>httr_oob_default</code> option.</p>
-<p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/" class="external-link">RStudio Connect</a>), you will also need to consider how the <a href="https://gargle.r-lib.org/articles/non-interactive-auth.html">deployed content will authenticate non-interactively</a>.</p>
+<p>Generating OAuth tokens for a server using httr (<code>https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server</code>) covers some of the same ground, although for the httr package. Note that this resource has grown quite dated, since it originates from a time before gargle was created to provide a Google-specific interface to httr.</p>
+<p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/" class="external-link">RStudio Connect</a>), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in <code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -124,9 +124,9 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/token_fetch.html">token_fetch</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; The gargle package is requesting access to your Google account. Select a</span></span>
-<span><span class="co">#&gt; pre-authorised account or enter '0' to obtain a new token. Press</span></span>
-<span><span class="co">#&gt; Esc/Ctrl + C to abort.</span></span>
+<span><span class="co">#&gt; The gargle package is requesting access to your Google account.</span></span>
+<span><span class="co">#&gt; Select a pre-authorised account or enter '0' to obtain a new token.</span></span>
+<span><span class="co">#&gt; Press Esc/Ctrl + C to cancel.</span></span>
 <span></span>
 <span><span class="co">#&gt; 1: janedoe_personal@gmail.com</span></span>
 <span><span class="co">#&gt; 2: janedoe@example.com</span></span>
@@ -134,12 +134,12 @@
 <span><span class="co">#&gt; Selection: 1</span></span>
 <span></span>
 <span><span class="va">token</span></span>
-<span><span class="co">#&gt; &lt;Token (via gargle)&gt;</span></span>
-<span><span class="co">#&gt;   &lt;oauth_endpoint&gt; google</span></span>
-<span><span class="co">#&gt;              &lt;app&gt; gargle-demo</span></span>
-<span><span class="co">#&gt;            &lt;email&gt; janedoe_personal@gmail.com</span></span>
-<span><span class="co">#&gt;           &lt;scopes&gt; ...userinfo.email</span></span>
-<span><span class="co">#&gt;      &lt;credentials&gt; access_token, expires_in, refresh_token, scope, ...</span></span></code></pre></div>
+<span><span class="co">#&gt; ── &lt;Token (via gargle)&gt; ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; oauth_endpoint: google</span></span>
+<span><span class="co">#&gt;            app: gargle-clio</span></span>
+<span><span class="co">#&gt;          email: janedoe_personal@gmail.com</span></span>
+<span><span class="co">#&gt;         scopes: ...userinfo.email</span></span>
+<span><span class="co">#&gt;    credentials: access_token, expires_in, refresh_token, scope, token_type, id_token</span></span></code></pre></div>
 <p>Here’s an example of using request and response helpers to make a one-off request to the <a href="https://developers.google.com/fonts/docs/developer_api" class="external-link">Web Fonts Developer API</a>. We show the most popular web font families served by Google Fonts.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span>

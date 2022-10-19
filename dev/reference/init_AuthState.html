@@ -88,8 +88,10 @@ like a good practice.</p></dd>
 
 
 <dt>app</dt>
-<dd><p>Optional. An OAuth consumer application, as produced by
-<code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>.</p></dd>
+<dd><p>A Google OAuth client, preferably constructed via
+<code><a href="gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which returns an instance of
+<code>gargle_oauth_client</code>. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>.</p></dd>
 
 
 <dt>api_key</dt>
@@ -117,21 +119,21 @@ probably not an API key). <code>FALSE</code> means requests should include an AP
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my_app</span> <span class="op">&lt;-</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">oauth_app</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  appname <span class="op">=</span> <span class="st">"my_package"</span>,</span></span>
-<span class="r-in"><span>  key <span class="op">=</span> <span class="st">"keykeykeykeykeykey"</span>,</span></span>
-<span class="r-in"><span>  secret <span class="op">=</span> <span class="st">"secretsecretsecret"</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">my_client</span> <span class="op">&lt;-</span> <span class="fu"><a href="gargle_oauth_client_from_json.html">gargle_oauth_client</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="st">"some_long_client_id"</span>,</span></span>
+<span class="r-in"><span>  secret <span class="op">=</span> <span class="st">"ssshhhhh_its_a_secret"</span>,</span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"my-nifty-oauth-client"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">init_AuthState</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"my_package"</span>,</span></span>
-<span class="r-in"><span>  app <span class="op">=</span> <span class="va">my_app</span>,</span></span>
+<span class="r-in"><span>  app <span class="op">=</span> <span class="va">my_client</span>,</span></span>
 <span class="r-in"><span>  api_key <span class="op">=</span> <span class="st">"api_key_api_key_api_key"</span>,</span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">&lt;AuthState (via </span><span style="color: #0000BB; font-weight: bold;">gargle</span><span style="font-weight: bold;">)&gt;</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     package: <span style="color: #0000BB;">my_package</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         app: my_package</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         app: my-nifty-oauth-client</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     api_key: api_key...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> auth_active: TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> credentials: <span style="color: #0000BB;">&lt;NULL&gt;</span></span>
