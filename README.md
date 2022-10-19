@@ -27,21 +27,20 @@ APIs, who are prepared to navigate the details of low-level API access.
 
 gargle’s functionality falls into two main domains:
 
--   **Auth.** The `token_fetch()` function calls a series of concrete
-    credential-fetching functions to obtain a valid access token (or it
-    quietly dies trying).
-    -   This covers explicit service accounts, application default
-        credentials, Google Compute Engine, (experimentally) workload
-        identity federation, and the standard OAuth2 browser flow.
-    -   gargle offers the `Gargle2.0` class, which extends
-        `httr::Token2.0`. It is the default class for user OAuth 2.0
-        credentials. There are two main differences from
-        `httr::Token2.0`: greater emphasis on the user’s email
-        (e.g. Google identity) and default token caching is at the user
-        level.
--   **Requests and responses**. A family of functions helps to prepare
-    HTTP requests, (possibly with reference to an API spec derived from
-    a Discovery Document), make requests, and process the response.
+- **Auth.** The `token_fetch()` function calls a series of concrete
+  credential-fetching functions to obtain a valid access token (or it
+  quietly dies trying).
+  - This covers explicit service accounts, application default
+    credentials, Google Compute Engine, (experimentally) workload
+    identity federation, and the standard OAuth2 browser flow.
+  - gargle offers the `Gargle2.0` class, which extends `httr::Token2.0`.
+    It is the default class for user OAuth 2.0 credentials. There are
+    two main differences from `httr::Token2.0`: greater emphasis on the
+    user’s email (e.g. Google identity) and default token caching is at
+    the user level.
+- **Requests and responses**. A family of functions helps to prepare
+  HTTP requests, (possibly with reference to an API spec derived from a
+  Discovery Document), make requests, and process the response.
 
 See the [articles](https://gargle.r-lib.org/articles/) for holistic
 advice on how to use gargle.
@@ -73,9 +72,9 @@ OAuth2 token.
 library(gargle)
 
 token <- token_fetch()
-#> The gargle package is requesting access to your Google account. Select a
-#> pre-authorised account or enter '0' to obtain a new token. Press
-#> Esc/Ctrl + C to abort.
+#> The gargle package is requesting access to your Google account.
+#> Select a pre-authorised account or enter '0' to obtain a new token.
+#> Press Esc/Ctrl + C to cancel.
 
 #> 1: janedoe_personal@gmail.com
 #> 2: janedoe@example.com
@@ -83,12 +82,12 @@ token <- token_fetch()
 #> Selection: 1
 
 token
-#> <Token (via gargle)>
-#>   <oauth_endpoint> google
-#>              <app> gargle-demo
-#>            <email> janedoe_personal@gmail.com
-#>           <scopes> ...userinfo.email
-#>      <credentials> access_token, expires_in, refresh_token, scope, ...
+#> ── <Token (via gargle)> ─────────────────────────────────────────────────────
+#> oauth_endpoint: google
+#>            app: gargle-clio
+#>          email: janedoe_personal@gmail.com
+#>         scopes: ...userinfo.email
+#>    credentials: access_token, expires_in, refresh_token, scope, token_type, id_token
 ```
 
 Here’s an example of using request and response helpers to make a

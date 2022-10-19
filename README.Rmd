@@ -64,9 +64,9 @@ gargle is a low-level package and does not do anything visibly exciting on its o
 library(gargle)
 
 token <- token_fetch()
-#> The gargle package is requesting access to your Google account. Select a
-#> pre-authorised account or enter '0' to obtain a new token. Press
-#> Esc/Ctrl + C to abort.
+#> The gargle package is requesting access to your Google account.
+#> Select a pre-authorised account or enter '0' to obtain a new token.
+#> Press Esc/Ctrl + C to cancel.
 
 #> 1: janedoe_personal@gmail.com
 #> 2: janedoe@example.com
@@ -74,15 +74,16 @@ token <- token_fetch()
 #> Selection: 1
 
 token
-#> <Token (via gargle)>
-#>   <oauth_endpoint> google
-#>              <app> gargle-demo
-#>            <email> janedoe_personal@gmail.com
-#>           <scopes> ...userinfo.email
-#>      <credentials> access_token, expires_in, refresh_token, scope, ...
+#> ── <Token (via gargle)> ─────────────────────────────────────────────────────
+#> oauth_endpoint: google
+#>            app: gargle-clio
+#>          email: janedoe_personal@gmail.com
+#>         scopes: ...userinfo.email
+#>    credentials: access_token, expires_in, refresh_token, scope, token_type, id_token
 ```
 
-Here's an example of using request and response helpers to make a one-off request to the [Web Fonts Developer API](https://developers.google.com/fonts/docs/developer_api). We show the most popular web font families served by Google Fonts.
+Here's an example of using request and response helpers to make a one-off request to the [Web Fonts Developer API](https://developers.google.com/fonts/docs/developer_api).
+We show the most popular web font families served by Google Fonts.
 
 ```{r}
 library(gargle)
