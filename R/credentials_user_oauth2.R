@@ -28,7 +28,8 @@
 #'   with a token; gargle uses this to index cached OAuth tokens. This grants no
 #'   permission to view or send email and is generally considered a low-value
 #'   scope.
-#' @inheritDotParams gargle2.0_token -scope
+#' @inheritParams gargle2.0_token
+#' @inheritDotParams gargle2.0_token -scope -app -package
 #'
 #' @return A [Gargle2.0] token.
 #' @family credential functions

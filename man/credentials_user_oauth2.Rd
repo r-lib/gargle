@@ -22,6 +22,13 @@ with a token; gargle uses this to index cached OAuth tokens. This grants no
 permission to view or send email and is generally considered a low-value
 scope.}
 
+\item{app}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+
+\item{package}{Name of the package requesting a token. Used in messages.}
+
 \item{...}{
   Arguments passed on to \code{\link[=gargle2.0_token]{gargle2.0_token}}
   \describe{
@@ -37,11 +44,6 @@ found in the cache. Specify just the domain with a glob pattern, e.g.
 \code{"*@example.com"}, to create code that "just works" for both
 \code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
 "gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
-    \item{\code{app}}{A Google OAuth client, preferably constructed via
-\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
-\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
-gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
-    \item{\code{package}}{Name of the package requesting a token. Used in messages.}
     \item{\code{use_oob}}{Whether to prefer out-of-band authentication. Defaults to the
 value returned by \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
     \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
