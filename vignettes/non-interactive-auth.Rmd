@@ -122,6 +122,50 @@ options(gargle_verbosity = "debug")
 
 withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
+## Workload Identity on Google Kubernetes Engine (GKE)
+
+When you are authenticating upon Google Compute Engine and related services such as Cloud Run, `credentials_gce()` can be used to authenticate without having to upload a service key by reusing the service key that created the Google service.  A similar concept is available for Google Kubernetes Clusters called [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity), with some extra configuration needed to make a service account's metadata available for the GKE instance to discover.   GKE is the underlying technology behind Google's managed Airflow service, [Cloud Composer](https://cloud.google.com/composer), so this also applies to R docker files being called in that environment. 
+
+Using Workload Identity is the recommended way to do authentication on GKE and other places if possible since it involves not downloading service keys which is a potential security risk.
+
+1. Following the [docs](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) you create a service account as normal and give it permissions and scopes needed to say upload to BigQuery, as you would before. eg. `my-service-key@my-project.iam.gserviceaccount.com` with `https://www.googleapis.com/auth/bigquery` scopes
+2.  Instead of downloading a JSON key, you instead migrate that permission by adding a policy binding to another service account within Kubernetes
+3. Create the service account within Kubernetes, ideally within a new namespace:
+
+```sh
+# create namespace
+kubectl create namespace my-namespace
+# Create Kubernetes service account
+kubectl create serviceaccount --namespace my-namespace bq-service-account 
+```
+
+4. Bind that Kubernetes service account to the service account outside of kubernetes you created in step 1, and assign it an annotation
+
+```sh
+# Create IAM policy binding betwwen k8s SA and GSA
+gcloud iam service-accounts add-iam-policy-binding my-service-key@my-project.iam.gserviceaccount.com \
+    --role roles/iam.workloadIdentityUser \
+    --member "serviceAccount:my-project.svc.id.goog[my-namespace/bq-service-account]"
+# Annotate k8s SA
+kubectl annotate serviceaccount bq-service-account \
+    --namespace my-namespace \
+    iam.gke.io/gcp-service-account=my-service-key@my-project.iam.gserviceaccount.com
+```
+
+This key will now be available to add to pods within the cluster.  For Airflow, you can pass them in using the `GKEPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')`
+
+5. When calling the `gargle::gce_credentials()` within R, you need first make sure its using the right endpoint (`options(gargle.gce.use_ip = TRUE)`) and then call the service email that is not "default".  `gargle:::list_service_accounts()` is helpful in debugging what service accounts your Docker container can see. 
+
+```r
+# code within the Docker container
+
+options(gargle.gce.use_ip = TRUE)
+gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
+
+... do authenticated stuff...
+```
+
+
 ## Provide an OAuth token directly
 
 If you somehow have the OAuth token you want to use as an R object, you can provide it directly to the `token` argument of the main auth function. Example using googledrive:

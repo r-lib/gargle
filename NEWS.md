@@ -42,6 +42,10 @@ As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oau
 
 `gargle_client(type =)` replaces `gargle_app()`.
 
+## GKE authentication documentation
+
+Some documentation has been added on how to use Workload Identity for authenticating R scripts running on Google Kubernetes Engine. 
+
 # gargle 1.2.1
 
 * Help files below `man/` have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)
