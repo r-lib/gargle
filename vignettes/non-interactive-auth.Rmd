@@ -152,7 +152,7 @@ kubectl annotate serviceaccount bq-service-account \
     iam.gke.io/gcp-service-account=my-service-key@my-project.iam.gserviceaccount.com
 ```
 
-This key will now be available to add to pods within the cluster.  For Airflow, you can pass them in using the `GKEPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')`
+This key will now be available to add to pods within the cluster.  For Airflow, you can pass them in using the Python code `GKEStartPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')`.  Documentation around `GKEStartPodOperator()` within Cloud Composer can be found [here](https://cloud.google.com/composer/docs/composer-2/use-gke-operator).
 
 5. When calling the `gargle::gce_credentials()` within R, you need first make sure its using the right endpoint (`options(gargle.gce.use_ip = TRUE)`) and then call the service email that is not "default".  `gargle:::list_service_accounts()` is helpful in debugging what service accounts your Docker container can see. 
 
@@ -164,6 +164,20 @@ gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
 
 ... do authenticated stuff...
 ```
+
+If the R package has implemented `gargle` as recommended with a `PKG_auth()` function available then this should be accessible via:
+
+```r
+# code within the Docker container
+library(PKG)
+
+options(gargle.gce.use_ip = TRUE)
+PKG_auth(service_key="my-service-key@my-project.iam.gserviceaccount.com")
+
+... do authenticated stuff...
+
+```
+
 
 
 ## Provide an OAuth token directly
