@@ -66,7 +66,18 @@ names(cred_funs_list())
 cred_funs_add(two = NULL)
 names(cred_funs_list())
 
-# undo all of the above and return to default
+# restore the default list
+cred_funs_set_default()
+
+# remove one specific credential fetcher
+cred_funs_add(credentials_gce = NULL)
+names(cred_funs_list())
+
+# force the use of one specific credential fetcher
+cred_funs_set(list(credentials_user_oauth2 = credentials_user_oauth2))
+names(cred_funs_list())
+
+# restore the default list
 cred_funs_set_default()
 }
 \seealso{
