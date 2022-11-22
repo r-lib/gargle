@@ -12,8 +12,8 @@
 <title>Utilities for Working with Google APIs • gargle</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.2/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.3/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.3/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Utilities for Working with Google APIs">
@@ -91,12 +91,14 @@
 <div class="page-header"><h1 id="gargle">gargle<a class="anchor" aria-label="anchor" href="#gargle"></a>
 </h1></div>
 <!-- badges: start -->
+
 <p>The goal of gargle is to take some of the agonizing pain out of working with Google APIs. This includes functions and classes for handling common credential types and for preparing, executing, and processing HTTP requests.</p>
 <p>The target user of gargle is an <em>R package author</em> who is wrapping one of the ~250 Google APIs listed in the <a href="https://developers.google.com/apis-explorer" class="external-link">APIs Explorer</a>. gargle aims to play roughly the same role as <a href="https://developers.google.com/api-client-library/" class="external-link">Google’s official client libraries</a>, but for R. gargle may also be useful to useRs making direct calls to Google APIs, who are prepared to navigate the details of low-level API access.</p>
 <p>gargle’s functionality falls into two main domains:</p>
 <ul>
 <li>
-<strong>Auth.</strong> The <code><a href="reference/token_fetch.html">token_fetch()</a></code> function calls a series of concrete credential-fetching functions to obtain a valid access token (or it quietly dies trying).<ul>
+<strong>Auth.</strong> The <code><a href="reference/token_fetch.html">token_fetch()</a></code> function calls a series of concrete credential-fetching functions to obtain a valid access token (or it quietly dies trying).
+<ul>
 <li>This covers explicit service accounts, application default credentials, Google Compute Engine, (experimentally) workload identity federation, and the standard OAuth2 browser flow.</li>
 <li>gargle offers the <code>Gargle2.0</code> class, which extends <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>. It is the default class for user OAuth 2.0 credentials. There are two main differences from <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>: greater emphasis on the user’s email (e.g. Google identity) and default token caching is at the user level.</li>
 </ul>
