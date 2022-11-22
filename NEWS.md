@@ -42,6 +42,26 @@ As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oau
 
 `gargle_client(type =)` replaces `gargle_app()`.
 
+## Credential function registry
+
+It's gotten a bit easier to work with the credential registry.
+The primary motivation is that, for example, on Google Compute Engine, you might
+actually want to suppress auth with the default service account and auth as a
+normal user instead.
+This is especially likely to come up with gmailr / the Gmail API.
+
+* The `...` in `cred_funs_all()` are now
+  [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html).
+
+* Every registered credential function must have a unique name now.
+  This is newly enforced by `cred_funs_add()` and `cred_funs_set()`.
+  
+* `cred_funs_add(cred_fun = NULL)` is now available to remove a credential
+  function from the registry.
+  
+* In general, credential registry functions now return the current registry,
+  invisibly.
+
 # gargle 1.2.1
 
 * Help files below `man/` have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)

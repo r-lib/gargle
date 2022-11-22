@@ -20,10 +20,14 @@ cred_funs_clear()
 cred_funs_set_default()
 }
 \arguments{
-\item{...}{One or more functions with the right signature: its first argument
-is named \code{scopes}, and it includes \code{...} as an argument.}
+\item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> One or more credential
+functions, in \code{name = value} form. Each credential function is subject to a
+superficial check that it at least "smells like" a credential function: its
+first argument must be named \code{scopes}, and its signature must include
+\code{...}. To remove a credential function, you can use a specification like
+\code{name = NULL}.}
 
-\item{ls}{A list of credential functions.}
+\item{ls}{A named list of credential functions.}
 }
 \value{
 A list of credential functions or \code{NULL}.
@@ -38,10 +42,10 @@ consulted by \code{\link[=token_fetch]{token_fetch()}}.
 
 \item \code{cred_funs_add()}: Register one or more new credential fetching functions.
 Function(s) are added to the \emph{front} of the list. So:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{* "First registered, last tried."
-* "Last registered, first tried."
-}\if{html}{\out{</div>}}
+\itemize{
+\item "First registered, last tried."
+\item "Last registered, first tried."
+}
 
 \item \code{cred_funs_set()}: Register a list of credential fetching functions.
 
@@ -54,10 +58,13 @@ Function(s) are added to the \emph{front} of the list. So:
 names(cred_funs_list())
 
 creds_one <- function(scopes, ...) {}
-cred_funs_add(creds_one)
+
 cred_funs_add(one = creds_one)
-cred_funs_add(one = creds_one, two = creds_one)
-cred_funs_add(one = creds_one, creds_one)
+cred_funs_add(two = creds_one, three = creds_one)
+names(cred_funs_list())
+
+cred_funs_add(two = NULL)
+names(cred_funs_list())
 
 # undo all of the above and return to default
 cred_funs_set_default()
