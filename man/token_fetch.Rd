@@ -20,16 +20,15 @@ scope.}
 \item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
-An \code{\link[httr:Token-class]{httr::Token}} (often an instance of
-something that inherits from \code{httr::Token}) or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::Token}} (often an instance of something
+that inherits from \code{httr::Token}) or \code{NULL}.
 }
 \description{
 This is a rather magical function that calls a series of concrete
 credential-fetching functions, each wrapped in a \code{tryCatch()}.
 \code{token_fetch()} keeps trying until it succeeds or there are no more functions
-to try. Use \code{\link[=cred_funs_list]{cred_funs_list()}} to see the current registry, in order. See the
-vignette \href{https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html}{How gargle gets tokens} for a
-full description of \code{token_fetch()}.
+to try. See the \code{vignette("how-gargle-gets-tokens")} for a full description
+of \code{token_fetch()}.
 }
 \examples{
 \dontrun{
@@ -37,6 +36,9 @@ token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
 }
 }
 \seealso{
+\code{\link[=cred_funs_list]{cred_funs_list()}} reveals the current registry of
+credential-fetching functions, in order.
+
 Other credential functions: 
 \code{\link{credentials_app_default}()},
 \code{\link{credentials_byo_oauth2}()},

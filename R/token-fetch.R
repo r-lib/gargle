@@ -3,16 +3,17 @@
 #' This is a rather magical function that calls a series of concrete
 #' credential-fetching functions, each wrapped in a `tryCatch()`.
 #' `token_fetch()` keeps trying until it succeeds or there are no more functions
-#' to try. Use [cred_funs_list()] to see the current registry, in order. See the
-#' vignette [How gargle gets
-#' tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html) for a
-#' full description of `token_fetch()`.
+#' to try. See the `vignette("how-gargle-gets-tokens")` for a full description
+#' of `token_fetch()`.
+#'
+#' @seealso [cred_funs_list()] reveals the current registry of
+#'   credential-fetching functions, in order.
 #'
 #' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credential functions.
 #'
-#' @return An [`httr::Token`][httr::Token-class] (often an instance of
-#'   something that inherits from `httr::Token`) or `NULL`.
+#' @return An [`httr::Token`][httr::Token-class] (often an instance of something
+#'   that inherits from `httr::Token`) or `NULL`.
 #' @family credential functions
 #' @export
 #' @examples
