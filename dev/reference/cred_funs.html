@@ -76,11 +76,25 @@ consulted by <code><a href="token_fetch.html">token_fetch()</a></code>.</p>
 <span></span>
 <span><span class="fu">cred_funs_add</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">cred_funs_set</span><span class="op">(</span><span class="va">ls</span><span class="op">)</span></span>
+<span><span class="fu">cred_funs_set</span><span class="op">(</span><span class="va">funs</span>, ls <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">cred_funs_clear</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">cred_funs_list_default</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">local_cred_funs</span><span class="op">(</span></span>
+<span>  funs <span class="op">=</span> <span class="fu">cred_funs_list_default</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replace"</span>, <span class="st">"modify"</span><span class="op">)</span>,</span>
+<span>  .local_envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">with_cred_funs</span><span class="op">(</span></span>
+<span>  funs <span class="op">=</span> <span class="fu">cred_funs_list_default</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">code</span>,</span>
+<span>  action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replace"</span>, <span class="st">"modify"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -94,8 +108,29 @@ first argument must be named <code>scopes</code>, and its signature must include
 <code>name = NULL</code>.</p></dd>
 
 
-<dt>ls</dt>
+<dt>funs</dt>
 <dd><p>A named list of credential functions.</p></dd>
+
+
+<dt>ls</dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> This argument has been renamed
+to <code>funs</code>.</p></dd>
+
+
+<dt>action</dt>
+<dd><p>Whether to use <code>funs</code> to replace or modify the registry with
+funs:</p><ul><li><p><code>"replace"</code> does <code>cred_funs_set(funs)</code></p></li>
+<li><p><code>"modify"</code> does <code>cred_funs_add(!!!funs)</code></p></li>
+</ul></dd>
+
+
+<dt>.local_envir</dt>
+<dd><p>The environment to use for scoping. Defaults to current
+execution environment.</p></dd>
+
+
+<dt>code</dt>
+<dd><p>Code to run with temporary active project.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -114,7 +149,13 @@ Function(s) are added to the <em>front</em> of the list. So:</p><ul><li><p>"Firs
 </ul></li>
 <li><p><code>cred_funs_set()</code>: Register a list of credential fetching functions.</p></li>
 <li><p><code>cred_funs_clear()</code>: Clear the credential function registry.</p></li>
+<li><p><code>cred_funs_list_default()</code>: Return the default list of credential functions.</p></li>
 <li><p><code>cred_funs_set_default()</code>: Reset the registry to the gargle default.</p></li>
+<li><p><code>local_cred_funs()</code>: Modify the credential function registry in the current
+scope. It is an example of the <code>local_*()</code> functions in <span class="pkg">withr</span>.</p></li>
+<li><p><code>with_cred_funs()</code>: Evaluate <code>code</code> with a temporarily modified credential
+function registry. It is an example of the <code>with_*()</code> functions in
+<span class="pkg">withr</span>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -163,6 +204,33 @@ Function(s) are added to the <em>front</em> of the list. So:</p><ul><li><p>"Firs
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># restore the default list</span></span></span>
 <span class="r-in"><span><span class="fu">cred_funs_set_default</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># run some code with a temporary change to the registry</span></span></span>
+<span class="r-in"><span><span class="co"># creds_one ONLY</span></span></span>
+<span class="r-in"><span><span class="fu">with_cred_funs</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "one"</span>
+<span class="r-in"><span><span class="co"># add creds_one to the list</span></span></span>
+<span class="r-in"><span><span class="fu">with_cred_funs</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>one <span class="op">=</span> <span class="va">creds_one</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  action <span class="op">=</span> <span class="st">"modify"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "one"                          "credentials_byo_oauth2"      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "credentials_service_account"  "credentials_external_account"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "credentials_app_default"      "credentials_gce"             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "credentials_user_oauth2"     </span>
+<span class="r-in"><span><span class="co"># remove credentials_gce</span></span></span>
+<span class="r-in"><span><span class="fu">with_cred_funs</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>credentials_gce <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu">cred_funs_list</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  action <span class="op">=</span> <span class="st">"modify"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "credentials_byo_oauth2"       "credentials_service_account" </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3] "credentials_external_account" "credentials_app_default"     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5] "credentials_user_oauth2"     </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
