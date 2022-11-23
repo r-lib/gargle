@@ -53,26 +53,28 @@ This is especially likely to come up with gmailr / the Gmail API.
 * The credential-fetcher `credentials_byo_oauth2()` has been moved to the very
   beginning of the default registry. The logic is that a user who has specified
   a non-`NULL` value of `token` must mean business and does not want automagic
-  auth methods like ADC or GCE to be tried before using their `token` (#187).
+  auth methods like ADC or GCE to be tried before using their `token`
+  (#187, #225).
 
 * The `...` in `cred_funs_all()` are now
-  [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html).
+  [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html) (#224).
 
 * Every registered credential function must have a unique name now.
-  This is newly enforced by `cred_funs_add()` and `cred_funs_set()`.
+  This is newly enforced by `cred_funs_add()` and `cred_funs_set()` (#224).
   
 * `cred_funs_list_default()` is a new function that returns gargle's default
-  list of credential functions.
+  list of credential functions (#226).
   
 * `cred_funs_add(cred_fun = NULL)` is now available to remove a credential
-  function from the registry.
+  function from the registry (#224).
   
-* `with_cred_funs()` and `local_cred_funs()` are new helpers for making narrowly     scoped changes to the registry.
+* `with_cred_funs()` and `local_cred_funs()` are new helpers for making narrowly
+  scoped changes to the registry (#226).
   
-* The `ls` argument of `cred_funs_set()` has been renamed to `funs`.
+* The `ls` argument of `cred_funs_set()` has been renamed to `funs` (#226).
   
 * In general, credential registry functions now return the current registry,
-  invisibly.
+  invisibly (#224).
 
 # gargle 1.2.1
 
