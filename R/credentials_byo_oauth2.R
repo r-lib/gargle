@@ -51,7 +51,8 @@ credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
   if (!is.null(scopes)) {
     gargle_debug(c(
       "{.arg scopes} cannot be specified when user brings their own OAuth token",
-      "{.arg scopes} are already implicit in the token"
+      "{.arg scopes} are already implicit in the token",
+      "requested {.arg scopes} are effectively ignored"
     ))
   }
 
