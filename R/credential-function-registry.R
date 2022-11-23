@@ -32,6 +32,25 @@
 #'
 #' # restore the default list
 #' cred_funs_set_default()
+#'
+#' # run some code with a temporary change to the registry
+#' # creds_one ONLY
+#' with_cred_funs(
+#'   list(one = creds_one),
+#'   names(cred_funs_list())
+#' )
+#' # add creds_one to the list
+#' with_cred_funs(
+#'   list(one = creds_one),
+#'   names(cred_funs_list()),
+#'   action = "modify"
+#' )
+#' # remove credentials_gce
+#' with_cred_funs(
+#'   list(credentials_gce = NULL),
+#'   names(cred_funs_list()),
+#'   action = "modify"
+#' )
 NULL
 
 #' @describeIn cred_funs Get the list of registered credential functions.
@@ -45,7 +64,6 @@ cred_funs_list <- function() {
 #'   * "First registered, last tried."
 #'   * "Last registered, first tried."
 #'
-
 #' @param ... <[`dynamic-dots`][rlang::dyn-dots]> One or more credential
 #'   functions, in `name = value` form. Each credential function is subject to a
 #'   superficial check that it at least "smells like" a credential function: its
@@ -91,11 +109,22 @@ cred_funs_add <- function(...) {
 
 #' @describeIn cred_funs Register a list of credential fetching functions.
 #'
-#' @param ls A named list of credential functions.
+#' @param funs A named list of credential functions.
+#' @param ls `r lifecycle::badge("deprecated")` This argument has been renamed
+#'   to `funs`.
 #' @export
-cred_funs_set <- function(ls) {
-  cred_funs_check(ls, allow_null = FALSE)
-  gargle_env$cred_funs <- ls
+cred_funs_set <- function(funs, ls = deprecated()) {
+  if (lifecycle::is_present(ls)) {
+    lifecycle::deprecate_warn(
+      when = "1.3.0",
+      what = "cred_funs_set(ls)",
+      with = "cred_funs_set(funs)",
+    )
+    funs = ls
+  }
+
+  cred_funs_check(funs, allow_null = FALSE)
+  gargle_env$cred_funs <- funs
   invisible(cred_funs_list())
 }
 
@@ -106,11 +135,10 @@ cred_funs_clear <- function() {
   invisible(cred_funs_list())
 }
 
-#' @describeIn cred_funs Reset the registry to the gargle default.
+#' @describeIn cred_funs Return the default list of credential functions.
 #' @export
-cred_funs_set_default <- function() {
-  cred_funs_clear()
-  l <- list(
+cred_funs_list_default <- function() {
+  list(
     credentials_byo_oauth2       = credentials_byo_oauth2,
     credentials_service_account  = credentials_service_account,
     credentials_external_account = credentials_external_account,
@@ -118,7 +146,46 @@ cred_funs_set_default <- function() {
     credentials_gce              = credentials_gce,
     credentials_user_oauth2      = credentials_user_oauth2
   )
-  cred_funs_set(l)
+}
+
+#' @describeIn cred_funs Reset the registry to the gargle default.
+#' @export
+cred_funs_set_default <- function() {
+  cred_funs_set(cred_funs_list_default())
+}
+
+#' @describeIn cred_funs Modify the credential function registry in the current
+#'   scope. It is an example of the `local_*()` functions in \pkg{withr}.
+#' @param action Whether to use `funs` to replace or modify the registry with
+#'   funs:
+#'   * `"replace"` does `cred_funs_set(funs)`
+#'   * `"modify"` does `cred_funs_add(!!!funs)`
+#' @export
+local_cred_funs <- function(funs = cred_funs_list_default(),
+                            action = c("replace", "modify"),
+                            .local_envir = parent.frame()) {
+  action <- arg_match(action)
+
+  cred_funs_orig <- cred_funs_list()
+  withr::defer(cred_funs_set(cred_funs_orig), envir = .local_envir)
+
+  switch(
+    action,
+    replace = cred_funs_set(funs),
+    modify = cred_funs_add(!!!funs)
+  )
+}
+
+#' @describeIn cred_funs Evaluate `code` with a temporarily modified credential
+#'   function registry. It is an example of the `with_*()` functions in
+#'   \pkg{withr}.
+#' @param code Code to run with temporary active project.
+#' @export
+with_cred_funs <- function(funs = cred_funs_list_default(),
+                           code,
+                           action = c("replace", "modify")) {
+  local_cred_funs(funs = funs, action = action)
+  force(code)
 }
 
 cred_funs_check <- function(ls, allow_null = FALSE) {

@@ -61,8 +61,15 @@ This is especially likely to come up with gmailr / the Gmail API.
 * Every registered credential function must have a unique name now.
   This is newly enforced by `cred_funs_add()` and `cred_funs_set()`.
   
+* `cred_funs_list_default()` is a new function that returns gargle's default
+  list of credential functions.
+  
 * `cred_funs_add(cred_fun = NULL)` is now available to remove a credential
   function from the registry.
+  
+* `with_cred_funs()` and `local_cred_funs()` are new helpers for making narrowly     scoped changes to the registry.
+  
+* The `ls` argument of `cred_funs_set()` has been renamed to `funs`.
   
 * In general, credential registry functions now return the current registry,
   invisibly.

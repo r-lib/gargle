@@ -6,18 +6,31 @@
 \alias{cred_funs_add}
 \alias{cred_funs_set}
 \alias{cred_funs_clear}
+\alias{cred_funs_list_default}
 \alias{cred_funs_set_default}
+\alias{local_cred_funs}
+\alias{with_cred_funs}
 \title{Credential function registry}
 \usage{
 cred_funs_list()
 
 cred_funs_add(...)
 
-cred_funs_set(ls)
+cred_funs_set(funs, ls = deprecated())
 
 cred_funs_clear()
 
+cred_funs_list_default()
+
 cred_funs_set_default()
+
+local_cred_funs(
+  funs = cred_funs_list_default(),
+  action = c("replace", "modify"),
+  .local_envir = parent.frame()
+)
+
+with_cred_funs(funs, code, action = c("replace", "modify"))
 }
 \arguments{
 \item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> One or more credential
@@ -27,7 +40,19 @@ first argument must be named \code{scopes}, and its signature must include
 \code{...}. To remove a credential function, you can use a specification like
 \code{name = NULL}.}
 
-\item{ls}{A named list of credential functions.}
+\item{funs}{A named list of credential functions.}
+
+\item{ls}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} This argument has been renamed
+to \code{funs}.}
+
+\item{action}{Whether to use \code{funs} to replace or modify the registry with
+funs:
+\itemize{
+\item \code{"replace"} does \code{cred_funs_set(funs)}
+\item \code{"modify"} does \code{cred_funs_add(!!!funs)}
+}}
+
+\item{code}{Code to run with temporary active project.}
 }
 \value{
 A list of credential functions or \code{NULL}.
@@ -51,7 +76,16 @@ Function(s) are added to the \emph{front} of the list. So:
 
 \item \code{cred_funs_clear()}: Clear the credential function registry.
 
+\item \code{cred_funs_list_default()}: Return the default list of credential functions.
+
 \item \code{cred_funs_set_default()}: Reset the registry to the gargle default.
+
+\item \code{local_cred_funs()}: Modify the credential function registry in the current
+scope. It is an example of the \verb{local_*()} functions in \pkg{withr}.
+
+\item \code{with_cred_funs()}: Evaluate \code{code} with a temporarily modified credential
+function registry. It is an example of the \verb{with_*()} functions in
+\pkg{withr}.
 
 }}
 \examples{
@@ -79,6 +113,25 @@ names(cred_funs_list())
 
 # restore the default list
 cred_funs_set_default()
+
+# run some code with a temporary change to the registry
+# creds_one ONLY
+with_cred_funs(
+  list(one = creds_one),
+  names(cred_funs_list())
+)
+# add creds_one to the list
+with_cred_funs(
+  list(one = creds_one),
+  names(cred_funs_list()),
+  action = "modify"
+)
+# remove credentials_gce
+with_cred_funs(
+  list(credentials_gce = NULL),
+  names(cred_funs_list()),
+  action = "modify"
+)
 }
 \seealso{
 \code{\link[=token_fetch]{token_fetch()}}, which is where the registry is actually used.
