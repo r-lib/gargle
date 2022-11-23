@@ -11,7 +11,8 @@
 #' @inheritParams credentials_user_oauth2
 #' @param ... Additional arguments passed to all credential functions.
 #'
-#' @return An [`httr::Token`][httr::Token-class] or `NULL`.
+#' @return An [`httr::Token`][httr::Token-class] (often an instance of
+#'   something that inherits from `httr::Token`) or `NULL`.
 #' @family credential functions
 #' @export
 #' @examples

@@ -20,7 +20,8 @@ scope.}
 \item{...}{Additional arguments passed to all credential functions.}
 }
 \value{
-An \code{\link[httr:Token-class]{httr::Token}} or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::Token}} (often an instance of
+something that inherits from \code{httr::Token}) or \code{NULL}.
 }
 \description{
 This is a rather magical function that calls a series of concrete
