@@ -160,6 +160,8 @@ cred_funs_set_default <- function() {
 #'   funs:
 #'   * `"replace"` does `cred_funs_set(funs)`
 #'   * `"modify"` does `cred_funs_add(!!!funs)`
+#' @param .local_envir The environment to use for scoping. Defaults to current
+#'   execution environment.
 #' @export
 local_cred_funs <- function(funs = cred_funs_list_default(),
                             action = c("replace", "modify"),

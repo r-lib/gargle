@@ -30,7 +30,11 @@ local_cred_funs(
   .local_envir = parent.frame()
 )
 
-with_cred_funs(funs, code, action = c("replace", "modify"))
+with_cred_funs(
+  funs = cred_funs_list_default(),
+  code,
+  action = c("replace", "modify")
+)
 }
 \arguments{
 \item{...}{<\code{\link[rlang:dyn-dots]{dynamic-dots}}> One or more credential
@@ -51,6 +55,9 @@ funs:
 \item \code{"replace"} does \code{cred_funs_set(funs)}
 \item \code{"modify"} does \code{cred_funs_add(!!!funs)}
 }}
+
+\item{.local_envir}{The environment to use for scoping. Defaults to current
+execution environment.}
 
 \item{code}{Code to run with temporary active project.}
 }
