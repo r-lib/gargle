@@ -50,6 +50,11 @@ actually want to suppress auth with the default service account and auth as a
 normal user instead.
 This is especially likely to come up with gmailr / the Gmail API.
 
+* The credential-fetcher `credentials_byo_oauth2()` has been moved to the very
+  beginning of the default registry. The logic is that a user who has specified
+  a non-`NULL` value of `token` must mean business and does not want automagic
+  auth methods like ADC or GCE to be tried before using their `token` (#187).
+
 * The `...` in `cred_funs_all()` are now
   [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html).
 
