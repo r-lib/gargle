@@ -112,8 +112,7 @@ returned token, e.g., incorporate it into downstream requests. It can be
 very nice for users if wrapper packages assume this responsibility, as
 opposed to requiring users to explicitly acquire and manage their
 tokens. We give a few design suggestions here and cover this in more
-depth in <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How
-to use gargle for auth in a client package</a>.</p>
+depth in <code><a href="../articles/gargle-auth-in-client-package.html">vignette("gargle-auth-in-client-package")</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -144,10 +143,13 @@ The only formal argument these functions have in common is
 <p>This gives a sense of the credential functions and reflects the order
 in which they are called:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/cred_funs.html">cred_funs_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "credentials_service_account"  "credentials_external_account"</span></span>
-<span><span class="co">#&gt; [3] "credentials_app_default"      "credentials_gce"             </span></span>
-<span><span class="co">#&gt; [5] "credentials_byo_oauth2"       "credentials_user_oauth2"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/cred_funs.html">cred_funs_list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; credentials_byo_oauth2</span></span>
+<span><span class="co">#&gt; credentials_service_account</span></span>
+<span><span class="co">#&gt; credentials_external_account</span></span>
+<span><span class="co">#&gt; credentials_app_default</span></span>
+<span><span class="co">#&gt; credentials_gce</span></span>
+<span><span class="co">#&gt; credentials_user_oauth2</span></span></code></pre></div>
 <p>It is possible to manipulate this registry of functions. The help for
 <code><a href="../reference/cred_funs.html">cred_funs_list()</a></code> is a good place to learn more.</p>
 <p>From now on, however, we assume you’re working with the default
@@ -163,19 +165,48 @@ named “gargle_verbosity” to “debug”. Read more in the docs for
 <code><a href="../reference/gargle_options.html">gargle_verbosity()</a></code>.</p>
 </div>
 <div class="section level2">
+<h2 id="credentials_byo_oauth2">
+<code>credentials_byo_oauth2()</code><a class="anchor" aria-label="anchor" href="#credentials_byo_oauth2"></a>
+</h2>
+<p>The first function tried is <code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code>.
+Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">token =</span> <span class="sc">&lt;</span>TOKEN2<span class="fl">.0</span><span class="sc">&gt;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_byo_oauth2</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> <span class="sc">&lt;</span>TOKEN2<span class="fl">.0</span><span class="sc">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> provides a back door for a
+“bring your own token” workflow. This function accounts for the scenario
+where an OAuth token has been obtained through external means and it’s
+convenient to be able to put it into force.</p>
+<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> checks that <code>token</code>
+is of class <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code> and that it appears to be
+associated with Google. A <code>token</code> of class
+<code>request</code> is also acceptable, in which case the
+<code>auth_token</code> component is extracted and treated as the input.
+This is how a <code>Token2.0</code> object would present, if processed
+with <code><a href="https://httr.r-lib.org/reference/config.html" class="external-link">httr::config()</a></code>, as functions like
+<code>googledrive::drive_token()</code> and
+<code>bigrquery::bq_token()</code> do.</p>
+<p>If <code>token</code> is not provided or if it doesn’t satisfy these
+requirements, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves
+on to the next function in the registry.</p>
+</div>
+<div class="section level2">
 <h2 id="credentials_service_account">
 <code>credentials_service_account()</code><a class="anchor" aria-label="anchor" href="#credentials_service_account"></a>
 </h2>
-<p>The first function tried is
+<p>The next function tried is
 <code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>. Here’s how a call to
 <code><a href="../reference/token_fetch.html">token_fetch()</a></code> with service account inputs plays out:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">path =</span> <span class="st">"/path/to/your/service-account.json"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># leads to this call:</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_service_account</span>(</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"/path/to/your/service-account.json"</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">path =</span> <span class="st">"/path/to/your/service-account.json"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_service_account</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"/path/to/your/service-account.json"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>The <code>scopes</code> are often provided by the API wrapper
 function that is mediating the calls to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> and
 <code>credential_service_account()</code>. The <code>path</code>
@@ -208,24 +239,27 @@ reasonably accurate system clock. This is of particular importance for
 users running gargle inside a Docker container, as Docker for Windows
 has <a href="https://github.com/docker/for-win/issues/4526" class="external-link">intermittently seen
 problems with clock drift</a>. If your service account token requests
-fail with “Bad Request” inside a container but succeed locally, check
+fail with “Bad Request” inside a container, but succeed locally, check
 that the container’s system clock is accurate.</p>
 </div>
 <div class="section level2">
 <h2 id="credentials_external_account">
 <code>credentials_external_account()</code><a class="anchor" aria-label="anchor" href="#credentials_external_account"></a>
 </h2>
-<p>The second function tried is
+<p>The next function tried is
 <code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code>. Here’s how a call to
 <code><a href="../reference/token_fetch.html">token_fetch()</a></code> with an external account inputs plays
 out:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">path =</span> <span class="st">"/path/to/your/external-account.json"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># leads to this call:</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_external_account</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"/path/to/your/external-account.json"</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">path =</span> <span class="st">"/path/to/your/external-account.json"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because the JSON provided via</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   `path` is not of type "service_account",</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_external_account</span>(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="st">"/path/to/your/external-account.json"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> implements something
 called <em>workload identity federation</em> and is available to
 applications running on specific non-Google Cloud platforms. At the time
@@ -262,15 +296,17 @@ workload identity federation</a>
 <h2 id="credentials_app_default">
 <code>credentials_app_default()</code><a class="anchor" aria-label="anchor" href="#credentials_app_default"></a>
 </h2>
-<p>The third function tried is <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code>.
+<p>The next function tried is <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code>.
 Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_app_default</span>(</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_external_account() fails because no `path`,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_app_default</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> loads credentials from a file
 identified via a search strategy known as <a href="https://cloud.google.com/docs/authentication#adc" class="external-link">Application
 Default Credentials (ADC)</a>. The credentials themselves are
@@ -282,16 +318,16 @@ started, such as the <a href="https://cloud.google.com/sdk/gcloud" class="extern
 line tool</a>. A sequence of paths is consulted, which we describe here,
 with some abuse of notation. ALL_CAPS represents the value of an
 environment variable.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>{GOOGLE_APPLICATION_CREDENTIALS}</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>{CLOUDSDK_CONFIG}<span class="sc">/</span>application_default_credentials.json</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on Windows:</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="sc">%APPDATA%</span>\gcloud\application_default_credentials.json</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="sc">%SystemDrive%</span>\gcloud\application_default_credentials.json</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>C<span class="sc">:</span>\gcloud\application_default_credentials.json</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># on not-Windows:</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="sc">~</span><span class="er">/</span>.config<span class="sc">/</span>gcloud<span class="sc">/</span>application_default_credentials.json</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>{GOOGLE_APPLICATION_CREDENTIALS}</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>{CLOUDSDK_CONFIG}<span class="sc">/</span>application_default_credentials.json</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># on Windows:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="sc">%APPDATA%</span>\gcloud\application_default_credentials.json</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="sc">%SystemDrive%</span>\gcloud\application_default_credentials.json</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>C<span class="sc">:</span>\gcloud\application_default_credentials.json</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># on not-Windows:</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="sc">~</span><span class="er">/</span>.config<span class="sc">/</span>gcloud<span class="sc">/</span>application_default_credentials.json</span></code></pre></div>
 <p>If the above search successfully identifies a JSON file, it is parsed
 and ingested either as a service account token, an external account
 configuration, or an OAuth2 user credential. In the case of an OAuth2
@@ -324,58 +360,28 @@ it’s only available in a very narrow set of circumstances.</p>
 </h2>
 <p>The next function tried is <code><a href="../reference/credentials_gce.html">credentials_gce()</a></code>. Here’s how
 a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or perhaps</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">service_account =</span> <span class="sc">&lt;</span>SERVICE_ACCOUNT<span class="sc">&gt;</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_app_default() fails because no ADC found,</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to one of these calls:</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_gce</span>(</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">service_account =</span> <span class="st">"default"</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_gce</span>(</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">service_account =</span> <span class="sc">&lt;</span>SERVICE_ACCOUNT<span class="sc">&gt;</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># or perhaps</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>, <span class="at">service_account =</span> <span class="sc">&lt;</span>SERVICE_ACCOUNT<span class="sc">&gt;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_external_account() fails because no `path`,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_app_default() fails because no ADC found,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to one of these calls:</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_gce</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">service_account =</span> <span class="st">"default"</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># or</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_gce</span>(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">service_account =</span> <span class="sc">&lt;</span>SERVICE_ACCOUNT<span class="sc">&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> retrieves service account credentials
 from a metadata service that is specific to virtual machine instances
 running on Google Cloud Engine (GCE). Basically, if you have to ask what
 this is about, this is not the auth method for you. Let us move on.</p>
-</div>
-<div class="section level2">
-<h2 id="credentials_byo_oauth2">
-<code>credentials_byo_oauth2()</code><a class="anchor" aria-label="anchor" href="#credentials_byo_oauth2"></a>
-</h2>
-<p>The next function tried is <code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code>.
-Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">token =</span> <span class="sc">&lt;</span>TOKEN2<span class="fl">.0</span><span class="sc">&gt;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_app_default() fails because no ADC found,</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_gce() fails because not on GCE,</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_byo_oauth2</span>(</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">token =</span> <span class="sc">&lt;</span>TOKEN2<span class="fl">.0</span><span class="sc">&gt;</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> provides a back door for a
-“bring your own token” workflow. This function accounts for the scenario
-where an OAuth token has been obtained through external means and it’s
-convenient to be able to put it into force.</p>
-<p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> checks that <code>token</code>
-is of class <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code> and that it appears to be
-associated with Google. A <code>token</code> of class
-<code>request</code> is also acceptable, in which case the
-<code>auth_token</code> component is extracted and treated as the input.
-This is how a <code>Token2.0</code> object would present, if processed
-with <code><a href="https://httr.r-lib.org/reference/config.html" class="external-link">httr::config()</a></code>, as functions like
-<code>googledrive::drive_token()</code> and
-<code>bigrquery::bq_token()</code> do.</p>
-<p>If <code>token</code> is not provided or if it doesn’t satisfy these
-requirements, we fail and <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves
-on to the next function in the registry.</p>
 </div>
 <div class="section level2">
 <h2 id="credentials_user_oauth2">
@@ -386,16 +392,17 @@ on to the next function in the registry.</p>
 <code><a href="../reference/token_fetch.html">token_fetch()</a></code> might work:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">token_fetch</span>(<span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_app_default() fails because no ADC found,</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_gce() fails because not on GCE,</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_user_oauth2</span>(</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">app =</span> <span class="sc">&lt;</span>OAUTH_APP<span class="sc">&gt;</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"&lt;PACKAGE&gt;"</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_byo_oauth2() fails because no `token`,</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_service_account() fails because no `path`,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_external_account() fails because no `path`,</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_app_default() fails because no ADC found,</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># credentials_gce() fails because not on GCE,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># which leads to this call:</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">credentials_user_oauth2</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">app =</span> <span class="sc">&lt;</span>OAUTH_APP<span class="sc">&gt;</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"&lt;PACKAGE&gt;"</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> is where the vast majority of
 users will end up. This is the function that choreographs the
 traditional “OAuth dance” in the browser. User credentials are cached
@@ -433,9 +440,8 @@ package:</p>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">app     =</span> <span class="fu">thingy_app</span>(),</span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="st">"thingyr"</span></span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<p>See <a href="https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html">How
-to use gargle for auth in a client package</a> for design ideas for a
-function like <code>THINGY_auth()</code>.</p>
+<p>See <code><a href="../articles/gargle-auth-in-client-package.html">vignette("gargle-auth-in-client-package")</a></code> for design
+ideas for a function like <code>THINGY_auth()</code>.</p>
 <p>What happens tomorrow or next week? Do we make this user go through
 the browser dance again? How do we get to that happy place where we
 don’t bug them constantly about auth?</p>
