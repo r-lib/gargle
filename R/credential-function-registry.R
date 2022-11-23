@@ -111,11 +111,11 @@ cred_funs_clear <- function() {
 cred_funs_set_default <- function() {
   cred_funs_clear()
   l <- list(
+    credentials_byo_oauth2       = credentials_byo_oauth2,
     credentials_service_account  = credentials_service_account,
     credentials_external_account = credentials_external_account,
     credentials_app_default      = credentials_app_default,
     credentials_gce              = credentials_gce,
-    credentials_byo_oauth2       = credentials_byo_oauth2,
     credentials_user_oauth2      = credentials_user_oauth2
   )
   cred_funs_set(l)
