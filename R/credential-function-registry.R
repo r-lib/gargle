@@ -64,6 +64,8 @@ cred_funs_list <- function() {
 #'   * "First registered, last tried."
 #'   * "Last registered, first tried."
 #'
+#' Can also be used to *remove* a function from the registry.
+#'
 #' @param ... <[`dynamic-dots`][rlang::dyn-dots]> One or more credential
 #'   functions, in `name = value` form. Each credential function is subject to a
 #'   superficial check that it at least "smells like" a credential function: its

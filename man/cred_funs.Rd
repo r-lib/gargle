@@ -79,6 +79,8 @@ Function(s) are added to the \emph{front} of the list. So:
 \item "Last registered, first tried."
 }
 
+Can also be used to \emph{remove} a function from the registry.
+
 \item \code{cred_funs_set()}: Register a list of credential fetching functions.
 
 \item \code{cred_funs_clear()}: Clear the credential function registry.
