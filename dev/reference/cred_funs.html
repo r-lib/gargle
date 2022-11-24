@@ -146,7 +146,7 @@ execution environment.</p></dd>
 <li><p><code>cred_funs_add()</code>: Register one or more new credential fetching functions.
 Function(s) are added to the <em>front</em> of the list. So:</p><ul><li><p>"First registered, last tried."</p></li>
 <li><p>"Last registered, first tried."</p></li>
-</ul></li>
+</ul><p>Can also be used to <em>remove</em> a function from the registry.</p></li>
 <li><p><code>cred_funs_set()</code>: Register a list of credential fetching functions.</p></li>
 <li><p><code>cred_funs_clear()</code>: Clear the credential function registry.</p></li>
 <li><p><code>cred_funs_list_default()</code>: Return the default list of credential functions.</p></li>
