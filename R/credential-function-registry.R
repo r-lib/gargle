@@ -181,7 +181,7 @@ local_cred_funs <- function(funs = cred_funs_list_default(),
 #' @describeIn cred_funs Evaluate `code` with a temporarily modified credential
 #'   function registry. It is an example of the `with_*()` functions in
 #'   \pkg{withr}.
-#' @param code Code to run with temporary active project.
+#' @param code Code to run with temporary credential function registry.
 #' @export
 with_cred_funs <- function(funs = cred_funs_list_default(),
                            code,

@@ -59,7 +59,7 @@ funs:
 \item{.local_envir}{The environment to use for scoping. Defaults to current
 execution environment.}
 
-\item{code}{Code to run with temporary active project.}
+\item{code}{Code to run with temporary credential function registry.}
 }
 \value{
 A list of credential functions or \code{NULL}.
