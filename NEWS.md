@@ -42,9 +42,9 @@ As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oau
 
 `gargle_client(type =)` replaces `gargle_app()`.
 
-## GKE authentication documentation
+## Google Kubernetes Engine
 
-Some documentation has been added on how to use Workload Identity for authenticating R scripts running on Google Kubernetes Engine. 
+`vignette("non-interactive-auth")` has a new section "Workload Identity on Google Kubernetes Engine (GKE)" that explains how gargle supports the use of workload identity for applications running on GKE. This is the recommended method of auth in R code running on GKE that needs to access other Google Cloud services, such as the BigQuery API (#197, #223, @MarkEdmondson1234).
 
 # gargle 1.2.1
 
