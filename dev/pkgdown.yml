@@ -1,5 +1,5 @@
 pandoc: 2.19.2
-pkgdown: 2.0.6
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   managing-tokens-securely: managing-tokens-securely.html
@@ -10,7 +10,7 @@ articles:
   non-interactive-auth: non-interactive-auth.html
   request-helper-functions: request-helper-functions.html
   troubleshooting: troubleshooting.html
-last_built: 2022-11-24T17:19Z
+last_built: 2023-01-27T00:36Z
 urls:
   reference: https://gargle.r-lib.org/reference
   article: https://gargle.r-lib.org/articles

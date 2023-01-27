@@ -8,12 +8,12 @@
 <meta name="description" content="gargle">
 <title>Non-interactive auth • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.3/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.3/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Non-interactive auth">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Non-interactive auth">
 <meta property="og:description" content="gargle">
 <meta name="robots" content="noindex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -268,12 +268,93 @@ verbose output about the execution of
 <code><a href="../reference/gargle_options.html">local_gargle_verbosity()</a></code>.</p>
 </div>
 <div class="section level2">
+<h2 id="workload-identity-on-google-kubernetes-engine-gke">Workload Identity on Google Kubernetes Engine (GKE)<a class="anchor" aria-label="anchor" href="#workload-identity-on-google-kubernetes-engine-gke"></a>
+</h2>
+<p>When you are authenticating on Google Compute Engine and related
+services such as Cloud Run, <code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> can be used
+to authenticate without having to upload a service key by reusing the
+service key that created the Google service. A similar concept is
+available for Google Kubernetes Clusters called <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
+Identity</a>, with some extra configuration needed to make a service
+account’s metadata available for the GKE instance to discover. GKE is
+the underlying technology behind Google’s managed Airflow service, <a href="https://cloud.google.com/composer" class="external-link">Cloud Composer</a>, so this
+also applies to R docker files being called in that environment.</p>
+<p>Using Workload Identity is the recommended way to do authentication
+on GKE and other places, if possible, since it eliminates the use of a
+file that holds the service key, which is a potential security risk.</p>
+<ol style="list-style-type: decimal">
+<li>Following the <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">docs</a>,
+you create a service account as normal and give it permissions and
+scopes needed to, say, upload to BigQuery. Imagine that
+<code>my-service-key@my-project.iam.gserviceaccount.com</code> has the
+<code>https://www.googleapis.com/auth/bigquery</code> scope.</li>
+<li>Instead of downloading a JSON key, you instead migrate that
+permission by adding a policy binding to another service account within
+Kubernetes.</li>
+<li>Create the service account within Kubernetes, ideally within a new
+namespace:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create namespace</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create namespace my-namespace</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Kubernetes service account</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create serviceaccount <span class="at">--namespace</span> my-namespace bq-service-account </span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Bind that Kubernetes service account to the service account outside
+of kubernetes you created in step 1, and assign it an annotation:</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create IAM policy binding betwwen k8s SA and GSA</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> iam service-accounts add-iam-policy-binding my-service-key@my-project.iam.gserviceaccount.com <span class="dt">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--role</span> roles/iam.workloadIdentityUser <span class="dt">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--member</span> <span class="st">"serviceAccount:my-project.svc.id.goog[my-namespace/bq-service-account]"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Annotate k8s SA</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> annotate serviceaccount bq-service-account <span class="dt">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--namespace</span> my-namespace <span class="dt">\</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    iam.gke.io/gcp-service-account=my-service-key@my-project.iam.gserviceaccount.com</span></code></pre></div>
+<p>This key will now be available to add to pods within the cluster. For
+Airflow, you can pass them in using the Python code
+<code>GKEStartPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')</code>.
+Documentation around <code>GKEStartPodOperator()</code> within Cloud
+Composer can be found <a href="https://cloud.google.com/composer/docs/composer-2/use-gke-operator" class="external-link">here</a>.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>In order for the R function <code>gargle::gce_credentials()</code>
+do the right thing, you need to do two things:</li>
+</ol>
+<ul>
+<li>Set <code>"gargle.gce.use_ip"</code> option to <code>TRUE</code>, in
+order to use the metadata server that’s relevant on GKE.</li>
+<li>Specify the target service account, i.e. you can’t just passively
+accept the default, which is to use the <code>"default"</code> service
+account. <code>gargle:::list_service_accounts()</code> can be helpful,
+e.g., if you want to know which service accounts your Docker container
+can see.</li>
+</ul>
+<p>Here is example code that you might execute in your Docker
+container:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle.gce.use_ip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/credentials_gce.html">credentials_gce</a></span><span class="op">(</span><span class="st">"my-service-key@my-project.iam.gserviceaccount.com"</span><span class="op">)</span></span>
+<span><span class="co"># ... do authenticated stuff...</span></span></code></pre></div>
+<p>Let’s assume that PKG is an R package that implements gargle auth in
+the standard way, such as bigrquery or googledrive. You should be able
+to pass the target service account to the usual, high-level
+<code>PKG_auth()</code> function. Internally, <code>PKG_auth()</code>
+presumably calls <code><a href="../reference/token_fetch.html">token_fetch()</a></code>, which calls
+<code><a href="../reference/credentials_gce.html">gargle::credentials_gce()</a></code>. Here’s an example of how that
+might look:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">PKG</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle.gce.use_ip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">PKG_auth</span><span class="op">(</span>service_account <span class="op">=</span> <span class="st">"my-service-key@my-project.iam.gserviceaccount.com"</span><span class="op">)</span></span>
+<span><span class="co"># ... do authenticated stuff...</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="provide-an-oauth-token-directly">Provide an OAuth token directly<a class="anchor" aria-label="anchor" href="#provide-an-oauth-token-directly"></a>
 </h2>
 <p>If you somehow have the OAuth token you want to use as an R object,
 you can provide it directly to the <code>token</code> argument of the
 main auth function. Example using googledrive:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">my_oauth_token</span> <span class="op">&lt;-</span> <span class="co"># some process that results in the token you want to use</span></span>
@@ -283,7 +364,7 @@ main auth function. Example using googledrive:</p>
 token you want to use, you could use <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code> to read it
 and provide as the <code>token</code> argument to the wrapper’s auth
 function. Example using googledrive:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive</span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"/path/to/your/oauth-token.rds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>How would you know this filepath? That requires some attention to the
@@ -318,7 +399,7 @@ that convey the range of what’s possible.</p>
 <p><strong>Step 1</strong>: Get that first token. You must run your code
 at least once, interactively, do the auth dance, and allow gargle to
 store the token in its cache.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># do anything that triggers auth</span></span>
@@ -355,27 +436,27 @@ and <code>bob@example.com</code>
 </ul>
 <p>This sets an option that allows gargle to use cached tokens whenever
 there’s a unique match:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This sets an option to use tokens associated with a specific email
 address:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This sets an option to use tokens associated with an email address
 with a specific domain:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em> and allows the use of a matching
 token, using googledrive as an example:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em>, for the user with a specific
 email address:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em>, first checking the cache for a
 token associated with a specific domain:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -386,7 +467,7 @@ project-level OAuth cache. This is good for deployed data products.</p>
 <p><strong>Step 1</strong>: Obtain the token intended for
 non-interactive use and make sure it’s cached in a (hidden) directory of
 the current project. Using googledrive as an example:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># designate project-specific cache</span></span>
@@ -403,7 +484,7 @@ the current project. Using googledrive as an example:</p>
 <p>Do this setup once per project.</p>
 <p>Another way to accomplish the same setup is to specify the desired
 cache location directly in the call to the auth function:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></span>
@@ -416,7 +497,7 @@ using R in the browser</a>.</p>
 <p><strong>Step 2</strong>: In all downstream use, announce the location
 of the cache and pre-authorize the use of a suitable token discovered
 there. Continuing the googledrive example:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
@@ -437,7 +518,7 @@ accomplish this in a startup file, e.g. project-level
 <p>Here’s a variation where we say which token to use by explicitly
 specifying the associated email. This is handy if there’s a reason to
 have more than one token in the cache.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
@@ -449,7 +530,7 @@ have more than one token in the cache.</p>
 <span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s another variation where we specify the necessary info directly
 in an auth call, instead of in options:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -458,7 +539,7 @@ in an auth call, instead of in options:</p>
 <span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s one last variation that’s applicable when the local cache
 could contain multiple tokens:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span>
@@ -471,7 +552,7 @@ things more robust.</p>
 <p>For troubleshooting purposes, you can set a gargle option to see
 verbose output about the execution of
 <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></span></code></pre></div>
 <p>withr-style convenience helpers also exist:
 <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and
@@ -499,7 +580,7 @@ the mismatch.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
   </div></footer>
