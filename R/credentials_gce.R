@@ -79,6 +79,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
   token <- GceToken$new(
     credentials = gce_token$access_token,
     params = params,
+    cache_path = FALSE,
     # The underlying Token2 class appears to *require* an endpoint and an app,
     # though it doesn't use them for anything in this case.
     endpoint = httr::oauth_endpoints("google"),
