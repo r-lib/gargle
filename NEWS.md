@@ -46,6 +46,40 @@ As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oau
 
 `vignette("non-interactive-auth")` has a new section "Workload Identity on Google Kubernetes Engine (GKE)" that explains how gargle supports the use of workload identity for applications running on GKE. This is the recommended method of auth in R code running on GKE that needs to access other Google Cloud services, such as the BigQuery API (#197, #223, @MarkEdmondson1234).
 
+## Credential function registry
+
+It's gotten a bit easier to work with the credential registry.
+The primary motivation is that, for example, on Google Compute Engine, you might
+actually want to suppress auth with the default service account and auth as a
+normal user instead.
+This is especially likely to come up with gmailr / the Gmail API.
+
+* The credential-fetcher `credentials_byo_oauth2()` has been moved to the very
+  beginning of the default registry. The logic is that a user who has specified
+  a non-`NULL` value of `token` must mean business and does not want automagic
+  auth methods like ADC or GCE to be tried before using their `token`
+  (#187, #225).
+
+* The `...` in `cred_funs_all()` are now
+  [dynamic dots](https://rlang.r-lib.org/reference/dyn-dots.html) (#224).
+
+* Every registered credential function must have a unique name now.
+  This is newly enforced by `cred_funs_add()` and `cred_funs_set()` (#224).
+  
+* `cred_funs_list_default()` is a new function that returns gargle's default
+  list of credential functions (#226).
+  
+* `cred_funs_add(cred_fun = NULL)` is now available to remove a credential
+  function from the registry (#224).
+  
+* `with_cred_funs()` and `local_cred_funs()` are new helpers for making narrowly
+  scoped changes to the registry (#226).
+  
+* The `ls` argument of `cred_funs_set()` has been renamed to `funs` (#226).
+  
+* In general, credential registry functions now return the current registry,
+  invisibly (#224).
+
 # gargle 1.2.1
 
 * Help files below `man/` have been re-generated, so that they give rise to valid HTML5. (This is the impetus for this release, to keep the package safely on CRAN.)
