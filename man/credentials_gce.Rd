@@ -2,7 +2,7 @@
 % Please edit documentation in R/credentials_gce.R
 \name{credentials_gce}
 \alias{credentials_gce}
-\title{Get a token for Google Compute Engine}
+\title{Get a token from the Google metadata server}
 \usage{
 credentials_gce(
   scopes = "https://www.googleapis.com/auth/cloud-platform",
@@ -29,7 +29,37 @@ scope.}
 A \code{\link[=GceToken]{GceToken()}} or \code{NULL}.
 }
 \description{
-Uses the metadata service available on GCE VMs to fetch an access token.
+If your code is running on Google Cloud, we can often obtain a token for an
+attached service account directly from a metadata server. This is more secure
+than working with an explicit a service account key, as
+\code{\link[=credentials_service_account]{credentials_service_account()}} does, and is the preferred method of auth for
+workloads running on Google Cloud.
+
+The most straightforward scenario is when you are working in a VM on Google
+Compute Engine and it's OK to use the default service account. This should
+"just work" automatically.
+
+\code{credentials_gce()} supports other use cases (such as GKE Workload Identity),
+but may require some explicit setup, such as:
+\itemize{
+\item Create a service account, grant it appropriate scopes(s) and IAM roles,
+attach it to the target resource. This prep work happens outside of R, e.g.,
+in the Google Cloud Console. On the R side, provide the email address of this
+appropriately configured service account via \code{service_account}.
+\item Specify details for constructing the root URL of the metadata service:
+\itemize{
+\item The logical option \code{"gargle.gce.use_ip"}. If undefined, this defaults to
+\code{FALSE}.
+\item The environment variable \code{GCE_METADATA_URL} is consulted when
+\code{"gargle.gce.use_ip"} is \code{FALSE}. If undefined, the default is
+\code{metadata.google.internal}.
+\item The environment variable \code{GCE_METADATA_IP} is consulted when
+\code{"gargle.gce.use_ip"} is \code{TRUE}. If undefined, the default is
+\verb{169.254.169.254}.
+For details on specific use cases, such as Google Kubernetes Engine (GKE),
+see \code{vignette("non-interactive-auth")}.
+}
+}
 }
 \examples{
 \dontrun{
@@ -37,6 +67,21 @@ credentials_gce()
 }
 }
 \seealso{
+A related auth flow that can be used on certain non-Google cloud
+providers is workload identity federation, which is implemented in
+\code{\link[=credentials_external_account]{credentials_external_account()}}.
+
+\url{https://cloud.google.com/compute/docs/access/service-accounts}
+
+\url{https://cloud.google.com/iam/docs/best-practices-service-accounts}
+
+How to attach a service account to a resource:
+\url{https://cloud.google.com/iam/docs/impersonating-service-accounts#attaching-to-resources}
+
+\url{https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity}
+
+\url{https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity}
+
 \url{https://cloud.google.com/compute/docs/metadata/overview}
 
 Other credential functions: 

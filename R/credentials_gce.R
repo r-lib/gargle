@@ -1,11 +1,59 @@
-#' Get a token for Google Compute Engine
+#' Get a token from the Google metadata server
 #'
-#' Uses the metadata service available on GCE VMs to fetch an access token.
+#' @description
+#'
+#' If your code is running on Google Cloud, we can often obtain a token for an
+#' attached service account directly from a metadata server. This is more secure
+#' than working with an explicit a service account key, as
+#' [credentials_service_account()] does, and is the preferred method of auth for
+#' workloads running on Google Cloud.
+
+#'
+#' The most straightforward scenario is when you are working in a VM on Google
+#' Compute Engine and it's OK to use the default service account. This should
+#' "just work" automatically.
+
+#'
+#' `credentials_gce()` supports other use cases (such as GKE Workload Identity),
+#' but may require some explicit setup, such as:
+
+#' * Create a service account, grant it appropriate scopes(s) and IAM roles,
+#' attach it to the target resource. This prep work happens outside of R, e.g.,
+#' in the Google Cloud Console. On the R side, provide the email address of this
+#' appropriately configured service account via `service_account`.
+
+#' * Specify details for constructing the root URL of the metadata service:
+#'   - The logical option `"gargle.gce.use_ip"`. If undefined, this defaults to
+#'     `FALSE`.
+#'   - The environment variable `GCE_METADATA_URL` is consulted when
+#'     `"gargle.gce.use_ip"` is `FALSE`. If undefined, the default is
+#'     `metadata.google.internal`.
+#'   - The environment variable `GCE_METADATA_IP` is consulted when
+#'     `"gargle.gce.use_ip"` is `TRUE`. If undefined, the default is
+#'     `169.254.169.254`.
+
+#' For details on specific use cases, such as Google Kubernetes Engine (GKE),
+#' see `vignette("non-interactive-auth")`.
 #'
 #' @inheritParams token_fetch
 #' @param service_account Name of the GCE service account to use.
 #'
-#' @seealso <https://cloud.google.com/compute/docs/metadata/overview>
+#' @seealso A related auth flow that can be used on certain non-Google cloud
+#' providers is workload identity federation, which is implemented in
+#' [credentials_external_account()].
+#'
+#' <https://cloud.google.com/compute/docs/access/service-accounts>
+#'
+#' <https://cloud.google.com/iam/docs/best-practices-service-accounts>
+#'
+#' How to attach a service account to a resource:
+#' <https://cloud.google.com/iam/docs/impersonating-service-accounts#attaching-to-resources>
+#'
+#' <https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity>
+#'
+#' <https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity>
+#'
+#' <https://cloud.google.com/compute/docs/metadata/overview>
 #'
 #' @return A [GceToken()] or `NULL`.
 #' @family credential functions
@@ -144,6 +192,10 @@ list_service_accounts <- function() {
 }
 
 # TODO: why isn't scopes used here at all?
+# the python auth library definitely passes scopes:
+# https://github.com/googleapis/google-auth-library-python/blob/a83af399fe98764ee851997bf3078ec45a9b51c9/google/auth/compute_engine/_metadata.py#L237
+# perhaps there are use cases where it would be helpful it we did same:
+# https://github.com/r-lib/gargle/issues/216
 fetch_gce_access_token <- function(scopes, service_account) {
   path <- glue("instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)

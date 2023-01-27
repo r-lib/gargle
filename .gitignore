@@ -6,5 +6,4 @@ internal
 .Rhistory
 .RData
 .httr-oauth
-scratch.R
 notes/*.html
