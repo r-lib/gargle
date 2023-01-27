@@ -82,7 +82,8 @@
 <p><code>gargle_client(type =)</code> replaces <code><a href="../reference/oauth_app_from_json.html">gargle_app()</a></code>.</p>
 </div>
 <div class="section level3">
-<h3 id="google-kubernetes-engine-development-version">Google Kubernetes Engine<a class="anchor" aria-label="anchor" href="#google-kubernetes-engine-development-version"></a></h3>
+<h3 id="google-compute-engine-and-google-kubernetes-engine-development-version">Google Compute Engine and Google Kubernetes Engine<a class="anchor" aria-label="anchor" href="#google-compute-engine-and-google-kubernetes-engine-development-version"></a></h3>
+<p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> no longer asks the user about initiating an OAuth cache, which is not relevant to that flow (<a href="https://github.com/r-lib/gargle/issues/221" class="external-link">#221</a>).</p>
 <p><code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code> has a new section “Workload Identity on Google Kubernetes Engine (GKE)” that explains how gargle supports the use of workload identity for applications running on GKE. This is the recommended method of auth in R code running on GKE that needs to access other Google Cloud services, such as the BigQuery API (<a href="https://github.com/r-lib/gargle/issues/197" class="external-link">#197</a>, <a href="https://github.com/r-lib/gargle/issues/223" class="external-link">#223</a>, <a href="https://github.com/MarkEdmondson1234" class="external-link">@MarkEdmondson1234</a>).</p>
 </div>
 <div class="section level3">
