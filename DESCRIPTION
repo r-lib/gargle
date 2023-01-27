@@ -2,13 +2,13 @@ Package: gargle
 Title: Utilities for Working with Google APIs
 Version: 1.2.1.9000
 Authors@R: c(
-    person("Jennifer", "Bryan", , "jenny@rstudio.com", role = c("aut", "cre"),
+    person("Jennifer", "Bryan", , "jenny@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6983-2759")),
     person("Craig", "Citro", , "craigcitro@google.com", role = "aut"),
-    person("Hadley", "Wickham", , "hadley@rstudio.com", role = "aut",
+    person("Hadley", "Wickham", , "hadley@posit.co", role = "aut",
            comment = c(ORCID = "0000-0003-4757-117X")),
     person("Google Inc", role = "cph"),
-    person("Posit PBC", role = c("cph", "fnd"))
+    person("Posit, PBC", role = c("cph", "fnd"))
   )
 Description: Provides utilities for working with Google APIs
     <https://developers.google.com/apis-explorer>.  This includes
