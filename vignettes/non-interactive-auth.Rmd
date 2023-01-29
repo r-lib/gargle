@@ -164,7 +164,7 @@ Documentation around `GKEStartPodOperator()` within Cloud Composer can be found 
     server that's relevant on GKE.
   - Specify the target service account, i.e. you can't just passively accept the
     default, which is to use the `"default"` service account.
-    `gargle:::list_service_accounts()` can be helpful, e.g., if you want to
+    `gce_instance_service_accounts()` can be helpful, e.g., if you want to
     know which service accounts your Docker container can see. 
 
 Here is example code that you might execute in your Docker container:
