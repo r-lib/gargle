@@ -65,7 +65,7 @@
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
   gargle_debug("trying {.fun credentials_gce}")
-  if (!detect_gce()) {
+  if (!is_gce()) {
     return(NULL)
   }
 
@@ -136,22 +136,30 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   revoke = function() {}
 ))
 
-gce_metadata_url <- function() {
+gce_metadata_hostname <- function() {
   use_ip <- getOption("gargle.gce.use_ip", FALSE)
-  root_url <- Sys.getenv("GCE_METADATA_URL", "metadata.google.internal")
   if (use_ip) {
-    root_url <- Sys.getenv("GCE_METADATA_IP", "169.254.169.254")
+    Sys.getenv("GCE_METADATA_IP", "169.254.169.254")
+  } else {
+    Sys.getenv("GCE_METADATA_URL", "metadata.google.internal")
   }
-  paste0("http://", root_url, "/")
 }
 
-gce_metadata_request <- function(path, stop_on_error = TRUE) {
-  root_url <- gce_metadata_url()
+gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) {
   # TODO(craigcitro): Add options to ignore proxies.
   if (grepl("^/", path)) {
     path <- substring(path, 2)
   }
-  url <- paste0(root_url, "computeMetadata/v1/", path)
+  url_parts <- structure(
+    list(
+      scheme = "http",
+      hostname = gce_metadata_hostname(),
+      path = paste0("computeMetadata/v1/", path),
+      query = query
+    ),
+    class = "url"
+  )
+  url <- httr::build_url(url_parts)
   timeout <- getOption("gargle.gce.timeout", default = 0.8)
   response <- try(
     {
@@ -178,18 +186,36 @@ gce_metadata_request <- function(path, stop_on_error = TRUE) {
   response
 }
 
-detect_gce <- function() {
+is_gce <- function() {
   response <- gce_metadata_request("", stop_on_error = FALSE)
   !(inherits(response, "try-error") %||% httr::http_error(response))
 }
 
-# List all service accounts available on this GCE instance.
-#
-# @return A list of service account names.
-list_service_accounts <- function() {
-  accounts <- gce_metadata_request("instance/service-accounts")
-  ct <- httr::content(accounts, as = "text", encoding = "UTF-8")
-  strsplit(ct, split = "/\n", fixed = TRUE)[[1]]
+#' List all service accounts available on this GCE instance
+#'
+#' @returns A data frame, where each row is a service account. Due to aliasing,
+#'   there is no guarantee that each row represents a distinct service account.
+#'
+#' @seealso The return value is built from a recursive query of the so-called
+#'   "directory" of the instance's service accounts as documented in
+#'   <https://cloud.google.com/compute/docs/metadata/default-metadata-values#vm_instance_metadata>.
+#'
+#' @export
+#' @examplesIf gargle:::is_gce()
+#' credentials_gce()
+gce_instance_service_accounts <- function() {
+  response <- gce_metadata_request(
+    "instance/service-accounts",
+    query = list(recursive = "true")
+  )
+  raw <- transpose(response_as_json(response))
+  data.frame(
+    name = names(raw$email),
+    email = unlist(raw$email),
+    aliases = map_chr(raw$aliases, function(x) glue_collapse(x, sep = ",")),
+    scopes = map_chr(raw$scopes, function(x) glue_collapse(x, sep = ",")),
+    stringsAsFactors = FALSE, row.names = NULL
+  )
 }
 
 # TODO: why isn't scopes used here at all?

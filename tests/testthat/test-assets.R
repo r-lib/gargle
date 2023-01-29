@@ -7,7 +7,11 @@ test_that("default options", {
     gargle_quiet       = NULL
   ))
   expect_equal(gargle_oauth_cache(), NA)
-  expect_false(gargle_oob_default())
+  if (is_rstudio_server()) {
+    expect_true(gargle_oob_default())
+  } else {
+    expect_false(gargle_oob_default())
+  }
   expect_null(gargle_oauth_email())
   expect_equal(gargle_verbosity(), "info")
 })
