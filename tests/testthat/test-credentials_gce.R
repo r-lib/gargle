@@ -29,3 +29,21 @@ test_that("Can list service accounts", {
   service_accounts <- gce_instance_service_accounts()
   expect_s3_class(service_accounts, class = "data.frame")
 })
+
+test_that("gce_timeout() works", {
+  withr::with_options(
+    list(gargle.gce.timeout = NULL),
+    {
+      expect_equal(gce_timeout(), 0.8)
+      expect_equal(gce_timeout(), 2)
+    }
+  )
+  withr::with_options(
+    new = list(gargle.gce.timeout = 100),
+    {
+      expect_equal(gce_timeout(), 100)
+      expect_equal(gce_timeout(200), 100)
+      expect_equal(gce_timeout(), 200)
+    }
+  )
+})

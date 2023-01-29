@@ -163,7 +163,7 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
   timeout <- getOption("gargle.gce.timeout", default = 0.8)
   response <- try(
     {
-      httr::with_config(httr::timeout(timeout), {
+      httr::with_config(httr::timeout(gce_timeout()), {
         httr::GET(url, httr::add_headers("Metadata-Flavor" = "Google"))
       })
     },
@@ -228,4 +228,30 @@ fetch_gce_access_token <- function(scopes, service_account) {
   path <- glue("computeMetadata/v1/instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)
   httr::content(response, as = "parsed", type = "application/json")
+}
+
+# wrapper to access the "gargle.gce.timeout" option
+# https://github.com/r-lib/gargle/issues/186
+# https://github.com/r-lib/gargle/pull/195
+# if called with no argument:
+#   if option is set, return that value
+#   if unset: return a short default, suitable for initial ping of
+#     the metadata server (and not too burdensome for non-GCE users) and set the
+#     option to a longer default, suitable for a subsequent request for all
+#     service accounts or a specific token
+# if called with an argument:
+#   set the option to that value (and return the old value)
+gce_timeout <- function(v) {
+  opt <- getOption("gargle.gce.timeout")
+  if (missing(v)) {
+    if (is.null(opt)) {
+      ret <- 0.8                      # short default timeout
+      options(gargle.gce.timeout = 2) # long default timeout
+    } else {
+      ret <- opt
+    }
+  } else {
+    ret <- options(gargle.gce.timeout = v)[["gargle.gce.timeout"]]
+  }
+  ret
 }
