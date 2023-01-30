@@ -138,7 +138,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
 
 gce_metadata_hostname <- function() {
   use_ip <- getOption("gargle.gce.use_ip", FALSE)
-  if (use_ip) {
+  if (isTRUE(use_ip)) {
     Sys.getenv("GCE_METADATA_IP", "169.254.169.254")
   } else {
     Sys.getenv("GCE_METADATA_URL", "metadata.google.internal")
