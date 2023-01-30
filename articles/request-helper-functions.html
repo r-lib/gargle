@@ -8,12 +8,12 @@
 <meta name="description" content="gargle">
 <title>Request helper functions • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Request helper functions">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Request helper functions">
 <meta property="og:description" content="gargle">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,71 +100,126 @@
 <li><code>request_build(method, path, params, body, token, key, base_url)</code></li>
 <li><code>request_make(x, ..., user_agent)</code></li>
 </ul>
-<p>The target audience is someone writing an R package to wrap a Google API.</p>
+<p>The target audience is someone writing an R package to wrap a Google
+API.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="why-use-gargles-request-helpers">Why use gargle’s request helpers?<a class="anchor" aria-label="anchor" href="#why-use-gargles-request-helpers"></a>
 </h2>
-<p>Why would the developer of a Google-API-wrapping package care about the request helpers in gargle?</p>
-<p>You can write less code and safer code, in return for a modest investment in studying your target API. That is done by ingesting the API’s so-called Discovery Document.</p>
-<p>Hundreds of Google APIs – the ones addressed by the <a href="https://developers.google.com/discovery/" class="external-link">API Discovery Service</a> – share a great deal of behaviour. By ingesting the metadata provided by this service, you can use gargle’s request helpers to exploit this shared data and logic, while also decreasing the chance that you and your users will submit ill-formed requests.</p>
-<p>The request helpers in gargle check the combined inputs from user and developer against suitably prepared API metadata:</p>
+<p>Why would the developer of a Google-API-wrapping package care about
+the request helpers in gargle?</p>
+<p>You can write less code and safer code, in return for a modest
+investment in studying your target API. That is done by ingesting the
+API’s so-called Discovery Document.</p>
+<p>Hundreds of Google APIs – the ones addressed by the <a href="https://developers.google.com/discovery/" class="external-link">API Discovery
+Service</a> – share a great deal of behaviour. By ingesting the metadata
+provided by this service, you can use gargle’s request helpers to
+exploit this shared data and logic, while also decreasing the chance
+that you and your users will submit ill-formed requests.</p>
+<p>The request helpers in gargle check the combined inputs from user and
+developer against suitably prepared API metadata:</p>
 <ul>
 <li>If required parameters are missing, an error is thrown.</li>
 <li>If unrecognized parameters are submitted, an error is thrown.</li>
-<li>Parameters are automatically placed in their correct location: URL substitution, query, or body.</li>
-<li><em>Is there something else you care about? It is possible to do more, but it would help to have concrete requests.</em></li>
+<li>Parameters are automatically placed in their correct location: URL
+substitution, query, or body.</li>
+<li><em>Is there something else you care about? It is possible to do
+more, but it would help to have concrete requests.</em></li>
 </ul>
-<p>Google provides <a href="https://developers.google.com/api-client-library/" class="external-link">API libraries for several languages</a>, including Java, Go, Python, JavaScript, Ruby and more (but not R). All of these libraries are machine-generated from the metadata provided by the API Discovery Service. It is the <a href="https://developers.google.com/discovery/v1/using#build" class="external-link">official recommendation</a> to use the Discovery Document when building client libraries. The gargle package aims to implement key parts of this strategy, in a way that is also idiomatic for R and its developers.</p>
+<p>Google provides <a href="https://developers.google.com/api-client-library/" class="external-link">API libraries
+for several languages</a>, including Java, Go, Python, JavaScript, Ruby
+and more (but not R). All of these libraries are machine-generated from
+the metadata provided by the API Discovery Service. It is the <a href="https://developers.google.com/discovery/v1/using#build" class="external-link">official
+recommendation</a> to use the Discovery Document when building client
+libraries. The gargle package aims to implement key parts of this
+strategy, in a way that is also idiomatic for R and its developers.</p>
 </div>
 <div class="section level2">
 <h2 id="high-level-design-pattern">High-level design pattern<a class="anchor" aria-label="anchor" href="#high-level-design-pattern"></a>
 </h2>
 <p>gargle facilitates this design for API-wrapping packages:</p>
 <ul>
-<li>A machine-assisted low-level interface driven by the Discovery Document:
+<li>A machine-assisted low-level interface driven by the Discovery
+Document:
 <ul>
-<li>Your package exports thin wrapper functions around gargle’s helpers to form and make HTTP requests, that inject package-specific logic and data, such as an API key and user agent. This is for power users and yourself.</li>
+<li>Your package exports thin wrapper functions around gargle’s helpers
+to form and make HTTP requests, that inject package-specific logic and
+data, such as an API key and user agent. This is for power users and
+yourself.</li>
 </ul>
 </li>
-<li>High-level, task-oriented, user-facing functions that constitute the main interface of your package.
+<li>High-level, task-oriented, user-facing functions that constitute the
+main interface of your package.
 <ul>
-<li>These functions convert user input into the form required by the API and pass it along to your low-level interface functions.</li>
+<li>These functions convert user input into the form required by the API
+and pass it along to your low-level interface functions.</li>
 </ul>
 </li>
 </ul>
-<p>Later, specific examples are given, using the googledrive package.</p>
+<p>Later, specific examples are given, using the googledrive
+package.</p>
 </div>
 <div class="section level2">
 <h2 id="gargles-http-request-helpers">gargle’s HTTP request helpers<a class="anchor" aria-label="anchor" href="#gargles-http-request-helpers"></a>
 </h2>
-<p>gargle provides support for creating and sending HTTP requests via these functions:</p>
-<p><code>request_develop(endpoint, params, base_url)</code>: a.k.a. The Smart One.</p>
+<p>gargle provides support for creating and sending HTTP requests via
+these functions:</p>
+<p><code>request_develop(endpoint, params, base_url)</code>: a.k.a. The
+Smart One.</p>
 <ul>
-<li>Processes the info in <code>params</code> relative to detailed knowledge about the <code>endpoint</code>, derived from an API Discovery Document.</li>
+<li>Processes the info in <code>params</code> relative to detailed
+knowledge about the <code>endpoint</code>, derived from an API Discovery
+Document.</li>
 <li>Checks for required and unrecognized parameters.</li>
-<li>Peels off <code>params</code> destined for the body into their own part.</li>
-<li>Returns request data in a form that anticipates the <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> call that is on the horizon.</li>
+<li>Peels off <code>params</code> destined for the body into their own
+part.</li>
+<li>Returns request data in a form that anticipates the
+<code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> call that is on the horizon.</li>
 </ul>
-<p><code>request_build(method, path, params, body, token, key, base_url)</code>: a.k.a. The Dumb One.</p>
+<p><code>request_build(method, path, params, body, token, key, base_url)</code>:
+a.k.a. The Dumb One.</p>
 <ul>
-<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_develop()</a></code>, although that is not required. It can be called directly to enjoy a few luxuries even when making one-off API calls in the absence of an ingested Discovery Document.</li>
-<li>Integrates <code>params</code> into a URL via substitution and the query string.</li>
-<li>Sends either an API key or an OAuth token, but it provides no default values or logic for either.</li>
+<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_develop()</a></code>,
+although that is not required. It can be called directly to enjoy a few
+luxuries even when making one-off API calls in the absence of an
+ingested Discovery Document.</li>
+<li>Integrates <code>params</code> into a URL via substitution and the
+query string.</li>
+<li>Sends either an API key or an OAuth token, but it provides no
+default values or logic for either.</li>
 </ul>
-<p><code>request_make(x, ..., user_agent)</code>: actually makes the HTTP request.</p>
+<p><code>request_make(x, ..., user_agent)</code>: actually makes the
+HTTP request.</p>
 <ul>
-<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>, although that is not required. However, if you have enough info to form a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> call yourself.</li>
-<li>Consults <code>x$method</code> to determine which <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> to call, then calls it with the rest of <code>x</code>, <code>...</code>, and <code>user_agent</code> passed as arguments.</li>
+<li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>,
+although that is not required. However, if you have enough info to form
+a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the
+<code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> call yourself.</li>
+<li>Consults <code>x$method</code> to determine which
+<code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> to call, then calls it with the rest of
+<code>x</code>, <code>...</code>, and <code>user_agent</code> passed as
+arguments.</li>
 </ul>
-<p>They are usually called in the above order, though they don’t have to be used that way. It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.</p>
+<p>They are usually called in the above order, though they don’t have to
+be used that way. It is also fine to ignore this part of gargle and use
+it only for help with auth. They are separate parts of the package.</p>
 </div>
 <div class="section level2">
 <h2 id="discovery-documents">Discovery Documents<a class="anchor" aria-label="anchor" href="#discovery-documents"></a>
 </h2>
-<p>Google’s <a href="https://developers.google.com/discovery/" class="external-link">API Discovery Service</a> “provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs”. We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle’s request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.</p>
-<p>The gargle package ships with some functions and scripts to facilitate the ingest of a Discovery Document. You can find these files in the gargle installation like so:</p>
+<p>Google’s <a href="https://developers.google.com/discovery/" class="external-link">API
+Discovery Service</a> “provides a lightweight, JSON-based API that
+exposes machine-readable metadata about Google APIs”. We recommend
+ingesting this metadata into an R list, stored as internal data in an
+API-wrapping client package. Then, HTTP requests inside high-level
+functions can be made concisely and safely, by referring to this
+metadata. The combined use of this data structure and gargle’s request
+helpers can eliminate a lot of boilerplate data and logic that are
+shared across Google APIs and across endpoints within an API.</p>
+<p>The gargle package ships with some functions and scripts to
+facilitate the ingest of a Discovery Document. You can find these files
+in the gargle installation like so:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ddi_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"discovery-doc-ingest"</span>, package <span class="op">=</span> <span class="st">"gargle"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">ddi_dir</span><span class="op">)</span></span>
@@ -177,18 +232,34 @@
 <p>Main files of interest to the developer of a client package:</p>
 <ul>
 <li>
-<code>ingest-functions.R</code> is a collection of functions for downloading and ingesting a Discovery Document.</li>
+<code>ingest-functions.R</code> is a collection of functions for
+downloading and ingesting a Discovery Document.</li>
 <li>
-<code>drive-example.R</code> uses those functions to ingest metadata on the Drive v3 API and store it as an internal data object for use in <a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a>.</li>
+<code>drive-example.R</code> uses those functions to ingest metadata
+on the Drive v3 API and store it as an internal data object for use in
+<a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a>.</li>
 </ul>
-<p>The remaining files present an analysis of the Discovery Document for the Discovery API itself (very meta!) and write files that are useful for reference. Several are included at the end of this vignette.</p>
-<p>Why aren’t the ingest functions exported by gargle? First, we regard this as functionality that is needed at development time, not install or run time. This is something you’ll do every few months, probably associated with preparing a release of a wrapper package. Second, the packages that are useful for wrangling JSON and lists are not existing dependencies of gargle, so putting these function in gargle would require some unappealing compromises.</p>
+<p>The remaining files present an analysis of the Discovery Document for
+the Discovery API itself (very meta!) and write files that are useful
+for reference. Several are included at the end of this vignette.</p>
+<p>Why aren’t the ingest functions exported by gargle? First, we regard
+this as functionality that is needed at development time, not install or
+run time. This is something you’ll do every few months, probably
+associated with preparing a release of a wrapper package. Second, the
+packages that are useful for wrangling JSON and lists are not existing
+dependencies of gargle, so putting these function in gargle would
+require some unappealing compromises.</p>
 </div>
 <div class="section level2">
 <h2 id="method-or-endpoint-data">Method (or endpoint) data<a class="anchor" aria-label="anchor" href="#method-or-endpoint-data"></a>
 </h2>
-<p>Our Discovery Document ingest process leaves you with an R list. Let’s assume it’s available in your package’s namespace as an internal object named <code>.endpoints</code>. Each item represents one method of the API (Google’s vocabulary) or an endpoint (gargle’s vocabulary).</p>
-<p>Each endpoint has an <code>id</code>. These <code>id</code>s are also used as names for the list. Examples of some <code>id</code>s from the Drive and Sheets APIs:</p>
+<p>Our Discovery Document ingest process leaves you with an R list.
+Let’s assume it’s available in your package’s namespace as an internal
+object named <code>.endpoints</code>. Each item represents one method of
+the API (Google’s vocabulary) or an endpoint (gargle’s vocabulary).</p>
+<p>Each endpoint has an <code>id</code>. These <code>id</code>s are also
+used as names for the list. Examples of some <code>id</code>s from the
+Drive and Sheets APIs:</p>
 <pre><code><span><span class="va">drive.about.get</span></span>
 <span><span class="va">drive.files.create</span></span>
 <span><span class="va">drive.teamdrives.list</span></span>
@@ -198,12 +269,18 @@
 <p>Retrieve the metadata for one endpoint by name, e.g.:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.endpoints</span><span class="op">[[</span><span class="st">"drive.files.create"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p>That info can be passed along to <code>request_develop(endpoint, params, base_url)</code>, which conducts sanity checks and combines this external knowledge with the data coming from the user and developer via <code>params</code>.</p>
+<p>That info can be passed along to
+<code>request_develop(endpoint, params, base_url)</code>, which conducts
+sanity checks and combines this external knowledge with the data coming
+from the user and developer via <code>params</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="design-suggestion-forming-requests">Design suggestion: forming requests<a class="anchor" aria-label="anchor" href="#design-suggestion-forming-requests"></a>
 </h2>
-<p>Here’s the model used in googledrive. There is a low-level request helper, <code>googledrive::request_generate()</code>, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.</p>
+<p>Here’s the model used in googledrive. There is a low-level request
+helper, <code>googledrive::request_generate()</code>, that is used to
+form every request in the package. It is exported as part of a low-level
+API for expert use, but most users will never know it exists.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive::</span></span>
 <span><span class="va">request_generate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -230,17 +307,33 @@
 <span>    token <span class="op">=</span> <span class="va">token</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The <code>endpoint</code> argument specifies an endpoint by its name, a.k.a. its <code>id</code>.</p>
+<p>The <code>endpoint</code> argument specifies an endpoint by its name,
+a.k.a. its <code>id</code>.</p>
 <p><code>params</code> is where the processed user input goes.</p>
-<p><code>key</code> and <code>token</code> refer to an API key and OAuth2 token, respectively. Both can be populated by default, but it is possible to pass them explicitly. If your package ships with a default API key, you should append it above as the final fallback value for <code>params$key</code>.</p>
-<p>Do not “borrow” an API key from gargle or another package; always send a key associated with your package or provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="external-link uri">https://developers.google.com/terms/api-services-user-data-policy</a>, your application must accurately represent itself when authenticating to Google API services.</p>
-<p>After <code>googledrive::request_generate()</code> takes care of everything specific to the Drive API and the user’s input and task, we call <code><a href="../reference/request_develop.html">gargle::request_develop()</a></code>. We finish preparing the request with <code><a href="../reference/request_develop.html">gargle::request_build()</a></code>, which enforces the rule that we always send exactly <strong>one</strong> of <code>key</code> and <code>token</code>.</p>
+<p><code>key</code> and <code>token</code> refer to an API key and
+OAuth2 token, respectively. Both can be populated by default, but it is
+possible to pass them explicitly. If your package ships with a default
+API key, you should append it above as the final fallback value for
+<code>params$key</code>.</p>
+<p>Do not “borrow” an API key from gargle or another package; always
+send a key associated with your package or provided by your user. Per
+the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="external-link uri">https://developers.google.com/terms/api-services-user-data-policy</a>,
+your application must accurately represent itself when authenticating to
+Google API services.</p>
+<p>After <code>googledrive::request_generate()</code> takes care of
+everything specific to the Drive API and the user’s input and task, we
+call <code><a href="../reference/request_develop.html">gargle::request_develop()</a></code>. We finish preparing the
+request with <code><a href="../reference/request_develop.html">gargle::request_build()</a></code>, which enforces the
+rule that we always send exactly <strong>one</strong> of
+<code>key</code> and <code>token</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="design-suggestion-making-requests">Design suggestion: making requests<a class="anchor" aria-label="anchor" href="#design-suggestion-making-requests"></a>
 </h2>
-<p>The output of <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> specifies an HTTP request.</p>
-<p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute it.</p>
+<p>The output of <code><a href="../reference/request_develop.html">gargle::request_build()</a></code> specifies an HTTP
+request.</p>
+<p><code><a href="../reference/request_make.html">gargle::request_make()</a></code> can be used to actually execute
+it.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># gargle::</span></span>
 <span><span class="va">request_make</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, <span class="va">user_agent</span> <span class="op">=</span> <span class="fu">gargle_user_agent</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -262,8 +355,12 @@
 <span>    <span class="va">...</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to identify the <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> and then calls it with the remainder of <code>x</code>, <code>...</code> and the <code>user_agent</code>.</p>
-<p>In googledrive we have a thin wrapper around this that injects the googledrive user agent:</p>
+<p><code><a href="../reference/request_make.html">request_make()</a></code> consults <code>x$method</code> to
+identify the <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> and then calls it with the
+remainder of <code>x</code>, <code>...</code> and the
+<code>user_agent</code>.</p>
+<p>In googledrive we have a thin wrapper around this that injects the
+googledrive user agent:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive::</span></span>
 <span><span class="va">request_make</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -273,7 +370,8 @@
 <div class="section level2">
 <h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
-<p><em>derived from the Discovery Document for the Discovery Service</em></p>
+<p><em>derived from the Discovery Document for the Discovery
+Service</em></p>
 <p>Properties of an endpoint</p>
 <pre><code>description             string  Description of this method.
 etagRequired            boolean Whether this method requires an ETag to be
@@ -303,7 +401,8 @@ useMediaDownloadService boolean Indicates that downloads from this method
                                 should use the download service URL (i.e.
                                 "/download"). Only applies if the method
                                 supports media download.</code></pre>
-<p>API-wide endpoint parameters (taken from Discovery API but, empirically, are shared with other APIs):</p>
+<p>API-wide endpoint parameters (taken from Discovery API but,
+empirically, are shared with other APIs):</p>
 <pre><code>alt         string  Data format for the response.
 fields      string  Selector specifying which fields to include
                     in a partial response.
@@ -379,12 +478,12 @@ variant              object  In a variant data type, the value of
   <footer><div class="container">
   <div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://www.rstudio.com" class="external-link"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" width="72"></a>.</p>
+<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Posit, PBC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
   </div></footer>

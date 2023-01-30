@@ -8,12 +8,12 @@
 <meta name="description" content="gargle">
 <title>Managing tokens securely • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Managing tokens securely">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Managing tokens securely">
 <meta property="og:description" content="gargle">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,44 +94,78 @@
 
     
     
-<p>Testing presents special challenges for packages that wrap an API. Here we tackle one of those problems: how to deal with auth in a non-interactive setting on a remote machine. This affects gargle itself and will affect any client package that relies on gargle for auth.</p>
-<p>This article documents the token management approach taken in gargle. We wanted it to be relatively easy to have a secret, such as an auth token, that we can:</p>
+<p>Testing presents special challenges for packages that wrap an API.
+Here we tackle one of those problems: how to deal with auth in a
+non-interactive setting on a remote machine. This affects gargle itself
+and will affect any client package that relies on gargle for auth.</p>
+<p>This article documents the token management approach taken in gargle.
+We wanted it to be relatively easy to have a secret, such as an auth
+token, that we can:</p>
 <ul>
 <li>Use locally</li>
-<li>Use with continuous integration (CI) services, such as GitHub Actions</li>
+<li>Use with continuous integration (CI) services, such as GitHub
+Actions</li>
 <li>Use with <a href="https://docs.r-hub.io" class="external-link">R-hub</a>
 </li>
 </ul>
 <p>all while keeping the secret secure.</p>
-<p>The approach uses symmetric encryption, where the shared key is stored in an environment variable. Why? This works well with existing conventions for local R usage. Most CI services offer support for secure environment variables. And R-hub accepts environment variables via the <code>env_vars</code> argument of <a href="https://r-hub.github.io/rhub/reference/check.html" class="external-link"><code>rhub::check()</code></a>.</p>
+<p>The approach uses symmetric encryption, where the shared key is
+stored in an environment variable. Why? This works well with existing
+conventions for local R usage. Most CI services offer support for secure
+environment variables. And R-hub accepts environment variables via the
+<code>env_vars</code> argument of <a href="https://r-hub.github.io/rhub/reference/check.html" class="external-link"><code>rhub::check()</code></a>.</p>
 <p>This is based on an approach originally worked out in <a href="https://bigrquery.r-dbi.org" class="external-link">bigrquery</a>.</p>
 <div class="section level2">
 <h2 id="accessing-the-secret_-functions">Accessing the <code>secret_*()</code> functions<a class="anchor" aria-label="anchor" href="#accessing-the-secret_-functions"></a>
 </h2>
-<p>gargle’s approach to managing test tokens is implemented through several functions that all start with the <code>secret_</code> prefix. These functions are not (currently?) exported. This may seem odd, since others might want to use these functions. But note they are only needed during setup or at test time. This sort of usage is compatible with others calling internal gargle functions and possibly inlining a version of a couple test helpers.</p>
-<p>One way to make the <code>secret_*()</code> functions available for local experimentation is to call <code>devtools::load_all()</code>, which exposes all internal objects in a package:</p>
+<p>gargle’s approach to managing test tokens is implemented through
+several functions that all start with the <code>secret_</code> prefix.
+These functions are not (currently?) exported. This may seem odd, since
+others might want to use these functions. But note they are only needed
+during setup or at test time. This sort of usage is compatible with
+others calling internal gargle functions and possibly inlining a version
+of a couple test helpers.</p>
+<p>One way to make the <code>secret_*()</code> functions available for
+local experimentation is to call <code>devtools::load_all()</code>,
+which exposes all internal objects in a package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="st">"path/to/source/of/gargle/"</span><span class="op">)</span></span></code></pre></div>
-<p>The approach I’ll take in this article is to call these functions via <code>:::</code>.</p>
+<p>The approach I’ll take in this article is to call these functions via
+<code>:::</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="overview-of-the-approach">Overview of the approach<a class="anchor" aria-label="anchor" href="#overview-of-the-approach"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li>Add the <a href="https://cran.r-project.org/package=sodium" class="external-link">sodium package</a> to Suggests in your DESCRIPTION, via <code>usethis::use_package("sodium", "Suggests")</code> if you like.</li>
-<li>Generate a random PASSWORD and give it a self-documenting name, e.g. <code>GARGLE_PASSWORD</code>. Store as an environment variable.</li>
-<li>Identify a secret file of interest, such as the JSON representing a service account token. This is presumably stored <em>outside</em> your package.</li>
-<li>Use the PASSWORD to apply a method for symmetric encryption to the target file. Store the resulting encrypted file in a designated location <em>within</em> your package.</li>
-<li>Store or pass the PASSWORD as an environment variable everywhere you’ll need to decrypt the secret.
+<li>Add the <a href="https://cran.r-project.org/package=sodium" class="external-link">sodium
+package</a> to Suggests in your DESCRIPTION, via
+<code>usethis::use_package("sodium", "Suggests")</code> if you
+like.</li>
+<li>Generate a random PASSWORD and give it a self-documenting name, e.g.
+<code>GARGLE_PASSWORD</code>. Store as an environment variable.</li>
+<li>Identify a secret file of interest, such as the JSON representing a
+service account token. This is presumably stored <em>outside</em> your
+package.</li>
+<li>Use the PASSWORD to apply a method for symmetric encryption to the
+target file. Store the resulting encrypted file in a designated location
+<em>within</em> your package.</li>
+<li>Store or pass the PASSWORD as an environment variable everywhere
+you’ll need to decrypt the secret.
 <ul>
-<li>Check that the platform has support for keeping the PASSWORD concealed.</li>
-<li>Make sure you don’t do anything in your own code that would dump it to, e.g., a log file.</li>
+<li>Check that the platform has support for keeping the PASSWORD
+concealed.</li>
+<li>Make sure you don’t do anything in your own code that would dump it
+to, e.g., a log file.</li>
 </ul>
 </li>
-<li>Rig your tests to determine if the key is available and, therefore, whether decryption is going to be possible.
+<li>Rig your tests to determine if the key is available and, therefore,
+whether decryption is going to be possible.
 <ul>
-<li>If “no”, carry on gracefully with any tests that don’t require auth.</li>
-<li>If “yes”, decrypt the secret and put the associated token into force globally for the test run or on an “as needed” basis in individual tests.</li>
+<li>If “no”, carry on gracefully with any tests that don’t require
+auth.</li>
+<li>If “yes”, decrypt the secret and put the associated token into force
+globally for the test run or on an “as needed” basis in individual
+tests.</li>
 </ul>
 </li>
 </ol>
@@ -142,7 +176,9 @@
 <div class="section level3">
 <h3 id="generate-a-name-for-the-password">Generate a name for the PASSWORD<a class="anchor" aria-label="anchor" href="#generate-a-name-for-the-password"></a>
 </h3>
-<p><code>secret_pw_name()</code> creates a name of the form “PACKAGE_PASSWORD”, a convention baked into the <code>secret_*()</code> family of functions.</p>
+<p><code>secret_pw_name()</code> creates a name of the form
+“PACKAGE_PASSWORD”, a convention baked into the <code>secret_*()</code>
+family of functions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pw_name</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_name</span><span class="op">(</span><span class="st">"gargle"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "GARGLE_PASSWORD"</span></span></code></pre></div>
@@ -150,18 +186,32 @@
 <div class="section level3">
 <h3 id="generate-a-random-password">Generate a random PASSWORD<a class="anchor" aria-label="anchor" href="#generate-a-random-password"></a>
 </h3>
-<p>In real life, you should keep the output of <code>secret_pw_gen()</code> to yourself! We reveal it here as part of the exposition.</p>
+<p>In real life, you should keep the output of
+<code>secret_pw_gen()</code> to yourself! We reveal it here as part of
+the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pw</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_gen</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "gLjxq5SiBpOCCqvKdZySrrQtksOOwovf2UtmMid3tQvmNcoL3v"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "MXM5n8sux9ACTA9lTPjq87uXn6sFilPxXGov6fVhjpFfsc0zKR"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="define-environment-variable-in--renviron">Define environment variable in <code>.Renviron</code><a class="anchor" aria-label="anchor" href="#define-environment-variable-in--renviron"></a>
 </h3>
-<p>Combine the name and value to form a line like this in your user-level <code>.Renviron</code> file:</p>
-<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">gLjxq5SiBpOCCqvKdZySrrQtksOOwovf2UtmMid3tQvmNcoL3v</span></span></code></pre>
-<p><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link"><code>usethis::edit_r_environ()</code></a> can help create or open this file. We <strong>strongly recommend</strong> using the user-level <code>.Renviron</code>, as opposed to project-level, because this makes it less likely you will share sensitive information by mistake. If you don’t take our advice and choose to store the PASSWORD in a file inside a Git repo, you must make sure that file is listed in <code>.gitignore</code>. This still would not prevent leaking your secret if, for example, that project is in a directory that syncs to DropBox.</p>
-<p>Make sure <code>.Renviron</code> ends in a newline; the lack of this is a notorious cause of silent failure. Remember you’ll need to restart R or call <code>readRenviron("~/.Renviron")</code> for the newly defined environment variable to take effect.</p>
+<p>Combine the name and value to form a line like this in your
+user-level <code>.Renviron</code> file:</p>
+<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">MXM5n8sux9ACTA9lTPjq87uXn6sFilPxXGov6fVhjpFfsc0zKR</span></span></code></pre>
+<p><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link"><code>usethis::edit_r_environ()</code></a>
+can help create or open this file. We <strong>strongly
+recommend</strong> using the user-level <code>.Renviron</code>, as
+opposed to project-level, because this makes it less likely you will
+share sensitive information by mistake. If you don’t take our advice and
+choose to store the PASSWORD in a file inside a Git repo, you must make
+sure that file is listed in <code>.gitignore</code>. This still would
+not prevent leaking your secret if, for example, that project is in a
+directory that syncs to DropBox.</p>
+<p>Make sure <code>.Renviron</code> ends in a newline; the lack of this
+is a notorious cause of silent failure. Remember you’ll need to restart
+R or call <code>readRenviron("~/.Renviron")</code> for the newly defined
+environment variable to take effect.</p>
 </div>
 <div class="section level3">
 <h3 id="provide-environment-variable-to-other-services">Provide environment variable to other services<a class="anchor" aria-label="anchor" href="#provide-environment-variable-to-other-services"></a>
@@ -169,21 +219,34 @@
 <div class="section level4">
 <h4 id="github-actions">GitHub Actions:<a class="anchor" aria-label="anchor" href="#github-actions"></a>
 </h4>
-<p>Define the environment variable as an encrypted secret in your repo:</p>
+<p>Define the environment variable as an encrypted secret in your
+repo:</p>
 <p><a href="https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets" class="external-link uri">https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets</a></p>
-<p>Use the secrets context to expose a secret as an environment variable in your workflows. That will look like like so, in some appropriate place in your workflow file:</p>
+<p>Use the secrets context to expose a secret as an environment variable
+in your workflows. That will look like like so, in some appropriate
+place in your workflow file:</p>
 <pre><code>env:
   PACKAGE_PASSWORD: ${{ secrets.PACKAGE_PASSWORD }}</code></pre>
-<p>Remember that the secret, and therefore the associated environment variable, is not available when workflows are triggered via an external pull request. This is another reason to carry on gracefully when token decryption is not possible (see below).</p>
+<p>Remember that the secret, and therefore the associated environment
+variable, is not available when workflows are triggered via an external
+pull request. This is another reason to carry on gracefully when token
+decryption is not possible (see below).</p>
 </div>
 <div class="section level4">
 <h4 id="travis-ci">Travis-CI<a class="anchor" aria-label="anchor" href="#travis-ci"></a>
 </h4>
-<p>Define the environment variable in your repo settings via the browser UI:</p>
+<p>Define the environment variable in your repo settings via the browser
+UI:</p>
 <p><a href="https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings" class="external-link uri">https://docs.travis-ci.com/user/environment-variables/#defining-variables-in-repository-settings</a></p>
-<p>Alternatively, you can use the Travis command line interface to configure the environment variable or even define an encrypted environment variable in <code>.travis.yml</code>.</p>
-<p>Regardless of how you define it, remember that private environment variables are not available to external pull requests, which is another reason to carry on gracefully when token decryption is not possible (see below).</p>
-<p>You may also need something like this in <code>.travis.yml</code> so that the sodium R package can be installed:</p>
+<p>Alternatively, you can use the Travis command line interface to
+configure the environment variable or even define an encrypted
+environment variable in <code>.travis.yml</code>.</p>
+<p>Regardless of how you define it, remember that private environment
+variables are not available to external pull requests, which is another
+reason to carry on gracefully when token decryption is not possible (see
+below).</p>
+<p>You may also need something like this in <code>.travis.yml</code> so
+that the sodium R package can be installed:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addons</span><span class="kw">:</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">apt</span><span class="kw">:</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">sources</span><span class="kw">:</span></span>
@@ -194,15 +257,23 @@
 <div class="section level4">
 <h4 id="appveyor">AppVeyor<a class="anchor" aria-label="anchor" href="#appveyor"></a>
 </h4>
-<p>Define the environment variable in the Environment page of your repo’s Settings. Make sure to request variable encryption and to click “Save” at the bottom. In the General page, you probably want to check “Enable secure variables in Pull Requests from the same repository only” and, again, explicitly “Save”.</p>
-<p>As with Travis, it is also possible to encrypt the password using your AppVeyor account’s public key and inline the value in <code>appveyor.yml</code>. There is a helpful web UI for that does the encryption and generates the lines to add to your config:</p>
+<p>Define the environment variable in the Environment page of your
+repo’s Settings. Make sure to request variable encryption and to click
+“Save” at the bottom. In the General page, you probably want to check
+“Enable secure variables in Pull Requests from the same repository only”
+and, again, explicitly “Save”.</p>
+<p>As with Travis, it is also possible to encrypt the password using
+your AppVeyor account’s public key and inline the value in
+<code>appveyor.yml</code>. There is a helpful web UI for that does the
+encryption and generates the lines to add to your config:</p>
 <p><a href="https://ci.appveyor.com/tools/encrypt" class="external-link uri">https://ci.appveyor.com/tools/encrypt</a></p>
 <p>This can also be found via <em>Settings &gt; Encrypt YAML</em>.</p>
 </div>
 <div class="section level4">
 <h4 id="r-hub">R-hub<a class="anchor" aria-label="anchor" href="#r-hub"></a>
 </h4>
-<p>Send the environment variable in your calls to <a href="https://r-hub.github.io/rhub/reference/check.html" class="external-link"><code>rhub::check()</code></a> and <a href="https://r-hub.github.io/rhub/reference/index.html#section-check-shortcuts" class="external-link">friends</a>:</p>
+<p>Send the environment variable in your calls to <a href="https://r-hub.github.io/rhub/reference/check.html" class="external-link"><code>rhub::check()</code></a>
+and <a href="https://r-hub.github.io/rhub/reference/index.html#section-check-shortcuts" class="external-link">friends</a>:</p>
 <pre><code><span><span class="fu">rhub</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span>env_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_name</span><span class="op">(</span><span class="st">"gargle"</span><span class="op">)</span>, names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
@@ -212,39 +283,69 @@
 <p><code>secret_write()</code> takes 3 arguments:</p>
 <ul>
 <li>
-<code>package</code> name. Processed through <code>secret_pw_name()</code> in order to retrieve the PASSWORD from an appropriately named environment variable.</li>
+<code>package</code> name. Processed through
+<code>secret_pw_name()</code> in order to retrieve the PASSWORD from an
+appropriately named environment variable.</li>
 <li>
-<code>name</code> of the encrypted file to write. The location is below <code>inst/secret</code> in the source of <code>package</code>.</li>
+<code>name</code> of the encrypted file to write. The location is
+below <code>inst/secret</code> in the source of
+<code>package</code>.</li>
 <li>
-<code>data</code>, either a file path to the unencrypted secret file or the data to be encrypted as a raw vector. In the case of a secret file, we <strong>strongly recommend</strong> that its primary home on your local computer is outside your package and, generally, outside of any folder that syncs regularly to a remote, e.g. GitHub or DropBox. This decreases the chance of accidental leakage.</li>
+<code>data</code>, either a file path to the unencrypted secret file
+or the data to be encrypted as a raw vector. In the case of a secret
+file, we <strong>strongly recommend</strong> that its primary home on
+your local computer is outside your package and, generally, outside of
+any folder that syncs regularly to a remote, e.g. GitHub or DropBox.
+This decreases the chance of accidental leakage.</li>
 </ul>
-<p>Example of a call to <code>secret_write()</code>, where <code>gargle-testing.json</code> is a JSON file downloaded for a service account managed via the <a href="https://console.cloud.google.com/project" class="external-link">Google API / Cloud Platform console</a>:</p>
+<p>Example of a call to <code>secret_write()</code>, where
+<code>gargle-testing.json</code> is a JSON file downloaded for a service
+account managed via the <a href="https://console.cloud.google.com/project" class="external-link">Google API / Cloud
+Platform console</a>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_write</span><span class="op">(</span></span>
 <span>  package <span class="op">=</span> <span class="st">"gargle"</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"gargle-testing.json"</span>,</span>
 <span>  input <span class="op">=</span> <span class="st">"a/very/private/local/folder/gargle-testing.json"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>This writes an encrypted version of <code>gargle-testing.json</code> to <code>inst/secret/gargle-testing.json</code> relative to the current working directory, which is presumably the top-level directory of gargle’s source. This encrypted file <em>should</em> be committed and pushed.</p>
+<p>This writes an encrypted version of <code>gargle-testing.json</code>
+to <code>inst/secret/gargle-testing.json</code> relative to the current
+working directory, which is presumably the top-level directory of
+gargle’s source. This encrypted file <em>should</em> be committed and
+pushed.</p>
 </div>
 <div class="section level3">
 <h3 id="test-setup">Test setup<a class="anchor" aria-label="anchor" href="#test-setup"></a>
 </h3>
-<p>Now you need to rig your tests or their setup around this encrypted token. You need to plan for two scenarios:</p>
+<p>Now you need to rig your tests or their setup around this encrypted
+token. You need to plan for two scenarios:</p>
 <ul>
-<li>Decryption is going to work. This is where you actually get to test package functionality against the target API, with auth.</li>
-<li>Decryption is not going to work. Either because the Suggested <a href="https://cran.r-project.org/package=sodium" class="external-link">sodium</a> package is not available or (much more likely) because the environment variable that represents the key is not available.
+<li>Decryption is going to work. This is where you actually get to test
+package functionality against the target API, with auth.</li>
+<li>Decryption is not going to work. Either because the Suggested <a href="https://cran.r-project.org/package=sodium" class="external-link">sodium</a> package is
+not available or (much more likely) because the environment variable
+that represents the key is not available.
 <ul>
-<li>This will be the case on CRAN, by definition, because there is no way to share an encrypted secret.</li>
-<li>This will be the case for external contributors, on their personal machines and when their GitHub pull requests are checked via CI services, such as GitHub Actions, Travis-CI, or AppVeyor.</li>
+<li>This will be the case on CRAN, by definition, because there is no
+way to share an encrypted secret.</li>
+<li>This will be the case for external contributors, on their personal
+machines and when their GitHub pull requests are checked via CI
+services, such as GitHub Actions, Travis-CI, or AppVeyor.</li>
 </ul>
 </li>
 </ul>
 <div class="section level4">
 <h4 id="ci-configuration">CI configuration<a class="anchor" aria-label="anchor" href="#ci-configuration"></a>
 </h4>
-<p>We recommend that you actively check your package under the “no decryption, no token” scenario, so that you discover problems before CRAN or your contributors do. In fact, this should probably be the default situation for your CI jobs and you only supply the secret to a single, flagship job – probably the check with the current R release and your favorite operating system.</p>
-<p>Here’s the simplified build matrix from the <code>R CMD check</code> GitHub Actions workflow file used by gargle (note: we redacted a very long <code>rspm</code> URL that’s irrelevant here):</p>
+<p>We recommend that you actively check your package under the “no
+decryption, no token” scenario, so that you discover problems before
+CRAN or your contributors do. In fact, this should probably be the
+default situation for your CI jobs and you only supply the secret to a
+single, flagship job – probably the check with the current R release and
+your favorite operating system.</p>
+<p>Here’s the simplified build matrix from the <code>R CMD check</code>
+GitHub Actions workflow file used by gargle (note: we redacted a very
+long <code>rspm</code> URL that’s irrelevant here):</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">strategy</span><span class="kw">:</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">matrix</span><span class="kw">:</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">config</span><span class="kw">:</span></span>
@@ -259,9 +360,20 @@
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">env</span><span class="kw">:</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">GARGLE_PASSWORD</span><span class="kw">:</span><span class="at"> ${{ secrets[matrix.config.gargle_auth] }}</span></span></code></pre></div>
-<p>Notice how <code>GARGLE_PASSWORD</code> will only be available when checking against the released version of R on macOS-latest.</p>
-<p>bigrquery implements the same idea with a different approach: it does not provide <code>BIGRQUERY_PASSWORD</code> to the main <code>R CMD check</code> GitHub Actions workflow at all. Instead there is a separate “live api” workflow that only has one job and that accesses the secret.</p>
-<p>The tidyverse / r-lib team is transitioning from Travis/AppVeyor to GitHub Actions. But in case it is helpful, here’s a simplified excerpt from a <code>.travis.yml</code> file used by gargle in the past. The main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code> implicitly as an encrypted environment variable, but <code>R CMD check</code> runs for the other builds with <code>GARGLE_PASSWORD</code> explicitly unset:</p>
+<p>Notice how <code>GARGLE_PASSWORD</code> will only be available when
+checking against the released version of R on macOS-latest.</p>
+<p>bigrquery implements the same idea with a different approach: it does
+not provide <code>BIGRQUERY_PASSWORD</code> to the main
+<code>R CMD check</code> GitHub Actions workflow at all. Instead there
+is a separate “live api” workflow that only has one job and that
+accesses the secret.</p>
+<p>The tidyverse / r-lib team is transitioning from Travis/AppVeyor to
+GitHub Actions. But in case it is helpful, here’s a simplified excerpt
+from a <code>.travis.yml</code> file used by gargle in the past. The
+main <code>r: release</code> build accesses <code>GARGLE_PASSWORD</code>
+implicitly as an encrypted environment variable, but
+<code>R CMD check</code> runs for the other builds with
+<code>GARGLE_PASSWORD</code> explicitly unset:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span><span class="kw">:</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">include</span><span class="kw">:</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> release</span></span>
@@ -272,35 +384,66 @@
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span><span class="at"> GARGLE_PASSWORD=''</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">r</span><span class="kw">:</span><span class="at"> oldrel</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">env</span><span class="kw">:</span><span class="at"> GARGLE_PASSWORD=''</span></span></code></pre></div>
-<p>Regardless of your CI platform, your absolute best bet for writing configuration files is to look at what other R package developers are doing in their public source repos. All of the above is static, simplified, and (probably) stale and will never reflect the current state-of-the-art.</p>
+<p>Regardless of your CI platform, your absolute best bet for writing
+configuration files is to look at what other R package developers are
+doing in their public source repos. All of the above is static,
+simplified, and (probably) stale and will never reflect the current
+state-of-the-art.</p>
 </div>
 <div class="section level4">
 <h4 id="testthat-configuration">Testthat configuration<a class="anchor" aria-label="anchor" href="#testthat-configuration"></a>
 </h4>
-<p>In a wrapper package, you could determine decrypt-ability at the start of the test run. Here’s representative code from googledrive’s <code>tests/testthat/helper.R</code> file, but something similar can be seen in bigrquery and googlesheets4:</p>
+<p>In a wrapper package, you could determine decrypt-ability at the
+start of the test run. Here’s representative code from googledrive’s
+<code>tests/testthat/helper.R</code> file, but something similar can be
+seen in bigrquery and googlesheets4:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_can_decrypt</span><span class="op">(</span><span class="st">"googledrive"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">json</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_read</span><span class="op">(</span><span class="st">"googledrive"</span>, <span class="st">"googledrive-testing.json"</span><span class="op">)</span></span>
 <span>  <span class="fu">drive_auth</span><span class="op">(</span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rawConversion.html" class="external-link">rawToChar</a></span><span class="op">(</span><span class="va">json</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Versions of <code>secret_can_decrypt()</code> and <code>secret_read()</code> are defined here in gargle. <code>drive_auth()</code> is a function specific to googledrive that loads a token for use downstream (in multiple tests, in this case). Note that it can clearly accept a JSON string, as an alternative to a filepath, and that’s very favorable for our workflow. We’ll come back to this below.</p>
-<p>But what if <code>secret_can_decrypt()</code> returns <code>FALSE</code> and no token is loaded? That’s where you rely on a custom test skipper. Here is the <a href="https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R" class="external-link">test skipper from googledrive</a>:</p>
+<p>Versions of <code>secret_can_decrypt()</code> and
+<code>secret_read()</code> are defined here in gargle.
+<code>drive_auth()</code> is a function specific to googledrive that
+loads a token for use downstream (in multiple tests, in this case). Note
+that it can clearly accept a JSON string, as an alternative to a
+filepath, and that’s very favorable for our workflow. We’ll come back to
+this below.</p>
+<p>But what if <code>secret_can_decrypt()</code> returns
+<code>FALSE</code> and no token is loaded? That’s where you rely on a
+custom test skipper. Here is the <a href="https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R" class="external-link">test
+skipper from googledrive</a>:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive</span></span>
 <span><span class="va">skip_if_no_token</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/skip.html" class="external-link">skip_if_not</a></span><span class="op">(</span><span class="fu">drive_has_token</span><span class="op">(</span><span class="op">)</span>, <span class="st">"No Drive token"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p><code>googledrive::drive_has_token()</code> returns <code>TRUE</code> if a token is available and <code>FALSE</code> otherwise. By calling the skipper at the start of tests that require auth, you arrange for your package to cope gracefully when the token cannot be decrypted, e.g., on CRAN and in pull requests. It is typical to define such a skipper in <code>tests/testthat/helper.R</code> or similar.</p>
-<p><em>gargle’s usage of the testing token is a bit different, still evolving, and less relevant to the maintainers of wrapper packages. Therefore it’s not featured here.</em></p>
+<p><code>googledrive::drive_has_token()</code> returns <code>TRUE</code>
+if a token is available and <code>FALSE</code> otherwise. By calling the
+skipper at the start of tests that require auth, you arrange for your
+package to cope gracefully when the token cannot be decrypted, e.g., on
+CRAN and in pull requests. It is typical to define such a skipper in
+<code>tests/testthat/helper.R</code> or similar.</p>
+<p><em>gargle’s usage of the testing token is a bit different, still
+evolving, and less relevant to the maintainers of wrapper packages.
+Therefore it’s not featured here.</em></p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="known-sources-of-friction">Known sources of friction<a class="anchor" aria-label="anchor" href="#known-sources-of-friction"></a>
 </h3>
-<p>Once you dig into the <code>secret_*()</code> family, you will notice there are two recurring sources of friction:</p>
+<p>Once you dig into the <code>secret_*()</code> family, you will notice
+there are two recurring sources of friction:</p>
 <ul>
-<li>File or object? You almost certainly store your secrets in files. But the sodium functions for data encrypt and decrypt work with R objects. So, for example, it is convenient if token ingest can accept an R object as opposed to only a file path.</li>
-<li>Raw vectors. You might think of the PASSWORD or even the secret file itself (e.g., JSON) in terms of plain text. But the sodium functions for data encrypt and decrypt work with <em>raw vectors</em>, not character vectors. Be prepared to see related conversions in the <code>secret_*()</code> functions.</li>
+<li>File or object? You almost certainly store your secrets in files.
+But the sodium functions for data encrypt and decrypt work with R
+objects. So, for example, it is convenient if token ingest can accept an
+R object as opposed to only a file path.</li>
+<li>Raw vectors. You might think of the PASSWORD or even the secret file
+itself (e.g., JSON) in terms of plain text. But the sodium functions for
+data encrypt and decrypt work with <em>raw vectors</em>, not character
+vectors. Be prepared to see related conversions in the
+<code>secret_*()</code> functions.</li>
 </ul>
 <p>Functions useful for these conversions:</p>
 <ul>
@@ -311,7 +454,8 @@
 <code><a href="https://rdrr.io/r/base/rawConversion.html" class="external-link">charToRaw()</a></code> / <code><a href="https://rdrr.io/r/base/rawConversion.html" class="external-link">rawToChar()</a></code>
 </li>
 <li>
-<code><a href="https://docs.ropensci.org/sodium/reference/symmetric.html" class="external-link">sodium::data_encrypt()</a></code> / <code><a href="https://docs.ropensci.org/sodium/reference/symmetric.html" class="external-link">sodium::data_decrypt</a></code>
+<code><a href="https://docs.ropensci.org/sodium/reference/symmetric.html" class="external-link">sodium::data_encrypt()</a></code> /
+<code><a href="https://docs.ropensci.org/sodium/reference/symmetric.html" class="external-link">sodium::data_decrypt</a></code>
 </li>
 <li>
 <code><a href="https://docs.ropensci.org/sodium/reference/helpers.html" class="external-link">sodium::bin2hex()</a></code> / <code><a href="https://docs.ropensci.org/sodium/reference/helpers.html" class="external-link">sodium::hex2bin()</a></code>
@@ -326,19 +470,23 @@
 <ul>
 <li><a href="https://github.com/r-dbi/bigrquery/blob/main/tests/testthat/helper-auth.R" class="external-link"><code>bigrquery/tests/testthat/helper-auth.R</code></a></li>
 <li><a href="https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R" class="external-link"><code>googledrive/tests/testthat/helper.R</code></a></li>
-<li>Setup chunk of a pkgdown article that is rendered and deployed via CI: <a href="https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd#L10-L29</code></a>
+<li>Setup chunk of a pkgdown article that is rendered and deployed via
+CI: <a href="https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd#L10-L29</code></a>
 </li>
 </ul>
 <p>“Managing secrets” vignette of httr:</p>
 <ul>
 <li><a href="https://httr.r-lib.org/articles/secrets.html" class="external-link uri">https://httr.r-lib.org/articles/secrets.html</a></li>
 </ul>
-<p>Vignettes of the sodium package, especially the parts relating to symmetric encryption:</p>
+<p>Vignettes of the sodium package, especially the parts relating to
+symmetric encryption:</p>
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html" class="external-link uri">https://cran.r-project.org/web/packages/sodium/vignettes/crypto101.html</a></li>
 <li><a href="https://cran.r-project.org/web/packages/sodium/vignettes/intro.html" class="external-link uri">https://cran.r-project.org/web/packages/sodium/vignettes/intro.html</a></li>
 </ul>
-<p>The <a href="https://ropensci.github.io/cyphr/" class="external-link">cyphr</a> package, which smooths over frictions like those identified above relating to “file vs. object?” and “character vs. raw?”:</p>
+<p>The <a href="https://ropensci.github.io/cyphr/" class="external-link">cyphr</a> package,
+which smooths over frictions like those identified above relating to
+“file vs. object?” and “character vs. raw?”:</p>
 <ul>
 <li><a href="https://docs.ropensci.org/cyphr/" class="external-link uri">https://docs.ropensci.org/cyphr/</a></li>
 </ul>
@@ -353,12 +501,12 @@
   <footer><div class="container">
   <div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://www.rstudio.com" class="external-link"><img src="https://www.tidyverse.org/rstudio-logo.svg" alt="RStudio" width="72"></a>.</p>
+<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Posit, PBC.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
   </div></footer>

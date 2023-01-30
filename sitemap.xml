@@ -106,16 +106,22 @@
     <loc>https://gargle.r-lib.org/reference/gargle_api_key.html</loc>
   </url>
   <url>
-    <loc>https://gargle.r-lib.org/reference/gargle_app.html</loc>
+    <loc>https://gargle.r-lib.org/reference/gargle_client.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_map_cli.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/gargle_oauth_client_from_json.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_oauth_sitrep.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_options.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/gce_instance_service_accounts.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/index.html</loc>
