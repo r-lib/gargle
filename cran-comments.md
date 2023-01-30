@@ -1,3 +1,5 @@
+I am changing my maintainer email address from jenny@rstudio.com to jenny@posit.co.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
@@ -25,4 +27,4 @@ Issues with CRAN packages are summarised below.
   
 I maintain both googledrive and googlesheets4.
 
-Both packages have internal utility functions that make `:::` calls into gargle to determine if we are able to decrypt a token and, if so, to decrypt it. These utilities are during testing and when building the pkgdown website and are never called by exported functions. And, to reiterate, I maintain all of these packages myself.
+Both packages have internal utility functions that make `:::` calls into gargle to determine if we are able to decrypt an auth token and, if so, to decrypt it. These utilities are used during testing and to determine which code can be evaluated in vignettes. They are never called by exported functions. And, to reiterate, I maintain all of these packages myself.
