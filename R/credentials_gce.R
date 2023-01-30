@@ -31,14 +31,16 @@
 #'   - The environment variable `GCE_METADATA_IP` is consulted when
 #'     `"gargle.gce.use_ip"` is `TRUE`. If undefined, the default is
 #'     `169.254.169.254`.
+
 #'
 #' * Change (presumably increase) the timeout for requests to the metadata
-#'   server via the `"gargle.gce.timeout"` global option. This timeout is set to
-#'   a value (strategy, really) that often works well in practice, but in some
-#'   cases it may be necessary to increase the timeout with code such as:
-#'   ``` r
-#'   options(gargle.gce.timeout = 3)
-#'   ````
+#' server via the `"gargle.gce.timeout"` global option. This timeout is given in
+#' seconds and is set to a value (strategy, really) that often works well in
+#' practice. However, in some cases it may be necessary to increase the timeout
+#' with code such as:
+#' ``` r
+#' options(gargle.gce.timeout = 3)
+#' ```
 
 #' For details on specific use cases, such as Google Kubernetes Engine (GKE),
 #' see `vignette("non-interactive-auth")`.

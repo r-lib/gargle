@@ -48,6 +48,10 @@ As a bridging measure, `gargle_oauth_client` currently inherits from httr's `oau
 
 `gce_instance_service_accounts()` is a newly exported utility that exposes the service accounts available from the metadata server for the current instance (#234).
 
+The global option `"gargle.gce.timeout"` is newly documented in `credentials_gce()`.
+This controls the timeout, in seconds, for requests to the metadata server.
+The default value (or strategy) for setting this should often suffice, but the option exists for those with an empirical need to increase the timeout (#186, #195).
+
 `vignette("non-interactive-auth")` has a new section "Workload Identity on Google Kubernetes Engine (GKE)" that explains how gargle supports the use of workload identity for applications running on GKE. This is the recommended method of auth in R code running on GKE that needs to access other Google Cloud services, such as the BigQuery API (#197, #223, @MarkEdmondson1234).
 
 ## Credential function registry
