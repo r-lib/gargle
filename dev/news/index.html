@@ -68,11 +68,11 @@
 <h3 id="partial-deprecation-out-of-band-oob-auth-flow-development-version">(Partial) deprecation out-of-band (OOB) auth flow<a class="anchor" aria-label="anchor" href="#partial-deprecation-out-of-band-oob-auth-flow-development-version"></a></h3>
 <p>On February 16, 2022, Google announced the gradual deprecation of the out-of-band (OOB) OAuth flow. OOB <strong>still works</strong> if the OAuth client is associated with a GCP project that is in testing mode and this is not going away. But OOB is no longer supported for projects in production mode. To be more accurate, some production-mode projects have gotten an extension to permit the use of OOB auth for a bit longer, but that’s just a temporary reprieve.</p>
 <p>The typical user who will (eventually) be impacted is:</p>
-<ul><li>Using R via RStudio Server/Workbench/Cloud.</li>
+<ul><li>Using R via RStudio Server, Posit Workbench, or Posit Cloud.</li>
 <li>Using tidyverse packages such as googledrive, googlesheets4, or bigrquery.</li>
 <li>Relying on the built-in OAuth client. Importantly, this client is associated with a GCP project that is in production mode.</li>
 </ul><p>The phased deprecation of OOB is nearly complete and we expect conventional OOB to stop working with the built-in tidyverse OAuth client on February 1, 2023, at the latest.</p>
-<p><strong>In preparation for this, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB)</strong>. The pseudo-OOB flow is triggered when <code>use_oob = TRUE</code> (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of “Web application” type. The gargle/googledrive/googlesheets4/bigrquery packages should default to a “Web application” client on RStudio Server/Workbench/Cloud now, leading the user through the pseudo-OOB flow. Other than needing to re-auth once, affected users should still find that things “just work”.</p>
+<p><strong>In preparation for this, gargle has gained support for a new flow, which we call pseudo-OOB (in contrast to conventional OOB)</strong>. The pseudo-OOB flow is triggered when <code>use_oob = TRUE</code> (an existing convention in gargle and gargle-using packages) and the configured OAuth client is of “Web application” type. The gargle/googledrive/googlesheets4/bigrquery packages should now default to a “Web application” client on RStudio Server, Posit Workbench and Posit Cloud, leading the user through the pseudo-OOB flow. Other than needing to re-auth once, affected users should still find that things “just work”.</p>
 <p>Read the <code><a href="../articles/auth-from-web.html">vignette("auth-from-web")</a></code> for more.</p>
 </div>
 <div class="section level3">

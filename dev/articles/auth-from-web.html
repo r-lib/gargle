@@ -95,8 +95,7 @@
 
     
     
-<p>If you are working with R in a web-based context, such as <a href="https://www.rstudio.com/products/rstudio/download-server/" class="external-link">RStudio
-Server</a>, <a href="https://rstudio.cloud" class="external-link">RStudio Cloud</a>, or <a href="https://www.rstudio.com/products/workbench/" class="external-link">RStudio
+<p>If you are working with R in a web-based context, such as <a href="https://posit.co/download/rstudio-server/" class="external-link">RStudio Server</a>, <a href="https://posit.cloud/" class="external-link">Posit Cloud</a>, or <a href="https://posit.co/products/enterprise/workbench/" class="external-link">Posit
 Workbench</a>, your experience of browser-based auth flows will be
 different from those using R on their local machine. You need to use
 <strong>out-of-band authentication</strong>, sometimes denoted “oob” or
@@ -116,7 +115,8 @@ stop working for the built-in tidyverse client (used by googledrive,
 googlesheets4, and bigrquery) no later than February 1, 2023. Therefore,
 gargle has gained a new auth flow that we call “pseudo-OOB”, which
 should allow casual users to continue to enjoy a low-friction auth
-experience even from RStudio Server/Cloud/Workbench.</p>
+experience even from RStudio Server, Posit Cloud, and Posit
+Workbench.</p>
 <p>This vignette documents various matters around OOB auth, both
 conventional and pseudo-OOB, for users who want to understand this more
 deeply.</p>
@@ -162,8 +162,8 @@ about using a service account, see
 </h2>
 <p>In the absence of any user instructions, the function
 <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code> is used to decide whether to
-use OOB auth. By default, OOB auth is used on RStudio
-Server/Cloud/Workbench or if the option
+use OOB auth. By default, OOB auth is used on RStudio Server, Posit
+Cloud, and Posit Workbench or if the option
 <code>"gargle_oob_default"</code> is set to <code>TRUE</code>. (Note
 that we use the term “OOB auth” here to include both the existing,
 conventional form of OOB and gargle’s new pseudo-OOB.)</p>
@@ -237,8 +237,8 @@ flow.</li>
 </ul>
 <p>Packages that use a built-in tidyverse OAuth client (googledrive,
 googlesheets4, and bigrquery) should automatically select a “web” client
-on RStudio Server/Cloud/Workbench and an “installed” client
-otherwise.</p>
+on RStudio Server, Posit Cloud, and Posit Workbench and an “installed”
+client otherwise.</p>
 <p>Users who configure their own OAuth client will need to be
 intentional when choosing the client type, depending on where the code
 is running.</p>
@@ -297,10 +297,10 @@ in production mode.</li>
 production mode. NOTE: the client used by the tidyverse has been granted
 an extension and conventional OOB still works (for now).</li>
 <li>2023 February 1: Conventional OOB will no longer work for the
-tidyverse OAuth client. Users on RStudio Server/Workbench/Cloud will
-need to use the pseudo-OOB flow or, as has always been true,
-non-interactive methods of auth, like using a service account token or
-uploading a user token obtained elsewhere.</li>
+tidyverse OAuth client. Users on RStudio Server, Posit Workbench, and
+Posit Cloud will need to use the pseudo-OOB flow or, as has always been
+true, non-interactive methods of auth, like using a service account
+token or uploading a user token obtained elsewhere.</li>
 </ul>
 <p>Key links:</p>
 <ul>
@@ -352,13 +352,12 @@ and kill the process, like so, filling in the PID you found:</p>
 <div class="section level2">
 <h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
-<p>Generating OAuth tokens for a server using httr
-(<code>https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server</code>)
+<p>Generating OAuth tokens for a server using httr (<a href="https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server" class="external-link uri">https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server</a>)
 covers some of the same ground, although for the httr package. Note that
 this resource has grown quite dated, since it originates from a time
 before gargle was created to provide a Google-specific interface to
 httr.</p>
-<p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://www.rstudio.com/products/connect/" class="external-link">RStudio Connect</a>),
+<p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://posit.co/products/enterprise/connect/" class="external-link">Posit Connect</a>),
 you will also need to consider how the deployed content will
 authenticate non-interactively, which is covered in
 <code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>

@@ -146,10 +146,10 @@ suitable token is found in the cache.</p></li>
     
 
 <p><code>gargle_oob_default()</code> returns <code>TRUE</code> unconditionally on RStudio Server,
-Workbench, or Cloud, since it is not possible to launch a local web server in
-these contexts. In this case, for the final step of the OAuth dance, the user
-is redirected to a specific URL where they must copy a code and paste it back
-into the R session.</p>
+Posit Workbench, or Posit Cloud, since it is not possible to launch a local
+web server in these contexts. In this case, for the final step of the OAuth
+dance, the user is redirected to a specific URL where they must copy a code
+and paste it back into the R session.</p>
 <p>In all other contexts, <code>gargle_oob_default()</code> consults the option named
 <code>"gargle_oob_default"</code>, then the option named <code>"httr_oob_default"</code>, and
 eventually defaults to <code>FALSE</code>.</p>
