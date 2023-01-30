@@ -189,7 +189,7 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
 # https://cloud.google.com/compute/docs/instances/detect-compute-engine
 is_gce <- function() {
   response <- gce_metadata_request(stop_on_error = FALSE)
-  !(inherits(response, "try-error") %||% httr::http_error(response))
+  !(inherits(response, "try-error") || httr::http_error(response))
 }
 
 #' List all service accounts available on this GCE instance
