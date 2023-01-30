@@ -29,6 +29,7 @@ reference:
       - starts_with("cred_funs")
       - starts_with("gargle_oauth_client")
       - starts_with("token")
+      - gce_instance_service_accounts
   - title: "Requests and responses"
     desc: >
       Helpers for forming HTTP requests and processing the response
