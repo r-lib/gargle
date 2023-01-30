@@ -56,10 +56,10 @@ gargle_oauth_email <- function() {
 #' @export
 #' @section `gargle_oob_default`:
 #' `gargle_oob_default()` returns `TRUE` unconditionally on RStudio Server,
-#' Workbench, or Cloud, since it is not possible to launch a local web server in
-#' these contexts. In this case, for the final step of the OAuth dance, the user
-#' is redirected to a specific URL where they must copy a code and paste it back
-#' into the R session.
+#' Posit Workbench, or Posit Cloud, since it is not possible to launch a local
+#' web server in these contexts. In this case, for the final step of the OAuth
+#' dance, the user is redirected to a specific URL where they must copy a code
+#' and paste it back into the R session.
 #'
 #' In all other contexts, `gargle_oob_default()` consults the option named
 #' `"gargle_oob_default"`, then the option named `"httr_oob_default"`, and

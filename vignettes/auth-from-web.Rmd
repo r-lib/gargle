@@ -14,8 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-If you are working with R in a web-based context, such as [RStudio Server](https://www.rstudio.com/products/rstudio/download-server/), [RStudio Cloud](https://rstudio.cloud), or [RStudio Workbench](https://www.rstudio.com/products/workbench/), your experience of browser-based auth flows will be
-different from those using R on their local machine.
+If you are working with R in a web-based context, such as [RStudio Server](https://posit.co/download/rstudio-server/), [Posit Cloud](https://posit.cloud/), or [Posit Workbench](https://posit.co/products/enterprise/workbench/), your experience of browser-based auth flows will be different from those using R on their local machine.
 You need to use **out-of-band authentication**, sometimes denoted "oob" or "OOB".
 After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
 For folks who are running R on their local machine, this final exchange can be done automagically, using a temporary local webserver, but that is not possible for those accessing a remote R session through the browser.
@@ -25,7 +24,7 @@ The deprecation is happening in phases and it only applies to Google Cloud Platf
 OOB still works for projects that are in testing mode.
 
 However, in particular, we expect that conventional OOB auth will stop working for the built-in tidyverse client (used by googledrive, googlesheets4, and bigrquery) no later than February 1, 2023.
-Therefore, gargle has gained a new auth flow that we call "pseudo-OOB", which should allow casual users to continue to enjoy a low-friction auth experience even from RStudio Server/Cloud/Workbench.
+Therefore, gargle has gained a new auth flow that we call "pseudo-OOB", which should allow casual users to continue to enjoy a low-friction auth experience even from RStudio Server, Posit Cloud, and Posit Workbench.
 
 This vignette documents various matters around OOB auth, both conventional and pseudo-OOB, for users who want to understand this more deeply.
 
@@ -55,7 +54,7 @@ To learn more about using a service account, see `vignette("non-interactive-auth
 ## When and how to use OOB
 
 In the absence of any user instructions, the function `gargle::gargle_oob_default()` is used to decide whether to use OOB auth.
-By default, OOB auth is used on RStudio Server/Cloud/Workbench or if the option `"gargle_oob_default"` is set to `TRUE`.
+By default, OOB auth is used on RStudio Server, Posit Cloud, and Posit Workbench or if the option `"gargle_oob_default"` is set to `TRUE`.
 (Note that we use the term "OOB auth" here to include both the existing, conventional form of OOB and gargle's new pseudo-OOB.)
 
 Wrapper packages generally also allow the user to opt-in to OOB auth when making a direct call to an auth function.
@@ -112,7 +111,7 @@ If we are using OOB auth, the decision between conventional or pseudo-OOB is mad
 * If the OAuth client is of type `"web"` (shows as "Web application" in Google
   Cloud Console), gargle uses the new pseudo-OOB flow.
 
-Packages that use a built-in tidyverse OAuth client (googledrive, googlesheets4, and bigrquery) should automatically select a "web" client on RStudio Server/Cloud/Workbench and an "installed" client otherwise.
+Packages that use a built-in tidyverse OAuth client (googledrive, googlesheets4, and bigrquery) should automatically select a "web" client on RStudio Server, Posit Cloud, and Posit Workbench and an "installed" client otherwise.
 
 Users who configure their own OAuth client will need to be intentional when choosing the client type, depending on where the code is running.
 
@@ -159,9 +158,9 @@ Timeline:
   production mode. NOTE: the client used by the tidyverse has been granted an
   extension and conventional OOB still works (for now).
 * 2023 February 1: Conventional OOB will no longer work for the tidyverse OAuth
-  client. Users on RStudio Server/Workbench/Cloud will need to use the
-  pseudo-OOB flow or, as has always been true, non-interactive methods of auth,
-  like using a service account token or uploading a user token obtained
+  client. Users on RStudio Server, Posit Workbench, and Posit Cloud will need to
+  use the pseudo-OOB flow or, as has always been true, non-interactive methods
+  of auth, like using a service account token or uploading a user token obtained
   elsewhere.
 
 Key links:
@@ -224,7 +223,7 @@ The normal, non-OOB auth web flow should work again now.
 
 ## Further reading
 
-Generating OAuth tokens for a server using httr (`https://support.rstudio.com/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server`) covers some of the same ground, although for the httr package.
+Generating OAuth tokens for a server using httr (<https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server>) covers some of the same ground, although for the httr package.
 Note that this resource has grown quite dated, since it originates from a time before gargle was created to provide a Google-specific interface to httr.
 
-If you're creating content to be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [RStudio Connect](https://www.rstudio.com/products/connect/)), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in `vignette("non-interactive-auth")`.
+If you're creating content to be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [Posit Connect](https://posit.co/products/enterprise/connect/)), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in `vignette("non-interactive-auth")`.

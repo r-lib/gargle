@@ -111,7 +111,7 @@ gargle::request_retry(req)
 \item \url{https://tech.channable.com/posts/2020-02-05-opnieuw.html}
 \item \url{https://github.com/channable/opnieuw}
 \item \url{https://cloud.google.com/storage/docs/retry-strategy}
-\item \url{https://tools.ietf.org/html/rfc7231#section-7.1.3}
+\item \url{https://www.rfc-editor.org/rfc/rfc7231#section-7.1.3}
 \item \url{https://developers.google.com/sheets/api/limits}
 \item \url{https://googleapis.dev/python/google-api-core/latest/retry.html}
 }

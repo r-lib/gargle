@@ -45,7 +45,7 @@ PREFIX_auth_description <- function(.data = list(
     "tokens are less likely to be synced to the cloud by accident.",
     "",
     "If you are interacting with R within a browser (applies to RStudio Server,",
-    "RStudio Workbench, and RStudio Cloud), you need a variant of this flow,",
+    "Posit Workbench, and Posit Cloud), you need a variant of this flow,",
     "known as out-of-band auth (\"oob\"). If this does not happen",
     "automatically, you can request it yourself with `use_oob = TRUE` or,",
     "more persistently, by setting an option via",
