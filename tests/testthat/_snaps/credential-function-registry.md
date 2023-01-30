@@ -1,3 +1,21 @@
+# We insist on valid credential function (or NULL)
+
+    Code
+      cred_funs_add(a = mean)
+    Condition
+      Error in `cred_funs_check()`:
+      ! Not a valid credential function:
+      x Element 1
+
+---
+
+    Code
+      cred_funs_set(list(a = NULL))
+    Condition
+      Error in `cred_funs_check()`:
+      ! Not a valid credential function:
+      x Element 1
+
 # We insist on uniquely named credential functions
 
     Code
