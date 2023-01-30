@@ -223,7 +223,7 @@ The normal, non-OOB auth web flow should work again now.
 
 ## Further reading
 
-Generating OAuth tokens for a server using httr (<https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server>) covers some of the same ground, although for the httr package.
+Generating OAuth tokens for a server using httr (`https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server`) covers some of the same ground, although for the httr package.
 Note that this resource has grown quite dated, since it originates from a time before gargle was created to provide a Google-specific interface to httr.
 
 If you're creating content to be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [Posit Connect](https://posit.co/products/enterprise/connect/)), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in `vignette("non-interactive-auth")`.
