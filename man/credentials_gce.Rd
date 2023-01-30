@@ -56,10 +56,19 @@ appropriately configured service account via \code{service_account}.
 \item The environment variable \code{GCE_METADATA_IP} is consulted when
 \code{"gargle.gce.use_ip"} is \code{TRUE}. If undefined, the default is
 \verb{169.254.169.254}.
+}
+\item Change (presumably increase) the timeout for requests to the metadata
+server via the \code{"gargle.gce.timeout"} global option. This timeout is given in
+seconds and is set to a value (strategy, really) that often works well in
+practice. However, in some cases it may be necessary to increase the timeout
+with code such as:
+}
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(gargle.gce.timeout = 3)
+}\if{html}{\out{</div>}}
+
 For details on specific use cases, such as Google Kubernetes Engine (GKE),
 see \code{vignette("non-interactive-auth")}.
-}
-}
 }
 \examples{
 \dontrun{
