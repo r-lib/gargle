@@ -154,7 +154,7 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
     list(
       scheme = "http",
       hostname = gce_metadata_hostname(),
-      path = paste0("computeMetadata/v1/", path),
+      path = path,
       query = query
     ),
     class = "url"
@@ -186,8 +186,9 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
   response
 }
 
+# https://cloud.google.com/compute/docs/instances/detect-compute-engine
 is_gce <- function() {
-  response <- gce_metadata_request("", stop_on_error = FALSE)
+  response <- gce_metadata_request(stop_on_error = FALSE)
   !(inherits(response, "try-error") %||% httr::http_error(response))
 }
 
@@ -205,7 +206,7 @@ is_gce <- function() {
 #' credentials_gce()
 gce_instance_service_accounts <- function() {
   response <- gce_metadata_request(
-    "instance/service-accounts",
+    "computeMetadata/v1/instance/service-accounts",
     query = list(recursive = "true")
   )
   raw <- transpose(response_as_json(response))
@@ -224,7 +225,7 @@ gce_instance_service_accounts <- function() {
 # perhaps there are use cases where it would be helpful it we did same:
 # https://github.com/r-lib/gargle/issues/216
 fetch_gce_access_token <- function(scopes, service_account) {
-  path <- glue("instance/service-accounts/{service_account}/token")
+  path <- glue("computeMetadata/v1/instance/service-accounts/{service_account}/token")
   response <- gce_metadata_request(path)
   httr::content(response, as = "parsed", type = "application/json")
 }
