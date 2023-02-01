@@ -29,6 +29,7 @@ Read the `vignette("auth-from-web")` for more.
 
 `gargle_oauth_client()` is a new constructor for an S3 class by the same name.
 There are two motivations:
+
   - To adjust to Google's deprecation of conventional OOB and to support
     gargle's new pseudo-OOB flow, it is helpful for gargle to know whether an
     OAuth client ID is of type "Web application" or "Desktop app". That means we
