@@ -170,7 +170,6 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
     class = "url"
   )
   url <- httr::build_url(url_parts)
-  timeout <- getOption("gargle.gce.timeout", default = 0.8)
   response <- try(
     {
       httr::with_config(httr::timeout(gce_timeout()), {
