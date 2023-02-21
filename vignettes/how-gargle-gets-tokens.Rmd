@@ -55,7 +55,8 @@ This gives a sense of the credential functions and reflects the order in which t
 writeLines(names(cred_funs_list()))
 ```
 
-It is possible to manipulate this registry of functions. The help for `cred_funs_list()` is a good place to learn more.
+It is possible to manipulate this registry of functions.
+The help for `cred_funs_list()` is a good place to learn more.
 
 From now on, however, we assume you're working with the default registry that ships with gargle.
 
@@ -63,7 +64,8 @@ Note also that these credential functions are exported and can be called directl
 
 ## Get verbose output
 
-To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug". Read more in the docs for `gargle_verbosity()`.
+To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug".
+Read more in the docs for `gargle_verbosity()`.
 
 ## `credentials_byo_oauth2()`
 
@@ -150,7 +152,7 @@ Similar to `credentials_service_account()`, the `path` is treated as a JSON repr
 However, in contrast to `credentials_service_account()`, this JSON only contains non-sensitive metadata, which is, indeed, the main point of this flow.
 The secrets needed to complete auth are obtained "on-the-fly" from, e.g., the running EC2 instance.
 
-`credentials_service_account()` will fail for many reasons: there is no named `path` argument, the JSON at `path` can't be parsed as configuration for an external AWS account, we don't appear to running on AWS, suggested packages for AWS functionality are not installed, or the workload identity pool is misconfigured.
+`credentials_external_account()` will fail for many reasons: there is no named `path` argument, the JSON at `path` can't be parsed as configuration for an external AWS account, we don't appear to running on AWS, suggested packages for AWS functionality are not installed, or the workload identity pool is misconfigured.
 If any of that happens, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
 
 Here is some Google documentation about workload identity federation and the specifics for AWS:
@@ -160,7 +162,8 @@ Here is some Google documentation about workload identity federation and the spe
 
 ## `credentials_app_default()`
 
-The next function tried is `credentials_app_default()`. Here's how a call to `token_fetch()` might work:
+The next function tried is `credentials_app_default()`.
+Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
@@ -203,14 +206,16 @@ If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on 
 
 The main takeaway lesson:
 
-  * You can make auth "just work" by storing the JSON for a service account or an external account at one of the filepaths listed above. It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
+  * You can make auth "just work" by storing the JSON for a service account or an external account at one of the filepaths listed above.
+  It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
   
 Again, remember that the JSON key file for a conventional service account must be managed securely and should NOT live in a directory that syncs to the cloud.
 The JSON configuration for an external account is not actually sensitive and this is one of the benefits of this flow, but it's only available in a very narrow set of circumstances.
 
 ## `credentials_gce()`
 
-The next function tried is `credentials_gce()`. Here's how a call to `token_fetch()` might work:
+The next function tried is `credentials_gce()`.
+Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
@@ -238,7 +243,8 @@ Basically, if you have to ask what this is about, this is not the auth method fo
 
 ## `credentials_user_oauth2()`
   
-The next and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+The next and final function tried is `credentials_user_oauth2()`.
+Here's how a call to `token_fetch()` might work:
 
 ```{r, eval = FALSE}
 token_fetch(scopes = <SCOPES>)
