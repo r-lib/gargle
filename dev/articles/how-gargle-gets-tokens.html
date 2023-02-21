@@ -272,7 +272,7 @@ configuration and it’s probably a file path. However, in contrast to
 non-sensitive metadata, which is, indeed, the main point of this flow.
 The secrets needed to complete auth are obtained “on-the-fly” from,
 e.g., the running EC2 instance.</p>
-<p><code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code> will fail for many
+<p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> will fail for many
 reasons: there is no named <code>path</code> argument, the JSON at
 <code>path</code> can’t be parsed as configuration for an external AWS
 account, we don’t appear to running on AWS, suggested packages for AWS
