@@ -23,6 +23,15 @@ is_rstudio_server <- function() {
     Sys.getenv("RSTUDIO_PROGRAM_MODE") == "server"
 }
 
+is_google_colab <- function() {
+  # idea from https://stackoverflow.com/a/74930276
+  # 2023-02-21 I created new notebook with
+  # https://colab.research.google.com/#create=true&language=r
+  # and I see:
+  # Sys.getenv("COLAB_RELEASE_TAG") returns 'release-colab-20230216-060056-RC01'
+  nzchar(Sys.getenv("COLAB_RELEASE_TAG"))
+}
+
 add_line <- function(path, line) {
   if (file_exists(path)) {
     lines <- readLines(path, warn = FALSE)

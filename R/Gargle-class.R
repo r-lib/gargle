@@ -55,6 +55,11 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
     params$oob_value <- select_pseudo_oob_value(app$redirect_uris)
   }
 
+  # explicitly declare Google Colab to be an interactive environment
+  if (is_google_colab()) {
+    withr::local_options(rlang_interactive = TRUE)
+  }
+
   if (!identical(client_type, "web")) {
     # don't use the new client type!
     # specifically, for an installed / desktop app client, we want to use httr's
@@ -250,6 +255,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   init_credentials = function() {
     gargle_debug("initiating new token")
     if (is_interactive()) {
+      # TODO: think about this
       if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
         encourage_httpuv()
       }

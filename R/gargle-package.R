@@ -56,10 +56,10 @@ gargle_oauth_email <- function() {
 #' @export
 #' @section `gargle_oob_default`:
 #' `gargle_oob_default()` returns `TRUE` unconditionally on RStudio Server,
-#' Posit Workbench, or Posit Cloud, since it is not possible to launch a local
-#' web server in these contexts. In this case, for the final step of the OAuth
-#' dance, the user is redirected to a specific URL where they must copy a code
-#' and paste it back into the R session.
+#' Posit Workbench, Posit Cloud, or Google Colab, since it is not possible to
+#' launch a local web server in these contexts. In this case, for the final step
+#' of the OAuth dance, the user is redirected to a specific URL where they must
+#' copy a code and paste it back into the R session.
 #'
 #' In all other contexts, `gargle_oob_default()` consults the option named
 #' `"gargle_oob_default"`, then the option named `"httr_oob_default"`, and
@@ -68,7 +68,7 @@ gargle_oauth_email <- function() {
 #' "oob" stands for out-of-band. Read more about out-of-band authentication in
 #' the vignette `vignette("auth-from-web")`.
 gargle_oob_default <- function() {
-  if (is_rstudio_server()) {
+  if (is_rstudio_server() || is_google_colab()) {
     # TODO: Is there a better, more general condition we could use to detect
     # whether OOB is necessary?
     # Idea from @jcheng: check if it's an SSH session?
@@ -91,4 +91,26 @@ gargle_oob_default <- function() {
 #' guess using some sensible heuristics.
 gargle_oauth_cache <- function() {
   getOption("gargle_oauth_cache", default = NA)
+}
+
+#' @rdname gargle_options
+#' @export
+#' @section `gargle_oauth_client_type`:
+#' `gargle_oauth_client_type()` returns the option named
+#' "gargle_oauth_client_type", if defined. If defined, the option must be either
+#' "installed" or "web". If the option is not defined, the function returns:
+#' * "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google
+#'   Colaboratory
+#' * "installed" otherwise
+#' Primarily intended to help infer the most suitable OAuth client when a user
+#' is relying on a built-in client, such as the tidyverse client used by
+#' packages like bigrquery, googledrive, and googlesheets4.
+gargle_oauth_client_type <- function() {
+  opt <- getOption("gargle_oauth_client_type")
+  if (is.null(opt)) {
+    if(is_rstudio_server() || is_google_colab()) "web" else "installed"
+  } else {
+    check_string(opt)
+    arg_match(opt, values = c("installed", "web"))
+  }
 }
