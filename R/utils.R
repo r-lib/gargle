@@ -29,6 +29,10 @@ is_google_colab <- function() {
   # https://colab.research.google.com/#create=true&language=r
   # and I see:
   # Sys.getenv("COLAB_RELEASE_TAG") returns 'release-colab-20230216-060056-RC01'
+  #
+  # https://github.com/r-lib/gargle/issues/140#issuecomment-1439111627
+  # via @craigcitro, the existence of this directory is another indicator:
+  # /var/colab/hostname
   nzchar(Sys.getenv("COLAB_RELEASE_TAG"))
 }
 
