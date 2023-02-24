@@ -23,7 +23,7 @@ Imports:
     cli (>= 3.0.0),
     fs (>= 1.3.1),
     glue (>= 1.3.0),
-    httr (>= 1.4.4.9000),
+    httr (>= 1.4.5),
     jsonlite,
     lifecycle,
     openssl,
@@ -51,5 +51,3 @@ Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Remotes:  
-    r-lib/httr
