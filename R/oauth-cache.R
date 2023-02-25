@@ -66,7 +66,11 @@ cache_allowed <- function(path) {
   gargle_info("
     Is it OK to cache OAuth access credentials in the folder \\
     {.path {path}} between R sessions?")
-  utils::menu(c("Yes", "No")) == 1
+  if(is_google_colab()) {
+    is_ok_readline()
+  } else {
+    utils::menu(c("Yes", "No")) == 1
+  }
 }
 
 cache_create <- function(path) {
@@ -321,7 +325,11 @@ token_match <- function(candidate, existing, package = "gargle") {
     "Select a pre-authorised account or enter '0' to obtain a new token.",
     "Press Esc/Ctrl + C to cancel."
   ))
-  choice <- utils::menu(emails)
+  if(is_google_colab()) {
+    choice <- choose_readline(emails)
+  } else {
+    choice <- utils::menu(emails)
+  }
 
   if (choice == 0) {
     NULL

@@ -36,6 +36,30 @@ is_google_colab <- function() {
   nzchar(Sys.getenv("COLAB_RELEASE_TAG"))
 }
 
+# readline() has been shimmed in IRkernel, to work around the fact that
+# Jupyter sessions are detected as non-interactive
+# (note there is no similar shim for utils::menu())
+# https://github.com/IRkernel/IRkernel/blob/d0d5ccccee23d798d53b79e14c5ab5935b17f8d8/R/execution.r#L131-L137
+is_ok_readline <- function(q = "[y/N]? ") {
+  ans <- trimws(readline(q))
+  tolower(ans) %in% c("y", "yes", "yeah", "yep")
+}
+
+# emulate utils::menu(), but only using readline
+# note this uses gargle_info()
+# caller is responsible for verbosity level
+choose_readline <- function(choices, prompt = "Selection: ") {
+  stopifnot(length(choices) > 0)
+  ints <- seq_along(choices)
+  gargle_info(c("", paste0(ints, ": ", choices), ""))
+  ints <- c(0L, ints)
+  while (TRUE) {
+    sel <- trimws(readline(prompt))
+    m <- match(sel, as.character(ints))
+    if (!is.na(m)) return(ints[[m]])
+  }
+}
+
 add_line <- function(path, line) {
   if (file_exists(path)) {
     lines <- readLines(path, warn = FALSE)
