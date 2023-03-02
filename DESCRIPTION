@@ -29,7 +29,6 @@ Imports:
     openssl,
     rappdirs,
     rlang (>= 1.0.0),
-    rstudioapi,
     stats,
     utils,
     withr
