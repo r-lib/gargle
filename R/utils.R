@@ -19,7 +19,7 @@ is.oauth_app <- function(x) inherits(x, "oauth_app")
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")
 
 is_rstudio_server <- function() {
-  Sys.getenv("RSTUDIO") == "1")
+  Sys.getenv("RSTUDIO") == "1"
 }
 
 add_line <- function(path, line) {
