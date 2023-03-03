@@ -1,5 +1,7 @@
 # gargle (development version)
 
+gargle is better able to detect when it's running on Posit Workbench or RStudio Server, e.g., in a subprocess.
+
 # gargle 1.3.0
 
 ## (Partial) deprecation out-of-band (OOB) auth flow
