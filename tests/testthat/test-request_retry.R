@@ -52,6 +52,7 @@ test_that("request_retry() logic works as advertised", {
   # Workaround in the meantime: load_all() before each interactive call to
   # with_mock().
 
+  skip_if_not_installed("mockr")
   # succeed on first try
   out <- with_mock(
     request_make = faux_request_make(),
@@ -122,6 +123,7 @@ test_that("request_retry() logic works as advertised", {
 })
 
 test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
+  skip_if_not_installed("mockr")
   faux_error <- function() {
     structure(list(status_code = 429), class = "response")
   }
