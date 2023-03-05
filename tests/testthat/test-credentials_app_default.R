@@ -1,4 +1,5 @@
 test_that("credentials_app_default_path(), default, non-Windows", {
+  skip_if_not_installed("mockr")
   withr::local_envvar(c(
     GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
     APPDATA = NA, SystemDrive = NA
@@ -15,6 +16,7 @@ test_that("credentials_app_default_path(), default, non-Windows", {
 })
 
 test_that("credentials_app_default_path(), default, Windows", {
+  skip_if_not_installed("mockr")
   withr::local_envvar(c(
     GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
     APPDATA = NA, SystemDrive = NA
@@ -31,6 +33,7 @@ test_that("credentials_app_default_path(), default, Windows", {
 })
 
 test_that("credentials_app_default_path(), system drive, Windows", {
+  skip_if_not_installed("mockr")
   withr::local_envvar(c(
     GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
     APPDATA = NA, SystemDrive = "D:"
@@ -47,6 +50,7 @@ test_that("credentials_app_default_path(), system drive, Windows", {
 })
 
 test_that("credentials_app_default_path(), APPDATA env var, Windows", {
+  skip_if_not_installed("mockr")
   withr::local_envvar(c(
     GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
     APPDATA = path("D:", "AppData"), SystemDrive = "D:"
