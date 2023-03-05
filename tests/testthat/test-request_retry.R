@@ -169,6 +169,7 @@ test_that("backoff() honors Retry-After header", {
     )
   }
 
+  skip_if_not_installed("mockr")
   # play with capitalization and character vs numeric
   out <- with_mock(
     gargle_error_message = function(...) "oops",
