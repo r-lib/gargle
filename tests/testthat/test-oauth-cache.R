@@ -16,6 +16,7 @@ test_that("cache_establish() insists on sensible input", {
 })
 
 test_that("`cache = TRUE` uses default cache path", {
+  skip_if_not_installed("mockr")
   with_mock(
     ## we don't want to actually initialize a cache
     cache_create = function(path) NULL,
@@ -30,6 +31,7 @@ test_that("`cache = FALSE` does nothing", {
 })
 
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
+  skip_if_not_installed("mockr")
   with_mock(
     # we want no existing cache to be found, be it current or legacy
     gargle_default_oauth_cache_path = function() file_temp(),
@@ -67,6 +69,7 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
 })
 
 test_that("default is to consult and set the oauth cache option", {
+  skip_if_not_installed("mockr")
   withr::with_options(
     list(gargle_oauth_cache = NA),
     with_mock(
