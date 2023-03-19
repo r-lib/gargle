@@ -16,6 +16,15 @@
 #   PREFIX      = "drive",
 # )
 
+# 2023-03 developments related to the 'app' -> 'client' transition:
+# - `PREFIX_auth_configure_description()` crosslinks to
+#   `PREFIX_oauth_client()` now, not `PREFIX_oauth_app()`
+# - `PREFIX_auth_configure_params()` gains `client` argument
+# - `PREFIX_auth_configure_params()` deprecates the `app` argument and uses a
+#   lifecycle badge
+# - `PREFIX_auth_configure_params() crosslinks to
+#   `gargle::gargle_oauth_client_from_json()` which requires gargle (>= 1.3.0)
+
 glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
   # work around name collision of `.x` of map_chr() vs. of glue_data()
   # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
@@ -197,8 +206,8 @@ PREFIX_auth_configure_description <- function(.data = list(
         "    requests are sent with an API key in lieu of a token."
       )
     },
-    "See the vignette",
-    "[How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)",
+    "",
+    'See the `vignette("get-api-credentials", package = "gargle")`',
     "for more.",
     if (.fallbacks) {
       c(
@@ -206,13 +215,14 @@ PREFIX_auth_configure_description <- function(.data = list(
         "are used."
       )
     },
+    "",
     if (.has_api_key) {
       c(
-        "`{PREFIX}_oauth_app()` and `{PREFIX}_api_key()` retrieve the",
+        "`{PREFIX}_oauth_client()` and `{PREFIX}_api_key()` retrieve the",
         "currently configured OAuth client and API key, respectively."
       )
     } else {
-      "`{PREFIX}_oauth_app()` retrieves the currently configured OAuth client."
+      "`{PREFIX}_oauth_client()` retrieves the currently configured OAuth client."
     }
   )
   glue_data_lines(lines, .data = .data)
@@ -220,12 +230,15 @@ PREFIX_auth_configure_description <- function(.data = list(
 
 PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
   c(
-    "@param app A Google OAuth client, preferably constructed via",
-    "[gargle::gargle_oauth_client_from_json()]",
+    "@param client A Google OAuth client, presumably constructed via",
+    "[gargle::gargle_oauth_client_from_json()]. Note, however, that it is",
+      "preferred to specify the client with JSON, using the `path` argument.",
     "@inheritParams gargle::gargle_oauth_client_from_json",
     if (.has_api_key) {
       "@param api_key API key."
-    }
+    },
+    "@param app `r lifecycle::badge('deprecated')` Replaced by the `client`",
+    "argument."
   )
 }
 
@@ -236,7 +249,7 @@ PREFIX_auth_configure_return <- function(.data = list(
     "@return",
     "  * `{PREFIX}_auth_configure()`: An object of R6 class",
     "    [gargle::AuthState], invisibly.",
-    "  * `{PREFIX}_oauth_app()`: the current user-configured OAuth client.",
+    "  * `{PREFIX}_oauth_client()`: the current user-configured OAuth client.",
     if (.has_api_key) {
       "  * `{PREFIX}_api_key()`: the current user-configured API key."
     }
