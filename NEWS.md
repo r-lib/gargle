@@ -1,5 +1,21 @@
 # gargle (development version)
 
+The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle's pivot from OAuth "app" to "client".
+Changes of note:
+
+  * `PREFIX_auth_configure_description()` crosslinks to `PREFIX_oauth_client()`
+    now, not `PREFIX_oauth_app()`. So this assumes the package has indeed
+    introduced the `PREFIX_oauth_client()` function (and, prosumably, has
+    deprecated `PREFIX_oauth_app()`).
+  * `PREFIX_auth_configure_params()` gains `client` argument.
+  * `PREFIX_auth_configure_params()` deprecates the `app` argument and uses a
+    lifecycle badge. It is assumed that the badge SVG is present, which can be
+    achieved with `usethis::use_lifecycle()`.
+  * `PREFIX_auth_configure_params() crosslinks to
+    `gargle::gargle_oauth_client_from_json()`. The wrapper package therefore
+    needs to state a minimum version for gargle, e.g. `gargle (>= 1.3.0)` (or
+    higher).
+
 gargle is better able to detect when it's running on Posit Workbench or RStudio Server, e.g., in a subprocess.
 
 # gargle 1.3.0
