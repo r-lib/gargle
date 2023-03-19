@@ -37,7 +37,7 @@ There are two motivations:
     OAuth client ID is of type "Web application" or "Desktop app". That means we
     need a Google- and gargle-specific notion of an OAuth client, so we can
     introduce a `type` field.
-  - A transition from httr and httr2 is on the horizon, so it makes sense to
+  - A transition from httr to httr2 is on the horizon, so it makes sense to
     look more toward `httr2:oauth_client()` than to `httr::oauth_app()`.
     gargle's vocabulary is generally shifting towards "client" and away from
     "app".
