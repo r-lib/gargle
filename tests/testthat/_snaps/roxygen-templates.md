@@ -145,12 +145,13 @@
         * OAuth client, which is used when obtaining a user token.
         * API key. If PACKAGE is de-authorized via [PREFIX_deauth()], all
           requests are sent with an API key in lieu of a token.
-      See the vignette
-      [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html)
+      
+      See the `vignette("get-api-credentials", package = "gargle")`
       for more.
       If the user does not configure these settings, internal defaults
       are used.
-      `PREFIX_oauth_app()` and `PREFIX_api_key()` retrieve the
+      
+      `PREFIX_oauth_client()` and `PREFIX_api_key()` retrieve the
       currently configured OAuth client and API key, respectively.
 
 # PREFIX_auth_configure_params()
@@ -158,10 +159,13 @@
     Code
       writeLines(PREFIX_auth_configure_params())
     Output
-      @param app A Google OAuth client, preferably constructed via
-      [gargle::gargle_oauth_client_from_json()]
+      @param client A Google OAuth client, presumably constructed via
+      [gargle::gargle_oauth_client_from_json()]. Note, however, that it is
+      preferred to specify the client with JSON, using the `path` argument.
       @inheritParams gargle::gargle_oauth_client_from_json
       @param api_key API key.
+      @param app `r lifecycle::badge('deprecated')` Replaced by the `client`
+      argument.
 
 # PREFIX_auth_configure_return()
 
@@ -171,7 +175,7 @@
       @return
         * `PREFIX_auth_configure()`: An object of R6 class
           [gargle::AuthState], invisibly.
-        * `PREFIX_oauth_app()`: the current user-configured OAuth client.
+        * `PREFIX_oauth_client()`: the current user-configured OAuth client.
         * `PREFIX_api_key()`: the current user-configured API key.
 
 # PREFIX_user_description()
