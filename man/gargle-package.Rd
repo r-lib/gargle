@@ -29,7 +29,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Google Inc [copyright holder]
-  \item Posit, PBC [copyright holder, funder]
+  \item Posit Software, PBC [copyright holder, funder]
 }
 
 }
