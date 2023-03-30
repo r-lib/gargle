@@ -57,8 +57,8 @@ install.packages("gargle")
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("r-lib/gargle")
+# install.packages("pak")
+pak::pak("r-lib/gargle")
 ```
 
 ## Basic usage
