@@ -58,3 +58,94 @@ test_that("bulletize() works", {
   expect_snapshot(cli::cli_bullets(bulletize(letters[1:6], n_fudge = 0)))
   expect_snapshot(cli::cli_bullets(bulletize(letters[1:8], n_fudge = 3)))
 })
+
+# menu(), but based on readline() + cli and mockable ---------------------------
+
+test_that("cli_menu() basic usage", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    cli_menu(
+      "Found multiple thingies.",
+      "Which one do you want to use?",
+      glue("label {head(letters, 3)}")
+    )
+  }
+
+  expect_snapshot(cli_menu_with_mock(1))
+})
+
+test_that("cli_menu() invalid selection", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    cli_menu(
+      "Found multiple thingies.",
+      "Which one do you want to use?",
+      glue("label {head(letters, 3)}")
+    )
+  }
+
+  expect_snapshot(cli_menu_with_mock("nope"), error = TRUE)
+})
+
+test_that("cli_menu(), request exit via 0", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    cli_menu(
+      "Found multiple thingies.",
+      "Which one do you want to use?",
+      glue("label {head(letters, 3)}")
+    )
+  }
+
+  expect_snapshot(error = TRUE, cli_menu_with_mock(0))
+})
+
+test_that("cli_menu(exit =) works", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    cli_menu(
+      header = "Hey we need to talk.",
+      prompt = "What do you want to do?",
+      choices = c(
+        "Give up",
+        "Some other thing"
+      ),
+      exit = 1
+    )
+  }
+
+  expect_snapshot(error = TRUE, cli_menu_with_mock(1))
+  expect_snapshot(cli_menu_with_mock(2))
+})
+
+test_that("cli_menu() inline markup and environment passing", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    verb <- "talk"
+    action <- "do"
+    pkg_name <- "nifty"
+    cli_menu(
+      header = "Hey we need to {.str {verb}}.",
+      prompt = "What do you want to {.str {action}}?",
+      choices = c(
+        "Send email to {.email jane@example.com}",
+        "Install the {.pkg {pkg_name}} package"
+      )
+    )
+  }
+  expect_snapshot(cli_menu_with_mock(1))
+})
+
+test_that("cli_menu() not_interactive, many strings, chained error", {
+  wrapper_fun <- function() {
+    local_interactive(FALSE)
+    things <- glue("thing {1:3}")
+    cli_menu(
+      header = "Multiple things found.",
+      prompt = "Which one do you want to use?",
+      choices = things,
+      not_interactive = c(i = "Use {.arg thingy} to specify one of {.str {things}}.")
+    )
+  }
+  expect_snapshot(wrapper_fun(), error = TRUE)
+})

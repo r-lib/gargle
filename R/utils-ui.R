@@ -271,3 +271,89 @@ compute_n_show <- function(n, n_show_nominal = 5, n_fudge = 2) {
     n
   }
 }
+
+# menu(), but based on readline() + cli and mockable ---------------------------
+# https://github.com/r-lib/cli/issues/228
+# https://github.com/rstudio/rsconnect/blob/main/R/utils-cli.R
+
+cli_menu <- function(header,
+                     prompt,
+                     choices,
+                     not_interactive = choices,
+                     exit = integer(),
+                     .envir = caller_env(),
+                     error_call = caller_env()) {
+  if (!is_interactive()) {
+    cli::cli_abort(
+      c(header, not_interactive),
+      .envir = .envir,
+      call = error_call
+    )
+  }
+
+  choices <- paste0(cli::style_bold(seq_along(choices)), ": ", choices)
+  cli::cli_inform(
+    c(header, prompt, choices),
+    .envir = .envir
+  )
+
+  # guard against invalid mocked input
+  local_input <- getOption("cli_input", character())
+
+  repeat {
+    selected <- cli_readline("Selection: ")
+    if (selected %in% c("0", seq_along(choices))) {
+      break
+    }
+    if (length(local_input) > 0) {
+      cli::cli_abort(
+        c(x = "Internal error: mocked input is invalid."),
+        .envir = .envir,
+        call = error_call
+      )
+    }
+    cli::cli_inform(
+      "Enter a number between 1 and {length(choices)}, or enter 0 to exit."
+    )
+  }
+
+  selected <- as.integer(selected)
+  if (selected %in% c(0, exit)) {
+    if (is_testing()) {
+      cli::cli_abort("Exiting...", call = NULL)
+    } else {
+      cli::cli_alert_danger("Exiting...")
+      # simulate user pressing Ctrl + C
+      invokeRestart("abort")
+    }
+  }
+
+  selected
+}
+
+cli_readline <- function(prompt) {
+  local_input <- getOption("cli_input", character())
+
+  # not convinced that we need to plan for multiple mocked inputs, but leaving
+  # this feature in for now
+  if (length(local_input) > 0) {
+    input <- local_input[[1]]
+    cli::cli_inform(paste0(prompt, input))
+    options(local_input = local_input[-1])
+    input
+  } else {
+    readline(prompt)
+  }
+}
+
+local_user_input <- function(x, env = caller_env()) {
+  withr::local_options(
+    rlang_interactive = TRUE,
+    cli_input = as.character(x),
+    .local_envir = env
+  )
+}
+
+is_testing <- function() {
+  identical(Sys.getenv("TESTTHAT"), "true")
+}

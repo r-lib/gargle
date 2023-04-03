@@ -86,6 +86,7 @@ test_that("default is to consult and set the oauth cache option", {
 # cache_allowed() --------------------------------------------------------------
 
 test_that("cache_allowed() returns false when non-interactive (or testing)", {
+  local_interactive(FALSE)
   expect_false(cache_allowed(getwd()))
 })
 

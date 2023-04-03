@@ -273,14 +273,15 @@ encourage_httpuv <- function() {
   if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
     return(invisible())
   }
-  local_gargle_verbosity("info")
-  gargle_info(c(
-    "The {.pkg httpuv} package enables a nicer Google auth experience, \\
-     in many cases.",
-    "It doesn't seem to be installed.",
-    "Would you like to install it now?"
-  ))
-  if (utils::menu(c("Yes", "No")) == 1) {
+  choice <- cli_menu(
+    c(
+      "The {.pkg httpuv} package enables a nicer Google auth experience, in many cases.",
+      "It doesn't seem to be installed."
+    ),
+    "Would you like to install it now?",
+    choices = c("Yes", "No")
+  )
+  if (choice == 1) {
     utils::install.packages("httpuv")
   }
   invisible()

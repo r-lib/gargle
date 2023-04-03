@@ -62,11 +62,13 @@ cache_allowed <- function(path) {
     return(FALSE)
   }
 
-  local_gargle_verbosity("info")
-  gargle_info("
-    Is it OK to cache OAuth access credentials in the folder \\
-    {.path {path}} between R sessions?")
-  utils::menu(c("Yes", "No")) == 1
+  choice <- cli_menu(
+    header = character(),
+    prompt = "Is it OK to cache OAuth access credentials in the folder \\
+              {.path {path}} between R sessions?",
+    choices = c("Yes", "No")
+  )
+  choice == 1
 }
 
 cache_create <- function(path) {
@@ -315,13 +317,14 @@ token_match <- function(candidate, existing, package = "gargle") {
 
   # we need user to OK our discovery or pick from multiple emails
   emails <- extract_email(existing)
-  local_gargle_verbosity("info")
-  gargle_info(c(
+  choice <- cli_menu(
     "The {.pkg {package}} package is requesting access to your Google account.",
-    "Select a pre-authorised account or enter '0' to obtain a new token.",
-    "Press Esc/Ctrl + C to cancel."
-  ))
-  choice <- utils::menu(emails)
+    c(
+      "Select a pre-authorised account or enter '0' to obtain a new token.",
+      "Press Esc/Ctrl + C to cancel."
+    ),
+    choices = emails
+  )
 
   if (choice == 0) {
     NULL
