@@ -12,7 +12,7 @@
       gargle_oauth_client(1234)
     Condition
       Error in `gargle_oauth_client()`:
-      ! `id` must be a single string, not a number.
+      ! `id` must be a single string, not the number 1234.
 
 ---
 
@@ -28,7 +28,7 @@
       gargle_oauth_client(id = "ID", secret = 1234)
     Condition
       Error in `gargle_oauth_client()`:
-      ! `secret` must be a single string, not a number.
+      ! `secret` must be a single string, not the number 1234.
 
 ---
 

@@ -28,7 +28,7 @@ Imports:
     lifecycle,
     openssl,
     rappdirs,
-    rlang (>= 1.0.0),
+    rlang (>= 1.1.0),
     stats,
     utils,
     withr

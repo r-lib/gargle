@@ -4,7 +4,7 @@
       check_oob("a")
     Condition
       Error in `check_oob()`:
-      ! `use_oob` must be `TRUE` or `FALSE`, not a string.
+      ! `use_oob` must be `TRUE` or `FALSE`, not the string "a".
 
 ---
 
