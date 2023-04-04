@@ -12,11 +12,3 @@ skip_if_no_auth <- function() {
     "Authentication not available"
   )
 }
-
-expect_info <- function(...) {
-  if (is_interactive()) {
-    expect_output(...)
-  } else {
-    expect_message(...)
-  }
-}
