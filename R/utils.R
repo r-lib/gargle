@@ -1,18 +1,11 @@
 empty_string <- function(x) {
-  stopifnot(is.character(x))
+  check_string(x)
   !nzchar(x)
 }
 
 is_windows <- function() {
   tolower(Sys.info()[["sysname"]]) == "windows"
 }
-
-file_is_empty <- function(path) {
-  stopifnot(is_string(path))
-  file.info(path)$size == 0
-}
-
-isFALSE <- function(x) identical(x, FALSE)
 
 is.oauth_app <- function(x) inherits(x, "oauth_app")
 
