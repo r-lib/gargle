@@ -44,7 +44,7 @@ secret_write <- function(package, name, input) {
   if (is.character(input)) {
     input <- readBin(input, "raw", file.size(input))
   } else if (!is.raw(input)) {
-    gargle_abort_bad_class(input, c("character", "raw"))
+    stop_input_type(input, what = c("character", "raw"))
   }
 
   destdir <- fs::path("inst", "secret")

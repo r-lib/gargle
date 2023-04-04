@@ -1,8 +1,8 @@
 # request_retry() logic works as advertised
 
     Code
-      writeLines(fix_strategy(fix_wait_time(msg_fail_once)))
-    Output
+      fail_then_succeed <- request_retry(max_total_wait_time_in_seconds = 5)
+    Message
       x Request failed [429]
         oops
       i Retry 1 happens in {WAIT_TIME} seconds ...
@@ -11,8 +11,8 @@
 ---
 
     Code
-      writeLines(fix_strategy(fix_wait_time(msg_retry_after)))
-    Output
+      fail_then_succeed <- request_retry()
+    Message
       x Request failed [429]
         oops
       i Retry 1 happens in {WAIT_TIME} seconds ...
@@ -21,8 +21,9 @@
 ---
 
     Code
-      writeLines(fix_strategy(fix_wait_time(msg_max_tries)))
-    Output
+      fail_max_tries <- request_retry(max_tries_total = 3,
+        max_total_wait_time_in_seconds = 6)
+    Message
       x Request failed [429]
         oops
       i Retry 1 happens in {WAIT_TIME} seconds ...

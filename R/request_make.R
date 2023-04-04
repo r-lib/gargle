@@ -39,7 +39,7 @@ request_make <- function(x,
                          ...,
                          encode = "json",
                          user_agent = gargle_user_agent()) {
-  stopifnot(is.character(x$method))
+  check_string(x$method, allow_empty = FALSE)
   method <- switch(x$method,
     GET    = httr::GET,
     POST   = httr::POST,

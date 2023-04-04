@@ -26,7 +26,7 @@ test_that("email can be set in option", {
 
 test_that("Attempt to initiate OAuth2 flow fails if non-interactive", {
   local_interactive(FALSE)
-  expect_error(gargle2.0_token(cache = FALSE), "requires an interactive session")
+  expect_snapshot(gargle2.0_token(cache = FALSE), error = TRUE)
 })
 
 test_that("`email = NA`, `email = FALSE` means we don't consult the cache", {
@@ -49,13 +49,13 @@ test_that("`email = NA`, `email = FALSE` means we don't consult the cache", {
   expect_gargle2.0_token(fauxen_in, fauxen_out)
 
   # `email = NA` and `email = FALSE` prevent the cache from being consulted
-  expect_error(
+  expect_snapshot(
     gargle2.0_token(email = NA, cache = cache_folder),
-    "OAuth2 flow requires an interactive session"
+    error = TRUE
   )
-  expect_error(
+  expect_snapshot(
     gargle2.0_token(email = FALSE, cache = cache_folder),
-    "OAuth2 flow requires an interactive session"
+    error = TRUE
   )
 })
 

@@ -16,7 +16,7 @@ cache_establish <- function(cache = NULL) {
   }
   # the inherits() call is so we accept 'fs_path'
   if (!is.logical(cache) && !is.character(cache) && !inherits(cache, "character")) {
-    gargle_abort_bad_class(cache, c("logical", "character"))
+    stop_input_type(cache, what = c("logical", "character"))
   }
 
   # takes care of the re-location of the default cache, implemented in v1.1.0

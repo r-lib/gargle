@@ -1,11 +1,10 @@
 test_that("request_make() errors for invalid HTTP methods", {
-  expect_error(
+  expect_snapshot(
     request_make(list(method = httr::GET)),
-    "is.character(x$method) is not TRUE",
-    fixed = TRUE
+    error = TRUE
   )
-  expect_error(
+  expect_snapshot(
     request_make(list(method = "PETCH")),
-    "Not a recognized HTTP method"
+    error = TRUE
   )
 })

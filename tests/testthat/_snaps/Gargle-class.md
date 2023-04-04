@@ -1,3 +1,27 @@
+# Attempt to initiate OAuth2 flow fails if non-interactive
+
+    Code
+      gargle2.0_token(cache = FALSE)
+    Condition
+      Error in `self$init_credentials()`:
+      ! OAuth2 flow requires an interactive session.
+
+# `email = NA`, `email = FALSE` means we don't consult the cache
+
+    Code
+      gargle2.0_token(email = NA, cache = cache_folder)
+    Condition
+      Error in `self$init_credentials()`:
+      ! OAuth2 flow requires an interactive session.
+
+---
+
+    Code
+      gargle2.0_token(email = FALSE, cache = cache_folder)
+    Condition
+      Error in `self$init_credentials()`:
+      ! OAuth2 flow requires an interactive session.
+
 # Gargle2.0 prints nicely
 
     Code

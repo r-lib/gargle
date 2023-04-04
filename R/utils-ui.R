@@ -50,16 +50,17 @@ gargle_verbosity <- function() {
   # help people using the previous option
   if (is.null(gv)) {
     gq <- getOption("gargle_quiet")
-    if (is_false(gq)) {
+    if (isFALSE(gq)) {
       options(gargle_verbosity = "debug")
-      with_gargle_verbosity(
-        "debug",
-        gargle_debug(c(
-          "!" = "Option {.val gargle_quiet} is deprecated in favor of \\
-                 {.val gargle_verbosity}",
-          "i" = "Instead of: {.code options(gargle_quiet = FALSE)}",
-          " " = 'Now do: {.code options(gargle_verbosity = "debug")}'
-        ))
+      lifecycle::deprecate_warn(
+        when = "1.1.0",
+        what = I('The "gargle_quiet" option'),
+        with = I('the "gargle_verbosity" option'),
+        details = c(
+          "x" = "Don't do this: `options(gargle_quiet = FALSE)`",
+          "v" = 'Do this instead: `options(gargle_verbosity = "debug")`'
+        ),
+        always = TRUE
       )
     }
   }
@@ -67,8 +68,9 @@ gargle_verbosity <- function() {
 
   vals <- c("debug", "info", "silent")
   if (!is_string(gv) || !(gv %in% vals)) {
-    # ideally this would collapse with 'or' not 'and' but I'm going with it
-    gargle_abort('Option "gargle_verbosity" must be one of: {.field {vals}}')
+    gargle_abort(
+      'Option "gargle_verbosity" must be one of: {.or {.field {vals}}}.'
+    )
   }
   gv
 }
@@ -171,29 +173,6 @@ gargle_abort <- function(message, ...,
 gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
   cli::cli_div(theme = gargle_theme())
   cli::cli_warn(message, .envir = .envir, ...)
-}
-
-gargle_abort_bad_class <- function(object,
-                                   expected_class,
-                                   call = caller_env()) {
-  nm <- as_name(ensym(object))
-  actual_class <- class(object)
-  expected <- glue_collapse(
-    gargle_map_cli(expected_class, template = "{.cls <<x>>}"),
-    sep = ", ", last = " or "
-  )
-  msg <- glue("
-    {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}.",
-    .open = "<<", .close = ">>"
-  )
-  gargle_abort(
-    msg,
-    class = "gargle_error_bad_class",
-    call = call,
-    object_name = nm,
-    actual_class = actual_class,
-    expected_class = expected_class
-  )
 }
 
 gargle_abort_bad_params <- function(names,

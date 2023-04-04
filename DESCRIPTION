@@ -28,7 +28,7 @@ Imports:
     lifecycle,
     openssl,
     rappdirs,
-    rlang (>= 1.0.0),
+    rlang (>= 1.1.0),
     stats,
     utils,
     withr
@@ -38,11 +38,10 @@ Suggests:
     covr,
     httpuv,
     knitr,
-    mockr,
     rmarkdown,
     sodium,
     spelling,
-    testthat (>= 3.1.2)
+    testthat (>= 3.1.7)
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate

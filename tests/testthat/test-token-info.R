@@ -7,11 +7,11 @@ test_that("token_*() functions work", {
     path = rawToChar(secret_read("gargle", "gargle-testing.json"))
   )
 
-  expect_error_free(
+  expect_no_error(
     # this implies a call to token_userinfo()
     email <- token_email(token)
   )
-  expect_error_free(
+  expect_no_error(
     tokeninfo <- token_tokeninfo(token)
   )
 
