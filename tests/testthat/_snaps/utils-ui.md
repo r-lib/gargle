@@ -1,15 +1,17 @@
 # gargle_verbosity() validates the value it finds
 
-    Option "gargle_verbosity" must be one of: 'debug', 'info', and 'silent'
+    Option "gargle_verbosity" must be one of: 'debug', 'info', or 'silent'.
 
 # gargle_verbosity() accomodates people using the old option
 
     Code
       out <- gargle_verbosity()
-    Message
-      ! Option "gargle_quiet" is deprecated in favor of "gargle_verbosity"
-      i Instead of: `options(gargle_quiet = FALSE)`
-        Now do: `options(gargle_verbosity = "debug")`
+    Condition
+      Warning:
+      The "gargle_quiet" option was deprecated in gargle 1.1.0.
+      i Please use the "gargle_verbosity" option instead.
+      x Don't do this: `options(gargle_quiet = FALSE)`
+      v Do this instead: `options(gargle_verbosity = "debug")`
 
 # gargle_info() works
 
