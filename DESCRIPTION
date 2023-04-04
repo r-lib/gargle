@@ -42,7 +42,7 @@ Suggests:
     rmarkdown,
     sodium,
     spelling,
-    testthat (>= 3.1.2)
+    testthat (>= 3.1.5)
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate
