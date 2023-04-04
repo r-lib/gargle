@@ -7,13 +7,11 @@ test_that("cache_establish() insists on sensible input", {
 })
 
 test_that("`cache = TRUE` uses default cache path", {
-  with_mock(
+  local_mocked_bindings(
     ## we don't want to actually initialize a cache
-    cache_create = function(path) NULL,
-    {
-      expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
-    }
+    cache_create = function(path) NULL
   )
+  expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
 })
 
 test_that("`cache = FALSE` does nothing", {
@@ -21,15 +19,13 @@ test_that("`cache = FALSE` does nothing", {
 })
 
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
-  with_mock(
+  local_mocked_bindings(
     # we want no existing cache to be found, be it current or legacy
     gargle_default_oauth_cache_path = function() file_temp(),
     gargle_legacy_default_oauth_cache_path = function() file_temp(),
-    cache_allowed = function(path) FALSE,
-    {
-      expect_equal(cache_establish(NA), cache_establish(FALSE))
-    }
+    cache_allowed = function(path) FALSE
   )
+  expect_equal(cache_establish(NA), cache_establish(FALSE))
 })
 
 test_that("`cache = <filepath>` creates cache folder, recursively", {
@@ -58,20 +54,17 @@ test_that("`cache = <filepath>` adds new cache folder to relevant 'ignores'", {
 })
 
 test_that("default is to consult and set the oauth cache option", {
-  withr::with_options(
-    list(gargle_oauth_cache = NA),
-    with_mock(
-      # we want no existing cache to be found, be it current or legacy
-      gargle_default_oauth_cache_path = function() file_temp(),
-      gargle_legacy_default_oauth_cache_path = function() file_temp(),
-      cache_allowed = function(path) FALSE,
-      {
-        expect_equal(getOption("gargle_oauth_cache"), NA)
-        cache_establish()
-        expect_false(getOption("gargle_oauth_cache"))
-      }
-    )
+  withr::local_options(list(gargle_oauth_cache = NA))
+  local_mocked_bindings(
+    # we want no existing cache to be found, be it current or legacy
+    gargle_default_oauth_cache_path = function() file_temp(),
+    gargle_legacy_default_oauth_cache_path = function() file_temp(),
+    cache_allowed = function(path) FALSE
   )
+
+  expect_equal(getOption("gargle_oauth_cache"), NA)
+  cache_establish()
+  expect_false(getOption("gargle_oauth_cache"))
 })
 
 # cache_allowed() --------------------------------------------------------------
