@@ -297,14 +297,14 @@ cli_menu <- function(header,
     .envir = .envir
   )
 
-  # guard against invalid mocked input
-  local_input <- getOption("cli_input", character())
-
   repeat {
     selected <- cli_readline("Selection: ")
     if (selected %in% c("0", seq_along(choices))) {
       break
     }
+
+    # guard against invalid mocked input and an infinite loop
+    local_input <- getOption("cli_input", character())
     if (length(local_input) > 0) {
       cli::cli_abort(
         c(x = "Internal error: mocked input is invalid."),
@@ -312,6 +312,7 @@ cli_menu <- function(header,
         call = error_call
       )
     }
+
     cli::cli_inform(
       "Enter a number between 1 and {length(choices)}, or enter 0 to exit."
     )
