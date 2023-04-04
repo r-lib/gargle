@@ -1,3 +1,27 @@
+# cache_establish() insists on sensible input
+
+    Code
+      cache_establish(letters[1:2])
+    Condition
+      Error in `cache_establish()`:
+      ! `cache` must have length 1, not 2.
+
+---
+
+    Code
+      cache_establish(1)
+    Condition
+      Error in `cache_establish()`:
+      ! `cache` must be logical or character, not the number 1.
+
+---
+
+    Code
+      cache_establish(list(1))
+    Condition
+      Error in `cache_establish()`:
+      ! `cache` must be logical or character, not a list.
+
 # cache_clean() works
 
     Code

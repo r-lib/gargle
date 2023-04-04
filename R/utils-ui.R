@@ -173,29 +173,6 @@ gargle_warn <- function(message, ..., class = NULL, .envir = parent.frame()) {
   cli::cli_warn(message, .envir = .envir, ...)
 }
 
-gargle_abort_bad_class <- function(object,
-                                   expected_class,
-                                   call = caller_env()) {
-  nm <- as_name(ensym(object))
-  actual_class <- class(object)
-  expected <- glue_collapse(
-    gargle_map_cli(expected_class, template = "{.cls <<x>>}"),
-    sep = ", ", last = " or "
-  )
-  msg <- glue("
-    {.arg {nm}} must be <<expected>>, not of class {.cls {actual_class}}.",
-    .open = "<<", .close = ">>"
-  )
-  gargle_abort(
-    msg,
-    class = "gargle_error_bad_class",
-    call = call,
-    object_name = nm,
-    actual_class = actual_class,
-    expected_class = expected_class
-  )
-}
-
 gargle_abort_bad_params <- function(names,
                                     reason,
                                     endpoint_id,

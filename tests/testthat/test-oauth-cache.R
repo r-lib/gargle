@@ -1,18 +1,9 @@
 # cache_establish ------------------------------------------------------------
 
 test_that("cache_establish() insists on sensible input", {
-  expect_error(
-    cache_establish(letters[1:2]),
-    "must have length 1"
-  )
-  expect_error(
-    cache_establish(1),
-    class = "gargle_error_bad_class"
-  )
-  expect_error(
-    cache_establish(list(1)),
-    class = "gargle_error_bad_class"
-  )
+  expect_snapshot(cache_establish(letters[1:2]), error = TRUE)
+  expect_snapshot(cache_establish(1), error = TRUE)
+  expect_snapshot(cache_establish(list(1)), error = TRUE)
 })
 
 test_that("`cache = TRUE` uses default cache path", {
