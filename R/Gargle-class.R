@@ -274,10 +274,7 @@ encourage_httpuv <- function() {
     return(invisible())
   }
   choice <- cli_menu(
-    c(
-      "The {.pkg httpuv} package enables a nicer Google auth experience, in many cases.",
-      "It doesn't seem to be installed."
-    ),
+   "The {.pkg httpuv} package enables a nicer Google auth experience, in many cases, but it isn't installed.",
     "Would you like to install it now?",
     choices = c("Yes", "No")
   )
