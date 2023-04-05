@@ -166,7 +166,7 @@ It might look something like this:
 #| fig-alt: >
 #|   Screenshot with the following text: "Google",
 #|   "Authorization Error", "Error 401: deleted_client",
-#|   "THe OAuth client was deleted."
+#|   "The OAuth client was deleted."
 knitr::include_graphics("deleted_client.png")
 ```
 
