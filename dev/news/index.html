@@ -64,6 +64,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
+<p>gargle now elicits user input via <code><a href="https://rdrr.io/r/base/readline.html" class="external-link">readline()</a></code>, instead of via <code><a href="https://rdrr.io/r/utils/menu.html" class="external-link">utils::menu()</a></code>, which is favorable for interacting with the user in a Jupyter notebook (<a href="https://github.com/r-lib/gargle/issues/242" class="external-link">#242</a>).</p>
 <p>The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle’s pivot from OAuth “app” to “client”. Changes of note:</p>
 <ul><li>
 <code>PREFIX_auth_configure_description()</code> crosslinks to <code>PREFIX_oauth_client()</code> now, not <code>PREFIX_oauth_app()</code>. So this assumes the package has indeed introduced the <code>PREFIX_oauth_client()</code> function (and, presumably, has deprecated <code>PREFIX_oauth_app()</code>).</li>
