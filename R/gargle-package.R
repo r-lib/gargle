@@ -35,6 +35,7 @@ NULL
 #' gargle_oauth_email()
 #' gargle_oob_default()
 #' gargle_oauth_cache()
+#' gargle_oauth_client_type()
 #' gargle_verbosity()
 NULL
 
