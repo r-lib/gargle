@@ -1,5 +1,7 @@
 # gargle (development version)
 
+gargle now elicits user input via `readline()`, instead of via `utils::menu()`, which is favorable for interacting with the user in a Jupyter notebook (#242).
+
 The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle's pivot from OAuth "app" to "client".
 Changes of note:
 
