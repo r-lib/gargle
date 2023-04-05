@@ -316,20 +316,23 @@ token_match <- function(candidate, existing, package = "gargle") {
   }
 
   # we need user to OK our discovery or pick from multiple emails
-  emails <- extract_email(existing)
+  choices <- c(
+    "Send me to the browser for a new auth process.",
+    extract_email(existing)
+  )
   choice <- cli_menu(
     "The {.pkg {package}} package is requesting access to your Google account.",
     c(
-      "Select a pre-authorised account or enter '0' to obtain a new token.",
-      "Press Esc/Ctrl + C to cancel."
+      "Enter '1' to start a new auth process or select a pre-authorized account.",
+      "Press Esc or Ctrl + C to cancel."
     ),
-    choices = emails
+    choices = choices
   )
 
-  if (choice == 0) {
+  if (choice == 1) {
     NULL
   } else {
-    existing[[choice]]
+    existing[[choice - 1]]
   }
 }
 
