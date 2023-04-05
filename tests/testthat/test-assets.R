@@ -8,7 +8,7 @@ test_that("default options", {
     gargle_quiet       = NULL
   ))
   expect_equal(gargle_oauth_cache(), NA)
-  if (is_rstudio_server()) {
+  if (is_hosted_session()) {
     expect_true(gargle_oob_default())
     expect_equal(gargle_oauth_client_type(), "web")
   } else {

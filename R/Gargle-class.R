@@ -250,7 +250,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   init_credentials = function() {
     gargle_debug("initiating new token")
     if (is_interactive()) {
-      if (!isTRUE(self$params$use_oob) && !is_rstudio_server()) {
+      if (!isTRUE(self$params$use_oob) || !is_hosted_session()) {
         encourage_httpuv()
       }
       self$credentials <- init_oauth2.0(
