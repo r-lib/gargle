@@ -20,6 +20,12 @@ Changes of note:
 
 gargle is better able to detect when it's running on Posit Workbench or RStudio Server, e.g., in a subprocess.
 
+`gargle_oauth_client_type()` is a new function that returns either "installed"
+or "web".
+It returns the value of the new global option by the same name (`"gargle_oauth_client_type"`), if defined.
+If the option is not defined, returns "web" on RStudio Server, Posit Workbench, or Posit Cloud, and "installed" otherwise.
+In the context of out-of-band (OOB) auth, an "installed" client type leads to the conventional OOB flow (only available for GCP projects in testing mode) and a "web" client leads to the new pseudo-OOB flow.
+
 # gargle 1.3.0
 
 ## (Partial) deprecation out-of-band (OOB) auth flow

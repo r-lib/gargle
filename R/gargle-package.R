@@ -94,3 +94,24 @@ gargle_oob_default <- function() {
 gargle_oauth_cache <- function() {
   getOption("gargle_oauth_cache", default = NA)
 }
+
+#' @rdname gargle_options
+#' @export
+#' @section `gargle_oauth_client_type`:
+#' `gargle_oauth_client_type()` returns the option named
+#' "gargle_oauth_client_type", if defined. If defined, the option must be either
+#' "installed" or "web". If the option is not defined, the function returns:
+#' * "web" on RStudio Server, Posit Workbench, or Posit Cloud
+#' * "installed" otherwise
+#' Primarily intended to help infer the most suitable OAuth client when a user
+#' is relying on a built-in client, such as the tidyverse client used by
+#' packages like bigrquery, googledrive, and googlesheets4.
+gargle_oauth_client_type <- function() {
+  opt <- getOption("gargle_oauth_client_type")
+  if (is.null(opt)) {
+    if(is_rstudio_server()) "web" else "installed"
+  } else {
+    check_string(opt)
+    arg_match(opt, values = c("installed", "web"))
+  }
+}
