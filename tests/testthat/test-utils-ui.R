@@ -74,7 +74,7 @@ test_that("cli_menu() basic usage", {
   expect_snapshot(cli_menu_with_mock(1))
 })
 
-test_that("cli_menu() invalid selection", {
+test_that("cli_menu() does not infinite loop with invalid mocked input", {
   cli_menu_with_mock <- function(x) {
     local_user_input(x)
     cli_menu(
@@ -85,6 +85,23 @@ test_that("cli_menu() invalid selection", {
   }
 
   expect_snapshot(cli_menu_with_mock("nope"), error = TRUE)
+})
+
+test_that("cli_menu() can work through multiple valid mocked inputs", {
+  cli_menu_with_mock <- function(x) {
+    local_user_input(x)
+    header <- "Found multiple thingies."
+    prompt <- "Which one do you want to use?"
+    choices <- glue("label {1:3}")
+    first <- cli_menu(header, prompt, choices)
+    second <- cli_menu(header, prompt, choices)
+    c(first, second)
+  }
+
+  expect_snapshot(
+    out <- cli_menu_with_mock(c(1, 3))
+  )
+  expect_equal(out, c(1, 3))
 })
 
 test_that("cli_menu(), request exit via 0", {

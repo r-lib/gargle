@@ -162,7 +162,7 @@
     Output
       [1] 1
 
-# cli_menu() invalid selection
+# cli_menu() does not infinite loop with invalid mocked input
 
     Code
       cli_menu_with_mock("nope")
@@ -178,6 +178,24 @@
     Condition
       Error:
       ! Exiting...
+
+# cli_menu() can work through multiple valid mocked inputs
+
+    Code
+      out <- cli_menu_with_mock(c(1, 3))
+    Message
+      Found multiple thingies.
+      Which one do you want to use?
+      1: label 1
+      2: label 2
+      3: label 3
+      Selection: 1
+      Found multiple thingies.
+      Which one do you want to use?
+      1: label 1
+      2: label 2
+      3: label 3
+      Selection: 3
 
 # cli_menu(), request exit via 0
 
