@@ -75,6 +75,7 @@
 <li>
 <code>PREFIX_auth_configure_params()</code> crosslinks to <code><a href="../reference/gargle_oauth_client_from_json.html">gargle::gargle_oauth_client_from_json()</a></code>. The wrapper package therefore needs to state a minimum version for gargle, e.g. <code>gargle (&gt;= 1.3.0)</code> (or higher).</li>
 </ul><p>gargle is better able to detect when it’s running on Posit Workbench or RStudio Server, e.g., in a subprocess.</p>
+<p><code><a href="../reference/gargle_options.html">gargle_oauth_client_type()</a></code> is a new function that returns either “installed” or “web”. It returns the value of the new global option by the same name (<code>"gargle_oauth_client_type"</code>), if defined. If the option is not defined, returns “web” on RStudio Server, Posit Workbench, or Posit Cloud, and “installed” otherwise. In the context of out-of-band (OOB) auth, an “installed” client type leads to the conventional OOB flow (only available for GCP projects in testing mode) and a “web” client leads to the new pseudo-OOB flow.</p>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="gargle-130">gargle 1.3.0<a class="anchor" aria-label="anchor" href="#gargle-130"></a></h2><p class="text-muted">CRAN release: 2023-01-30</p>

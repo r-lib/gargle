@@ -107,6 +107,8 @@ these lines:</p>
 <span></span>
 <span><span class="fu">gargle_oauth_cache</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">gargle_oauth_client_type</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">gargle_verbosity</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">local_gargle_verbosity</span><span class="op">(</span><span class="va">level</span>, env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -166,6 +168,18 @@ a string. <code>TRUE</code> means to cache using the default user-level cache fi
 <code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means don't cache, and <code>NA</code> means to
 guess using some sensible heuristics.</p>
     </div>
+    <div class="section level2">
+    <h2 id="gargle-oauth-client-type"><code>gargle_oauth_client_type</code><a class="anchor" aria-label="anchor" href="#gargle-oauth-client-type"></a></h2>
+    
+
+<p><code>gargle_oauth_client_type()</code> returns the option named
+"gargle_oauth_client_type", if defined. If defined, the option must be either
+"installed" or "web". If the option is not defined, the function returns:</p><ul><li><p>"web" on RStudio Server, Posit Workbench, or Posit Cloud</p></li>
+<li><p>"installed" otherwise
+Primarily intended to help infer the most suitable OAuth client when a user
+is relying on a built-in client, such as the tidyverse client used by
+packages like bigrquery, googledrive, and googlesheets4.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="gargle-verbosity"><code>gargle_verbosity</code><a class="anchor" aria-label="anchor" href="#gargle-verbosity"></a></h2>
     
