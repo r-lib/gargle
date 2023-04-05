@@ -281,17 +281,6 @@ cli_menu <- function(header,
     if (selected %in% c("0", seq_along(choices))) {
       break
     }
-
-    # guard against invalid mocked input and an infinite loop
-    local_input <- getOption("cli_input", character())
-    if (length(local_input) > 0) {
-      cli::cli_abort(
-        c(x = "Internal error: mocked input is invalid."),
-        .envir = .envir,
-        call = error_call
-      )
-    }
-
     cli::cli_inform(
       "Enter a number between 1 and {length(choices)}, or enter 0 to exit."
     )
@@ -329,7 +318,8 @@ cli_readline <- function(prompt) {
 local_user_input <- function(x, env = caller_env()) {
   withr::local_options(
     rlang_interactive = TRUE,
-    cli_input = as.character(x),
+    # trailing 0 prevents infinite loop if x only contains invalid choices
+    cli_input = c(x, "0"),
     .local_envir = env
   )
 }

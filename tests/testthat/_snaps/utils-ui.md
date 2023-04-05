@@ -173,9 +173,11 @@
       2: label b
       3: label c
       Selection: nope
+      Enter a number between 1 and 3, or enter 0 to exit.
+      Selection: 0
     Condition
-      Error in `cli_menu_with_mock()`:
-      x Internal error: mocked input is invalid.
+      Error:
+      ! Exiting...
 
 # cli_menu(), request exit via 0
 
