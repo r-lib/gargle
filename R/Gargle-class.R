@@ -55,6 +55,15 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
     params$oob_value <- select_pseudo_oob_value(app$redirect_uris)
   }
 
+  # this allows pseudo-oob auth to work on colab, because:
+  # 1) gargle's attempts to communicate with the user route through readline()
+  #    which is shimmed in Jupyter (and therefore Colab)
+  # 2) httr >= 1.4.5 honors the "rlang_interactive" option when deciding whether
+  #   it will try the oauth dance
+  if (is_google_colab()) {
+    withr::local_options(rlang_interactive = TRUE)
+  }
+
   if (!identical(client_type, "web")) {
     # don't use the new client type!
     # specifically, for an installed / desktop app client, we want to use httr's
