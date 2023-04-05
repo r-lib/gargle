@@ -5,6 +5,7 @@
 \alias{gargle_oauth_email}
 \alias{gargle_oob_default}
 \alias{gargle_oauth_cache}
+\alias{gargle_oauth_client_type}
 \alias{gargle_verbosity}
 \alias{local_gargle_verbosity}
 \alias{with_gargle_verbosity}
@@ -15,6 +16,8 @@ gargle_oauth_email()
 gargle_oob_default()
 
 gargle_oauth_cache()
+
+gargle_oauth_client_type()
 
 gargle_verbosity()
 
@@ -84,6 +87,20 @@ defaulting to \code{NA}. If defined, the option must be set to a logical value o
 a string. \code{TRUE} means to cache using the default user-level cache file,
 \verb{~/.R/gargle/gargle-oauth}, \code{FALSE} means don't cache, and \code{NA} means to
 guess using some sensible heuristics.
+}
+
+\section{\code{gargle_oauth_client_type}}{
+
+\code{gargle_oauth_client_type()} returns the option named
+"gargle_oauth_client_type", if defined. If defined, the option must be either
+"installed" or "web". If the option is not defined, the function returns:
+\itemize{
+\item "web" on RStudio Server, Posit Workbench, or Posit Cloud
+\item "installed" otherwise
+Primarily intended to help infer the most suitable OAuth client when a user
+is relying on a built-in client, such as the tidyverse client used by
+packages like bigrquery, googledrive, and googlesheets4.
+}
 }
 
 \section{\code{gargle_verbosity}}{

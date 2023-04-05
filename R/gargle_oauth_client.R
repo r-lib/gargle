@@ -199,7 +199,7 @@ list_redact <- function(x, names, case_sensitive = TRUE) {
 #' }
 gargle_client <- function(type = NULL) {
   if (is.null(type) || is.na(type)) {
-    type <- if(is_rstudio_server()) "web" else "installed"
+    type <- gargle_oauth_client_type()
   }
   check_string(type)
   type <- arg_match(type, values = c("installed", "web"))
@@ -218,7 +218,7 @@ tidyverse_client <- function(type = NULL) {
   check_permitted_package(parent.frame())
 
   if (is.null(type) || is.na(type)) {
-    type <- if(is_rstudio_server()) "web" else "installed"
+    type <- gargle_oauth_client_type()
   }
   check_string(type)
   type <- arg_match(type, values = c("installed", "web"))
