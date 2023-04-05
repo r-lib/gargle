@@ -67,10 +67,10 @@ suitable token is found in the cache.
 \section{\code{gargle_oob_default}}{
 
 \code{gargle_oob_default()} returns \code{TRUE} unconditionally on RStudio Server,
-Posit Workbench, or Posit Cloud, since it is not possible to launch a local
-web server in these contexts. In this case, for the final step of the OAuth
-dance, the user is redirected to a specific URL where they must copy a code
-and paste it back into the R session.
+Posit Workbench, Posit Cloud, or Google Colaboratory, since it is not
+possible to launch a local web server in these contexts. In this case, for
+the final step of the OAuth dance, the user is redirected to a specific URL
+where they must copy a code and paste it back into the R session.
 
 In all other contexts, \code{gargle_oob_default()} consults the option named
 \code{"gargle_oob_default"}, then the option named \code{"httr_oob_default"}, and
@@ -95,7 +95,8 @@ guess using some sensible heuristics.
 "gargle_oauth_client_type", if defined. If defined, the option must be either
 "installed" or "web". If the option is not defined, the function returns:
 \itemize{
-\item "web" on RStudio Server, Posit Workbench, or Posit Cloud
+\item "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google
+Colaboratory
 \item "installed" otherwise
 Primarily intended to help infer the most suitable OAuth client when a user
 is relying on a built-in client, such as the tidyverse client used by
