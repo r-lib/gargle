@@ -322,10 +322,7 @@ token_match <- function(candidate, existing, package = "gargle") {
   )
   choice <- cli_menu(
     "The {.pkg {package}} package is requesting access to your Google account.",
-    c(
-      "Enter '1' to start a new auth process or select a pre-authorized account.",
-      "Press Esc or Ctrl + C to cancel."
-    ),
+    "Enter '1' to start a new auth process or select a pre-authorized account.",
     choices = choices
   )
 
