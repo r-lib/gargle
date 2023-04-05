@@ -25,7 +25,7 @@ test_that("email can be set in option", {
 })
 
 test_that("Attempt to initiate OAuth2 flow fails if non-interactive", {
-  rlang::local_interactive(FALSE)
+  local_interactive(FALSE)
   expect_snapshot(gargle2.0_token(cache = FALSE), error = TRUE)
 })
 
