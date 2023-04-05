@@ -319,7 +319,7 @@ cli_readline <- function(prompt) {
   if (length(local_input) > 0) {
     input <- local_input[[1]]
     cli::cli_inform(paste0(prompt, input))
-    options(local_input = local_input[-1])
+    options(cli_input = local_input[-1])
     input
   } else {
     readline(prompt)
