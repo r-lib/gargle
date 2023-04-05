@@ -26,6 +26,8 @@ It returns the value of the new global option by the same name (`"gargle_oauth_c
 If the option is not defined, returns "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google Colaboratory and "installed" otherwise.
 In the context of out-of-band (OOB) auth, an "installed" client type leads to the conventional OOB flow (only available for GCP projects in testing mode) and a "web" client leads to the new pseudo-OOB flow.
 
+`credentials_user_oauth2()` now works in Google Colaboratory (#140).
+
 # gargle 1.3.0
 
 ## (Partial) deprecation out-of-band (OOB) auth flow
