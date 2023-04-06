@@ -192,14 +192,14 @@ family of functions.</p>
 the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pw</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_gen</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "30RLiYmSe94wYfNXLrJQNqCjqilvRXJGrnQMq0UtuPcwmRSoTP"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "SAvGvc6oBs3D7fuVtk2TkdY7ChBuvxISe2CMs5imO9qwC26tPY"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="define-environment-variable-in--renviron">Define environment variable in <code>.Renviron</code><a class="anchor" aria-label="anchor" href="#define-environment-variable-in--renviron"></a>
 </h3>
 <p>Combine the name and value to form a line like this in your
 user-level <code>.Renviron</code> file:</p>
-<pre><code>GARGLE_PASSWORD=30RLiYmSe94wYfNXLrJQNqCjqilvRXJGrnQMq0UtuPcwmRSoTP</code></pre>
+<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">SAvGvc6oBs3D7fuVtk2TkdY7ChBuvxISe2CMs5imO9qwC26tPY</span></span></code></pre>
 <p><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link"><code>usethis::edit_r_environ()</code></a>
 can help create or open this file. We <strong>strongly
 recommend</strong> using the user-level <code>.Renviron</code>, as
@@ -472,7 +472,7 @@ vectors. Be prepared to see related conversions in the
 <li><a href="https://github.com/r-dbi/bigrquery/blob/main/tests/testthat/helper-auth.R" class="external-link"><code>bigrquery/tests/testthat/helper-auth.R</code></a></li>
 <li><a href="https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R" class="external-link"><code>googledrive/tests/testthat/helper.R</code></a></li>
 <li>Setup chunk of a pkgdown article that is rendered and deployed via
-CI: <a href="https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd#L10-L29</code></a>
+CI: <a href="https://github.com/tidyverse/googledrive/blob/1f3ae3758e6ef12f52a90ea6889ddd2cbd26acd9/vignettes/articles/multiple-files.Rmd#L5-L28" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd</code></a>
 </li>
 </ul>
 <p>“Managing secrets” vignette of httr:</p>

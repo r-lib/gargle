@@ -95,8 +95,9 @@
 
     
     
-<p>If you are working with R in a web-based context, such as <a href="https://posit.co/download/rstudio-server/" class="external-link">RStudio Server</a>, <a href="https://posit.cloud/" class="external-link">Posit Cloud</a>, or <a href="https://posit.co/products/enterprise/workbench/" class="external-link">Posit
-Workbench</a>, your experience of browser-based auth flows will be
+<p>If you are working with R in a web-based context, such as <a href="https://posit.co/download/rstudio-server/" class="external-link">RStudio Server</a>, <a href="https://posit.cloud/" class="external-link">Posit Cloud</a>, <a href="https://posit.co/products/enterprise/workbench/" class="external-link">Posit
+Workbench</a>, or <a href="https://colab.research.google.com/" class="external-link">Google
+Colaboratory</a>, your experience of browser-based auth flows will be
 different from those using R on their local machine. You need to use
 <strong>out-of-band authentication</strong>, sometimes denoted “oob” or
 “OOB”. After the usual auth dance, instead of seeing “authentication
@@ -105,18 +106,31 @@ to copy and paste back into your R session. For folks who are running R
 on their local machine, this final exchange can be done automagically,
 using a temporary local webserver, but that is not possible for those
 accessing a remote R session through the browser.</p>
-<p>On February 16, 2022, Google announced the deprecation of the OAuth
-out-of-band (OOB) flow. The deprecation is happening in phases and it
-only applies to Google Cloud Platform (GCP) projects that are in
-production mode. OOB still works for projects that are in testing
-mode.</p>
-<p>However, in particular, we expect that conventional OOB auth will
-stop working for the built-in tidyverse client (used by googledrive,
-googlesheets4, and bigrquery) no later than February 1, 2023. Therefore,
-gargle has gained a new auth flow that we call “pseudo-OOB”, which
-should allow casual users to continue to enjoy a low-friction auth
-experience even from RStudio Server, Posit Cloud, and Posit
-Workbench.</p>
+<p>On February 16, 2022, Google announced the (partial) deprecation of
+the OAuth out-of-band (OOB) flow, to be enacted no later than February
+1, 2023. The deprecation applies to Google Cloud Platform (GCP) projects
+that are in production mode. OOB still works for projects that are in
+testing mode.</p>
+<p>The built-in tidyverse client (used by googledrive, googlesheets4,
+and bigrquery) is associated with a GCP project that is in production
+mode. Therefore, conventional OOB auth stopped working for the built-in
+client in February 2023. In anticipation of this, gargle gained a new
+auth flow in version 1.3.0 that we call “pseudo-OOB”, which should allow
+casual users to continue to enjoy a low-friction auth experience, even
+from RStudio Server, Posit Cloud, Posit Workbench, and Google Colab.</p>
+<p>If you attempt to do conventional OOB auth with a client that no
+longer supports it, you’ll see something like this:</p>
+<div class="figure">
+<img src="invalid_request.png" alt="Screenshot with the following text: &quot;Access blocked: Tidyverse API Packages's request is invalid&quot;, &quot;You can't sign in because Tidyverse API Packages sent an invalid request. You can try again later, or contact the developer about this issue. Learn more about this error&quot;, &quot;If you are a developer of Tidyverse API Packages, see error details.&quot;, &quot;Error 400: invalid_request&quot;." width="400px"><p class="caption">
+Access blocked: Tidyverse API Packages’s request is invalid. Error 400:
+invalid_request
+</p>
+</div>
+<p>If you work on any of the affected platforms and are experiencing new
+auth problems, your first move should be to update all packages involved
+(gargle and one or more of googledrive, googlesheets4, bigrquery).
+<strong>Restart R.</strong> Re-execute your code in an interactive
+context that will allow you to re-auth.</p>
 <p>This vignette documents various matters around OOB auth, both
 conventional and pseudo-OOB, for users who want to understand this more
 deeply.</p>
@@ -125,11 +139,10 @@ article applies:</p>
 <ul>
 <li><a href="https://bigrquery.r-dbi.org" class="external-link">bigrquery</a></li>
 <li><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></li>
-<li><a href="https://gmailr.r-lib.org" class="external-link">gmailr</a></li>
 <li><a href="https://googlesheets4.tidyverse.org" class="external-link">googlesheets4</a></li>
 <li>
-<a href="https://github.com/andrie/gcalendr" class="external-link">gcalendr</a> <em>GitHub
-only</em>
+<a href="https://gmailr.r-lib.org" class="external-link">gmailr</a> <em>note: gmailr does
+not use the built-in tidyverse OAuth client</em>
 </li>
 </ul>
 <div class="section level2">
@@ -163,7 +176,7 @@ about using a service account, see
 <p>In the absence of any user instructions, the function
 <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code> is used to decide whether to
 use OOB auth. By default, OOB auth is used on RStudio Server, Posit
-Cloud, and Posit Workbench or if the option
+Cloud, Posit Workbench, and Google Colaboratory, or if the option
 <code>"gargle_oob_default"</code> is set to <code>TRUE</code>. (Note
 that we use the term “OOB auth” here to include both the existing,
 conventional form of OOB and gargle’s new pseudo-OOB.)</p>
@@ -211,12 +224,13 @@ within a project, the best way to express this is to set the
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oob_default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This code could appear at the top of a script, in a setup chunk for
 <code>.Rmd</code>, or in a Shiny app. But it probably makes even more
-sense in a <code>.Rprofile</code> startup file, at the user- or
-project-level.</p>
-<p>Once that option has been set, it is honoured by downstream calls to
-<code>PKG_auth()</code>, explicit or implicit, because the default value
-of <code>use_oob</code> is <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code>,
-which consults the option.</p>
+sense in a <code>.Rprofile</code> startup file, at the user or project
+level.</p>
+<p>Once the <code>"gargle_oob_default"</code> option has been set, it is
+honoured by downstream calls to <code>PKG_auth()</code>, explicit or
+implicit, because the default value of <code>use_oob</code> is
+<code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code>, which consults the
+option.</p>
 </div>
 <div class="section level2">
 <h2 id="conventional-vs--pseudo-oob-auth">Conventional vs. pseudo-OOB auth<a class="anchor" aria-label="anchor" href="#conventional-vs--pseudo-oob-auth"></a>
@@ -237,8 +251,12 @@ flow.</li>
 </ul>
 <p>Packages that use a built-in tidyverse OAuth client (googledrive,
 googlesheets4, and bigrquery) should automatically select a “web” client
-on RStudio Server, Posit Cloud, and Posit Workbench and an “installed”
-client otherwise.</p>
+on RStudio Server, Posit Cloud, Posit Workbench, and Google Colaboratory
+and an “installed” client otherwise. If you need to explicitly request a
+“web” client in some other setting, you can use the global option
+<code>"gargle_oauth_client_type"</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_client_type <span class="op">=</span> <span class="st">"web"</span><span class="op">)</span></span></code></pre></div>
 <p>Users who configure their own OAuth client will need to be
 intentional when choosing the client type, depending on where the code
 is running.</p>
@@ -266,8 +284,9 @@ and the httpuv package is available (i.e. a non-OOB flow).</li>
 <li>In conventional OOB, a special redirect value is used, typically
 <code>urn:ietf:wg:oauth:2.0:oob</code>, and the authorization code is
 provided to the user via a browser window for manual copy/paste. This
-page is served by Google. Google is deprecating conventional OOB for
-projects in production mode.</li>
+page is served by Google. Google has deprecated conventional OOB for
+projects in production mode (but it is still allowed for projects in
+testing mode).</li>
 <li>In gargle’s pseudo-OOB, a redirect URI from the configured OAuth
 client is used to receive the response. This page is responsible for
 exposing a code that the user can copy/paste, similar to conventional
@@ -288,20 +307,6 @@ to the waiting R process and thereby complete the auth process.</p>
 <div class="section level3">
 <h3 id="more-details-about-the-deprecation-of-conventional-oob">More details about the deprecation of conventional OOB<a class="anchor" aria-label="anchor" href="#more-details-about-the-deprecation-of-conventional-oob"></a>
 </h3>
-<p>Timeline:</p>
-<ul>
-<li>2022 February 16: Google announced OOB deprecation.</li>
-<li>2022 February 28: New OAuth clients cannot use conventional OOB when
-in production mode.</li>
-<li>2022 October 3: Existing clients cannot use conventional OOB when in
-production mode. NOTE: the client used by the tidyverse has been granted
-an extension and conventional OOB still works (for now).</li>
-<li>2023 February 1: Conventional OOB will no longer work for the
-tidyverse OAuth client. Users on RStudio Server, Posit Workbench, and
-Posit Cloud will need to use the pseudo-OOB flow or, as has always been
-true, non-interactive methods of auth, like using a service account
-token or uploading a user token obtained elsewhere.</li>
-</ul>
 <p>Key links:</p>
 <ul>
 <li>Blog post: <a href="https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html" class="external-link">Making
@@ -318,7 +323,7 @@ OAuth 2.0 to Access Google APIs</a></li>
 <div class="section level2">
 <h2 id="but-i-didnt-need-oob-yesterday">But I didn’t need OOB yesterday!<a class="anchor" aria-label="anchor" href="#but-i-didnt-need-oob-yesterday"></a>
 </h2>
-<p>Sometimes the usual oauth web flow suddenly stops working for people
+<p>Sometimes the usual OAuth web flow suddenly stops working for people
 working directly with R (so NOT via the browser) and they use OOB auth
 to get unstuck again. What’s going on in this case?</p>
 <p>The initial error looks something like this:</p>
@@ -352,13 +357,8 @@ and kill the process, like so, filling in the PID you found:</p>
 <div class="section level2">
 <h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
 </h2>
-<p>Generating OAuth tokens for a server using httr
-(<code>https://support.posit.co/hc/en-us/articles/217952868-Generating-OAuth-tokens-from-a-server</code>)
-covers some of the same ground, although for the httr package. Note that
-this resource has grown quite dated, since it originates from a time
-before gargle was created to provide a Google-specific interface to
-httr.</p>
-<p>If you’re creating content to be deployed (for example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://posit.co/products/enterprise/connect/" class="external-link">Posit Connect</a>),
+<p>If you’re working on a data product that will be deployed (for
+example on <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a> or <a href="https://posit.co/products/enterprise/connect/" class="external-link">Posit Connect</a>),
 you will also need to consider how the deployed content will
 authenticate non-interactively, which is covered in
 <code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>
