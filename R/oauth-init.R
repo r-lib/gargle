@@ -52,14 +52,6 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
 
-    # https://developers.googleblog.com/2022/02/making-oauth-flows-safer.html#warning-message
-    # "The developers can acknowledge the user-facing warning message and
-    # suppress it by passing a query parameter in the authorization call ..."
-    client_name <- app$name %||% app$appname %||% ""
-    if (client_name %in% c("tidyverse-clio", "gargle-clio")) {
-      query_authorize_extra[["ack_oob_shutdown"]] <- "2022-10-03"
-    }
-
     if (identical(client_type, "web")) { # pseudo-oob flow
       # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
 
