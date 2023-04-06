@@ -277,7 +277,7 @@ bigrquery and googledrive, which both use this approach.
 
   * [`bigrquery/tests/testthat/helper-auth.R`](https://github.com/r-dbi/bigrquery/blob/main/tests/testthat/helper-auth.R)
   * [`googledrive/tests/testthat/helper.R`](https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R)
-  * Setup chunk of a pkgdown article that is rendered and deployed via CI: [`googledrive/vignettes/articles/multiple-files.Rmd#L10-L29`](https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29)
+  * Setup chunk of a pkgdown article that is rendered and deployed via CI: [`googledrive/vignettes/articles/multiple-files.Rmd`](https://github.com/tidyverse/googledrive/blob/1f3ae3758e6ef12f52a90ea6889ddd2cbd26acd9/vignettes/articles/multiple-files.Rmd#L5-L28)
 
 "Managing secrets" vignette of httr:
 
