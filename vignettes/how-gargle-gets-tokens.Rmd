@@ -64,7 +64,7 @@ Note also that these credential functions are exported and can be called directl
 
 ## Get verbose output
 
-To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug".
+To see more information about what gargle is up to, set the `"gargle_verbosity"` option to "debug".
 Read more in the docs for `gargle_verbosity()`.
 
 ## `credentials_byo_oauth2()`
@@ -267,7 +267,7 @@ This is the function that choreographs the traditional "OAuth dance" in the brow
 User credentials are cached locally, at the user level, by default.
 Therefore, after first use, there are scenarios in which gargle can determine unequivocally that it already has a suitable token on hand and can load (and possibly refresh) it, without additional user intervention.
 
-The `scopes`, `app`, and `package` are generally provided by the API wrapper function that is mediating the calls to `token_fetch()`.
+The `scopes`, `app` (likely to be renamed `client` in a future version of gargle), and `package` are generally provided by the API wrapper function that is mediating the calls to `token_fetch()`.
 Do not "borrow" an OAuth client from gargle or any other package; always use credentials associated with your package or provided by your user.
 Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your application must accurately represent itself when authenticating to Google API services.
 
@@ -313,24 +313,22 @@ gargle2.0_token(
 )
 ```
 
-gargle looks in the cache specified by `gargle_oauth_cache()` for a token that has these scopes, this app, and the Google identity specified by `email`.
-By default `email` is `NA`, so we might find one or more tokens that have the necessary scopes and app.
+gargle looks in the cache specified by `gargle_oauth_cache()` for a token that has these scopes, this client, and the Google identity specified by `email`.
+By default `email` is `NA`, so we might find one or more tokens that have the necessary scopes and client.
 In that case, gargle reveals the `email` associated with the matching token(s) and asks the user for explicit instructions about how to proceed.
 That looks something like this:
 
 ```{r, eval = FALSE}
-The thingyr package is requesting access to your Google account. Select a
-pre-authorised account or enter '0' to obtain a new token. Press Esc/Ctrl + C to
-abort.
-
-1: janedoe_personal@gmail.com
-2: janedoe@example.com
-3: janedoe_work@gmail.com
-
-Selection: 3
+The thingyr package is requesting access to your Google account.
+Enter '1' to start a new auth process or select a pre-authorized account.
+1: Send me to the browser for a new auth process.
+2: janedoe_personal@gmail.com
+3: janedoe@example.com
+4: janedoe_work@gmail.com
+Selection: 
 ```
 
-If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow *de novo*.
+If none of the tokens has the right scopes and client (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow *de novo*.
 
 A user can reduce the need for interaction by passing the target `email` to `thingy_auth()`:
 
@@ -338,7 +336,7 @@ A user can reduce the need for interaction by passing the target `email` to `thi
 thingy_auth(email = "janedoe_work@gmail.com")
 ```
 
-or by specifying same in the `gargle_oauth_email` option.
+or by specifying same in the `"gargle_oauth_email"` option.
 A value of `email = TRUE`, passed directly or via the option, is an alternative strategy: `TRUE` means that gargle is allowed to use a matching token whenever there is exactly one match.
 
 The elevated status of `email` for `gargle::Gargle2.0` tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs.
@@ -347,12 +345,10 @@ The `gargle::Gargle2.0` class also defaults to a user-level token cache, as oppo
 
 ```{r, eval = FALSE}
 gargle_oauth_sitrep()
-#' gargle OAuth cache path:
-#' /Users/janedoe/.R/gargle/gargle-oauth
+#> 14 tokens found in this gargle OAuth cache:
+#> ~/Library/Caches/gargle
 #' 
-#' 14 tokens found
-#' 
-#' email                         app         scope                          hash...   
+#' email                         app         scopes                         hash...   
 #' ----------------------------- ----------- ------------------------------ ----------
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
