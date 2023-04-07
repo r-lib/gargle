@@ -104,18 +104,6 @@ gargle_info <- function(text, .envir = parent.frame()) {
   }
 }
 
-# inspired by
-# https://github.com/rundel/ghclass/blob/6ed836c0e3750b4bfd1386c21b28b91fd7e24b4a/R/util_cli.R#L1-L7
-# more discussion at
-# https://github.com/r-lib/cli/issues/222
-cli_this <- function(..., .envir = parent.frame()) {
-  txt <- cli::cli_format_method(cli::cli_text(..., .envir = .envir))
-  # @rundel does this to undo wrapping done by cli_format_method()
-  # I haven't had this need yet
-  # paste(txt, collapse = " ")
-  txt
-}
-
 commapse <- function(...) paste0(..., collapse = ", ")
 fr <- function(x) format(x, justify = "right")
 fl <- function(x) format(x, justify = "left")

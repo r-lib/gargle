@@ -284,7 +284,7 @@ token_match <- function(candidate, existing, package = "gargle") {
       emails <- extract_email(existing)
       emails_fmt <- lapply(
         emails,
-        function(x) cli_this("{.email {x}}")
+        function(x) cli::format_inline("{.email {x}}")
       )
       msg <- c(
         "i" = "Suitable tokens found in the cache, associated with these \\
