@@ -4,7 +4,7 @@ gargle_theme <- function() {
     # make the default bullet "regular" color, instead of explicitly colored
     # mostly motivated by consistency with googledrive, where the cumulative
     # use of color made me want to do this
-    ".memo .memo-item-*" = list(
+    ".bullets .bullet-*" = list(
       "text-exdent" = 2,
       before = function(x) paste0(cli::symbol$bullet, " ")
     )
