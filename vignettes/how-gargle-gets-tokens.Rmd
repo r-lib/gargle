@@ -17,12 +17,15 @@ knitr::opts_chunk$set(
 This vignette explains the purpose and usage of `token_fetch()` and the functions it subsequently calls.
 The goal of `token_fetch()` is to secure a token for use in downstream requests.
   
-The target audience is someone who works directly with a Google API. These people roughly fall into two camps:
+The target audience is someone who works directly with a Google API.
+These people roughly fall into two camps:
 
   * The author of an R package that wraps a Google API.
   * The useR who is writing a script or app, without using such a wrapper,
     either because the wrapper does not exist or there's a reason to avoid the
     dependency.
+    
+This vignette might also be useful to the user of a wrapper package who needs to influence the operations of `token_fetch()`, e.g. by telling it to try auth methods in a non-default order or to not try certain methods at all.
 
 `token_fetch()` is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests.
 It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens.
@@ -56,9 +59,9 @@ writeLines(names(cred_funs_list()))
 ```
 
 It is possible to manipulate this registry of functions.
-The help for `cred_funs_list()` is a good place to learn more.
+The help for `cred_funs_list()` is a good place to learn more and we present a concrete example in the last section of this vignette.
 
-From now on, however, we assume you're working with the default registry that ships with gargle.
+For now, however, we assume you're working with the default registry that ships with gargle.
 
 Note also that these credential functions are exported and can be called directly.
 
@@ -241,6 +244,8 @@ credentials_gce(
 `credentials_gce()` retrieves service account credentials from a metadata service that is specific to virtual machine instances running on Google Cloud Engine (GCE).
 Basically, if you have to ask what this is about, this is not the auth method for you. Let us move on.
 
+If this seems to happening to you and it's not what you want, see the last section for how to remove this auth method.
+
 ## `credentials_user_oauth2()`
   
 The next and final function tried is `credentials_user_oauth2()`.
@@ -365,3 +370,27 @@ gargle_oauth_sitrep()
 #' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
+
+## Manipulate the credential function registry
+
+Recall that you can get an overview of the credential functions that `token_fetch()` works through like so:
+
+```{r}
+writeLines(names(cred_funs_list()))
+```
+
+Sometimes more than one of these auth methods "work", but only one of them actually "works" and, sadly, it's not the first one.
+In this case, gargle successfully gets a token, but then you experience token-related failure in downstream work.
+
+The most common example of this is someone who is working on Google Compute Engine (GCE), but they prefer to auth as a normal user, not as the default service account.
+
+Let's say you want to prevent `token_fetch()` from even trying one specific auth method, clearing the way for it to automagically use the method you want.
+You can remove a specific credential function from the registry.
+Here's how to do this for the scenario described above, where you want to skip GCE-specific auth:
+
+```{r eval = FALSE}
+gargle::cred_funs_add(credentials_gce = NULL)
+```
+
+Learn more in the docs for `cred_funs_list()`.
+You can even make narrowly scoped changes to the registry with `local_cred_funs()` and `with_cred_funs()`.
