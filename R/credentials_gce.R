@@ -126,36 +126,26 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   #' @return A GceToken.
   initialize = function(params) {
     self$params <- params
-    self$refresh()
+    self$init_credentials()
+  },
+  #' @description Request an access token.
+  init_credentials = function() {
+    self$credentials <- fetch_gce_access_token(
+      self$params$scope,
+      service_account = self$params$service_account
+    )
+    self
   },
   #' @description Refreshes the token. In this case, that just means "ask again
   #'   for an access token".
   refresh = function() {
-    # TODO: I'm not sure there needs to be so much kerfuffle here. Check this.
-    # The access_token can only include the token itself, not the expiration and
-    # type. Otherwise, the httr code will create extra header lines that bust
-    # the POST request:
-    gce_token <- fetch_gce_access_token(
-      self$params$scope,
-      service_account = self$params$service_account
-    )
-    self$credentials <- list(access_token = NULL)
-    self$credentials$access_token <- gce_token$access_token
-    self
+    self$init_credentials()
   },
   #' @description Placeholder implementation of required method. Returns `TRUE`.
   can_refresh = function() {
     TRUE
   },
-  #' @description Placeholder implementation to avoid inheriting method from
-  #' parent class.
-  init_credentials = function() {
-    # TO THINK: is this where we should get the access token and $refresh()
-    # should call this? sort of makes more sense to me
-    # having $refresh() do the work is just me copying what I see in
-    # httr::TokenServiceAccount
-    self$refresh()
-  },
+
   #' @description Print token
   print = function(...) {
     cat("<GceToken>")
