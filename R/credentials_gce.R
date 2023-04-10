@@ -79,29 +79,36 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     return(NULL)
   }
 
-  gce_token <- fetch_gce_access_token(scopes, service_account = service_account)
+  # TODO: could / should I do normalize_scopes(add_email_scope(scopes)) as
+  # elsewhere? does adding the email scope work or is it at least harmless?
+  scopes <- normalize_scopes(scopes)
 
-  params <- list(
-    as_header = TRUE,
-    scope = scopes,
-    service_account = service_account
-  )
-  token <- GceToken$new(
-    credentials = gce_token$access_token,
-    params = params,
-    cache_path = FALSE,
-    # The underlying Token2 class appears to *require* an endpoint and an app,
-    # though it doesn't use them for anything in this case.
-    endpoint = httr::oauth_endpoints("google"),
-    app = httr::oauth_app("google", key = "KEY", secret = "SECRET")
-  )
-  token$refresh()
+  token <- gce_access_token(scopes, service_account = service_account)
+
   if (is.null(token$credentials$access_token) ||
     !nzchar(token$credentials$access_token)) {
     NULL
   } else {
     token
   }
+}
+
+#' Fetch access token for a service account on GCE
+#'
+#' @inheritParams credentials_gce
+#'
+#' @keywords internal
+#' @export
+gce_access_token <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
+                             service_account = "default") {
+  params <- list(
+    scope = scopes,
+    service_account = service_account,
+    as_header = TRUE
+  )
+  GceToken$new(
+    params = params
+  )
 }
 
 #' Token for use on Google Compute Engine instances
@@ -114,24 +121,17 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 #' @keywords internal
 #' @export
 GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
-  #' @description Print token
-  print = function(...) {
-    cat("<GceToken>")
+  #' @description Get an access for a GCE service account.
+  #' @param params A list of parameters for `fetch_gce_access_token()`.
+  #' @return A GceToken.
+  initialize = function(params) {
+    self$params <- params
+    self$refresh()
   },
-  #' @description Placeholder implementation of required method
-  init_credentials = function() {
-    self$credentials <- list(access_token = NULL)
-  },
-  #' @description Placeholder implementation of required method
-  cache = function(...) {},
-  #' @description Placeholder implementation of required method
-  load_from_cache = function(...) {},
-  #' @description Placeholder implementation of required method
-  can_refresh = function() {
-    TRUE
-  },
-  #' @description Refresh a GCE token
+  #' @description Refreshes the token. In this case, that just means "ask again
+  #'   for an access token".
   refresh = function() {
+    # TODO: I'm not sure there needs to be so much kerfuffle here. Check this.
     # The access_token can only include the token itself, not the expiration and
     # type. Otherwise, the httr code will create extra header lines that bust
     # the POST request:
@@ -141,9 +141,41 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     )
     self$credentials <- list(access_token = NULL)
     self$credentials$access_token <- gce_token$access_token
+    self
+  },
+  #' @description Placeholder implementation of required method. Returns `TRUE`.
+  can_refresh = function() {
+    TRUE
+  },
+  #' @description Placeholder implementation to avoid inheriting method from
+  #' parent class.
+  init_credentials = function() {
+    # TO THINK: is this where we should get the access token and $refresh()
+    # should call this? sort of makes more sense to me
+    # having $refresh() do the work is just me copying what I see in
+    # httr::TokenServiceAccount
+    self$refresh()
+  },
+  #' @description Print token
+  print = function(...) {
+    cat("<GceToken>")
+  },
+
+  # Never cache
+  #' @description Placeholder implementation of required method.
+  cache = function() self,
+  #' @description Placeholder implementation of required method.
+  load_from_cache = function() self,
+
+  # These methods don't really make sense for GCE access tokens
+  #' @description Placeholder implementation of required method.
+  revoke = function() {
+    gargle_abort("{.fun $revoke} is not implemented for {.cls GceToken}")
   },
   #' @description Placeholder implementation of required method
-  revoke = function() {}
+  validate = function() {
+    gargle_abort("{.fun $validate} is not implemented for {.cls GceToken}")
+  }
 ))
 
 gce_metadata_hostname <- function() {
@@ -235,7 +267,8 @@ gce_instance_service_accounts <- function() {
 # https://github.com/r-lib/gargle/issues/216
 fetch_gce_access_token <- function(scopes, service_account) {
   path <- glue("computeMetadata/v1/instance/service-accounts/{service_account}/token")
-  response <- gce_metadata_request(path)
+  scope_string <- glue_collapse(scopes, sep = ",")
+  response <- gce_metadata_request(path, query = list(scopes = scope_string))
   httr::content(response, as = "parsed", type = "application/json")
 }
 
