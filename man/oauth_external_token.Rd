@@ -2,7 +2,7 @@
 % Please edit documentation in R/credentials_external_account.R
 \name{oauth_external_token}
 \alias{oauth_external_token}
-\title{Generate OAuth token for an external account.}
+\title{Generate OAuth token for an external account}
 \usage{
 oauth_external_token(
   path = "",
@@ -32,6 +32,6 @@ permission to view or send email and is generally considered a low-value
 scope.}
 }
 \description{
-Generate OAuth token for an external account.
+Generate OAuth token for an external account
 }
 \keyword{internal}

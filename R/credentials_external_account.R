@@ -83,7 +83,7 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
   }
 }
 
-#' Generate OAuth token for an external account.
+#' Generate OAuth token for an external account
 #'
 #' @inheritParams credentials_external_account
 #'
