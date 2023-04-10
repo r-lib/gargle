@@ -1,8 +1,8 @@
 ---
-title: "Auth when using R in the browser"
+title: "Auth when using R from the browser"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Auth when using R in the browser}
+  %\VignetteIndexEntry{Auth when using R from the browser}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
