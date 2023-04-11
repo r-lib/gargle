@@ -40,7 +40,7 @@ NULL
 #' @details
 #' It's hard to say exactly what info will be returned by the "userinfo"
 #' endpoint targetted by `token_userinfo()`. It depends on the token's scopes.
-#' OAuth2 tokens obtained via the gargle package include the
+#' Where possible, OAuth2 tokens obtained via the gargle package include the
 #' `https://www.googleapis.com/auth/userinfo.email` scope, which guarantees we
 #' can learn the email associated with the token. If the token has the
 #' `https://www.googleapis.com/auth/userinfo.profile` scope, there will be even
@@ -77,8 +77,8 @@ token_tokeninfo <- function(token) {
     token <- token$auth_token
   }
   stopifnot(inherits(token, "Token2.0"))
-  # I only want to refresh a user token, which I identify in this rather
-  # back-ass-wards way, i.e. by a process of elimination
+  # I only want to explicitly refresh a user token, which I identify in this
+  # rather back-ass-wards way, i.e. by a process of elimination.
   if (!inherits(token, c("TokenServiceAccount", "WifToken", "GceToken"))) {
     # A stale token does not fail in a way that leads to auto refresh.
     # It results in: "Bad Request (HTTP 400)."
@@ -87,6 +87,8 @@ token_tokeninfo <- function(token) {
   }
 
   # https://www.googleapis.com/oauth2/v3/tokeninfo
+  # This can still lead to a doomed attempt to refresh, for example, a GceToken,
+  # where the problem is actually (lack of) scope. That happens inside of httr.
   req <- request_build(
     method = "GET",
     path = "oauth2/v3/tokeninfo",
