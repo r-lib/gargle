@@ -74,14 +74,28 @@
 #' }
 credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
                             service_account = "default", ...) {
-  gargle_debug("trying {.fun credentials_gce}")
+  gargle_debug("Trying {.fun credentials_gce} ...")
   if (!is_gce()) {
+    gargle_debug(c("x" = "We don't seem to be on GCE."))
     return(NULL)
   }
 
-  # TODO: could / should I do normalize_scopes(add_email_scope(scopes)) as
-  # elsewhere? does adding the email scope work or is it at least harmless?
-  scopes <- normalize_scopes(scopes)
+  requested_scopes <- normalize_scopes(scopes)
+  dat <- gce_instance_service_accounts()
+  service_account_details <- as.list(dat[dat$name == service_account, ])
+
+  account_scopes <- service_account_details$scopes
+  account_scopes <- normalize_scopes(strsplit(account_scopes, split = ",")[[1]])
+  missing <- setdiff(requested_scopes, account_scopes)
+  if (length(missing) > 0) {
+    gargle_debug(c(
+      "!" = "{cli::qty(length(missing))}{?This/These} requested \\
+             scope{?s} {?is/are} not among the scopes for the \\
+             {.val {service_account}} service account:",
+      bulletize(missing, bullet = "x"),
+      "i" = "If there are problems downstream, this might be the root cause."
+    ))
+  }
 
   token <- gce_access_token(scopes, service_account = service_account)
 
@@ -89,6 +103,9 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     !nzchar(token$credentials$access_token)) {
     NULL
   } else {
+    gargle_debug("GCE service account email: {.email {service_account_details$email}}")
+    gargle_debug("GCE service account name: {.val {token$params$service_account}}")
+    gargle_debug("GCE access token scopes: {.val {commapse(base_scope(token$params$scope))}}")
     token
   }
 }
@@ -125,20 +142,64 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   #' @param params A list of parameters for `fetch_gce_access_token()`.
   #' @return A GceToken.
   initialize = function(params) {
+    gargle_debug("GceToken initialize")
     self$params <- params
     self$init_credentials()
   },
   #' @description Request an access token.
   init_credentials = function() {
-    self$credentials <- fetch_gce_access_token(
+    gargle_debug("GceToken init_credentials")
+    token <- fetch_gce_access_token(
       self$params$scope,
       service_account = self$params$service_account
     )
+
+    # find out the scopes actually obtained
+    # https://www.googleapis.com/oauth2/v3/tokeninfo
+    req <- request_build(
+      method = "GET",
+      path = "oauth2/v3/tokeninfo",
+      params = list(access_token = token$access_token),
+      base_url = "https://www.googleapis.com"
+    )
+    resp <- request_make(req)
+    info <- response_process(resp)
+    actual_scopes <- normalize_scopes(strsplit(info$scope, split = "\\s+")[[1]])
+
+    missing <- setdiff(self$params$scope, actual_scopes)
+    if (length(missing) > 0) {
+      gargle_debug(c(
+        "!" = "{cli::qty(length(missing))}{?This/These} requested \\
+             scope{?s} {?is/are} not among the scopes for the \\
+             access token returned by the metadata server:",
+        bulletize(missing, bullet = "x"),
+        "i" = "If there are problems downstream, this might be the root cause."
+      ))
+      gargle_debug(c(
+        "!" = "Setting token scopes to:",
+        bulletize(actual_scopes)
+      ))
+      self$params$scope <-actual_scopes
+    }
+
+    self$credentials <- token
     self
   },
   #' @description Refreshes the token. In this case, that just means "ask again
   #'   for an access token".
   refresh = function() {
+    gargle_debug("GceToken refresh")
+    # There's something kind of wrong about this, because it's not a true
+    # refresh. But this method is basically required by the way httr currently
+    # works.
+    # This means that some uses of $refresh() aren't really appropriate for a
+    # GceToken.
+    # For example, if I attempt token_userinfo(x) on a GceToken that lacks
+    # appropriate scope, it fails with 401.
+    # httr tries to "fix" things by refreshing the token. But this is
+    # not a problem that refreshing can fix.
+    # I've now prevented an explicit refresh in token_userinfo(), but an
+    # implicit one still eventually happens in httr:::request_perform().
     self$init_credentials()
   },
   #' @description Placeholder implementation of required method. Returns `TRUE`.
@@ -146,9 +207,26 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
     TRUE
   },
 
-  #' @description Print token
+  #' @description Format a [GceToken()].
+  #' @param ... Not used.
+  format = function(...) {
+    x <- list(
+      scopes         = commapse(base_scope(self$params$scope)),
+      credentials    = commapse(names(self$credentials))
+    )
+    c(
+      cli::cli_format_method(
+        cli::cli_h1("<GceToken (via {.pkg gargle})>")
+      ),
+      glue("{fr(names(x))}: {fl(x)}")
+    )
+  },
+  #' @description Print a [GceToken()].
+  #' @param ... Not used.
   print = function(...) {
-    cat("<GceToken>")
+    # a format method is not sufficient for GceToken because the parent class
+    # has a print method
+    cli::cat_line(self$format())
   },
 
   # Never cache
