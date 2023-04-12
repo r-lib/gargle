@@ -183,7 +183,7 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
         "!" = "Updating token scopes to reflect its actual scopes:",
         bulletize(actual_scopes)
       ))
-      self$params$scope <-actual_scopes
+      self$params$scope <- actual_scopes
     }
 
     self$credentials <- token
