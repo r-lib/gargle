@@ -80,6 +80,7 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
     return(NULL)
   }
 
+  scopes <- scopes %||% "https://www.googleapis.com/auth/cloud-platform"
   requested_scopes <- normalize_scopes(scopes)
   dat <- gce_instance_service_accounts()
   service_account_details <- as.list(dat[dat$name == service_account, ])
