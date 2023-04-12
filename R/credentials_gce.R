@@ -176,8 +176,11 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
         bulletize(missing, bullet = "x"),
         "i" = "If there are problems downstream, this might be the root cause."
       ))
+    }
+
+    if (!setequal(self$params$scope, actual_scopes)) {
       gargle_debug(c(
-        "!" = "Setting token scopes to:",
+        "!" = "Updating token scopes to reflect its actual scopes:",
         bulletize(actual_scopes)
       ))
       self$params$scope <-actual_scopes
