@@ -2,7 +2,7 @@
 
 # secret_pw_name("gargle") --> "GARGLE_PASSWORD"
 secret_pw_name <- function(package) {
-  paste0(toupper(package), "_PASSWORD")
+  paste0(toupper(gsub("[.]", "_", package)), "_PASSWORD")
 }
 
 # secret_pw_gen() --> "9AkKLa50wf1zHNCnHiQWeFLDoch9MYJHmPNnIVYZgSUt0Emwgi"
