@@ -19,13 +19,15 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-GceToken-print}{\code{GceToken$print()}}
+\item \href{#method-GceToken-new}{\code{GceToken$new()}}
+\item \href{#method-GceToken-refresh}{\code{GceToken$refresh()}}
+\item \href{#method-GceToken-can_refresh}{\code{GceToken$can_refresh()}}
 \item \href{#method-GceToken-init_credentials}{\code{GceToken$init_credentials()}}
+\item \href{#method-GceToken-print}{\code{GceToken$print()}}
 \item \href{#method-GceToken-cache}{\code{GceToken$cache()}}
 \item \href{#method-GceToken-load_from_cache}{\code{GceToken$load_from_cache()}}
-\item \href{#method-GceToken-can_refresh}{\code{GceToken$can_refresh()}}
-\item \href{#method-GceToken-refresh}{\code{GceToken$refresh()}}
 \item \href{#method-GceToken-revoke}{\code{GceToken$revoke()}}
+\item \href{#method-GceToken-validate}{\code{GceToken$validate()}}
 \item \href{#method-GceToken-clone}{\code{GceToken$clone()}}
 }
 }
@@ -33,12 +35,62 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href='../../httr/html/Token.html#method-Token-hash'><code>httr::Token$hash()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="initialize"><a href='../../httr/html/Token.html#method-Token-initialize'><code>httr::Token$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-Token2.0-sign'><code>httr::Token2.0$sign()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href='../../httr/html/Token2.0.html#method-Token2.0-validate'><code>httr::Token2.0$validate()</code></a></span></li>
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-new"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-new}{}}}
+\subsection{Method \code{new()}}{
+Get an access for a GCE service account.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$new(params)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{params}}{A list of parameters for \code{fetch_gce_access_token()}.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A GceToken.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-refresh}{}}}
+\subsection{Method \code{refresh()}}{
+Refreshes the token. In this case, that just means "ask again
+for an access token".
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-can_refresh"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-can_refresh}{}}}
+\subsection{Method \code{can_refresh()}}{
+Placeholder implementation of required method. Returns \code{TRUE}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$can_refresh()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-init_credentials}{}}}
+\subsection{Method \code{init_credentials()}}{
+Placeholder implementation to avoid inheriting method from
+parent class.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$init_credentials()}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GceToken-print"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-print}{}}}
@@ -57,66 +109,22 @@ Print token
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-GceToken-init_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-GceToken-init_credentials}{}}}
-\subsection{Method \code{init_credentials()}}{
-Placeholder implementation of required method
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$init_credentials()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GceToken-cache"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-cache}{}}}
 \subsection{Method \code{cache()}}{
-Placeholder implementation of required method
+Placeholder implementation of required method.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$cache(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$cache()}\if{html}{\out{</div>}}
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Not used.}
-}
-\if{html}{\out{</div>}}
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GceToken-load_from_cache"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-load_from_cache}{}}}
 \subsection{Method \code{load_from_cache()}}{
-Placeholder implementation of required method
+Placeholder implementation of required method.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$load_from_cache(...)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Not used.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-GceToken-can_refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-GceToken-can_refresh}{}}}
-\subsection{Method \code{can_refresh()}}{
-Placeholder implementation of required method
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$can_refresh()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-GceToken-refresh"></a>}}
-\if{latex}{\out{\hypertarget{method-GceToken-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-Refresh a GCE token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$refresh()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$load_from_cache()}\if{html}{\out{</div>}}
 }
 
 }
@@ -124,9 +132,19 @@ Refresh a GCE token
 \if{html}{\out{<a id="method-GceToken-revoke"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-revoke}{}}}
 \subsection{Method \code{revoke()}}{
-Placeholder implementation of required method
+Placeholder implementation of required method.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$revoke()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-validate"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-validate}{}}}
+\subsection{Method \code{validate()}}{
+Placeholder implementation of required method
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$validate()}\if{html}{\out{</div>}}
 }
 
 }
