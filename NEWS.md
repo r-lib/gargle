@@ -29,6 +29,16 @@ The option and accessor have been added to cover contexts other than those menti
 
 `credentials_user_oauth2()` now works in Google Colaboratory (#140).
 
+`credentials_gce(scopes = NULL)` is now equivalent to `credentials_gce(scopes = "https://www.googleapis.com/auth/cloud-platform")`, i.e. there's an even stronger current towards the recommended "cloud-platform" scope.
+
+`credentials_gce(scopes =)` now includes those `scopes` in its request to the metadata server for an access token (#216). Note that the scopes for a GCE access token are generally pre-determined for the instance and its associated service account at creation/launch time and these requested `scopes` will have no effect. But this seems to do no harm and it is possible that there are contexts where this is useful.
+
+`credentials_gce()` now emits considerably more information when the `"gargle_verbosity"` option is set to `"debug"`. For example, it reports mismatches between requested scopes and instance scopes and between requested scopes and the access token's actual scopes.
+
+`credentials_gce()` stores the actual scopes of the received access token, which can differ from the requested scopes. This is also noted when the `"gargle_verbosity"` option is set to `"debug"`.
+
+The `GceToken` R6 class gains a better `$print()` method that is more similar to gargle's treatment of tokens obtained with other flows.
+
 # gargle 1.3.0
 
 ## (Partial) deprecation out-of-band (OOB) auth flow
