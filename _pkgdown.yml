@@ -70,3 +70,8 @@ articles:
     - articles/managing-tokens-securely
     - request-helper-functions
 
+  - title: Gargle development
+    desc: Internal development notes
+    contents:
+    - articles/google-compute-engine
+
