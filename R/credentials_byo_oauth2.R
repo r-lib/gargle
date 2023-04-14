@@ -6,10 +6,10 @@
 #'     with [httr::config()], the `auth_token` component is extracted. For
 #'     example, such input could be produced by `googledrive::drive_token()`
 #'     or `bigrquery::bq_token()`.
-#'   * Checks that the input appears to be a Google OAuth token, based on
-#'     the embedded `oauth_endpoint`.
-#'   * Refreshes the token, if it's refreshable.
-#'   * Returns its input.
+#'   * If token is an instance of `Gargle2.0` (a gargle-obtained user token),
+#'     checks that it appears to be a Google OAuth token, based on its embedded
+#'     `oauth_endpoint`. Refreshes the token, if it's refreshable.
+#'   * Returns the token.
 #'
 #' There is no point providing `scopes`. They are ignored because the `scopes`
 #' associated with the token have already been baked in to the token itself and
@@ -56,10 +56,13 @@ credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
     ))
   }
 
-  check_endpoint(token$endpoint)
-  if (token$can_refresh()) {
-    token$refresh()
+  if (inherits(token, "Gargle2.0")) {
+    check_endpoint(token$endpoint)
+    if (token$can_refresh()) {
+      token$refresh()
+    }
   }
+
   token
 }
 

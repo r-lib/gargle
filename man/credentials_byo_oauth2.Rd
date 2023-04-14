@@ -34,10 +34,10 @@ This function does very little when called directly with a token:
 with \code{\link[httr:config]{httr::config()}}, the \code{auth_token} component is extracted. For
 example, such input could be produced by \code{googledrive::drive_token()}
 or \code{bigrquery::bq_token()}.
-\item Checks that the input appears to be a Google OAuth token, based on
-the embedded \code{oauth_endpoint}.
-\item Refreshes the token, if it's refreshable.
-\item Returns its input.
+\item If token is an instance of \code{Gargle2.0} (a gargle-obtained user token),
+checks that it appears to be a Google OAuth token, based on its embedded
+\code{oauth_endpoint}. Refreshes the token, if it's refreshable.
+\item Returns the token.
 }
 
 There is no point providing \code{scopes}. They are ignored because the \code{scopes}

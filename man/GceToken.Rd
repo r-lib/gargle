@@ -20,9 +20,10 @@ tokens. Not intended for direct use. See \code{\link[=credentials_gce]{credentia
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-GceToken-new}{\code{GceToken$new()}}
+\item \href{#method-GceToken-init_credentials}{\code{GceToken$init_credentials()}}
 \item \href{#method-GceToken-refresh}{\code{GceToken$refresh()}}
 \item \href{#method-GceToken-can_refresh}{\code{GceToken$can_refresh()}}
-\item \href{#method-GceToken-init_credentials}{\code{GceToken$init_credentials()}}
+\item \href{#method-GceToken-format}{\code{GceToken$format()}}
 \item \href{#method-GceToken-print}{\code{GceToken$print()}}
 \item \href{#method-GceToken-cache}{\code{GceToken$cache()}}
 \item \href{#method-GceToken-load_from_cache}{\code{GceToken$load_from_cache()}}
@@ -60,6 +61,16 @@ A GceToken.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-GceToken-init_credentials"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-init_credentials}{}}}
+\subsection{Method \code{init_credentials()}}{
+Request an access token.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$init_credentials()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GceToken-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-refresh}{}}}
 \subsection{Method \code{refresh()}}{
@@ -81,21 +92,27 @@ Placeholder implementation of required method. Returns \code{TRUE}.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-GceToken-init_credentials"></a>}}
-\if{latex}{\out{\hypertarget{method-GceToken-init_credentials}{}}}
-\subsection{Method \code{init_credentials()}}{
-Placeholder implementation to avoid inheriting method from
-parent class.
+\if{html}{\out{<a id="method-GceToken-format"></a>}}
+\if{latex}{\out{\hypertarget{method-GceToken-format}{}}}
+\subsection{Method \code{format()}}{
+Format a \code{\link[=GceToken]{GceToken()}}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{GceToken$init_credentials()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{GceToken$format(...)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{...}}{Not used.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-GceToken-print"></a>}}
 \if{latex}{\out{\hypertarget{method-GceToken-print}{}}}
 \subsection{Method \code{print()}}{
-Print token
+Print a \code{\link[=GceToken]{GceToken()}}.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{GceToken$print(...)}\if{html}{\out{</div>}}
 }
