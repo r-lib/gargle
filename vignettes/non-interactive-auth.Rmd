@@ -15,17 +15,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-Here we describe how to do auth with a package that uses gargle, without requiring any user interaction. This comes up in a wide array of contexts, ranging from simple rendering of a local R Markdown document to deploying a data product on a remote server.
+Here we describe how to do auth with a package that uses gargle, without requiring any user interaction.
+This comes up in a wide array of contexts, ranging from simple rendering of a local R Markdown document to deploying a data product on a remote server.
 
-We assume the wrapper package uses the design described in [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html). Examples include:
+We assume the wrapper package uses the design described in `vignette("gargle-auth-in-client-package")`.
+Examples include:
 
   * [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
   * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
   * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
   * [googlesheets4](https://googlesheets4.tidyverse.org)
-  * [gcalendr](https://github.com/andrie/gcalendr) *GitHub only*
 
-Full details on [`gargle::token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.html), which powers this strategy, are given in [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+Full details on `gargle::token_fetch()`, which powers this strategy, are given in `vignette("how-gargle-gets-tokens")`.
     
 ## Provide a token or pre-authorize token discovery
 
@@ -37,100 +38,106 @@ We present several ways to achieve this, basically in order of preference.
 
 ## Sidebar 1: Deployment
 
-First, a word about deployed environments. If this doesn't apply to you, skip this section.
+First, a word about deployed environments.
+If this doesn't apply to you, skip this section.
 
-Let's identify a specific type of project: it is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [Posit Connect](https://posit.co/products/enterprise/connect/) or [shinyapps.io](https://www.shinyapps.io). In this context, it may make sense to depart from gargle's default behaviour, which is to store tokens outside the project, and to embed them in the project instead. An example at the end of this vignette demonstrates the use of a project-level OAuth cache. A service account token could also be stored in the project. When you embed tokens in the project and deploy, remember, that they are no more secure or hidden than the other source files in the project.
+Let's identify a specific type of project: it is developed in one place, with interactivity -- such as your local computer -- and then deployed elsewhere, where it must run without further interaction -- such as on [Posit Connect](https://posit.co/products/enterprise/connect/) or [shinyapps.io](https://www.shinyapps.io).
+In this context, it may make sense to depart from gargle's default behaviour, which is to store tokens outside the project, and to embed them in the project instead.
+An example at the end of this vignette demonstrates the use of a project-level OAuth cache.
+A service account token could also be stored in the project.
 
-The vignette [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html) describes a method for embedding an encrypted token in the project, which is an extra level of care needed to work with, e.g., continuous integration services, such as GitHub Actions, Travis-CI, or AppVeyor.
+When you embed tokens in the project and deploy, remember, that, by default, they are no more secure or hidden than the other source files in the project.
+`vignette("managing-tokens-securely")` describes a method for embedding an encrypted token in the project, which is an extra level of care needed if you want to access credentials within, e.g., a continuous integration service, such as GitHub Actions.
 
 ## Sidebar 2: I just want my `.Rmd` to render
 
-TL;DR is that you need to successfully authenticate *once* in an interactive session and then, in your code, give gargle permission to use a token it finds in the cache. These sorts of commands achieve that:
+TL;DR is that you need to successfully authenticate *once* in an interactive session and then, in your code, give gargle permission to use a token it finds in the cache.
+These sorts of commands achieve that:
 
 ```{r}
 # Approach #1: use an option.
 # Either specify the user:
 options(gargle_oauth_email = "jenny@example.com")
-# Or, if you don't use multiple Google identities, you can be more vague:
+# Or, if you only use one Google identity, you can be more vague:
 options(gargle_oauth_email = TRUE)
+# Or, you can specify the identity to use at the domain level:
+options(gargle_oauth_email = "*@example.com")
 
 # Approach #2: call PACKAGE_auth() proactively.
 library(googledrive)
 # Either specify the user:
 drive_auth(email = "jenny@example.com")
-# Or, if you don't use multiple Google identities, you can be more vague:
+# Or, if you only use one Google identity, you can be more vague:
 drive_auth(email = TRUE)
+# Or, you can specify the identity to use at the domain level:
+drive_auth(email = "*@example.com")
 ```
 
-Keep reading if you want to actually understand this.
+At the end of this article, this scenario is explained in detail, if you want to understand why this works.
 
-## Provide a service account token directly
+## Embrace credentials available in certain cloud settings
 
-When two computers are talking to each other, possibly with no human involvement, the most appropriate type of token to use is a service account token.
+In certain cloud computing contexts, a service account token may be ambiently available (or you can arrange for that to be true).
+Think about it: if your workload is running on Google Compute Engine (GCE), it's already "inside the Google house".
+It seems like there should be a way to avoid another round of auth and that is indeed the case.
 
-This requires some advance preparation, but that tends to pay off pretty quickly, in terms of having a much more robust auth setup.
+Another advantage of these cloud auth workflows is that there is never any need to download and carefully manage a file that contains sensitive information.
+This is why they are often described as "keyless".
+If you *can* use one of these methods, you should seriously consider doing so.
 
-**Step 1**: Get a service account and then download a token. Described in the gargle article [How to get your own API credentials](https://gargle.r-lib.org/articles/get-api-credentials.html), specifically in the [Service account token](https://gargle.r-lib.org/articles/get-api-credentials.html#service-account-token) section.
+### Google Compute Engine
 
-**Step 2**: Call the wrapper package's main auth function proactively and provide the path to your service account token. Example using googledrive:
+This section applies to code running on a GCE instance, either literally, or on another Google Cloud product built on top of GCE.
+You should consider Google's own documentation to be definitive, but we'll try to give a useful summary here and to explain how gargle works with GCE:
+
+<https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances>
+
+A Google Cloud Platform (GCP) project generally has a GCE default service account and, by default, a new GCE instance runs as that service account.
+(If you wish, you can use a *different* service account by taking explicit steps when you create an instance or by modifying it while it's stopped.)
+The main point is that, for an application running on GCE, a service account identity is generally available.
+
+GCE allows applications to get an OAuth access token from its metadata server and this is what `gargle::credentials_gce()` does (which is one of functions tried by `gargle::token_fetch()`, which is called by wrapper packages).
+This token request can be made for specific scopes and, in general, most wrapper packages will indeed be asking for specific scopes relevant to the API they access.
+Consider the signature of `googledrive::drive_auth()`:
 
 ```{r}
-library(googledrive)
-
-drive_auth(path = "/path/to/your/service-account-token.json")
+drive_auth <- function(email = gargle::gargle_oauth_email(),
+                       path = NULL,
+                       scopes = "https://www.googleapis.com/auth/drive",
+                       cache = gargle::gargle_oauth_cache(),
+                       use_oob = gargle::gargle_oob_default(),
+                       token = NULL) { ... }
 ```
 
-If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see the gargle article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+The googledrive package asks for a token with `"drive"` scope, by default.
+This brings up one big gotcha when using packages like googledrive or googlesheets4 on GCE.
 
-If the code is running on AWS, a special auth flow is available called workload identity federation.
-Learn more in the documentation for `credentials_external_account()`.
+By default, a GCE instance will be running as the default service account, with the `"cloud-platform"` scope and this will, generally speaking, allow the service account to work with various Cloud products.
+However, the `"cloud-platform"` scope does not permit operations with non-Cloud APIs, such as Drive and Sheets.
+If you want the service account identity for your GCE instance to be able to get an access token for use with Drive and Sheets, you will need to explicitly add, e.g., the `"drive"` scope when you create the instance (or stop the instance and add that scope).
+(Note that, in contrast, BigQuery is considered a Cloud product and therefore bigrquery can operate with the `"cloud-platform"` scope.)
 
-For certain APIs, service accounts are inherently awkward, because you often want to do things *on behalf of a specific user*. Gmail is a good example. If you are sending email programmatically, there's a decent chance you want to send it as yourself (or from some other specific email account) instead of from `zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com`. This is described as "impersonation", which should tip you off that Google does not exactly encourage this workflow. Some details:
+Be aware that you might also need to explicitly grant the service account an appropriate level of access (e.g. read or write) to any Drive files you intend to work on.
 
-* This requires "delegating domain-wide authority " to the service account.
-* It is only possible in the context of a G Suite domain and only an
-  administrator of the domain can set this up.
-* The domain-wide authority is granted only for specific scopes, so those can be
-  as narrow as possible. This may make a domain administrator more receptive
-  to the idea.
-* This is documented in a few different places, such as:
-  - [Delegating domain-wide authority to the service account](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority) from Google Identity Platform docs
-  - [Perform G Suite Domain-Wide Delegation of Authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation) from G Suite Admin SDK docs
-* The `subject` argument of `credentials_service_account()` and
-  `credentials_app_default()` is available to specify which user to
-  impersonate, e.g. `subject = "user@example.com"`. This argument first appeared
-  in gargle 0.5.0, so it may not necessarily be exposed yet in user-facing auth functions like `drive_auth()`. If you need `subject` in a client package, that
-  is a reasonable feature request.
-
-If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
-
-## Rig a service or external account for use with Application Default Credentials
-
-Wrapper packages that use `gargle::token_fetch()` in the recommended way have access to the token search strategy known as **Application Default Credentials**.
-
-You need to put the JSON corresponding to your service or external account in a very specific location or, alternatively, record the location of this JSON file in a specific environment variable.
-
-Full details are in the [`credentials_app_default()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_app_default) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
-
-If you have your token rigged properly, you **do not** need to do anything else, i.e. you do not need to call `PACKAGE_auth()` explicitly. Your token should just get discovered upon first need.
-
-For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+Finally, if you want to opt-out of using the default service account and, instead, auth as a normal user, even though you are on GCE, that is also possible.
+One way to achieve that is to remove `credentials_gce()` from the set of auth functions tried by `gargle::token_fetch()` by executing this command before any explicit or implicit auth happens:
 
 ```{r}
-options(gargle_verbosity = "debug")
+# removes `credentials_gce()` from gargle's registry
+gargle::cred_funs_add(credentials_gce = NULL)
 ```
 
-withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
+You can make a similar change in more scoped way with the helpers `gargle::with_cred_funs()` or `gargle::local_cred_funs()`.
 
-## Workload Identity on Google Kubernetes Engine (GKE)
+### Workload Identity on Google Kubernetes Engine (GKE)
 
-When you are authenticating on Google Compute Engine and related services such as Cloud Run, `credentials_gce()` can be used to authenticate without having to upload a service key by reusing the service key that created the Google service.
-A similar concept is available for Google Kubernetes Clusters called [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity), with some extra configuration needed to make a service account's metadata available for the GKE instance to discover.
+Here we discuss how gargle's GCE auth can work for a related service, Google Kubernetes Engine (GKE), using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
+This is more complicated that direct usage of GCE and some extra configuration is needed to make a service account's metadata available for the GKE instance to discover.
 GKE is the underlying technology behind Google's managed Airflow service, [Cloud Composer](https://cloud.google.com/composer), so this also applies to R docker files being called in that environment. 
 
-Using Workload Identity is the recommended way to do authentication on GKE and other places, if possible, since it eliminates the use of a file that holds the service key, which is a potential security risk.
+Workload Identity is the recommended way to do authentication on GKE and other places, if possible, since it eliminates the use of a file that holds the service key, which is a potential security risk.
 
-1. Following the [docs](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity), you create a service account as normal and give it permissions and scopes needed to, say, upload to BigQuery.
+1. Following the [Workload Identity docs](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity), you create a service account as normal and give it permissions and scopes needed to, say, upload to BigQuery.
 Imagine that `my-service-key@my-project.iam.gserviceaccount.com` has the `https://www.googleapis.com/auth/bigquery` scope.
 2.  Instead of downloading a JSON key, you instead migrate that permission by adding a policy binding to another service account within Kubernetes.
 3. Create the service account within Kubernetes, ideally within a new namespace:
@@ -169,24 +176,110 @@ Documentation around `GKEStartPodOperator()` within Cloud Composer can be found 
 
 Here is example code that you might execute in your Docker container:
 
-```{r eval = FALSE}
+```{r}
 options(gargle.gce.use_ip = TRUE)
-gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
-# ... do authenticated stuff...
+t <- gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
+# ... do authenticated stuff with the token t ...
 ```
 
 Let's assume that PKG is an R package that implements gargle auth in the standard way, such as bigrquery or googledrive.
-You should be able to pass the target service account to the usual, high-level `PKG_auth()` function.
-Internally, `PKG_auth()` presumably calls `token_fetch()`, which calls `gargle::credentials_gce()`.
+At the time of writing the `service_account` argument is not exposed in the usual, high-level `PKG_auth()` function (<https://github.com/r-lib/gargle/issues/249>.
+So if you need to use a non-`default` service account, you need to call `credentials_gce()` directly and pass that token to `PKG_auth()`:
 Here's an example of how that might look:
 
-```{r, eval = FALSE}
+```{r}
 library(PKG)
 
 options(gargle.gce.use_ip = TRUE)
-PKG_auth(service_account = "my-service-key@my-project.iam.gserviceaccount.com")
+t <- gargle::credentials_gce(
+  "my-service-key@my-project.iam.gserviceaccount.com", # use YOUR service account
+  scopes = "https://www.googleapis.com/auth/PKG"       # use REAL scopes
+)
+PKG_auth(token = t)
 # ... do authenticated stuff...
 ```
+
+### AWS
+
+Keyless auth is even possible from non-Google cloud platforms, using [Workload identity federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation).
+
+This is implemented in the experimental function `credentials_external_account()`, which currently only supports AWS.
+
+## Provide a service account token directly
+
+When two computers are talking to each other, possibly with no human involvement, the most appropriate type of token to use is a service account token.
+If you're not working in cloud context with automatic access to a service account (see previous section), you can still use a service account, but it will require more explicit effort.
+
+1. Create a service account and then download its credentials as a JSON file.
+   This is described in `vignette("get-api-credentials")`, specifically in the
+   *Service account token* section.
+1. Call the wrapper package's main auth function proactively and provide the
+   path to this JSON file.
+   
+Example using googledrive:
+
+```{r}
+library(googledrive)
+
+drive_auth(path = "/path/to/your/service-account-token.json")
+```
+
+If this code is running on, e.g., a continuous integration service and you need to use an encrypted token, see `vignette("managing-tokens-securely")`.
+
+For certain APIs, service accounts are inherently awkward, because you often want to do things *on behalf of a specific user*.
+Gmail is a good example.
+If you are sending email programmatically, you probably want to send it as yourself (or from some other specific email account) instead of from `zestybus-geosyogl@fuffapster-654321.iam.gserviceaccount.com`.
+This is, in fact, possible but is described as "impersonation", which should tip you off that Google does not exactly encourage this workflow.
+Some details:
+
+* This requires "delegating domain-wide authority " to the service account.
+* It is only possible in the context of a G Suite domain and only an
+  administrator of the domain can set this up.
+* The domain-wide authority is granted only for specific scopes, so those can be
+  as narrow as possible. This may make a domain administrator more receptive
+  to the idea.
+* This is documented in a few different places, such as:
+  - [Delegating domain-wide authority to the service account](https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority) from Google Identity Platform docs
+  - [Perform G Suite Domain-Wide Delegation of Authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation) from G Suite Admin SDK docs
+* The `subject` argument of `credentials_service_account()` and
+  `credentials_app_default()` is available to specify which user to
+  impersonate, e.g. `subject = "user@example.com"`.
+  This argument first appeared in gargle 0.5.0, so it may not necessarily be
+  exposed yet in user-facing auth functions like `drive_auth()`.
+  If you need `subject` in a client package, that is a reasonable feature
+  request.
+  It is also possible to get a token with an explicit call to, e.g., 
+  `credentials_service_account()` and then pass that token to the auth function:
+  
+```{r}
+t <- gargle::credentials_service_account(
+  path = "/path/to/your/service-account-token.json",
+  scopes = ...,
+  subject = "user@example.com"
+)
+googledrive::dive_auth(token = t)
+```
+
+If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
+
+## Rig a service or external account for use with Application Default Credentials
+
+Wrapper packages that use `gargle::token_fetch()` in the recommended way have access to the token search strategy known as **Application Default Credentials**.
+
+You need to put the JSON corresponding to your service or external account in a very specific location or, alternatively, record the location of this JSON file in a specific environment variable.
+
+Full details are in the `credentials_app_default()` section of `vignette("how-gargle-gets-tokens")`.
+
+If you have your token rigged properly, you **do not** need to do anything else, i.e. you do not need to call `PACKAGE_auth()` explicitly.
+Your token should just get discovered upon first need.
+
+For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
+
+```{r}
+options(gargle_verbosity = "debug")
+```
+
+withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
 ## Provide an OAuth token directly
 
@@ -199,20 +292,25 @@ my_oauth_token <- # some process that results in the token you want to use
 drive_auth(token = my_oauth_token)
 ```
 
-gargle caches each OAuth user token it obtains to an `.rds` file, by default. If you know the filepath to the token you want to use, you could use `readRDS()` to read it and provide as the `token` argument to the wrapper's auth function. Example using googledrive:
+gargle caches each OAuth user token it obtains to an `.rds` file, by default.
+If you know the filepath to the token you want to use, you could use `readRDS()` to read it and provide as the `token` argument to the wrapper's auth function.
+Example using googledrive:
 
 ```{r}
 # googledrive
 drive_auth(token = readRDS("/path/to/your/oauth-token.rds"))
 ```
 
-How would you know this filepath? That requires some attention to the location of gargle's OAuth token cache folder, which is described in the next section.
+How would you know this filepath?
+That requires some attention to the location of gargle's OAuth token cache folder, which is described in the next section.
 
-Full details are in the [`credentials_byo_oauth2()` section](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html#credentials_byo_oauth2) of the gargle article [How gargle gets tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+Full details are in the `credentials_byo_oauth2()` section of `vignette("how-gargle-gets-tokens")`.
 
-## Arrange for an OAuth token to be re-discovered
+## Arrange for an OAuth user token to be re-discovered
 
-This is the least recommended strategy, but it appeals to many users, because it doesn't require creating a service account. Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use. You might be forced to use this strategy with certain APIs, such as Gmail, that are difficult to use with a service account.
+This is the least recommended strategy, but it appeals to many users, because it doesn't require creating a service account.
+Just remember that the perceived ease of using the token you already have (an OAuth user token) is quickly cancelled out by the greater difficulty of managing such tokens for non-interactive use.
+You might be forced to use this strategy with certain APIs, such as Gmail, that are difficult to use with a service account.
 
 Two main principles:
 
@@ -234,7 +332,8 @@ library(googledrive)
 drive_find(n_max)
 ```
 
-**Step 2**: Revise your code to pre-authorize the use of that token next time. Now your `.Rmd` can be rendered or your `.R` script can run, without further interaction.
+**Step 2**: Revise your code to pre-authorize the use of that token next time.
+Now your `.Rmd` can be rendered or your `.R` script can run, without further interaction.
 
 You have two choices to make:
 
@@ -290,7 +389,8 @@ drive_auth(email = "*@example.com")
 
 This is like the previous example, but with an added twist: we use a project-level OAuth cache. This is good for deployed data products.
 
-**Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project. Using googledrive as an example:
+**Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project.
+Using googledrive as an example:
 
 ```{r}
 library(googledrive)
@@ -319,8 +419,6 @@ library(googledrive)
 drive_auth(cache = ".secrets")
 ```
 
-If you are doing setup in a web-based environment, such as RStudio Server, you may also need to request out-of-band auth, whenever you are first acquiring a token. That is a separate issue, which is explained in [Auth when using R in the browser](https://gargle.r-lib.org/articles/auth-from-web.html).
-
 **Step 2**: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the googledrive example:
 
 ```{r}
@@ -335,9 +433,12 @@ options(
 drive_find(n_max = 5)
 ```
 
-Setting the option `gargle_oauth_email = TRUE` says that googledrive is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token. This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively. Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
+Setting the option `gargle_oauth_email = TRUE` says that googledrive is allowed to use a token that it finds in the cache, without interacting with a user, as long as it discovers EXACTLY one matching token.
+This option-setting code needs to appear in each script, `.Rmd`, or app that needs to use this token non-interactively.
+Depending on the context, it might be suitable to accomplish this in a startup file, e.g. project-level `.Rprofile`.
 
-Here's a variation where we say which token to use by explicitly specifying the associated email. This is handy if there's a reason to have more than one token in the cache.
+Here's a variation where we say which token to use by explicitly specifying the associated email.
+This is handy if there's a reason to have more than one token in the cache.
 
 ```{r}
 library(googledrive)
@@ -373,7 +474,8 @@ drive_auth(cache = ".secrets", email = "jenny@example.com")
 drive_find(n_max = 5)
 ```
 
-Be very intentional about paths and working directory. Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
+Be very intentional about paths and working directory.
+Personally I would use `here::here(".secrets)"` everywhere above, to make things more robust.
 
 For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
@@ -383,4 +485,5 @@ options(gargle_verbosity = "debug")
 
 withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local_gargle_verbosity()`.
 
-For a cached token to be considered a "match", it must match the current request with respect to user's email, scopes, and OAuth app (client ID or key and secret). By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.
+For a cached token to be considered a "match", it must match the current request with respect to user's email, scopes, and OAuth client (client ID or key and secret).
+By design, these settings have very low visibility, because we usually want to use the defaults. If your token is not being discovered, consider if any of these fields might explain the mismatch.
