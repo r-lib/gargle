@@ -42,7 +42,7 @@
 #' credentials_byo_oauth2(token = my_token)
 #' }
 credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
-  gargle_debug("trying {.fun credentials_byo_oauth}")
+  gargle_debug("Trying {.fun credentials_byo_oauth} ...")
   if (inherits(token, "request")) {
     token <- token$auth_token
   }
@@ -50,9 +50,9 @@ credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
 
   if (!is.null(scopes)) {
     gargle_debug(c(
-      "{.arg scopes} cannot be specified when user brings their own OAuth token",
-      "{.arg scopes} are already implicit in the token",
-      "requested {.arg scopes} are effectively ignored"
+      "!" = "{.arg scopes} cannot be specified when user brings their own OAuth token.",
+      "i" = "{.arg scopes} are already implicit in the token.",
+      "i" = "requested {.arg scopes} are effectively ignored."
     ))
   }
 
