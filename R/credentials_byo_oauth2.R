@@ -50,10 +50,23 @@ credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {
 
   if (!is.null(scopes)) {
     gargle_debug(c(
-      "!" = "{.arg scopes} cannot be specified when user brings their own OAuth token.",
-      "i" = "{.arg scopes} are already implicit in the token.",
-      "i" = "requested {.arg scopes} are effectively ignored."
+      "!" = "The {.arg scopes} cannot be specified when user brings their own \\
+             OAuth token.",
+      "i" = "The {.arg scopes} are already implicit in the token.",
+      "i" = "Requested {.arg scopes} are effectively ignored."
     ))
+
+    declared_scopes <- normalize_scopes(token$params$scope)
+    requested_scopes <- normalize_scopes(scopes)
+
+    if (!setequal(requested_scopes, declared_scopes)) {
+      gargle_debug(c(
+        "!" = "Token's declared scopes are not the same as the requested \\
+               scopes.",
+        "i" = "Scopes declared in token: {commapse(base_scope(declared_scopes))}",
+        "i" = "Requested scopes: {commapse(base_scope(requested_scopes))}"
+      ))
+    }
   }
 
   if (inherits(token, "Gargle2.0")) {
