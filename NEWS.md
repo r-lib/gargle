@@ -1,45 +1,51 @@
 # gargle (development version)
 
-gargle now elicits user input via `readline()`, instead of via `utils::menu()`, which is favorable for interacting with the user in a Jupyter notebook (#242).
+## Google Compute Engine
 
-The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle's pivot from OAuth "app" to "client".
-Changes of note:
+* `credentials_gce(scopes = NULL)` is now equivalent to `credentials_gce(scopes = "https://www.googleapis.com/auth/cloud-platform")`, i.e. there's an even stronger current towards the recommended "cloud-platform" scope.
 
-  * `PREFIX_auth_configure_description()` crosslinks to `PREFIX_oauth_client()`
-    now, not `PREFIX_oauth_app()`. So this assumes the package has indeed
-    introduced the `PREFIX_oauth_client()` function (and, presumably, has
-    deprecated `PREFIX_oauth_app()`).
-  * `PREFIX_auth_configure_params()` gains `client` argument.
-  * `PREFIX_auth_configure_params()` deprecates the `app` argument and uses a
-    lifecycle badge. It is assumed that the badge SVG is present, which can be
-    achieved with `usethis::use_lifecycle()`.
-  * `PREFIX_auth_configure_params()` crosslinks to
-    `gargle::gargle_oauth_client_from_json()`. The wrapper package therefore
-    needs to state a minimum version for gargle, e.g. `gargle (>= 1.3.0)` (or
-    higher).
+* `credentials_gce(scopes =)` now includes those `scopes` in its request to the metadata server for an access token (#216). Note that the scopes for a GCE access token are generally pre-determined for the instance and its associated service account at creation/launch time and these requested `scopes` will have no effect. But this seems to do no harm and it is possible that there are contexts where this is useful.
 
-gargle is better able to detect when it's running on Posit Workbench or RStudio Server, e.g., in a subprocess.
+* `credentials_gce()` now emits considerably more information when the `"gargle_verbosity"` option is set to `"debug"`. For example, it reports mismatches between requested scopes and instance scopes and between requested scopes and the access token's actual scopes.
 
-`gargle_oauth_client_type()` is a new function that returns either "installed"
+* `credentials_gce()` stores the actual scopes of the received access token, which can differ from the requested scopes. This is also noted when the `"gargle_verbosity"` option is set to `"debug"`.
+
+* The `GceToken` R6 class gains a better `$print()` method that is more similar to gargle's treatment of tokens obtained with other flows.
+
+## Behaviour in a cloud/server context
+
+* gargle is better able to detect when it's running on Posit Workbench or RStudio Server, e.g., in a subprocess.
+
+* `gargle_oauth_client_type()` is a new function that returns either "installed"
 or "web".
 It returns the value of the new global option by the same name (`"gargle_oauth_client_type"`), if defined.
 If the option is not defined, returns "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google Colaboratory and "installed" otherwise.
 In the context of out-of-band (OOB) auth, an "installed" client type leads to the conventional OOB flow (only available for GCP projects in testing mode) and a "web" client leads to the new pseudo-OOB flow.
 The option and accessor have been added to cover contexts other than those mentioned above where it is helpful to request a "web" client.
 
-`credentials_user_oauth2()` now works in Google Colaboratory (#140).
+* `credentials_user_oauth2()` now works in Google Colaboratory (#140).
 
-`credentials_gce(scopes = NULL)` is now equivalent to `credentials_gce(scopes = "https://www.googleapis.com/auth/cloud-platform")`, i.e. there's an even stronger current towards the recommended "cloud-platform" scope.
+## Everything else
 
-`credentials_gce(scopes =)` now includes those `scopes` in its request to the metadata server for an access token (#216). Note that the scopes for a GCE access token are generally pre-determined for the instance and its associated service account at creation/launch time and these requested `scopes` will have no effect. But this seems to do no harm and it is possible that there are contexts where this is useful.
+* gargle now elicits user input via `readline()`, instead of via `utils::menu()`, which is favorable for interacting with the user in a Jupyter notebook (#242).
 
-`credentials_gce()` now emits considerably more information when the `"gargle_verbosity"` option is set to `"debug"`. For example, it reports mismatches between requested scopes and instance scopes and between requested scopes and the access token's actual scopes.
+* The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle's pivot from OAuth "app" to "client".
+Changes of note:
 
-`credentials_gce()` stores the actual scopes of the received access token, which can differ from the requested scopes. This is also noted when the `"gargle_verbosity"` option is set to `"debug"`.
+  - `PREFIX_auth_configure_description()` crosslinks to `PREFIX_oauth_client()`
+    now, not `PREFIX_oauth_app()`. So this assumes the package has indeed
+    introduced the `PREFIX_oauth_client()` function (and, presumably, has
+    deprecated `PREFIX_oauth_app()`).
+  - `PREFIX_auth_configure_params()` gains `client` argument.
+  - `PREFIX_auth_configure_params()` deprecates the `app` argument and uses a
+    lifecycle badge. It is assumed that the badge SVG is present, which can be
+    achieved with `usethis::use_lifecycle()`.
+  - `PREFIX_auth_configure_params()` crosslinks to
+    `gargle::gargle_oauth_client_from_json()`. The wrapper package therefore
+    needs to state a minimum version for gargle, e.g. `gargle (>= 1.3.0)` (or
+    higher).
 
-The `GceToken` R6 class gains a better `$print()` method that is more similar to gargle's treatment of tokens obtained with other flows.
-
-`credentials_byo_oauth2()` works now for (variations of) service account tokens, as intended, not just for user tokens (#250). It also emits more information about scopes when the `"gargle_verbosity"` option is set to `"debug"`.
+* `credentials_byo_oauth2()` works now for (variations of) service account tokens, as intended, not just for user tokens (#250). It also emits more information about scopes when the `"gargle_verbosity"` option is set to `"debug"`.
 
 # gargle 1.3.0
 
