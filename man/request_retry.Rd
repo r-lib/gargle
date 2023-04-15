@@ -43,7 +43,7 @@ times.
 Either way our waiting times are based on a geometric series, which, by
 convention, is usually written in terms of powers of 2:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{b , 2b, 4b, 8b, ...
+\if{html}{\out{<div class="sourceCode">}}\preformatted{b, 2b, 4b, 8b, ...
   = b * 2^0, b * 2^1, b * 2^2, b * 2^3, ...
 }\if{html}{\out{</div>}}
 
@@ -85,13 +85,13 @@ seconds and do not generate a random waiting time. (In theory, this header
 can alternatively provide a datetime after which to retry, but we have no
 first-hand experience with this variant for a Google API.)
 \item Sheets API quota exhaustion: In the course of googlesheets4 development,
-we've grown very familiar with the \verb{429 RESOURCE_EXHAUSTED} error. The
-Sheets API v4 has "a limit of 500 requests per 100 seconds per project and
-100 requests per 100 seconds per user. Limits for reads and writes are
-tracked separately." In our experience, the "100 (read or write) requests
-per 100 seconds per user" limit is the one you hit most often. If we detect
-this specific failure, the first wait time is a bit more than 100 seconds,
-then we revert to exponential backoff.
+we've grown very familiar with the \verb{429 RESOURCE_EXHAUSTED} error. As of
+2023-04-15, the Sheets API v4 has a limit of 300 requests per minute per
+project and 60 requests per minute per user per project. Limits for reads
+and writes are tracked separately. In our experience, the "60 (read or
+write) requests per minute per user" limit is the one you hit most often.
+If we detect this specific failure, the first wait time is a bit more than
+one minute, then we revert to exponential backoff.
 }
 }
 

@@ -25,7 +25,7 @@
 #' convention, is usually written in terms of powers of 2:
 #'
 #' ```
-#' b , 2b, 4b, 8b, ...
+#' b, 2b, 4b, 8b, ...
 #'   = b * 2^0, b * 2^1, b * 2^2, b * 2^3, ...
 #' ```
 #'
@@ -64,13 +64,14 @@
 #'   can alternatively provide a datetime after which to retry, but we have no
 #'   first-hand experience with this variant for a Google API.)
 #' * Sheets API quota exhaustion: In the course of googlesheets4 development,
-#'   we've grown very familiar with the `429 RESOURCE_EXHAUSTED` error. The
-#'   Sheets API v4 has "a limit of 500 requests per 100 seconds per project and
-#'   100 requests per 100 seconds per user. Limits for reads and writes are
-#'   tracked separately." In our experience, the "100 (read or write) requests
-#'   per 100 seconds per user" limit is the one you hit most often. If we detect
-#'   this specific failure, the first wait time is a bit more than 100 seconds,
-#'   then we revert to exponential backoff.
+#'   we've grown very familiar with the `429 RESOURCE_EXHAUSTED` error. As of
+#'   2023-04-15, the Sheets API v4 has a limit of 300 requests per minute per
+#'   project and 60 requests per minute per user per project. Limits for reads
+#'   and writes are tracked separately. In our experience, the "60 (read or
+#'   write) requests per minute per user" limit is the one you hit most often.
+#'   If we detect this specific failure, the first wait time is a bit more than
+#'   one minute, then we revert to exponential backoff.
+#'
 #'
 #' @param ... Passed along to [request_make()].
 #' @param max_tries_total Maximum number of tries.
@@ -155,8 +156,8 @@ backoff <- function(tries_made,
   }
 
   if (sheets_per_user_quota_exhaustion(resp) && tries_made == 1) {
-    wait_time <- 100 + stats::runif(1)
-    wait_rationale <- "fixed 100 second wait for per user quota exhaustion"
+    wait_time <- 60 + stats::runif(1)
+    wait_rationale <- "fixed 60 second wait for per user quota exhaustion"
   }
 
   retry_after <- retry_after_header(resp)
@@ -203,7 +204,7 @@ sheets_per_user_quota_exhaustion <- function(resp) {
   msg <- gargle_error_message(resp)
   # the structure of this error and the wording of this message have changed
   # over time
-  any(grepl("per user per 100 seconds", msg)) ||
+  any(grepl("per user per 60 seconds", msg)) ||
     any(grepl("per minute per user", msg))
 }
 

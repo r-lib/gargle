@@ -7,7 +7,7 @@ f <- function(ssid = deaths_id, i = 0) {
     "sheets.spreadsheets.get",
     params = list(spreadsheetId = ssid, fields = "spreadsheetId")
   )
-  raw_resp <- googlesheets4::request_make(req)
+  raw_resp <- gargle::request_make(req)
   code <- httr::status_code(raw_resp)
   cat(i, "code:", code, "\n")
   if (code >= 200 && code < 300) {
