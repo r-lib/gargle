@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +26,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a>
     <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a>
-    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R in the browser</a>
+    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a>
     <a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -63,6 +63,39 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.0" id="gargle-140">gargle 1.4.0<a class="anchor" aria-label="anchor" href="#gargle-140"></a></h2>
+<div class="section level3">
+<h3 id="google-compute-engine-1-4-0">Google Compute Engine<a class="anchor" aria-label="anchor" href="#google-compute-engine-1-4-0"></a></h3>
+<ul><li><p><code>credentials_gce(scopes = NULL)</code> is now equivalent to <code>credentials_gce(scopes = "https://www.googleapis.com/auth/cloud-platform")</code>, i.e. there’s an even stronger current towards the recommended “cloud-platform” scope.</p></li>
+<li><p><code>credentials_gce(scopes =)</code> now includes those <code>scopes</code> in its request to the metadata server for an access token (<a href="https://github.com/r-lib/gargle/issues/216" class="external-link">#216</a>). Note that the scopes for a GCE access token are generally pre-determined for the instance and its associated service account at creation/launch time and these requested <code>scopes</code> will have no effect. But this seems to do no harm and it is possible that there are contexts where this is useful.</p></li>
+<li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> now emits considerably more information when the <code>"gargle_verbosity"</code> option is set to <code>"debug"</code>. For example, it reports mismatches between requested scopes and instance scopes and between requested scopes and the access token’s actual scopes.</p></li>
+<li><p><code><a href="../reference/credentials_gce.html">credentials_gce()</a></code> stores the actual scopes of the received access token, which can differ from the requested scopes. This is also noted when the <code>"gargle_verbosity"</code> option is set to <code>"debug"</code>.</p></li>
+<li><p>The <code>GceToken</code> R6 class gains a better <code>$print()</code> method that is more similar to gargle’s treatment of tokens obtained with other flows.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="behaviour-in-a-cloudserver-context-1-4-0">Behaviour in a cloud/server context<a class="anchor" aria-label="anchor" href="#behaviour-in-a-cloudserver-context-1-4-0"></a></h3>
+<ul><li><p>gargle is better able to detect when it’s running on Posit Workbench or RStudio Server, e.g., in a subprocess.</p></li>
+<li><p><code><a href="../reference/gargle_options.html">gargle_oauth_client_type()</a></code> is a new function that returns either “installed” or “web”. It returns the value of the new global option by the same name (<code>"gargle_oauth_client_type"</code>), if defined. If the option is not defined, returns “web” on RStudio Server, Posit Workbench, Posit Cloud, or Google Colaboratory and “installed” otherwise. In the context of out-of-band (OOB) auth, an “installed” client type leads to the conventional OOB flow (only available for GCP projects in testing mode) and a “web” client leads to the new pseudo-OOB flow. The option and accessor have been added to cover contexts other than those mentioned above where it is helpful to request a “web” client.</p></li>
+<li><p><code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> now works in Google Colaboratory (<a href="https://github.com/r-lib/gargle/issues/140" class="external-link">#140</a>).</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="everything-else-1-4-0">Everything else<a class="anchor" aria-label="anchor" href="#everything-else-1-4-0"></a></h3>
+<ul><li><p>gargle now elicits user input via <code><a href="https://rdrr.io/r/base/readline.html" class="external-link">readline()</a></code>, instead of via <code><a href="https://rdrr.io/r/utils/menu.html" class="external-link">utils::menu()</a></code>, which is favorable for interacting with the user in a Jupyter notebook (<a href="https://github.com/r-lib/gargle/issues/242" class="external-link">#242</a>).</p></li>
+<li>
+<p>The roxygen templating functions that wrapper packages can use to generate standardized documentation around auth have been updated to reflect gargle’s pivot from OAuth “app” to “client”. Changes of note:</p>
+<ul><li>
+<code>PREFIX_auth_configure_description()</code> crosslinks to <code>PREFIX_oauth_client()</code> now, not <code>PREFIX_oauth_app()</code>. So this assumes the package has indeed introduced the <code>PREFIX_oauth_client()</code> function (and, presumably, has deprecated <code>PREFIX_oauth_app()</code>).</li>
+<li>
+<code>PREFIX_auth_configure_params()</code> gains <code>client</code> argument.</li>
+<li>
+<code>PREFIX_auth_configure_params()</code> deprecates the <code>app</code> argument and uses a lifecycle badge. It is assumed that the badge SVG is present, which can be achieved with <code>usethis::use_lifecycle()</code>.</li>
+<li>
+<code>PREFIX_auth_configure_params()</code> crosslinks to <code><a href="../reference/gargle_oauth_client_from_json.html">gargle::gargle_oauth_client_from_json()</a></code>. The wrapper package therefore needs to state a minimum version for gargle, e.g. <code>gargle (&gt;= 1.3.0)</code> (or higher).</li>
+</ul></li>
+<li><p><code><a href="../reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> works now for (variations of) service account tokens, as intended, not just for user tokens (<a href="https://github.com/r-lib/gargle/issues/250" class="external-link">#250</a>). It also emits more information about scopes when the <code>"gargle_verbosity"</code> option is set to <code>"debug"</code>.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.3.0" id="gargle-130">gargle 1.3.0<a class="anchor" aria-label="anchor" href="#gargle-130"></a></h2><p class="text-muted">CRAN release: 2023-01-30</p>
 <div class="section level3">
 <h3 id="partial-deprecation-out-of-band-oob-auth-flow-1-3-0">(Partial) deprecation out-of-band (OOB) auth flow<a class="anchor" aria-label="anchor" href="#partial-deprecation-out-of-band-oob-auth-flow-1-3-0"></a></h3>
@@ -77,8 +110,10 @@
 </div>
 <div class="section level3">
 <h3 id="gargle-specific-notion-of-oauth-client-1-3-0">gargle-specific notion of OAuth client<a class="anchor" aria-label="anchor" href="#gargle-specific-notion-of-oauth-client-1-3-0"></a></h3>
-<p><code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> is a new constructor for an S3 class by the same name. There are two motivations: - To adjust to Google’s deprecation of conventional OOB and to support gargle’s new pseudo-OOB flow, it is helpful for gargle to know whether an OAuth client ID is of type “Web application” or “Desktop app”. That means we need a Google- and gargle-specific notion of an OAuth client, so we can introduce a <code>type</code> field. - A transition from httr and httr2 is on the horizon, so it makes sense to look more toward <code>httr2:oauth_client()</code> than to <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>. gargle’s vocabulary is generally shifting towards “client” and away from “app”.</p>
-<p><code><a href="../reference/oauth_app_from_json.html">oauth_app_from_json()</a></code> has therefore been (soft) deprecated, in favor of a new function <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which is the preferred way to instantiate an OAuth client, since the downloaded JSON conveys the client type and redirect URI(s). As a bridging measure, <code>gargle_oauth_client</code> currently inherits from httr’s <code>oauth_app</code>, but this probably won’t be true in the long-term.</p>
+<p><code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> is a new constructor for an S3 class by the same name. There are two motivations:</p>
+<ul><li>To adjust to Google’s deprecation of conventional OOB and to support gargle’s new pseudo-OOB flow, it is helpful for gargle to know whether an OAuth client ID is of type “Web application” or “Desktop app”. That means we need a Google- and gargle-specific notion of an OAuth client, so we can introduce a <code>type</code> field.</li>
+<li>A transition from httr to httr2 is on the horizon, so it makes sense to look more toward <code>httr2:oauth_client()</code> than to <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>. gargle’s vocabulary is generally shifting towards “client” and away from “app”.</li>
+</ul><p><code><a href="../reference/oauth_app_from_json.html">oauth_app_from_json()</a></code> has therefore been (soft) deprecated, in favor of a new function <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which is the preferred way to instantiate an OAuth client, since the downloaded JSON conveys the client type and redirect URI(s). As a bridging measure, <code>gargle_oauth_client</code> currently inherits from httr’s <code>oauth_app</code>, but this probably won’t be true in the long-term.</p>
 <p><code>gargle_client(type =)</code> replaces <code><a href="../reference/oauth_app_from_json.html">gargle_app()</a></code>.</p>
 </div>
 <div class="section level3">
@@ -245,7 +280,7 @@
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Posit, PBC.</p>
+  <p></p><p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

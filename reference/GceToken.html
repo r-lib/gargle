@@ -12,7 +12,7 @@ Token for use on Google Compute Engine instances"><!-- mathjax --><script src="h
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@ Token for use on Google Compute Engine instances"><!-- mathjax --><script src="h
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a>
     <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a>
-    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R in the browser</a>
+    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a>
     <a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -86,47 +86,69 @@ tokens. Not intended for direct use. See <code><a href="credentials_gce.html">cr
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
 
-<ul><li><p><a href="#method-GceToken-print"><code>GceToken$print()</code></a></p></li>
+<ul><li><p><a href="#method-GceToken-new"><code>GceToken$new()</code></a></p></li>
 <li><p><a href="#method-GceToken-init_credentials"><code>GceToken$init_credentials()</code></a></p></li>
+<li><p><a href="#method-GceToken-refresh"><code>GceToken$refresh()</code></a></p></li>
+<li><p><a href="#method-GceToken-can_refresh"><code>GceToken$can_refresh()</code></a></p></li>
+<li><p><a href="#method-GceToken-format"><code>GceToken$format()</code></a></p></li>
+<li><p><a href="#method-GceToken-print"><code>GceToken$print()</code></a></p></li>
 <li><p><a href="#method-GceToken-cache"><code>GceToken$cache()</code></a></p></li>
 <li><p><a href="#method-GceToken-load_from_cache"><code>GceToken$load_from_cache()</code></a></p></li>
-<li><p><a href="#method-GceToken-can_refresh"><code>GceToken$can_refresh()</code></a></p></li>
-<li><p><a href="#method-GceToken-refresh"><code>GceToken$refresh()</code></a></p></li>
 <li><p><a href="#method-GceToken-revoke"><code>GceToken$revoke()</code></a></p></li>
+<li><p><a href="#method-GceToken-validate"><code>GceToken$validate()</code></a></p></li>
 <li><p><a href="#method-GceToken-clone"><code>GceToken$clone()</code></a></p></li>
 </ul></div><p><details open><summary>Inherited methods</summary><ul><li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="hash"><a href="../../httr/html/Token.html#method-Token-hash"><code>httr::Token$hash()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token" data-id="initialize"><a href="../../httr/html/Token.html#method-Token-initialize"><code>httr::Token$initialize()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href="../../httr/html/Token2.0.html#method-Token2.0-sign"><code>httr::Token2.0$sign()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href="../../httr/html/Token2.0.html#method-Token2.0-validate"><code>httr::Token2.0$validate()</code></a></span></li>
-</ul></details></p><hr><a id="method-GceToken-print"></a><div class="section">
-<h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
-<p>Print token</p><div class="section">
+</ul></details></p><hr><a id="method-GceToken-new"></a><div class="section">
+<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+<p>Get an access for a GCE service account.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/GceToken.html">GceToken</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">params</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>...</code></dt>
-<dd><p>Not used.</p></dd>
+<p></p><div class="arguments"><dl><dt><code>params</code></dt>
+<dd><p>A list of parameters for <code>fetch_gce_access_token()</code>.</p></dd>
 
 
 </dl><p></p></div>
 </div>
+<div class="section">
+<h4 id="returns">Returns<a class="anchor" aria-label="anchor" href="#returns"></a></h4>
+<p>A GceToken.</p>
+</div>
 
 </div><p></p><hr><a id="method-GceToken-init_credentials"></a><div class="section">
 <h3 id="method-init-credentials-">Method <code>init_credentials()</code><a class="anchor" aria-label="anchor" href="#method-init-credentials-"></a></h3>
-<p>Placeholder implementation of required method</p><div class="section">
+<p>Request an access token.</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">init_credentials</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-GceToken-cache"></a><div class="section">
-<h3 id="method-cache-">Method <code>cache()</code><a class="anchor" aria-label="anchor" href="#method-cache-"></a></h3>
-<p>Placeholder implementation of required method</p><div class="section">
+</div><p></p><hr><a id="method-GceToken-refresh"></a><div class="section">
+<h3 id="method-refresh-">Method <code>refresh()</code><a class="anchor" aria-label="anchor" href="#method-refresh-"></a></h3>
+<p>Refreshes the token. In this case, that just means "ask again
+for an access token".</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">cache</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">refresh</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-GceToken-can_refresh"></a><div class="section">
+<h3 id="method-can-refresh-">Method <code>can_refresh()</code><a class="anchor" aria-label="anchor" href="#method-can-refresh-"></a></h3>
+<p>Placeholder implementation of required method. Returns <code>TRUE</code>.</p><div class="section">
+<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">can_refresh</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-GceToken-format"></a><div class="section">
+<h3 id="method-format-">Method <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code><a class="anchor" aria-label="anchor" href="#method-format-"></a></h3>
+<p>Format a <code>GceToken()</code>.</p><div class="section">
+<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">format</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -138,11 +160,11 @@ tokens. Not intended for direct use. See <code><a href="credentials_gce.html">cr
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-GceToken-load_from_cache"></a><div class="section">
-<h3 id="method-load-from-cache-">Method <code>load_from_cache()</code><a class="anchor" aria-label="anchor" href="#method-load-from-cache-"></a></h3>
-<p>Placeholder implementation of required method</p><div class="section">
-<h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">load_from_cache</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><hr><a id="method-GceToken-print"></a><div class="section">
+<h3 id="method-print-">Method <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code><a class="anchor" aria-label="anchor" href="#method-print-"></a></h3>
+<p>Print a <code>GceToken()</code>.</p><div class="section">
+<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
@@ -154,34 +176,42 @@ tokens. Not intended for direct use. See <code><a href="credentials_gce.html">cr
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-GceToken-can_refresh"></a><div class="section">
-<h3 id="method-can-refresh-">Method <code>can_refresh()</code><a class="anchor" aria-label="anchor" href="#method-can-refresh-"></a></h3>
-<p>Placeholder implementation of required method</p><div class="section">
-<h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">can_refresh</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><hr><a id="method-GceToken-cache"></a><div class="section">
+<h3 id="method-cache-">Method <code>cache()</code><a class="anchor" aria-label="anchor" href="#method-cache-"></a></h3>
+<p>Placeholder implementation of required method.</p><div class="section">
+<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">cache</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
-</div><p></p><hr><a id="method-GceToken-refresh"></a><div class="section">
-<h3 id="method-refresh-">Method <code>refresh()</code><a class="anchor" aria-label="anchor" href="#method-refresh-"></a></h3>
-<p>Refresh a GCE token</p><div class="section">
-<h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">refresh</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div><p></p><hr><a id="method-GceToken-load_from_cache"></a><div class="section">
+<h3 id="method-load-from-cache-">Method <code>load_from_cache()</code><a class="anchor" aria-label="anchor" href="#method-load-from-cache-"></a></h3>
+<p>Placeholder implementation of required method.</p><div class="section">
+<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">load_from_cache</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
 </div><p></p><hr><a id="method-GceToken-revoke"></a><div class="section">
 <h3 id="method-revoke-">Method <code>revoke()</code><a class="anchor" aria-label="anchor" href="#method-revoke-"></a></h3>
-<p>Placeholder implementation of required method</p><div class="section">
-<h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
+<p>Placeholder implementation of required method.</p><div class="section">
+<h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">revoke</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+
+</div><p></p><hr><a id="method-GceToken-validate"></a><div class="section">
+<h3 id="method-validate-">Method <code>validate()</code><a class="anchor" aria-label="anchor" href="#method-validate-"></a></h3>
+<p>Placeholder implementation of required method</p><div class="section">
+<h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">validate</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 
 </div><p></p><hr><a id="method-GceToken-clone"></a><div class="section">
 <h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
-<h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
+<h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">GceToken</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -205,7 +235,7 @@ tokens. Not intended for direct use. See <code><a href="credentials_gce.html">cr
    </div>
   <footer><div class="container">
   <div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Posit, PBC.</p>
+  <p></p><p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">

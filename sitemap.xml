@@ -31,6 +31,9 @@
     <loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/google-compute-engine.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html</loc>
   </url>
   <url>
@@ -119,6 +122,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_options.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/gce_access_token.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gce_instance_service_accounts.html</loc>

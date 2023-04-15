@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a>
     <a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a>
-    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R in the browser</a>
+    <a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a>
     <a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -191,14 +191,14 @@ family of functions.</p>
 the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pw</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">secret_pw_gen</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "cLldBLiCfJepovI0nPXuE6BKmU0N6TYntYwjROMa5f230gwuQE"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "fM8QrKwfrPNae8TN6Sw8aDkg5JCcBzwVLrzdHPFcnlfRGUKxpZ"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="define-environment-variable-in--renviron">Define environment variable in <code>.Renviron</code><a class="anchor" aria-label="anchor" href="#define-environment-variable-in--renviron"></a>
 </h3>
 <p>Combine the name and value to form a line like this in your
 user-level <code>.Renviron</code> file:</p>
-<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">cLldBLiCfJepovI0nPXuE6BKmU0N6TYntYwjROMa5f230gwuQE</span></span></code></pre>
+<pre><code><span><span class="va">GARGLE_PASSWORD</span><span class="op">=</span><span class="va">fM8QrKwfrPNae8TN6Sw8aDkg5JCcBzwVLrzdHPFcnlfRGUKxpZ</span></span></code></pre>
 <p><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link"><code>usethis::edit_r_environ()</code></a>
 can help create or open this file. We <strong>strongly
 recommend</strong> using the user-level <code>.Renviron</code>, as
@@ -471,7 +471,7 @@ vectors. Be prepared to see related conversions in the
 <li><a href="https://github.com/r-dbi/bigrquery/blob/main/tests/testthat/helper-auth.R" class="external-link"><code>bigrquery/tests/testthat/helper-auth.R</code></a></li>
 <li><a href="https://github.com/tidyverse/googledrive/blob/main/tests/testthat/helper.R" class="external-link"><code>googledrive/tests/testthat/helper.R</code></a></li>
 <li>Setup chunk of a pkgdown article that is rendered and deployed via
-CI: <a href="https://github.com/tidyverse/googledrive/blob/f08c545284eadd4e69a14d1e843d228e8166e896/vignettes/articles/multiple-files.Rmd#L10-L29" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd#L10-L29</code></a>
+CI: <a href="https://github.com/tidyverse/googledrive/blob/1f3ae3758e6ef12f52a90ea6889ddd2cbd26acd9/vignettes/articles/multiple-files.Rmd#L5-L28" class="external-link"><code>googledrive/vignettes/articles/multiple-files.Rmd</code></a>
 </li>
 </ul>
 <p>“Managing secrets” vignette of httr:</p>
@@ -501,7 +501,7 @@ which smooths over frictions like those identified above relating to
   <footer><div class="container">
   <div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, Posit, PBC.</p>
+<p>Developed by <a href="https://jennybryan.org" class="external-link">Jennifer Bryan</a>, Craig Citro, <a href="http://hadley.nz" class="external-link">Hadley Wickham</a>, <a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" style="margin-bottom: 3px;"></a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
