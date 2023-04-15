@@ -7,10 +7,15 @@
     Error details:
     * reason: RATE_LIMIT_EXCEEDED
     * domain: googleapis.com
+    * metadata.quota_location: global
+    * metadata.quota_metric: sheets.googleapis.com/read_requests
     * metadata.quota_limit: ReadRequestsPerMinutePerUser
+    * metadata.quota_limit_value: 60
     * metadata.consumer: projects/603366585132
     * metadata.service: sheets.googleapis.com
-    * metadata.quota_metric: sheets.googleapis.com/read_requests
+    Links
+    * Description: Request a higher quota limit.
+      URL: https://cloud.google.com/docs/quota#requesting_higher_quota
 
 # Request for non-existent resource (Drive)
 
