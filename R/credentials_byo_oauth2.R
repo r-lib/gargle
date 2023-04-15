@@ -1,20 +1,21 @@
 #' Load a user-provided token
 #'
 #' @description
-#' This function does very little when called directly with a token:
-#'   * If input has class `request`, i.e. it is a token that has been prepared
+#' This function is designed to pass its `token` input through, after doing a
+#' few checks and some light processing:
+#'   * If `token` has class `request`, i.e. it is a token that has been prepared
 #'     with [httr::config()], the `auth_token` component is extracted. For
-#'     example, such input could be produced by `googledrive::drive_token()`
+#'     example, such input could be returned by `googledrive::drive_token()`
 #'     or `bigrquery::bq_token()`.
-#'   * If token is an instance of `Gargle2.0` (a gargle-obtained user token),
-#'     checks that it appears to be a Google OAuth token, based on its embedded
-#'     `oauth_endpoint`. Refreshes the token, if it's refreshable.
-#'   * Returns the token.
+#'   * If `token` is an instance of `Gargle2.0` (so: a gargle-obtained user
+#'     token), checks that it appears to be a Google OAuth token, based on its
+#'     embedded `oauth_endpoint`. Refreshes the token, if it's refreshable.
+#'   * Returns the `token`.
 #'
-#' There is no point providing `scopes`. They are ignored because the `scopes`
-#' associated with the token have already been baked in to the token itself and
-#' gargle does not support incremental authorization. The main point of
-#' `credentials_byo_oauth2()` is to allow `token_fetch()` (and packages that
+#' There is no point in providing `scopes`. They are ignored because the
+#' `scopes` associated with the token have already been baked in to the token
+#' itself and gargle does not support incremental authorization. The main point
+#' of `credentials_byo_oauth2()` is to allow `token_fetch()` (and packages that
 #' wrap it) to accommodate a "bring your own token" workflow.
 #'
 #' This also makes it possible to obtain a token with one package and then
@@ -26,7 +27,7 @@
 #' library(googlesheets4)
 #' drive_auth(email = "jane_doe@example.com")
 #' gs4_auth(token = drive_token())
-#' # work with both packages freely now
+#' # work with both packages freely now, with the same identity
 #' ```
 #'
 #' @inheritParams token_fetch
@@ -38,7 +39,7 @@
 #' @examples
 #' \dontrun{
 #' # assume `my_token` is a Token2.0 object returned by a function such as
-#' # httr::oauth2.0_token() or gargle::gargle2.0_token()
+#' # credentials_user_oauth2()
 #' credentials_byo_oauth2(token = my_token)
 #' }
 credentials_byo_oauth2 <- function(scopes = NULL, token, ...) {

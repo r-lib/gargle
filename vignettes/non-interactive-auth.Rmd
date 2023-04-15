@@ -21,10 +21,11 @@ This comes up in a wide array of contexts, ranging from simple rendering of a lo
 We assume the wrapper package uses the design described in `vignette("gargle-auth-in-client-package")`.
 Examples include:
 
-  * [bigrquery](https://bigrquery.r-dbi.org) (>= v1.2.0)
-  * [googledrive](https://googledrive.tidyverse.org) (>= v1.0.0)
-  * [gmailr](https://gmailr.r-lib.org) (>= v1.0.0)
+  * [bigrquery](https://bigrquery.r-dbi.org)
+  * [googledrive](https://googledrive.tidyverse.org)
   * [googlesheets4](https://googlesheets4.tidyverse.org)
+  * [gmailr](https://gmailr.r-lib.org) *note: gmailr does not use the built-in
+    tidyverse OAuth client*
 
 Full details on `gargle::token_fetch()`, which powers this strategy, are given in `vignette("how-gargle-gets-tokens")`.
     

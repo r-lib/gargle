@@ -28,22 +28,23 @@ httr's class \code{request}, i.e. a token that has been prepared with
 An \link[httr:Token-class]{Token2.0}.
 }
 \description{
-This function does very little when called directly with a token:
+This function is designed to pass its \code{token} input through, after doing a
+few checks and some light processing:
 \itemize{
-\item If input has class \code{request}, i.e. it is a token that has been prepared
+\item If \code{token} has class \code{request}, i.e. it is a token that has been prepared
 with \code{\link[httr:config]{httr::config()}}, the \code{auth_token} component is extracted. For
-example, such input could be produced by \code{googledrive::drive_token()}
+example, such input could be returned by \code{googledrive::drive_token()}
 or \code{bigrquery::bq_token()}.
-\item If token is an instance of \code{Gargle2.0} (a gargle-obtained user token),
-checks that it appears to be a Google OAuth token, based on its embedded
-\code{oauth_endpoint}. Refreshes the token, if it's refreshable.
-\item Returns the token.
+\item If \code{token} is an instance of \code{Gargle2.0} (so: a gargle-obtained user
+token), checks that it appears to be a Google OAuth token, based on its
+embedded \code{oauth_endpoint}. Refreshes the token, if it's refreshable.
+\item Returns the \code{token}.
 }
 
-There is no point providing \code{scopes}. They are ignored because the \code{scopes}
-associated with the token have already been baked in to the token itself and
-gargle does not support incremental authorization. The main point of
-\code{credentials_byo_oauth2()} is to allow \code{token_fetch()} (and packages that
+There is no point in providing \code{scopes}. They are ignored because the
+\code{scopes} associated with the token have already been baked in to the token
+itself and gargle does not support incremental authorization. The main point
+of \code{credentials_byo_oauth2()} is to allow \code{token_fetch()} (and packages that
 wrap it) to accommodate a "bring your own token" workflow.
 
 This also makes it possible to obtain a token with one package and then
@@ -55,13 +56,13 @@ googlesheets4. You could use a shared token like so:
 library(googlesheets4)
 drive_auth(email = "jane_doe@example.com")
 gs4_auth(token = drive_token())
-# work with both packages freely now
+# work with both packages freely now, with the same identity
 }\if{html}{\out{</div>}}
 }
 \examples{
 \dontrun{
 # assume `my_token` is a Token2.0 object returned by a function such as
-# httr::oauth2.0_token() or gargle::gargle2.0_token()
+# credentials_user_oauth2()
 credentials_byo_oauth2(token = my_token)
 }
 }

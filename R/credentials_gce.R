@@ -215,8 +215,8 @@ GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
   #' @param ... Not used.
   format = function(...) {
     x <- list(
-      scopes         = commapse(base_scope(self$params$scope)),
-      credentials    = commapse(names(self$credentials))
+      scopes      = commapse(base_scope(self$params$scope)),
+      credentials = commapse(names(self$credentials))
     )
     c(
       cli::cli_format_method(

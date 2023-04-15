@@ -101,8 +101,9 @@ gargle_oauth_cache <- function() {
 #' * "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google
 #' Colaboratory
 #' * "installed" otherwise
-#' Primarily intended to help infer the most suitable OAuth client when a user
-#' is relying on a built-in client, such as the tidyverse client used by
+#'
+#' Primarily intended to help infer the most suitable OAuth client type when a
+#' user is relying on a built-in client, such as the tidyverse client used by
 #' packages like bigrquery, googledrive, and googlesheets4.
 gargle_oauth_client_type <- function() {
   opt <- getOption("gargle_oauth_client_type")

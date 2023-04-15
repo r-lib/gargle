@@ -39,6 +39,8 @@ The option and accessor have been added to cover contexts other than those menti
 
 The `GceToken` R6 class gains a better `$print()` method that is more similar to gargle's treatment of tokens obtained with other flows.
 
+`credentials_byo_oauth2()` works now for (variations of) service account tokens, as intended, not just for user tokens (#250). It also emits more information about scopes when the `"gargle_verbosity"` option is set to `"debug"`.
+
 # gargle 1.3.0
 
 ## (Partial) deprecation out-of-band (OOB) auth flow

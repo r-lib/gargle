@@ -98,10 +98,11 @@ guess using some sensible heuristics.
 \item "web" on RStudio Server, Posit Workbench, Posit Cloud, or Google
 Colaboratory
 \item "installed" otherwise
-Primarily intended to help infer the most suitable OAuth client when a user
-is relying on a built-in client, such as the tidyverse client used by
-packages like bigrquery, googledrive, and googlesheets4.
 }
+
+Primarily intended to help infer the most suitable OAuth client type when a
+user is relying on a built-in client, such as the tidyverse client used by
+packages like bigrquery, googledrive, and googlesheets4.
 }
 
 \section{\code{gargle_verbosity}}{
