@@ -46,5 +46,5 @@ x <- list(
 field_mask(x)
 }
 \seealso{
-The documentation for the \href{https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks}{JSON encoding of a Protocol Buffers FieldMask}.
+The documentation for the \href{https://protobuf.dev/reference/protobuf/google.protobuf/#json-encoding-of-field-masks}{JSON encoding of a Protocol Buffers FieldMask}.
 }

@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @seealso The documentation for the [JSON encoding of a Protocol Buffers
-#'   FieldMask](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#json-encoding-of-field-masks).
+#'   FieldMask](https://protobuf.dev/reference/protobuf/google.protobuf/#json-encoding-of-field-masks).
 #'
 #' @examples
 #' x <- list(sheetId = 1234, title = "my_favorite_worksheet")
