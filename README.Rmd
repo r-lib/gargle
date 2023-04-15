@@ -58,20 +58,19 @@ pak::pak("r-lib/gargle")
 ```
 ## Basic usage
 
-gargle is a low-level package and does not do anything visibly exciting on its own. But here's a bit of usage in an interactive scenario where a user confirms they want to use a specific Google identity and loads an OAuth2 token.
+gargle is a low-level package and does not do anything visibly exciting on its own.
+But here's a bit of usage in an interactive scenario where a user confirms they want to use a specific Google identity and loads an OAuth2 token.
 
 ```{r eval = FALSE}
 library(gargle)
 
 token <- token_fetch()
 #> The gargle package is requesting access to your Google account.
-#> Select a pre-authorised account or enter '0' to obtain a new token.
-#> Press Esc/Ctrl + C to cancel.
-
-#> 1: janedoe_personal@gmail.com
-#> 2: janedoe@example.com
-
-#> Selection: 1
+#> Enter '1' to start a new auth process or select a pre-authorized account.
+#> 1: Send me to the browser for a new auth process.
+#> 2: janedoe_personal@gmail.com
+#> 3: janedoe@example.com
+#> Selection: 2
 
 token
 #> ── <Token (via gargle)> ─────────────────────────────────────────────────────
