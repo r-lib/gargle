@@ -32,20 +32,34 @@ gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]
 \item{...}{
   Arguments passed on to \code{\link[=gargle2.0_token]{gargle2.0_token}}
   \describe{
-    \item{\code{email}}{Optional. Allows user to target a specific Google identity. If
-specified, this is used for token lookup, i.e. to determine if a suitable
-token is already available in the cache. If no such token is found, \code{email}
-is used to pre-select the targetted Google identity in the OAuth chooser.
-Note, however, that the email associated with a token when it's cached is
-always determined from the token itself, never from this argument. Use \code{NA}
-or \code{FALSE} to match nothing and force the OAuth dance in the browser. Use
-\code{TRUE} to allow email auto-discovery, if exactly one matching token is
-found in the cache. Specify just the domain with a glob pattern, e.g.
-\code{"*@example.com"}, to create code that "just works" for both
-\code{alice@example.com} and \code{bob@example.com}. Defaults to the option named
-"gargle_oauth_email", retrieved by \code{\link[=gargle_oauth_email]{gargle_oauth_email()}}.}
-    \item{\code{use_oob}}{Whether to prefer out-of-band authentication. Defaults to the
-value returned by \code{\link[=gargle_oob_default]{gargle_oob_default()}}.}
+    \item{\code{email}}{Optional. If specified, \code{email} can take several different
+forms:
+\itemize{
+\item \code{"jane@gmail.com"}, i.e. an actual email address. This allows the user to
+target a specific Google identity. If specified, this is used for token
+lookup, i.e. to determine if a suitable token is already available in the
+cache. If no such token is found, \code{email} is used to pre-select the targeted
+Google identity in the OAuth chooser. (Note, however, that the email
+associated with a token when it's cached is always determined from the token
+itself, never from this argument).
+\item \code{"*@example.com"}, i.e. a domain-only glob pattern. This can be helpful if
+you need code that "just works" for both \code{alice@example.com} and
+\code{bob@example.com}.
+\item \code{TRUE} means that you are approving email auto-discovery. If exactly one
+matching token is found in the cache, it will be used.
+\item \code{FALSE} or \code{NA} mean that you want to ignore the token cache and force a
+new OAuth dance in the browser.
+}
+
+Defaults to the option named \code{"gargle_oauth_email"}, retrieved by
+\code{\link[=gargle_oauth_email]{gargle_oauth_email()}} (unless a wrapper package implements different
+default behavior).}
+    \item{\code{use_oob}}{Whether to use out-of-band authentication (or, perhaps, a
+variant implemented by gargle and known as "pseudo-oob") when first
+acquiring the token. Defaults to the value returned by
+\code{\link[=gargle_oob_default]{gargle_oob_default()}}. Note that (pseudo-)oob auth only affects
+the initial OAuth dance. If we retrieve (and possibly refresh) a
+cached token, \code{use_oob} has no effect.}
     \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
 \code{"gargle_oauth_cache"}, retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
     \item{\code{credentials}}{Advanced use only: allows you to completely customise

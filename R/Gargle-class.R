@@ -2,26 +2,38 @@
 #'
 #' Constructor function for objects of class [Gargle2.0].
 #'
-#' @param email Optional. Allows user to target a specific Google identity. If
-#'   specified, this is used for token lookup, i.e. to determine if a suitable
-#'   token is already available in the cache. If no such token is found, `email`
-#'   is used to pre-select the targetted Google identity in the OAuth chooser.
-#'   Note, however, that the email associated with a token when it's cached is
-#'   always determined from the token itself, never from this argument. Use `NA`
-#'   or `FALSE` to match nothing and force the OAuth dance in the browser. Use
-#'   `TRUE` to allow email auto-discovery, if exactly one matching token is
-#'   found in the cache. Specify just the domain with a glob pattern, e.g.
-#'   `"*@example.com"`, to create code that "just works" for both
-#'   `alice@example.com` and `bob@example.com`. Defaults to the option named
-#'   "gargle_oauth_email", retrieved by [gargle::gargle_oauth_email()].
+#' @param email Optional. If specified, `email` can take several different
+#'   forms:
+#' * `"jane@gmail.com"`, i.e. an actual email address. This allows the user to
+#' target a specific Google identity. If specified, this is used for token
+#' lookup, i.e. to determine if a suitable token is already available in the
+#' cache. If no such token is found, `email` is used to pre-select the targeted
+#' Google identity in the OAuth chooser. (Note, however, that the email
+#' associated with a token when it's cached is always determined from the token
+#' itself, never from this argument).
+#' * `"*@example.com"`, i.e. a domain-only glob pattern. This can be helpful if
+#' you need code that "just works" for both `alice@example.com` and
+#' `bob@example.com`.
+#' * `TRUE` means that you are approving email auto-discovery. If exactly one
+#'   matching token is found in the cache, it will be used.
+#' * `FALSE` or `NA` mean that you want to ignore the token cache and force a
+#' new OAuth dance in the browser.
+#'
+#' Defaults to the option named `"gargle_oauth_email"`, retrieved by
+#' [gargle::gargle_oauth_email()] (unless a wrapper package implements different
+#' default behavior).
 #' @param app A Google OAuth client, preferably constructed via
 #'   [gargle::gargle_oauth_client_from_json()], which returns an instance of
 #'   `gargle_oauth_client`. For backwards compatibility, for a limited time,
 #'   gargle will still accept an "OAuth app" created with [httr::oauth_app()].
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
-#' @param use_oob Whether to prefer out-of-band authentication. Defaults to the
-#'   value returned by [gargle::gargle_oob_default()].
+#' @param use_oob Whether to use out-of-band authentication (or, perhaps, a
+#'   variant implemented by gargle and known as "pseudo-oob") when first
+#'   acquiring the token. Defaults to the value returned by
+#'   [gargle::gargle_oob_default()]. Note that (pseudo-)oob auth only affects
+#'   the initial OAuth dance. If we retrieve (and possibly refresh) a
+#'   cached token, `use_oob` has no effect.
 #' @param cache Specifies the OAuth token cache. Defaults to the option named
 #'   `"gargle_oauth_cache"`, retrieved via [gargle::gargle_oauth_cache()].
 #' @inheritParams httr::oauth2.0_token
