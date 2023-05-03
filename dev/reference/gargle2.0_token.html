@@ -84,18 +84,24 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>email</dt>
-<dd><p>Optional. Allows user to target a specific Google identity. If
-specified, this is used for token lookup, i.e. to determine if a suitable
-token is already available in the cache. If no such token is found, <code>email</code>
-is used to pre-select the targetted Google identity in the OAuth chooser.
-Note, however, that the email associated with a token when it's cached is
-always determined from the token itself, never from this argument. Use <code>NA</code>
-or <code>FALSE</code> to match nothing and force the OAuth dance in the browser. Use
-<code>TRUE</code> to allow email auto-discovery, if exactly one matching token is
-found in the cache. Specify just the domain with a glob pattern, e.g.
-<code>"*@example.com"</code>, to create code that "just works" for both
-<code>alice@example.com</code> and <code>bob@example.com</code>. Defaults to the option named
-"gargle_oauth_email", retrieved by <code><a href="gargle_options.html">gargle_oauth_email()</a></code>.</p></dd>
+<dd><p>Optional. If specified, <code>email</code> can take several different
+forms:</p><ul><li><p><code>"jane@gmail.com"</code>, i.e. an actual email address. This allows the user to
+target a specific Google identity. If specified, this is used for token
+lookup, i.e. to determine if a suitable token is already available in the
+cache. If no such token is found, <code>email</code> is used to pre-select the targeted
+Google identity in the OAuth chooser. (Note, however, that the email
+associated with a token when it's cached is always determined from the token
+itself, never from this argument).</p></li>
+<li><p><code>"*@example.com"</code>, i.e. a domain-only glob pattern. This can be helpful if
+you need code that "just works" for both <code>alice@example.com</code> and
+<code>bob@example.com</code>.</p></li>
+<li><p><code>TRUE</code> means that you are approving email auto-discovery. If exactly one
+matching token is found in the cache, it will be used.</p></li>
+<li><p><code>FALSE</code> or <code>NA</code> mean that you want to ignore the token cache and force a
+new OAuth dance in the browser.</p></li>
+</ul><p>Defaults to the option named <code>"gargle_oauth_email"</code>, retrieved by
+<code><a href="gargle_options.html">gargle_oauth_email()</a></code> (unless a wrapper package implements different
+default behavior).</p></dd>
 
 
 <dt>app</dt>
@@ -114,8 +120,12 @@ gargle will still accept an "OAuth app" created with <code><a href="https://httr
 
 
 <dt>use_oob</dt>
-<dd><p>Whether to prefer out-of-band authentication. Defaults to the
-value returned by <code><a href="gargle_options.html">gargle_oob_default()</a></code>.</p></dd>
+<dd><p>Whether to use out-of-band authentication (or, perhaps, a
+variant implemented by gargle and known as "pseudo-oob") when first
+acquiring the token. Defaults to the value returned by
+<code><a href="gargle_options.html">gargle_oob_default()</a></code>. Note that (pseudo-)oob auth only affects
+the initial OAuth dance. If we retrieve (and possibly refresh) a
+cached token, <code>use_oob</code> has no effect.</p></dd>
 
 
 <dt>credentials</dt>
