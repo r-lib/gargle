@@ -59,3 +59,41 @@ credentials_service_account <- function(scopes = NULL,
     token
   }
 }
+
+#' Check for a service account
+#'
+#' This pre-checks information provided to a high-level, user-facing auth
+#' function, such as `googledrive::drive_auth()`, before passing the user's
+#' input along to [token_fetch()], which is designed to silently swallow errors.
+#' Some users are confused about the difference between an OAuth client and a
+#' service account and they provide the (path to the) JSON for one, when the
+#' other is what's actually expected.
+#'
+#' @inheritParams credentials_service_account
+#' @param hint The relevant function to call for configuring an OAuth client.
+#' @inheritParams rlang::abort
+#'
+#' @return Nothing. Exists purely to throw an error.
+#' @export
+#' @keywords internal
+check_is_service_account <- function(path, hint, call = caller_env()) {
+  if (is.null(path)) {
+    return(invisible())
+  }
+
+  tryCatch(
+    info <- jsonlite::fromJSON(path, simplifyVector = FALSE),
+    error = NULL
+  )
+
+  if (!is.null(info) && !identical(info[["type"]], "service_account")) {
+    cli::cli_abort(c(
+      "{.arg path} does not represent a service account.",
+      "Did you provide the JSON for an OAuth client instead of for a \\
+         service account?",
+      "Use {.fun {hint}} to configure the OAuth client."
+      ),
+      call = call
+    )
+  }
+}
