@@ -40,9 +40,7 @@ test_that("service account JSON throws an informative error", {
 test_that("oauth app from JSON", {
   withr::local_options(lifecycle_verbosity = "quiet")
   oa <- oauth_app_from_json(
-    test_path(
-      "fixtures", "client_secret_123.googleusercontent.com.json"
-    )
+    fs::path_package("gargle", "extdata", "client_secret_installed.googleusercontent.com.json")
   )
   expect_s3_class(oa, "oauth_app")
   expect_match(oa$appname, "^a_project")
@@ -50,9 +48,7 @@ test_that("oauth app from JSON", {
   expect_equal(oa$key, "abc.apps.googleusercontent.com")
 
   oa <- oauth_app_from_json(
-    test_path(
-      "fixtures", "client_secret_456.googleusercontent.com.json"
-    )
+    fs::path_package("gargle", "extdata", "client_secret_web.googleusercontent.com.json")
   )
   expect_s3_class(oa, "oauth_app")
   expect_match(oa$appname, "^a_project")

@@ -1,7 +1,8 @@
 # check_is_service_account() errors for OAuth client
 
     Code
-      PKG_auth(test_path("fixtures", "client_secret_123.googleusercontent.com.json"))
+      PKG_auth(fs::path_package("gargle", "extdata",
+        "client_secret_installed.googleusercontent.com.json"))
     Condition
       Error in `PKG_auth()`:
       ! `path` does not represent a service account.

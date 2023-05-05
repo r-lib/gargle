@@ -6,7 +6,7 @@ test_that("check_is_service_account() errors for OAuth client", {
   expect_snapshot(
     error = TRUE,
     PKG_auth(
-      test_path("fixtures", "client_secret_123.googleusercontent.com.json")
+      fs::path_package("gargle", "extdata", "client_secret_installed.googleusercontent.com.json")
     )
   )
 })
