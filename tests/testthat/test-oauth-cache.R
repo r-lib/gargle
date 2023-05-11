@@ -22,7 +22,6 @@ test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
   local_mocked_bindings(
     # we want no existing cache to be found, be it current or legacy
     gargle_default_oauth_cache_path = function() file_temp(),
-    gargle_legacy_default_oauth_cache_path = function() file_temp(),
     cache_allowed = function(path) FALSE
   )
   expect_equal(cache_establish(NA), cache_establish(FALSE))
@@ -58,7 +57,6 @@ test_that("default is to consult and set the oauth cache option", {
   local_mocked_bindings(
     # we want no existing cache to be found, be it current or legacy
     gargle_default_oauth_cache_path = function() file_temp(),
-    gargle_legacy_default_oauth_cache_path = function() file_temp(),
     cache_allowed = function(path) FALSE
   )
 

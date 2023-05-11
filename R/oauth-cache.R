@@ -19,13 +19,6 @@ cache_establish <- function(cache = NULL) {
     stop_input_type(cache, what = c("logical", "character"))
   }
 
-  # takes care of the re-location of the default cache, implemented in v1.1.0
-  # once we consider the transition done, this if(){...} can go away
-  # the persistent solution for cleaning out legacy tokens is cache_clean() below
-  if (isTRUE(cache) || is_na(cache)) {
-    close_out_legacy_cache()
-  }
-
   # If NA, consider default cache folder
   # Request user's permission to create it, if doesn't exist yet
   # Store outcome of this mission (TRUE or FALSE) in the option for the session
@@ -143,11 +136,6 @@ cache_load <- function(path) {
 }
 
 cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
-  # deletes an empty directory at the legacy cache location
-  # new location implemented in v1.1.0
-  # once we consider the transition done, this defer() can go away
-  withr::defer(delete_empty_legacy_cache(cache))
-
   dat_tokens <- gargle_oauth_dat(cache)
   dat_tokens$legacy <- grepl(pattern, dat_tokens$app)
   n <- sum(dat_tokens$legacy)
@@ -453,12 +441,6 @@ print.gargle_oauth_dat <- function(x, ...) {
   invisible(x)
 }
 
-# cache relocation, implemented in v1.1.0 --------------------------------------
-
-gargle_legacy_default_oauth_cache_path <- function() {
-  path_home(".R", "gargle", "gargle-oauth")
-}
-
 # main point of this is **passive** cache discovery
 cache_locate <- function() {
   option_cache <- gargle_oauth_cache()
@@ -470,89 +452,8 @@ cache_locate <- function() {
   }
 
   default_cache <- gargle_default_oauth_cache_path()
-  if (dir_exists(default_cache)) {
-    return(default_cache)
-  }
-
-  cache <- gargle_legacy_default_oauth_cache_path()
-  if (dir_exists(cache)) {
-    gargle_info(c(
-      "!" = "Legacy OAuth cache found.",
-      "!" = "Expect cache to be cleaned and relocated upon first use."
-    ))
-    return(cache)
-  }
-
-  default_cache
-}
-
-is_legacy_cache <- function(cache) {
-  legacy_cache <- gargle_legacy_default_oauth_cache_path()
-  dir_exists(legacy_cache) &&
-    path_real(cache) == path_real(legacy_cache)
-}
-
-delete_empty_legacy_cache <- function(cache) {
-  if (!is_legacy_cache(cache)) {
-    return()
-  }
-
-  # use dir_ls() or gargle_oauth_dat()?
-  # dir_ls() captures all files
-  # gargle_oauth_dat() just captures files that "look" like our tokens
-  # this should rarely matter, but I'll err on the side of not deleting files
-  #   that I don't recognize as ours
-  cache_contents <- dir_ls(cache, all = TRUE)
-  if (length(cache_contents) == 0) {
-    gargle_debug("
-      Legacy cache {.path {cache}} is empty, deleting the directory")
-    dir_delete(cache)
-    TRUE
-  } else {
-    FALSE
-  }
-}
-
-# gets rid of an existing cache at the legacy location, whatever it takes
-#
-# ideally, it's empty and we can delete it and start over
-# that's why we first delete legacy tokens
-#
-# if there are still tokens remaining, move them to new default cache
-#
-# once we consider the transition done, this function can go away
-# the persistent solution for cleaning out legacy tokens is cache_clean()
-close_out_legacy_cache <- function() {
-  default_cache <- gargle_default_oauth_cache_path()
-  if (dir_exists(default_cache)) {
-    # cache already established at current default path
-    # even if a legacy cache still exists, we shall not speak of it
-    return()
-  }
-
-  cache <- gargle_legacy_default_oauth_cache_path()
-  if (dir_exists(cache)) {
-    cache_clean(cache)
-  }
-  if (!dir_exists(cache)) {
-    return()
-  }
-
-  # we have a non-empty legacy cache
-  cache_relocate(from = cache, to = default_cache)
-}
-
-cache_relocate <- function(from, to) {
   gargle_info(c(
-    "The default location for caching gargle OAuth tokens has changed.",
-    "Previously: {.path {from}}",
-    "As of gargle v1.1.0: {.path {to}}"
+    "i" = 'Reporting the default cache location.'
   ))
-  if (!dir_exists(to)) {
-    cache_create(to)
-  }
-  dat_tokens <- gargle_oauth_dat(from)
-  file_move(dat_tokens$filepath, to)
-  gargle_info("Relocating {nrow(dat_tokens)} existing token{?s} to new cache.")
-  delete_empty_legacy_cache(from)
+  default_cache
 }
