@@ -173,6 +173,12 @@ token_from_cache <- function(candidate) {
 
   existing <- cache_ls(cache_path)
   this_one <- token_match(candidate$hash(), existing, package = candidate$package)
+
+  gargle_debug("token(s) found in cache:")
+  gargle_debug(existing)
+  gargle_debug("token we are looking for:")
+  gargle_debug(this_one)
+
   if (is.null(this_one)) {
     NULL
   } else {

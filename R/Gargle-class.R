@@ -226,6 +226,12 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       return(FALSE)
     }
 
+    gargle_debug("email: {.email {self$email}}")
+    gargle_debug("oauth client name: {self$app$name}")
+    gargle_debug("oauth client name: {self$app$type}")
+    gargle_debug("oauth client id: {self$app$id}")
+    gargle_debug("scopes: {commapse(base_scope(self$params$scope))}")
+
     cached <- token_from_cache(self)
     if (is.null(cached)) {
       return(FALSE)
