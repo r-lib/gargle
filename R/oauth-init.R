@@ -77,7 +77,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
       state <- NULL
     }
   } else {
-    redirect_uri <- app$redirect_uri
+    redirect_uri <- httr::oauth_callback()
     state <- csrf_token()
   }
 
