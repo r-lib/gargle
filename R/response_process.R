@@ -209,6 +209,7 @@ gargle_error_message <- function(resp) {
 redact_response <- function(resp) {
   resp$request$auth_token <- "<REDACTED>"
   resp$request$headers["Authorization"] <- "<REDACTED>"
+  resp$handle <- NULL
   resp
 }
 
