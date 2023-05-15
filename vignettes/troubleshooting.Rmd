@@ -203,3 +203,48 @@ headache periodically.
 Consider using your own OAuth client to eliminate your exposure to a third-party deciding to roll their client.
 Be prepared to generate a fresh token interactively and upload it to the token cache consulted by your remote mission critical thing.
 Better yet, upgrade to a more robust strategy for [non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html), such as a service account token.
+
+## How to inspect the last response
+
+By default, `gargle::response_process()` stores the most recently processed response in an internal environment.
+You can access this response with the nonexported helper `gargle:::gargle_last_response()`.
+Prior to storage, a few parts of the response are redacted or deleted, such as the access token and the handle.
+These are either sensitive (the token) or useless (the handle) and they have more downside than upside for downstream debugging use.
+
+Here's an example of accessing the most recent response and writing it to file, which could be shared with someone else for debugging.
+The response is in this example has HTTP status 200, i.e. it is not an error.
+But this process works the same even if in the case of an error, e.g. an HTTP status >= 400.
+
+```{r include = FALSE}
+# only run the chunk below in settings that are known to be safe, i.e. where
+# occasional, incidental failure is OK
+can_decrypt <- gargle:::secret_can_decrypt("gargle")
+```
+
+```{r eval = can_decrypt, purl = can_decrypt}
+library(gargle)
+
+req <- request_build(
+  method = "GET",
+  path = "webfonts/v1/webfonts",
+  params = list(
+    sort = "popularity"
+  ),
+  key = gargle_api_key(),
+  base_url = "https://www.googleapis.com"
+)
+resp <- request_make(req)
+out <- response_process(resp)
+
+lr
+tmp <- tempfile("gargle-last-response-")
+saveRDS(lr, tmp)
+# you could share this .rds file with a colleague or the gargle maintainer
+
+# how it would look to complete the round trip, i.e. load this on the other end
+rt_lr <- readRDS(tmp)
+rt_lr
+
+# clean up
+unlink("tmp")
+```
