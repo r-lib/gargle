@@ -236,7 +236,7 @@ req <- request_build(
 resp <- request_make(req)
 out <- response_process(resp)
 
-lr
+(lr <- gargle:::gargle_last_response())
 tmp <- tempfile("gargle-last-response-")
 saveRDS(lr, tmp)
 # you could share this .rds file with a colleague or the gargle maintainer
