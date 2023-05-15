@@ -18,19 +18,21 @@ knitr::opts_chunk$set(
 library(gargle)
 ```
 
-## "gargle_verbosity" option
+## `"gargle_verbosity"` option
 
-There is a package-wide option that controls gargle's verbosity: "gargle_verbosity". The function `gargle_verbosity()` reveals the current value:
+There is a package-wide option that controls gargle's verbosity: `"gargle_verbosity"`.
+The function `gargle_verbosity()` reveals the current value:
 
 ```{r}
 gargle_verbosity()
 ```
 
-It defaults to "info", which is fairly quiet.
+It defaults to `"info"`, which is fairly quiet.
 This is because gargle is designed to try a bunch of auth methods (many of which will fail) and persist doggedly until one succeeds.
 If none succeeds, gargle tries to guide the user through auth or, in a non-interactive session, it throws an error.
 
-If you need to see all those gory details, set the "gargle_verbosity" option to "debug" and you'll get much more output as gargle works through various auth approaches.
+If you need to see all those gory details, set the `"gargle_verbosity"` option to `"debug"` and you'll get much more output as gargle works through various auth approaches.
+It is **normal** to see lots of errors, as gargle tries various auth methods in succession, most of which will often fail.
 
 ```{r}
 # save current value
@@ -68,7 +70,8 @@ gargle_verbosity()
 
 `gargle_oauth_sitrep()` provides an OAuth2 "situation report".
 
-`gargle_oauth_sitrep()` is only relevant to OAuth2 user tokens. If you are using (or struggling to use) a service account token, workload identity federation, Application Default Credentials, or credentials from the GCE metadata service, `gargle_oauth_sitrep()` isn't going to help you figure out what's going on.
+`gargle_oauth_sitrep()` is only relevant to OAuth2 user tokens.
+If you are using (or struggling to use) a service account token, workload identity federation, Application Default Credentials, or credentials from the GCE metadata service, `gargle_oauth_sitrep()` isn't going to help you figure out what's going on.
 
 Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.
 
@@ -95,7 +98,8 @@ gargle_oauth_sitrep()
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
 
-It is relatively harmless to delete the folder serving as the OAuth cache. Or, if you have reason to believe one specific cached token is causing you pain, you could delete a specific token (an `.rds` file) from the cache. OAuth user tokens are meant to be perishable and replaceable.
+It is relatively harmless to delete the folder serving as the OAuth cache.
+Or, if you have reason to believe one specific cached token is causing you pain, you could delete a specific token (an `.rds` file) from the cache. OAuth user tokens are meant to be perishable and replaceable.
 
 If you choose to delete your cache (or a specific token), here is the fallout you can expect:
 
@@ -120,6 +124,9 @@ A specific Google user (email) can only have a certain number of OAuth tokens at
 So, whenever you get a new token (as opposed to refreshing an existing token), there is the potential for it to invalidate an older token.
 This is unlikely to be an issue for a casual user, but it can absolutely become noticeable for someone who is developing against a Google API or someone working from many different machines / caches.
 
+Another reason that an existing token stops working is if it was obtained with an OAuth client that is in "testing" mode.
+Refresh tokens obtained that way only last for one week, whereas it's more typical for refresh tokens to last almost indefinitely (or, at least, for several months).
+
 ### Credential rolling
 
 Many users of packages like googlesheets4 or googledrive tacitly rely on the default OAuth client used by those packages.
@@ -128,7 +135,7 @@ This will make it impossible to refresh existing tokens, made with the old, disa
 Those tokens will stop working.
 
 *In gargle v1.0.0, in March 2021, we rolled the client used in googlesheets4, googledrive, and bigrquery.
-At some point in 2021, we plan to disable the old client.
+We reserve the right to disable the old client at any time.
 Anyone relying on the default client will have to upgrade.*
 
 The solution is to update the package in question, e.g. googlesheets4:
@@ -192,6 +199,7 @@ This is why cached user tokens are a poor fit for such applications.
 
 If you choose to use a cached user token anyway, be prepared to deal with this
 headache periodically.
-Consider using your own OAuth client to eliminate your exposure to a third-party deciding to roll their client
+(You may not have much of a choice if you are using, for example, the gmailr package to work with the Gmail API, which has limited support for service accounts.)
+Consider using your own OAuth client to eliminate your exposure to a third-party deciding to roll their client.
 Be prepared to generate a fresh token interactively and upload it to the token cache consulted by your remote mission critical thing.
 Better yet, upgrade to a more robust strategy for [non-interactive auth](https://gargle.r-lib.org/articles/non-interactive-auth.html), such as a service account token.
