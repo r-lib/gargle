@@ -6,11 +6,16 @@
 \alias{gargle_error_message}
 \title{Process a Google API response}
 \usage{
-response_process(resp, error_message = gargle_error_message, remember = TRUE)
+response_process(
+  resp,
+  error_message = gargle_error_message,
+  remember = TRUE,
+  call = caller_env()
+)
 
-response_as_json(resp)
+response_as_json(resp, call = caller_env())
 
-gargle_error_message(resp)
+gargle_error_message(resp, call = caller_env())
 }
 \arguments{
 \item{resp}{Object of class \code{response} from \link{httr}.}
@@ -19,6 +24,20 @@ gargle_error_message(resp)
 the primary input, \code{resp}. It must return a character vector.}
 
 \item{remember}{Whether to remember the most recently processed response.}
+
+\item{call}{The execution environment of a currently running
+function, e.g. \code{call = caller_env()}. The corresponding function
+call is retrieved and mentioned in error messages as the source
+of the error.
+
+You only need to supply \code{call} when throwing a condition from a
+helper function which wouldn't be relevant to mention in the
+message.
+
+Can also be \code{NULL} or a \link[rlang:topic-defuse]{defused function call} to
+respectively not display any call or hard-code a code to display.
+
+For more information about error calls, see \ifelse{html}{\link[rlang:topic-error-call]{Including function calls in error messages}}{\link[rlang:topic-error-call]{Including function calls in error messages}}.}
 }
 \value{
 The content of the request, as a list. An HTTP status code of 204 (No

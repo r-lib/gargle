@@ -3,7 +3,15 @@ expect_recorded_error <- function(filename, status_code) {
   resp <- readRDS(rds_file)
   expect_error(response_process(resp), class = "gargle_error_request_failed")
   expect_error(response_process(resp), class = glue("http_error_{status_code}"))
-  expect_snapshot_error(response_process(resp))
+  # HTML errors (as opposed to JSON) need this
+  scrub_filepath <- function(x) {
+    gsub(
+      "([\"\'])\\S+gargle-unexpected-html-error-\\S+[.]html([\"\'])",
+      "\\1VOLATILE_FILE_PATH\\2",
+      x,
+      perl = TRUE)
+  }
+  expect_snapshot(response_process(resp), error = TRUE, transform = scrub_filepath)
 }
 
 test_that("Resource exhausted (Sheets, ReadGroup)", {
