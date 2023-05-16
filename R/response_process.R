@@ -122,7 +122,7 @@ check_for_json <- function(resp, call = caller_env()) {
 
 gargle_abort_request_failed <- function(message,
                                         resp,
-                                        .envir = parent.frame(),
+                                        .envir = caller_env(),
                                         call = caller_env()) {
   gargle_abort(
     message,

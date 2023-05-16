@@ -167,7 +167,7 @@ cred_funs_set_default <- function() {
 #' @export
 local_cred_funs <- function(funs = cred_funs_list_default(),
                             action = c("replace", "modify"),
-                            .local_envir = parent.frame()) {
+                            .local_envir = caller_env()) {
   action <- arg_match(action)
 
   cred_funs_orig <- cred_funs_list()

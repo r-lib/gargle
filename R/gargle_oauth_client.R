@@ -215,7 +215,7 @@ gargle_client <- function(type = NULL) {
 #' @keywords internal
 #' @rdname internal-assets
 tidyverse_client <- function(type = NULL) {
-  check_permitted_package(parent.frame())
+  check_permitted_package(caller_env())
 
   if (is.null(type) || is.na(type)) {
     type <- gargle_oauth_client_type()

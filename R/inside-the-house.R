@@ -1,4 +1,4 @@
-from_permitted_package <- function(env = parent.frame()) {
+from_permitted_package <- function(env = caller_env()) {
   env <- topenv(env, globalenv())
   if (!isNamespace(env)) {
     return(FALSE)
@@ -9,7 +9,7 @@ from_permitted_package <- function(env = parent.frame()) {
   nm %in% c("gargle", "googledrive", "bigrquery", "googlesheets4", "gmailr")
 }
 
-check_permitted_package <- function(env = parent.frame(), call = caller_env()) {
+check_permitted_package <- function(env = caller_env(), call = caller_env()) {
   if (!from_permitted_package(env)) {
     msg <- c(
       "Attempt to directly access a credential that can only be used within \\
