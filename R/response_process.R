@@ -140,7 +140,7 @@ gargle_abort_request_failed <- function(message,
 #' @rdname response_process
 gargle_error_message <- function(resp, call = caller_env()) {
   type <- httr::http_type(resp)
-  if (type == "text/html") {
+  if (grepl("^text/html", type)) {
     return(gargle_html_error_message(resp))
   }
 
