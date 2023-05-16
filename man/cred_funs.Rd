@@ -27,7 +27,7 @@ cred_funs_set_default()
 local_cred_funs(
   funs = cred_funs_list_default(),
   action = c("replace", "modify"),
-  .local_envir = parent.frame()
+  .local_envir = caller_env()
 )
 
 with_cred_funs(
