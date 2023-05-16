@@ -127,7 +127,7 @@ gargle_oauth_client <- function(id,
 
   if (type == "web" && length(redirect_uris) == 0) {
     gargle_abort('
-        A "web" type OAuth client must have one or more {.field redirect_uris}.')
+      A "web" type OAuth client must have one or more {.field redirect_uris}.')
   }
 
   structure(
