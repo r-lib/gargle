@@ -1,5 +1,9 @@
 # gargle (development version)
 
+* When the `"gargle_verbosity"` option is set to `"debug"`, there are more debugging messages around user credentials. Specifically, more information is available on the email, OAuth client, and scopes, with the goal of better understanding why a cached token is (or is not) being used.
+
+* `check_is_service_account()` is a new function for use in wrapper packages to throw a more informative error when a user provides JSON for an OAuth client to an argument that is expecting JSON for a service account.
+
 * `response_process()` has improved handling of responses that represent an HTTP error with HTML content (as opposed to the expected and preferred JSON) (#254).
 
 * `response_process(call = caller_env())` is a new argument that is passed along to various helpers, which can improve error reporting for user-facing functions that call `response_process()` (#255).
