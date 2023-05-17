@@ -1,5 +1,9 @@
 # gargle (development version)
 
+* `response_process()` has improved handling of responses that represent an HTTP error with HTML content (as opposed to the expected and preferred JSON) (#254).
+
+* `response_process(call = caller_env())` is a new argument that is passed along to various helpers, which can improve error reporting for user-facing functions that call `response_process()` (#255).
+
 # gargle 1.4.0
 
 ## Google Compute Engine
