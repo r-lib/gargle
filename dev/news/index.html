@@ -64,7 +64,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
-</div>
+<ul><li><p><code><a href="../reference/response_process.html">response_process()</a></code> has improved handling of responses that represent an HTTP error with HTML content (as opposed to the expected and preferred JSON) (<a href="https://github.com/r-lib/gargle/issues/254" class="external-link">#254</a>).</p></li>
+<li><p><code>response_process(call = caller_env())</code> is a new argument that is passed along to various helpers, which can improve error reporting for user-facing functions that call <code><a href="../reference/response_process.html">response_process()</a></code> (<a href="https://github.com/r-lib/gargle/issues/255" class="external-link">#255</a>).</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.4.0" id="gargle-140">gargle 1.4.0<a class="anchor" aria-label="anchor" href="#gargle-140"></a></h2><p class="text-muted">CRAN release: 2023-04-15</p>
 <div class="section level3">

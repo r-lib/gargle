@@ -111,7 +111,7 @@ these lines:</p>
 <span></span>
 <span><span class="fu">gargle_verbosity</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">local_gargle_verbosity</span><span class="op">(</span><span class="va">level</span>, env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">local_gargle_verbosity</span><span class="op">(</span><span class="va">level</span>, env <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">with_gargle_verbosity</span><span class="op">(</span><span class="va">level</span>, <span class="va">code</span><span class="op">)</span></span></code></pre></div>
     </div>

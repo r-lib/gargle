@@ -87,7 +87,7 @@ consulted by <code><a href="token_fetch.html">token_fetch()</a></code>.</p>
 <span><span class="fu">local_cred_funs</span><span class="op">(</span></span>
 <span>  funs <span class="op">=</span> <span class="fu">cred_funs_list_default</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  action <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"replace"</span>, <span class="st">"modify"</span><span class="op">)</span>,</span>
-<span>  .local_envir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  .local_envir <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">with_cred_funs</span><span class="op">(</span></span>
