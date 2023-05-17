@@ -35,6 +35,17 @@
       * locationType: parameter
       * location: fileId
 
+# Too many requests (Drive, HTML content)
+
+    Code
+      response_process(resp)
+    Condition
+      Error in `expect_recorded_error()`:
+      ! Client error: (429) Too Many Requests (RFC 6585)
+      x Expected content type 'application/json', not 'text/html'.
+      i See 'VOLATILE_FILE_PATH' for the html error content.
+      i Or execute `browseURL("VOLATILE_FILE_PATH")` to view it in your browser.
+
 # Request for which we don't have scope (Fitness)
 
     Code

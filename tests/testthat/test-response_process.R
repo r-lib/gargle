@@ -28,6 +28,14 @@ test_that("Request for non-existent resource (Drive)", {
   )
 })
 
+# https://github.com/r-lib/gargle/issues/254
+test_that("Too many requests (Drive, HTML content)", {
+  expect_recorded_error(
+    "drive-automated-queries_429",
+    429
+  )
+})
+
 test_that("Request for which we don't have scope (Fitness)", {
   expect_recorded_error(
     "fitness-get-wrong-scope_403",
