@@ -21,7 +21,7 @@ gargle_oauth_client_type()
 
 gargle_verbosity()
 
-local_gargle_verbosity(level, env = parent.frame())
+local_gargle_verbosity(level, env = caller_env())
 
 with_gargle_verbosity(level, code)
 }

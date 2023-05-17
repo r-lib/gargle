@@ -32,6 +32,6 @@ NULL
 #' @keywords internal
 #' @rdname internal-assets
 tidyverse_api_key <- function() {
-  check_permitted_package(parent.frame())
+  check_permitted_package(caller_env())
   tak()
 }

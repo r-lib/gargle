@@ -127,7 +127,7 @@ gargle_oauth_client <- function(id,
 
   if (type == "web" && length(redirect_uris) == 0) {
     gargle_abort('
-        A "web" type OAuth client must have one or more {.field redirect_uris}.')
+      A "web" type OAuth client must have one or more {.field redirect_uris}.')
   }
 
   structure(
@@ -215,7 +215,7 @@ gargle_client <- function(type = NULL) {
 #' @keywords internal
 #' @rdname internal-assets
 tidyverse_client <- function(type = NULL) {
-  check_permitted_package(parent.frame())
+  check_permitted_package(caller_env())
 
   if (is.null(type) || is.na(type)) {
     type <- gargle_oauth_client_type()

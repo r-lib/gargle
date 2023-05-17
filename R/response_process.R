@@ -40,6 +40,7 @@
 #' @param error_message Function that produces an informative error message from
 #'   the primary input, `resp`. It must return a character vector.
 #' @param remember Whether to remember the most recently processed response.
+#' @inheritParams rlang::abort
 #'
 #' @return The content of the request, as a list. An HTTP status code of 204 (No
 #'   content) is a special case returning `TRUE`.
@@ -72,7 +73,8 @@
 #' }
 response_process <- function(resp,
                              error_message = gargle_error_message,
-                             remember = TRUE) {
+                             remember = TRUE,
+                             call = caller_env()) {
   if (remember) {
     gargle_env$last_response <- redact_response(resp)
   }
@@ -83,17 +85,21 @@ response_process <- function(resp,
       # HTTP status: No content
       TRUE
     } else {
-      response_as_json(resp)
+      response_as_json(resp, call = call)
     }
   } else {
-    gargle_abort_request_failed(error_message(resp), resp)
+    gargle_abort_request_failed(
+      error_message(resp, call = call),
+      resp,
+      call = call
+    )
   }
 }
 
 #' @export
 #' @rdname response_process
-response_as_json <- function(resp) {
-  check_for_json(resp)
+response_as_json <- function(resp, call = caller_env()) {
+  check_for_json(resp, call = call)
 
   content <- httr::content(resp, type = "raw")
   content <- rawToChar(content)
@@ -107,31 +113,24 @@ check_for_json <- function(resp, call = caller_env()) {
     return(invisible(resp))
   }
 
-  content <- httr::content(resp, as = "text")
   gargle_abort_request_failed(
-    c(
-      gargle_map_cli(
-        type,
-        template = "Expected content type {.field application/json}, not \\
-                    {.field <<x>>}."
-      ),
-      "*" = obfuscate(content, first = 197, last = 0)
-    ),
+    "Expected content type {.field application/json}, not {.field {type}}.",
     call = call,
     resp = resp
   )
 }
 
-# personal policy: a wrapper around a wrapper around cli_abort() should not
-# capture/pass an environment
-# if you really want cli styling, you have to pre-interpolate
-gargle_abort_request_failed <- function(message, resp, call = caller_env()) {
+gargle_abort_request_failed <- function(message,
+                                        resp,
+                                        .envir = caller_env(),
+                                        call = caller_env()) {
   gargle_abort(
     message,
     class = c(
       "gargle_error_request_failed",
       glue("http_error_{httr::status_code(resp)}")
     ),
+    .envir = .envir,
     call = call,
     resp = redact_response(resp)
   )
@@ -139,8 +138,13 @@ gargle_abort_request_failed <- function(message, resp, call = caller_env()) {
 
 #' @export
 #' @rdname response_process
-gargle_error_message <- function(resp) {
-  content <- response_as_json(resp)
+gargle_error_message <- function(resp, call = caller_env()) {
+  type <- httr::http_type(resp)
+  if (grepl("^text/html", type)) {
+    return(gargle_html_error_message(resp))
+  }
+
+  content <- response_as_json(resp, call = call)
   error <- content[["error"]]
 
   # Handle variety of error messages returned by different google APIs
@@ -307,4 +311,26 @@ reveal_detail <- function(x) {
       )
     )
   )
+}
+
+gargle_html_error_message <- function(resp) {
+  stopifnot(httr::http_type(resp) == "text/html")
+
+  content <- httr::content(resp, as = "text")
+  tmp <- tempfile("gargle-unexpected-html-error-", fileext = ".html")
+  writeLines(content, tmp)
+  browse_hint <- glue('browseURL("{tmp}")')
+
+  # pre-interpolate, since `tmp` and `browse_hint` are only known here.
+  c(
+    httr::http_status(resp)$message,
+    "x" = "Expected content type {.field application/json}, not \\
+           {.field text/html}.",
+    "i" = gargle_map_cli(tmp, "See {.file <<x>>} for the html error content."),
+    "i" = gargle_map_cli(
+      browse_hint,
+      "Or execute {.code <<x>>} to view it in your browser."
+    )
+  )
+
 }

@@ -3,7 +3,16 @@ expect_recorded_error <- function(filename, status_code) {
   resp <- readRDS(rds_file)
   expect_error(response_process(resp), class = "gargle_error_request_failed")
   expect_error(response_process(resp), class = glue("http_error_{status_code}"))
-  expect_snapshot_error(response_process(resp))
+  # HTML errors (as opposed to JSON) need this
+  scrub_filepath <- function(x) {
+    gsub(
+      "([\"\'])\\S+gargle-unexpected-html-error-\\S+[.]html([\"\'])",
+      "\\1VOLATILE_FILE_PATH\\2",
+      x,
+      perl = TRUE
+    )
+  }
+  expect_snapshot(response_process(resp), error = TRUE, transform = scrub_filepath)
 }
 
 test_that("Resource exhausted (Sheets, ReadGroup)", {
@@ -18,6 +27,31 @@ test_that("Request for non-existent resource (Drive)", {
     "drive-files-get-nonexistent-file-id_404",
     404
   )
+})
+
+# https://github.com/r-lib/gargle/issues/254
+test_that("Too many requests (Drive, HTML content)", {
+  expect_recorded_error(
+    "drive-automated-queries_429",
+    429
+  )
+})
+
+# https://github.com/r-lib/gargle/issues/254
+test_that("HTML error is offered as a file", {
+  rds_file <- test_path("fixtures", "drive-automated-queries_429.rds")
+  resp <- readRDS(rds_file)
+  err <- tryCatch(
+    response_process(resp),
+    gargle_error_request_failed = function(e) e
+  )
+  regex <- "[^'\" \\t\\n\\r]+gargle-unexpected-html-error-\\S+[.]html"
+  m <- gregexpr(regex, err$body, perl = TRUE)
+  path_to_html_error <- unique(unlist(regmatches(err$body, m)))
+  # the strwrap() result is a bit goofy, but seems least of all evils
+  # this is mostly about making sure we excavate the HTML
+  expect_snapshot(strwrap(readLines(path_to_html_error), width = 60))
+  unlink(path_to_html_error)
 })
 
 test_that("Request for which we don't have scope (Fitness)", {

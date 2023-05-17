@@ -146,9 +146,10 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       is.list(params)
     )
     if (identical(email, "")) {
-      gargle_abort("
-        {.arg email} must not be \"\" (the empty string).
-        Do you intend to consult an env var, but it's unset?")
+      gargle_abort(c(
+        "{.arg email} must not be \"\" (the empty string).",
+        "i" = "Do you intend to consult an env var, but it's unset?"
+      ))
     }
     if (isTRUE(email)) {
       email <- "*"

@@ -25,7 +25,7 @@
 # - `PREFIX_auth_configure_params() crosslinks to
 #   `gargle::gargle_oauth_client_from_json()` which requires gargle (>= 1.3.0)
 
-glue_data_lines <- function(.data, lines, ..., .envir = parent.frame()) {
+glue_data_lines <- function(.data, lines, ..., .envir = caller_env()) {
   # work around name collision of `.x` of map_chr() vs. of glue_data()
   # and confusion re: `...` of glue_data_lines() vs. `...` of map_chr()
   # plus: I've only got compat-purrr here, so I have to write a function
