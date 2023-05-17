@@ -46,6 +46,35 @@
       i See 'VOLATILE_FILE_PATH' for the html error content.
       i Or execute `browseURL("VOLATILE_FILE_PATH")` to view it in your browser.
 
+# HTML error is offered as a file
+
+    Code
+      strwrap(readLines(path_to_html_error), width = 60)
+    Output
+       [1] "<html><head><meta http-equiv=\"content-type\""                    
+       [2] "content=\"text/html;"                                             
+       [3] "charset=utf-8\"/><title>Sorry...</title><style> body {"           
+       [4] "font-family: verdana, arial, sans-serif; background-color:"       
+       [5] "#fff; color: #000;"                                               
+       [6] "}</style></head><body><div><table><tr><td><b><font"               
+       [7] "face=sans-serif size=10><font color=#4285f4>G</font><font"        
+       [8] "color=#ea4335>o</font><font color=#fbbc05>o</font><font"          
+       [9] "color=#4285f4>g</font><font color=#34a853>l</font><font"          
+      [10] "color=#ea4335>e</font></font></b></td><td"                        
+      [11] "style=\"text-align: left; vertical-align: bottom;"                
+      [12] "padding-bottom: 15px; width: 50%\"><div"                          
+      [13] "style=\"border-bottom: 1px solid"                                 
+      [14] "#dfdfdf;\">Sorry...</div></td></tr></table></div><div"            
+      [15] "style=\"margin-left: 4em;\"><h1>We're sorry...</h1><p>... but"    
+      [16] "your computer or network may be sending automated queries."       
+      [17] "To protect our users, we can't process your request right"        
+      [18] "now.</p></div><div style=\"margin-left: 4em;\">See <a"            
+      [19] "href=\"https://support.google.com/websearch/answer/86640\">Google"
+      [20] "Help</a> for more information.<br/><br/></div><div"               
+      [21] "style=\"text-align: center; border-top: 1px solid"                
+      [22] "#dfdfdf;\"><a href=\"https://www.google.com\">Google"             
+      [23] "Home</a></div></body></html>"                                     
+
 # Request for which we don't have scope (Fitness)
 
     Code
