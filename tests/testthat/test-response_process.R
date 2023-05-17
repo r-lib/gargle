@@ -9,7 +9,8 @@ expect_recorded_error <- function(filename, status_code) {
       "([\"\'])\\S+gargle-unexpected-html-error-\\S+[.]html([\"\'])",
       "\\1VOLATILE_FILE_PATH\\2",
       x,
-      perl = TRUE)
+      perl = TRUE
+    )
   }
   expect_snapshot(response_process(resp), error = TRUE, transform = scrub_filepath)
 }
