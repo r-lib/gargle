@@ -34,10 +34,10 @@
 #' @param id Client ID
 #' @param secret Client secret
 
-#' @param redirect_uris Where your app listens for the response from Google's
-#'   authorization server. If you didn't configure this specifically when
-#'   creating the client (which is only possible for clients of the "web" type),
-#'   you can leave this unspecified.
+#' @param redirect_uris Where your application listens for the response from
+#'   Google's authorization server. If you didn't configure this specifically
+#'   when creating the client (which is only possible for clients of the "web"
+#'   type), you can leave this unspecified.
 
 #' @param type Specifies the type of OAuth client. The valid values are a subset
 #'   of possible Google client types and reflect the key used to describe the
