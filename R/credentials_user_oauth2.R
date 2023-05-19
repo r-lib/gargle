@@ -29,7 +29,7 @@
 #'   permission to view or send email and is generally considered a low-value
 #'   scope.
 #' @inheritParams gargle2.0_token
-#' @inheritDotParams gargle2.0_token -scope -app -package
+#' @inheritDotParams gargle2.0_token -scope -client -package
 #'
 #' @return A [Gargle2.0] token.
 #' @family credential functions
@@ -38,7 +38,7 @@
 #' \dontrun{
 #' # Drive scope, built-in gargle demo client
 #' scopes <- "https://www.googleapis.com/auth/drive"
-#' credentials_user_oauth2(scopes, app = gargle_client())
+#' credentials_user_oauth2(scopes, client = gargle_client())
 #'
 #' # bring your own client
 #' client <- gargle_oauth_client_from_json(
@@ -48,12 +48,21 @@
 #' credentials_user_oauth2(scopes, client)
 #' }
 credentials_user_oauth2 <- function(scopes = NULL,
-                                    app = gargle_client(),
+                                    client = gargle_client(),
                                     package = "gargle",
-                                    ...) {
+                                    ...,
+                                    app = deprecated()) {
   gargle_debug("trying {.fun credentials_user_oauth2}")
+  if (lifecycle::is_present(app)) {
+    lifecycle::deprecate_warn(
+      "1.5.0",
+      "credentials_user_oauth2(app)",
+      "credentials_user_oauth2(client)"
+    )
+    client <- app
+  }
   gargle2.0_token(
-    app = app,
+    client = client,
     scope = scopes,
     package = package,
     ...

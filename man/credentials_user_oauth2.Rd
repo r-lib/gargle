@@ -6,9 +6,10 @@
 \usage{
 credentials_user_oauth2(
   scopes = NULL,
-  app = gargle_client(),
+  client = gargle_client(),
   package = "gargle",
-  ...
+  ...,
+  app = deprecated()
 )
 }
 \arguments{
@@ -22,8 +23,10 @@ with a token; gargle uses this to index cached OAuth tokens. This grants no
 permission to view or send email and is generally considered a low-value
 scope.}
 
-\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
-argument.}
+\item{client}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
 
 \item{package}{Name of the package requesting a token. Used in messages.}
 
@@ -52,10 +55,6 @@ new OAuth dance in the browser.
 Defaults to the option named \code{"gargle_oauth_email"}, retrieved by
 \code{\link[=gargle_oauth_email]{gargle_oauth_email()}} (unless a wrapper package implements different
 default behavior).}
-    \item{\code{client}}{A Google OAuth client, preferably constructed via
-\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
-\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
-gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
     \item{\code{use_oob}}{Whether to use out-of-band authentication (or, perhaps, a
 variant implemented by gargle and known as "pseudo-oob") when first
 acquiring the token. Defaults to the value returned by
@@ -67,6 +66,9 @@ cached token, \code{use_oob} has no effect.}
     \item{\code{credentials}}{Advanced use only: allows you to completely customise
 token generation.}
   }}
+
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 }
 \value{
 A \link{Gargle2.0} token.
@@ -93,7 +95,7 @@ also suggests it might be time to use a \link[=credentials_service_account]{serv
 \dontrun{
 # Drive scope, built-in gargle demo client
 scopes <- "https://www.googleapis.com/auth/drive"
-credentials_user_oauth2(scopes, app = gargle_client())
+credentials_user_oauth2(scopes, client = gargle_client())
 
 # bring your own client
 client <- gargle_oauth_client_from_json(
