@@ -6,12 +6,15 @@ test_that("credentials_byo_oauth2() demands a Token2.0", {
 })
 
 test_that("credentials_byo_oauth2() rejects a token that obviously not Google", {
-  token <- Gargle2.0$new(
-    credentials = list(access_token = "ACCESS_TOKEN"),
+  fauxen <- gargle2.0_token(
+    email = "a@example.org",
+    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "CLIENT"),
+    credentials = list(access_token = "ACCESS_TOKEN_1"),
+    cache = FALSE
   )
-  token$endpoint <- httr::oauth_endpoints("github")
+  fauxen$endpoint <- httr::oauth_endpoints("github")
 
-  expect_snapshot(credentials_byo_oauth2(token = token), error = TRUE)
+  expect_snapshot(credentials_byo_oauth2(token = fauxen), error = TRUE)
 })
 
 test_that("credentials_byo_oauth2() just passes valid input through", {
