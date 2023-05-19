@@ -34,6 +34,8 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 \item{\code{email}}{Email associated with the token.}
 
 \item{\code{package}}{Name of the package requesting a token. Used in messages.}
+
+\item{\code{client}}{An OAuth client.}
 }
 \if{html}{\out{</div>}}
 }
@@ -69,11 +71,12 @@ Create a Gargle2.0 token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
   email = gargle_oauth_email(),
-  app = gargle_client(),
+  client = gargle_client(),
   package = "gargle",
   credentials = NULL,
   params = list(),
-  cache_path = gargle_oauth_cache()
+  cache_path = gargle_oauth_cache(),
+  app = deprecated()
 )}\if{html}{\out{</div>}}
 }
 
@@ -82,7 +85,7 @@ Create a Gargle2.0 token
 \describe{
 \item{\code{email}}{Optional email address. See \code{\link[=gargle2.0_token]{gargle2.0_token()}} for full details.}
 
-\item{\code{app}}{An OAuth consumer application.}
+\item{\code{client}}{An OAuth consumer application.}
 
 \item{\code{package}}{Name of the package requesting a token. Used in messages.}
 
@@ -97,6 +100,8 @@ does not use \code{user_params}, \code{type}, \code{as_header} (hard-wired to \c
 
 \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
 \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 }
 \if{html}{\out{</div>}}
 }

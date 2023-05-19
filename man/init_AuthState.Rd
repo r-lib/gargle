@@ -19,6 +19,11 @@ generally by implied by the namespace within which the \code{AuthState} is
 defined. But it's possible to record the package name explicitly and seems
 like a good practice.}
 
+\item{client}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+
 \item{api_key}{Optional. API key (a string). Some APIs accept unauthorized,
 "token-free" requests for public resources, but only if the request
 includes an API key.}
@@ -29,10 +34,8 @@ probably not an API key). \code{FALSE} means requests should include an API key
 
 \item{cred}{Credentials. Typically populated indirectly via \code{\link[=token_fetch]{token_fetch()}}.}
 
-\item{app}{A Google OAuth client, preferably constructed via
-\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
-\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
-gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 }
 \value{
 An object of class \link{AuthState}.

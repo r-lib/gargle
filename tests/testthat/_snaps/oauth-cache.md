@@ -121,7 +121,7 @@
       2 tokens found in this gargle OAuth cache:
       '{path to gargle oauth cache}'
       
-      email         app         scopes hash...   
+      email         client      scopes hash...   
       _____________ ___________ ______ __________
       a@example.org gargle-clio        {hash...}
       b@example.org gargle-clio        {hash...}
@@ -135,7 +135,7 @@
       1 token found in this gargle OAuth cache:
       '{path to gargle oauth cache}'
       
-      email         app         scopes hash...   
+      email         client      scopes hash...   
       _____________ ___________ ______ __________
       a@example.org gargle-clio        {hash...}
 

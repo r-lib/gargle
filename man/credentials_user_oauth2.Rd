@@ -22,10 +22,8 @@ with a token; gargle uses this to index cached OAuth tokens. This grants no
 permission to view or send email and is generally considered a low-value
 scope.}
 
-\item{app}{A Google OAuth client, preferably constructed via
-\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
-\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
-gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 
 \item{package}{Name of the package requesting a token. Used in messages.}
 
@@ -54,6 +52,10 @@ new OAuth dance in the browser.
 Defaults to the option named \code{"gargle_oauth_email"}, retrieved by
 \code{\link[=gargle_oauth_email]{gargle_oauth_email()}} (unless a wrapper package implements different
 default behavior).}
+    \item{\code{client}}{A Google OAuth client, preferably constructed via
+\code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
+\code{gargle_oauth_client}. For backwards compatibility, for a limited time,
+gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
     \item{\code{use_oob}}{Whether to use out-of-band authentication (or, perhaps, a
 variant implemented by gargle and known as "pseudo-oob") when first
 acquiring the token. Defaults to the value returned by

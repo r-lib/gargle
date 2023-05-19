@@ -62,7 +62,7 @@ test_that("`email = NA`, `email = FALSE` means we don't consult the cache", {
 test_that("Gargle2.0 prints nicely", {
   fauxen <- gargle2.0_token(
     email = "a@example.org",
-    app = httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET"),
+    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "CLIENT"),
     credentials = list(a = 1),
     cache = FALSE
   )
@@ -122,4 +122,15 @@ test_that("we can identify the redirect URI suitable for pseudo-OOB flow", {
     "https://codepen.io/USER/full/abcdef123456"
   )
   expect_equal(select_pseudo_oob_value(redirect_uris), redirect_uris[4])
+})
+
+test_that("gargle2.0_token(app) is deprecated but still works", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "ABC")
+
+  expect_snapshot(
+    t <- gargle2.0_token(email = NA, credentials = list(a = 1), app = client)
+  )
+  expect_equal(t$client$name, "ABC")
+  expect_equal(t$app$appname, "ABC")
 })

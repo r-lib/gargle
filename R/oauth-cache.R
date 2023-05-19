@@ -137,7 +137,7 @@ cache_load <- function(path) {
 
 cache_clean <- function(cache, pattern = gargle_legacy_app_pattern()) {
   dat_tokens <- gargle_oauth_dat(cache)
-  dat_tokens$legacy <- grepl(pattern, dat_tokens$app)
+  dat_tokens$legacy <- grepl(pattern, dat_tokens$client)
   n <- sum(dat_tokens$legacy)
   if (n == 0) {
     return(FALSE)
@@ -399,7 +399,7 @@ gargle_oauth_dat <- function(cache = NULL) {
   nms    <- names(tokens)
   hash   <- mask_email(nms)
   email  <- extract_email(nms)
-  app    <- map_chr(tokens, function(t) t$app$appname)
+  client <- map_chr(tokens, function(t) t$client$name %||% t$app$appname)
   scopes <- map(tokens, function(t) t$params$scope)
   email_scope <- "https://www.googleapis.com/auth/userinfo.email"
   scopes <- map(scopes, function(s) s[s != email_scope])
@@ -407,7 +407,7 @@ gargle_oauth_dat <- function(cache = NULL) {
 
   structure(
     data.frame(
-      email, app, scopes, hash,
+      email, client, scopes, hash,
       filepath = path(cache, nms),
       stringsAsFactors = FALSE, row.names = NULL
     ),
@@ -436,7 +436,7 @@ format.gargle_oauth_dat <- function(x, ...) {
 
   glue_data(
     x,
-    "{email} {app} {scopes} {hash...}",
+    "{email} {client} {scopes} {hash...}",
     .transformer = format_transformer
   )
 }

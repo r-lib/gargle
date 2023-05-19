@@ -80,13 +80,13 @@ test_that("cache_clean() works", {
 
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
-    app = httr::oauth_app("apple", key = "KEY", secret = "SECRET"),
+    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "apple"),
     credentials = list(a = 1),
     cache = cache_folder
   )
   fauxen_b <- gargle2.0_token(
     email = "b@example.org",
-    app = httr::oauth_app("banana", key = "KEY", secret = "SECRET"),
+    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "banana"),
     credentials = list(b = 1),
     cache = cache_folder
   )
@@ -97,7 +97,7 @@ test_that("cache_clean() works", {
     cache_clean(cache_folder, "apple")
   )
   dat <- gargle_oauth_dat(cache_folder)
-  expect_equal(dat$app, "banana")
+  expect_equal(dat$client, "banana")
 
   local_gargle_verbosity("silent")
   cache_clean(cache_folder, "banana")
@@ -267,7 +267,7 @@ test_that("gargle_oauth_dat() is OK with nonexistent or empty cache", {
   tmp_cache <- file_temp()
   withr::defer(dir_delete(tmp_cache))
 
-  columns <- c("email", "app", "scopes", "hash", "filepath")
+  columns <- c("email", "client", "scopes", "hash", "filepath")
 
   dat <- gargle_oauth_dat(tmp_cache)
   expect_s3_class(dat, "gargle_oauth_dat")
