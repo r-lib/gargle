@@ -26,17 +26,27 @@
 #'
 #' init_AuthState(
 #'   package = "my_package",
-#'   app = my_client,
+#'   client = my_client,
 #'   api_key = "api_key_api_key_api_key",
 #' )
 init_AuthState <- function(package = NA_character_,
-                           app = NULL,
+                           client = NULL,
                            api_key = NULL,
                            auth_active = TRUE,
-                           cred = NULL) {
+                           cred = NULL,
+                           app = deprecated()) {
+  if (lifecycle::is_present(app)) {
+    lifecycle::deprecate_warn(
+      "1.5.0",
+      "init_AuthState(app)",
+      "init_AuthState(client)"
+    )
+    client <- app
+  }
+
   AuthState$new(
     package     = package,
-    app         = app,
+    client      = client,
     api_key     = api_key,
     auth_active = auth_active,
     cred        = cred
@@ -49,17 +59,17 @@ init_AuthState <- function(package = NA_character_,
 #' An `AuthState` object manages an authorization state, typically on behalf of
 #' a wrapper package that makes requests to a Google API.
 #'
-#' The [How to use gargle for auth in a client
-#' package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html)
-#' vignette describes a design for wrapper packages that relies on an `AuthState`
-#' object. This state can then be incorporated into the package's requests for
-#' tokens and can control the inclusion of tokens in requests to the target API.
+
+#' The `vignette("gargle-auth-in-client-package)` describes a design for wrapper
+#' packages that relies on an `AuthState` object. This state can then be
+#' incorporated into the package's requests for tokens and can control the
+#' inclusion of tokens in requests to the target API.
 #'
 #'   * `api_key` is the simplest way to associate a request with a specific
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 #'     with an API key, but this is the exception.
-#'   * `app` is an OAuth client ID (and secret) associated with a specific
+#'   * `client` is an OAuth client ID (and secret) associated with a specific
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     This is used in the OAuth flow, in which an authenticated user authorizes
 #'     the client to access or manipulate data on their behalf.
@@ -78,18 +88,19 @@ init_AuthState <- function(package = NA_character_,
 #' [init_AuthState()], which has more details on the arguments.
 #'
 #' @param package Package name.
-#' @param app An OAuth client.
+#' @param client An OAuth client.
 #' @param api_key An API key.
 #' @param auth_active Logical, indicating whether auth is active.
 #' @param cred Credentials.
+#' @param app `r lifecycle::badge('deprecated')` Use `client` instead.
 #'
 #' @export
 #' @name AuthState-class
 AuthState <- R6::R6Class("AuthState", list(
   #' @field package Package name.
   package = NULL,
-  #' @field app An OAuth client.
-  app = NULL,
+  #' @field client An OAuth client.
+  client = NULL,
   #' @field api_key An API key.
   api_key = NULL,
   #' @field auth_active Logical, indicating whether auth is active.
@@ -99,20 +110,29 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @description Create a new AuthState
   #' @details For more details on the parameters, see [init_AuthState()]
   initialize = function(package = NA_character_,
-                        app = NULL,
+                        client = NULL,
                         api_key = NULL,
                         auth_active = TRUE,
-                        cred = NULL) {
+                        cred = NULL,
+                        app = deprecated()) {
     gargle_debug("initializing AuthState")
+    if (lifecycle::is_present(app)) {
+      lifecycle::deprecate_warn(
+        "1.5.0",
+        "AuthState$initialize(app)",
+        "AuthState$initialize(client)"
+      )
+      client <- app
+    }
     stopifnot(
       is_scalar_character(package),
-      is.null(app) || is.oauth_app(app),
+      is.null(client) || is.oauth_app(client),
       is.null(api_key) || is_string(api_key),
       is_bool(auth_active),
       is.null(cred) || inherits(cred, "Token2.0")
     )
     self$package     <- package
-    self$app         <- app
+    self$client      <- client
     self$api_key     <- api_key
     self$auth_active <- auth_active
     self$cred        <- cred
@@ -123,7 +143,7 @@ AuthState <- R6::R6Class("AuthState", list(
   format = function(...) {
     x <- list(
       package     = cli::format_inline("{.pkg {self$package}}"),
-      app         = self$app$appname,
+      client      = self$client$name,
       api_key     = obfuscate(self$api_key),
       auth_active = self$auth_active,
       credentials = cli::format_inline("{.cls {class(self$cred)[[1]]}}")
@@ -135,11 +155,21 @@ AuthState <- R6::R6Class("AuthState", list(
       glue("{fr(names(x))}: {fl(x)}")
     )
   },
-  #' @description Set the OAuth app
-  set_app = function(app) {
-    stopifnot(is.null(app) || is.oauth_app(app))
-    self$app <- app
+  #' @description Set the OAuth client
+  set_client = function(client) {
+    stopifnot(is.null(client) || is.oauth_app(client))
+    self$client <- client
     invisible(self)
+  },
+  #' @description `r lifecycle::badge('deprecated')` Deprecated method to set
+  #'   the OAuth client
+  set_app = function(app) {
+    lifecycle::deprecate_warn(
+      "1.5.0",
+      "AuthState$set_app()",
+      "AuthState$set_client()"
+    )
+    self$set_client(client = app)
   },
   #' @description Set the API key
   #' @param value An API key.
@@ -174,5 +204,19 @@ AuthState <- R6::R6Class("AuthState", list(
   has_cred = function() {
     ## FIXME(jennybc): how should this interact with auth_active? should it?
     !is.null(self$cred)
+  }
+), active = list(
+  #' @field app `r lifecycle::badge('deprecated')` Replaced by `client`.
+  app = function(value) {
+    if (missing(value)) {
+      lifecycle::deprecate_warn(
+        "1.5.0",
+        I("AuthState$app"),
+        I("AuthState$client")
+      )
+      self$client
+    } else {
+      cli::cli_abort("{.field app} is read-only (and deprecated)")
+    }
   }
 ))

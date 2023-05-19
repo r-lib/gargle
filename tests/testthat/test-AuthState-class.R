@@ -1,47 +1,47 @@
 test_that("inputs are checked when creating AuthState", {
-  app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET")
 
   expect_snapshot(
     init_AuthState(
       package = NULL,
-      app = app,
+      client = client,
       api_key = "API_KEY",
       auth_active = TRUE
     ),
     error = TRUE
   )
-  expect_snapshot(init_AuthState(app = "not_an_oauth_app"), error = TRUE)
-  expect_snapshot(init_AuthState(app = app, api_key = 1234), error = TRUE)
+  expect_snapshot(init_AuthState(client = "not_an_oauth_client"), error = TRUE)
+  expect_snapshot(init_AuthState(client = client, api_key = 1234), error = TRUE)
   expect_snapshot(
-    init_AuthState(app = app, api_key = "API_KEY", auth_active = NULL),
+    init_AuthState(client = client, api_key = "API_KEY", auth_active = NULL),
     error = TRUE
   )
 
   a <- init_AuthState(
     package = "PACKAGE",
-    app = app,
+    client = client,
     api_key = "API_KEY",
     auth_active = TRUE
   )
   expect_s3_class(a, "AuthState")
 })
 
-test_that("AuthState app can be modified and cleared", {
-  app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
-  a <- init_AuthState(app = app, api_key = "API_KEY", auth_active = TRUE)
-  expect_equal(a$app$appname, "AAA")
+test_that("AuthState client can be modified and cleared", {
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
+  expect_equal(a$client$name, "AAA")
 
-  app2 <- httr::oauth_app("BBB", key = "KEY", secret = "SECRET")
-  a$set_app(app2)
-  expect_equal(a$app$appname, "BBB")
+  client2 <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "BBB")
+  a$set_client(client2)
+  expect_equal(a$client$name, "BBB")
 
-  a$set_app(NULL)
-  expect_null(a$app)
+  a$set_client(NULL)
+  expect_null(a$client)
 })
 
 test_that("AuthState api_key can be modified and cleared", {
-  app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
-  a <- init_AuthState(app = app, api_key = "AAA", auth_active = TRUE)
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
   expect_equal(a$api_key, "AAA")
 
   a$set_api_key("BBB")
@@ -52,8 +52,8 @@ test_that("AuthState api_key can be modified and cleared", {
 })
 
 test_that("AuthState auth_active can be toggled", {
-  app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
-  a <- init_AuthState(app = app, api_key = "AAA", auth_active = TRUE)
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
   expect_true(a$auth_active)
 
   a$set_auth_active(FALSE)
@@ -61,8 +61,8 @@ test_that("AuthState auth_active can be toggled", {
 })
 
 test_that("AuthState supports basic handling of cred", {
-  app <- httr::oauth_app("AAA", key = "KEY", secret = "SECRET")
-  a <- init_AuthState(app = app, api_key = "A", auth_active = TRUE)
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
 
   a$set_cred("hi")
   expect_true(a$has_cred())
@@ -74,13 +74,82 @@ test_that("AuthState supports basic handling of cred", {
 })
 
 test_that("AuthState prints nicely", {
-  app <- httr::oauth_app("APPNAME", key = "KEY", secret = "SECRET")
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
   a <- init_AuthState(
     package = "PKG",
-    app = app,
+    client = client,
     api_key = "API_KEY",
     auth_active = TRUE
   )
   a$set_cred(structure("TOKEN", class = "some_sort_of_token"))
   expect_snapshot(print(a))
+})
+
+test_that("init_Authstate(app) argument is deprecated, but still works", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET")
+
+  expect_snapshot(
+    a <- init_AuthState(
+      package = "PACKAGE",
+      app = client,
+      api_key = "API_KEY",
+      auth_active = TRUE
+    )
+  )
+  expect_s3_class(a, "AuthState")
+  expect_s3_class(a$client, "gargle_oauth_client")
+})
+
+test_that("AuthState$new(app) is deprecated, but still works", {
+  withr::local_options(lifecycle_verbosity = "warning")
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET")
+
+  expect_snapshot(
+    a <- AuthState$new(
+      package = "PACKAGE",
+      app = client,
+      api_key = "API_KEY",
+      auth_active = TRUE
+    )
+  )
+  expect_s3_class(a, "AuthState")
+  expect_s3_class(a$client, "gargle_oauth_client")
+})
+
+test_that("$set_app is deprecated, but still works", {
+  withr::local_options(lifecycle_verbosity = "warning")
+
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
+  client2 <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "BBB")
+
+  expect_snapshot(
+    a$set_app(client2)
+  )
+  expect_equal(a$client$name, "BBB")
+})
+
+test_that("app active field warns but returns the client", {
+  withr::local_options(lifecycle_verbosity = "warning")
+
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
+
+  expect_snapshot(
+    client <- a$app
+  )
+  expect_s3_class(a$client, "gargle_oauth_client")
+})
+
+test_that("app active field won't accept input", {
+  withr::local_options(lifecycle_verbosity = "quiet")
+
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
+
+  expect_snapshot(
+    a$app <- client,
+    error = TRUE
+  )
 })
