@@ -25,15 +25,16 @@ token_fetch <- function(scopes = NULL, ...) {
   for (f in gargle_env$cred_funs) {
     token <- NULL
     token <- tryCatch(
-      f(scopes, ...),
-      warning = function(e) {
-        gargle_debug(c("Warning caught by {.fun token_fetch}:", e$message))
-        NULL
-      },
       error = function(e) {
         gargle_debug(c("Error caught by {.fun token_fetch}:", e$message))
         NULL
-      }
+      },
+      withCallingHandlers(
+        f(scopes, ...),
+        warning = function(e) {
+          gargle_debug(c("Warning caught by {.fun token_fetch}:", e$message))
+        }
+      )
     )
     if (!is.null(token)) {
       return(token)
