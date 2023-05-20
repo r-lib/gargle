@@ -54,7 +54,7 @@ credentials_user_oauth2 <- function(scopes = NULL,
                                     app = deprecated()) {
   gargle_debug("trying {.fun credentials_user_oauth2}")
   if (lifecycle::is_present(app)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       "1.5.0",
       "credentials_user_oauth2(app)",
       "credentials_user_oauth2(client)"

@@ -59,7 +59,7 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
                             ...,
                             app = deprecated()) {
   if (lifecycle::is_present(app)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       "1.5.0",
       "gargle2.0_token(app)",
       "gargle2.0_token(client)"
@@ -155,7 +155,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         app = deprecated()) {
     gargle_debug("Gargle2.0 initialize")
     if (lifecycle::is_present(app)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_soft(
         "1.5.0",
         "Gargle2.0$initialize(app)",
         "Gargle2.0$initialize(client)"

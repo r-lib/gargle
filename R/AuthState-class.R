@@ -36,7 +36,7 @@ init_AuthState <- function(package = NA_character_,
                            cred = NULL,
                            app = deprecated()) {
   if (lifecycle::is_present(app)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       "1.5.0",
       "init_AuthState(app)",
       "init_AuthState(client)"
@@ -117,7 +117,7 @@ AuthState <- R6::R6Class("AuthState", list(
                         app = deprecated()) {
     gargle_debug("initializing AuthState")
     if (lifecycle::is_present(app)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_soft(
         "1.5.0",
         "AuthState$initialize(app)",
         "AuthState$initialize(client)"
@@ -164,7 +164,7 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @description `r lifecycle::badge('deprecated')` Deprecated method to set
   #'   the OAuth client
   set_app = function(app) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_soft(
       "1.5.0",
       "AuthState$set_app()",
       "AuthState$set_client()"
@@ -209,7 +209,7 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @field app `r lifecycle::badge('deprecated')` Replaced by `client`.
   app = function(value) {
     if (missing(value)) {
-      lifecycle::deprecate_warn(
+      lifecycle::deprecate_soft(
         "1.5.0",
         I("AuthState$app"),
         I("AuthState$client")
