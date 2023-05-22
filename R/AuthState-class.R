@@ -117,7 +117,11 @@ AuthState <- R6::R6Class("AuthState", list(
                         app = deprecated()) {
     gargle_debug("initializing AuthState")
     if (lifecycle::is_present(app)) {
-      lifecycle::deprecate_soft(
+      # I'm using deprecate_warn() intentionally here.
+      # If I use deprecate_soft(), you don't see the warning for a call to
+      # AuthState$new(app). Folks should be instantiating through
+      # init_AuthState() anyway.
+      lifecycle::deprecate_warn(
         "1.5.0",
         "AuthState$initialize(app)",
         "AuthState$initialize(client)"
