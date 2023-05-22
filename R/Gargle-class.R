@@ -155,7 +155,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         app = deprecated()) {
     gargle_debug("Gargle2.0 initialize")
     if (lifecycle::is_present(app)) {
-      lifecycle::deprecate_soft(
+      lifecycle::deprecate_warn(
         "1.5.0",
         "Gargle2.0$initialize(app)",
         "Gargle2.0$initialize(client)"
