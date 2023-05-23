@@ -121,7 +121,14 @@ test_that("$set_app is deprecated, but still works", {
   withr::local_options(lifecycle_verbosity = "warning")
 
   client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
-  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
+  a <- init_AuthState(
+    client = client,
+    # this just needs to be some package that is guaranteed to be installed, in
+    # order to fully exercise the deprecation warning
+    package = "rlang",
+    api_key = "API_KEY",
+    auth_active = TRUE
+  )
   client2 <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "BBB")
 
   expect_snapshot(

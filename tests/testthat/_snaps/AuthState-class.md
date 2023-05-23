@@ -74,6 +74,8 @@
       Warning:
       `AuthState$set_app()` was deprecated in gargle 1.5.0.
       i Please use `AuthState$set_client()` instead.
+      i This probably needs to be addressed in the rlang package.
+      i Please report the issue at <https://github.com/r-lib/rlang/issues>.
 
 # app active field warns but returns the client
 

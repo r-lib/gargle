@@ -172,7 +172,8 @@ AuthState <- R6::R6Class("AuthState", list(
     lifecycle::deprecate_soft(
       "1.5.0",
       "AuthState$set_app()",
-      "AuthState$set_client()"
+      "AuthState$set_client()",
+      details = make_package_hint(self$package)
     )
     self$set_client(client = app)
   },
@@ -216,26 +217,25 @@ AuthState <- R6::R6Class("AuthState", list(
     if (!missing(value)) {
       cli::cli_abort("{.field app} is read-only (and deprecated)")
     }
-
-    pkg_hint <- NULL
-    if (is_string(self$package)) {
-      url <- pkg_url_bug(self$package)
-      pkg_hint <- glue("
-        This probably needs to be addressed in the {self$package} package.")
-      if (!is.null(url)) {
-        pkg_hint <- c(
-          pkg_hint,
-          glue("Please report the issue at <{url}>.")
-        )
-      }
-    }
-
     lifecycle::deprecate_soft(
       "1.5.0",
       I("AuthState$app"),
       I("AuthState$client"),
-      details = pkg_hint
+      details = make_package_hint(self$package)
     )
     self$client
   }
 ))
+
+make_package_hint <- function(pkg) {
+  hint <- NULL
+  if (is_string(pkg)) {
+    hint <- glue("
+      This probably needs to be addressed in the {pkg} package.")
+    url <- pkg_url_bug(pkg)
+    if (!is.null(url)) {
+      hint <- c(hint, glue("Please report the issue at <{url}>."))
+    }
+  }
+  hint
+}
