@@ -120,8 +120,21 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #' directory of such files. In contrast, `Token2.0` tokens are cached as
 #' components of a list, which is typically serialized to `./.httr-oauth`.
 #'
-#' @param email Optional email address. See [gargle2.0_token()] for full details.
+
+#' @param email Optional email address. See [gargle2.0_token()] for full
+#'   details.
+#' @param client An OAuth consumer application.
 #' @param package Name of the package requesting a token. Used in messages.
+#' @param credentials Exists largely for testing purposes.
+#' @param params A list of parameters for the internal function
+#'   `init_oauth2.0()`, which is a modified version of [httr::init_oauth2.0()].
+#'   gargle actively uses `scope` and `use_oob`, but does not use `user_params`,
+#'   `type`, `as_header` (hard-wired to `TRUE`), `use_basic_auth` (accept
+#'   default of `use_basic_auth = FALSE`), `config_init`, or
+#'   `client_credentials`.
+#' @param cache_path Specifies the OAuth token cache. Read more in
+#'   [gargle::gargle_oauth_cache()].
+#' @param app `r lifecycle::badge('deprecated')` Use `client` instead.
 #'
 #' @keywords internal
 #' @export
@@ -134,17 +147,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @field client An OAuth client.
   client = NULL,
   #' @description Create a Gargle2.0 token
-  #' @param client An OAuth consumer application.
-  #' @param credentials Exists largely for testing purposes.
-  #' @param params A list of parameters for the internal function
-  #'   `init_oauth2.0()`, which is a modified version of
-  #'   [httr::init_oauth2.0()]. gargle actively uses `scope` and `use_oob`, but
-  #'   does not use `user_params`, `type`, `as_header` (hard-wired to `TRUE`),
-  #'   `use_basic_auth` (accept default of `use_basic_auth = FALSE`),
-  #'   `config_init`, or `client_credentials`.
-  #' @param cache_path Specifies the OAuth token cache. Read more in
-  #'   [gargle::gargle_oauth_cache()].
-  #' @param app `r lifecycle::badge('deprecated')` Use `client` instead.
   #' @return A Gargle2.0 token.
   initialize = function(email = gargle_oauth_email(),
                         client = gargle_client(),
