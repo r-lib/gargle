@@ -213,15 +213,29 @@ AuthState <- R6::R6Class("AuthState", list(
 ), active = list(
   #' @field app `r lifecycle::badge('deprecated')` Replaced by `client`.
   app = function(value) {
-    if (missing(value)) {
-      lifecycle::deprecate_soft(
-        "1.5.0",
-        I("AuthState$app"),
-        I("AuthState$client")
-      )
-      self$client
-    } else {
+    if (!missing(value)) {
       cli::cli_abort("{.field app} is read-only (and deprecated)")
     }
+
+    pkg_hint <- NULL
+    if (is_string(self$package)) {
+      url <- pkg_url_bug(self$package)
+      pkg_hint <- glue("
+        This probably needs to be addressed in the {self$package} package.")
+      if (!is.null(url)) {
+        pkg_hint <- c(
+          pkg_hint,
+          glue("Please report the issue at <{url}>.")
+        )
+      }
+    }
+
+    lifecycle::deprecate_soft(
+      "1.5.0",
+      I("AuthState$app"),
+      I("AuthState$client"),
+      details = pkg_hint
+    )
+    self$client
   }
 ))
