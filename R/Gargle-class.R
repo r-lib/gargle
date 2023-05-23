@@ -154,6 +154,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
                         cache_path = gargle_oauth_cache(),
                         app = deprecated()) {
     gargle_debug("Gargle2.0 initialize")
+    # I'm using deprecate_warn() intentionally here. Most folks should be
+    # instantiating through gargle2.0_token() anyway, so anyone who sees this
+    # warning probably needs to see it.
     if (lifecycle::is_present(app)) {
       lifecycle::deprecate_warn(
         "1.5.0",
