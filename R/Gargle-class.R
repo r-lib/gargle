@@ -193,8 +193,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     self$endpoint   <- gargle_oauth_endpoint()
     self$email      <- email
     self$client     <- client
-    # I can't use an active `app` field the way I did in AuthState, because
-    # `app` comes from parent class in this case
+    # for backwards compatibility and also because the parent class has $app;
+    # I can never remove it
     self$app        <- client
     self$package    <- package
     params$scope    <- normalize_scopes(add_email_scope(params$scope))

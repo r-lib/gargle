@@ -2,10 +2,9 @@
 #'
 #' Constructor function for objects of class [AuthState].
 #'
-#' @param package Package name, an optional string. The associated package will
-#'   generally by implied by the namespace within which the `AuthState` is
-#'   defined. But it's possible to record the package name explicitly and seems
-#'   like a good practice.
+#' @param package Package name, an optional string. It is recommended to record
+#'   the name of the package whose auth state is being managed. Ultimately, this
+#'   may be used in some downstream messaging.
 #' @param api_key Optional. API key (a string). Some APIs accept unauthorized,
 #'   "token-free" requests for public resources, but only if the request
 #'   includes an API key.
@@ -101,6 +100,8 @@ AuthState <- R6::R6Class("AuthState", list(
   package = NULL,
   #' @field client An OAuth client.
   client = NULL,
+  #' @field app `r lifecycle::badge('deprecated')` Use `client` instead.
+  app = NULL,
   #' @field api_key An API key.
   api_key = NULL,
   #' @field auth_active Logical, indicating whether auth is active.
@@ -138,6 +139,8 @@ AuthState <- R6::R6Class("AuthState", list(
     )
     self$package     <- package
     self$client      <- client
+    # for backwards compatibility; could eventually be removed
+    self$app         <- client
     self$api_key     <- api_key
     self$auth_active <- auth_active
     self$cred        <- cred
@@ -210,20 +213,6 @@ AuthState <- R6::R6Class("AuthState", list(
   has_cred = function() {
     ## FIXME(jennybc): how should this interact with auth_active? should it?
     !is.null(self$cred)
-  }
-), active = list(
-  #' @field app `r lifecycle::badge('deprecated')` Replaced by `client`.
-  app = function(value) {
-    if (!missing(value)) {
-      cli::cli_abort("{.field app} is read-only (and deprecated)")
-    }
-    lifecycle::deprecate_soft(
-      "1.5.0",
-      I("AuthState$app"),
-      I("AuthState$client"),
-      details = make_package_hint(self$package)
-    )
-    self$client
   }
 ))
 

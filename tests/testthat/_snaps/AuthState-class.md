@@ -77,20 +77,3 @@
       i This probably needs to be addressed in the rlang package.
       i Please report the issue at <https://github.com/r-lib/rlang/issues>.
 
-# app active field warns but returns the client
-
-    Code
-      client <- a$app
-    Condition
-      Warning:
-      AuthState$app was deprecated in gargle 1.5.0.
-      i Please use AuthState$client instead.
-
-# app active field won't accept input
-
-    Code
-      a$app <- client
-    Condition
-      Error:
-      ! app is read-only (and deprecated)
-

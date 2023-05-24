@@ -137,26 +137,8 @@ test_that("$set_app is deprecated, but still works", {
   expect_equal(a$client$name, "BBB")
 })
 
-test_that("app active field warns but returns the client", {
-  withr::local_options(lifecycle_verbosity = "warning")
-
+test_that("$app still returns the client", {
   client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
   a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
-
-  expect_snapshot(
-    client <- a$app
-  )
-  expect_s3_class(a$client, "gargle_oauth_client")
-})
-
-test_that("app active field won't accept input", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
-  a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
-
-  expect_snapshot(
-    a$app <- client,
-    error = TRUE
-  )
+  expect_equal(a$app, client)
 })

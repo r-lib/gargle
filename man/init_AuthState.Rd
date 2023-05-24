@@ -14,10 +14,9 @@ init_AuthState(
 )
 }
 \arguments{
-\item{package}{Package name, an optional string. The associated package will
-generally by implied by the namespace within which the \code{AuthState} is
-defined. But it's possible to record the package name explicitly and seems
-like a good practice.}
+\item{package}{Package name, an optional string. It is recommended to record
+the name of the package whose auth state is being managed. Ultimately, this
+may be used in some downstream messaging.}
 
 \item{client}{A Google OAuth client, preferably constructed via
 \code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
