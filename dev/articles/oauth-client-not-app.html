@@ -120,10 +120,10 @@ that has historically made auth “just work” for casual users of packages
 such as googledrive, googlesheets4, and bigrquery. The default OAuth
 client used by these package no longer works with conventional OOB.</p>
 <p>In response, as of v1.3.0, gargle implements a new variant of OOB,
-called <strong>pseudo-oob</strong>, to continue to provide a
+called <strong>pseudo-OOB</strong>, to continue to provide a
 user-friendly auth flow for googledrive/googlesheets4/bigrquery on
 RStudio Server/Posit Workbench/Posit Cloud/Google Colaboratory. The
-pseudo-oob flow is also available for other developers to use. This flow
+pseudo-OOB flow is also available for other developers to use. This flow
 is triggered when <code>use_oob = TRUE</code> (an existing convention in
 gargle and gargle-using packages) <strong>and</strong> the configured
 OAuth client is of the <em>web</em> type (when creating an OAuth client,
@@ -171,14 +171,14 @@ this is called the “Web application” type).</p>
 <tr>
 <th>web</th>
       <td>--not possible--</td>
-      <td>pseudo-oob</td>
+      <td>pseudo-OOB</td>
     </tr>
 </tbody>
 </table>
 <p>In the past, gargle basically assumed that every OAuth client was of
 the <em>installed</em> type (when creating an OAuth client, this is
 called the “Desktop app” type). Therefore, the introduction of
-pseudo-oob meant that gargle had to learn about different OAuth client
+pseudo-OOB meant that gargle had to learn about different OAuth client
 types (web vs. installed). And that didn’t play well with
 <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>, which gargle had been using to store the
 client ID and secret.</p>
