@@ -57,7 +57,7 @@
       For details on the many ways to find a token, see
       [gargle::token_fetch()]. For deeper control over auth, use
       [PREFIX_auth_configure()] to bring your own OAuth client or API key.
-      Read more about gargle options, see [gargle::gargle_options].
+      To learn more about gargle options, see [gargle::gargle_options].
 
 # PREFIX_auth_params()
 

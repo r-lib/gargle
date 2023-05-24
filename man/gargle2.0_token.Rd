@@ -56,7 +56,7 @@ acquiring the token. Defaults to the value returned by
 the initial OAuth dance. If we retrieve (and possibly refresh) a
 cached token, \code{use_oob} has no effect.
 
-If the OAuth client is provided implicitly by wrapper package, its type
+If the OAuth client is provided implicitly by a wrapper package, its type
 probably defaults to the value returned by
 \code{\link[=gargle_oauth_client_type]{gargle_oauth_client_type()}}. You can take control of the client
 type by setting \code{options(gargle_oauth_client_type = "web")} or
