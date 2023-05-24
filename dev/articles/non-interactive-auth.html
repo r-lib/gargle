@@ -280,7 +280,7 @@ namespace:</li>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">kubectl</span> create serviceaccount <span class="at">--namespace</span> my-namespace bq-service-account </span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Bind that Kubernetes service account to the service account outside
-of kubernetes you created in step 1, and assign it an annotation:</li>
+of Kubernetes you created in step 1, and assign it an annotation:</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create IAM policy binding betwwen k8s SA and GSA</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> iam service-accounts add-iam-policy-binding my-service-key@my-project.iam.gserviceaccount.com <span class="dt">\</span></span>
