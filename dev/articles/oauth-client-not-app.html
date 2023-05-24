@@ -98,9 +98,9 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span></code></pre></div>
 <p>Over the course of several releases (v1.3.0, v1.4.0, and v1.5.0),
-gargle has shifted to using an <strong>OAuth client</strong> in the user
+gargle has shifted to using an OAuth <strong>client</strong> in the user
 flow facilitated by <code><a href="../reference/credentials_user_oauth2.html">gargle::credentials_user_oauth2()</a></code>,
-instead the previous “OAuth app”. This is a more than just a vocabulary
+instead the previous OAuth “app”. This is a more than just a vocabulary
 change (but it is also a vocabulary change). This vignette explains what
 actually changed and how wrapper packages should adjust.</p>
 <div class="section level2">
@@ -191,7 +191,7 @@ create a client is to provide JSON downloaded from the GCP console to
 <p>Since we had to introduce a new S3 class and supporting functions, we
 also took this chance to make the vocabulary pivot from “OAuth app” to
 “OAuth client”. Google’s documentation has always talked about the
-“OAuth client”, so this is more natural This vocabulary is also more
+“OAuth client”, so this is more natural. This vocabulary is also more
 future-facing, anticipating the day when gargle might shift from httr to
 httr2, which uses <code>httr2:oauth_client()</code>. As a bridging
 measure, the <code>"gargle_oauth_client"</code> class currently inherits
