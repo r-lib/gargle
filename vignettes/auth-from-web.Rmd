@@ -92,7 +92,7 @@ Firefox: Unable to connect; can't establish a connection.
 If this happens you might need to explicitly request OOB.
 Below we review two different methods.
 
-## Request oob auth in the `PKG_auth()` call
+## Request OOB auth in the `PKG_auth()` call
 
 Packages like googledrive and bigrquery aim to make auth "just work" for most users, i.e. it's automatically triggered upon first need.
 However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters.

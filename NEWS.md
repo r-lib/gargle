@@ -2,7 +2,7 @@
 
 * The transition from OAuth "app" to OAuth "client" is fully enacted now. This
   process tarted in v1.3.0, when the `"gargle_oauth_client"` class was
-  introduced, to support the new pseudo-oob auth flow. The deprecations are
+  introduced, to support the new pseudo-OOB auth flow. The deprecations are
   implemented to preserve backwards compatibility for some time. In this
   release, function, argument, and field names are all updated to the "client"
   terminology:

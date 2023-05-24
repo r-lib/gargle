@@ -50,9 +50,9 @@ gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]
 \item{scope}{A character vector of scopes to request.}
 
 \item{use_oob}{Whether to use out-of-band authentication (or, perhaps, a
-variant implemented by gargle and known as "pseudo-oob") when first
+variant implemented by gargle and known as "pseudo-OOB") when first
 acquiring the token. Defaults to the value returned by
-\code{\link[=gargle_oob_default]{gargle_oob_default()}}. Note that (pseudo-)oob auth only affects
+\code{\link[=gargle_oob_default]{gargle_oob_default()}}. Note that (pseudo-)OOB auth only affects
 the initial OAuth dance. If we retrieve (and possibly refresh) a
 cached token, \code{use_oob} has no effect.
 

@@ -32,26 +32,26 @@
         * Bring your own `token`.
         * Customize `scopes`.
         * Use a non-default `cache` folder or turn caching off.
-        * Explicitly request out-of-bound auth via `use_oob`.
+        * Explicitly request out-of-bound (OOB) auth via `use_oob`.
       
       If you are interacting with R within a browser (applies to RStudio
       Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need
-      oob auth or the pseudo-oob variant. If this does not happen
+      OOB auth or the pseudo-OOB variant. If this does not happen
       automatically, you can request it explicitly with `use_oob = TRUE` or,
       more persistently, by setting an option via
       `options(gargle_oob_default = TRUE)`.
       
-      The choice between conventional oob or pseudo-oob auth is determined
+      The choice between conventional OOB or pseudo-OOB auth is determined
       by the type of OAuth client. If the client is of the "installed" type,
-      `use_oob = TRUE` results in conventional oob auth. If the client is of
-      the "web" type, `use_oob = TRUE` results in pseudo-oob auth. Packages
+      `use_oob = TRUE` results in conventional OOB auth. If the client is of
+      the "web" type, `use_oob = TRUE` results in pseudo-OOB auth. Packages
       that provide a built-in OAuth client can usually detect which type of
       client to use. But if you need to set this explicitly, use the
       `"gargle_oauth_client_type"` option:
       ```r
-      options(gargle_oauth_client_type = "web")       # pseudo-oob
+      options(gargle_oauth_client_type = "web")       # pseudo-OOB
       # or, alternatively
-      options(gargle_oauth_client_type = "installed") # conventional oob
+      options(gargle_oauth_client_type = "installed") # conventional OOB
       ```
       
       For details on the many ways to find a token, see

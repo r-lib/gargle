@@ -52,7 +52,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
 
-    if (identical(client_type, "web")) { # pseudo-oob flow
+    if (identical(client_type, "web")) { # pseudo-OOB flow
       # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
 
       # We need so-called "offline" access, so the access token can be

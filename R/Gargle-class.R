@@ -29,9 +29,9 @@
 #' @param package Name of the package requesting a token. Used in messages.
 #' @param scope A character vector of scopes to request.
 #' @param use_oob Whether to use out-of-band authentication (or, perhaps, a
-#'   variant implemented by gargle and known as "pseudo-oob") when first
+#'   variant implemented by gargle and known as "pseudo-OOB") when first
 #'   acquiring the token. Defaults to the value returned by
-#'   [gargle::gargle_oob_default()]. Note that (pseudo-)oob auth only affects
+#'   [gargle::gargle_oob_default()]. Note that (pseudo-)OOB auth only affects
 #'   the initial OAuth dance. If we retrieve (and possibly refresh) a
 #'   cached token, `use_oob` has no effect.
 #'
@@ -79,15 +79,15 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
     as_header = TRUE
   )
 
-  # pseudo-oob flow
+  # pseudo-OOB flow
   client_type <- if (inherits(app, "gargle_oauth_client")) client$type else NA
   if (use_oob && identical(client_type, "web")) {
     params$oob_value <- select_pseudo_oob_value(client$redirect_uris)
   }
-  # params$oob_value is deliberately left unspecified for conventional oob,
+  # params$oob_value is deliberately left unspecified for conventional OOB,
   # with the intent of falling back to urn:ietf:wg:oauth:2.0:oob
 
-  # this allows pseudo-oob auth to work on colab, because:
+  # this allows pseudo-OOB auth to work on colab, because:
   # 1) gargle's attempts to communicate with the user route through readline()
   #    which is shimmed in Jupyter (and therefore Colab)
   # 2) httr >= 1.4.5 honors the "rlang_interactive" option when deciding whether
@@ -344,7 +344,7 @@ encourage_httpuv <- function() {
 # I want to encourage users to create an OAuth client (newer httr2-y language)
 # directly from downloaded JSON, using gargle_oauth_client_from_json().
 # Sometimes there are multiple URIs and I think we can usually figure out which
-# one to use for the pseudo-oob flow.
+# one to use for the pseudo-OOB flow.
 select_pseudo_oob_value <- function(redirect_uris) {
   # https://developers.google.com/identity/protocols/oauth2/resources/oob-migration#inspect-your-application-code
   bad_values <- c(
