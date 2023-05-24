@@ -43,18 +43,13 @@ An \code{AuthState} should be created through the constructor function
 
 \item{\code{client}}{An OAuth client.}
 
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
+
 \item{\code{api_key}}{An API key.}
 
 \item{\code{auth_active}}{Logical, indicating whether auth is active.}
 
 \item{\code{cred}}{Credentials.}
-}
-\if{html}{\out{</div>}}
-}
-\section{Active bindings}{
-\if{html}{\out{<div class="r6-active-bindings">}}
-\describe{
-\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by \code{client}.}
 }
 \if{html}{\out{</div>}}
 }
