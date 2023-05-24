@@ -14,13 +14,6 @@
       they can be automatically refreshed, as necessary. Storage at the user
       level means the same token can be used across multiple projects and
       tokens are less likely to be synced to the cloud by accident.
-      
-      If you are interacting with R within a browser (applies to RStudio
-      Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need
-      a variant of this flow, known as out-of-band auth ("oob") or
-      pseudo-oob. If this does not happen automatically, you can request it
-      explicitly with `use_oob = TRUE` or, more persistently, by setting an
-      option via `options(gargle_oob_default = TRUE)`.
 
 # PREFIX_auth_details()
 
@@ -31,21 +24,35 @@
       Most users, most of the time, do not need to call `PREFIX_auth()`
       explicitly -- it is triggered by the first action that requires
       authorization. Even when called, the default arguments often suffice.
-      However, when necessary, this function allows the user to explicitly:
-        * Declare which Google identity to use, via an email address. If there
-          are multiple cached tokens, this can clarify which one to use. It can
-          also force PACKAGE to switch from one identity to another. If
-          there's no cached token for the email, this triggers a return to the
-          browser to choose the identity and give consent. You can specify just
-          the domain by using a glob pattern. This means that a script
-          containing `email = "*@example.com"` can be run without further
-          tweaks on the machine of either `alice@example.com` or
-          `bob@example.com`.
-        * Use a service account token or workload identity federation.
-        * Bring their own [Token2.0][httr::Token-class].
-        * Specify non-default behavior re: token caching and out-of-bound
-          authentication.
-        * Customize scopes.
+      
+      However, when necessary, `PREFIX_auth()` allows the user to explicitly:
+        * Declare which Google identity to use, via an `email` specification.
+        * Use a service account token or workload identity federation via
+          `path`.
+        * Bring your own `token`.
+        * Customize `scopes`.
+        * Use a non-default `cache` folder or turn caching off.
+        * Explicitly request out-of-bound auth via `use_oob`.
+      
+      If you are interacting with R within a browser (applies to RStudio
+      Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need
+      oob auth or the pseudo-oob variant. If this does not happen
+      automatically, you can request it explicitly with `use_oob = TRUE` or,
+      more persistently, by setting an option via
+      `options(gargle_oob_default = TRUE)`.
+      
+      The choice between conventional oob or pseudo-oob auth is determined
+      by the type of OAuth client. If the client is of the "installed" type,
+      `use_oob = TRUE` results in conventional oob auth. If the client is of
+      the "web" type, `use_oob = TRUE` results in pseudo-oob auth. Packages
+      that provide a built-in OAuth client can usually detect which type of
+      client to use. But if you need to set this explicitly, use the
+      `"gargle_oauth_client_type"` option:
+      ```r
+      options(gargle_oauth_client_type = "web")       # pseudo-oob
+      # or, alternatively
+      options(gargle_oauth_client_type = "installed") # conventional oob
+      ```
       
       For details on the many ways to find a token, see
       [gargle::token_fetch()]. For deeper control over auth, use
