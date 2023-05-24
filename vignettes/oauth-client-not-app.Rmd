@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(gargle)
 ```
 
-Over the course of several releases (v1.3.0, v1.4.0, and v1.5.0), gargle has shifted to using an **OAuth client** in the user flow facilitated by `gargle::credentials_user_oauth2()`, instead the previous "OAuth app".
+Over the course of several releases (v1.3.0, v1.4.0, and v1.5.0), gargle has shifted to using an OAuth **client** in the user flow facilitated by `gargle::credentials_user_oauth2()`, instead the previous OAuth "app".
 This is a more than just a vocabulary change (but it is also a vocabulary change).
 This vignette explains what actually changed and how wrapper packages should adjust.
 
@@ -96,7 +96,7 @@ That's why there is a new S3 class, `"gargle_oauth_client"`, with a constructor 
 Since more information is now necessary to instantiate a client (e.g. its type and, potentially, redirect URIs), the recommended way to create a client is to provide JSON downloaded from the GCP console to `gargle_oauth_client_from_json()`.
 
 Since we had to introduce a new S3 class and supporting functions, we also took this chance to make the vocabulary pivot from "OAuth app" to "OAuth client".
-Google's documentation has always talked about the "OAuth client", so this is more natural
+Google's documentation has always talked about the "OAuth client", so this is more natural.
 This vocabulary is also more future-facing, anticipating the day when gargle might shift from httr to httr2, which uses `httr2:oauth_client()`.
 As a bridging measure, the `"gargle_oauth_client"` class currently inherits from httr's `"oauth_app"`, but this probably won't be true in the long-term.
 
