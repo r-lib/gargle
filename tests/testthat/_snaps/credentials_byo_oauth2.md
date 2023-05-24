@@ -9,7 +9,7 @@
 # credentials_byo_oauth2() rejects a token that obviously not Google
 
     Code
-      credentials_byo_oauth2(token = token)
+      credentials_byo_oauth2(token = fauxen)
     Condition
       Error in `credentials_byo_oauth2()`:
       ! Token doesn't use Google's OAuth endpoint.

@@ -1,5 +1,22 @@
 # gargle (development version)
 
+* The transition from OAuth "app" to OAuth "client" is fully enacted now. This
+  process tarted in v1.3.0, when the `"gargle_oauth_client"` class was
+  introduced, to support the new pseudo-oob auth flow. The deprecations are
+  implemented to preserve backwards compatibility for some time. In this
+  release, function, argument, and field names are all updated to the "client"
+  terminology:
+  
+  - `init_AuthState(client =)` instead of `init_AuthState(app =)`
+  - `AuthState$client` instead of `AuthState$app`
+  - `AuthState$set_client()` instead of `AuthState$set_app()`
+  - `gargle2.0_token(client =)` instead of `gargle2.0_token(app =)` 
+  - `credentials_user_oauth2(client =)` instead of
+    `credentials_user_oauth2(app =)`
+    
+  A new `vignette("oauth-client-not-app")` explains how a wrapper package should
+  adapt.
+
 * When the `"gargle_verbosity"` option is set to `"debug"`, there are more debugging messages around user credentials. Specifically, more information is available on the email, OAuth client, and scopes, with the goal of better understanding why a cached token is (or is not) being used.
 
 * `check_is_service_account()` is a new function for use in wrapper packages to throw a more informative error when a user provides JSON for an OAuth client to an argument that is expecting JSON for a service account.

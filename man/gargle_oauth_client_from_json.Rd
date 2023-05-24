@@ -29,10 +29,10 @@ contain this information.}
 
 \item{secret}{Client secret}
 
-\item{redirect_uris}{Where your app listens for the response from Google's
-authorization server. If you didn't configure this specifically when
-creating the client (which is only possible for clients of the "web" type),
-you can leave this unspecified.}
+\item{redirect_uris}{Where your application listens for the response from
+Google's authorization server. If you didn't configure this specifically
+when creating the client (which is only possible for clients of the "web"
+type), you can leave this unspecified.}
 
 \item{type}{Specifies the type of OAuth client. The valid values are a subset
 of possible Google client types and reflect the key used to describe the
@@ -57,7 +57,6 @@ constructors \code{gargle_oauth_client_from_json()} and \code{gargle_oauth_clien
 to \code{\link[httr:oauth_app]{httr::oauth_app()}} and \code{\link[=oauth_app_from_json]{oauth_app_from_json()}}.
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 A \code{gargle_oauth_client} consists of:
 \itemize{
 \item A type. gargle only supports the "Desktop app" and "Web application" client
@@ -70,9 +69,7 @@ here as the name used to label the client ID in the \href{https://console.cloud.
 }
 
 A \code{gargle_oauth_client} is an adaptation of httr's \code{\link[=oauth_app]{oauth_app()}} (currently)
-and httr2's \code{oauth_client()} (which gargle will migrate to in the future),
-specialized for Google APIs. This function and class is marked "experimental"
-since the details of this transition are necessarily uncertain.
+and httr2's \code{oauth_client()} (which gargle will migrate to in the future).
 }
 \examples{
 \dontrun{

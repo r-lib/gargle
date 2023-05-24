@@ -6,13 +6,14 @@
 \usage{
 gargle2.0_token(
   email = gargle_oauth_email(),
-  app = gargle_client(),
+  client = gargle_client(),
   package = "gargle",
   scope = NULL,
   use_oob = gargle_oob_default(),
   credentials = NULL,
   cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
-  ...
+  ...,
+  app = deprecated()
 )
 }
 \arguments{
@@ -39,7 +40,7 @@ Defaults to the option named \code{"gargle_oauth_email"}, retrieved by
 \code{\link[=gargle_oauth_email]{gargle_oauth_email()}} (unless a wrapper package implements different
 default behavior).}
 
-\item{app}{A Google OAuth client, preferably constructed via
+\item{client}{A Google OAuth client, preferably constructed via
 \code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
 \code{gargle_oauth_client}. For backwards compatibility, for a limited time,
 gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
@@ -63,6 +64,9 @@ token generation.}
 
 \item{...}{Absorbs arguments intended for use by other credential functions.
 Not used.}
+
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 }
 \value{
 An object of class \link{Gargle2.0}, either new or loaded from the cache.

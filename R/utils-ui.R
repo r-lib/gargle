@@ -315,3 +315,20 @@ local_user_input <- function(x, env = caller_env()) {
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }
+
+# taken from lifecycle
+# https://github.com/r-lib/lifecycle/blob/9417eca8f5091f95b4569fb6c388e4394e2b2157/R/utils.R#L30
+pkg_url_bug <- function(pkg) {
+  # First check that package is installed, e.g. in case of
+  # runtime-only namespace created by pkgload
+  if (nzchar(system.file(package = pkg))) {
+    url <- utils::packageDescription(pkg)$BugReports
+
+    # `url` can be NULL if not part of the description
+    if (is_string(url) && grepl("^https://", url)) {
+      return(url)
+    }
+  }
+
+  NULL
+}

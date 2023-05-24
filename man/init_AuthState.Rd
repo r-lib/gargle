@@ -6,19 +6,19 @@
 \usage{
 init_AuthState(
   package = NA_character_,
-  app = NULL,
+  client = NULL,
   api_key = NULL,
   auth_active = TRUE,
-  cred = NULL
+  cred = NULL,
+  app = deprecated()
 )
 }
 \arguments{
-\item{package}{Package name, an optional string. The associated package will
-generally by implied by the namespace within which the \code{AuthState} is
-defined. But it's possible to record the package name explicitly and seems
-like a good practice.}
+\item{package}{Package name, an optional string. It is recommended to record
+the name of the package whose auth state is being managed. Ultimately, this
+may be used in some downstream messaging.}
 
-\item{app}{A Google OAuth client, preferably constructed via
+\item{client}{A Google OAuth client, preferably constructed via
 \code{\link[=gargle_oauth_client_from_json]{gargle_oauth_client_from_json()}}, which returns an instance of
 \code{gargle_oauth_client}. For backwards compatibility, for a limited time,
 gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]{httr::oauth_app()}}.}
@@ -32,6 +32,9 @@ probably not an API key). \code{FALSE} means requests should include an API key
 (and probably not a token).}
 
 \item{cred}{Credentials. Typically populated indirectly via \code{\link[=token_fetch]{token_fetch()}}.}
+
+\item{app}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the \code{client}
+argument.}
 }
 \value{
 An object of class \link{AuthState}.
@@ -48,7 +51,7 @@ my_client <- gargle_oauth_client(
 
 init_AuthState(
   package = "my_package",
-  app = my_client,
+  client = my_client,
   api_key = "api_key_api_key_api_key",
 )
 }

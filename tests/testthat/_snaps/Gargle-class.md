@@ -30,7 +30,7 @@
       
       -- <Token (via gargle)> --------------------------------------------------------
       oauth_endpoint: google
-                 app: APPNAME
+              client: CLIENT
                email: 'a@example.org'
               scopes: ...userinfo.email
          credentials: a
@@ -41,7 +41,7 @@
       select_pseudo_oob_value("urn:ietf:wg:oauth:2.0:oob")
     Condition
       Error in `select_pseudo_oob_value()`:
-      ! OAuth client (a.k.a "app") does not have a redirect URI suitable for the pseudo-OOB flow.
+      ! OAuth client does not have a redirect URI suitable for the pseudo-OOB flow.
 
 # we reject local web server redirect URIs for pseudo-OOB flow
 
@@ -49,7 +49,7 @@
       select_pseudo_oob_value("http://localhost")
     Condition
       Error in `select_pseudo_oob_value()`:
-      ! OAuth client (a.k.a "app") does not have a redirect URI suitable for the pseudo-OOB flow.
+      ! OAuth client does not have a redirect URI suitable for the pseudo-OOB flow.
 
 # we insist on finding exactly one redirect URI for pseudo-OOB flow
 
@@ -60,4 +60,13 @@
       ! Can't determine which redirect URI to use for the pseudo-OOB flow:
       * https://example.com/google-callback/one.html
       * https://example.com/google-callback/two.html
+
+# gargle2.0_token(app) is deprecated but still works
+
+    Code
+      t <- gargle2.0_token(email = NA, credentials = list(a = 1), app = client)
+    Condition
+      Warning:
+      The `app` argument of `gargle2.0_token()` is deprecated as of gargle 1.5.0.
+      i Please use the `client` argument instead.
 

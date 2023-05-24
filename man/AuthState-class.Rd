@@ -8,16 +8,16 @@
 An \code{AuthState} object manages an authorization state, typically on behalf of
 a wrapper package that makes requests to a Google API.
 
-The \href{https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html}{How to use gargle for auth in a client package}
-vignette describes a design for wrapper packages that relies on an \code{AuthState}
-object. This state can then be incorporated into the package's requests for
-tokens and can control the inclusion of tokens in requests to the target API.
+The \verb{vignette("gargle-auth-in-client-package)} describes a design for wrapper
+packages that relies on an \code{AuthState} object. This state can then be
+incorporated into the package's requests for tokens and can control the
+inclusion of tokens in requests to the target API.
 \itemize{
 \item \code{api_key} is the simplest way to associate a request with a specific
 Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
 A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 with an API key, but this is the exception.
-\item \code{app} is an OAuth client ID (and secret) associated with a specific
+\item \code{client} is an OAuth client ID (and secret) associated with a specific
 Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
 This is used in the OAuth flow, in which an authenticated user authorizes
 the client to access or manipulate data on their behalf.
@@ -41,7 +41,9 @@ An \code{AuthState} should be created through the constructor function
 \describe{
 \item{\code{package}}{Package name.}
 
-\item{\code{app}}{An OAuth client.}
+\item{\code{client}}{An OAuth client.}
+
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 
 \item{\code{api_key}}{An API key.}
 
@@ -56,6 +58,7 @@ An \code{AuthState} should be created through the constructor function
 \itemize{
 \item \href{#method-AuthState-new}{\code{AuthState$new()}}
 \item \href{#method-AuthState-format}{\code{AuthState$format()}}
+\item \href{#method-AuthState-set_client}{\code{AuthState$set_client()}}
 \item \href{#method-AuthState-set_app}{\code{AuthState$set_app()}}
 \item \href{#method-AuthState-set_api_key}{\code{AuthState$set_api_key()}}
 \item \href{#method-AuthState-set_auth_active}{\code{AuthState$set_auth_active()}}
@@ -74,10 +77,11 @@ Create a new AuthState
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuthState$new(
   package = NA_character_,
-  app = NULL,
+  client = NULL,
   api_key = NULL,
   auth_active = TRUE,
-  cred = NULL
+  cred = NULL,
+  app = deprecated()
 )}\if{html}{\out{</div>}}
 }
 
@@ -86,13 +90,15 @@ Create a new AuthState
 \describe{
 \item{\code{package}}{Package name.}
 
-\item{\code{app}}{An OAuth client.}
+\item{\code{client}}{An OAuth client.}
 
 \item{\code{api_key}}{An API key.}
 
 \item{\code{auth_active}}{Logical, indicating whether auth is active.}
 
 \item{\code{cred}}{Credentials.}
+
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 }
 \if{html}{\out{</div>}}
 }
@@ -119,10 +125,28 @@ Format an AuthState
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-AuthState-set_client"></a>}}
+\if{latex}{\out{\hypertarget{method-AuthState-set_client}{}}}
+\subsection{Method \code{set_client()}}{
+Set the OAuth client
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_client(client)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{client}}{An OAuth client.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_app"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_app}{}}}
 \subsection{Method \code{set_app()}}{
-Set the OAuth app
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated method to set
+the OAuth client
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{AuthState$set_app(app)}\if{html}{\out{</div>}}
 }
@@ -130,7 +154,7 @@ Set the OAuth app
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{app}}{An OAuth client.}
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 }
 \if{html}{\out{</div>}}
 }

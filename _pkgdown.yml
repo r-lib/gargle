@@ -67,6 +67,7 @@ articles:
     contents:
     - how-gargle-gets-tokens
     - gargle-auth-in-client-package
+    - oauth-client-not-app
     - articles/managing-tokens-securely
     - request-helper-functions
 

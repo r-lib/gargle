@@ -2,10 +2,9 @@
 #'
 #' Constructor function for objects of class [AuthState].
 #'
-#' @param package Package name, an optional string. The associated package will
-#'   generally by implied by the namespace within which the `AuthState` is
-#'   defined. But it's possible to record the package name explicitly and seems
-#'   like a good practice.
+#' @param package Package name, an optional string. It is recommended to record
+#'   the name of the package whose auth state is being managed. Ultimately, this
+#'   may be used in some downstream messaging.
 #' @param api_key Optional. API key (a string). Some APIs accept unauthorized,
 #'   "token-free" requests for public resources, but only if the request
 #'   includes an API key.
@@ -26,17 +25,27 @@
 #'
 #' init_AuthState(
 #'   package = "my_package",
-#'   app = my_client,
+#'   client = my_client,
 #'   api_key = "api_key_api_key_api_key",
 #' )
 init_AuthState <- function(package = NA_character_,
-                           app = NULL,
+                           client = NULL,
                            api_key = NULL,
                            auth_active = TRUE,
-                           cred = NULL) {
+                           cred = NULL,
+                           app = deprecated()) {
+  if (lifecycle::is_present(app)) {
+    lifecycle::deprecate_soft(
+      "1.5.0",
+      "init_AuthState(app)",
+      "init_AuthState(client)"
+    )
+    client <- app
+  }
+
   AuthState$new(
     package     = package,
-    app         = app,
+    client      = client,
     api_key     = api_key,
     auth_active = auth_active,
     cred        = cred
@@ -49,17 +58,17 @@ init_AuthState <- function(package = NA_character_,
 #' An `AuthState` object manages an authorization state, typically on behalf of
 #' a wrapper package that makes requests to a Google API.
 #'
-#' The [How to use gargle for auth in a client
-#' package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html)
-#' vignette describes a design for wrapper packages that relies on an `AuthState`
-#' object. This state can then be incorporated into the package's requests for
-#' tokens and can control the inclusion of tokens in requests to the target API.
+
+#' The `vignette("gargle-auth-in-client-package)` describes a design for wrapper
+#' packages that relies on an `AuthState` object. This state can then be
+#' incorporated into the package's requests for tokens and can control the
+#' inclusion of tokens in requests to the target API.
 #'
 #'   * `api_key` is the simplest way to associate a request with a specific
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 #'     with an API key, but this is the exception.
-#'   * `app` is an OAuth client ID (and secret) associated with a specific
+#'   * `client` is an OAuth client ID (and secret) associated with a specific
 #'     Google Cloud Platform [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
 #'     This is used in the OAuth flow, in which an authenticated user authorizes
 #'     the client to access or manipulate data on their behalf.
@@ -78,17 +87,20 @@ init_AuthState <- function(package = NA_character_,
 #' [init_AuthState()], which has more details on the arguments.
 #'
 #' @param package Package name.
-#' @param app An OAuth client.
+#' @param client An OAuth client.
 #' @param api_key An API key.
 #' @param auth_active Logical, indicating whether auth is active.
 #' @param cred Credentials.
+#' @param app `r lifecycle::badge('deprecated')` Use `client` instead.
 #'
 #' @export
 #' @name AuthState-class
 AuthState <- R6::R6Class("AuthState", list(
   #' @field package Package name.
   package = NULL,
-  #' @field app An OAuth client.
+  #' @field client An OAuth client.
+  client = NULL,
+  #' @field app `r lifecycle::badge('deprecated')` Use `client` instead.
   app = NULL,
   #' @field api_key An API key.
   api_key = NULL,
@@ -99,20 +111,36 @@ AuthState <- R6::R6Class("AuthState", list(
   #' @description Create a new AuthState
   #' @details For more details on the parameters, see [init_AuthState()]
   initialize = function(package = NA_character_,
-                        app = NULL,
+                        client = NULL,
                         api_key = NULL,
                         auth_active = TRUE,
-                        cred = NULL) {
+                        cred = NULL,
+                        app = deprecated()) {
     gargle_debug("initializing AuthState")
+    if (lifecycle::is_present(app)) {
+      # I'm using deprecate_warn() intentionally here. If I use
+      # deprecate_soft(), you don't see the warning for a call to
+      # AuthState$new(app). Most folks should be instantiating through
+      # init_AuthState() anyway, so anyone who sees this warning probably needs
+      # to see it.
+      lifecycle::deprecate_warn(
+        "1.5.0",
+        "AuthState$initialize(app)",
+        "AuthState$initialize(client)"
+      )
+      client <- app
+    }
     stopifnot(
       is_scalar_character(package),
-      is.null(app) || is.oauth_app(app),
+      is.null(client) || is.oauth_app(client),
       is.null(api_key) || is_string(api_key),
       is_bool(auth_active),
       is.null(cred) || inherits(cred, "Token2.0")
     )
     self$package     <- package
-    self$app         <- app
+    self$client      <- client
+    # for backwards compatibility; could eventually be removed
+    self$app         <- client
     self$api_key     <- api_key
     self$auth_active <- auth_active
     self$cred        <- cred
@@ -123,7 +151,7 @@ AuthState <- R6::R6Class("AuthState", list(
   format = function(...) {
     x <- list(
       package     = cli::format_inline("{.pkg {self$package}}"),
-      app         = self$app$appname,
+      client      = self$client$name,
       api_key     = obfuscate(self$api_key),
       auth_active = self$auth_active,
       credentials = cli::format_inline("{.cls {class(self$cred)[[1]]}}")
@@ -135,11 +163,22 @@ AuthState <- R6::R6Class("AuthState", list(
       glue("{fr(names(x))}: {fl(x)}")
     )
   },
-  #' @description Set the OAuth app
-  set_app = function(app) {
-    stopifnot(is.null(app) || is.oauth_app(app))
-    self$app <- app
+  #' @description Set the OAuth client
+  set_client = function(client) {
+    stopifnot(is.null(client) || is.oauth_app(client))
+    self$client <- client
     invisible(self)
+  },
+  #' @description `r lifecycle::badge('deprecated')` Deprecated method to set
+  #'   the OAuth client
+  set_app = function(app) {
+    lifecycle::deprecate_soft(
+      "1.5.0",
+      "AuthState$set_app()",
+      "AuthState$set_client()",
+      details = make_package_hint(self$package)
+    )
+    self$set_client(client = app)
   },
   #' @description Set the API key
   #' @param value An API key.
@@ -176,3 +215,16 @@ AuthState <- R6::R6Class("AuthState", list(
     !is.null(self$cred)
   }
 ))
+
+make_package_hint <- function(pkg) {
+  hint <- NULL
+  if (is_string(pkg)) {
+    hint <- glue("
+      This probably needs to be addressed in the {pkg} package.")
+    url <- pkg_url_bug(pkg)
+    if (!is.null(url)) {
+      hint <- c(hint, glue("Please report the issue at <{url}>."))
+    }
+  }
+  hint
+}

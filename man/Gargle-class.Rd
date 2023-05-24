@@ -34,6 +34,8 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 \item{\code{email}}{Email associated with the token.}
 
 \item{\code{package}}{Name of the package requesting a token. Used in messages.}
+
+\item{\code{client}}{An OAuth client.}
 }
 \if{html}{\out{</div>}}
 }
@@ -69,34 +71,38 @@ Create a Gargle2.0 token
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
   email = gargle_oauth_email(),
-  app = gargle_client(),
+  client = gargle_client(),
   package = "gargle",
   credentials = NULL,
   params = list(),
-  cache_path = gargle_oauth_cache()
+  cache_path = gargle_oauth_cache(),
+  app = deprecated()
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{email}}{Optional email address. See \code{\link[=gargle2.0_token]{gargle2.0_token()}} for full details.}
+\item{\code{email}}{Optional email address. See \code{\link[=gargle2.0_token]{gargle2.0_token()}} for full
+details.}
 
-\item{\code{app}}{An OAuth consumer application.}
+\item{\code{client}}{An OAuth consumer application.}
 
 \item{\code{package}}{Name of the package requesting a token. Used in messages.}
 
 \item{\code{credentials}}{Exists largely for testing purposes.}
 
 \item{\code{params}}{A list of parameters for the internal function
-\code{init_oauth2.0()}, which is a modified version of
-\code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}. gargle actively uses \code{scope} and \code{use_oob}, but
-does not use \code{user_params}, \code{type}, \code{as_header} (hard-wired to \code{TRUE}),
-\code{use_basic_auth} (accept default of \code{use_basic_auth = FALSE}),
-\code{config_init}, or \code{client_credentials}.}
+\code{init_oauth2.0()}, which is a modified version of \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}.
+gargle actively uses \code{scope} and \code{use_oob}, but does not use \code{user_params},
+\code{type}, \code{as_header} (hard-wired to \code{TRUE}), \code{use_basic_auth} (accept
+default of \code{use_basic_auth = FALSE}), \code{config_init}, or
+\code{client_credentials}.}
 
 \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
 \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+
+\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 }
 \if{html}{\out{</div>}}
 }
