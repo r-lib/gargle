@@ -150,7 +150,7 @@ kubectl create namespace my-namespace
 kubectl create serviceaccount --namespace my-namespace bq-service-account 
 ```
 
-4. Bind that Kubernetes service account to the service account outside of kubernetes you created in step 1, and assign it an annotation:
+4. Bind that Kubernetes service account to the service account outside of Kubernetes you created in step 1, and assign it an annotation:
 
 ```sh
 # Create IAM policy binding betwwen k8s SA and GSA

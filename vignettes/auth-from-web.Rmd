@@ -25,7 +25,7 @@ OOB still works for projects that are in testing mode.
 
 The built-in tidyverse client (used by googledrive, googlesheets4, and bigrquery) is associated with a GCP project that is in production mode.
 Therefore, conventional OOB auth stopped working for the built-in client in February 2023. 
-In anticipation of this, gargle gained a new auth flow in version 1.3.0 that we call "pseudo-OOB", which should allow casual users to continue to enjoy a low-friction auth experience, even from RStudio Server, Posit Cloud, Posit Workbench, and Google Colab.
+In anticipation of this, gargle gained a new auth flow in version 1.3.0 that we call "pseudo-OOB", which should allow casual users to continue to enjoy a low-friction auth experience, even from RStudio Server, Posit Cloud, Posit Workbench, and Google Colaboratory.
 
 If you attempt to do conventional OOB auth with a client that no longer supports it, you'll see something like this:
 
