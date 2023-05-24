@@ -34,6 +34,12 @@
 #'   [gargle::gargle_oob_default()]. Note that (pseudo-)oob auth only affects
 #'   the initial OAuth dance. If we retrieve (and possibly refresh) a
 #'   cached token, `use_oob` has no effect.
+#'
+#'   If the OAuth client is provided implicitly by wrapper package, its type
+#'   probably defaults to the value returned by
+#'   [gargle::gargle_oauth_client_type()]. You can take control of the client
+#'   type by setting `options(gargle_oauth_client_type = "web")` or
+#'   `options(gargle_oauth_client_type = "installed")`.
 #' @param cache Specifies the OAuth token cache. Defaults to the option named
 #'   `"gargle_oauth_cache"`, retrieved via [gargle::gargle_oauth_cache()].
 #' @inheritParams httr::oauth2.0_token

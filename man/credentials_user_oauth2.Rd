@@ -60,7 +60,13 @@ variant implemented by gargle and known as "pseudo-oob") when first
 acquiring the token. Defaults to the value returned by
 \code{\link[=gargle_oob_default]{gargle_oob_default()}}. Note that (pseudo-)oob auth only affects
 the initial OAuth dance. If we retrieve (and possibly refresh) a
-cached token, \code{use_oob} has no effect.}
+cached token, \code{use_oob} has no effect.
+
+If the OAuth client is provided implicitly by wrapper package, its type
+probably defaults to the value returned by
+\code{\link[=gargle_oauth_client_type]{gargle_oauth_client_type()}}. You can take control of the client
+type by setting \code{options(gargle_oauth_client_type = "web")} or
+\code{options(gargle_oauth_client_type = "installed")}.}
     \item{\code{cache}}{Specifies the OAuth token cache. Defaults to the option named
 \code{"gargle_oauth_cache"}, retrieved via \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
     \item{\code{credentials}}{Advanced use only: allows you to completely customise
