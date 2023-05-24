@@ -40,8 +40,8 @@ drive_auth <- function(email = gargle::gargle_oauth_email(),
                        cache = gargle::gargle_oauth_cache(),
                        use_oob = gargle::gargle_oob_default(),
                        token = NULL) {
-  # this catches a common user error, where the JSON for an OAuth client is
-  # passed to the `path` argument, which expects a service account token
+  # this catches a common error, where the user passes JSON for an OAuth client
+  # to the `path` argument, which only expects a service account token
   gargle::check_is_service_account(path, hint = "drive_auth_configure")
 
   cred <- gargle::token_fetch(

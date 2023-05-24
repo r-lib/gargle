@@ -34,7 +34,7 @@ The default OAuth client used by these package no longer works with conventional
 
 In response, as of v1.3.0, gargle implements a new variant of OOB, called **pseudo-oob**, to continue to provide a user-friendly auth flow for googledrive/googlesheets4/bigrquery on RStudio Server/Posit Workbench/Posit Cloud/Google Colaboratory.
 The pseudo-oob flow is also available for other developers to use.
-This flow is triggered when `use_oob = TRUE` (an existing convention in gargle and gargle-using packages) **and** the configured OAuth client is of the "web" type (when creating an OAuth client, this is called the "Web application" type).
+This flow is triggered when `use_oob = TRUE` (an existing convention in gargle and gargle-using packages) **and** the configured OAuth client is of the *web* type (when creating an OAuth client, this is called the "Web application" type).
 
 ```{=html}
 <style>
@@ -52,11 +52,7 @@ This flow is triggered when `use_oob = TRUE` (an existing convention in gargle a
     background-color: transparent;
   }
   
-  table th {
-    border-style: solid;
-  }
-  
-  table td {
+  table th, table td {
     border-style: solid;
   }
 </style>
@@ -92,8 +88,8 @@ This flow is triggered when `use_oob = TRUE` (an existing convention in gargle a
 </table>
 ```
 
-In the past, gargle basically assumed that every OAuth client was of the "installed" type (when creating an OAuth client, this is called the "Desktop app" type).
-Therefore, the introduction of pseudo-oob meant that gargle had to learn about different OAuth client types.
+In the past, gargle basically assumed that every OAuth client was of the *installed* type (when creating an OAuth client, this is called the "Desktop app" type).
+Therefore, the introduction of pseudo-oob meant that gargle had to learn about different OAuth client types (web vs. installed).
 And that didn't play well with `httr::oauth_app()`, which gargle had been using to store the client ID and secret.
 
 That's why there is a new S3 class, `"gargle_oauth_client"`, with a constructor of the same name.
@@ -104,12 +100,14 @@ Google's documentation has always talked about the "OAuth client", so this is mo
 This vocabulary is also more future-facing, anticipating the day when gargle might shift from httr to httr2, which uses `httr2:oauth_client()`.
 As a bridging measure, the `"gargle_oauth_client"` class currently inherits from httr's `"oauth_app"`, but this probably won't be true in the long-term.
 
-### How to create an OAuth client
+### How to instantiate an OAuth client in R
 
 If you do auth via gargle, here are some recommended changes:
 
 1. Stop using `httr::oauth_app()` or `gargle::oauth_app_from_json()` to instantiate an OAuth client.
 2. Start using `gargle_oauth_client_from_json()` (strongly recommended) or `gargle_oauth_client()` instead.
+
+This advice applies to anything you do inside your package and also to what you encourage and document for your users.
 
 gargle ships with JSON files for two non-functional OAuth clients, just to make this all more concrete:
 
@@ -118,6 +116,7 @@ gargle ships with JSON files for two non-functional OAuth clients, just to make 
   "extdata", "client_secret_installed.googleusercontent.com.json",
   package = "gargle"
 ))
+jsonlite::prettify(scan(path_to_installed_client, what = character()))
 (client <- gargle_oauth_client_from_json(path_to_installed_client))
 class(client)
 
@@ -125,11 +124,13 @@ class(client)
   "extdata", "client_secret_web.googleusercontent.com.json",
   package = "gargle"
 ))
+jsonlite::prettify(scan(path_to_web_client, what = character()))
 (client <- gargle_oauth_client_from_json(path_to_web_client))
 class(client)
 ```
 
-Note the class of `client`, the new `type` field, and the `redirect_uris`.
+Notice the difference in the JSON for the installed vs. web client.
+Note the class of the `client` object, the new `type` field, and the `redirect_uris`.
 
 ## `AuthState` class
 
@@ -138,7 +139,7 @@ We cover `AuthState` here and `Gargle2.0` in the next section.
 
 If a wrapper package follows the design laid out in `vignette("gargle-auth-in-client-package")`, it will use an instance of `AuthState` to manage the package's auth state.
 Let's assume that internal object is named `.auth`, which it usually is.
-Here are the changes in `AuthState`:
+Here are the changes you need to know about in `AuthState`:
 
 * The `app` field is deprecated, in favor of a new field `client`.
   If you request `.auth$app`, there will be a deprecation message and the
@@ -151,10 +152,15 @@ Here are the changes in `AuthState`:
   there will be a deprecation message and the input `x` is used as the
   `client` argument instead.
   
-The wrapper package might export a user-facing function, `PKG_auth_configure()` that allows the user to configure their own OAuth client or API key.
-The `PKG_auth_configure()` function typically exposes an argument for the OAuth client and it makes sense to rename this from `app` to `client`.
-It is also typical to export a function that reveals the user's configured OAuth client.
-It makes sense to rename this from `PKG_oauth_app()` to `PKG_oauth_client()`.
+Here are the changes you probably need to make in your package:
+
+* The first argument of the user-facing function, `PKG_auth_configure()`, should
+  become `client` (which is new). Move the existing `app` argument to the last
+  position and deprecate it.
+* Deprecate `PKG_oauth_app()` (the function to reveal the user's configured
+  OAuth client).
+* Introduce `PKG_oauth_client()` to replace `PKG_oauth_app()`.
+
 Here's how `googledrive::drive_auth_configure()` and `googledrive::drive_oauth_client()` looked before and after the transition:
 
 ```{r, eval = FALSE}
@@ -193,12 +199,12 @@ drive_oauth_app <- function() {
 }
 ```
 
-The approach above follows various conventions explained in the "Arguments" section of `vignette("communicate", package = "lifecycle")`.
-(The `usethis::use_lifecycle()` function does the recommended setup, to start using the lifecycle package.)
-The first argument of `PKG_auth_configure()` is now `client` and `app` is moved to the end, with default value `deprecated()`.
-In the body of `drive_auth_configure()`, we'll issue a deprecation warning for explicit usage of the `app` argument and then use that input as the `client` instead.
-Instead of calling `.auth$set_app()`, we use `.auth$set_client()` instead.
-A call to `drive_oauth_app()` results in a deprecation warning, then a call to `drive_oauth_client()` instead.
+The approach above follows various conventions explained in `vignette("communicate", package = "lifecycle")`.
+If you also choose to use the lifecycle package to assist in this process, `usethis::use_lifecycle()` function does some helpful one-time setup in your package:
+
+```{r eval = FALSE}
+usethis::use_lifecycle()
+```
 
 The roxygen documentation helpers in gargle assume `PKG_auth_configure()` is adapted as shown above:
 
@@ -209,3 +215,36 @@ The roxygen documentation helpers in gargle assume `PKG_auth_configure()` is ada
   communicate that `app` is deprecated.
 * `PREFIX_auth_configure_params()` crosslinks to
   `gargle::gargle_oauth_client_from_json()` which requires gargle (>= 1.3.0)
+
+## `Gargle2.0` class
+
+`Gargle2.0` is the second gargle class that is impacted by the OAuth-app-to-client switch.
+
+Here are the changes you probably need to make in your package:
+
+* Inside `PKG_auth()`, you presumably call `gargle::token_fetch()`. If you are
+  passing `app = <SOMETHING>`, change that to `client = <SOMETHING>`. Neither
+  `app` nor `client` are formal arguments of `gargle::token_fetch()`, instead,
+  these are intended for eventual use by `gargle::credentials_user_oauth2()`.
+  Here's a sketch of how this looks in `googledrive::drive_auth()`:
+  
+    ```{r eval = FALSE}
+    drive_auth <- function(...) {
+      # code not shown
+      cred <- gargle::token_fetch(
+        scopes = scopes,
+        # app = drive_oauth_client() %||% <BUILT_IN_DEFAULT_CLIENT>,   # BEFORE
+        client = drive_oauth_client() %||% <BUILT_IN_DEFAULT_CLIENT>,  # AFTER
+        email = email,
+        path = path,
+        package = "googledrive",
+        cache = cache,
+        use_oob = use_oob,
+        token = token
+      )
+      # code not shown
+    }
+    ```
+  
+* If you ever call `gargle::credentials_user_oauth2()` directly, use the new
+  `client` argument instead of the deprecated `app` argument.
