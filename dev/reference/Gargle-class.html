@@ -130,6 +130,10 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 <dd><p>Name of the package requesting a token. Used in messages.</p></dd>
 
 
+<dt><code>client</code></dt>
+<dd><p>An OAuth client.</p></dd>
+
+
 </dl><p></p></div>
     </div>
     <div class="section level2">
@@ -157,21 +161,23 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/Gargle-class.html">Gargle2.0</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  email <span class="op">=</span> <span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  app <span class="op">=</span> <span class="fu"><a href="../reference/gargle_client.html">gargle_client</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  client <span class="op">=</span> <span class="fu"><a href="../reference/gargle_client.html">gargle_client</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"gargle"</span>,</span>
 <span>  credentials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  cache_path <span class="op">=</span> <span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  cache_path <span class="op">=</span> <span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  app <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>email</code></dt>
-<dd><p>Optional email address. See <code><a href="gargle2.0_token.html">gargle2.0_token()</a></code> for full details.</p></dd>
+<dd><p>Optional email address. See <code><a href="gargle2.0_token.html">gargle2.0_token()</a></code> for full
+details.</p></dd>
 
 
-<dt><code>app</code></dt>
+<dt><code>client</code></dt>
 <dd><p>An OAuth consumer application.</p></dd>
 
 
@@ -185,16 +191,20 @@ components of a list, which is typically serialized to <code>./.httr-oauth</code
 
 <dt><code>params</code></dt>
 <dd><p>A list of parameters for the internal function
-<code>init_oauth2.0()</code>, which is a modified version of
-<code><a href="https://httr.r-lib.org/reference/init_oauth2.0.html" class="external-link">httr::init_oauth2.0()</a></code>. gargle actively uses <code>scope</code> and <code>use_oob</code>, but
-does not use <code>user_params</code>, <code>type</code>, <code>as_header</code> (hard-wired to <code>TRUE</code>),
-<code>use_basic_auth</code> (accept default of <code>use_basic_auth = FALSE</code>),
-<code>config_init</code>, or <code>client_credentials</code>.</p></dd>
+<code>init_oauth2.0()</code>, which is a modified version of <code><a href="https://httr.r-lib.org/reference/init_oauth2.0.html" class="external-link">httr::init_oauth2.0()</a></code>.
+gargle actively uses <code>scope</code> and <code>use_oob</code>, but does not use <code>user_params</code>,
+<code>type</code>, <code>as_header</code> (hard-wired to <code>TRUE</code>), <code>use_basic_auth</code> (accept
+default of <code>use_basic_auth = FALSE</code>), <code>config_init</code>, or
+<code>client_credentials</code>.</p></dd>
 
 
 <dt><code>cache_path</code></dt>
 <dd><p>Specifies the OAuth token cache. Read more in
 <code><a href="gargle_options.html">gargle_oauth_cache()</a></code>.</p></dd>
+
+
+<dt><code>app</code></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>client</code> instead.</p></dd>
 
 
 </dl><p></p></div>

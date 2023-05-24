@@ -43,6 +43,9 @@
     <loc>https://gargle.r-lib.org/dev/articles/non-interactive-auth.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/dev/articles/oauth-client-not-app.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/dev/articles/request-helper-functions.html</loc>
   </url>
   <url>
