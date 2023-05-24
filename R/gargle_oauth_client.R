@@ -1,8 +1,6 @@
 #' Create an OAuth client for Google
 #'
 #' @description
-#' `r lifecycle::badge("experimental")`
-
 #' A `gargle_oauth_client` consists of:
 
 #' * A type. gargle only supports the "Desktop app" and "Web application" client
@@ -17,9 +15,7 @@
 #' Console](https://console.cloud.google.com).
 #'
 #' A `gargle_oauth_client` is an adaptation of httr's [oauth_app()] (currently)
-#' and httr2's `oauth_client()` (which gargle will migrate to in the future),
-#' specialized for Google APIs. This function and class is marked "experimental"
-#' since the details of this transition are necessarily uncertain.
+#' and httr2's `oauth_client()` (which gargle will migrate to in the future).
 
 #' @param path JSON downloaded from [Google Cloud
 #'   Console](https://console.cloud.google.com), containing a client id and
