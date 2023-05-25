@@ -178,6 +178,9 @@ AuthState <- R6::R6Class("AuthState", list(
       "AuthState$set_client()",
       details = make_package_hint(self$package)
     )
+    # needed for backwards compatibility, as long as there are packages out
+    # there consulting .auth$app
+    self$app <- app
     self$set_client(client = app)
   },
   #' @description Set the API key
