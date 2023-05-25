@@ -258,22 +258,26 @@ token_match <- function(candidate, existing, package = "gargle") {
       return()
     }
     existing <- existing[m]
-
-    if (length(existing) == 1) {
-      gargle_info(c(
-        "i" = "The {.pkg {package}} package is using a cached token for \\
-               {.email {extract_email(existing)}}."
-      ))
-      return(existing)
-    }
   }
+
+  # if candidate_email is '*' or domain-only, e.g. '*@example.org' AND
+  # we're down to 1 match, we're done
+  if (!empty_string(candidate_email) && length(existing) == 1) {
+    gargle_info(c(
+      "i" = "The {.pkg {package}} package is using a cached token for \\
+             {.email {extract_email(existing)}}."
+    ))
+    return(existing)
+  }
+  # if we're still here, one of these is true:
+  # - email was partially specified and there are multiple matches
+  # - email was unspecified and there is at least one match
 
   if (!is_interactive()) {
     # proceed, but make sure user sees messaging about how to do
     # non-interactive auth more properly
     # https://github.com/r-lib/gargle/issues/92
     local_gargle_verbosity("info")
-    candidate_email <- "*"
     if (length(existing) > 1) {
       emails <- extract_email(existing)
       emails_fmt <- lapply(
@@ -299,9 +303,6 @@ token_match <- function(candidate, existing, package = "gargle") {
     # morally, I'd like to throw a warning but current design of token_fetch()
     # means warnings are caught
     gargle_info(msg)
-  }
-
-  if (length(existing) == 1 && candidate_email == "*") {
     gargle_info(c(
       "i" = "The {.pkg {package}} package is using a cached token for \\
              {.email {extract_email(existing)}}."

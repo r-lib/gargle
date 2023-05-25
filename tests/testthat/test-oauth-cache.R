@@ -237,8 +237,6 @@ test_that("token_match() scolds but returns short hash match when non-interactiv
   )
   expect_equal(m, one_existing)
 })
-# 1 short hash match, interactive
-# >1 short hash match, interactive
 
 # situation report ----------------------------------------------------------
 
