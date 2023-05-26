@@ -1,21 +1,59 @@
 # gargle's new secret management functions -------------------------------------
 
-#' Encrypt a JSON string or file
+#' Encrypt/decrypt JSON or an R object
 #'
-#' @param json A JSON string or file.
-#' @param path_out An optional path to write the encrypted result to.
-#' @param key Encryption key, as implemented by httr2's secret functions. TL;DR
-#'   probably the name of an environment variable.
+#' @description
+
+#' These functions help to encrypt and decrypt confidential information that you
+#' might need when deploying gargle-using projects or in CI/CD. They basically
+#' rely on inlined copies of the [secret functions in the httr2
+#' package](https://httr2.r-lib.org/reference/secrets.html). The awkwardness of
+#' inlining code from httr2 can be removed when/if gargle starts to depend on
+#' httr2.
 #'
-#' @return The encrypted JSON string, invisibly. This function is more about its
-#'   side effect, which is usually to write an encrypted file.
-#' @noRd
-#' @examples
+#' @param key Encryption key, as implemented by httr2's [secret
+#'   functions](https://httr2.r-lib.org/reference/secrets.html). This should
+#'   almost certainly be the name of an environment variable whose value was
+#'   generated with `gargle:::secret_make_key()` (which is an inlined copy of
+#'   `httr2::secret_make_key()`).
+
+#'
+#' @return
+#' * `secret_encrypt_json()`: The encrypted JSON string, invisibly. In typical
+#' use, this function is mainly called for its side effect, which is to write an
+#' encrypted file.
+#' * `secret_decrypt_json()`: The decrypted JSON string, invisibly.
+#'
+#' @name gargle_secret
+#' @keywords internal
+#' @examplesIf gargle:::secret_has_key("GARGLE_KEY")
+#' # gargle ships with JSON for a fake service account
+#' # we'll put the encrypted JSON into a new file
+#' tmp <- tempfile()
 #' secret_encrypt_json(
-#'   "~/rrr/gargle-internal/gargle-testing.json",
-#'   "inst/secret/gargle-testing.json",
+#'   fs::path_package("gargle", "extdata", "fake_service_account.json"),
+#'   tmp,
 #'   key = "GARGLE_KEY"
 #' )
+#'
+#' # complete the round trip by providing the decrypted JSON to a credential
+#' # function
+#' credentials_service_account(
+#'  scopes = "https://www.googleapis.com/auth/userinfo.email",
+#'  path = secret_decrypt_json(
+#'    fs::path_package("gargle", "secret", "gargle-testing.json"),
+#'    key = "GARGLE_KEY"
+#'  )
+#' )
+#'
+#' file.remove(tmp)
+NULL
+
+#' @param json A JSON file (or string).
+#' @param path_out The path to write the encrypted result to. This is optional,
+#'   but anticipated for typical use.
+#' @rdname gargle_secret
+#' @export
 secret_encrypt_json <- function(json, path_out = NULL, key) {
   if (!jsonlite::validate(json)) {
     json <- readChar(json, file.info(json)$size - 1)
@@ -30,22 +68,9 @@ secret_encrypt_json <- function(json, path_out = NULL, key) {
   invisible(enc)
 }
 
-#' Decrypt a JSON file
-#'
 #' @param path An encrypted JSON file.
-#' @param key Encryption key, as implemented by httr2's secret functions. TL;DR
-#'   probably the name of an environment variable.
-#'
-#' @return The decrypted JSON string, invisibly.
-#' @noRd
-#' @examples
-#' credentials_service_account(
-#'   scopes = "https://www.googleapis.com/auth/userinfo.email",
-#'   path = secret_read_json(
-#'     "inst/secret/gargle-testing.json",
-#'     key = "GARGLE_KEY"
-#'   )
-#' )
+#' @rdname gargle_secret
+#' @export
 secret_read_json <- function(path, key) {
   raw <- readBin(path, "raw", file.size(path))
   enc <- rawToChar(raw)
