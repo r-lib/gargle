@@ -1,12 +1,225 @@
-# Setup support for the NAME=PASSWORD envvar ----------------------------------
+# gargle's new secret management functions -------------------------------------
+
+#' Encrypt a JSON string or file
+#'
+#' @param json A JSON string or file.
+#' @param path_out An optional path to write the encrypted result to.
+#' @param key Encryption key, as implemented by httr2's secret functions. TL;DR
+#'   probably the name of an environment variable.
+#'
+#' @return The encrypted JSON string, invisibly. This function is more about its
+#'   side effect, which is usually to write an encrypted file.
+#' @noRd
+#' @examples
+#' secret_encrypt_json(
+#'   "~/rrr/gargle-internal/gargle-testing.json",
+#'   "inst/secret/gargle-testing.json",
+#'   key = "GARGLE_KEY"
+#' )
+secret_encrypt_json <- function(json, path_out = NULL, key) {
+  if (!jsonlite::validate(json)) {
+    json <- readChar(json, file.info(json)$size - 1)
+  }
+  enc <- secret_encrypt(json, key = key)
+
+  if(!is.null(path_out)) {
+    check_string(path_out)
+    writeBin(enc, path_out)
+  }
+
+  invisible(enc)
+}
+
+#' Decrypt a JSON file
+#'
+#' @param path An encrypted JSON file.
+#' @param key Encryption key, as implemented by httr2's secret functions. TL;DR
+#'   probably the name of an environment variable.
+#'
+#' @return The decrypted JSON string, invisibly.
+#' @noRd
+#' @examples
+#' credentials_service_account(
+#'   scopes = "https://www.googleapis.com/auth/userinfo.email",
+#'   path = secret_read_json(
+#'     "inst/secret/gargle-testing.json",
+#'     key = "GARGLE_KEY"
+#'   )
+#' )
+secret_read_json <- function(path, key) {
+  raw <- readBin(path, "raw", file.size(path))
+  enc <- rawToChar(raw)
+  invisible(secret_decrypt(enc, key = key))
+}
+
+# httr2's secret management functions ------------------------------------------
+# inlined as of:
+# https://github.com/r-lib/httr2/commit/86127996b98c03f4ada8949969db83bb0c4a7921
+
+# # Basic workflow
+#
+# 1.  Use `secret_make_key()` to generate a password. Make this available
+#     as an env var (e.g. `{MYPACKAGE}_KEY`) by adding a line to your
+#     `.Renviron`.
+#
+# 2.  Encrypt strings with `secret_encrypt()` and other data with
+#     `secret_write_rds()`, setting `key = "{MYPACKAGE}_KEY"`.
+#
+# 3.  In your tests, decrypt the data with `secret_decrypt()` or
+#     `secret_read_rds()` to match how you encrypt it.
+#
+# 4.  If you push this code to your CI server, it will already "work" because
+#     all functions automatically skip tests when your `{MYPACKAGE}_KEY}`
+#     env var isn't set. To make the tests actually run, you'll need to set
+#     the env var using whatever tool your CI system provides for setting
+#     env vars. Make sure to carefully inspect the test output to check that
+#     the skips have actually gone away.
+#'
+
+secret_make_key <- function() {
+  I(base64_url_rand(16))
+}
+
+secret_encrypt <- function(x, key) {
+  check_string(x)
+  key <- as_key(key)
+
+  value <- openssl::aes_ctr_encrypt(charToRaw(x), key)
+  base64_url_encode(c(attr(value, "iv"), value))
+}
+
+secret_decrypt <- function(encrypted, key) {
+  check_string(encrypted, arg = "encrypted")
+  key <- as_key(key)
+
+  bytes <- base64_url_decode(encrypted)
+  iv <- bytes[1:16]
+  value <- bytes[-(1:16)]
+
+  rawToChar(openssl::aes_ctr_decrypt(value, key, iv = iv))
+}
+
+secret_write_rds <- function(x, path, key) {
+  writeBin(secret_serialize(x, key), path)
+  invisible(x)
+}
+
+secret_read_rds <- function(path, key) {
+  x <- readBin(path, "raw", file.size(path))
+  secret_unserialize(x, key)
+}
+
+secret_serialize <- function(x, key) {
+  key <- as_key(key)
+
+  x <- serialize(x, NULL, version = 2)
+  x_cmp <- memCompress(x, "bzip2")
+  x_enc <- openssl::aes_ctr_encrypt(x_cmp, key)
+  c(attr(x_enc, "iv"), x_enc)
+}
+
+secret_unserialize <- function(encrypted, key) {
+  key <- as_key(key)
+
+  iv <- encrypted[1:16]
+
+  x_enc <- encrypted[-(1:16)]
+  x_cmp <- openssl::aes_ctr_decrypt(x_enc, key, iv = iv)
+  x <- memDecompress(x_cmp, "bzip2")
+  unserialize(x)
+}
+
+secret_has_key <- function(key) {
+  check_string(key, arg = "envvar")
+  key <- Sys.getenv(key)
+  !identical(key, "")
+}
+
+secret_get_key <- function(envvar, call = caller_env()) {
+  key <- Sys.getenv(envvar)
+
+  if (identical(key, "")) {
+    msg <- glue("Can't find envvar {envvar}")
+    if (is_testing()) {
+      testthat::skip(msg)
+    } else {
+      abort(msg, call = call)
+    }
+  }
+
+  base64_url_decode(key)
+}
+
+## Helpers -----------------------------------------------------------------
+
+as_key <- function(x) {
+  if (inherits(x, "AsIs") && is_string(x)) {
+    base64_url_decode(x)
+  } else if (is.raw(x)) {
+    x
+  } else if (is_string(x)) {
+    secret_get_key(x)
+  } else {
+    abort(paste0(
+      "`key` must be a raw vector containing the key, ",
+      "a string giving the name of an env var, ",
+      "or a string wrapped in I() that contains the base64url encoded key"
+    ))
+  }
+}
+
+# https://datatracker.ietf.org/doc/html/rfc7636#appendix-A
+base64_url_encode <- function(x) {
+  x <- openssl::base64_encode(x)
+  x <- gsub("=+$", "", x)
+  x <- gsub("+", "-", x, fixed = TRUE)
+  x <- gsub("/", "_", x, fixed = TRUE)
+  x
+}
+
+base64_url_decode <- function(x) {
+  mod4 <- nchar(x) %% 4
+  if (mod4 > 0) {
+    x <- paste0(x, strrep("=", 4 - mod4))
+  }
+
+  x <- gsub("_", "/", x, fixed = TRUE)
+  x <- gsub("-", "+", x, fixed = TRUE)
+  # x <- gsub("=+$", "", x)
+  openssl::base64_decode(x)
+}
+
+base64_url_rand <- function(bytes = 32) {
+  base64_url_encode(openssl::rand_bytes(bytes))
+}
+
+# gargle's legacy, internal secret management functions ------------------------
+warn_for_legacy_secret <- function(what,
+                                   env = caller_env(),
+                                   user_env = caller_env(2)) {
+  lifecycle::deprecate_soft(
+    when = "1.5.0",
+    what = what,
+    details = c(
+      "Use the new secret functions inlined from httr2 instead:",
+      "<https://httr2.r-lib.org/reference/secrets.html>"
+    ),
+    env = env, user_env = user_env,
+    id = "httr2_secret_mgmt"
+  )
+}
+
+## Setup support for the NAME=PASSWORD envvar ----------------------------------
 
 # secret_pw_name("gargle") --> "GARGLE_PASSWORD"
 secret_pw_name <- function(package) {
+  warn_for_legacy_secret("secret_pw_name()")
   paste0(toupper(gsub("[.]", "_", package)), "_PASSWORD")
 }
 
 # secret_pw_gen() --> "9AkKLa50wf1zHNCnHiQWeFLDoch9MYJHmPNnIVYZgSUt0Emwgi"
 secret_pw_gen <- function() {
+  warn_for_legacy_secret("secret_pw_gen()")
   x <- sample(c(letters, LETTERS, 0:9), 50, replace = TRUE)
   paste0(x, collapse = "")
 }
@@ -33,14 +246,16 @@ secret_pw_get <- function(package) {
   sodium::sha256(charToRaw(pw))
 }
 
-# Store and retrieve encrypted data -------------------------------------------
+## Store and retrieve encrypted data -------------------------------------------
 
 secret_can_decrypt <- function(package) {
+  warn_for_legacy_secret("secret_can_decrypt()")
   requireNamespace("sodium", quietly = TRUE) && secret_pw_exists(package)
 }
 
 # input should either be a filepath or a raw vector
 secret_write <- function(package, name, input) {
+  warn_for_legacy_secret("secret_write()")
   if (is.character(input)) {
     input <- readBin(input, "raw", file.size(input))
   } else if (!is.raw(input)) {
@@ -74,6 +289,7 @@ secret_path <- function(package, name) {
 
 # Returns a raw vector
 secret_read <- function(package, name) {
+  warn_for_legacy_secret("secret_read()")
   if (!secret_can_decrypt(package)) {
     gargle_abort_secret(message = "Decryption not available.", package = package)
   }

@@ -1,10 +1,12 @@
 test_that("token_*() functions work", {
   skip_if_offline()
-  skip_if_no_auth()
 
   token <- credentials_service_account(
     scopes = "https://www.googleapis.com/auth/userinfo.email",
-    path = rawToChar(secret_read("gargle", "gargle-testing.json"))
+    path = secret_read_json(
+      fs::path_package("gargle", "secret", "gargle-testing.json"),
+      key = "GARGLE_KEY"
+    )
   )
 
   expect_no_error(
