@@ -191,7 +191,7 @@ secret_unserialize <- function(encrypted, key) {
 }
 
 secret_has_key <- function(key) {
-  check_string(key, arg = "envvar")
+  check_string(key)
   key <- Sys.getenv(key)
   !identical(key, "")
 }
@@ -200,11 +200,15 @@ secret_get_key <- function(envvar, call = caller_env()) {
   key <- Sys.getenv(envvar)
 
   if (identical(key, "")) {
-    msg <- glue("Can't find envvar {envvar}")
     if (is_testing()) {
+      msg <- glue("Env var {envvar} not defined.")
       testthat::skip(msg)
     } else {
-      abort(msg, call = call)
+      msg <- gargle_map_cli(
+        envvar,
+        "Env var {.envvar <<x>>} not defined."
+      )
+      cli::cli_abort(msg, call = call)
     }
   }
 
