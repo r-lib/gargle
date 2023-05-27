@@ -4,7 +4,7 @@ test_that("token works", {
   expect_no_error(
     token <- credentials_service_account(
       scopes = "https://www.googleapis.com/auth/userinfo.email",
-      path = secret_read_json(
+      path = secret_decrypt_json(
         fs::path_package("gargle", "secret", "gargle-testing.json"),
         key = "GARGLE_KEY"
       )

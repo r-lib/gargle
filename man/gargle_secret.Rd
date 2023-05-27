@@ -3,25 +3,32 @@
 \name{gargle_secret}
 \alias{gargle_secret}
 \alias{secret_encrypt_json}
-\alias{secret_read_json}
+\alias{secret_decrypt_json}
+\alias{secret_write_rds}
+\alias{secret_read_rds}
 \title{Encrypt/decrypt JSON or an R object}
 \usage{
-secret_encrypt_json(json, path_out = NULL, key)
+secret_encrypt_json(json, path = NULL, key)
 
-secret_read_json(path, key)
+secret_decrypt_json(path, key)
+
+secret_write_rds(x, path, key)
+
+secret_read_rds(path, key)
 }
 \arguments{
 \item{json}{A JSON file (or string).}
 
-\item{path_out}{The path to write the encrypted result to. This is optional,
-but anticipated for typical use.}
+\item{path}{The path to write to (\code{secret_encrypt_json()},
+\code{secret_write_rds()}) or to read from (\code{secret_decrypt_json()},
+\code{secret_read_rds()}).}
 
 \item{key}{Encryption key, as implemented by httr2's \href{https://httr2.r-lib.org/reference/secrets.html}{secret functions}. This should
-almost certainly be the name of an environment variable whose value was
+almost always be the name of an environment variable whose value was
 generated with \code{gargle:::secret_make_key()} (which is an inlined copy of
 \code{httr2::secret_make_key()}).}
 
-\item{path}{An encrypted JSON file.}
+\item{x}{An R object.}
 }
 \value{
 \itemize{
@@ -29,19 +36,28 @@ generated with \code{gargle:::secret_make_key()} (which is an inlined copy of
 use, this function is mainly called for its side effect, which is to write an
 encrypted file.
 \item \code{secret_decrypt_json()}: The decrypted JSON string, invisibly.
+\item \code{secret_write_rds()}: \code{x}, invisibly
+\item \code{secret_read_rds()}: the decrypted object.
 }
 }
 \description{
 These functions help to encrypt and decrypt confidential information that you
 might need when deploying gargle-using projects or in CI/CD. They basically
 rely on inlined copies of the \href{https://httr2.r-lib.org/reference/secrets.html}{secret functions in the httr2 package}. The awkwardness of
-inlining code from httr2 can be removed when/if gargle starts to depend on
+inlining code from httr2 can be removed if/when gargle starts to depend on
 httr2.
+\itemize{
+\item The \code{secret_encrypt_json()} + \code{secret_decrypt_json()} pair is unique to
+gargle, given how frequently Google auth relies on JSON files, e.g., service
+account tokens and OAuth clients.
+\item The \code{secret_write_rds()} + \code{secret_read_rds()} pair is just a copy of
+functions from httr2. They are handy if you need to secure a user token.
+}
 }
 \examples{
 \dontshow{if (gargle:::secret_has_key("GARGLE_KEY")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # gargle ships with JSON for a fake service account
-# we'll put the encrypted JSON into a new file
+# here we put the encrypted JSON into a new file
 tmp <- tempfile()
 secret_encrypt_json(
   fs::path_package("gargle", "extdata", "fake_service_account.json"),
@@ -60,6 +76,28 @@ credentials_service_account(
 )
 
 file.remove(tmp)
+
+# make an artificial Gargle2.0 token
+fauxen <- gargle2.0_token(
+  email = "jane@example.org",
+  client = gargle_oauth_client(
+    id = "CLIENT_ID", secret = "SECRET", name = "CLIENT"
+  ),
+  credentials = list(token = "fauxen"),
+  cache = FALSE
+)
+
+# store the fake token in an encrypted file
+tmp2 <- tempfile()
+secret_write_rds(fauxen, path = tmp2, key = "GARGLE_KEY")
+
+# complete the round trip by providing the decrypted token to the "BYO token"
+# credential function
+rt_fauxen <- credentials_byo_oauth2(
+  token  = secret_read_rds(tmp2, key = "GARGLE_KEY")
+)
+
+file.remove(tmp2)
 \dontshow{\}) # examplesIf}
 }
 \keyword{internal}

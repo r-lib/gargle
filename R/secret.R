@@ -8,12 +8,22 @@
 #' might need when deploying gargle-using projects or in CI/CD. They basically
 #' rely on inlined copies of the [secret functions in the httr2
 #' package](https://httr2.r-lib.org/reference/secrets.html). The awkwardness of
-#' inlining code from httr2 can be removed when/if gargle starts to depend on
+#' inlining code from httr2 can be removed if/when gargle starts to depend on
 #' httr2.
+
+#' * The `secret_encrypt_json()` + `secret_decrypt_json()` pair is unique to
+#' gargle, given how frequently Google auth relies on JSON files, e.g., service
+#' account tokens and OAuth clients.
+#' * The `secret_write_rds()` + `secret_read_rds()` pair is just a copy of
+#' functions from httr2. They are handy if you need to secure a user token.
+
 #'
+#' @param path The path to write to (`secret_encrypt_json()`,
+#'   `secret_write_rds()`) or to read from (`secret_decrypt_json()`,
+#'   `secret_read_rds()`).
 #' @param key Encryption key, as implemented by httr2's [secret
 #'   functions](https://httr2.r-lib.org/reference/secrets.html). This should
-#'   almost certainly be the name of an environment variable whose value was
+#'   almost always be the name of an environment variable whose value was
 #'   generated with `gargle:::secret_make_key()` (which is an inlined copy of
 #'   `httr2::secret_make_key()`).
 
@@ -23,12 +33,14 @@
 #' use, this function is mainly called for its side effect, which is to write an
 #' encrypted file.
 #' * `secret_decrypt_json()`: The decrypted JSON string, invisibly.
+#' * `secret_write_rds()`: `x`, invisibly
+#' * `secret_read_rds()`: the decrypted object.
 #'
 #' @name gargle_secret
 #' @keywords internal
 #' @examplesIf gargle:::secret_has_key("GARGLE_KEY")
 #' # gargle ships with JSON for a fake service account
-#' # we'll put the encrypted JSON into a new file
+#' # here we put the encrypted JSON into a new file
 #' tmp <- tempfile()
 #' secret_encrypt_json(
 #'   fs::path_package("gargle", "extdata", "fake_service_account.json"),
@@ -47,31 +59,50 @@
 #' )
 #'
 #' file.remove(tmp)
+#'
+#' # make an artificial Gargle2.0 token
+#' fauxen <- gargle2.0_token(
+#'   email = "jane@example.org",
+#'   client = gargle_oauth_client(
+#'     id = "CLIENT_ID", secret = "SECRET", name = "CLIENT"
+#'   ),
+#'   credentials = list(token = "fauxen"),
+#'   cache = FALSE
+#' )
+#'
+#' # store the fake token in an encrypted file
+#' tmp2 <- tempfile()
+#' secret_write_rds(fauxen, path = tmp2, key = "GARGLE_KEY")
+#'
+#' # complete the round trip by providing the decrypted token to the "BYO token"
+#' # credential function
+#' rt_fauxen <- credentials_byo_oauth2(
+#'   token  = secret_read_rds(tmp2, key = "GARGLE_KEY")
+#' )
+#'
+#' file.remove(tmp2)
 NULL
 
 #' @param json A JSON file (or string).
-#' @param path_out The path to write the encrypted result to. This is optional,
-#'   but anticipated for typical use.
 #' @rdname gargle_secret
 #' @export
-secret_encrypt_json <- function(json, path_out = NULL, key) {
+secret_encrypt_json <- function(json, path = NULL, key) {
   if (!jsonlite::validate(json)) {
     json <- readChar(json, file.info(json)$size - 1)
   }
   enc <- secret_encrypt(json, key = key)
 
-  if(!is.null(path_out)) {
-    check_string(path_out)
-    writeBin(enc, path_out)
+  if(!is.null(path)) {
+    check_string(path)
+    writeBin(enc, path)
   }
 
   invisible(enc)
 }
 
-#' @param path An encrypted JSON file.
 #' @rdname gargle_secret
 #' @export
-secret_read_json <- function(path, key) {
+secret_decrypt_json <- function(path, key) {
   raw <- readBin(path, "raw", file.size(path))
   enc <- rawToChar(raw)
   invisible(secret_decrypt(enc, key = key))
@@ -124,11 +155,16 @@ secret_decrypt <- function(encrypted, key) {
   rawToChar(openssl::aes_ctr_decrypt(value, key, iv = iv))
 }
 
+#' @param x An R object.
+#' @rdname gargle_secret
+#' @export
 secret_write_rds <- function(x, path, key) {
   writeBin(secret_serialize(x, key), path)
   invisible(x)
 }
 
+#' @rdname gargle_secret
+#' @export
 secret_read_rds <- function(path, key) {
   x <- readBin(path, "raw", file.size(path))
   secret_unserialize(x, key)
