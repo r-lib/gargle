@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      GARGLE_PASSWORD: ${{ secrets.GARGLE_PASSWORD }}
+      GARGLE_KEY: ${{ secrets.GARGLE_KEY }}
       R_KEEP_PKG_SOURCE: yes
     steps:
       - uses: actions/checkout@v3
