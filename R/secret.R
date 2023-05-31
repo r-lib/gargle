@@ -190,6 +190,8 @@ secret_unserialize <- function(encrypted, key) {
   unserialize(x)
 }
 
+#' @rdname gargle_secret
+#' @export
 secret_has_key <- function(key) {
   check_string(key)
   key <- Sys.getenv(key)

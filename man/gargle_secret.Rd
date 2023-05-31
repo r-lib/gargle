@@ -6,6 +6,7 @@
 \alias{secret_decrypt_json}
 \alias{secret_write_rds}
 \alias{secret_read_rds}
+\alias{secret_has_key}
 \title{Encrypt/decrypt JSON or an R object}
 \usage{
 secret_encrypt_json(json, path = NULL, key)
@@ -15,6 +16,8 @@ secret_decrypt_json(path, key)
 secret_write_rds(x, path, key)
 
 secret_read_rds(path, key)
+
+secret_has_key(key)
 }
 \arguments{
 \item{json}{A JSON file (or string).}
