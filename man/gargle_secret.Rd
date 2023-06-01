@@ -31,7 +31,7 @@ secret_has_key(key)
 
 \item{key}{Encryption key, as implemented by httr2's \href{https://httr2.r-lib.org/reference/secrets.html}{secret functions}. This should
 almost always be the name of an environment variable whose value was
-generated with \code{gargle:::secret_make_key()} (which is an inlined copy of
+generated with \code{secret_make_key()} (which is an inlined copy of
 \code{httr2::secret_make_key()}).}
 
 \item{x}{An R object.}
@@ -44,6 +44,9 @@ encrypted file.
 \item \code{secret_decrypt_json()}: The decrypted JSON string, invisibly.
 \item \code{secret_write_rds()}: \code{x}, invisibly
 \item \code{secret_read_rds()}: the decrypted object.
+\item \code{secret_make_key()}: a random string to use as an encryption key.
+\item \code{secret_has_key()} returns \code{TRUE} if the key is available and \code{FALSE}
+otherwise.
 }
 }
 \description{
@@ -58,10 +61,13 @@ gargle, given how frequently Google auth relies on JSON files, e.g., service
 account tokens and OAuth clients.
 \item The \code{secret_write_rds()} + \code{secret_read_rds()} pair is just a copy of
 functions from httr2. They are handy if you need to secure a user token.
+\item \code{secret_make_key()} and \code{secret_has_key()} are also copies of functions
+from httr2. Use \code{secret_make_key} to generate a key. Use \code{secret_has_key()}
+to condition on key availability in, e.g., examples, tests, or apps.
 }
 }
 \examples{
-\dontshow{if (gargle:::secret_has_key("GARGLE_KEY")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (secret_has_key("GARGLE_KEY")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # gargle ships with JSON for a fake service account
 # here we put the encrypted JSON into a new file
 tmp <- tempfile()
@@ -92,6 +98,7 @@ fauxen <- gargle2.0_token(
   credentials = list(token = "fauxen"),
   cache = FALSE
 )
+fauxen
 
 # store the fake token in an encrypted file
 tmp2 <- tempfile()
@@ -102,6 +109,7 @@ secret_write_rds(fauxen, path = tmp2, key = "GARGLE_KEY")
 rt_fauxen <- credentials_byo_oauth2(
   token  = secret_read_rds(tmp2, key = "GARGLE_KEY")
 )
+rt_fauxen
 
 file.remove(tmp2)
 \dontshow{\}) # examplesIf}

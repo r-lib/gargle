@@ -16,7 +16,9 @@
 #' account tokens and OAuth clients.
 #' * The `secret_write_rds()` + `secret_read_rds()` pair is just a copy of
 #' functions from httr2. They are handy if you need to secure a user token.
-
+#' * `secret_make_key()` and `secret_has_key()` are also copies of functions
+#' from httr2. Use `secret_make_key` to generate a key. Use `secret_has_key()`
+#' to condition on key availability in, e.g., examples, tests, or apps.
 #'
 #' @param path The path to write to (`secret_encrypt_json()`,
 #'   `secret_write_rds()`) or to read from (`secret_decrypt_json()`,
@@ -24,7 +26,7 @@
 #' @param key Encryption key, as implemented by httr2's [secret
 #'   functions](https://httr2.r-lib.org/reference/secrets.html). This should
 #'   almost always be the name of an environment variable whose value was
-#'   generated with `gargle:::secret_make_key()` (which is an inlined copy of
+#'   generated with `secret_make_key()` (which is an inlined copy of
 #'   `httr2::secret_make_key()`).
 
 #'
@@ -35,10 +37,13 @@
 #' * `secret_decrypt_json()`: The decrypted JSON string, invisibly.
 #' * `secret_write_rds()`: `x`, invisibly
 #' * `secret_read_rds()`: the decrypted object.
+#' * `secret_make_key()`: a random string to use as an encryption key.
+#' * `secret_has_key()` returns `TRUE` if the key is available and `FALSE`
+#'   otherwise.
 #'
 #' @name gargle_secret
 #' @keywords internal
-#' @examplesIf gargle:::secret_has_key("GARGLE_KEY")
+#' @examplesIf secret_has_key("GARGLE_KEY")
 #' # gargle ships with JSON for a fake service account
 #' # here we put the encrypted JSON into a new file
 #' tmp <- tempfile()
@@ -69,6 +74,7 @@
 #'   credentials = list(token = "fauxen"),
 #'   cache = FALSE
 #' )
+#' fauxen
 #'
 #' # store the fake token in an encrypted file
 #' tmp2 <- tempfile()
@@ -79,6 +85,7 @@
 #' rt_fauxen <- credentials_byo_oauth2(
 #'   token  = secret_read_rds(tmp2, key = "GARGLE_KEY")
 #' )
+#' rt_fauxen
 #'
 #' file.remove(tmp2)
 NULL
