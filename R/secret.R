@@ -236,11 +236,13 @@ as_key <- function(x) {
   } else if (is_string(x)) {
     secret_get_key(x)
   } else {
-    cli::cli_abort('
-      {.arg key} must be a string giving the name of an env var, \\
-      a raw vector containing the key, \\
-      or a string wrapped in {.fun I} that contains \\
-      the base64url encoded key.')
+    cli::cli_abort(c(
+      "{.arg key} must be one of the following:",
+      "*" = "a string giving the name of an env var",
+      "*" = "a raw vector containing the key",
+      "*" = "a string wrapped in {.fun I} that contains the base64url encoded \\
+             key"
+    ))
   }
 }
 
