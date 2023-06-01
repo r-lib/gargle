@@ -270,8 +270,8 @@ warn_for_legacy_secret <- function(what,
     when = "1.5.0",
     what = what,
     details = c(
-      "Use the new secret functions inlined from httr2 instead:",
-      "<https://httr2.r-lib.org/reference/secrets.html>"
+      "Use the new secret functions instead:",
+      "<https://gargle.r-lib.org/articles/managing-tokens-securely.html>"
     ),
     env = env, user_env = user_env,
     id = "httr2_secret_mgmt"
