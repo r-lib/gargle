@@ -65,6 +65,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
 <ul><li>
+<p>gargle’s existing unexported <code>secret_*()</code> functions are deprecated, in favor of new, exported <code>secret_*()</code> functions the are built on or inlined from httr2. The <code><a href="../articles/managing-tokens-securely.html">vignette("managing-tokens-securely")</a></code> is updated to reflect the new, recommended strategy for encrypting secrets.</p>
+<ul><li>
+<code><a href="../reference/gargle_secret.html">secret_encrypt_json()</a></code> / <code><a href="../reference/gargle_secret.html">secret_decrypt_json()</a></code> are new gargle-specific functions.</li>
+<li>
+<code><a href="../reference/gargle_secret.html">secret_write_rds()</a></code> / <code><a href="../reference/gargle_secret.html">secret_read_rds()</a></code>, <code><a href="../reference/gargle_secret.html">secret_make_key()</a></code>, and <code>secret_had_key()</code> are basically copies of their httr2 counterparts.</li>
+<li>Legacy functions to move away from: <code>secret_pw_name()</code>, <code>secret_pw_gen()</code>, <code>secret_pw_exists()</code>, <code>secret_pw_get()</code>, <code>secret_can_decypt()</code>, <code>secret_read()</code>, <code>secret_write()</code>.</li>
+<li>The new approach makes it much easier to use gargle functions to encrypt and decrypt credentials in a project that is <em>not</em> necessarily an R package.</li>
+</ul></li>
+<li>
 <p>The transition from OAuth “app” to OAuth “client” is fully enacted now. This process tarted in v1.3.0, when the <code>"gargle_oauth_client"</code> class was introduced, to support the new pseudo-OOB auth flow. The deprecations are implemented to preserve backwards compatibility for some time. In this release, function, argument, and field names are all updated to the “client” terminology:</p>
 <ul><li>
 <code>init_AuthState(client =)</code> instead of <code>init_AuthState(app =)</code>
