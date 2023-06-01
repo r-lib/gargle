@@ -4,6 +4,7 @@
 \alias{gargle_secret}
 \alias{secret_encrypt_json}
 \alias{secret_decrypt_json}
+\alias{secret_make_key}
 \alias{secret_write_rds}
 \alias{secret_read_rds}
 \alias{secret_has_key}
@@ -12,6 +13,8 @@
 secret_encrypt_json(json, path = NULL, key)
 
 secret_decrypt_json(path, key)
+
+secret_make_key()
 
 secret_write_rds(x, path, key)
 

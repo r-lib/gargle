@@ -132,6 +132,8 @@ secret_decrypt_json <- function(path, key) {
 #     the skips have actually gone away.
 #'
 
+#' @rdname gargle_secret
+#' @export
 secret_make_key <- function() {
   I(base64_url_rand(16))
 }
