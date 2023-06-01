@@ -1,6 +1,5 @@
 AFAICT
 API's
-AppVeyor
 Auth
 AuthState
 Behaviour
@@ -9,6 +8,7 @@ CMD
 Codecov
 Colaboratory
 De
+Decrypt
 DropBox
 FieldMask
 Filepath
@@ -32,18 +32,14 @@ PBC
 PID
 RStudio
 SDK
-Testthat
 Tidyverse
-UI
 URI
 URIs
 VM
 VMs
 WifToken
 XDG
-YAML
 ambiently
-api
 auth
 authed
 automagic
@@ -60,7 +56,6 @@ config
 cron
 crosslinks
 customise
-cyphr
 datetime
 dbi
 de
@@ -70,6 +65,7 @@ deprecations
 dev
 ec
 env
+erroring
 filepath
 funder
 funs
@@ -81,10 +77,10 @@ googleapis
 googledrive
 googledrive's
 googlesheets
-honoured
 httpuv
 httr
 httr's
+inlined
 inlining
 io
 iteratively
@@ -100,15 +96,12 @@ nonexported
 novo
 oauth
 oob
-pkgdown
 pre
 prepending
 programmatically
 rappdirs
 refreshable
 repo
-repo's
-repos
 retryable
 rlang
 roxygen
@@ -123,7 +116,6 @@ templating
 testthat
 thingyr
 tidyverse
-unencrypted
 urlencoded
 useR
 useRs
