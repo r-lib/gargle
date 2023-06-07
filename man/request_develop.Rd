@@ -101,7 +101,8 @@ note that \code{\link[=gargle_api_key]{gargle_api_key()}} is available for small
 
 See \code{googledrive::generate_request()} for an example of usage in a client
 package. googledrive has an internal list of selected endpoints, derived from
-the \href{https://www.googleapis.com/discovery/v1/apis/drive/v3/rest}{Drive API Discovery Document},
+the Drive API Discovery Document
+(\verb{https://www.googleapis.com/discovery/v1/apis/drive/v3/rest}),
 exposed via \code{googledrive::drive_endpoints()}. An element from such a list is
 the expected input for \code{endpoint}. \code{googledrive::generate_request()} is a
 wrapper around \code{request_develop()} and \code{request_build()} that inserts a
