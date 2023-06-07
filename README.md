@@ -110,8 +110,8 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 sort(vapply(out, function(x) x[["family"]], character(1)))
-#> [1] "Lato"             "Montserrat"       "Noto Sans JP"     "Open Sans"       
-#> [5] "Poppins"          "Roboto"           "Roboto Condensed" "Source Sans Pro"
+#> [1] "Lato"             "Material Icons"   "Montserrat"       "Noto Sans JP"    
+#> [5] "Open Sans"        "Poppins"          "Roboto"           "Roboto Condensed"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
