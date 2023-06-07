@@ -1,7 +1,7 @@
 # gargle (development version)
 
 * gargle's existing unexported `secret_*()` functions are deprecated, in favor
-  of new, exported `secret_*()` functions the are built on or inlined from
+  of new, exported `secret_*()` functions that are built on or inlined from
   httr2. The `vignette("managing-tokens-securely")` is updated to reflect the
   new, recommended strategy for encrypting secrets.
   - `secret_encrypt_json()` / `secret_decrypt_json()` are new gargle-specific
