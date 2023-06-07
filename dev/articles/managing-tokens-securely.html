@@ -168,7 +168,7 @@ the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gargle_secret.html">secret_make_key</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">key</span></span>
-<span><span class="co">#&gt; [1] "3u0Y_v_JWrPN4mYbVJ6wKw"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "xYnk8uAZHfwWxb2SY6ttaA"</span></span></code></pre></div>
 <p><code><a href="../reference/gargle_secret.html">gargle::secret_make_key()</a></code> is a copy of
 <code>httr2::secret_make_key()</code>.</p>
 </div>
@@ -177,7 +177,7 @@ the exposition.</p>
 </h3>
 <p>Combine the key name and value to form a line like this in your
 user-level <code>.Renviron</code> file:</p>
-<pre><code>SOMETHING_KEY=3u0Y_v_JWrPN4mYbVJ6wKw</code></pre>
+<pre><code><span><span class="va">SOMETHING_KEY</span><span class="op">=</span><span class="va">xYnk8uAZHfwWxb2SY6ttaA</span></span></code></pre>
 <p><code>usethis::edit_r_environ()</code> can help create or open this
 file. I <strong>strongly recommend</strong> using the user-level
 <code>.Renviron</code>, as opposed to project-level, because this makes
@@ -194,7 +194,7 @@ environment variable to take effect.</p>
 do a quick check that the key is setup correctly locally:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SOMETHING_KEY"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "3u0Y_v_JWrPN4mYbVJ6wKw"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "xYnk8uAZHfwWxb2SY6ttaA"</span></span></code></pre></div>
 <p>This <code><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv()</a></code> call is <strong>exactly</strong> the
 sort of thing you should be very careful about doing in a deployed
 setting, where the result could up in a (semi-)public log file.</p>
