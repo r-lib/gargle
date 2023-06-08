@@ -5,8 +5,8 @@
 #'   supported for the `txt` argument of [jsonlite::fromJSON()] (typically, a
 #'   file path or JSON string).
 #' @param subject An optional subject claim. Specify this if you wish to use the
-#'   service account represented by `path` to impersonate a normal user (the
-#'   `subject`). Before this can work, an administrator must grant the service
+#'   service account represented by `path` to impersonate the `subject`, who is
+#'   a normal user. Before this can work, an administrator must grant the service
 #'   account domain-wide authority. Identify the user to impersonate via their
 #'   email, e.g. `subject = "user@example.com"`. Note that gargle automatically
 #'   adds the non-sensitive `"https://www.googleapis.com/auth/userinfo.email"`
