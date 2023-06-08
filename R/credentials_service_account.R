@@ -4,14 +4,18 @@
 #' @param path JSON identifying the service account, in one of the forms
 #'   supported for the `txt` argument of [jsonlite::fromJSON()] (typically, a
 #'   file path or JSON string).
-#' @param subject An optional subject claim. Use for a service account which has
-#'   been granted domain-wide authority by an administrator. Such delegation of
-#'   domain-wide authority means that the service account is permitted to act on
-#'   behalf of users, without their consent. Identify the user to impersonate
-#'   via their email, e.g. `subject = "user@example.com"`.
+#' @param subject An optional subject claim. Specify this if you wish to use the
+#'   service account represented by `path` to impersonate a normal user (the
+#'   `subject`). Before this can work, an administrator must grant the service
+#'   account domain-wide authority. Identify the user to impersonate via their
+#'   email, e.g. `subject = "user@example.com"`. Note that gargle automatically
+#'   adds the non-sensitive `"https://www.googleapis.com/auth/userinfo.email"`
+#'   scope, so this scope must be enabled for the service account, along with
+#'   any other `scopes` being requested.
 #'
-#' @details Note that fetching a token for a service account requires a reasonably accurate system clock. For more information, see the vignette [How gargle gets
-#' tokens](https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html).
+#' @details Note that fetching a token for a service account requires a
+#'   reasonably accurate system clock. For more information, see the
+#'   `vignette("how-gargle-gets-tokens")`.
 #' @seealso Additional reading on delegation of domain-wide authority:
 #' * <https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority>
 #'

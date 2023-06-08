@@ -23,11 +23,14 @@ file path or JSON string).}
 
 \item{...}{Additional arguments passed to all credential functions.}
 
-\item{subject}{An optional subject claim. Use for a service account which has
-been granted domain-wide authority by an administrator. Such delegation of
-domain-wide authority means that the service account is permitted to act on
-behalf of users, without their consent. Identify the user to impersonate
-via their email, e.g. \code{subject = "user@example.com"}.}
+\item{subject}{An optional subject claim. Specify this if you wish to use the
+service account represented by \code{path} to impersonate a normal user (the
+\code{subject}). Before this can work, an administrator must grant the service
+account domain-wide authority. Identify the user to impersonate via their
+email, e.g. \code{subject = "user@example.com"}. Note that gargle automatically
+adds the non-sensitive \code{"https://www.googleapis.com/auth/userinfo.email"}
+scope, so this scope must be enabled for the service account, along with
+any other \code{scopes} being requested.}
 }
 \value{
 An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
@@ -36,7 +39,9 @@ An \code{\link[httr:Token-class]{httr::TokenServiceAccount}} or \code{NULL}.
 Load a service account token
 }
 \details{
-Note that fetching a token for a service account requires a reasonably accurate system clock. For more information, see the vignette \href{https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html}{How gargle gets tokens}.
+Note that fetching a token for a service account requires a
+reasonably accurate system clock. For more information, see the
+\code{vignette("how-gargle-gets-tokens")}.
 }
 \examples{
 \dontrun{
