@@ -9,8 +9,8 @@
 <title>Auth when using R from the browser • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Auth when using R from the browser">
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -116,7 +116,8 @@ mode. Therefore, conventional OOB auth stopped working for the built-in
 client in February 2023. In anticipation of this, gargle gained a new
 auth flow in version 1.3.0 that we call “pseudo-OOB”, which should allow
 casual users to continue to enjoy a low-friction auth experience, even
-from RStudio Server, Posit Cloud, Posit Workbench, and Google Colab.</p>
+from RStudio Server, Posit Cloud, Posit Workbench, and Google
+Colaboratory.</p>
 <p>If you attempt to do conventional OOB auth with a client that no
 longer supports it, you’ll see something like this:</p>
 <div class="figure">
@@ -150,9 +151,9 @@ not use the built-in tidyverse OAuth client</em>
 <p>If you have concerns about using OOB auth, consider whether your task
 truly requires auth as a specific, normal user.</p>
 <p>Can the task be completed with <em>no auth</em>, i.e. you are
-accessing something that is world readable or to “anyone with a link”?
-In that case, the wrapper package probably provides a function to go
-into a de-authorized state, such as
+accessing something that is world readable or readable for “anyone with
+a link”? In that case, the wrapper package probably provides a function
+to go into a de-authorized state, such as
 <code>googledrive::drive_deauth()</code> or
 <code>googlesheets4::gs4_deauth()</code>.</p>
 <p>If the task requires auth, consider whether it really must be as a
@@ -164,7 +165,7 @@ more selective permissions than a user account and can be more easily
 deleted, once it is no longer needed. Remember that the service account
 will need to be explicitly given permission to access any necessary
 resources (e.g. permission to read or write a specific Drive file or
-Sheet). A service account doesn’t somehow inherit permission indirectly
+Sheet). A service account doesn’t somehow inherit permissions indirectly
 from the user who owns the GCP project in which it lives. To learn more
 about using a service account, see
 <code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>
@@ -197,7 +198,7 @@ Firefox: Unable to connect; can't establish a connection.</code></pre>
 review two different methods.</p>
 </div>
 <div class="section level2">
-<h2 id="request-oob-auth-in-the-pkg_auth-call">Request oob auth in the <code>PKG_auth()</code> call<a class="anchor" aria-label="anchor" href="#request-oob-auth-in-the-pkg_auth-call"></a>
+<h2 id="request-oob-auth-in-the-pkg_auth-call">Request OOB auth in the <code>PKG_auth()</code> call<a class="anchor" aria-label="anchor" href="#request-oob-auth-in-the-pkg_auth-call"></a>
 </h2>
 <p>Packages like googledrive and bigrquery aim to make auth “just work”
 for most users, i.e. it’s automatically triggered upon first need.
@@ -226,7 +227,7 @@ within a project, the best way to express this is to set the
 sense in a <code>.Rprofile</code> startup file, at the user or project
 level.</p>
 <p>Once the <code>"gargle_oob_default"</code> option has been set, it is
-honoured by downstream calls to <code>PKG_auth()</code>, explicit or
+honored by downstream calls to <code>PKG_auth()</code>, explicit or
 implicit, because the default value of <code>use_oob</code> is
 <code><a href="../reference/gargle_options.html">gargle::gargle_oob_default()</a></code>, which consults the
 option.</p>
@@ -248,6 +249,53 @@ the deprecation process described above.</li>
 application” in Google Cloud Console), gargle uses the new pseudo-OOB
 flow.</li>
 </ul>
+<style>
+  table {
+    border-collapse: collapse;
+    border-style: none;
+  }
+  
+  .empty-cell {
+    border: none;
+    background-color: transparent;
+  }
+  
+  table thead {
+    background-color: transparent;
+  }
+  
+  table th, table td {
+    border-style: solid;
+  }
+</style>
+<table class="table">
+<thead>
+<tr>
+<th class="empty-cell"></th>
+      <th class="empty-cell"></th>
+      <th colspan="2"><verb>use_oob</verb></th>
+    </tr>
+<tr>
+<th class="empty-cell"></th>
+      <th class="empty-cell"></th>
+      <th>FALSE</th>
+      <th>TRUE</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="2">client type</th>
+      <th>installed</th>
+      <td>use httpuv to spin up<br> a temporary web server</td>
+      <td>conventional OOB</td>
+    </tr>
+<tr>
+<th>web</th>
+      <td>--not possible--</td>
+      <td>pseudo-OOB</td>
+    </tr>
+</tbody>
+</table>
 <p>Packages that use a built-in tidyverse OAuth client (googledrive,
 googlesheets4, and bigrquery) should automatically select a “web” client
 on RStudio Server, Posit Cloud, Posit Workbench, and Google Colaboratory

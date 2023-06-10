@@ -9,8 +9,8 @@
 <title>How to use gargle for auth in a client package • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="How to use gargle for auth in a client package">
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,13 +127,13 @@ approximately, remember this is static code):</p>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">cache =</span> gargle<span class="sc">::</span><span class="fu">gargle_oauth_cache</span>(),</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">use_oob =</span> gargle<span class="sc">::</span><span class="fu">gargle_oob_default</span>(),</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">token =</span> <span class="cn">NULL</span>) {</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">missing</span>(email) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">missing</span>(path)) {</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># warn, because this is user error 99% of the time</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># this catches a common error, where the user passes JSON for an OAuth client</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to the `path` argument, which only expects a service account token</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  gargle<span class="sc">::</span><span class="fu">check_is_service_account</span>(path, <span class="at">hint =</span> <span class="st">"drive_auth_configure"</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  cred <span class="ot">&lt;-</span> gargle<span class="sc">::</span><span class="fu">token_fetch</span>(</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">scopes =</span> scopes,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">app =</span> <span class="fu">drive_oauth_client</span>() <span class="sc">%||%</span> <span class="er">&lt;</span>BUILT_IN_DEFAULT_CLIENT<span class="sc">&gt;</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">client =</span> <span class="fu">drive_oauth_client</span>() <span class="sc">%||%</span> <span class="er">&lt;</span>BUILT_IN_DEFAULT_CLIENT<span class="sc">&gt;</span>,</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">email =</span> email,</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> path,</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">package =</span> <span class="st">"googledrive"</span>,</span>
@@ -142,7 +142,7 @@ approximately, remember this is static code):</p>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">token =</span> token</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(cred, <span class="st">"Token2.0"</span>)) {</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># error</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># throw an informative error here</span></span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  .auth<span class="sc">$</span><span class="fu">set_cred</span>(cred)</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  .auth<span class="sc">$</span><span class="fu">set_auth_active</span>(<span class="cn">TRUE</span>)</span>
@@ -151,16 +151,17 @@ approximately, remember this is static code):</p>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p><code>drive_auth()</code> is called automatically upon the first need
 of a token and that can lead to user interaction, but does not
-necessarily do so. <code><a href="../reference/token_fetch.html">token_fetch()</a></code> is described in the
-vignette <a href="https://gargle.r-lib.org/articles/how-gargle-gets-tokens.html">How
-gargle gets tokens</a>. The internal <code>.auth</code> object maintains
-googledrive’s auth state and is explained next.</p>
+necessarily do so. <code>drive_auth()</code> can be called explicitly by
+the user, but usually that is not necessary. <code><a href="../reference/token_fetch.html">token_fetch()</a></code>
+is described in the <code><a href="../articles/how-gargle-gets-tokens.html">vignette("how-gargle-gets-tokens")</a></code>. The
+internal <code>.auth</code> object maintains googledrive’s auth state
+and is explained next.</p>
 </div>
 <div class="section level3">
 <h3 id="auth-state">Auth state<a class="anchor" aria-label="anchor" href="#auth-state"></a>
 </h3>
 <p>A client package can use an internal object of class
-<code>gargle::AuthClass</code> to hold the auth state. In googledrive,
+<code><a href="../reference/AuthState-class.html">gargle::AuthState</a></code> to hold the auth state. In googledrive,
 the main auth file defines a placeholder <code>.auth</code> object:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.auth</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
@@ -180,10 +181,9 @@ current, installed version of gargle (vs. the ambient version from
 whenever gargle was built, perhaps by CRAN).</p>
 <p>An <code>AuthState</code> instance has other fields which, in this
 googledrive example, are not set at this point. The OAuth
-<code>app</code> (this is likely to be renamed to <code>client</code> in
-a future version of gargle) and <code>api_key</code> are configurable by
-the user and, when <code>NULL</code>, downstream functions can fall back
-to internal credentials. The <code>cred</code> field is populated by the
+<code>client</code> and <code>api_key</code> are configurable by the
+user and, when <code>NULL</code>, downstream functions can fall back to
+internal credentials. The <code>cred</code> field is populated by the
 first call to <code>drive_auth()</code> (direct or indirectly via
 <code>drive_token()</code>).</p>
 </div>
@@ -191,18 +191,19 @@ first call to <code>drive_auth()</code> (direct or indirectly via
 <h3 id="oauth-client">OAuth client<a class="anchor" aria-label="anchor" href="#oauth-client"></a>
 </h3>
 <p>Most users should present OAuth user credentials to Google APIs.
-However, most users can also be spared the fiddly details surrounding
-this. The OAuth client is one example. (Historically, following the lead
-of the httr package, we have used the term OAuth <em>app</em>, but we
-are pivoting towards the term OAuth <em>client</em>.) The client is a
-component that most users do not even know about and they are content to
-use the same client for all work through a wrapper package: possibly,
-the client built into the package.</p>
+However, most users would love to be spared the fiddly details
+surrounding this. The OAuth client is one example. (Historically,
+following the lead of the httr package, we have used the term OAuth
+<em>app</em>, but we now use the term OAuth <em>client</em>.) The client
+is a component that most users do not even know about and they are
+content to use the same client for all work through a wrapper package:
+possibly, the client built into the package.</p>
 <p>There is a field in the <code>.auth</code> auth state to hold the
-OAuth <code>app</code> (client). Exported auth helpers,
-<code>drive_oauth_app()</code> and <code>drive_auth_configure()</code>,
-retrieve and modify the current client to support the minority of users
-wishing to take that level of control.</p>
+OAuth <code>client</code>. Exported auth helpers,
+<code>drive_oauth_client()</code> and
+<code>drive_auth_configure()</code>, retrieve and modify the current
+client to support users who want to (or must) take that level of
+control.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
@@ -223,6 +224,10 @@ other package; always use credentials associated with your package or
 provided by your user. Per the Google User Data Policy <a href="https://developers.google.com/terms/api-services-user-data-policy" class="external-link uri">https://developers.google.com/terms/api-services-user-data-policy</a>,
 your application must accurately represent itself when authenticating to
 Google API services.</p>
+<p>Some APIs and scopes are considered so sensitive that is essentially
+impossible for a package to provide a built-in OAuth client. Users
+<strong>must</strong> get and configure their own client. Among the
+packages mentioned as examples, this is true of gmailr.</p>
 </div>
 <div class="section level3">
 <h3 id="api-key">API key<a class="anchor" aria-label="anchor" href="#api-key"></a>
@@ -233,10 +238,10 @@ a Google Sheet that is world-readable or readable by “anyone with a
 link” from a Shiny app, thereby designing away the need to manage user
 credentials on the server.</p>
 <p>The user can provide their own API key via
-<code>drive_auth_configure()</code> and retrieve that value with
-<code>drive_api_key()</code>, just as with the OAuth client. The API key
-is stored in the <code>api_key</code> field of the <code>.auth</code>
-auth state.</p>
+<code>drive_auth_configure(api_key =)</code> and retrieve that value
+with <code>drive_api_key()</code>, just as with the OAuth client. The
+API key is stored in the <code>api_key</code> field of the
+<code>.auth</code> auth state.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
@@ -404,9 +409,9 @@ token.</p>
 <p>Above, we discussed scenarios where an advanced user might call
 <code>drive_auth()</code> proactively, with non-default arguments,
 possibly even loading a service token or using alternative flows, like
-Application Default Credentials or a Google Cloud Engine flow. Any token
-loaded in that way is stashed in <code>.auth$cred</code> and will be
-returned by subsequent calls to <code>drive_token()</code>.</p>
+an external account. Any token loaded in that way is stashed in
+<code>.auth$cred</code> and will be returned by subsequent calls to
+<code>drive_token()</code>.</p>
 <p>Multiple gargle-using packages can use a shared token by obtaining a
 suitably scoped token with one package, then registering that token with
 the other packages. For example, the default scope requested by
@@ -458,9 +463,10 @@ toggle <code>auth_active</code>, depending on the features of the target
 API. See below.</li>
 <li>
 <code>drive_oauth_client()</code> returns
-<code>.auth$app</code>.</li>
+<code>.auth$client</code>.</li>
 <li>
-<code>drive_api_key()</code> returns <code>.auth$key</code>.</li>
+<code>drive_api_key()</code> returns
+<code>.auth$api_key</code>.</li>
 <li>
 <code>drive_auth_configure()</code> can be used to configure auth.
 This is how an advanced user would enter their own OAuth client and API
@@ -503,10 +509,10 @@ needed.</p>
 </h2>
 <p>Advanced users can use their own OAuth client and API key.
 <code>drive_auth_configure()</code> lives in <code>R/drive_auth.R</code>
-and it provides the ability to modify the current <code>app</code>
-(client) and <code>api_key</code>. Recall that
-<code>drive_oauth_client()</code> and <code>drive_api_key()</code> also
-exist for targeted, read-only access.</p>
+and it provides the ability to modify the current <code>client</code>
+and <code>api_key</code>. Recall that <code>drive_oauth_client()</code>
+and <code>drive_api_key()</code> also exist for targeted, read-only
+access.</p>
 <p>The <code><a href="../articles/get-api-credentials.html">vignette("get-api-credentials")</a></code> describes how to get
 an API key and OAuth client.</p>
 <p>Packages that always send a token will omit the API key functionality

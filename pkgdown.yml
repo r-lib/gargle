@@ -9,9 +9,10 @@ articles:
   get-api-credentials: get-api-credentials.html
   how-gargle-gets-tokens: how-gargle-gets-tokens.html
   non-interactive-auth: non-interactive-auth.html
+  oauth-client-not-app: oauth-client-not-app.html
   request-helper-functions: request-helper-functions.html
   troubleshooting: troubleshooting.html
-last_built: 2023-04-15T15:18Z
+last_built: 2023-06-10T23:57Z
 urls:
   reference: https://gargle.r-lib.org/reference
   article: https://gargle.r-lib.org/articles

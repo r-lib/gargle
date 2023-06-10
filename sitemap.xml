@@ -46,6 +46,9 @@
     <loc>https://gargle.r-lib.org/articles/non-interactive-auth.html</loc>
   </url>
   <url>
+    <loc>https://gargle.r-lib.org/articles/oauth-client-not-app.html</loc>
+  </url>
+  <url>
     <loc>https://gargle.r-lib.org/articles/request-helper-functions.html</loc>
   </url>
   <url>
@@ -74,6 +77,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/bulletize.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/check_is_service_account.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/cred_funs.html</loc>
@@ -122,6 +128,9 @@
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gargle_options.html</loc>
+  </url>
+  <url>
+    <loc>https://gargle.r-lib.org/reference/gargle_secret.html</loc>
   </url>
   <url>
     <loc>https://gargle.r-lib.org/reference/gce_access_token.html</loc>
