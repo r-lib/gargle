@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 1.5.0
 
 * gargle's existing unexported `secret_*()` functions are deprecated, in favor
   of new, exported `secret_*()` functions that are built on or inlined from
