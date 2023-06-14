@@ -92,7 +92,7 @@ gargle_refresh_failure <- function(err, client, package = NULL) {
   gargle_warn(c(
     "Unable to refresh token, because the associated OAuth client \\
      has been deleted.",
-    "*" = if (nzchar(client_name)) "Client name: {.field {app_name}}",
+    "*" = if (nzchar(client_name)) "Client name: {.field {client_name}}",
     if (!is.null(package)) {
       c(
         "i" = "If you did not configure this OAuth client, it may be built into \\
