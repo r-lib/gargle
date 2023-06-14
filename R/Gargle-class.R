@@ -266,9 +266,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
 
     gargle_debug("email: {.email {self$email}}")
-    gargle_debug("oauth client name: {self$app$name}")
-    gargle_debug("oauth client name: {self$app$type}")
-    gargle_debug("oauth client id: {self$app$id}")
+    gargle_debug("oauth client name: {self$client$name}")
+    gargle_debug("oauth client name: {self$client$type}")
+    gargle_debug("oauth client id: {self$client$id}")
     gargle_debug("scopes: {commapse(base_scope(self$params$scope))}")
 
     cached <- token_from_cache(self)
@@ -279,6 +279,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
+    browser()
     self$app         <- cached$app
     self$credentials <- cached$credentials
     self$params      <- cached$params
@@ -286,8 +287,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
+    browser()
     cred <- refresh_oauth2.0(
-      self$endpoint, self$app, self$credentials,
+      self$endpoint, self$client, self$credentials,
       package = self$package
     )
     if (is.null(cred)) {
@@ -311,7 +313,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       }
       self$credentials <- init_oauth2.0(
         self$endpoint,
-        self$app,
+        self$client,
         scope = self$params$scope,
         use_oob = self$params$use_oob,
         oob_value = self$params$oob_value,
