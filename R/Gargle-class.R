@@ -80,7 +80,7 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
   )
 
   # pseudo-OOB flow
-  client_type <- if (inherits(app, "gargle_oauth_client")) client$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) client$type else NA
   if (use_oob && identical(client_type, "web")) {
     params$oob_value <- select_pseudo_oob_value(client$redirect_uris)
   }

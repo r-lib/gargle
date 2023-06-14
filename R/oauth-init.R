@@ -47,7 +47,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
 
   use_oob <- check_oob(use_oob, oob_value)
 
-  client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) app$type else NA
 
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
