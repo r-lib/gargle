@@ -22,11 +22,11 @@
 #' @param endpoint An OAuth endpoint, presumably the one returned by
 #'   `gargle_oauth_endpoint()`. The fact that this is even an argument is
 #'   because this function is based on `httr::init_oauth2.0()`.
-#' @param app An OAuth client, preferably an instance of `gargle_oauth_client`.
+#' @param client An OAuth client, preferably an instance of `gargle_oauth_client`.
 #' @param scope a character vector of scopes to request.
 #' @param use_oob Whether to use out-of-band auth. Results in conventional OOB
-#'   if the `app` is of type `"installed"` (or if type is unknown) and
-#'   pseudo-OOB if the `app` is of type `"web"`.
+#'   if the `client` is of type `"installed"` (or if type is unknown) and
+#'   pseudo-OOB if the `client` is of type `"web"`.
 #' @param oob_value if provided, specifies the value to use for the redirect_uri
 #'   parameter when retrieving an authorization URL. For conventional OOB, this
 #'   defaults to "urn:ietf:wg:oauth:2.0:oob". For pseudo-OOB, this should be the
@@ -36,7 +36,7 @@
 #'   initial request to the authorization server.
 #' @noRd
 init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
-                          app = gargle_client(),
+                          client = gargle_client(),
                           scope = NULL,
                           use_oob = gargle_oob_default(),
                           oob_value = NULL,
@@ -47,7 +47,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
 
   use_oob <- check_oob(use_oob, oob_value)
 
-  client_type <- if (inherits(app, "gargle_oauth_client")) app$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) client$type else NA
 
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
@@ -83,7 +83,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
 
   authorize_url <- httr::oauth2.0_authorize_url(
     endpoint,
-    app,
+    client,
     scope = scope,
     redirect_uri = redirect_uri,
     state = state,
@@ -99,7 +99,7 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
   # Use authorisation code to get (temporary) access token
   httr::oauth2.0_access_token(
     endpoint,
-    app,
+    client,
     code = code,
     redirect_uri = redirect_uri
   )

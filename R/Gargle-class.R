@@ -80,7 +80,7 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
   )
 
   # pseudo-OOB flow
-  client_type <- if (inherits(app, "gargle_oauth_client")) client$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) client$type else NA
   if (use_oob && identical(client_type, "web")) {
     params$oob_value <- select_pseudo_oob_value(client$redirect_uris)
   }
@@ -266,9 +266,9 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     }
 
     gargle_debug("email: {.email {self$email}}")
-    gargle_debug("oauth client name: {self$app$name}")
-    gargle_debug("oauth client name: {self$app$type}")
-    gargle_debug("oauth client id: {self$app$id}")
+    gargle_debug("oauth client name: {self$client$name}")
+    gargle_debug("oauth client name: {self$client$type}")
+    gargle_debug("oauth client id: {self$client$id}")
     gargle_debug("scopes: {commapse(base_scope(self$params$scope))}")
 
     cached <- token_from_cache(self)
@@ -279,7 +279,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
-    self$app         <- cached$app
+    self$client      <- cached$client
+    self$app         <- cached$client
     self$credentials <- cached$credentials
     self$params      <- cached$params
     TRUE
@@ -287,7 +288,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
     cred <- refresh_oauth2.0(
-      self$endpoint, self$app, self$credentials,
+      self$endpoint, self$client, self$credentials,
       package = self$package
     )
     if (is.null(cred)) {
@@ -311,7 +312,7 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
       }
       self$credentials <- init_oauth2.0(
         self$endpoint,
-        self$app,
+        self$client,
         scope = self$params$scope,
         use_oob = self$params$use_oob,
         oob_value = self$params$oob_value,

@@ -1,12 +1,12 @@
 # this file has its origins in oauth-refresh.R and oauth-error.R in httr
-# I want to introduce behaviour to error informatively for a deleted OAuth app
+# I want to introduce behaviour to error informatively for a deleted OAuth client
 
 # Refresh an OAuth 2.0 credential.
 #
 # Refreshes the given token, and returns a new credential with a
 # valid access_token. Based on:
 # https://developers.google.com/identity/protocols/oauth2/native-app#offline
-refresh_oauth2.0 <- function(endpoint, app, credentials, package = NULL) {
+refresh_oauth2.0 <- function(endpoint, client, credentials, package = NULL) {
   if (is.null(credentials$refresh_token)) {
     gargle_abort("Refresh token not available.")
   }
@@ -14,8 +14,8 @@ refresh_oauth2.0 <- function(endpoint, app, credentials, package = NULL) {
   refresh_url <- endpoint$access
   req_params <- list(
     refresh_token = credentials$refresh_token,
-    client_id = app$key,
-    client_secret = app$secret,
+    client_id = client$key,
+    client_secret = client$secret,
     grant_type = "refresh_token"
   )
 
@@ -23,7 +23,7 @@ refresh_oauth2.0 <- function(endpoint, app, credentials, package = NULL) {
 
   err <- find_oauth2.0_error(response)
   if (!is.null(err)) {
-    gargle_refresh_failure(err, app, package)
+    gargle_refresh_failure(err, client, package)
     return(NULL)
   }
 
@@ -56,7 +56,7 @@ find_oauth2.0_error <- function(response) {
   )
 }
 
-gargle_refresh_failure <- function(err, app, package = NULL) {
+gargle_refresh_failure <- function(err, client, package = NULL) {
   if (!identical(err$error, "deleted_client")) {
     # this is basically what httr does, except we don't have an explicit
     # whitelist of acceptable values of err$error, because we know Google does
@@ -70,8 +70,8 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
   }
 
   # special handling for 'deleted_client'
-  app_name <- app$appname %||% ""
-  is_legacy_app <- grepl(gargle_legacy_app_pattern(), app_name)
+  client_name <- client$name %||% client$appname %||% ""
+  is_legacy_app <- grepl(gargle_legacy_app_pattern(), client_name)
 
   # client looks like one of "ours"
   if (is_legacy_app) {
@@ -92,7 +92,7 @@ gargle_refresh_failure <- function(err, app, package = NULL) {
   gargle_warn(c(
     "Unable to refresh token, because the associated OAuth client \\
      has been deleted.",
-    "*" = if (nzchar(app_name)) "Client name: {.field {app_name}}",
+    "*" = if (nzchar(client_name)) "Client name: {.field {client_name}}",
     if (!is.null(package)) {
       c(
         "i" = "If you did not configure this OAuth client, it may be built into \\
