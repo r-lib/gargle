@@ -279,8 +279,8 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     gargle_debug("matching token found in the cache")
     self$endpoint    <- cached$endpoint
     self$email       <- cached$email
-    browser()
-    self$app         <- cached$app
+    self$client      <- cached$client
+    self$app         <- cached$client
     self$credentials <- cached$credentials
     self$params      <- cached$params
     TRUE
