@@ -287,7 +287,6 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
   },
   #' @description (Attempt to) refresh a Gargle2.0 token
   refresh = function() {
-    browser()
     cred <- refresh_oauth2.0(
       self$endpoint, self$client, self$credentials,
       package = self$package
