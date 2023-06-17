@@ -1,7 +1,7 @@
 # gargle (development version)
 
 * Completed some overlooked, unfinished work around the OAuth "app" to "client"
-  transition that affected out-of-bound auth (#263, #264)..
+  transition that affected out-of-bound auth (#263, #264).
 
 # gargle 1.5.0
 
