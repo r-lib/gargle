@@ -114,4 +114,3 @@ rt_fauxen
 file.remove(tmp2)
 \dontshow{\}) # examplesIf}
 }
-\keyword{internal}

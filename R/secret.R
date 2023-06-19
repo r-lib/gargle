@@ -42,7 +42,6 @@
 #'   otherwise.
 #'
 #' @name gargle_secret
-#' @keywords internal
 #' @examplesIf secret_has_key("GARGLE_KEY")
 #' # gargle ships with JSON for a fake service account
 #' # here we put the encrypted JSON into a new file
