@@ -18,7 +18,7 @@ common credential types and for preparing, executing, and processing
 HTTP requests.
 
 The target user of gargle is an *R package author* who is wrapping one
-of the \~250 Google APIs listed in the [APIs
+of the ~250 Google APIs listed in the [APIs
 Explorer](https://developers.google.com/apis-explorer). gargle aims to
 play roughly the same role as [Google’s official client
 libraries](https://developers.google.com/api-client-library/), but for
