@@ -30,6 +30,7 @@ reference:
       - starts_with("gargle_oauth_client")
       - starts_with("token")
       - gce_instance_service_accounts
+      - gargle_secret
   - title: "Requests and responses"
     desc: >
       Helpers for forming HTTP requests and processing the response
