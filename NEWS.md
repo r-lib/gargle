@@ -18,7 +18,7 @@
   - `secret_write_rds()` / `secret_read_rds()`, `secret_make_key()`, and
     `secret_had_key()` are basically copies of their httr2 counterparts.
   - Legacy functions to move away from: `secret_pw_name()`, `secret_pw_gen()`,
-    `secret_pw_exists()`, `secret_pw_get()`, `secret_can_decypt()`,
+    `secret_pw_exists()`, `secret_pw_get()`, `secret_can_decrypt()`,
     `secret_read()`, `secret_write()`.
   - The new approach makes it much easier to use gargle functions to encrypt and
     decrypt credentials in a project that is *not* necessarily an R package.
