@@ -293,9 +293,28 @@ Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
     )
     if (is.null(cred)) {
       token_remove_from_cache(self)
-      # TODO: why do we return the current, invalid, unrefreshed token?
-      # at the very least, let's clear the refresh_token, to prevent
-      # future refresh attempts
+      # It's tricky to decide what to do here. Currently we return the current,
+      # invalid, unrefreshed token, but we clear the refresh_token field, to
+      # prevent subsequent refresh attempts.
+      #
+      # Analysis from a BYO token POV:
+      # I've decided the status quo may be the best move, because it causes
+      # token_fetch() to return instead of moving on to try other methods. If
+      # someone provides token_fetch(token =), I think it's clear that they
+      # want/hope to use that token and they don't want to end up doing the
+      # OAuth browser dance. If we threw an error or returned NULL,
+      # token_fetch() would just keep going. The refresh failure does throw a
+      # visible warning:
+      #
+      # Warning message:
+      # Unable to refresh token: invalid_grant
+      # • Token has been expired or revoked.
+      #
+      # However, this does mean that functions like PKG_has_token() still return
+      # TRUE and that some other method must be used to find out if we have a
+      # *valid* token. gargle::token_tokeninfo() and API-specific functions for
+      # "tell me about the current user" are good candidates, such as
+      # gmailr::gm_profile() or googledrive::drive_user().
       self$credentials$refresh_token <- NULL
     } else {
       self$credentials <- cred
