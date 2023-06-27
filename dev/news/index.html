@@ -66,7 +66,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.5.1" id="gargle-151">gargle 1.5.1<a class="anchor" aria-label="anchor" href="#gargle-151"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.5.1" id="gargle-151">gargle 1.5.1<a class="anchor" aria-label="anchor" href="#gargle-151"></a></h2><p class="text-muted">CRAN release: 2023-06-19</p>
 <ul><li><p>Completed some overlooked, unfinished work around the OAuth “app” to “client” transition that affected out-of-bound auth (<a href="https://github.com/r-lib/gargle/issues/263" class="external-link">#263</a>, <a href="https://github.com/r-lib/gargle/issues/264" class="external-link">#264</a>).</p></li>
 <li><p>The <code>secret_*()</code> functions are more discoverable via documentation.</p></li>
 </ul></div>
@@ -78,7 +78,7 @@
 <code><a href="../reference/gargle_secret.html">secret_encrypt_json()</a></code> / <code><a href="../reference/gargle_secret.html">secret_decrypt_json()</a></code> are new gargle-specific functions.</li>
 <li>
 <code><a href="../reference/gargle_secret.html">secret_write_rds()</a></code> / <code><a href="../reference/gargle_secret.html">secret_read_rds()</a></code>, <code><a href="../reference/gargle_secret.html">secret_make_key()</a></code>, and <code>secret_had_key()</code> are basically copies of their httr2 counterparts.</li>
-<li>Legacy functions to move away from: <code>secret_pw_name()</code>, <code>secret_pw_gen()</code>, <code>secret_pw_exists()</code>, <code>secret_pw_get()</code>, <code>secret_can_decypt()</code>, <code>secret_read()</code>, <code>secret_write()</code>.</li>
+<li>Legacy functions to move away from: <code>secret_pw_name()</code>, <code>secret_pw_gen()</code>, <code>secret_pw_exists()</code>, <code>secret_pw_get()</code>, <code>secret_can_decrypt()</code>, <code>secret_read()</code>, <code>secret_write()</code>.</li>
 <li>The new approach makes it much easier to use gargle functions to encrypt and decrypt credentials in a project that is <em>not</em> necessarily an R package.</li>
 </ul></li>
 <li>
