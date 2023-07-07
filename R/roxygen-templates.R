@@ -72,7 +72,7 @@ PREFIX_auth_details <- function(.data = list(
     "  * Bring your own `token`.",
     "  * Customize `scopes`.",
     "  * Use a non-default `cache` folder or turn caching off.",
-    "  * Explicitly request out-of-bound (OOB) auth via `use_oob`.",
+    "  * Explicitly request out-of-band (OOB) auth via `use_oob`.",
     "",
     "If you are interacting with R within a browser (applies to RStudio",
     "Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need",
