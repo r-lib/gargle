@@ -1,4 +1,4 @@
-# gargle (development version)
+# gargle 1.5.2
 
 * Fixed a bug in an internal helper that validates input specifying a service
   account. The helper targets a common mistake where the JSON for an OAuth
