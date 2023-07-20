@@ -85,12 +85,12 @@ check_is_service_account <- function(path, hint, call = caller_env()) {
     return(invisible())
   }
 
-  tryCatch(
-    info <- jsonlite::fromJSON(path, simplifyVector = FALSE),
-    error = NULL
+  info <- tryCatch(
+    jsonlite::fromJSON(path, simplifyVector = FALSE),
+    error = function(e) NULL
   )
 
-  if (!is.null(info) && !identical(info[["type"]], "service_account")) {
+  if (is.null(info) || !identical(info[["type"]], "service_account")) {
     cli::cli_abort(c(
       "{.arg path} does not represent a service account.",
       "Did you provide the JSON for an OAuth client instead of for a \\
