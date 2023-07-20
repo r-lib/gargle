@@ -1,5 +1,9 @@
 # gargle (development version)
 
+* Fixed a bug in an internal helper that validates input specifying a service
+  account. The helper targets a common mistake where the JSON for an OAuth
+  client is provided to an argument that is meant for a service account (#270).
+  
 # gargle 1.5.1
 
 * Completed some overlooked, unfinished work around the OAuth "app" to "client"
