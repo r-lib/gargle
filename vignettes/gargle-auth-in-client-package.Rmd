@@ -199,9 +199,9 @@ For example, if they intend to only read data and want to guard against inadvert
 drive_auth(scopes = "https://www.googleapis.com/auth/drive.readonly")
 ```
 
-### OAuth cache and Out-of-bound auth
+### OAuth cache and Out-of-band auth
 
-The location of the token cache and whether to prefer out-of-bound auth are two aspects of OAuth where most users are content to go along with sensible default behavior.
+The location of the token cache and whether to prefer out-of-band auth are two aspects of OAuth where most users are content to go along with sensible default behavior.
 For those who want to exert control, that can be done in direct calls to `drive_auth()` or by configuring an option.
 Read the help for `gargle::gargle_oauth_cache()` and `gargle::gargle_oob_default()` and `vignette("auth-from-web")` for more.
 

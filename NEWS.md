@@ -9,7 +9,7 @@
 # gargle 1.5.1
 
 * Completed some overlooked, unfinished work around the OAuth "app" to "client"
-  transition that affected out-of-bound auth (#263, #264).
+  transition that affected out-of-band auth (#263, #264).
   
 * The `secret_*()` functions are more discoverable via documentation.
 
@@ -372,7 +372,7 @@ mockr is new in Suggests, since `testthat::use_mock()` is superseded.
 
 * In a non-interactive context, gargle will use a cached OAuth token, if it discovers (at least) one, even if the user has not given explicit instructions. We emit a recommendation that the user make their intent unambiguous and link to the vignette on non-interactive auth (#92).
 
-* gargle consults the option `"httr_oob_default"`, if the option `"gargle_oob_default"` is unset. This is part of an effort to automatically detect the need for out-of-bound auth in more situations (#102).
+* gargle consults the option `"httr_oob_default"`, if the option `"gargle_oob_default"` is unset. This is part of an effort to automatically detect the need for out-of-band auth in more situations (#102).
 
 * `credentials_service_account()` checks explicitly that `type` is `"service_account"`. This makes it easier to detect a common mistake, where the JSON for an OAuth client is provided instead of the JSON representing a service account (#93).
 
