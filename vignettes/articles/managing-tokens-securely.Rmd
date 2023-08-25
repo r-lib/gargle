@@ -337,7 +337,7 @@ In auth-requiring package, we usually have two `R CMD check` workflows:
           SOMETHING_KEY: ${{ secrets.SOMETHING_KEY }}
 ```
 
-Look at the GitHub Actions workflow configurations for googledrive, googlesheets4, bigrquery, and gmailr, to learn see some concrete examples.
+Look at the GitHub Actions workflow configurations for googledrive, googlesheets4, bigrquery, and gmailr, to see some concrete examples.
 
 ## Resources
 
