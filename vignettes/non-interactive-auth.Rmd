@@ -258,7 +258,7 @@ t <- gargle::credentials_service_account(
   scopes = ...,
   subject = "user@example.com"
 )
-googledrive::dive_auth(token = t)
+googledrive::drive_auth(token = t)
 ```
 
 If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
