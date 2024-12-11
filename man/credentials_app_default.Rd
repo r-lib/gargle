@@ -69,6 +69,7 @@ credentials_app_default()
 
 Other credential functions: 
 \code{\link{credentials_byo_oauth2}()},
+\code{\link{credentials_connect}()},
 \code{\link{credentials_external_account}()},
 \code{\link{credentials_gce}()},
 \code{\link{credentials_service_account}()},

@@ -49,7 +49,7 @@ An \code{AuthState} should be created through the constructor function
 
 \item{\code{auth_active}}{Logical, indicating whether auth is active.}
 
-\item{\code{cred}}{Credentials.}
+\item{\code{cred}}{Global credentials.}
 }
 \if{html}{\out{</div>}}
 }
@@ -200,13 +200,16 @@ user credentials.}
 \subsection{Method \code{set_cred()}}{
 Set credentials
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_cred(cred)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_cred(cred, id = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{cred}}{User credentials.}
+
+\item{\code{id}}{An identifier for these credentials, or \code{NULL} to set the global
+credentials.}
 }
 \if{html}{\out{</div>}}
 }
@@ -217,9 +220,17 @@ Set credentials
 \subsection{Method \code{clear_cred()}}{
 Clear credentials
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$clear_cred()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$clear_cred(id = current_session_id())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{An identifier for the credentials, or \code{NULL} to clear the global
+credentials.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-get_cred"></a>}}
@@ -227,9 +238,17 @@ Clear credentials
 \subsection{Method \code{get_cred()}}{
 Get credentials
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$get_cred()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$get_cred(id = current_session_id())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{An identifier for the credentials, or \code{NULL} to get the global
+credentials.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-has_cred"></a>}}
@@ -237,9 +256,17 @@ Get credentials
 \subsection{Method \code{has_cred()}}{
 Report if we have credentials
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$has_cred()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{AuthState$has_cred(id = current_session_id())}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{id}}{An identifier for the credentials, or \code{NULL} to check the global
+credentials.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-clone"></a>}}

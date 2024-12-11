@@ -73,6 +73,45 @@ test_that("AuthState supports basic handling of cred", {
   expect_equal(a$get_cred(), "bye")
 })
 
+test_that("AuthState supports session credentials", {
+  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
+
+  # Verify that we can set and get session credentials.
+  local_mocked_bindings(current_session_id = function() "1")
+  cred_s1 <- list(id = "1", token = "y")
+  cred_s2 <- list(id = "2", token = "z")
+  a$set_cred(cred_s1)
+  a$set_cred(cred_s2)
+  expect_true(a$has_cred())
+  expect_equal(a$get_cred(), cred_s1)
+  expect_equal(a$get_cred("2"), cred_s2)
+  expect_equal(a$get_cred(NULL), NULL)
+
+  # Some packages access this directly; make sure it can't contain a session
+  # credential.
+  expect_equal(a$cred, NULL)
+
+  # Both session and for global credentials can coexist.
+  cred_global <- list(token = "x")
+  expect_false(a$has_cred(NULL))
+  a$set_cred(cred_global)
+
+  # Verify backwards compatibility again.
+  expect_equal(a$cred, cred_global)
+
+  # Clearing session credentials falls back to global credentials, unless they
+  # are themselves cleared.
+  a$clear_cred()
+  expect_true(a$has_cred())
+  expect_equal(a$get_cred(), cred_global)
+  a$clear_cred()
+  expect_false(a$has_cred())
+
+  # Backwards compatibility, one more time.
+  expect_equal(a$cred, NULL)
+})
+
 test_that("AuthState prints nicely", {
   client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
   a <- init_AuthState(
