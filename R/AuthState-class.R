@@ -106,7 +106,7 @@ AuthState <- R6::R6Class("AuthState", list(
   api_key = NULL,
   #' @field auth_active Logical, indicating whether auth is active.
   auth_active = NULL,
-  #' @field cred Credentials.
+  #' @field cred Global credentials.
   cred = NULL,
   #' @description Create a new AuthState
   #' @details For more details on the parameters, see [init_AuthState()]
@@ -200,24 +200,57 @@ AuthState <- R6::R6Class("AuthState", list(
   },
   #' @description Set credentials
   #' @param cred User credentials.
-  set_cred = function(cred) {
-    self$cred <- cred
+  #' @param id An identifier for these credentials, or `NULL` to set the global
+  #'   credentials.
+  set_cred = function(cred, id = NULL) {
+    if (hasName(cred, "id")) {
+      id <- cred$id
+    }
+    if (!is.null(id)) {
+      env_poke(private$session_creds, hash(id), cred)
+    } else {
+      self$cred <- cred
+    }
     invisible(self)
   },
   #' @description Clear credentials
-  clear_cred = function() {
-    self$set_cred(NULL)
+  #' @param id An identifier for the credentials, or `NULL` to clear the global
+  #'   credentials.
+  clear_cred = function(id = current_session_id()) {
+    if (!is.null(id) && env_has(private$session_creds, hash(id))) {
+      env_unbind(private$session_creds, hash(id))
+    } else {
+      self$cred <- NULL
+    }
+    invisible(self)
   },
   #' @description Get credentials
-  get_cred = function() {
+  #' @param id An identifier for the credentials, or `NULL` to get the global
+  #'   credentials.
+  get_cred = function(id = current_session_id()) {
+    if (!is.null(id)) {
+      cred <- env_get(private$session_creds, hash(id), default = NULL)
+      if (!is.null(cred)) {
+        return(cred)
+      }
+    }
     self$cred
   },
   #' @description Report if we have credentials
-  has_cred = function() {
+  #' @param id An identifier for the credentials, or `NULL` to check the global
+  #'   credentials.
+  has_cred = function(id = current_session_id()) {
     ## FIXME(jennybc): how should this interact with auth_active? should it?
-    !is.null(self$cred)
+    !is.null(self$get_cred(id = id))
   }
+), private = list(
+  session_creds = new_environment()
 ))
+
+current_session_id <- function() {
+  # For now, only Connect's notion of a session is relevant.
+  connect_session_id()
+}
 
 make_package_hint <- function(pkg) {
   hint <- NULL

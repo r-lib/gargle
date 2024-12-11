@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* gargle can now pick up on Google credentials from the current Shiny session
+  when running on Posit Connect (@atheriel, #289).
+
 # gargle 1.5.2
 
 * Fixed a bug in an internal helper that validates input specifying a service

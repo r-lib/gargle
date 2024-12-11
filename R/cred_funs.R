@@ -142,6 +142,7 @@ cred_funs_clear <- function() {
 cred_funs_list_default <- function() {
   list(
     credentials_byo_oauth2       = credentials_byo_oauth2,
+    credentials_connect          = credentials_connect,
     credentials_service_account  = credentials_service_account,
     credentials_external_account = credentials_external_account,
     credentials_app_default      = credentials_app_default,
