@@ -228,17 +228,21 @@ detect_aws_ec2 <- function() {
 }
 
 init_oauth_external_account <- function(params) {
-  credential_source <- params$credential_source
-  if (!identical(credential_source$environment_id, "aws1")) {
-    gargle_abort("
-      {.pkg gargle}'s workload identity federation flow only supports AWS at \\
-      this time.")
+  if (params$github_actions) {
+    serialized_subject_token <- gha_subject_token(params)
+  } else {
+    credential_source <- params$credential_source
+    if (!identical(credential_source$environment_id, "aws1")) {
+      gargle_abort("
+       {.pkg gargle}'s workload identity federation flow only supports AWS at \\
+       this time.")
+    }
+    subject_token <- aws_subject_token(
+      credential_source = credential_source,
+      audience = params$audience
+    )
+    serialized_subject_token <- serialize_subject_token(subject_token)
   }
-  subject_token <- aws_subject_token(
-    credential_source = credential_source,
-    audience = params$audience
-  )
-  serialized_subject_token <- serialize_subject_token(subject_token)
 
   federated_access_token <- fetch_federated_access_token(
     params = params,
@@ -248,7 +252,8 @@ init_oauth_external_account <- function(params) {
   fetch_wif_access_token(
     federated_access_token,
     impersonation_url = params[["service_account_impersonation_url"]],
-    scope = params[["scope"]]
+    scope = params[["scope"]],
+    lifetime = params[["lifetime"]]
   )
 }
 
@@ -378,13 +383,14 @@ fetch_federated_access_token <- function(params,
 # https://cloud.google.com/iam/docs/creating-short-lived-service-account-credentials#sa-credentials-oauth
 fetch_wif_access_token <- function(federated_access_token,
                                    impersonation_url,
-                                   scope = "https://www.googleapis.com/auth/cloud-platform") {
+                                   scope = "https://www.googleapis.com/auth/cloud-platform",
+                                   lifetime = "3600s") {
   req <- list(
     method = "POST",
     url = impersonation_url,
     # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
     # takes scope as an **array**, not a space delimited string
-    body = list(scope = scope),
+    body = list(scope = scope, lifetime = lifetime),
     token = httr::add_headers(
       Authorization = paste("Bearer", federated_access_token$access_token)
     )
