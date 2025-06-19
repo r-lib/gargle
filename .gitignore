@@ -7,3 +7,5 @@ internal
 .RData
 .httr-oauth
 notes/*.html
+
+/.quarto/
