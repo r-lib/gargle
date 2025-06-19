@@ -307,7 +307,11 @@ reveal_detail <- function(x) {
           "Consider opening an issue at \\
            <https://github.com/r-lib/gargle/issues.>"
         ),
-        glue
+        # https://github.com/tidyverse/googlesheets4/issues/317
+        # this needs to be an anonymous function (as opposed to naked `glue`)
+        # in order to capture the value of `type`
+        # good write-up in https://stackoverflow.com/a/75247635
+        \(x) glue(x)
       )
     )
   )
