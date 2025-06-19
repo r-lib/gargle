@@ -311,7 +311,7 @@ reveal_detail <- function(x) {
         # this needs to be an anonymous function (as opposed to naked `glue`)
         # in order to capture the value of `type`
         # good write-up in https://stackoverflow.com/a/75247635
-        \(x) glue(x)
+        function(x) glue(x)
       )
     )
   )
