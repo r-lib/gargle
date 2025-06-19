@@ -1,171 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://gargle.r-lib.org/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/ISSUE_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/auth-from-web.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/get-api-credentials.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/google-compute-engine.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/how-gargle-gets-tokens.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/managing-tokens-securely.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/non-interactive-auth.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/oauth-client-not-app.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/request-helper-functions.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/articles/troubleshooting.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/AuthState-class.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/Gargle-class.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/GceToken.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/WifToken.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/bulletize.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/check_is_service_account.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/cred_funs.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_app_default.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_byo_oauth2.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_external_account.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_gce.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_service_account.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/credentials_user_oauth2.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/field_mask.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle-package.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle2.0_token.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_api_key.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_client.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_map_cli.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_options.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gargle_secret.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gce_access_token.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/gce_instance_service_accounts.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/init_AuthState.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/internal-assets.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/oauth_app_from_json.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/oauth_external_token.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/request_develop.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/request_make.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/request_retry.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/response_process.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/token-info.html</loc>
-  </url>
-  <url>
-    <loc>https://gargle.r-lib.org/dev/reference/token_fetch.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://gargle.r-lib.org/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/CONTRIBUTING.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/ISSUE_TEMPLATE.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/LICENSE-text.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/LICENSE.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/SUPPORT.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/auth-from-web.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/get-api-credentials.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/google-compute-engine.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/how-gargle-gets-tokens.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/index.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/managing-tokens-securely.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/non-interactive-auth.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/oauth-client-not-app.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/request-helper-functions.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/troubleshooting.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/authors.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/index.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/news/index.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/AuthState-class.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/Gargle-class.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/GceToken.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/WifToken.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/bulletize.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/check_is_service_account.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/cred_funs.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_app_default.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_byo_oauth2.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_external_account.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_gce.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_service_account.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/credentials_user_oauth2.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/field_mask.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle-package.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle2.0_token.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_api_key.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_client.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_map_cli.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_options.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_secret.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gce_access_token.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gce_instance_service_accounts.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/index.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/init_AuthState.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/internal-assets.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/oauth_app_from_json.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/oauth_external_token.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/request_develop.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/request_make.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/request_retry.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/response_process.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/token-info.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/token_fetch.html</loc></url>
 </urlset>
+
