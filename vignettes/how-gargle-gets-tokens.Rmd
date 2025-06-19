@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 This vignette explains the purpose and usage of `token_fetch()` and the functions it subsequently calls.
 The goal of `token_fetch()` is to secure a token for use in downstream requests.
-  
+
 The target audience is someone who works directly with a Google API.
 These people roughly fall into two camps:
 
@@ -24,7 +24,7 @@ These people roughly fall into two camps:
   * The useR who is writing a script or app, without using such a wrapper,
     either because the wrapper does not exist or there's a reason to avoid the
     dependency.
-    
+
 This vignette might also be useful to the user of a wrapper package who needs to influence the operations of `token_fetch()`, e.g. by telling it to try auth methods in a non-default order or to not try certain methods at all.
 
 `token_fetch()` is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests.
@@ -120,7 +120,7 @@ Here is some Google documentation about service accounts:
 
 For R users, a service account is a great option for credentials that will be used in a script or application running remotely or in an unattended fashion.
 In particular, this is a better approach than trying to move OAuth2 credentials from one machine to another.
-For example, a service account is the preferred method of auth when testing and documenting a package on a continuous integration service. 
+For example, a service account is the preferred method of auth when testing and documenting a package on a continuous integration service.
 
 The JSON key file must be managed securely.
 In particular, it should not be kept in, e.g., a GitHub repository (unless it is encrypted).
@@ -211,7 +211,7 @@ The main takeaway lesson:
 
   * You can make auth "just work" by storing the JSON for a service account or an external account at one of the filepaths listed above.
   It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
-  
+
 Again, remember that the JSON key file for a conventional service account must be managed securely and should NOT live in a directory that syncs to the cloud.
 The JSON configuration for an external account is not actually sensitive and this is one of the benefits of this flow, but it's only available in a very narrow set of circumstances.
 
@@ -247,7 +247,7 @@ Basically, if you have to ask what this is about, this is not the auth method fo
 If this seems to happening to you and it's not what you want, see the last section for how to remove this auth method.
 
 ## `credentials_user_oauth2()`
-  
+
 The next and final function tried is `credentials_user_oauth2()`.
 Here's how a call to `token_fetch()` might work:
 
@@ -330,7 +330,7 @@ Enter '1' to start a new auth process or select a pre-authorized account.
 2: janedoe_personal@gmail.com
 3: janedoe@example.com
 4: janedoe_work@gmail.com
-Selection: 
+Selection:
 ```
 
 If none of the tokens has the right scopes and client (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow *de novo*.
@@ -352,8 +352,8 @@ The `gargle::Gargle2.0` class also defaults to a user-level token cache, as oppo
 gargle_oauth_sitrep()
 #> 14 tokens found in this gargle OAuth cache:
 #> ~/Library/Caches/gargle
-#' 
-#' email                         app         scopes                         hash...   
+#'
+#' email                         app         scopes                         hash...
 #' ----------------------------- ----------- ------------------------------ ----------
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
