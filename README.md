@@ -8,7 +8,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
 [![Codecov test
-coverage](https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/gargle?branch=main)
+coverage](https://codecov.io/gh/r-lib/gargle/graph/badge.svg)](https://app.codecov.io/gh/r-lib/gargle)
 [![R-CMD-check](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -110,8 +110,8 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 sort(vapply(out, function(x) x[["family"]], character(1)))
-#> [1] "Lato"             "Material Icons"   "Montserrat"       "Noto Sans JP"    
-#> [5] "Open Sans"        "Poppins"          "Roboto"           "Roboto Condensed"
+#> [1] "Inter"          "Lato"           "Material Icons" "Montserrat"    
+#> [5] "Noto Sans JP"   "Open Sans"      "Poppins"        "Roboto"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor

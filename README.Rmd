@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gargle)](https://cran.r-project.org/package=gargle)
-[![Codecov test coverage](https://codecov.io/gh/r-lib/gargle/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/gargle?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/gargle/graph/badge.svg)](https://app.codecov.io/gh/r-lib/gargle)
 [![R-CMD-check](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/gargle/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -39,7 +39,7 @@ gargle's functionality falls into two main domains:
   * **Requests and responses**. A family of functions helps to prepare HTTP
     requests, (possibly with reference to an API spec derived from a Discovery
     Document), make requests, and process the response.
-    
+
 See the [articles](https://gargle.r-lib.org/articles/) for holistic advice on how to use gargle.
 
 ## Installation
