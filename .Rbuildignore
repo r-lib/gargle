@@ -20,4 +20,6 @@
 ^CRAN-SUBMISSION$
 ^notes$
 ^vignettes/articles$
+^vignettes/\.quarto$
+^vignettes/*_files$
 ^\.quarto$
