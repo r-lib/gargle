@@ -97,6 +97,7 @@ Other credential functions:
 \code{\link{credentials_app_default}()},
 \code{\link{credentials_byo_oauth2}()},
 \code{\link{credentials_external_account}()},
+\code{\link{credentials_github_actions}()},
 \code{\link{credentials_service_account}()},
 \code{\link{credentials_user_oauth2}()},
 \code{\link{token_fetch}()}
