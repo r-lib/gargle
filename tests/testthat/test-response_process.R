@@ -89,6 +89,14 @@ test_that("Request for nonexistent resource (Sheets)", {
   )
 })
 
+# https://github.com/tidyverse/googlesheets4/issues/317
+test_that("Use service account that's not enabled for the API (Sheets)", {
+  expect_recorded_error(
+    "sheets-spreadsheets-get-service-disabled_403",
+    403
+  )
+})
+
 test_that("Request with invalid value (tokeninfo, stale token)", {
   expect_recorded_error(
     "tokeninfo-stale_400",

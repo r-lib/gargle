@@ -177,18 +177,41 @@ gargle_error_message <- function(resp, call = caller_env()) {
   if (is.null(errors)) {
     # developed from test fixtures from "sheets.spreadsheets.get" endpoint
     status <- httr::http_status(resp)
+
     message <- c(
       glue("{status$category}: ({error$code}) {error$status}"),
       "*" = rpc_description(error$status),
       "*" = error$message
     )
-    if (!is.null(error$details)) {
-      message <- c(
-        message,
-        "",
-        reveal_details(error$details)
-      )
+
+    error_details <- error$details
+    if (is.null(error_details)) {
+      return(message)
     }
+
+    # https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
+    # Look for a localized error message
+    # Below, we display it alongside the main message, if it's not identical to
+    # the primary message
+    # Remove the localized message from error details, regardless
+    # Currently ignoring the locale info, because it seems hard to reliably
+    # compare to something returned by Sys.getlocale()
+    types <- map_chr(error_details, function(x) x[["@type"]])
+    lm_index <- match("type.googleapis.com/google.rpc.LocalizedMessage", types)
+    localized_message <- error_details[[lm_index]][["message"]]
+    if (!is.na(lm_index)) {
+      error_details <- error_details[-lm_index]
+    }
+
+    if (!is.null(localized_message) && !identical(localized_message, error$message)) {
+      message <- c(message, "*" = localized_message)
+    }
+
+    message <- c(
+      message,
+      "",
+      reveal_details(error_details)
+    )
     return(message)
   }
 

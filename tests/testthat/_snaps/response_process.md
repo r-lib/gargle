@@ -142,6 +142,28 @@
       * A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting.
       * Requested entity was not found.
 
+# Use service account that's not enabled for the API (Sheets)
+
+    Code
+      response_process(resp)
+    Condition
+      Error in `expect_recorded_error()`:
+      ! Client error: (403) PERMISSION_DENIED
+      * Client does not have sufficient permission. This can happen because the OAuth token does not have the right scopes, the client doesn't have permission, or the API has not been enabled for the client project.
+      * Google Sheets API has not been used in project 1234567890 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/sheets.googleapis.com/overview?project=1234567890 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+      
+      Error details:
+      * reason: SERVICE_DISABLED
+      * domain: googleapis.com
+      * metadata.serviceTitle: Google Sheets API
+      * metadata.consumer: projects/1234567890
+      * metadata.activationUrl: https://console.developers.google.com/apis/api/sheets.googleapis.com/overview?project=1234567890
+      * metadata.containerInfo: 1234567890
+      * metadata.service: sheets.googleapis.com
+      Links
+      * Description: Google developers console API activation
+        URL: https://console.developers.google.com/apis/api/sheets.googleapis.com/overview?project=1234567890
+
 # Request with invalid value (tokeninfo, stale token)
 
     Code
