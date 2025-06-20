@@ -1,5 +1,8 @@
 # gargle (development version)
 
+* Fixed a bug when displaying a request failure that includes a localized
+  message in the error details (#293).
+
 # gargle 1.5.2
 
 * Fixed a bug in an internal helper that validates input specifying a service
