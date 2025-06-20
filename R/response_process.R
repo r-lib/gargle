@@ -190,8 +190,12 @@ gargle_error_message <- function(resp, call = caller_env()) {
     }
 
     # https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
-    # if the localized error message exists and is not identical to the primary
-    # message, display it alongside the main message and remove from details
+    # Look for a localized error message
+    # Below, we display it alongside the main message, if it's not identical to
+    # the primary message
+    # Remove the localized message from error details, regardless
+    # Currently ignoring the locale info, because it seems hard to reliably
+    # compare to something returned by Sys.getlocale()
     types <- map_chr(error_details, function(x) x[["@type"]])
     lm_index <- match("type.googleapis.com/google.rpc.LocalizedMessage", types)
     localized_message <- error_details[[lm_index]][["message"]]
