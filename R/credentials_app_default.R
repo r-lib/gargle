@@ -45,7 +45,8 @@
 #' \dontrun{
 #' credentials_app_default()
 #' }
-credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
+credentials_app_default <- function(scopes =
+                                      c("https://www.googleapis.com/auth/cloud-platform"), ..., subject = NULL) {
   gargle_debug("trying {.fun credentials_app_default}")
   # In general, application default credentials only include the cloud-platform
   # scope.
