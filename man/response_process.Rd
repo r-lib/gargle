@@ -18,7 +18,7 @@ response_as_json(resp, call = caller_env())
 gargle_error_message(resp, call = caller_env())
 }
 \arguments{
-\item{resp}{Object of class \code{response} from \link{httr}.}
+\item{resp}{Object of class \code{response} from \link[httr:httr-package]{httr::httr}.}
 
 \item{error_message}{Function that produces an informative error message from
 the primary input, \code{resp}. It must return a character vector.}

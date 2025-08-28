@@ -14,7 +14,7 @@ there is no guarantee that each row represents a distinct service account.
 List all service accounts available on this GCE instance
 }
 \examples{
-\dontshow{if (gargle:::is_gce()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (gargle:::is_gce()) withAutoprint(\{ # examplesIf}
 credentials_gce()
 \dontshow{\}) # examplesIf}
 }

@@ -33,7 +33,7 @@ in doubt, a client package should have an internal function that extends
 package's name and version.}
 }
 \value{
-Object of class \code{response} from \link{httr}.
+Object of class \code{response} from \link[httr:httr-package]{httr::httr}.
 }
 \description{
 Intended primarily for internal use in client packages that provide

@@ -68,7 +68,7 @@ that way, but the default is just a hash. We recommend using the same name
 here as the name used to label the client ID in the \href{https://console.cloud.google.com}{Google Cloud Platform Console}.
 }
 
-A \code{gargle_oauth_client} is an adaptation of httr's \code{\link[=oauth_app]{oauth_app()}} (currently)
+A \code{gargle_oauth_client} is an adaptation of httr's \code{\link[httr:oauth_app]{httr::oauth_app()}} (currently)
 and httr2's \code{oauth_client()} (which gargle will migrate to in the future).
 }
 \examples{

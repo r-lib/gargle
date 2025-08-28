@@ -67,7 +67,7 @@ to condition on key availability in, e.g., examples, tests, or apps.
 }
 }
 \examples{
-\dontshow{if (secret_has_key("GARGLE_KEY")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (secret_has_key("GARGLE_KEY")) withAutoprint(\{ # examplesIf}
 # gargle ships with JSON for a fake service account
 # here we put the encrypted JSON into a new file
 tmp <- tempfile()
