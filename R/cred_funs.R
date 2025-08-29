@@ -141,12 +141,12 @@ cred_funs_clear <- function() {
 #' @export
 cred_funs_list_default <- function() {
   list(
-    credentials_byo_oauth2       = credentials_byo_oauth2,
-    credentials_service_account  = credentials_service_account,
+    credentials_byo_oauth2 = credentials_byo_oauth2,
+    credentials_service_account = credentials_service_account,
     credentials_external_account = credentials_external_account,
-    credentials_app_default      = credentials_app_default,
-    credentials_gce              = credentials_gce,
-    credentials_user_oauth2      = credentials_user_oauth2
+    credentials_app_default = credentials_app_default,
+    credentials_gce = credentials_gce,
+    credentials_user_oauth2 = credentials_user_oauth2
   )
 }
 
@@ -165,9 +165,11 @@ cred_funs_set_default <- function() {
 #' @param .local_envir The environment to use for scoping. Defaults to current
 #'   execution environment.
 #' @export
-local_cred_funs <- function(funs = cred_funs_list_default(),
-                            action = c("replace", "modify"),
-                            .local_envir = caller_env()) {
+local_cred_funs <- function(
+  funs = cred_funs_list_default(),
+  action = c("replace", "modify"),
+  .local_envir = caller_env()
+) {
   action <- arg_match(action)
 
   cred_funs_orig <- cred_funs_list()
@@ -185,9 +187,11 @@ local_cred_funs <- function(funs = cred_funs_list_default(),
 #'   \pkg{withr}.
 #' @param code Code to run with temporary credential function registry.
 #' @export
-with_cred_funs <- function(funs = cred_funs_list_default(),
-                           code,
-                           action = c("replace", "modify")) {
+with_cred_funs <- function(
+  funs = cred_funs_list_default(),
+  code,
+  action = c("replace", "modify")
+) {
   local_cred_funs(funs = funs, action = action)
   force(code)
 }

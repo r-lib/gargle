@@ -34,6 +34,9 @@ response_process(resp_after)
 
 saveRDS(
   gargle:::redact_response(resp_after),
-  testthat::test_path("fixtures", "sheets-spreadsheets-get-service-disabled_403.rds"),
+  testthat::test_path(
+    "fixtures",
+    "sheets-spreadsheets-get-service-disabled_403.rds"
+  ),
   version = 2
 )

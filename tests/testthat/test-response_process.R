@@ -12,7 +12,11 @@ expect_recorded_error <- function(filename, status_code) {
       perl = TRUE
     )
   }
-  expect_snapshot(response_process(resp), error = TRUE, transform = scrub_filepath)
+  expect_snapshot(
+    response_process(resp),
+    error = TRUE,
+    transform = scrub_filepath
+  )
 }
 
 test_that("Resource exhausted (Sheets, ReadGroup)", {

@@ -13,7 +13,10 @@ resp <- googlesheets4::request_make(req)
 stopifnot(httr::status_code(resp) == 400)
 saveRDS(
   gargle:::redact_response(resp),
-  testthat::test_path("fixtures", "sheets-spreadsheets-get-nonexistent-range_400.rds"),
+  testthat::test_path(
+    "fixtures",
+    "sheets-spreadsheets-get-nonexistent-range_400.rds"
+  ),
   version = 2
 )
 

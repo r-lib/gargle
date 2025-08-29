@@ -15,7 +15,9 @@ cache_establish <- function(cache = NULL) {
     gargle_abort("{.arg cache} must have length 1, not {length(cache)}.")
   }
   # the inherits() call is so we accept 'fs_path'
-  if (!is.logical(cache) && !is.character(cache) && !inherits(cache, "character")) {
+  if (
+    !is.logical(cache) && !is.character(cache) && !inherits(cache, "character")
+  ) {
     stop_input_type(cache, what = c("logical", "character"))
   }
 
@@ -172,7 +174,11 @@ token_from_cache <- function(candidate) {
   }
 
   existing <- cache_ls(cache_path)
-  this_one <- token_match(candidate$hash(), existing, package = candidate$package)
+  this_one <- token_match(
+    candidate$hash(),
+    existing,
+    package = candidate$package
+  )
 
   gargle_debug("token(s) found in cache:")
   gargle_debug(existing)
@@ -332,7 +338,7 @@ token_match <- function(candidate, existing, package = "gargle") {
 ## 2a46e6750476326f7085ebdab4ad103d_jenny@example.org
 ## ^  mask_email() returns this   ^ ^ extract_email() returns this ^
 hash_regex <- "^([0-9a-f]+)_(.*?)$"
-mask_email    <- function(x) sub(hash_regex, "\\1", x)
+mask_email <- function(x) sub(hash_regex, "\\1", x)
 extract_email <- function(x) sub(hash_regex, "\\2", x)
 keep_hash_paths <- function(x) x[grep(hash_regex, path_file(x))]
 
@@ -397,9 +403,9 @@ gargle_oauth_dat <- function(cache = NULL) {
     tokens <- list()
   }
 
-  nms    <- names(tokens)
-  hash   <- mask_email(nms)
-  email  <- extract_email(nms)
+  nms <- names(tokens)
+  hash <- mask_email(nms)
+  email <- extract_email(nms)
   client <- map_chr(tokens, function(t) t$client$name %||% t$app$appname)
   scopes <- map(tokens, function(t) t$params$scope)
   email_scope <- "https://www.googleapis.com/auth/userinfo.email"
@@ -408,9 +414,13 @@ gargle_oauth_dat <- function(cache = NULL) {
 
   structure(
     data.frame(
-      email, client, scopes, hash,
+      email,
+      client,
+      scopes,
+      hash,
       filepath = path(cache, nms),
-      stringsAsFactors = FALSE, row.names = NULL
+      stringsAsFactors = FALSE,
+      row.names = NULL
     ),
     class = c("gargle_oauth_dat", "data.frame")
   )

@@ -8,7 +8,11 @@ test_that("credentials_byo_oauth2() demands a Token2.0", {
 test_that("credentials_byo_oauth2() rejects a token that obviously not Google", {
   fauxen <- gargle2.0_token(
     email = "a@example.org",
-    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "CLIENT"),
+    client = gargle_oauth_client(
+      id = "CLIENT_ID",
+      secret = "SECRET",
+      name = "CLIENT"
+    ),
     credentials = list(access_token = "ACCESS_TOKEN_1"),
     cache = FALSE
   )

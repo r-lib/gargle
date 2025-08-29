@@ -132,16 +132,18 @@
 #' out <- response_process(resp)
 #' vapply(out$results, function(x) x$name, character(1))
 #' }
-request_develop <- function(endpoint,
-                            params = list(),
-                            base_url = "https://www.googleapis.com") {
+request_develop <- function(
+  endpoint,
+  params = list(),
+  base_url = "https://www.googleapis.com"
+) {
   check_params(params, endpoint$parameters, endpoint$id)
   in_body <- vapply(
     endpoint$parameters,
     function(x) x$location == "body",
     logical(1)
   )
-  body_param_names  <- names(endpoint$parameters[in_body])
+  body_param_names <- names(endpoint$parameters[in_body])
   other_param_names <- names(endpoint$parameters[!in_body])
   list(
     method = endpoint$httpMethod,
@@ -154,13 +156,15 @@ request_develop <- function(endpoint,
 
 #' @rdname request_develop
 #' @export
-request_build <- function(method = "GET",
-                          path = "",
-                          params = list(),
-                          body = list(),
-                          token = NULL,
-                          key = NULL,
-                          base_url = "https://www.googleapis.com") {
+request_build <- function(
+  method = "GET",
+  path = "",
+  params = list(),
+  body = list(),
+  token = NULL,
+  key = NULL,
+  base_url = "https://www.googleapis.com"
+) {
   path_param_names <- extract_path_names(path)
   path_params <- params[path_param_names]
   query_param_names <- setdiff(names(params), path_param_names)

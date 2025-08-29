@@ -1,11 +1,12 @@
 test_that("default options", {
   withr::local_options(list(
     gargle_oauth_cache = NULL,
-    gargle_oob_default = NULL, httr_oob_default = NULL,
+    gargle_oob_default = NULL,
+    httr_oob_default = NULL,
     gargle_oauth_client_type = NULL,
     gargle_oauth_email = NULL,
-    gargle_verbosity   = NULL,
-    gargle_quiet       = NULL
+    gargle_verbosity = NULL,
+    gargle_quiet = NULL
   ))
   expect_equal(gargle_oauth_cache(), NA)
   if (is_hosted_session()) {

@@ -100,13 +100,15 @@
 #' )
 #' gargle::request_retry(req)
 #' }
-request_retry <- function(...,
-                          max_tries_total = 5,
-                          max_total_wait_time_in_seconds = 100) {
+request_retry <- function(
+  ...,
+  max_tries_total = 5,
+  max_total_wait_time_in_seconds = 100
+) {
   resp <- request_make(...)
   tries_made <- 1
   b <- calculate_base_wait(
-    n_waits         = max_tries_total - 1,
+    n_waits = max_tries_total - 1,
     total_wait_time = max_total_wait_time_in_seconds
   )
 
@@ -133,11 +135,7 @@ we_should_retry <- function(tries_made, max_tries_total, resp) {
   }
 }
 
-backoff <- function(tries_made,
-                    resp,
-                    base = 1,
-                    min_wait = 1,
-                    max_wait = 45) {
+backoff <- function(tries_made, resp, base = 1, min_wait = 1, max_wait = 45) {
   wait_time <- stats::runif(1, 0, base * (2^(tries_made - 1)))
   wait_rationale <- "exponential backoff, full jitter"
 
@@ -210,6 +208,10 @@ sheets_per_user_quota_exhaustion <- function(resp) {
 
 calculate_base_wait <- function(n_waits, total_wait_time) {
   stopifnot(is.numeric(n_waits), length(n_waits) == 1L, n_waits > 0)
-  stopifnot(is.numeric(total_wait_time), length(total_wait_time) == 1L, total_wait_time > 0)
+  stopifnot(
+    is.numeric(total_wait_time),
+    length(total_wait_time) == 1L,
+    total_wait_time > 0
+  )
   total_wait_time / (2^(n_waits) - 1)
 }

@@ -80,13 +80,21 @@ test_that("cache_clean() works", {
 
   fauxen_a <- gargle2.0_token(
     email = "a@example.org",
-    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "apple"),
+    client = gargle_oauth_client(
+      id = "CLIENT_ID",
+      secret = "SECRET",
+      name = "apple"
+    ),
     credentials = list(a = 1),
     cache = cache_folder
   )
   fauxen_b <- gargle2.0_token(
     email = "b@example.org",
-    client = gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "banana"),
+    client = gargle_oauth_client(
+      id = "CLIENT_ID",
+      secret = "SECRET",
+      name = "banana"
+    ),
     credentials = list(b = 1),
     cache = cache_folder
   )

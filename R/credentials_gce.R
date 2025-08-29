@@ -72,8 +72,11 @@
 #' \dontrun{
 #' credentials_gce()
 #' }
-credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
-                            service_account = "default", ...) {
+credentials_gce <- function(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  service_account = "default",
+  ...
+) {
   gargle_debug("Trying {.fun credentials_gce} ...")
   if (!is_gce()) {
     gargle_debug(c("x" = "We don't seem to be on GCE."))
@@ -100,13 +103,21 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 
   token <- gce_access_token(scopes, service_account = service_account)
 
-  if (is.null(token$credentials$access_token) ||
-    !nzchar(token$credentials$access_token)) {
+  if (
+    is.null(token$credentials$access_token) ||
+      !nzchar(token$credentials$access_token)
+  ) {
     NULL
   } else {
-    gargle_debug("GCE service account email: {.email {service_account_details$email}}")
-    gargle_debug("GCE service account name: {.val {token$params$service_account}}")
-    gargle_debug("GCE access token scopes: {.val {commapse(base_scope(token$params$scope))}}")
+    gargle_debug(
+      "GCE service account email: {.email {service_account_details$email}}"
+    )
+    gargle_debug(
+      "GCE service account name: {.val {token$params$service_account}}"
+    )
+    gargle_debug(
+      "GCE access token scopes: {.val {commapse(base_scope(token$params$scope))}}"
+    )
     token
   }
 }
@@ -117,8 +128,10 @@ credentials_gce <- function(scopes = "https://www.googleapis.com/auth/cloud-plat
 #'
 #' @keywords internal
 #' @export
-gce_access_token <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
-                             service_account = "default") {
+gce_access_token <- function(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  service_account = "default"
+) {
   params <- list(
     scope = scopes,
     service_account = service_account,
@@ -138,117 +151,123 @@ gce_access_token <- function(scopes = "https://www.googleapis.com/auth/cloud-pla
 #'
 #' @keywords internal
 #' @export
-GceToken <- R6::R6Class("GceToken", inherit = httr::Token2.0, list(
-  #' @description Get an access for a GCE service account.
-  #' @param params A list of parameters for `fetch_gce_access_token()`.
-  #' @return A GceToken.
-  initialize = function(params) {
-    gargle_debug("GceToken initialize")
-    self$params <- params
-    self$init_credentials()
-  },
-  #' @description Request an access token.
-  init_credentials = function() {
-    gargle_debug("GceToken init_credentials")
-    token <- fetch_gce_access_token(
-      self$params$scope,
-      service_account = self$params$service_account
-    )
+GceToken <- R6::R6Class(
+  "GceToken",
+  inherit = httr::Token2.0,
+  list(
+    #' @description Get an access for a GCE service account.
+    #' @param params A list of parameters for `fetch_gce_access_token()`.
+    #' @return A GceToken.
+    initialize = function(params) {
+      gargle_debug("GceToken initialize")
+      self$params <- params
+      self$init_credentials()
+    },
+    #' @description Request an access token.
+    init_credentials = function() {
+      gargle_debug("GceToken init_credentials")
+      token <- fetch_gce_access_token(
+        self$params$scope,
+        service_account = self$params$service_account
+      )
 
-    # find out the scopes actually obtained
-    # https://www.googleapis.com/oauth2/v3/tokeninfo
-    req <- request_build(
-      method = "GET",
-      path = "oauth2/v3/tokeninfo",
-      params = list(access_token = token$access_token),
-      base_url = "https://www.googleapis.com"
-    )
-    resp <- request_make(req)
-    info <- response_process(resp)
-    actual_scopes <- normalize_scopes(strsplit(info$scope, split = "\\s+")[[1]])
+      # find out the scopes actually obtained
+      # https://www.googleapis.com/oauth2/v3/tokeninfo
+      req <- request_build(
+        method = "GET",
+        path = "oauth2/v3/tokeninfo",
+        params = list(access_token = token$access_token),
+        base_url = "https://www.googleapis.com"
+      )
+      resp <- request_make(req)
+      info <- response_process(resp)
+      actual_scopes <- normalize_scopes(strsplit(info$scope, split = "\\s+")[[
+        1
+      ]])
 
-    missing <- setdiff(self$params$scope, actual_scopes)
-    if (length(missing) > 0) {
-      gargle_debug(c(
-        "!" = "{cli::qty(length(missing))}{?This/These} requested \\
+      missing <- setdiff(self$params$scope, actual_scopes)
+      if (length(missing) > 0) {
+        gargle_debug(c(
+          "!" = "{cli::qty(length(missing))}{?This/These} requested \\
              scope{?s} {?is/are} not among the scopes for the \\
              access token returned by the metadata server:",
-        bulletize(missing, bullet = "x"),
-        "i" = "If there are problems downstream, this might be the root cause."
-      ))
+          bulletize(missing, bullet = "x"),
+          "i" = "If there are problems downstream, this might be the root cause."
+        ))
+      }
+
+      if (!setequal(self$params$scope, actual_scopes)) {
+        gargle_debug(c(
+          "!" = "Updating token scopes to reflect its actual scopes:",
+          bulletize(actual_scopes)
+        ))
+        self$params$scope <- actual_scopes
+      }
+
+      self$credentials <- token
+      self
+    },
+    #' @description Refreshes the token. In this case, that just means "ask again
+    #'   for an access token".
+    refresh = function() {
+      gargle_debug("GceToken refresh")
+      # There's something kind of wrong about this, because it's not a true
+      # refresh. But this method is basically required by the way httr currently
+      # works.
+      # This means that some uses of $refresh() aren't really appropriate for a
+      # GceToken.
+      # For example, if I attempt token_userinfo(x) on a GceToken that lacks
+      # appropriate scope, it fails with 401.
+      # httr tries to "fix" things by refreshing the token. But this is
+      # not a problem that refreshing can fix.
+      # I've now prevented an explicit refresh in token_userinfo(), but an
+      # implicit one still eventually happens in httr:::request_perform().
+      self$init_credentials()
+    },
+    #' @description Placeholder implementation of required method. Returns `TRUE`.
+    can_refresh = function() {
+      TRUE
+    },
+
+    #' @description Format a [GceToken()].
+    #' @param ... Not used.
+    format = function(...) {
+      x <- list(
+        scopes = commapse(base_scope(self$params$scope)),
+        credentials = commapse(names(self$credentials))
+      )
+      c(
+        cli::cli_format_method(
+          cli::cli_h1("<GceToken (via {.pkg gargle})>")
+        ),
+        glue("{fr(names(x))}: {fl(x)}")
+      )
+    },
+    #' @description Print a [GceToken()].
+    #' @param ... Not used.
+    print = function(...) {
+      # a format method is not sufficient for GceToken because the parent class
+      # has a print method
+      cli::cat_line(self$format())
+    },
+
+    # Never cache
+    #' @description Placeholder implementation of required method.
+    cache = function() self,
+    #' @description Placeholder implementation of required method.
+    load_from_cache = function() self,
+
+    # These methods don't really make sense for GCE access tokens
+    #' @description Placeholder implementation of required method.
+    revoke = function() {
+      gargle_abort("{.fun $revoke} is not implemented for {.cls GceToken}")
+    },
+    #' @description Placeholder implementation of required method
+    validate = function() {
+      gargle_abort("{.fun $validate} is not implemented for {.cls GceToken}")
     }
-
-    if (!setequal(self$params$scope, actual_scopes)) {
-      gargle_debug(c(
-        "!" = "Updating token scopes to reflect its actual scopes:",
-        bulletize(actual_scopes)
-      ))
-      self$params$scope <- actual_scopes
-    }
-
-    self$credentials <- token
-    self
-  },
-  #' @description Refreshes the token. In this case, that just means "ask again
-  #'   for an access token".
-  refresh = function() {
-    gargle_debug("GceToken refresh")
-    # There's something kind of wrong about this, because it's not a true
-    # refresh. But this method is basically required by the way httr currently
-    # works.
-    # This means that some uses of $refresh() aren't really appropriate for a
-    # GceToken.
-    # For example, if I attempt token_userinfo(x) on a GceToken that lacks
-    # appropriate scope, it fails with 401.
-    # httr tries to "fix" things by refreshing the token. But this is
-    # not a problem that refreshing can fix.
-    # I've now prevented an explicit refresh in token_userinfo(), but an
-    # implicit one still eventually happens in httr:::request_perform().
-    self$init_credentials()
-  },
-  #' @description Placeholder implementation of required method. Returns `TRUE`.
-  can_refresh = function() {
-    TRUE
-  },
-
-  #' @description Format a [GceToken()].
-  #' @param ... Not used.
-  format = function(...) {
-    x <- list(
-      scopes      = commapse(base_scope(self$params$scope)),
-      credentials = commapse(names(self$credentials))
-    )
-    c(
-      cli::cli_format_method(
-        cli::cli_h1("<GceToken (via {.pkg gargle})>")
-      ),
-      glue("{fr(names(x))}: {fl(x)}")
-    )
-  },
-  #' @description Print a [GceToken()].
-  #' @param ... Not used.
-  print = function(...) {
-    # a format method is not sufficient for GceToken because the parent class
-    # has a print method
-    cli::cat_line(self$format())
-  },
-
-  # Never cache
-  #' @description Placeholder implementation of required method.
-  cache = function() self,
-  #' @description Placeholder implementation of required method.
-  load_from_cache = function() self,
-
-  # These methods don't really make sense for GCE access tokens
-  #' @description Placeholder implementation of required method.
-  revoke = function() {
-    gargle_abort("{.fun $revoke} is not implemented for {.cls GceToken}")
-  },
-  #' @description Placeholder implementation of required method
-  validate = function() {
-    gargle_abort("{.fun $validate} is not implemented for {.cls GceToken}")
-  }
-))
+  )
+)
 
 gce_metadata_hostname <- function() {
   use_ip <- getOption("gargle.gce.use_ip", FALSE)
@@ -259,7 +278,11 @@ gce_metadata_hostname <- function() {
   }
 }
 
-gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) {
+gce_metadata_request <- function(
+  path = "",
+  query = NULL,
+  stop_on_error = TRUE
+) {
   # TODO(craigcitro): Add options to ignore proxies.
   if (grepl("^/", path)) {
     path <- substring(path, 2)
@@ -285,15 +308,21 @@ gce_metadata_request <- function(path = "", query = NULL, stop_on_error = TRUE) 
 
   if (stop_on_error) {
     if (inherits(response, "try-error")) {
-      gargle_abort("
-        Error fetching GCE metadata: {attr(response, 'condition')$message}")
+      gargle_abort(
+        "
+        Error fetching GCE metadata: {attr(response, 'condition')$message}"
+      )
     } else if (httr::http_error(response)) {
-      gargle_abort("
-        Error fetching GCE metadata: {httr::http_status(response)$message}")
+      gargle_abort(
+        "
+        Error fetching GCE metadata: {httr::http_status(response)$message}"
+      )
     }
     if (response$headers$`metadata-flavor` != "Google") {
-      gargle_abort("
-        Error fetching GCE metadata: missing/invalid metadata-flavor header")
+      gargle_abort(
+        "
+        Error fetching GCE metadata: missing/invalid metadata-flavor header"
+      )
     }
   }
   response
@@ -328,7 +357,8 @@ gce_instance_service_accounts <- function() {
     email = unlist(raw$email),
     aliases = map_chr(raw$aliases, function(x) glue_collapse(x, sep = ",")),
     scopes = map_chr(raw$scopes, function(x) glue_collapse(x, sep = ",")),
-    stringsAsFactors = FALSE, row.names = NULL
+    stringsAsFactors = FALSE,
+    row.names = NULL
   )
 }
 
@@ -338,7 +368,9 @@ gce_instance_service_accounts <- function() {
 # perhaps there are use cases where it would be helpful it we did same:
 # https://github.com/r-lib/gargle/issues/216
 fetch_gce_access_token <- function(scopes, service_account) {
-  path <- glue("computeMetadata/v1/instance/service-accounts/{service_account}/token")
+  path <- glue(
+    "computeMetadata/v1/instance/service-accounts/{service_account}/token"
+  )
   scope_string <- glue_collapse(scopes, sep = ",")
   response <- gce_metadata_request(path, query = list(scopes = scope_string))
   httr::content(response, as = "parsed", type = "application/json")
@@ -359,7 +391,7 @@ gce_timeout <- function(v) {
   opt <- getOption("gargle.gce.timeout")
   if (missing(v)) {
     if (is.null(opt)) {
-      ret <- 0.8                      # short default timeout
+      ret <- 0.8 # short default timeout
       options(gargle.gce.timeout = 2) # long default timeout
     } else {
       ret <- opt

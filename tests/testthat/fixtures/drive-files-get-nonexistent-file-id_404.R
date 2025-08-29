@@ -11,7 +11,10 @@ resp <- googledrive::request_make(req)
 stopifnot(httr::status_code(resp) == 404)
 saveRDS(
   gargle:::redact_response(resp),
-  testthat::test_path("fixtures", "drive-files-get-nonexistent-file-id_404.rds"),
+  testthat::test_path(
+    "fixtures",
+    "drive-files-get-nonexistent-file-id_404.rds"
+  ),
   version = 2
 )
 

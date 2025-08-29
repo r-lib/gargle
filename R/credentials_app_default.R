@@ -71,7 +71,11 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
       return(NULL)
     }
     gargle_debug("ADC cred type: {.val authorized_user}")
-    app <- httr::oauth_app("google", info$client_id, secret = info$client_secret)
+    app <- httr::oauth_app(
+      "google",
+      info$client_id,
+      secret = info$client_secret
+    )
     scope <- "https://www.googleapis.com/auth/cloud.platform"
     token <- httr::Token2.0$new(
       endpoint = gargle_oauth_endpoint(),

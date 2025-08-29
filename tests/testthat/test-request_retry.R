@@ -80,7 +80,8 @@ test_that("request_retry() logic works as advertised", {
   local_mocked_bindings(request_make = faux_request_make(r[1:3]))
   expect_snapshot(
     fail_max_tries <- request_retry(
-      max_tries_total = 3, max_total_wait_time_in_seconds = 6
+      max_tries_total = 3,
+      max_total_wait_time_in_seconds = 6
     ),
     transform = scrub
   )
@@ -100,7 +101,8 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
       rep.int(1, 100),
       backoff,
       FUN.VALUE = numeric(1),
-      resp = faux_error(), min_wait = 3
+      resp = faux_error(),
+      min_wait = 3
     )
   )
   expect_true(all(wait_times > 3))
@@ -113,7 +115,9 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
       rep.int(1, 100),
       backoff,
       FUN.VALUE = numeric(1),
-      resp = faux_error(), base = 6, max_wait = 3
+      resp = faux_error(),
+      base = 6,
+      max_wait = 3
     )
   )
   expect_true(all(wait_times > 1))

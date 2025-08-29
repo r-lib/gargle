@@ -35,16 +35,19 @@
 #' )
 #' gargle::request_make(req)
 #' }
-request_make <- function(x,
-                         ...,
-                         encode = "json",
-                         user_agent = gargle_user_agent()) {
+request_make <- function(
+  x,
+  ...,
+  encode = "json",
+  user_agent = gargle_user_agent()
+) {
   check_string(x$method, allow_empty = FALSE)
-  method <- switch(x$method,
-    GET    = httr::GET,
-    POST   = httr::POST,
-    PATCH  = httr::PATCH,
-    PUT    = httr::PUT,
+  method <- switch(
+    x$method,
+    GET = httr::GET,
+    POST = httr::POST,
+    PATCH = httr::PATCH,
+    PUT = httr::PUT,
     DELETE = httr::DELETE,
     gargle_abort("Not a recognized HTTP method: {.code {x$method}}.")
   )
@@ -60,8 +63,12 @@ request_make <- function(x,
 
 gargle_user_agent <- function() {
   httr::user_agent(paste0(
-    "gargle/", utils::packageVersion("gargle"), " ",
-    "(GPN:RStudio; )", " ",
-    "httr/", utils::packageVersion("httr")
+    "gargle/",
+    utils::packageVersion("gargle"),
+    " ",
+    "(GPN:RStudio; )",
+    " ",
+    "httr/",
+    utils::packageVersion("httr")
   ))
 }

@@ -52,7 +52,7 @@ make_humane_table <- function(df) {
       description = str_split(description, pattern = "\n"),
       n = lengths(description),
       property = map2(property, n, pad),
-      type =     map2(type, n, pad),
+      type = map2(type, n, pad),
       n = NULL
     ) %>%
     unnest(cols = c(property, type, description)) %>%

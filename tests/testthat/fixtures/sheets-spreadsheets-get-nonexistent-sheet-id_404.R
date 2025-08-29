@@ -14,7 +14,8 @@ stopifnot(httr::status_code(resp) == 404)
 saveRDS(
   gargle:::redact_response(resp),
   testthat::test_path(
-    "fixtures", "sheets-spreadsheets-get-nonexistent-sheet-id_404.rds"
+    "fixtures",
+    "sheets-spreadsheets-get-nonexistent-sheet-id_404.rds"
   ),
   version = 2
 )

@@ -108,7 +108,7 @@ gargle_oauth_cache <- function() {
 gargle_oauth_client_type <- function() {
   opt <- getOption("gargle_oauth_client_type")
   if (is.null(opt)) {
-    if(is_hosted_session()) "web" else "installed"
+    if (is_hosted_session()) "web" else "installed"
   } else {
     check_string(opt)
     arg_match(opt, values = c("installed", "web"))

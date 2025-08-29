@@ -62,9 +62,11 @@
 #' \dontrun{
 #' credentials_external_account()
 #' }
-credentials_external_account <- function(scopes = "https://www.googleapis.com/auth/cloud-platform",
-                                         path = "",
-                                         ...) {
+credentials_external_account <- function(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  path = "",
+  ...
+) {
   gargle_debug("trying {.fun credentials_external_account}")
   if (!detect_aws_ec2() || is.null(scopes)) {
     return(NULL)
@@ -74,8 +76,10 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
 
   token <- oauth_external_token(path = path, scopes = scopes)
 
-  if (is.null(token$credentials$access_token) ||
-    !nzchar(token$credentials$access_token)) {
+  if (
+    is.null(token$credentials$access_token) ||
+      !nzchar(token$credentials$access_token)
+  ) {
     NULL
   } else {
     gargle_debug("service account email: {.email {token_email(token)}}")
@@ -89,8 +93,10 @@ credentials_external_account <- function(scopes = "https://www.googleapis.com/au
 #'
 #' @keywords internal
 #' @export
-oauth_external_token <- function(path = "",
-                                 scopes = "https://www.googleapis.com/auth/cloud-platform") {
+oauth_external_token <- function(
+  path = "",
+  scopes = "https://www.googleapis.com/auth/cloud-platform"
+) {
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (!identical(info[["type"]], "external_account")) {
     gargle_debug("JSON does not appear to represent an external account")
@@ -114,106 +120,110 @@ oauth_external_token <- function(path = "",
 #'
 #' @keywords internal
 #' @export
-WifToken <- R6::R6Class("WifToken", inherit = httr::Token2.0, list(
-  #' @description Get a token via workload identity federation
-  #' @param params A list of parameters for `init_oauth_external_account()`.
-  #' @return A WifToken.
-  initialize = function(params = list()) {
-    gargle_debug("WifToken initialize")
-    # TODO: any desired validity checks on contents of params
+WifToken <- R6::R6Class(
+  "WifToken",
+  inherit = httr::Token2.0,
+  list(
+    #' @description Get a token via workload identity federation
+    #' @param params A list of parameters for `init_oauth_external_account()`.
+    #' @return A WifToken.
+    initialize = function(params = list()) {
+      gargle_debug("WifToken initialize")
+      # TODO: any desired validity checks on contents of params
 
-    # NOTE: the final token exchange with
-    # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
-    # takes scopes as an **array**, not a space delimited string
-    # so we do NOT collapse scopes in this flow
-    params$scope <- params$scopes
-    self$params <- params
+      # NOTE: the final token exchange with
+      # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken
+      # takes scopes as an **array**, not a space delimited string
+      # so we do NOT collapse scopes in this flow
+      params$scope <- params$scopes
+      self$params <- params
 
-    self$init_credentials()
-  },
+      self$init_credentials()
+    },
 
-  #' @description Enact the actual token exchange for workload identity
-  #'   federation.
-  init_credentials = function() {
-    gargle_debug("WifToken init_credentials")
-    creds <- init_oauth_external_account(params = self$params)
+    #' @description Enact the actual token exchange for workload identity
+    #'   federation.
+    init_credentials = function() {
+      gargle_debug("WifToken init_credentials")
+      creds <- init_oauth_external_account(params = self$params)
 
-    # for some reason, the serviceAccounts.generateAccessToken method of
-    # Google's Service Account Credentials API returns in camelCase, not
-    # snake_case
-    # as in, we get this:
-    # "accessToken":"ya29.c.KsY..."
-    # "expireTime":"2021-06-01T18:01:06Z"
-    # instead of this:
-    # "access_token": "ya29.a0A..."
-    # "expires_in": 3599
-    snake_case <- function(x) {
-      gsub("([a-z0-9])([A-Z])", "\\1_\\L\\2", x, perl = TRUE)
-    }
-    names(creds) <- snake_case(names(creds))
-    self$credentials <- creds
-    self
-  },
+      # for some reason, the serviceAccounts.generateAccessToken method of
+      # Google's Service Account Credentials API returns in camelCase, not
+      # snake_case
+      # as in, we get this:
+      # "accessToken":"ya29.c.KsY..."
+      # "expireTime":"2021-06-01T18:01:06Z"
+      # instead of this:
+      # "access_token": "ya29.a0A..."
+      # "expires_in": 3599
+      snake_case <- function(x) {
+        gsub("([a-z0-9])([A-Z])", "\\1_\\L\\2", x, perl = TRUE)
+      }
+      names(creds) <- snake_case(names(creds))
+      self$credentials <- creds
+      self
+    },
 
-  #' @description Refreshes the token, which means re-doing the entire token
-  #'   flow in this case.
-  refresh = function() {
-    gargle_debug("WifToken refresh")
-    # There's something kind of wrong about this, because it's not a true
-    # refresh. But this method is basically required by the way httr currently
-    # works.
-    # This means that some uses of $refresh() aren't really appropriate for a
-    # WifToken.
-    # For example, if I attempt token_userinfo(x) on a WifToken that lacks
-    # appropriate scope, it fails with 401.
-    # httr tries to "fix" things by refreshing the token. But this is
-    # not a problem that refreshing can fix.
-    # I've now prevented that particular phenomenon in token_userinfo().
-    self$init_credentials()
-  },
+    #' @description Refreshes the token, which means re-doing the entire token
+    #'   flow in this case.
+    refresh = function() {
+      gargle_debug("WifToken refresh")
+      # There's something kind of wrong about this, because it's not a true
+      # refresh. But this method is basically required by the way httr currently
+      # works.
+      # This means that some uses of $refresh() aren't really appropriate for a
+      # WifToken.
+      # For example, if I attempt token_userinfo(x) on a WifToken that lacks
+      # appropriate scope, it fails with 401.
+      # httr tries to "fix" things by refreshing the token. But this is
+      # not a problem that refreshing can fix.
+      # I've now prevented that particular phenomenon in token_userinfo().
+      self$init_credentials()
+    },
 
-  #' @description Format a [WifToken()].
-  #' @param ... Not used.
-  format = function(...) {
-    x <- list(
-      scopes         = commapse(base_scope(self$params$scope)),
-      credentials    = commapse(names(self$credentials))
-    )
-    c(
-      cli::cli_format_method(
-        cli::cli_h1("<WifToken (via {.pkg gargle})>")
-      ),
-      glue("{fr(names(x))}: {fl(x)}")
-    )
-  },
-  #' @description Print a [WifToken()].
-  #' @param ... Not used.
-  print = function(...) {
-    # a format method is not sufficient for WifToken because the parent class
-    # has a print method
-    cli::cat_line(self$format())
-  },
+    #' @description Format a [WifToken()].
+    #' @param ... Not used.
+    format = function(...) {
+      x <- list(
+        scopes = commapse(base_scope(self$params$scope)),
+        credentials = commapse(names(self$credentials))
+      )
+      c(
+        cli::cli_format_method(
+          cli::cli_h1("<WifToken (via {.pkg gargle})>")
+        ),
+        glue("{fr(names(x))}: {fl(x)}")
+      )
+    },
+    #' @description Print a [WifToken()].
+    #' @param ... Not used.
+    print = function(...) {
+      # a format method is not sufficient for WifToken because the parent class
+      # has a print method
+      cli::cat_line(self$format())
+    },
 
-  #' @description Placeholder implementation of required method. Returns `TRUE`.
-  can_refresh = function() {
-    # TODO: see above re: my ambivalence about the whole notion of refresh with
-    # respect to this flow
-    TRUE
-  },
+    #' @description Placeholder implementation of required method. Returns `TRUE`.
+    can_refresh = function() {
+      # TODO: see above re: my ambivalence about the whole notion of refresh with
+      # respect to this flow
+      TRUE
+    },
 
-  # TODO: are cache and load_from_cache really required?
-  # alternatively, what if calling them threw an error?
-  #' @description Placeholder implementation of required method. Returns self.
-  cache = function() self,
-  #' @description Placeholder implementation of required method. Returns self.
-  load_from_cache = function() self,
+    # TODO: are cache and load_from_cache really required?
+    # alternatively, what if calling them threw an error?
+    #' @description Placeholder implementation of required method. Returns self.
+    cache = function() self,
+    #' @description Placeholder implementation of required method. Returns self.
+    load_from_cache = function() self,
 
-  # TODO: are these really required?
-  #' @description Placeholder implementation of required method.
-  validate = function() {},
-  #' @description Placeholder implementation of required method.
-  revoke = function() {}
-))
+    # TODO: are these really required?
+    #' @description Placeholder implementation of required method.
+    validate = function() {},
+    #' @description Placeholder implementation of required method.
+    revoke = function() {}
+  )
+)
 
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/identify_ec2_instances.html
 # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-identity-documents.html
@@ -221,18 +231,22 @@ detect_aws_ec2 <- function() {
   if (is_installed("aws.ec2metadata")) {
     return(aws.ec2metadata::is_ec2())
   }
-  gargle_debug("
+  gargle_debug(
+    "
     {.pkg aws.ec2metadata} not installed; can't detect whether running on \\
-    EC2 instance")
+    EC2 instance"
+  )
   FALSE
 }
 
 init_oauth_external_account <- function(params) {
   credential_source <- params$credential_source
   if (!identical(credential_source$environment_id, "aws1")) {
-    gargle_abort("
+    gargle_abort(
+      "
       {.pkg gargle}'s workload identity federation flow only supports AWS at \\
-      this time.")
+      this time."
+    )
   }
   subject_token <- aws_subject_token(
     credential_source = credential_source,
@@ -265,9 +279,11 @@ init_oauth_external_account <- function(params) {
 # https://cloud.google.com/iam/docs/reference/sts/rest/v1/TopLevel/token
 aws_subject_token <- function(credential_source, audience) {
   if (!is_installed(c("aws.ec2metadata", "aws.signature"))) {
-    gargle_abort("
+    gargle_abort(
+      "
       Packages {.pkg aws.ec2metadata} and {.pkg aws.signature} must be \\
-      installed in order to use workload identity federation on AWS.")
+      installed in order to use workload identity federation on AWS."
+    )
   }
 
   region <- aws.ec2metadata::instance_document()$region
@@ -310,9 +326,9 @@ aws_subject_token <- function(credential_source, audience) {
     sub(needle, "", x)
   }
   headers <- list(
-    host                           = f("host"),
-    `x-amz-date`                   = f("x-amz-date"),
-    `x-amz-security-token`         = f("x-amz-security-token"),
+    host = f("host"),
+    `x-amz-date` = f("x-amz-date"),
+    `x-amz-security-token` = f("x-amz-security-token"),
     `x-goog-cloud-target-resource` = f("x-goog-cloud-target-resource")
   )
 
@@ -351,8 +367,7 @@ serialize_subject_token <- function(x) {
 # https://datatracker.ietf.org/doc/html/rfc8693
 # https://cloud.google.com/iam/docs/reference/sts/rest/v1/TopLevel/token
 # https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateAccessToken#authorization-scopes
-fetch_federated_access_token <- function(params,
-                                         subject_token) {
+fetch_federated_access_token <- function(params, subject_token) {
   req <- list(
     method = "POST",
     url = params$token_url,
@@ -376,9 +391,11 @@ fetch_federated_access_token <- function(params,
 }
 
 # https://cloud.google.com/iam/docs/creating-short-lived-service-account-credentials#sa-credentials-oauth
-fetch_wif_access_token <- function(federated_access_token,
-                                   impersonation_url,
-                                   scope = "https://www.googleapis.com/auth/cloud-platform") {
+fetch_wif_access_token <- function(
+  federated_access_token,
+  impersonation_url,
+  scope = "https://www.googleapis.com/auth/cloud-platform"
+) {
   req <- list(
     method = "POST",
     url = impersonation_url,
