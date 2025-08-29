@@ -98,9 +98,11 @@ check_is_service_account <- function(path, hint, call = caller_env()) {
     cli::cli_abort(
       c(
         "{.arg path} does not represent a service account.",
-        "Did you provide the JSON for an OAuth client instead of for a \\
-         service account?",
-        "Use {.fun {hint}} to configure the OAuth client."
+        "i" = "If {.arg path} is meant to be a filepath, perhaps the file does \\
+               not exist?",
+        "i" = "Did you provide the JSON for an OAuth client instead of for a \\
+               service account?",
+        "i" = "To configure the OAuth client, use {.fun {hint}} instead."
       ),
       call = call
     )
