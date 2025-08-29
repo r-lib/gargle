@@ -28,12 +28,14 @@
 #'   client = my_client,
 #'   api_key = "api_key_api_key_api_key",
 #' )
-init_AuthState <- function(package = NA_character_,
-                           client = NULL,
-                           api_key = NULL,
-                           auth_active = TRUE,
-                           cred = NULL,
-                           app = deprecated()) {
+init_AuthState <- function(
+  package = NA_character_,
+  client = NULL,
+  api_key = NULL,
+  auth_active = TRUE,
+  cred = NULL,
+  app = deprecated()
+) {
   if (lifecycle::is_present(app)) {
     lifecycle::deprecate_soft(
       "1.5.0",
@@ -44,11 +46,11 @@ init_AuthState <- function(package = NA_character_,
   }
 
   AuthState$new(
-    package     = package,
-    client      = client,
-    api_key     = api_key,
+    package = package,
+    client = client,
+    api_key = api_key,
     auth_active = auth_active,
-    cred        = cred
+    cred = cred
   )
 }
 
@@ -95,135 +97,142 @@ init_AuthState <- function(package = NA_character_,
 #'
 #' @export
 #' @name AuthState-class
-AuthState <- R6::R6Class("AuthState", list(
-  #' @field package Package name.
-  package = NULL,
-  #' @field client An OAuth client.
-  client = NULL,
-  #' @field app `r lifecycle::badge('deprecated')` Use `client` instead.
-  app = NULL,
-  #' @field api_key An API key.
-  api_key = NULL,
-  #' @field auth_active Logical, indicating whether auth is active.
-  auth_active = NULL,
-  #' @field cred Credentials.
-  cred = NULL,
-  #' @description Create a new AuthState
-  #' @details For more details on the parameters, see [init_AuthState()]
-  initialize = function(package = NA_character_,
-                        client = NULL,
-                        api_key = NULL,
-                        auth_active = TRUE,
-                        cred = NULL,
-                        app = deprecated()) {
-    gargle_debug("initializing AuthState")
-    if (lifecycle::is_present(app)) {
-      # I'm using deprecate_warn() intentionally here. If I use
-      # deprecate_soft(), you don't see the warning for a call to
-      # AuthState$new(app). Most folks should be instantiating through
-      # init_AuthState() anyway, so anyone who sees this warning probably needs
-      # to see it.
-      lifecycle::deprecate_warn(
-        "1.5.0",
-        "AuthState$initialize(app)",
-        "AuthState$initialize(client)"
+AuthState <- R6::R6Class(
+  "AuthState",
+  list(
+    #' @field package Package name.
+    package = NULL,
+    #' @field client An OAuth client.
+    client = NULL,
+    #' @field app `r lifecycle::badge('deprecated')` Use `client` instead.
+    app = NULL,
+    #' @field api_key An API key.
+    api_key = NULL,
+    #' @field auth_active Logical, indicating whether auth is active.
+    auth_active = NULL,
+    #' @field cred Credentials.
+    cred = NULL,
+    #' @description Create a new AuthState
+    #' @details For more details on the parameters, see [init_AuthState()]
+    initialize = function(
+      package = NA_character_,
+      client = NULL,
+      api_key = NULL,
+      auth_active = TRUE,
+      cred = NULL,
+      app = deprecated()
+    ) {
+      gargle_debug("initializing AuthState")
+      if (lifecycle::is_present(app)) {
+        # I'm using deprecate_warn() intentionally here. If I use
+        # deprecate_soft(), you don't see the warning for a call to
+        # AuthState$new(app). Most folks should be instantiating through
+        # init_AuthState() anyway, so anyone who sees this warning probably needs
+        # to see it.
+        lifecycle::deprecate_warn(
+          "1.5.0",
+          "AuthState$initialize(app)",
+          "AuthState$initialize(client)"
+        )
+        client <- app
+      }
+      stopifnot(
+        is_scalar_character(package),
+        is.null(client) || is.oauth_app(client),
+        is.null(api_key) || is_string(api_key),
+        is_bool(auth_active),
+        is.null(cred) || inherits(cred, "Token2.0")
       )
-      client <- app
+      self$package <- package
+      self$client <- client
+      # for backwards compatibility; could eventually be removed
+      self$app <- client
+      self$api_key <- api_key
+      self$auth_active <- auth_active
+      self$cred <- cred
+      self
+    },
+    #' @description Format an AuthState
+    #' @param ... Not used.
+    format = function(...) {
+      x <- list(
+        package = cli::format_inline("{.pkg {self$package}}"),
+        client = self$client$name,
+        api_key = obfuscate(self$api_key),
+        auth_active = self$auth_active,
+        credentials = cli::format_inline("{.cls {class(self$cred)[[1]]}}")
+      )
+      c(
+        cli::cli_format_method(
+          cli::cli_h1("<AuthState (via {.pkg gargle})>")
+        ),
+        glue("{fr(names(x))}: {fl(x)}")
+      )
+    },
+    #' @description Set the OAuth client
+    set_client = function(client) {
+      stopifnot(is.null(client) || is.oauth_app(client))
+      self$client <- client
+      invisible(self)
+    },
+    #' @description `r lifecycle::badge('deprecated')` Deprecated method to set
+    #'   the OAuth client
+    set_app = function(app) {
+      lifecycle::deprecate_soft(
+        "1.5.0",
+        "AuthState$set_app()",
+        "AuthState$set_client()",
+        details = make_package_hint(self$package)
+      )
+      # needed for backwards compatibility, as long as there are packages out
+      # there consulting .auth$app
+      self$app <- app
+      self$set_client(client = app)
+    },
+    #' @description Set the API key
+    #' @param value An API key.
+    set_api_key = function(value) {
+      stopifnot(is.null(value) || is_string(value))
+      self$api_key <- value
+      invisible(self)
+    },
+    #' @description Set whether auth is (in)active
+    #' @param value Logical, indicating whether to send requests authorized with
+    #'   user credentials.
+    set_auth_active = function(value) {
+      stopifnot(isTRUE(value) || isFALSE(value))
+      self$auth_active <- value
+      invisible(self)
+    },
+    #' @description Set credentials
+    #' @param cred User credentials.
+    set_cred = function(cred) {
+      self$cred <- cred
+      invisible(self)
+    },
+    #' @description Clear credentials
+    clear_cred = function() {
+      self$set_cred(NULL)
+    },
+    #' @description Get credentials
+    get_cred = function() {
+      self$cred
+    },
+    #' @description Report if we have credentials
+    has_cred = function() {
+      ## FIXME(jennybc): how should this interact with auth_active? should it?
+      !is.null(self$cred)
     }
-    stopifnot(
-      is_scalar_character(package),
-      is.null(client) || is.oauth_app(client),
-      is.null(api_key) || is_string(api_key),
-      is_bool(auth_active),
-      is.null(cred) || inherits(cred, "Token2.0")
-    )
-    self$package     <- package
-    self$client      <- client
-    # for backwards compatibility; could eventually be removed
-    self$app         <- client
-    self$api_key     <- api_key
-    self$auth_active <- auth_active
-    self$cred        <- cred
-    self
-  },
-  #' @description Format an AuthState
-  #' @param ... Not used.
-  format = function(...) {
-    x <- list(
-      package     = cli::format_inline("{.pkg {self$package}}"),
-      client      = self$client$name,
-      api_key     = obfuscate(self$api_key),
-      auth_active = self$auth_active,
-      credentials = cli::format_inline("{.cls {class(self$cred)[[1]]}}")
-    )
-    c(
-      cli::cli_format_method(
-        cli::cli_h1("<AuthState (via {.pkg gargle})>")
-      ),
-      glue("{fr(names(x))}: {fl(x)}")
-    )
-  },
-  #' @description Set the OAuth client
-  set_client = function(client) {
-    stopifnot(is.null(client) || is.oauth_app(client))
-    self$client <- client
-    invisible(self)
-  },
-  #' @description `r lifecycle::badge('deprecated')` Deprecated method to set
-  #'   the OAuth client
-  set_app = function(app) {
-    lifecycle::deprecate_soft(
-      "1.5.0",
-      "AuthState$set_app()",
-      "AuthState$set_client()",
-      details = make_package_hint(self$package)
-    )
-    # needed for backwards compatibility, as long as there are packages out
-    # there consulting .auth$app
-    self$app <- app
-    self$set_client(client = app)
-  },
-  #' @description Set the API key
-  #' @param value An API key.
-  set_api_key = function(value) {
-    stopifnot(is.null(value) || is_string(value))
-    self$api_key <- value
-    invisible(self)
-  },
-  #' @description Set whether auth is (in)active
-  #' @param value Logical, indicating whether to send requests authorized with
-  #'   user credentials.
-  set_auth_active = function(value) {
-    stopifnot(isTRUE(value) || isFALSE(value))
-    self$auth_active <- value
-    invisible(self)
-  },
-  #' @description Set credentials
-  #' @param cred User credentials.
-  set_cred = function(cred) {
-    self$cred <- cred
-    invisible(self)
-  },
-  #' @description Clear credentials
-  clear_cred = function() {
-    self$set_cred(NULL)
-  },
-  #' @description Get credentials
-  get_cred = function() {
-    self$cred
-  },
-  #' @description Report if we have credentials
-  has_cred = function() {
-    ## FIXME(jennybc): how should this interact with auth_active? should it?
-    !is.null(self$cred)
-  }
-))
+  )
+)
 
 make_package_hint <- function(pkg) {
   hint <- NULL
   if (is_string(pkg)) {
-    hint <- glue("
-      This probably needs to be addressed in the {pkg} package.")
+    hint <- glue(
+      "
+      This probably needs to be addressed in the {pkg} package."
+    )
     url <- pkg_url_bug(pkg)
     if (!is.null(url)) {
       hint <- c(hint, glue("Please report the issue at <{url}>."))

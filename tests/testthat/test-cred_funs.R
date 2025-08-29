@@ -108,7 +108,7 @@ test_that("cred_funs_set() warns for use of `ls`", {
   withr::local_options(lifecycle_verbosity = "warning")
   withr::defer(cred_funs_set_default())
   expect_snapshot(
-   out <- cred_funs_set(ls = list(a = function(scopes, ...) {}))
+    out <- cred_funs_set(ls = list(a = function(scopes, ...) {}))
   )
   expect_equal(names(cred_funs_list()), "a")
 })
@@ -138,7 +138,8 @@ test_that("with_cred_funs() works", {
   cred_funs_add(a = cred_fun, b = cred_fun)
 
   with_cred_funs(
-    funs = list(c = cred_fun), action = "modify",
+    funs = list(c = cred_fun),
+    action = "modify",
     expect_equal(names(cred_funs_list()), c("c", "b", "a"))
   )
 
@@ -148,6 +149,9 @@ test_that("with_cred_funs() works", {
   )
 
   with_cred_funs(
-    code = expect_equal(names(cred_funs_list()), names(cred_funs_list_default()))
+    code = expect_equal(
+      names(cred_funs_list()),
+      names(cred_funs_list_default())
+    )
   )
 })

@@ -39,13 +39,22 @@ test_that("gargle_debug() works", {
   foo <- "FOO"
 
   local_gargle_verbosity("debug")
-  expect_snapshot(gargle_debug(c("11 {.field {foo}} 22", "33 {.file a/b/c} 44")))
+  expect_snapshot(gargle_debug(c(
+    "11 {.field {foo}} 22",
+    "33 {.file a/b/c} 44"
+  )))
 
   local_gargle_verbosity("info")
-  expect_snapshot(gargle_debug(c("55 {.field {foo}} 66", "77 {.file a/b/c} 88")))
+  expect_snapshot(gargle_debug(c(
+    "55 {.field {foo}} 66",
+    "77 {.file a/b/c} 88"
+  )))
 
   local_gargle_verbosity("silent")
-  expect_snapshot(gargle_debug(c("99 {.field {foo}} 00", "11 {.file a/b/c} 22")))
+  expect_snapshot(gargle_debug(c(
+    "99 {.field {foo}} 00",
+    "11 {.file a/b/c} 22"
+  )))
 })
 
 test_that("bulletize() works", {
@@ -161,7 +170,9 @@ test_that("cli_menu() not_interactive, many strings, chained error", {
       header = "Multiple things found.",
       prompt = "Which one do you want to use?",
       choices = things,
-      not_interactive = c(i = "Use {.arg thingy} to specify one of {.str {things}}.")
+      not_interactive = c(
+        i = "Use {.arg thingy} to specify one of {.str {things}}."
+      )
     )
   }
   expect_snapshot(wrapper_fun(), error = TRUE)

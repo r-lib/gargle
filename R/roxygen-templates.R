@@ -35,70 +35,80 @@ glue_data_lines <- function(.data, lines, ..., .envir = caller_env()) {
 
 # PREFIX_auth() ----------------------------------------------------------
 
-PREFIX_auth_description <- function(.data = list(
-                                      PACKAGE    = "PACKAGE",
-                                      YOUR_STUFF = "YOUR STUFF",
-                                      PRODUCT    = "A GOOGLE PRODUCT"
-                                    )) {
-  glue_data_lines(c(
-    "@description",
-    "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. This function is a",
-    "wrapper around [gargle::token_fetch()].",
-    "",
-    "By default, you are directed to a web browser, asked to sign in to your",
-    "Google account, and to grant {PACKAGE} permission to operate on your",
-    "behalf with {PRODUCT}. By default, with your permission, these user",
-    "credentials are cached in a folder below your home directory, from where",
-    "they can be automatically refreshed, as necessary. Storage at the user",
-    "level means the same token can be used across multiple projects and",
-    "tokens are less likely to be synced to the cloud by accident."
-  ), .data = .data)
+PREFIX_auth_description <- function(
+  .data = list(
+    PACKAGE = "PACKAGE",
+    YOUR_STUFF = "YOUR STUFF",
+    PRODUCT = "A GOOGLE PRODUCT"
+  )
+) {
+  glue_data_lines(
+    c(
+      "@description",
+      "Authorize {PACKAGE} to view and manage {YOUR_STUFF}. This function is a",
+      "wrapper around [gargle::token_fetch()].",
+      "",
+      "By default, you are directed to a web browser, asked to sign in to your",
+      "Google account, and to grant {PACKAGE} permission to operate on your",
+      "behalf with {PRODUCT}. By default, with your permission, these user",
+      "credentials are cached in a folder below your home directory, from where",
+      "they can be automatically refreshed, as necessary. Storage at the user",
+      "level means the same token can be used across multiple projects and",
+      "tokens are less likely to be synced to the cloud by accident."
+    ),
+    .data = .data
+  )
 }
 
-PREFIX_auth_details <- function(.data = list(
-                                  PACKAGE = "PACKAGE",
-                                  PREFIX  = "PREFIX"
-                                )) {
-  glue_data_lines(c(
-    "@details",
-    "Most users, most of the time, do not need to call `{PREFIX}_auth()`",
-    "explicitly -- it is triggered by the first action that requires",
-    "authorization. Even when called, the default arguments often suffice.",
-    "",
-    "However, when necessary, `{PREFIX}_auth()` allows the user to explicitly:",
-    "  * Declare which Google identity to use, via an `email` specification.",
-    "  * Use a service account token or workload identity federation via",
-    "    `path`.",
-    "  * Bring your own `token`.",
-    "  * Customize `scopes`.",
-    "  * Use a non-default `cache` folder or turn caching off.",
-    "  * Explicitly request out-of-band (OOB) auth via `use_oob`.",
-    "",
-    "If you are interacting with R within a browser (applies to RStudio",
-    "Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need",
-    "OOB auth or the pseudo-OOB variant. If this does not happen",
-    "automatically, you can request it explicitly with `use_oob = TRUE` or,",
-    "more persistently, by setting an option via",
-    "`options(gargle_oob_default = TRUE)`.",
-    "",
-    "The choice between conventional OOB or pseudo-OOB auth is determined",
-    "by the type of OAuth client. If the client is of the \"installed\" type,",
-    "`use_oob = TRUE` results in conventional OOB auth. If the client is of",
-    "the \"web\" type, `use_oob = TRUE` results in pseudo-OOB auth. Packages",
-    "that provide a built-in OAuth client can usually detect which type of",
-    "client to use. But if you need to set this explicitly, use the",
-    "`\"gargle_oauth_client_type\"` option:",
-    "```r",
-    "options(gargle_oauth_client_type = \"web\")       # pseudo-OOB",
-    "# or, alternatively",
-    "options(gargle_oauth_client_type = \"installed\") # conventional OOB",
-    "```",
-    "",
-    "For details on the many ways to find a token, see",
-    "[gargle::token_fetch()]. For deeper control over auth, use",
-    "[{PREFIX}_auth_configure()] to bring your own OAuth client or API key.",
-    "To learn more about gargle options, see [gargle::gargle_options]."
-  ), .data = .data)
+PREFIX_auth_details <- function(
+  .data = list(
+    PACKAGE = "PACKAGE",
+    PREFIX = "PREFIX"
+  )
+) {
+  glue_data_lines(
+    c(
+      "@details",
+      "Most users, most of the time, do not need to call `{PREFIX}_auth()`",
+      "explicitly -- it is triggered by the first action that requires",
+      "authorization. Even when called, the default arguments often suffice.",
+      "",
+      "However, when necessary, `{PREFIX}_auth()` allows the user to explicitly:",
+      "  * Declare which Google identity to use, via an `email` specification.",
+      "  * Use a service account token or workload identity federation via",
+      "    `path`.",
+      "  * Bring your own `token`.",
+      "  * Customize `scopes`.",
+      "  * Use a non-default `cache` folder or turn caching off.",
+      "  * Explicitly request out-of-band (OOB) auth via `use_oob`.",
+      "",
+      "If you are interacting with R within a browser (applies to RStudio",
+      "Server, Posit Workbench, Posit Cloud, and Google Colaboratory), you need",
+      "OOB auth or the pseudo-OOB variant. If this does not happen",
+      "automatically, you can request it explicitly with `use_oob = TRUE` or,",
+      "more persistently, by setting an option via",
+      "`options(gargle_oob_default = TRUE)`.",
+      "",
+      "The choice between conventional OOB or pseudo-OOB auth is determined",
+      "by the type of OAuth client. If the client is of the \"installed\" type,",
+      "`use_oob = TRUE` results in conventional OOB auth. If the client is of",
+      "the \"web\" type, `use_oob = TRUE` results in pseudo-OOB auth. Packages",
+      "that provide a built-in OAuth client can usually detect which type of",
+      "client to use. But if you need to set this explicitly, use the",
+      "`\"gargle_oauth_client_type\"` option:",
+      "```r",
+      "options(gargle_oauth_client_type = \"web\")       # pseudo-OOB",
+      "# or, alternatively",
+      "options(gargle_oauth_client_type = \"installed\") # conventional OOB",
+      "```",
+      "",
+      "For details on the many ways to find a token, see",
+      "[gargle::token_fetch()]. For deeper control over auth, use",
+      "[{PREFIX}_auth_configure()] to bring your own OAuth client or API key.",
+      "To learn more about gargle options, see [gargle::gargle_options]."
+    ),
+    .data = .data
+  )
 }
 
 PREFIX_auth_params <- function() {
@@ -115,10 +125,13 @@ PREFIX_auth_params <- function() {
 
 # PREFIX_deauth() ----------------------------------------------------------
 
-PREFIX_deauth_description_with_api_key <- function(.data = list(
-                                                     PACKAGE = "PACKAGE",
-                                                     PREFIX  = "PREFIX"
-                                                   ), .fallback_api_key = TRUE) {
+PREFIX_deauth_description_with_api_key <- function(
+  .data = list(
+    PACKAGE = "PACKAGE",
+    PREFIX = "PREFIX"
+  ),
+  .fallback_api_key = TRUE
+) {
   lines <- c(
     "@description",
     "Put {PACKAGE} into a de-authorized state. Instead of sending a token,",
@@ -136,10 +149,13 @@ PREFIX_deauth_description_with_api_key <- function(.data = list(
   glue_data_lines(lines, .data = .data)
 }
 
-PREFIX_deauth_description_no_api_key <- function(.data = list(
-                                                   PACKAGE = "PACKAGE",
-                                                   PREFIX  = "PREFIX"
-                                                 ), .fallback_api_key = TRUE) {
+PREFIX_deauth_description_no_api_key <- function(
+  .data = list(
+    PACKAGE = "PACKAGE",
+    PREFIX = "PREFIX"
+  ),
+  .fallback_api_key = TRUE
+) {
   lines <- c(
     "@description",
     "Clears any currently stored token. The next time {PACKAGE} needs a token,",
@@ -155,10 +171,13 @@ PREFIX_deauth_description_no_api_key <- function(.data = list(
 
 # PREFIX_token() ----------------------------------------------------------
 
-PREFIX_token_description <- function(.data = list(
-                                       API    = "GOOGLE API",
-                                       PREFIX = "PREFIX"
-                                     ), .deauth_possible = TRUE) {
+PREFIX_token_description <- function(
+  .data = list(
+    API = "GOOGLE API",
+    PREFIX = "PREFIX"
+  ),
+  .deauth_possible = TRUE
+) {
   lines <- c(
     "@description",
     "For internal use or for those programming around the {API}.",
@@ -184,11 +203,14 @@ PREFIX_token_return <- function() {
 # PREFIX_has_token() ----------------------------------------------------------
 
 PREFIX_has_token_description <- function(.data = list(PACKAGE = "PACKAGE")) {
-  glue_data_lines(c(
-    "@description",
-    "Reports whether {PACKAGE} has stored a token, ready for use in downstream",
-    "requests."
-  ), .data = .data)
+  glue_data_lines(
+    c(
+      "@description",
+      "Reports whether {PACKAGE} has stored a token, ready for use in downstream",
+      "requests."
+    ),
+    .data = .data
+  )
 }
 
 PREFIX_has_token_return <- function() {
@@ -197,10 +219,14 @@ PREFIX_has_token_return <- function() {
 
 # PREFIX_auth_configure() -------------------------------------------------------
 
-PREFIX_auth_configure_description <- function(.data = list(
-                                                PACKAGE = "PACKAGE",
-                                                PREFIX  = "PREFIX"
-                                              ), .has_api_key = TRUE, .fallbacks = TRUE) {
+PREFIX_auth_configure_description <- function(
+  .data = list(
+    PACKAGE = "PACKAGE",
+    PREFIX = "PREFIX"
+  ),
+  .has_api_key = TRUE,
+  .fallbacks = TRUE
+) {
   lines <- c(
     "@description",
     "These functions give more control over and visibility into the auth",
@@ -239,7 +265,7 @@ PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
   c(
     "@param client A Google OAuth client, presumably constructed via",
     "[gargle::gargle_oauth_client_from_json()]. Note, however, that it is",
-      "preferred to specify the client with JSON, using the `path` argument.",
+    "preferred to specify the client with JSON, using the `path` argument.",
     "@inheritParams gargle::gargle_oauth_client_from_json",
     if (.has_api_key) {
       "@param api_key API key."
@@ -249,9 +275,12 @@ PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
   )
 }
 
-PREFIX_auth_configure_return <- function(.data = list(
-                                           PREFIX = "PREFIX"
-                                         ), .has_api_key = TRUE) {
+PREFIX_auth_configure_return <- function(
+  .data = list(
+    PREFIX = "PREFIX"
+  ),
+  .has_api_key = TRUE
+) {
   lines <- c(
     "@return",
     "  * `{PREFIX}_auth_configure()`: An object of R6 class",

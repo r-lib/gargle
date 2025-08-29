@@ -1,4 +1,3 @@
-
 test_that("'deleted_client' causes extra special feedback", {
   err <- list(
     error = "deleted_client",
@@ -37,7 +36,11 @@ test_that("'deleted_client' causes extra special feedback", {
   expect_snapshot(
     gargle_refresh_failure(
       err,
-      httr::oauth_app(appname = "fake-calliope", key = "KEY", secret = "SECRET"),
+      httr::oauth_app(
+        appname = "fake-calliope",
+        key = "KEY",
+        secret = "SECRET"
+      ),
       package = "PACKAGE"
     )
   )

@@ -47,11 +47,13 @@
 #' )
 #' credentials_user_oauth2(scopes, client)
 #' }
-credentials_user_oauth2 <- function(scopes = NULL,
-                                    client = gargle_client(),
-                                    package = "gargle",
-                                    ...,
-                                    app = deprecated()) {
+credentials_user_oauth2 <- function(
+  scopes = NULL,
+  client = gargle_client(),
+  package = "gargle",
+  ...,
+  app = deprecated()
+) {
   gargle_debug("trying {.fun credentials_user_oauth2}")
   if (lifecycle::is_present(app)) {
     lifecycle::deprecate_soft(

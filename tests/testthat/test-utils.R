@@ -25,8 +25,12 @@ test_that("base_scope() extracts the last scope part", {
   expect_equal(
     out,
     c(
-      "...userinfo.email", "...drive", "...gmail.readonly", "...gmail.modify",
-      "...gmail.compose", "...mail.google.com"
+      "...userinfo.email",
+      "...drive",
+      "...gmail.readonly",
+      "...gmail.modify",
+      "...gmail.compose",
+      "...mail.google.com"
     )
   )
 })

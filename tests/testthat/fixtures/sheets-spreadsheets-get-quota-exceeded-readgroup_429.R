@@ -30,7 +30,10 @@ resp
 stopifnot(httr::status_code(resp) == 429)
 saveRDS(
   gargle:::redact_response(resp),
-  testthat::test_path("fixtures", "sheets-spreadsheets-get-quota-exceeded-readgroup_429.rds"),
+  testthat::test_path(
+    "fixtures",
+    "sheets-spreadsheets-get-quota-exceeded-readgroup_429.rds"
+  ),
   version = 2
 )
 

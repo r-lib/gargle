@@ -98,7 +98,7 @@ secret_encrypt_json <- function(json, path = NULL, key) {
   }
   enc <- secret_encrypt(json, key = key)
 
-  if(!is.null(path)) {
+  if (!is.null(path)) {
     check_string(path)
     writeBin(enc, path)
   }
@@ -271,9 +271,11 @@ base64_url_rand <- function(bytes = 32) {
 }
 
 # gargle's legacy, internal secret management functions ------------------------
-warn_for_legacy_secret <- function(what,
-                                   env = caller_env(),
-                                   user_env = caller_env(2)) {
+warn_for_legacy_secret <- function(
+  what,
+  env = caller_env(),
+  user_env = caller_env(2)
+) {
   lifecycle::deprecate_soft(
     when = "1.5.0",
     what = what,
@@ -281,7 +283,8 @@ warn_for_legacy_secret <- function(what,
       "Use the new secret functions instead:",
       "<https://gargle.r-lib.org/articles/managing-tokens-securely.html>"
     ),
-    env = env, user_env = user_env,
+    env = env,
+    user_env = user_env,
     id = "httr2_secret_mgmt"
   )
 }
@@ -368,7 +371,10 @@ secret_path <- function(package, name) {
 secret_read <- function(package, name) {
   warn_for_legacy_secret("secret_read()")
   if (!secret_can_decrypt(package)) {
-    gargle_abort_secret(message = "Decryption not available.", package = package)
+    gargle_abort_secret(
+      message = "Decryption not available.",
+      package = package
+    )
   }
 
   path <- secret_path(package, name)

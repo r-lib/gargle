@@ -27,11 +27,19 @@ test_that("inputs are checked when creating AuthState", {
 })
 
 test_that("AuthState client can be modified and cleared", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
   expect_equal(a$client$name, "AAA")
 
-  client2 <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "BBB")
+  client2 <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "BBB"
+  )
   a$set_client(client2)
   expect_equal(a$client$name, "BBB")
 
@@ -40,7 +48,11 @@ test_that("AuthState client can be modified and cleared", {
 })
 
 test_that("AuthState api_key can be modified and cleared", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
   expect_equal(a$api_key, "AAA")
 
@@ -52,7 +64,11 @@ test_that("AuthState api_key can be modified and cleared", {
 })
 
 test_that("AuthState auth_active can be toggled", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
   expect_true(a$auth_active)
 
@@ -61,7 +77,11 @@ test_that("AuthState auth_active can be toggled", {
 })
 
 test_that("AuthState supports basic handling of cred", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(client = client, api_key = "AAA", auth_active = TRUE)
 
   a$set_cred("hi")
@@ -74,7 +94,11 @@ test_that("AuthState supports basic handling of cred", {
 })
 
 test_that("AuthState prints nicely", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(
     package = "PKG",
     client = client,
@@ -120,7 +144,11 @@ test_that("AuthState$new(app) is deprecated, but still works", {
 test_that("$set_app is deprecated, but still works", {
   withr::local_options(lifecycle_verbosity = "warning")
 
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(
     client = client,
     # this just needs to be some package that is guaranteed to be installed, in
@@ -129,7 +157,11 @@ test_that("$set_app is deprecated, but still works", {
     api_key = "API_KEY",
     auth_active = TRUE
   )
-  client2 <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "BBB")
+  client2 <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "BBB"
+  )
 
   expect_snapshot(
     a$set_app(client2)
@@ -138,7 +170,11 @@ test_that("$set_app is deprecated, but still works", {
 })
 
 test_that("$app still returns the client", {
-  client <- gargle_oauth_client(id = "CLIENT_ID", secret = "SECRET", name = "AAA")
+  client <- gargle_oauth_client(
+    id = "CLIENT_ID",
+    secret = "SECRET",
+    name = "AAA"
+  )
   a <- init_AuthState(client = client, api_key = "API_KEY", auth_active = TRUE)
   expect_equal(a$app, client)
 })

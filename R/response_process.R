@@ -71,10 +71,12 @@
 #' resp <- gargle::request_make(req)
 #' response_process(resp)
 #' }
-response_process <- function(resp,
-                             error_message = gargle_error_message,
-                             remember = TRUE,
-                             call = caller_env()) {
+response_process <- function(
+  resp,
+  error_message = gargle_error_message,
+  remember = TRUE,
+  call = caller_env()
+) {
   if (remember) {
     gargle_env$last_response <- redact_response(resp)
   }
@@ -120,10 +122,12 @@ check_for_json <- function(resp, call = caller_env()) {
   )
 }
 
-gargle_abort_request_failed <- function(message,
-                                        resp,
-                                        .envir = caller_env(),
-                                        call = caller_env()) {
+gargle_abort_request_failed <- function(
+  message,
+  resp,
+  .envir = caller_env(),
+  call = caller_env()
+) {
   gargle_abort(
     message,
     class = c(
@@ -203,7 +207,10 @@ gargle_error_message <- function(resp, call = caller_env()) {
       error_details <- error_details[-lm_index]
     }
 
-    if (!is.null(localized_message) && !identical(localized_message, error$message)) {
+    if (
+      !is.null(localized_message) &&
+        !identical(localized_message, error$message)
+    ) {
       message <- c(message, "*" = localized_message)
     }
 
@@ -256,7 +263,8 @@ rpc_description <- function(rpc) {
 # APIs will ultimately converge on"
 # https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
 oops <- read.csv(
-  text = trimws(c('
+  text = trimws(c(
+    '
   HTTP,                   RPC,  Description
    200,                  "OK", "No error."
    400,    "INVALID_ARGUMENT", "Client specified an invalid argument. Check error message and error details for more information."
@@ -275,8 +283,10 @@ oops <- read.csv(
    501,     "NOT_IMPLEMENTED", "API method not implemented by the server."
    503,         "UNAVAILABLE", "Service unavailable. Typically the server is down."
    504,   "DEADLINE_EXCEEDED", "Request deadline exceeded. This will happen only if the caller sets a deadline that is shorter than the method\'s default deadline (i.e. requested deadline is not enough for the server to process the request) and the request did not finish within the deadline."
-                         ')),
-  stringsAsFactors = FALSE, strip.white = TRUE
+                         '
+  )),
+  stringsAsFactors = FALSE,
+  strip.white = TRUE
 )
 
 # https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
@@ -315,10 +325,11 @@ reveal_detail <- function(x) {
     bulletize(glue_data(as.list(e), "{names(e)}: {e}"), n_show = 10)
   }
 
-  switch(type,
+  switch(
+    type,
     "google.rpc.BadRequest" = rpc_bad_request(x),
-    "google.rpc.Help"       = rpc_help(x),
-    "google.rpc.ErrorInfo"  = rpc_error_info(x),
+    "google.rpc.Help" = rpc_help(x),
+    "google.rpc.ErrorInfo" = rpc_error_info(x),
     # must be an unimplemented type, such as RetryInfo, QuotaFailure, etc.
     bulletize(
       map_chr(
@@ -359,5 +370,4 @@ gargle_html_error_message <- function(resp) {
       "Or execute {.code <<x>>} to view it in your browser."
     )
   )
-
 }

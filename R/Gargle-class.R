@@ -53,17 +53,19 @@
 #' \dontrun{
 #' gargle2.0_token()
 #' }
-gargle2.0_token <- function(email = gargle_oauth_email(),
-                            client = gargle_client(),
-                            package = "gargle",
-                            ## params start
-                            scope = NULL,
-                            use_oob = gargle_oob_default(),
-                            ## params end
-                            credentials = NULL,
-                            cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
-                            ...,
-                            app = deprecated()) {
+gargle2.0_token <- function(
+  email = gargle_oauth_email(),
+  client = gargle_client(),
+  package = "gargle",
+  ## params start
+  scope = NULL,
+  use_oob = gargle_oob_default(),
+  ## params end
+  credentials = NULL,
+  cache = if (is.null(credentials)) gargle_oauth_cache() else FALSE,
+  ...,
+  app = deprecated()
+) {
   if (lifecycle::is_present(app)) {
     lifecycle::deprecate_soft(
       "1.5.0",
@@ -80,7 +82,11 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
   )
 
   # pseudo-OOB flow
-  client_type <- if (inherits(client, "gargle_oauth_client")) client$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) {
+    client$type
+  } else {
+    NA
+  }
   if (use_oob && identical(client_type, "web")) {
     params$oob_value <- select_pseudo_oob_value(client$redirect_uris)
   }
@@ -145,212 +151,223 @@ gargle2.0_token <- function(email = gargle_oauth_email(),
 #' @keywords internal
 #' @export
 #' @name Gargle-class
-Gargle2.0 <- R6::R6Class("Gargle2.0", inherit = httr::Token2.0, list(
-  #' @field email Email associated with the token.
-  email = NULL,
-  #' @field package Name of the package requesting a token. Used in messages.
-  package = NULL,
-  #' @field client An OAuth client.
-  client = NULL,
-  #' @description Create a Gargle2.0 token
-  #' @return A Gargle2.0 token.
-  initialize = function(email = gargle_oauth_email(),
-                        client = gargle_client(),
-                        package = "gargle",
-                        credentials = NULL,
-                        params = list(),
-                        cache_path = gargle_oauth_cache(),
-                        app = deprecated()) {
-    gargle_debug("Gargle2.0 initialize")
-    # I'm using deprecate_warn() intentionally here. Most folks should be
-    # instantiating through gargle2.0_token() anyway, so anyone who sees this
-    # warning probably needs to see it.
-    if (lifecycle::is_present(app)) {
-      lifecycle::deprecate_warn(
-        "1.5.0",
-        "Gargle2.0$initialize(app)",
-        "Gargle2.0$initialize(client)"
-      )
-      client <- app
-    }
-    stopifnot(
-      is.null(email) || is_scalar_character(email) ||
-        isTRUE(email) || isFALSE(email) || is_na(email),
-      is.oauth_app(client),
-      is_string(package),
-      is.list(params)
-    )
-    if (identical(email, "")) {
-      gargle_abort(c(
-        "{.arg email} must not be \"\" (the empty string).",
-        "i" = "Do you intend to consult an env var, but it's unset?"
-      ))
-    }
-    if (isTRUE(email)) {
-      email <- "*"
-    }
-    if (isFALSE(email) || is_na(email)) {
-      email <- NA_character_
-    }
-    # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
-    # optional hint for the auth server to pre-fill the email box
-    login_hint <- if (is_string(email) && !startsWith(email, "*")) email
-
-    self$endpoint   <- gargle_oauth_endpoint()
-    self$email      <- email
-    self$client     <- client
-    # for backwards compatibility and also because the parent class has $app;
-    # I can never remove it
-    self$app        <- client
-    self$package    <- package
-    params$scope    <- normalize_scopes(add_email_scope(params$scope))
-    params$query_authorize_extra <- list(login_hint = login_hint)
-    self$params     <- params
-    self$cache_path <- cache_establish(cache_path)
-
-    if (!is.null(credentials)) {
-      # Use credentials created elsewhere - usually for tests
-      gargle_debug("credentials provided directly")
-      self$credentials <- credentials
-      return(self$cache())
-    }
-
-    # Are credentials cached already?
-    if (self$load_from_cache()) {
-      self
-    } else {
-      gargle_debug("no matching token in the cache")
-      self$init_credentials()
-      self$email <- token_email(self) %||% NA_character_
-      self$cache()
-    }
-  },
-  #' @description Format a Gargle2.0 token
-  #' @param ... Not used.
-  format = function(...) {
-    x <- list(
-      oauth_endpoint = "google",
-      client         = self$client$name,
-      email          = cli::format_inline("{.email {self$email}}"),
-      scopes         = commapse(base_scope(self$params$scope)),
-      credentials    = commapse(names(self$credentials))
-    )
-    c(
-      cli::cli_format_method(
-        cli::cli_h1("<Token (via {.pkg gargle})>")
-      ),
-      glue("{fr(names(x))}: {fl(x)}")
-    )
-  },
-  #' @description Print a Gargle2.0 token
-  #' @param ... Not used.
-  print = function(...) {
-    # a format method is not sufficient for Gargle2.0 because the parent class
-    # has a print method
-    cli::cat_line(self$format())
-  },
-  #' @description Generate the email-augmented hash of a Gargle2.0 token
-  hash = function() {
-    paste(super$hash(), self$email, sep = "_")
-  },
-  #' @description Put a Gargle2.0 token into the cache
-  cache = function() {
-    token_into_cache(self)
-    self
-  },
-  #' @description (Attempt to) get a Gargle2.0 token from the cache
-  load_from_cache = function() {
-    gargle_debug("loading token from the cache")
-    if (is.null(self$cache_path) || is_na(self$email)) {
-      return(FALSE)
-    }
-
-    gargle_debug("email: {.email {self$email}}")
-    gargle_debug("oauth client name: {self$client$name}")
-    gargle_debug("oauth client name: {self$client$type}")
-    gargle_debug("oauth client id: {self$client$id}")
-    gargle_debug("scopes: {commapse(base_scope(self$params$scope))}")
-
-    cached <- token_from_cache(self)
-    if (is.null(cached)) {
-      return(FALSE)
-    }
-
-    gargle_debug("matching token found in the cache")
-    self$endpoint    <- cached$endpoint
-    self$email       <- cached$email
-    self$client      <- cached$client
-    self$app         <- cached$client
-    self$credentials <- cached$credentials
-    self$params      <- cached$params
-    TRUE
-  },
-  #' @description (Attempt to) refresh a Gargle2.0 token
-  refresh = function() {
-    cred <- refresh_oauth2.0(
-      self$endpoint, self$client, self$credentials,
-      package = self$package
-    )
-    if (is.null(cred)) {
-      token_remove_from_cache(self)
-      # It's tricky to decide what to do here. Currently we return the current,
-      # invalid, unrefreshed token, but we clear the refresh_token field, to
-      # prevent subsequent refresh attempts.
-      #
-      # Analysis from a BYO token POV:
-      # I've decided the status quo may be the best move, because it causes
-      # token_fetch() to return instead of moving on to try other methods. If
-      # someone provides token_fetch(token =), I think it's clear that they
-      # want/hope to use that token and they don't want to end up doing the
-      # OAuth browser dance. If we threw an error or returned NULL,
-      # token_fetch() would just keep going. The refresh failure does throw a
-      # visible warning:
-      #
-      # Warning message:
-      # Unable to refresh token: invalid_grant
-      # • Token has been expired or revoked.
-      #
-      # However, this does mean that functions like PKG_has_token() still return
-      # TRUE and that some other method must be used to find out if we have a
-      # *valid* token. gargle::token_tokeninfo() and API-specific functions for
-      # "tell me about the current user" are good candidates, such as
-      # gmailr::gm_profile() or googledrive::drive_user().
-      self$credentials$refresh_token <- NULL
-    } else {
-      self$credentials <- cred
-      self$cache()
-    }
-    self
-  },
-  #' @description Initiate a new Gargle2.0 token
-  init_credentials = function() {
-    gargle_debug("initiating new token")
-    if (is_interactive()) {
-      if (!isTRUE(self$params$use_oob) && !is_hosted_session()) {
-        encourage_httpuv()
+Gargle2.0 <- R6::R6Class(
+  "Gargle2.0",
+  inherit = httr::Token2.0,
+  list(
+    #' @field email Email associated with the token.
+    email = NULL,
+    #' @field package Name of the package requesting a token. Used in messages.
+    package = NULL,
+    #' @field client An OAuth client.
+    client = NULL,
+    #' @description Create a Gargle2.0 token
+    #' @return A Gargle2.0 token.
+    initialize = function(
+      email = gargle_oauth_email(),
+      client = gargle_client(),
+      package = "gargle",
+      credentials = NULL,
+      params = list(),
+      cache_path = gargle_oauth_cache(),
+      app = deprecated()
+    ) {
+      gargle_debug("Gargle2.0 initialize")
+      # I'm using deprecate_warn() intentionally here. Most folks should be
+      # instantiating through gargle2.0_token() anyway, so anyone who sees this
+      # warning probably needs to see it.
+      if (lifecycle::is_present(app)) {
+        lifecycle::deprecate_warn(
+          "1.5.0",
+          "Gargle2.0$initialize(app)",
+          "Gargle2.0$initialize(client)"
+        )
+        client <- app
       }
-      self$credentials <- init_oauth2.0(
+      stopifnot(
+        is.null(email) ||
+          is_scalar_character(email) ||
+          isTRUE(email) ||
+          isFALSE(email) ||
+          is_na(email),
+        is.oauth_app(client),
+        is_string(package),
+        is.list(params)
+      )
+      if (identical(email, "")) {
+        gargle_abort(c(
+          "{.arg email} must not be \"\" (the empty string).",
+          "i" = "Do you intend to consult an env var, but it's unset?"
+        ))
+      }
+      if (isTRUE(email)) {
+        email <- "*"
+      }
+      if (isFALSE(email) || is_na(email)) {
+        email <- NA_character_
+      }
+      # https://developers.google.com/identity/protocols/OpenIDConnect#login-hint
+      # optional hint for the auth server to pre-fill the email box
+      login_hint <- if (is_string(email) && !startsWith(email, "*")) email
+
+      self$endpoint <- gargle_oauth_endpoint()
+      self$email <- email
+      self$client <- client
+      # for backwards compatibility and also because the parent class has $app;
+      # I can never remove it
+      self$app <- client
+      self$package <- package
+      params$scope <- normalize_scopes(add_email_scope(params$scope))
+      params$query_authorize_extra <- list(login_hint = login_hint)
+      self$params <- params
+      self$cache_path <- cache_establish(cache_path)
+
+      if (!is.null(credentials)) {
+        # Use credentials created elsewhere - usually for tests
+        gargle_debug("credentials provided directly")
+        self$credentials <- credentials
+        return(self$cache())
+      }
+
+      # Are credentials cached already?
+      if (self$load_from_cache()) {
+        self
+      } else {
+        gargle_debug("no matching token in the cache")
+        self$init_credentials()
+        self$email <- token_email(self) %||% NA_character_
+        self$cache()
+      }
+    },
+    #' @description Format a Gargle2.0 token
+    #' @param ... Not used.
+    format = function(...) {
+      x <- list(
+        oauth_endpoint = "google",
+        client = self$client$name,
+        email = cli::format_inline("{.email {self$email}}"),
+        scopes = commapse(base_scope(self$params$scope)),
+        credentials = commapse(names(self$credentials))
+      )
+      c(
+        cli::cli_format_method(
+          cli::cli_h1("<Token (via {.pkg gargle})>")
+        ),
+        glue("{fr(names(x))}: {fl(x)}")
+      )
+    },
+    #' @description Print a Gargle2.0 token
+    #' @param ... Not used.
+    print = function(...) {
+      # a format method is not sufficient for Gargle2.0 because the parent class
+      # has a print method
+      cli::cat_line(self$format())
+    },
+    #' @description Generate the email-augmented hash of a Gargle2.0 token
+    hash = function() {
+      paste(super$hash(), self$email, sep = "_")
+    },
+    #' @description Put a Gargle2.0 token into the cache
+    cache = function() {
+      token_into_cache(self)
+      self
+    },
+    #' @description (Attempt to) get a Gargle2.0 token from the cache
+    load_from_cache = function() {
+      gargle_debug("loading token from the cache")
+      if (is.null(self$cache_path) || is_na(self$email)) {
+        return(FALSE)
+      }
+
+      gargle_debug("email: {.email {self$email}}")
+      gargle_debug("oauth client name: {self$client$name}")
+      gargle_debug("oauth client name: {self$client$type}")
+      gargle_debug("oauth client id: {self$client$id}")
+      gargle_debug("scopes: {commapse(base_scope(self$params$scope))}")
+
+      cached <- token_from_cache(self)
+      if (is.null(cached)) {
+        return(FALSE)
+      }
+
+      gargle_debug("matching token found in the cache")
+      self$endpoint <- cached$endpoint
+      self$email <- cached$email
+      self$client <- cached$client
+      self$app <- cached$client
+      self$credentials <- cached$credentials
+      self$params <- cached$params
+      TRUE
+    },
+    #' @description (Attempt to) refresh a Gargle2.0 token
+    refresh = function() {
+      cred <- refresh_oauth2.0(
         self$endpoint,
         self$client,
-        scope = self$params$scope,
-        use_oob = self$params$use_oob,
-        oob_value = self$params$oob_value,
-        query_authorize_extra = self$params$query_authorize_extra
+        self$credentials,
+        package = self$package
       )
-    } else {
-      # TODO: good candidate for an eventual sub-classed gargle error
-      # would be useful in testing to know that this is exactly where we aborted
-      gargle_abort("OAuth2 flow requires an interactive session.")
+      if (is.null(cred)) {
+        token_remove_from_cache(self)
+        # It's tricky to decide what to do here. Currently we return the current,
+        # invalid, unrefreshed token, but we clear the refresh_token field, to
+        # prevent subsequent refresh attempts.
+        #
+        # Analysis from a BYO token POV:
+        # I've decided the status quo may be the best move, because it causes
+        # token_fetch() to return instead of moving on to try other methods. If
+        # someone provides token_fetch(token =), I think it's clear that they
+        # want/hope to use that token and they don't want to end up doing the
+        # OAuth browser dance. If we threw an error or returned NULL,
+        # token_fetch() would just keep going. The refresh failure does throw a
+        # visible warning:
+        #
+        # Warning message:
+        # Unable to refresh token: invalid_grant
+        # • Token has been expired or revoked.
+        #
+        # However, this does mean that functions like PKG_has_token() still return
+        # TRUE and that some other method must be used to find out if we have a
+        # *valid* token. gargle::token_tokeninfo() and API-specific functions for
+        # "tell me about the current user" are good candidates, such as
+        # gmailr::gm_profile() or googledrive::drive_user().
+        self$credentials$refresh_token <- NULL
+      } else {
+        self$credentials <- cred
+        self$cache()
+      }
+      self
+    },
+    #' @description Initiate a new Gargle2.0 token
+    init_credentials = function() {
+      gargle_debug("initiating new token")
+      if (is_interactive()) {
+        if (!isTRUE(self$params$use_oob) && !is_hosted_session()) {
+          encourage_httpuv()
+        }
+        self$credentials <- init_oauth2.0(
+          self$endpoint,
+          self$client,
+          scope = self$params$scope,
+          use_oob = self$params$use_oob,
+          oob_value = self$params$oob_value,
+          query_authorize_extra = self$params$query_authorize_extra
+        )
+      } else {
+        # TODO: good candidate for an eventual sub-classed gargle error
+        # would be useful in testing to know that this is exactly where we aborted
+        gargle_abort("OAuth2 flow requires an interactive session.")
+      }
     }
-  }
-))
+  )
+)
 
 encourage_httpuv <- function() {
   if (!is_interactive() || isTRUE(is_installed("httpuv"))) {
     return(invisible())
   }
   choice <- cli_menu(
-   "The {.pkg httpuv} package enables a nicer Google auth experience, in many \\
+    "The {.pkg httpuv} package enables a nicer Google auth experience, in many \\
     cases, but it isn't installed.",
     "Would you like to install it now?",
     choices = c("Yes", "No")
@@ -388,9 +405,11 @@ select_pseudo_oob_value <- function(redirect_uris) {
   }
 
   if (length(redirect_uris) == 0) {
-    gargle_abort('
+    gargle_abort(
+      '
       OAuth client does not have a redirect URI suitable for the pseudo-OOB \\
-      flow.')
+      flow.'
+    )
   }
 
   if (length(redirect_uris) > 1) {

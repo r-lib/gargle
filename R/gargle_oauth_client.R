@@ -100,11 +100,13 @@ gargle_oauth_client_from_json <- function(path, name = NULL) {
 
 #' @export
 #' @rdname gargle_oauth_client_from_json
-gargle_oauth_client <- function(id,
-                                secret,
-                                redirect_uris = NULL,
-                                type = c("installed", "web"),
-                                name = hash(id)) {
+gargle_oauth_client <- function(
+  id,
+  secret,
+  redirect_uris = NULL,
+  type = c("installed", "web"),
+  name = hash(id)
+) {
   check_string(id)
   check_string(secret)
   check_string(name)
@@ -122,8 +124,10 @@ gargle_oauth_client <- function(id,
   }
 
   if (type == "web" && length(redirect_uris) == 0) {
-    gargle_abort('
-      A "web" type OAuth client must have one or more {.field redirect_uris}.')
+    gargle_abort(
+      '
+      A "web" type OAuth client must have one or more {.field redirect_uris}.'
+    )
   }
 
   structure(
@@ -202,7 +206,7 @@ gargle_client <- function(type = NULL) {
 
   switch(
     type,
-    web       = goc_web(),
+    web = goc_web(),
     installed = goc_installed()
   )
 }
@@ -221,7 +225,7 @@ tidyverse_client <- function(type = NULL) {
 
   switch(
     type,
-    web       = toc_web(),
+    web = toc_web(),
     installed = toc_installed()
   )
 }
@@ -246,10 +250,11 @@ tidyverse_client <- function(type = NULL) {
 #' @inheritParams httr::oauth_app
 #' @keywords internal
 #' @export
-oauth_app_from_json <- function(path,
-                                appname = NULL) {
+oauth_app_from_json <- function(path, appname = NULL) {
   lifecycle::deprecate_soft(
-    "1.3.0", "oauth_app_from_json()", "gargle_oauth_client_from_json()"
+    "1.3.0",
+    "oauth_app_from_json()",
+    "gargle_oauth_client_from_json()"
   )
   gargle_oauth_client_from_json(path = path, name = appname)
 }
@@ -259,7 +264,9 @@ oauth_app_from_json <- function(path,
 #' @rdname internal-assets
 tidyverse_app <- function() {
   lifecycle::deprecate_soft(
-    "1.3.0", "tidyverse_app()", "tidyverse_client()"
+    "1.3.0",
+    "tidyverse_app()",
+    "tidyverse_client()"
   )
   tidyverse_client()
 }
@@ -269,7 +276,9 @@ tidyverse_app <- function() {
 #' @rdname oauth_app_from_json
 gargle_app <- function() {
   lifecycle::deprecate_soft(
-    "1.3.0", "gargle_app()", "gargle_client()"
+    "1.3.0",
+    "gargle_app()",
+    "gargle_client()"
   )
   gargle_client()
 }

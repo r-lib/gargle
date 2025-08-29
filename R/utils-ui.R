@@ -118,7 +118,8 @@ obfuscate <- function(x, first = 7, last = 0) {
     paste0(
       substr(x[ellipsize], start = 1, stop = first),
       "...",
-      substr(x[ellipsize],
+      substr(
+        x[ellipsize],
         start = nc[ellipsize] - last + 1,
         stop = nc[ellipsize]
       )
@@ -127,8 +128,10 @@ obfuscate <- function(x, first = 7, last = 0) {
 }
 
 message <- function(...) {
-  gargle_abort("
-    Internal error: use {.pkg gargle}'s UI functions, not {.fun message}.")
+  gargle_abort(
+    "
+    Internal error: use {.pkg gargle}'s UI functions, not {.fun message}."
+  )
 }
 
 #' Error conditions for the gargle package
@@ -140,10 +143,13 @@ message <- function(...) {
 #' @noRd
 NULL
 
-gargle_abort <- function(message, ...,
-                         class = NULL,
-                         .envir = caller_env(),
-                         call = caller_env()) {
+gargle_abort <- function(
+  message,
+  ...,
+  class = NULL,
+  .envir = caller_env(),
+  call = caller_env()
+) {
   cli::cli_div(theme = gargle_theme())
   cli::cli_abort(
     message,
@@ -163,10 +169,12 @@ gargle_warn <- function(message, ..., class = NULL, .envir = caller_env()) {
   cli::cli_warn(message, .envir = .envir, ...)
 }
 
-gargle_abort_bad_params <- function(names,
-                                    reason,
-                                    endpoint_id,
-                                    call = caller_env()) {
+gargle_abort_bad_params <- function(
+  names,
+  reason,
+  endpoint_id,
+  call = caller_env()
+) {
   gargle_abort(
     c(
       "These parameters are {reason}:",
@@ -193,19 +201,24 @@ gargle_map_cli <- function(x, ...) UseMethod("gargle_map_cli")
 
 #' @export
 gargle_map_cli.default <- function(x, ...) {
-  gargle_abort("
+  gargle_abort(
+    "
     Don't know how to {.fun gargle_map_cli} an object of class \\
-    {.cls {class(x)}}.")
+    {.cls {class(x)}}."
+  )
 }
 
 #' @export
 gargle_map_cli.NULL <- function(x, ...) NULL
 
 #' @export
-gargle_map_cli.character <- function(x,
-                                     template = "{.field <<x>>}",
-                                     .open = "<<", .close = ">>",
-                                     ...) {
+gargle_map_cli.character <- function(
+  x,
+  template = "{.field <<x>>}",
+  .open = "<<",
+  .close = ">>",
+  ...
+) {
   as.character(glue(template, .open = .open, .close = .close))
 }
 
@@ -243,13 +256,15 @@ compute_n_show <- function(n, n_show_nominal = 5, n_fudge = 2) {
 # https://github.com/r-lib/cli/issues/228
 # https://github.com/rstudio/rsconnect/blob/main/R/utils-cli.R
 
-cli_menu <- function(header,
-                     prompt,
-                     choices,
-                     not_interactive = choices,
-                     exit = integer(),
-                     .envir = caller_env(),
-                     error_call = caller_env()) {
+cli_menu <- function(
+  header,
+  prompt,
+  choices,
+  not_interactive = choices,
+  exit = integer(),
+  .envir = caller_env(),
+  error_call = caller_env()
+) {
   if (!is_interactive()) {
     cli::cli_abort(
       c(header, not_interactive),

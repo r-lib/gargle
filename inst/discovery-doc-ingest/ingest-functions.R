@@ -26,7 +26,7 @@ get_discovery_ids <- function() {
 #' @examples
 #' make_discovery_url("sheets:v4")
 make_discovery_url <- function(id) {
-  av <- set_names(as.list(strsplit(id, split =":")[[1]]), c("api", "version"))
+  av <- set_names(as.list(strsplit(id, split = ":")[[1]]), c("api", "version"))
   ## https://developers.google.com/discovery/v1/reference/apis/getRest
   getRest_url <-
     "https://www.googleapis.com/discovery/v1/apis/{api}/{version}/rest"
@@ -176,11 +176,21 @@ groom_properties <- function(method, dd) {
 
   # all of the properties in the RestMethod schema, in order of usefulness
   property_names <- c(
-    "id", "httpMethod", "path", "parameters", "scopes", "description",
-    "request", "response",
-    "mediaUpload", "supportsMediaDownload", "supportsMediaUpload",
+    "id",
+    "httpMethod",
+    "path",
+    "parameters",
+    "scopes",
+    "description",
+    "request",
+    "response",
+    "mediaUpload",
+    "supportsMediaDownload",
+    "supportsMediaUpload",
     "useMediaDownloadService",
-    "etagRequired", "parameterOrder", "supportsSubscription"
+    "etagRequired",
+    "parameterOrder",
+    "supportsSubscription"
   )
 
   method[intersect(property_names, names(method))]

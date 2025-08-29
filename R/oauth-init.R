@@ -35,24 +35,31 @@
 #' @param query_authorize_extra Named list of query parameters to include in the
 #'   initial request to the authorization server.
 #' @noRd
-init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
-                          client = gargle_client(),
-                          scope = NULL,
-                          use_oob = gargle_oob_default(),
-                          oob_value = NULL,
-                          is_interactive = interactive(),
-                          query_authorize_extra = list()) {
+init_oauth2.0 <- function(
+  endpoint = gargle_oauth_endpoint(),
+  client = gargle_client(),
+  scope = NULL,
+  use_oob = gargle_oob_default(),
+  oob_value = NULL,
+  is_interactive = interactive(),
+  query_authorize_extra = list()
+) {
   check_character(scope, allow_null = TRUE)
   scope <- glue_collapse(scope, sep = " ")
 
   use_oob <- check_oob(use_oob, oob_value)
 
-  client_type <- if (inherits(client, "gargle_oauth_client")) client$type else NA
+  client_type <- if (inherits(client, "gargle_oauth_client")) {
+    client$type
+  } else {
+    NA
+  }
 
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
 
-    if (identical(client_type, "web")) { # pseudo-OOB flow
+    if (identical(client_type, "web")) {
+      # pseudo-OOB flow
       # https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
 
       # We need so-called "offline" access, so the access token can be
@@ -73,7 +80,8 @@ init_oauth2.0 <- function(endpoint = gargle_oauth_endpoint(),
       query_authorize_extra[["prompt"]] <- "consent"
 
       state <- csrf_token()
-    } else { # conventional oob
+    } else {
+      # conventional oob
       state <- NULL
     }
   } else {
@@ -117,7 +125,8 @@ csrf_token <- function(n_bytes = 16) {
 
 oauth_authorize <- function(url, oob = FALSE, client_type = NA, state = NULL) {
   if (oob) {
-    if (identical(client_type, "web")) { # pseudo oob
+    if (identical(client_type, "web")) {
+      # pseudo oob
       oauth_exchanger_with_state(url, state)$code
     } else {
       httr::oauth_exchanger(url)$code
@@ -143,7 +152,8 @@ check_oob <- function(use_oob, oob_value = NULL) {
 
   if (!use_oob && !is_installed("httpuv")) {
     gargle_info(
-      "The {.pkg httpuv} package is not installed; using out-of-band auth.")
+      "The {.pkg httpuv} package is not installed; using out-of-band auth."
+    )
     use_oob <- TRUE
   }
 
@@ -152,8 +162,10 @@ check_oob <- function(use_oob, oob_value = NULL) {
   }
 
   if (!is.null(oob_value) && !use_oob) {
-    gargle_abort("
-      The {.arg oob_value} argument can only be used when {.code use_oob = TRUE}.")
+    gargle_abort(
+      "
+      The {.arg oob_value} argument can only be used when {.code use_oob = TRUE}."
+    )
   }
 
   if (use_oob && !is.null(oob_value)) {

@@ -1,7 +1,9 @@
 test_that("credentials_app_default_path(), default, non-Windows", {
   withr::local_envvar(c(
-    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
-    APPDATA = NA, SystemDrive = NA
+    GOOGLE_APPLICATION_CREDENTIALS = NA,
+    CLOUDSDK_CONFIG = NA,
+    APPDATA = NA,
+    SystemDrive = NA
   ))
   local_mocked_bindings(is_windows = function() FALSE)
   expect_equal(
@@ -12,8 +14,10 @@ test_that("credentials_app_default_path(), default, non-Windows", {
 
 test_that("credentials_app_default_path(), default, Windows", {
   withr::local_envvar(c(
-    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
-    APPDATA = NA, SystemDrive = NA
+    GOOGLE_APPLICATION_CREDENTIALS = NA,
+    CLOUDSDK_CONFIG = NA,
+    APPDATA = NA,
+    SystemDrive = NA
   ))
   local_mocked_bindings(is_windows = function() TRUE)
   expect_equal(
@@ -24,8 +28,10 @@ test_that("credentials_app_default_path(), default, Windows", {
 
 test_that("credentials_app_default_path(), system drive, Windows", {
   withr::local_envvar(c(
-    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
-    APPDATA = NA, SystemDrive = "D:"
+    GOOGLE_APPLICATION_CREDENTIALS = NA,
+    CLOUDSDK_CONFIG = NA,
+    APPDATA = NA,
+    SystemDrive = "D:"
   ))
   local_mocked_bindings(is_windows = function() TRUE)
   expect_equal(
@@ -36,8 +42,10 @@ test_that("credentials_app_default_path(), system drive, Windows", {
 
 test_that("credentials_app_default_path(), APPDATA env var, Windows", {
   withr::local_envvar(c(
-    GOOGLE_APPLICATION_CREDENTIALS = NA, CLOUDSDK_CONFIG = NA,
-    APPDATA = path("D:", "AppData"), SystemDrive = "D:"
+    GOOGLE_APPLICATION_CREDENTIALS = NA,
+    CLOUDSDK_CONFIG = NA,
+    APPDATA = path("D:", "AppData"),
+    SystemDrive = "D:"
   ))
   local_mocked_bindings(is_windows = function() TRUE)
   expect_equal(

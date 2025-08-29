@@ -23,3 +23,5 @@
 ^vignettes/\.quarto$
 ^vignettes/*_files$
 ^\.quarto$
+^[.]?air[.]toml$
+^\.vscode$
