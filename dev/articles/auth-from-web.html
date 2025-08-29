@@ -250,16 +250,16 @@ flow.</li>
     border-collapse: collapse;
     border-style: none;
   }
-  
+
   .empty-cell {
     border: none;
     background-color: transparent;
   }
-  
+
   table thead {
     background-color: transparent;
   }
-  
+
   table th, table td {
     border-style: solid;
   }
@@ -371,7 +371,7 @@ working directly with R (so NOT via the browser) and they use OOB auth
 to get unstuck again. What’s going on in this case?</p>
 <p>The initial error looks something like this:</p>
 <pre><code>createTcpServer: address already in use
-Error in httpuv::startServer(use$host, use$port, list(call = listen)) : 
+Error in httpuv::startServer(use$host, use$port, list(call = listen)) :
   Failed to create server</code></pre>
 <p>It’s characteristic of some other process sitting on port 1410, which
 is what gargle is trying to use for auth.</p>
