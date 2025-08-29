@@ -330,7 +330,7 @@ There are many ways to do this. We'll work several examples using that convey th
 library(googledrive)
 
 # do anything that triggers auth
-drive_find(n_max)
+drive_find(n_max = 5)
 ```
 
 **Step 2**: Revise your code to pre-authorize the use of that token next time.
