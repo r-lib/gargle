@@ -11,9 +11,33 @@ is.oauth_app <- function(x) inherits(x, "oauth_app")
 
 is.oauth_endpoint <- function(x) inherits(x, "oauth_endpoint")
 
+# meant to evoke "RStudio, on a server", which includes RStudio Server and
+# Posit Workbench
 is_rstudio_server <- function() {
   Sys.getenv("RSTUDIO") == "1" &&
     Sys.getenv("RSTUDIO_PROGRAM_MODE") == "server"
+}
+
+# meant to evoke "Positron, on a server", not Positron Server,
+# which does not exist
+is_positron_server <- function() {
+  Sys.getenv("POSITRON") == "1" &&
+    # yes, it really is RSTUDIO_PROGRAM_MODE vs. POSITRON_MODE
+    Sys.getenv("POSITRON_MODE") == "server"
+}
+
+# intended to detect execution on RStudio Server or Posit Workbench
+# mostly aimed at detecting R use via VS Code on a server,
+# since use via RStudio or Positron should be picked up by more specialized
+# helpers: is_(rstudio|positron)_server()
+is_workbench <- function() {
+  # values seen on Workbench for RS_SERVER_URL in 2025-08-29 experimentation
+  # VS Code, R in a terminal: "https://dev.palm.ptd.posit.it/"
+  # Positron Pro, R Console and R in terminal: "https://dev.palm.ptd.posit.it/"
+  # RStudio Pro, R Console and R in terminal: ""
+  # yes, on RStudio Pro, RS_SERVER_URL is intentionally(?) set to the empty
+  # string, but it IS set
+  !is.na(Sys.getenv("RS_SERVER_URL", unset = NA_character_))
 }
 
 is_google_colab <- function() {
@@ -31,6 +55,8 @@ is_google_colab <- function() {
 
 is_hosted_session <- function() {
   is_rstudio_server() ||
+    is_positron_server() ||
+    is_workbench() ||
     is_google_colab()
 }
 

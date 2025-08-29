@@ -28,7 +28,7 @@ Examples include:
     tidyverse OAuth client*
 
 Full details on `gargle::token_fetch()`, which powers this strategy, are given in `vignette("how-gargle-gets-tokens")`.
-    
+
 ## Provide a token or pre-authorize token discovery
 
 The main principle for auth that does not require user interaction:
@@ -134,7 +134,7 @@ You can make a similar change in more scoped way with the helpers `gargle::with_
 
 Here we discuss how gargle's GCE auth can work for a related service, Google Kubernetes Engine (GKE), using [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
 This is more complicated that direct usage of GCE and some extra configuration is needed to make a service account's metadata available for the GKE instance to discover.
-GKE is the underlying technology behind Google's managed Airflow service, [Cloud Composer](https://cloud.google.com/composer), so this also applies to R docker files being called in that environment. 
+GKE is the underlying technology behind Google's managed Airflow service, [Cloud Composer](https://cloud.google.com/composer), so this also applies to R docker files being called in that environment.
 
 Workload Identity is the recommended way to do authentication on GKE and other places, if possible, since it eliminates the use of a file that holds the service key, which is a potential security risk.
 
@@ -147,7 +147,7 @@ Imagine that `my-service-key@my-project.iam.gserviceaccount.com` has the `https:
 # create namespace
 kubectl create namespace my-namespace
 # Create Kubernetes service account
-kubectl create serviceaccount --namespace my-namespace bq-service-account 
+kubectl create serviceaccount --namespace my-namespace bq-service-account
 ```
 
 4. Bind that Kubernetes service account to the service account outside of Kubernetes you created in step 1, and assign it an annotation:
@@ -173,7 +173,7 @@ Documentation around `GKEStartPodOperator()` within Cloud Composer can be found 
   - Specify the target service account, i.e. you can't just passively accept the
     default, which is to use the `"default"` service account.
     `gce_instance_service_accounts()` can be helpful, e.g., if you want to
-    know which service accounts your Docker container can see. 
+    know which service accounts your Docker container can see.
 
 Here is example code that you might execute in your Docker container:
 
@@ -216,7 +216,7 @@ If you're not working in cloud context with automatic access to a service accoun
    *Service account token* section.
 1. Call the wrapper package's main auth function proactively and provide the
    path to this JSON file.
-   
+
 Example using googledrive:
 
 ```{r}
@@ -249,9 +249,9 @@ Some details:
   exposed yet in user-facing auth functions like `drive_auth()`.
   If you need `subject` in a client package, that is a reasonable feature
   request.
-  It is also possible to get a token with an explicit call to, e.g., 
+  It is also possible to get a token with an explicit call to, e.g.,
   `credentials_service_account()` and then pass that token to the auth function:
-  
+
 ```{r}
 t <- gargle::credentials_service_account(
   path = "/path/to/your/service-account-token.json",
