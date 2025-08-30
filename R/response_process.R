@@ -165,7 +165,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
       "*" = content$error,
       "*" = content$error_description
     )
-    return(message)
+    return(escape_braces(message))
   }
 
   if (is.null(error)) {
@@ -174,7 +174,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
       httr::http_status(resp)$message,
       "*" = content$error_description
     )
-    return(message)
+    return(escape_braces(message))
   }
   errors <- error[["errors"]]
 
@@ -190,7 +190,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
 
     error_details <- error$details
     if (is.null(error_details)) {
-      return(message)
+      return(escape_braces(message))
     }
 
     # https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto
@@ -219,7 +219,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
       "",
       reveal_details(error_details)
     )
-    return(message)
+    return(escape_braces(message))
   }
 
   # developed from
@@ -370,4 +370,18 @@ gargle_html_error_message <- function(resp) {
       "Or execute {.code <<x>>} to view it in your browser."
     )
   )
+}
+
+# Google APIs might return error messages containing curly braces, e.g.
+# "metadata.quota_unit: 1/min/{project}/{user}"
+# This can cause problems when eventually process by cli::cli_abort(), e.g.
+# Error:
+# ! ! Could not evaluate cli `{}` expression: `project`.
+# Caused by error in `eval(expr, envir = envir)`:
+# ! object 'project' not found
+# So we need to escape them by doubling them, so they are taken literally.
+# Seen by me and by a user:
+# https://github.com/tidyverse/googlesheets4/issues/319
+escape_braces <- function(msg) {
+  gsub("([{}])", "\\1\\1", msg)
 }
