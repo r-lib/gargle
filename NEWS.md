@@ -1,7 +1,10 @@
 # gargle (development version)
 
-* Fixed a bug when displaying a request failure that includes a localized
-  message in the error details (#293).
+* Fixed some bugs around surfacing the details of a request failure:
+  - Better handling when the error details include a localized message (#293)
+  - Defensive escaping of `{..}` in Google-provided error messages, to prevent
+    `cli::cli_abort()` from trying (and failing) to do string interpolation
+    (https://github.com/tidyverse/googlesheets4/issues/319)
 * gargle is better able to detect when it's running on Posit Workbench, but not
   necessarily in RStudio, such as in Positron or VS Code (#291).
 
