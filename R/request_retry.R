@@ -106,18 +106,44 @@ request_retry <- function(
   max_total_wait_time_in_seconds = 100
 ) {
   resp <- request_make(...)
+
   tries_made <- 1
+  per_user_failures <- 0
+
   b <- calculate_base_wait(
     n_waits = max_tries_total - 1,
     total_wait_time = max_total_wait_time_in_seconds
   )
 
   while (we_should_retry(tries_made, max_tries_total, resp)) {
-    wait_time <- backoff(tries_made, resp, base = b)
-    # TODO: show progress in some way
-    Sys.sleep(wait_time)
+    wait_info <- backoff(tries_made, resp, base = b, per_user_failures)
+    wait_time <- wait_info$wait_time
+
+    announce_retryable_failure(resp, tries_made, wait_info)
+
+    # n = progress updates per second, which is really about the spinner
+    n <- 20
+    cli::cli_progress_bar(
+      format = "{cli::pb_spin} Retry happens in {cli::pb_eta}",
+      total = wait_time * n
+    )
+    for (i in seq_len(wait_time * n)) {
+      Sys.sleep(1 / n)
+      cli::cli_progress_update()
+    }
+
     resp <- request_make(...)
+
     tries_made <- tries_made + 1
+    if (sheets_per_user_quota_exhaustion(resp)) {
+      per_user_failures <- per_user_failures + 1
+    }
+  }
+
+  if (tries_made > 1) {
+    code <- httr::status_code(resp)
+    adjective <- if (code >= 200 && code < 300) "successful!" else "failed :("
+    gargle_info(c("v" = "Request {tries_made} {adjective}"))
   }
 
   invisible(resp)
@@ -135,7 +161,14 @@ we_should_retry <- function(tries_made, max_tries_total, resp) {
   }
 }
 
-backoff <- function(tries_made, resp, base = 1, min_wait = 1, max_wait = 45) {
+backoff <- function(
+  tries_made,
+  resp,
+  base = 1,
+  per_user_failures = 0,
+  min_wait = 1,
+  max_wait = 64
+) {
   wait_time <- stats::runif(1, 0, base * (2^(tries_made - 1)))
   wait_rationale <- "exponential backoff, full jitter"
 
@@ -153,9 +186,10 @@ backoff <- function(tries_made, resp, base = 1, min_wait = 1, max_wait = 45) {
     )
   }
 
-  if (sheets_per_user_quota_exhaustion(resp) && tries_made == 1) {
-    wait_time <- 60 + stats::runif(1)
-    wait_rationale <- "fixed 60 second wait for per user quota exhaustion"
+  if (sheets_per_user_quota_exhaustion(resp) && per_user_failures < 1) {
+    # 60s plus 1s and some jitter, for some wiggle
+    wait_time <- 60 + 1 + stats::runif(1)
+    wait_rationale <- "fixed 60 second wait for first per user quota exhaustion"
   }
 
   retry_after <- retry_after_header(resp)
@@ -164,23 +198,7 @@ backoff <- function(tries_made, resp, base = 1, min_wait = 1, max_wait = 45) {
     wait_rationale <- "'Retry-After' header"
   }
 
-  status_code <- httr::status_code(resp)
-
-  if (gargle_verbosity() == "debug") {
-    msg <- c(
-      "x" = "Request failed [{status_code}]",
-      " " = gargle_error_message(resp),
-      "i" = "Retry {tries_made} happens in {round(wait_time, 1)} seconds ...",
-      " " = "(strategy: {wait_rationale})"
-    )
-    gargle_debug(msg)
-  } else {
-    gargle_info(c(
-      "x" = "Request failed [{status_code}]. Retry {tries_made} happens in \\
-             {round(wait_time, 1)} seconds ..."
-    ))
-  }
-  wait_time
+  list(wait_time = wait_time, wait_rationale = wait_rationale)
 }
 
 retry_after_header <- function(resp) {
@@ -198,6 +216,8 @@ retry_after_header <- function(resp) {
   }
 }
 
+# targets the most common quota problem, which is the per user per minute quota
+# from the Sheets API
 sheets_per_user_quota_exhaustion <- function(resp) {
   msg <- gargle_error_message(resp)
   # the structure of this error and the wording of this message have changed
@@ -213,5 +233,33 @@ calculate_base_wait <- function(n_waits, total_wait_time) {
     length(total_wait_time) == 1L,
     total_wait_time > 0
   )
-  total_wait_time / (2^(n_waits) - 1)
+  b <- total_wait_time / (2^(n_waits) - 1)
+  gargle_debug(c("i" = "Exponential base for retries is {round(b, 1)}s."))
+  b
+}
+
+announce_retryable_failure <- function(resp, tries_made, wait_info) {
+  status_code <- httr::status_code(resp)
+
+  # add a bit more info, without doing full-blown error processing
+  status_rpc <- tryCatch(
+    {
+      # oops is defined in response_process.R
+      oops$RPC[[match(status_code, oops$HTTP)]]
+    },
+    error = function(e) NULL
+  )
+  status_extra <- glue(": {status_rpc}") %||% ""
+  if (sheets_per_user_quota_exhaustion(resp)) {
+    status_extra <- glue("{status_extra}, per user quota")
+  }
+
+  gargle_info(c(
+    "x" = "Request {tries_made} failed [{status_code}{status_extra}].",
+    "i" = "Will retry in {round(wait_info$wait_time, 1)}s."
+  ))
+  gargle_debug(c(
+    "i" = "Wait time strategy: {wait_info$wait_rationale}",
+    " " = gargle_error_message(resp)
+  ))
 }
