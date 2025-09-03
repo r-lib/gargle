@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* When retrying a request, the messaging reveals more detail about the failed
+  request and counts down until the retry happens (part of #64).
 * Fixed some bugs around surfacing the details of a request failure:
   - Better handling when the error details include a localized message (#293)
   - Defensive escaping of `{..}` in Google-provided error messages, to prevent
