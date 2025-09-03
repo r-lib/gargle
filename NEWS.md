@@ -1,3 +1,5 @@
+# gargle (development version)
+
 # gargle 1.6.0
 
 * When retrying a request, the messaging reveals more detail about the failed
