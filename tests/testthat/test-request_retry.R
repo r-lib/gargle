@@ -18,12 +18,11 @@ test_that("request_retry() logic works as advertised", {
     }
   }
 
-  # turn this: Retry 1 happens in 1.7 seconds
-  #            Retry 1 happens in 1 seconds
-  # into this: Retry 1 happens in {WAIT_TIME} seconds
+  # turn this: Will retry in 1.19769861013629s.
+  # into this: Will retry in {WAIT_TIME}s.
   scrub_wait_time <- function(x) {
     sub(
-      "(?<=in )[[:digit:]]+([.][[:digit:]]+)?(?= seconds)",
+      "(?<=retry in )[[:digit:]]+([.][[:digit:]]+)?(?=s)",
       "{WAIT_TIME}",
       x,
       perl = TRUE
@@ -40,14 +39,41 @@ test_that("request_retry() logic works as advertised", {
       perl = TRUE
     )
   }
-  scrub <- function(x) scrub_strategy(scrub_wait_time(x))
-  local_gargle_verbosity("debug")
-  local_mocked_bindings(gargle_error_message = function(...) "oops")
+  # turn this: base for retries is 2s
+  # into this: base for retries is {BASE}s
+  scrub_base <- function(x) {
+    sub(
+      "(?<=base for retries is )[[:digit:]]+([.][[:digit:]]+)?(?=s)",
+      "{BASE}",
+      x,
+      perl = TRUE
+    )
+  }
+
+  # get rid of the progress ticks like:
+  # \ Retry 1 happens in  1s
+  scrub_tick <- function(x) {
+    grep("happens in", x, value = TRUE, invert = TRUE)
+  }
+
+  scrub <- function(x) {
+    scrub_tick(scrub_base(scrub_strategy(scrub_wait_time(x))))
+  }
+
+  local_mocked_bindings(gargle_error_message = function(...) {
+    "PLACEHOLDER FOR GOOGLE ERROR MESSAGE"
+  })
 
   # succeed on first try
   local_mocked_bindings(request_make = faux_request_make())
   out <- request_retry()
   expect_equal(httr::status_code(out), 200)
+
+  local_gargle_verbosity("debug")
+  local_options(
+    cli.progress_show_after = 0,
+    cli.width = 200
+  )
 
   # fail, then succeed (exponential backoff)
   r <- list(faux_response(429), faux_response())
@@ -93,13 +119,15 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
     structure(list(status_code = 429), class = "response")
   }
 
+  backoff_time_only <- function(...) backoff(...)$wait_time
+
   # raw wait_times in U[0,1], therefore all become min_wait + U[0,1]
   local_mocked_bindings(gargle_error_message = function(...) "oops")
 
   suppressMessages(
     wait_times <- vapply(
       rep.int(1, 100),
-      backoff,
+      backoff_time_only,
       FUN.VALUE = numeric(1),
       resp = faux_error(),
       min_wait = 3
@@ -113,7 +141,7 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
   suppressMessages(
     wait_times <- vapply(
       rep.int(1, 100),
-      backoff,
+      backoff_time_only,
       FUN.VALUE = numeric(1),
       resp = faux_error(),
       base = 6,
@@ -140,16 +168,19 @@ test_that("backoff() honors Retry-After header", {
   suppressMessages(
     out <- backoff(1, faux_429(list(`Retry-After` = "1.2")))
   )
-  expect_equal(out, 1.2)
+  expect_equal(out$wait_time, 1.2)
+  expect_equal(out$wait_rationale, "'Retry-After' header")
 
   suppressMessages(
     out <- backoff(1, faux_429(list(`retry-after` = 2.4)))
   )
-  expect_equal(out, 2.4)
+  expect_equal(out$wait_time, 2.4)
+  expect_equal(out$wait_rationale, "'Retry-After' header")
 
   # should work even when tries_made > 1
   suppressMessages(
     out <- backoff(3, faux_429(list(`reTry-aFteR` = 3.6)))
   )
-  expect_equal(out, 3.6)
+  expect_equal(out$wait_time, 3.6)
+  expect_equal(out$wait_rationale, "'Retry-After' header")
 })

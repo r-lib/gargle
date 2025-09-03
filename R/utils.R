@@ -18,10 +18,14 @@ is_rstudio_server <- function() {
     Sys.getenv("RSTUDIO_PROGRAM_MODE") == "server"
 }
 
+is_positron <- function() {
+  identical(Sys.getenv("POSITRON"), "1")
+}
+
 # meant to evoke "Positron, on a server", not Positron Server,
 # which does not exist
 is_positron_server <- function() {
-  Sys.getenv("POSITRON") == "1" &&
+  is_positron() &&
     # yes, it really is RSTUDIO_PROGRAM_MODE vs. POSITRON_MODE
     Sys.getenv("POSITRON_MODE") == "server"
 }
