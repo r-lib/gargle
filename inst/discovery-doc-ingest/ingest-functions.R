@@ -57,7 +57,7 @@ list_discovery_documents <- function(id = NULL, path = NULL) {
   id <- id %||% "[[:alnum:]]+[-][[:alnum:]]+"
   date <- "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}"
   regexp <- glue::glue("{id}_{date}[.]json")
-  fs::dir_ls(path = path, regexp = regexp) %>%
+  fs::dir_ls(path = path, regexp = regexp) |>
     fs::path_rel(path)
 }
 
@@ -128,10 +128,10 @@ read_discovery_document <- function(path) {
 #' dd <- read_discovery_document(drive)
 #' ee <- get_raw_methods(dd)
 get_raw_methods <- function(dd) {
-  dd %>%
-    pluck("resources") %>%
-    map("methods") %>%
-    flatten() %>%
+  dd |>
+    pluck("resources") |>
+    map("methods") |>
+    flatten() |>
     set_names(map_chr(., "id"))
 }
 
@@ -159,8 +159,8 @@ groom_properties <- function(method, dd) {
   method$path <- fs::path(dd$servicePath, method$path)
 
   condense_scopes <- function(scopes) {
-    scopes %>%
-      str_remove("https://www.googleapis.com/auth/") %>%
+    scopes |>
+      str_remove("https://www.googleapis.com/auth/") |>
       str_c(collapse = ", ")
   }
   method$scopes <- condense_scopes(method$scopes)
