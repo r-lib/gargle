@@ -26,13 +26,13 @@ Getting a token requires several pieces of information and there are stark diffe
   * Overall config: OAuth client and API key. Who provides?
   * Token-level properties: Google identity (email) and scopes.
   * Request-level: Who manages tokens and injects them into requests?
-  
+
 ### User-facing auth
 
 In googledrive, the main user-facing auth function is `googledrive::drive_auth()`.
 Here is its definition (at least approximately, remember this is static code):
 
-```{r, eval = FALSE}
+```r
 # googledrive::
 drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
@@ -74,19 +74,19 @@ The internal `.auth` object maintains googledrive's auth state and is explained 
 A client package can use an internal object of class `gargle::AuthState` to hold the auth state.
 In googledrive, the main auth file defines a placeholder `.auth` object:
 
-```{r eval = FALSE}
+```r
 .auth <- NULL
 ```
 
 The actual initialization happens in `.onLoad()`:
 
-```{r}
+```r
 .onLoad <- function(libname, pkgname) {
   utils::assignInMyNamespace(
     ".auth",
     gargle::init_AuthState(package = "googledrive", auth_active = TRUE)
   )
-  
+
   # other stuff
 }
 ```
@@ -108,7 +108,7 @@ The client is a component that most users do not even know about and they are co
 There is a field in the `.auth` auth state to hold the OAuth `client`.
 Exported auth helpers, `drive_oauth_client()` and `drive_auth_configure()`, retrieve and modify the current client to support users who want to (or must) take that level of control.
 
-```{r, eval = FALSE}
+```r
 library(googledrive)
 
 # first: download the OAuth client as a JSON file
@@ -140,7 +140,7 @@ For example, this is a great way to read a Google Sheet that is world-readable o
 The user can provide their own API key via `drive_auth_configure(api_key =)` and retrieve that value with `drive_api_key()`, just as with the OAuth client.
 The API key is stored in the `api_key` field of the `.auth` auth state.
 
-```{r, eval = FALSE}
+```r
 library(googledrive)
 
 drive_auth_configure(api_key = "123456789")
@@ -164,7 +164,7 @@ Since users may have more than one Google account, it's quite likely that they w
 That explains why `drive_auth()` has the optional `email` argument that lets users proactively specify their identity.
 `drive_auth()` is usually called indirectly upon first need, but a user can also call it proactively in order to specify their target `email`:
 
-```{r eval = FALSE}
+```r
 # googledrive::
 drive_auth(email = "janedoe_work@gmail.com")
 ```
@@ -181,7 +181,7 @@ A client package can usually pick sensible default scopes, that will support wha
 
 Here's a reminder of the signature of `googledrive::drive_auth()`:
 
-```{r, eval = FALSE}
+```r
 # googledrive::
 drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
@@ -194,7 +194,7 @@ drive_auth <- function(email = gargle::gargle_oauth_email(),
 googledrive ships with a default scope, but a motivated user could call `drive_auth()` preemptively at the start of the session and request different scopes.
 For example, if they intend to only read data and want to guard against inadvertent file modification, they might opt for the `drive.readonly` scope.
 
-```{r, eval = FALSE}
+```r
 # googledrive::
 drive_auth(scopes = "https://www.googleapis.com/auth/drive.readonly")
 ```
@@ -230,7 +230,7 @@ I focus on early use, by the naive user, with the OAuth flow.
 When the user first calls a high-level googledrive function such as `drive_find()`, a Drive request is ultimately generated with a call to `googledrive::request_generate()`.
 Here is its definition, at least approximately:
 
-```{r eval = FALSE}
+```r
 # googledrive::
 request_generate <- function(endpoint = character(),
                              params = list(),
@@ -260,11 +260,11 @@ request_generate <- function(endpoint = character(),
 ```
 
 `googledrive::request_generate()` is a thin wrapper around `gargle::request_develop()` and `gargle::request_build()` that only implements details specific to googledrive, before delegating to more general functions in gargle.
-The `vignette("request-helper-functions")` documents these gargle functions.  
+The `vignette("request-helper-functions")` documents these gargle functions.
 
 `googledrive::request_generate()` gets a token with `drive_token()`, which is defined like so:
 
-```{r eval = FALSE}
+```r
 # googledrive::
 drive_token <- function() {
   if (isFALSE(.auth$auth_active)) {
@@ -279,7 +279,7 @@ drive_token <- function() {
 
 where `drive_has_token()` in a helper defined as:
 
-```{r eval = FALSE}
+```r
 # googledrive::
 drive_has_token <- function() {
   inherits(.auth$cred, "Token2.0")
@@ -297,7 +297,7 @@ Multiple gargle-using packages can use a shared token by obtaining a suitably sc
 For example, the default scope requested by googledrive is also sufficient for operations available in googlesheets4.
 You could use a shared token like so:
 
-```{r eval = FALSE}
+```r
 library(googledrive)
 library(googlesheets4)
 
@@ -310,7 +310,7 @@ gs4_auth(token = drive_token())            # registers token with googlesheets4
 ```
 
 It is important to make sure that the token-requesting package (googledrive, above) is using an OAuth client for which all the necessary APIs and scopes are enabled.
-    
+
 ## Auth interface
 
 The exported functions like `drive_auth()`, `drive_token()`, etc. constitute the auth interface between googledrive and gargle and are centralized in [`tidyverse/googledrive/R/drive_auth.R`](https://github.com/tidyverse/googledrive/blob/main/R/drive_auth.R).
@@ -369,7 +369,7 @@ One reason for a user to call `drive_auth()` directly and proactively is to swit
 `drive_auth()` accepts an `email` argument, which is honored when gargle determines if there is already a suitable token on hand.
 Here is a sketch of how a user could switch identities during a session, possibly non-interactive:
 
-```{r eval = FALSE}
+```r
 library(googledrive)
 
 drive_auth(email = "janedoe_work@gmail.com")

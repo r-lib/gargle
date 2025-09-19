@@ -19,7 +19,7 @@ This vignette explains the purpose and usage of:
   * `request_develop(endpoint, params, base_url)`
   * `request_build(method, path, params, body, token, key, base_url)`
   * `request_make(x, ..., user_agent)`
-  
+
 The target audience is someone writing an R package to wrap a Google API.
 
 ```{r setup}
@@ -40,7 +40,7 @@ The request helpers in gargle check the combined inputs from user and developer 
   * If unrecognized parameters are submitted, an error is thrown.
   * Parameters are automatically placed in their correct location: URL substitution, query, or body.
   * *Is there something else you care about? It is possible to do more, but it would help to have concrete requests.*
-  
+
 Google provides [API libraries for several languages](https://developers.google.com/api-client-library/), including Java, Go, Python, JavaScript, Ruby and more (but not R). All of these libraries are machine-generated from the metadata provided by the API Discovery Service. It is the [official recommendation](https://developers.google.com/discovery/v1/using#build) to use the Discovery Document when building client libraries. The gargle package aims to implement key parts of this strategy, in a way that is also idiomatic for R and its developers.
 
 ## High-level design pattern
@@ -51,7 +51,7 @@ gargle facilitates this design for API-wrapping packages:
     - Your package exports thin wrapper functions around gargle's helpers to form and make HTTP requests, that inject package-specific logic and data, such as an API key and user agent. This is for power users and yourself.
   * High-level, task-oriented, user-facing functions that constitute the main interface of your package.
     - These functions convert user input into the form required by the API and pass it along to your low-level interface functions.
-    
+
 Later, specific examples are given, using the googledrive package.
 
 ## gargle's HTTP request helpers
@@ -66,7 +66,7 @@ gargle provides support for creating and sending HTTP requests via these functio
   * Peels off `params` destined for the body into their own part.
   * Returns request data in a form that anticipates the `httr::VERB()` call
     that is on the horizon.
-  
+
 `request_build(method, path, params, body, token, key, base_url)`: a.k.a. The Dumb One.
 
   * Typically consumes the output of `request_develop()`, although that is not
@@ -83,9 +83,9 @@ gargle provides support for creating and sending HTTP requests via these functio
     request, you would probably just make the `httr::VERB()` call yourself.
   * Consults `x$method` to determine which `httr::VERB()` to call, then calls it
     with the rest of `x`, `...`, and `user_agent` passed as arguments.
-  
+
 They are usually called in the above order, though they don't have to be used that way. It is also fine to ignore this part of gargle and use it only for help with auth. They are separate parts of the package.
-  
+
 ## Discovery Documents
 
 Google's [API Discovery Service](https://developers.google.com/discovery/) "provides a lightweight, JSON-based API that exposes machine-readable metadata about Google APIs". We recommend ingesting this metadata into an R list, stored as internal data in an API-wrapping client package. Then, HTTP requests inside high-level functions can be made concisely and safely, by referring to this metadata. The combined use of this data structure and gargle's request helpers can eliminate a lot of boilerplate data and logic that are shared across Google APIs and across endpoints within an API.
@@ -101,9 +101,9 @@ Main files of interest to the developer of a client package:
 
   * `ingest-functions.R` is a collection of functions for downloading and ingesting a Discovery Document.
   * `drive-example.R` uses those functions to ingest metadata on the Drive v3 API and store it as an internal data object for use in [googledrive](https://googledrive.tidyverse.org).
-  
+
 The remaining files present an analysis of the Discovery Document for the Discovery API itself (very meta!) and write files that are useful for reference. Several are included at the end of this vignette.
-  
+
 Why aren't the ingest functions exported by gargle? First, we regard this as functionality that is needed at development time, not install or run time. This is something you'll do every few months, probably associated with preparing a release of a wrapper package. Second, the packages that are useful for wrangling JSON and lists are not existing dependencies of gargle, so putting these function in gargle would require some unappealing compromises.
 
 ## Method (or endpoint) data
@@ -123,7 +123,7 @@ sheets.spreadsheets.sheets.copyTo
 
 Retrieve the metadata for one endpoint by name, e.g.:
 
-```{r, eval = FALSE}
+```r
 .endpoints[["drive.files.create"]]
 ```
 
@@ -133,7 +133,7 @@ That info can be passed along to `request_develop(endpoint, params, base_url)`, 
 
 Here's the model used in googledrive. There is a low-level request helper, `googledrive::request_generate()`, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.
 
-```{r eval = FALSE}
+```r
 # googledrive::
 request_generate <- function(endpoint = character(),
                              params = list(),
@@ -178,7 +178,7 @@ The output of `gargle::request_build()` specifies an HTTP request.
 
 `gargle::request_make()` can be used to actually execute it.
 
-```{r, eval = FALSE}
+```r
 # gargle::
 request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
@@ -205,7 +205,7 @@ request_make <- function(x, ..., user_agent = gargle_user_agent()) {
 
 In googledrive we have a thin wrapper around this that injects the googledrive user agent:
 
-```{r, eval = FALSE}
+```r
 # googledrive::
 request_make <- function(x, ...) {
   gargle::request_make(x, ..., user_agent = drive_ua())
