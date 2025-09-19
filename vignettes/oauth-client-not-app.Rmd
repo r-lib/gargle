@@ -42,16 +42,16 @@ This flow is triggered when `use_oob = TRUE` (an existing convention in gargle a
     border-collapse: collapse;
     border-style: none;
   }
-  
+
   .empty-cell {
     border: none;
     background-color: transparent;
   }
-  
+
   table thead {
     background-color: transparent;
   }
-  
+
   table th, table td {
     border-style: solid;
   }
@@ -151,7 +151,7 @@ Here are the changes you need to know about in `AuthState`:
   favor of the new `client` argument. If you call `init_AuthState(app = x)`,
   there will be a deprecation message and the input `x` is used as the
   `client` argument instead.
-  
+
 Here are the changes you probably need to make in your package:
 
 * The first argument of the user-facing function, `PKG_auth_configure()`, should
@@ -163,7 +163,7 @@ Here are the changes you probably need to make in your package:
 
 Here's how `googledrive::drive_auth_configure()` and `googledrive::drive_oauth_client()` looked before and after the transition:
 
-```{r, eval = FALSE}
+```r
 # BEFORE
 drive_auth_configure <- function(app, path, api_key) {
   # not showing this code
@@ -182,8 +182,8 @@ drive_auth_configure <- function(client, path, api_key, app = deprecated()) {
       "drive_auth_configure(client)"
     )
     drive_auth_configure(client = app, path = path, api_key = api_key)
-  } 
-  
+  }
+
   # not showing this code
   .auth$set_client(client)
   # more code we're not showing
@@ -202,7 +202,7 @@ drive_oauth_app <- function() {
 The approach above follows various conventions explained in `vignette("communicate", package = "lifecycle")`.
 If you also choose to use the lifecycle package to assist in this process, `usethis::use_lifecycle()` function does some helpful one-time setup in your package:
 
-```{r eval = FALSE}
+```r
 usethis::use_lifecycle()
 ```
 
@@ -227,8 +227,8 @@ Here are the changes you probably need to make in your package:
   `app` nor `client` are formal arguments of `gargle::token_fetch()`, instead,
   these are intended for eventual use by `gargle::credentials_user_oauth2()`.
   Here's a sketch of how this looks in `googledrive::drive_auth()`:
-  
-    ```{r eval = FALSE}
+
+    ```r
     drive_auth <- function(...) {
       # code not shown
       cred <- gargle::token_fetch(
@@ -245,6 +245,6 @@ Here are the changes you probably need to make in your package:
       # code not shown
     }
     ```
-  
+
 * If you ever call `gargle::credentials_user_oauth2()` directly, use the new
   `client` argument instead of the deprecated `app` argument.

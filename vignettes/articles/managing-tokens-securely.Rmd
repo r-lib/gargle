@@ -122,7 +122,7 @@ You will be interested in `secret_encrypt_json()` if you want to encrypt a servi
 `secret_encrypt_json()` takes 3 arguments:
 
   * `json`: probably the path to a JSON file, but a JSON string is also
-    acceptable. 
+    acceptable.
   * `path`: The path to write the encrypted JSON to. Technically this is
     optional, but this function mostly exists to write to file.
   * `key`: The name of the environment variable that holds the encryption key.
@@ -130,7 +130,7 @@ You will be interested in `secret_encrypt_json()` if you want to encrypt a servi
 This example shows how googledrive's testing credentials are placed inside the package source.
 `googledrive-testing.json` is a JSON file downloaded for a service account managed via the [Google API / Cloud Platform console](https://console.cloud.google.com/project):
 
-```{r eval = FALSE}
+```r
 secret_encrypt_json(
   json = "~/some/place/where/I/keep/secret/stuff/googledrive-testing.json",
   path = "inst/secret/googledrive-testing.json",
@@ -163,7 +163,7 @@ If at all possible, use a service account instead.
 
 This example shows how an encrypted googlesheets4 user token could be placed inside the `.secrets/` directory of a project, e.g. a Shiny app intended for deployment.
 
-```{r eval = FALSE}
+```r
 library(googlesheets4)
 
 dir.create(".secrets")
@@ -227,7 +227,7 @@ It should come as no surprise that `secret_encrypt_json()` and `secret_write_rds
 Recall that in the example above we encrypted the JSON specifying a service account token, for use in CI by googledrive.
 Here's how you would use `secret_decrypt_json()` to decrypt that token and direct googledrive to use it:
 
-```{r eval = FALSE}
+```r
 library(googledrive)
 
 drive_auth(
@@ -243,7 +243,7 @@ drive_auth(
 Recall that in the example above we encrypted a googlesheets4 user token, for use inside something like a deployed Shiny app.
 Here's how you would use `secret_read_rds()` to decrypt that token and direct googlesheets4 to use it:
 
-```{r eval = FALSE}
+```r
 library(googlesheets4)
 
 gs4_auth(token = gargle::secret_read_rds(
@@ -268,22 +268,22 @@ You do want to rig things for graceful, informative failure in this case.
   likely to benefit from this is you, i.e. when you're trying to figure out why
   your app isn't working. It's nice to have a clear signal that the encryption
   key is unavailable instead of some mysterious deployment failure.
-  
+
 #### Condition on key availability
 
 `secret_has_key("SOMETHING_KEY")` reports whether the `"SOMETHING_KEY"` environment variable is defined.
 In a deployed data product, you might want to call `secret_has_key()` before any attempt to decrypt a secret.
 If the encryption key is not available, report that finding and arrange to do something graceful instead of erroring, especially in some cryptic, difficult-to-debug way.
-  
+
 #### Automatic skips
 
 The `secret_*` functions have a built-in feature such that, if they are called during testing, when the encryption key is unavailable, that test is skipped.
 That behaviour is implemented in the internal helper `secret_get_key()`, which looks something like this:
 
-```{r eval = FALSE}
+```r
 secret_get_key <- function(envvar) {
   key <- Sys.getenv(envvar)
-  
+
   if (identical(key, "")) {
     if (is_testing()) {
       msg <- glue("Env var {envvar} not defined.")

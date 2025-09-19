@@ -7,15 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = FALSE,
-  purl = FALSE
-)
-```
-
 Here we describe how to do auth with a package that uses gargle, without requiring any user interaction.
 This comes up in a wide array of contexts, ranging from simple rendering of a local R Markdown document to deploying a data product on a remote server.
 
@@ -56,7 +47,7 @@ When you embed tokens in the project and deploy, remember, that, by default, the
 TL;DR is that you need to successfully authenticate *once* in an interactive session and then, in your code, give gargle permission to use a token it finds in the cache.
 These sorts of commands achieve that:
 
-```{r}
+```r
 # Approach #1: use an option.
 # Either specify the user:
 options(gargle_oauth_email = "jenny@example.com")
@@ -102,7 +93,7 @@ GCE allows applications to get an OAuth access token from its metadata server an
 This token request can be made for specific scopes and, in general, most wrapper packages will indeed be asking for specific scopes relevant to the API they access.
 Consider the signature of `googledrive::drive_auth()`:
 
-```{r}
+```r
 drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
                        scopes = "https://www.googleapis.com/auth/drive",
@@ -124,7 +115,7 @@ Be aware that you might also need to explicitly grant the service account an app
 Finally, if you want to opt-out of using the default service account and, instead, auth as a normal user, even though you are on GCE, that is also possible.
 One way to achieve that is to remove `credentials_gce()` from the set of auth functions tried by `gargle::token_fetch()` by executing this command before any explicit or implicit auth happens:
 
-```{r}
+```r
 # removes `credentials_gce()` from gargle's registry
 gargle::cred_funs_add(credentials_gce = NULL)
 ```
@@ -178,7 +169,7 @@ Documentation around `GKEStartPodOperator()` within Cloud Composer can be found 
 
 Here is example code that you might execute in your Docker container:
 
-```{r}
+```r
 options(gargle.gce.use_ip = TRUE)
 t <- gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
 # ... do authenticated stuff with the token t ...
@@ -189,7 +180,7 @@ At the time of writing the `service_account` argument is not exposed in the usua
 So if you need to use a non-`default` service account, you need to call `credentials_gce()` directly and pass that token to `PKG_auth()`:
 Here's an example of how that might look:
 
-```{r}
+```r
 library(PKG)
 
 options(gargle.gce.use_ip = TRUE)
@@ -220,7 +211,7 @@ If you're not working in cloud context with automatic access to a service accoun
 
 Example using googledrive:
 
-```{r}
+```r
 library(googledrive)
 
 drive_auth(path = "/path/to/your/service-account-token.json")
@@ -253,7 +244,7 @@ Some details:
   It is also possible to get a token with an explicit call to, e.g.,
   `credentials_service_account()` and then pass that token to the auth function:
 
-```{r}
+```r
 t <- gargle::credentials_service_account(
   path = "/path/to/your/service-account-token.json",
   scopes = ...,
@@ -277,7 +268,7 @@ Your token should just get discovered upon first need.
 
 For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
-```{r}
+```r
 options(gargle_verbosity = "debug")
 ```
 
@@ -287,7 +278,7 @@ withr-style convenience helpers also exist: `with_gargle_verbosity()` and `local
 
 If you somehow have the OAuth token you want to use as an R object, you can provide it directly to the `token` argument of the main auth function. Example using googledrive:
 
-```{r}
+```r
 library(googledrive)
 
 my_oauth_token <- # some process that results in the token you want to use
@@ -298,7 +289,7 @@ gargle caches each OAuth user token it obtains to an `.rds` file, by default.
 If you know the filepath to the token you want to use, you could use `readRDS()` to read it and provide as the `token` argument to the wrapper's auth function.
 Example using googledrive:
 
-```{r}
+```r
 # googledrive
 drive_auth(token = readRDS("/path/to/your/oauth-token.rds"))
 ```
@@ -327,7 +318,7 @@ There are many ways to do this. We'll work several examples using that convey th
 
 **Step 1**: Get that first token. You must run your code at least once, interactively, do the auth dance, and allow gargle to store the token in its cache.
 
-```{r}
+```r
 library(googledrive)
 
 # do anything that triggers auth
@@ -353,37 +344,37 @@ You have two choices to make:
 
 This sets an option that allows gargle to use cached tokens whenever there's a unique match:
 
-```{r}
+```r
 options(gargle_oauth_email = TRUE)
 ```
 
 This sets an option to use tokens associated with a specific email address:
 
-```{r}
+```r
 options(gargle_oauth_email = "jenny@example.com")
 ```
 
 This sets an option to use tokens associated with an email address with a specific domain:
 
-```{r}
+```r
 options(gargle_oauth_email = "*@example.com")
 ```
 
 This gets a token *right now* and allows the use of a matching token, using googledrive as an example:
 
-```{r}
+```r
 drive_auth(email = TRUE)
 ```
 
 This gets a token *right now*, for the user with a specific email address:
 
-```{r}
+```r
 drive_auth(email = "jenny@example.com")
 ```
 
 This gets a token *right now*, first checking the cache for a token associated with a specific domain:
 
-```{r}
+```r
 drive_auth(email = "*@example.com")
 ```
 
@@ -394,7 +385,7 @@ This is like the previous example, but with an added twist: we use a project-lev
 **Step 1**: Obtain the token intended for non-interactive use and make sure it's cached in a (hidden) directory of the current project.
 Using googledrive as an example:
 
-```{r}
+```r
 library(googledrive)
 
 # designate project-specific cache
@@ -414,7 +405,7 @@ Do this setup once per project.
 
 Another way to accomplish the same setup is to specify the desired cache location directly in the call to the auth function:
 
-```{r}
+```r
 library(googledrive)
 
 # trigger auth on purpose --> store a token in the specified cache
@@ -423,7 +414,7 @@ drive_auth(cache = ".secrets")
 
 **Step 2**: In all downstream use, announce the location of the cache and pre-authorize the use of a suitable token discovered there. Continuing the googledrive example:
 
-```{r}
+```r
 library(googledrive)
 
 options(
@@ -442,7 +433,7 @@ Depending on the context, it might be suitable to accomplish this in a startup f
 Here's a variation where we say which token to use by explicitly specifying the associated email.
 This is handy if there's a reason to have more than one token in the cache.
 
-```{r}
+```r
 library(googledrive)
 
 options(
@@ -456,7 +447,7 @@ drive_find(n_max = 5)
 
 Here's another variation where we specify the necessary info directly in an auth call, instead of in options:
 
-```{r}
+```r
 library(googledrive)
 
 drive_auth(cache = ".secrets", email = TRUE)
@@ -467,7 +458,7 @@ drive_find(n_max = 5)
 
 Here's one last variation that's applicable when the local cache could contain multiple tokens:
 
-```{r}
+```r
 library(googledrive)
 
 drive_auth(cache = ".secrets", email = "jenny@example.com")
@@ -481,7 +472,7 @@ Personally I would use `here::here(".secrets)"` everywhere above, to make things
 
 For troubleshooting purposes, you can set a gargle option to see verbose output about the execution of `gargle::token_fetch()`:
 
-```{r}
+```r
 options(gargle_verbosity = "debug")
 ```
 
