@@ -9,6 +9,7 @@ template:
 
   includes:
     in_header: |
+      <script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script>
       <script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
 news:
@@ -19,61 +20,61 @@ news:
     href: https://www.tidyverse.org/blog/2019/08/gargle-hello-world/
 
 reference:
-  - title: "Fetching credentials"
-    desc: >
-      Load an existing token or obtain a new one
-    contents:
-      - token_fetch
-      - starts_with("credentials")
-      - gargle_oauth_sitrep
-      - starts_with("cred_funs")
-      - starts_with("gargle_oauth_client")
-      - starts_with("token")
-      - gce_instance_service_accounts
-      - gargle_secret
-  - title: "Requests and responses"
-    desc: >
-      Helpers for forming HTTP requests and processing the response
-    contents:
-      - starts_with("request")
-      - starts_with("response")
-      - field_mask
-  - title: "Classes"
-    desc: >
-      Classes to represent a token or auth state and their constructors
-    contents:
-      - Gargle2.0
-      - gargle2.0_token
-      - AuthState
-      - init_AuthState
-  - title: "Options"
-    contents:
-      - gargle_options
-  - title: "Demo assets"
-    desc: >
-      Assets to aid experimentation during development (not for production use!)
-    contents:
-      - gargle_api_key
+- title: "Fetching credentials"
+  desc: >
+    Load an existing token or obtain a new one
+  contents:
+  - token_fetch
+  - starts_with("credentials")
+  - gargle_oauth_sitrep
+  - starts_with("cred_funs")
+  - starts_with("gargle_oauth_client")
+  - starts_with("token")
+  - gce_instance_service_accounts
+  - gargle_secret
+- title: "Requests and responses"
+  desc: >
+    Helpers for forming HTTP requests and processing the response
+  contents:
+  - starts_with("request")
+  - starts_with("response")
+  - field_mask
+- title: "Classes"
+  desc: >
+    Classes to represent a token or auth state and their constructors
+  contents:
+  - Gargle2.0
+  - gargle2.0_token
+  - AuthState
+  - init_AuthState
+- title: "Options"
+  contents:
+  - gargle_options
+- title: "Demo assets"
+  desc: >
+    Assets to aid experimentation during development (not for production use!)
+  contents:
+  - gargle_api_key
 
 articles:
-  - title: For users of packages that use gargle for auth
-    navbar: ~
-    contents:
-    - non-interactive-auth
-    - troubleshooting
-    - auth-from-web
-    - get-api-credentials
+- title: For users of packages that use gargle for auth
+  navbar:
+  contents:
+  - non-interactive-auth
+  - troubleshooting
+  - auth-from-web
+  - get-api-credentials
 
-  - title: For package developers and advanced users
-    contents:
-    - how-gargle-gets-tokens
-    - gargle-auth-in-client-package
-    - oauth-client-not-app
-    - articles/managing-tokens-securely
-    - request-helper-functions
+- title: For package developers and advanced users
+  contents:
+  - how-gargle-gets-tokens
+  - gargle-auth-in-client-package
+  - oauth-client-not-app
+  - articles/managing-tokens-securely
+  - request-helper-functions
 
-  - title: Gargle development
-    desc: Internal development notes
-    contents:
-    - articles/google-compute-engine
+- title: Gargle development
+  desc: Internal development notes
+  contents:
+  - articles/google-compute-engine
 
