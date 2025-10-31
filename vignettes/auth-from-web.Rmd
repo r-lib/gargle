@@ -98,7 +98,7 @@ Packages like googledrive and bigrquery aim to make auth "just work" for most us
 However, it is always possible to initiate auth yourself, which gives you the opportunity to specify non-default values of certain parameters.
 Here's how you could request OOB auth, using googledrive as an example:
 
-```{r eval = FALSE}
+```r
 library(googledrive)
 
 drive_auth(use_oob = TRUE)
@@ -111,7 +111,7 @@ drive_find(n_max = 5)
 
 If you know that you *always* want to use OOB, as a user or within a project, the best way to express this is to set the `"gargle_oob_default"` option.
 
-```{r eval = FALSE}
+```r
 options(gargle_oob_default = TRUE)
 ```
 
@@ -187,7 +187,7 @@ If we are using OOB auth, the decision between conventional or pseudo-OOB is mad
 Packages that use a built-in tidyverse OAuth client (googledrive, googlesheets4, and bigrquery) should automatically select a "web" client on RStudio Server, Posit Cloud, Posit Workbench, and Google Colaboratory and an "installed" client otherwise.
 If you need to explicitly request a "web" client in some other setting, you can use the global option `"gargle_oauth_client_type"`:
 
-```{r eval = FALSE}
+```r
 options(gargle_oauth_client_type = "web")
 ```
 
