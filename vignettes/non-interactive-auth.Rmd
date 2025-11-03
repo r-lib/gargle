@@ -94,12 +94,16 @@ This token request can be made for specific scopes and, in general, most wrapper
 Consider the signature of `googledrive::drive_auth()`:
 
 ```r
-drive_auth <- function(email = gargle::gargle_oauth_email(),
-                       path = NULL,
-                       scopes = "https://www.googleapis.com/auth/drive",
-                       cache = gargle::gargle_oauth_cache(),
-                       use_oob = gargle::gargle_oob_default(),
-                       token = NULL) { ... }
+drive_auth <- function(
+  email = gargle::gargle_oauth_email(),
+  path = NULL,
+  scopes = "https://www.googleapis.com/auth/drive",
+  cache = gargle::gargle_oauth_cache(),
+  use_oob = gargle::gargle_oob_default(),
+  token = NULL
+) {
+  ...
+}
 ```
 
 The googledrive package asks for a token with `"drive"` scope, by default.
@@ -171,7 +175,9 @@ Here is example code that you might execute in your Docker container:
 
 ```r
 options(gargle.gce.use_ip = TRUE)
-t <- gargle::credentials_gce("my-service-key@my-project.iam.gserviceaccount.com")
+t <- gargle::credentials_gce(
+  "my-service-key@my-project.iam.gserviceaccount.com"
+)
 # ... do authenticated stuff with the token t ...
 ```
 
@@ -250,7 +256,7 @@ t <- gargle::credentials_service_account(
   scopes = ...,
   subject = "user@example.com"
 )
-googledrive::dive_auth(token = t)
+googledrive::drive_auth(token = t)
 ```
 
 If delegation of domain-wide authority is impossible or unappealing, you must use an OAuth user token, as described below.
