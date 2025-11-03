@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* In vignettes, convert all `{r eval=FALSE}` chunks to plain `r` chunks to prevent any chance of vignette code evaluation while maintaining R syntax highlighting (#301, @tanho63)
+
 # gargle 1.6.0
 
 * When retrying a request, the messaging reveals more detail about the failed
