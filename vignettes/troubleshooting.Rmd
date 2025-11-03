@@ -75,12 +75,12 @@ If you are using (or struggling to use) a service account token, workload identi
 
 Here is indicative output of `gargle_oauth_sitrep()`, for someone who has accepted the default OAuth cache location and has played with several APIs via gargle-using packages.
 
-```r
+```{r, eval = FALSE}
 gargle_oauth_sitrep()
 #' > 14 tokens found in this gargle OAuth cache:
 #' '~/Library/Caches/gargle'
-#'
-#' email                         app         scope                          hash...
+#' 
+#' email                         app         scope                          hash...   
 #' ----------------------------- ----------- ------------------------------ ----------
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
@@ -140,7 +140,7 @@ Anyone relying on the default client will have to upgrade.*
 
 The solution is to update the package in question, e.g. googlesheets4:
 
-```r
+```{r eval = FALSE}
 install.packages("googlesheets4")
 ```
 
@@ -192,7 +192,7 @@ Unable to refresh token, because the associated OAuth app has been deleted
 ```
 
 ## How to avoid auth pain
-
+ 
 If you have rigged some remote mission critical thing (e.g. a Shiny app or cron job) to use a cached user OAuth token, one day, one of the problems described above will happen and your mission critical token will stop working.
 Your thing (e.g. the Shiny app or cron job) will mysteriously fail because the OAuth token can't be refreshed and a new token can't be obtained in a non-interactive setting.
 This is why cached user tokens are a poor fit for such applications.

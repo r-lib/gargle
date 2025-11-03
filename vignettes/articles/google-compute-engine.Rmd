@@ -5,7 +5,8 @@ title: "Google Compute Engine"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -35,7 +36,7 @@ I have done the required setup for this package:
 
 Having done this setup, this is how attaching the package looks:
 
-```r
+```{r}
 library(googleComputeEngineR)
 #> ✔ Setting scopes to https://www.googleapis.com/auth/cloud-platform
 #> ✔ Successfully auto-authenticated via /path/to/that/json/mentioned/above.json
@@ -49,7 +50,7 @@ I don't think this has any direct connection to instance scopes for VMs created 
 
 You can see your current instances with `gce_list_instances()`:
 
-```r
+```{r}
 gce_list_instances()
 #> ==Google Compute Engine Instance List==
 #>                        name   machineType     status       zone     externalIP   creationTimestamp
@@ -65,7 +66,7 @@ The above reflects how things look after I've been mucking around a bit and have
 
 Here's my basic way of creating a VM:
 
-```r
+```{r}
 vm <- gce_vm(
   template = "rstudio",
   name = "cerebral-lion",
@@ -79,22 +80,22 @@ I can no longer remember why I settled on `predefined_type = "e2-standard-4"`.
 
 Here's what you'll see:
 
-```r
+```{r}
 #> ── ## VM Template: ' rstudio' running at http://{IP_ADDRESS} ─────────────────────────────────────────────────────
 #> ℹ 2023-04-13 12:03:05 > On first boot, wait a few minutes for docker container to install before logging in.
 #> ==Google Compute Engine Instance==
-#>
+#> 
 #> Name:                cerebral-lion
 #> Created:             2023-04-13 12:02:44
 #> Machine Type:        e2-standard-4
 #> Status:              RUNNING
 #> Zone:                us-west1-a
 #> External IP:         {IP_ADDRESS}
-#> Disks:
+#> Disks: 
 #>                deviceName       type       mode boot autoDelete
 #> 1 cerebral-lion-boot-disk PERSISTENT READ_WRITE TRUE       TRUE
-#>
-#> Metadata:
+#> 
+#> Metadata:  
 #>                      key            value
 #> 2               template          rstudio
 #> 3 google-logging-enabled             true
@@ -106,7 +107,7 @@ Here's what you'll see:
 You can then log in to RStudio Server at the given `{IP_ADDRESS}`.
 Helpful snippets for getting that on the clipboard:
 
-```r
+```{r}
 # if you, e.g., just created `vm`
 paste0("http://", gce_get_external_ip(vm)) |>
   clipr::write_clip()
@@ -119,7 +120,7 @@ paste0("http://", gce_get_external_ip("cerebral-lion")) |>
 Under the hood, googleComputeEngineR is inserting its own default choices for the associated service account and scopes.
 It's actually as if you had done:
 
-```r
+```{r}
 gce_vm(
   ...,
   serviceAccounts = list(
@@ -138,21 +139,21 @@ To learn more: <https://cloud.google.com/compute/docs/access/create-enable-servi
 Log in to RStudio Server in the VM (see above for getting the IP address).
 First, for my current exploration, I want to install gargle from a specific branch:
 
-```r
+```{r}
 install.packages("pak")
 pak::pak("r-lib/gargle@gce-improvements")
 ```
 
 Now attach gargle and set verbosity level to `"debug"`.
 
-```r
+```{r}
 library(gargle)
 local_gargle_verbosity("debug")
 ```
 
 Let's look at the service accounts available to this running instance:
 
-```r
+```{r}
 gce_instance_service_accounts()
 #>                                     name                                  email aliases
 #> 1 {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} default
@@ -168,7 +169,7 @@ So there will only ever be 1 actual service account identify, but you might see 
 
 Let's get a token with `token_fetch()` and inspect it.
 
-```r
+```{r}
 t <- token_fetch()
 #> trying `token_fetch()`
 #> ...
@@ -179,7 +180,7 @@ t <- token_fetch()
 #> GCE service account name: "default"
 #> GCE access token scopes: "...cloud-platform"
 t
-#>
+#> 
 #> ── <GceToken (via gargle)> ──────────────────────────────────────────────────────────────────────────────────────────────────────
 #>      scopes: ...cloud-platform
 #> credentials: access_token, expires_in, token_type
@@ -189,7 +190,7 @@ By default, `credentials_gce()` uses the `default` service account and the `"clo
 
 What if we want to do something with the Google Drive API and we request that scope?
 
-```r
+```{r}
 t <- token_fetch(c(
   "https://www.googleapis.com/auth/cloud-platform",
   "https://www.googleapis.com/auth/drive"
@@ -211,7 +212,7 @@ t <- token_fetch(c(
 #> GCE service account name: "default"
 #> GCE access token scopes: "...cloud-platform"
 t
-#>
+#> 
 #> ── <GceToken (via gargle)> ──────────────────────────────────────────────────────────────────────────────────────────────────────
 #>      scopes: ...cloud-platform
 #> credentials: access_token, expires_in, token_type
@@ -223,7 +224,7 @@ We get a token, but still with only the `"cloud-platform"` scope, because the Dr
 
 And, indeed, this lack of an explicit Drive scope means that, e.g., the googledrive package can't do operations that require auth:
 
-```r
+```{r}
 library(googledrive)
 drive_find()
 #> attempt to access internal gargle data from: googledrive
@@ -251,7 +252,7 @@ If you're not actively working on the VM, you should at least suspend it.
 Then you could resume it to pick up where you left off.
 To ensure that you aren't incurring any charges, you should stop the machine, but then you'll have to start over if you've, e.g., installed dev packages or downloaded/created any files.
 
-```r
+```{r}
 gce_vm_suspend("cerebral-lion")
 gce_vm_resume("cerebral-lion")
 gce_vm_stop("cerebral-lion")
@@ -260,7 +261,7 @@ gce_vm_stop("cerebral-lion")
 It's a good idea to check that you've done whatever you intended with the instance.
 Check its status here:
 
-```r
+```{r}
 gce_list_instances()
 #> ==Google Compute Engine Instance List==
 #>                        name   machineType     status       zone     externalIP   creationTimestamp
@@ -278,7 +279,7 @@ AFAICT googleComputeEngineR only helps you set scopes at the time of VM creation
 It seems possible to change scopes for pre-existing instance as long as it is stopped, so maybe that could be a feature request for googleComputeEngineR (or maybe I'm overlooking that there's already a way to do this).
 Further reading: <https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#changeserviceaccountandscopes>.
 
-```r
+```{r}
 vm <- gce_vm(
   template = "rstudio",
   name = "trustful-bull",
@@ -300,7 +301,7 @@ vm <- gce_vm(
 I get the IP address, log in to RStudio Server, and install the desired version of gargle (not shown).
 `gce_instance_service_accounts()` shows that we have, in fact, managed to change the `scopes` available to the default service account:
 
-```r
+```{r}
 gce_instance_service_accounts()
 #>                                     name                                  email aliases
 #> 1 {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} default
@@ -313,7 +314,7 @@ gce_instance_service_accounts()
 We see this in actual tokens as well.
 Note that we get `"drive"` scope *even if we don't ask for it*.
 
-```r
+```{r}
 t <- token_fetch()
 #> trying `token_fetch()`
 #> ...
@@ -327,7 +328,7 @@ t <- token_fetch()
 #> GCE service account name: "default"
 #> GCE access token scopes: "...cloud-platform, ...drive"
 t
-#>
+#> 
 #> ── <GceToken (via gargle)> ──────────────────────────────────────────────────────────────────────────────────────────────────────
 #>      scopes: ...cloud-platform, ...drive
 #> credentials: access_token, expires_in, token_type
@@ -335,7 +336,7 @@ t
 
 And, as one would expect, it's now possible to work with the googledrive package.
 
-```r
+```{r}
 library(googledrive)
 drive_find()
 #> # A dribble: 0 × 3
