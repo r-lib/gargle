@@ -110,7 +110,7 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 sort(vapply(out, function(x) x[["family"]], character(1)))
-#> [1] "Inter"          "Lato"           "Material Icons" "Montserrat"
+#> [1] "Inter"          "Lato"           "Material Icons" "Montserrat"    
 #> [5] "Noto Sans JP"   "Open Sans"      "Poppins"        "Roboto"
 ```
 
