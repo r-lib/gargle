@@ -161,8 +161,8 @@ with several APIs via gargle-using packages.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#' &gt; 14 tokens found in this gargle OAuth cache:</span></span>
 <span><span class="co">#' '~/Library/Caches/gargle'</span></span>
-<span><span class="co">#' </span></span>
-<span><span class="co">#' email                         app         scope                          hash...   </span></span>
+<span><span class="co">#'</span></span>
+<span><span class="co">#' email                         app         scope                          hash...</span></span>
 <span><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></span>
 <span><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></span>
 <span><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></span>
@@ -251,9 +251,7 @@ might see this in the browser, while R is waiting to receive input:</p>
 Error 401: deleted_client
 The OAuth client was deleted.</code></pre>
 <p>It might look something like this:</p>
-<p>&lt;img src=“deleted_client.png” alt=“Screenshot with the following
-text:”Google”, “Authorization Error”, “Error 401: deleted_client”, “The
-OAuth client was deleted.”” width=“400px” /&gt;</p>
+<p><img src="deleted_client.png" alt="Screenshot with the following text: 'Google', 'Authorization Error', 'Error 401: deleted_client', 'The OAuth client was deleted.'" width="400px"></p>
 <p>As of gargle version v1.1.0, we’re trying harder to recognize this
 specific problem and to provide a more detailed and actionable error
 message:</p>
