@@ -34,12 +34,12 @@ If you attempt to do conventional OOB auth with a client that no longer supports
 #|   Access blocked: Tidyverse API Packages's request is invalid.
 #|   Error 400: invalid_request
 #| fig-alt: >
-#|   Screenshot with the following text: "Access blocked: Tidyverse API
-#|   Packages's request is invalid", "You can't sign in because Tidyverse API
+#|   Screenshot with the following text: 'Access blocked: Tidyverse API
+#|   Packages's request is invalid', 'You can't sign in because Tidyverse API
 #|   Packages sent an invalid request. You can try again later, or contact the
-#|   developer about this issue. Learn more about this error", "If you are a
-#|   developer of Tidyverse API Packages, see error details.", "Error 400:
-#|   invalid_request".
+#|   developer about this issue. Learn more about this error', 'If you are a
+#|   developer of Tidyverse API Packages, see error details.', 'Error 400:
+#|   invalid_request'.
 knitr::include_graphics("invalid_request.png")
 ```
 
