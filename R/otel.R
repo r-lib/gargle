@@ -28,12 +28,12 @@ modify_binding <- function(env, lst) {
 }
 
 otel_local_active_span <- function(
-    name,
-    attributes = list(),
-    links = NULL,
-    options = NULL,
-    return_ctx = FALSE,
-    scope = parent.frame()
+  name,
+  attributes = list(),
+  links = NULL,
+  options = NULL,
+  return_ctx = FALSE,
+  scope = parent.frame()
 ) {
   otel_is_tracing || return()
   otel::start_local_active_span(
