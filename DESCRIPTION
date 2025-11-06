@@ -33,6 +33,7 @@ Imports:
     utils,
     withr
 Suggests: 
+    R6,
     aws.ec2metadata,
     aws.signature,
     covr,
