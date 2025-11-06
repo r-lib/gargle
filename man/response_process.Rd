@@ -72,10 +72,9 @@ input is returned in the condition (auth tokens are removed).
 When \code{remember = TRUE} (the default), gargle stores the most recently seen
 response internally, for \emph{post hoc} examination. The stored response is
 literally just the most recent \code{resp} input, but with auth tokens redacted.
-It can be accessed via the unexported function
-\code{gargle:::gargle_last_response()}. A companion function
-\code{gargle:::gargle_last_content()} returns the content of the last response,
-which is probably the most useful form for \emph{post mortem} analysis.
+It can be accessed via \code{\link[=gargle_last_response]{gargle_last_response()}}. A companion function
+\code{\link[=gargle_last_content]{gargle_last_content()}} returns the just the parsed content, which is
+probably the most useful form for \emph{post mortem} analysis.
 
 The \code{response_as_json()} helper is exported only as an aid to maintainers who
 wish to use their own \code{error_message} function, instead of gargle's built-in

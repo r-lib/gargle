@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* `gargle_last_response()` and `gargle_last_content()` are newly exported.
+
 * In vignettes, convert all `{r eval=FALSE}` chunks to plain `r` chunks to prevent any chance of vignette code evaluation while maintaining R syntax highlighting (#301, @tanho63)
 
 # gargle 1.6.0
