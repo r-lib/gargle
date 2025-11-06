@@ -318,7 +318,7 @@ e.g. an HTTP status &gt;= 400.</p>
 <span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lr</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu">gargle_last_response</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">lr</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu"><a href="../reference/internal-last-response.html">gargle_last_response</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"gargle-last-response-"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">lr</span>, <span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co"># you could share this .rds file with a colleague or the gargle maintainer</span></span>
