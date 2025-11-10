@@ -115,6 +115,42 @@ test_that("Request to bad URL (tokeninfo, HTML content)", {
   )
 })
 
+# error_class parameter ----
+test_that("error_class parameter adds custom classes", {
+  rds_file <- test_path(
+    "fixtures",
+    "drive-files-get-nonexistent-file-id_404.rds"
+  )
+  resp <- readRDS(rds_file)
+
+  # Without error_class, we get default classes
+  err <- tryCatch(
+    response_process(resp),
+    gargle_error_request_failed = function(e) e
+  )
+  klass <- class(err)
+  expect_equal(
+    klass[1:3],
+    c("gargle_error_request_failed", "http_error_404", "gargle_error")
+  )
+
+  err_custom <- tryCatch(
+    response_process(resp, error_class = c("custom_error1", "custom_error2")),
+    custom_error1 = function(e) e
+  )
+  klass <- class(err_custom)
+  expect_equal(
+    klass[1:5],
+    c(
+      "custom_error1",
+      "custom_error2",
+      "gargle_error_request_failed",
+      "http_error_404",
+      "gargle_error"
+    )
+  )
+})
+
 # helpers ----
 test_that("RPC codes can be looked up (or not)", {
   expect_match(

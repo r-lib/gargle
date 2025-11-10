@@ -9,6 +9,7 @@
 response_process(
   resp,
   error_message = gargle_error_message,
+  error_class = NULL,
   remember = TRUE,
   call = caller_env()
 )
@@ -22,6 +23,10 @@ gargle_error_message(resp, call = caller_env())
 
 \item{error_message}{Function that produces an informative error message from
 the primary input, \code{resp}. It must return a character vector.}
+
+\item{error_class}{Optional character vector of error classes to add to the
+condition object. These classes are prepended to gargle's default classes
+(\code{"gargle_error_request_failed"} and \code{"http_error_{status_code}"}).}
 
 \item{remember}{Whether to remember the most recently processed response.}
 

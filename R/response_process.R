@@ -38,6 +38,9 @@
 #' @param resp Object of class `response` from [httr].
 #' @param error_message Function that produces an informative error message from
 #'   the primary input, `resp`. It must return a character vector.
+#' @param error_class Optional character vector of error classes to add to the
+#'   condition object. These classes are prepended to gargle's default classes
+#'   (`"gargle_error_request_failed"` and `"http_error_{status_code}"`).
 #' @param remember Whether to remember the most recently processed response.
 #' @inheritParams rlang::abort
 #'
@@ -73,6 +76,7 @@
 response_process <- function(
   resp,
   error_message = gargle_error_message,
+  error_class = NULL,
   remember = TRUE,
   call = caller_env()
 ) {
@@ -92,6 +96,7 @@ response_process <- function(
     gargle_abort_request_failed(
       error_message(resp, call = call),
       resp,
+      class = error_class,
       call = call
     )
   }
@@ -124,12 +129,14 @@ check_for_json <- function(resp, call = caller_env()) {
 gargle_abort_request_failed <- function(
   message,
   resp,
+  class = NULL,
   .envir = caller_env(),
   call = caller_env()
 ) {
   gargle_abort(
     message,
     class = c(
+      class,
       "gargle_error_request_failed",
       glue("http_error_{httr::status_code(resp)}")
     ),
