@@ -38,6 +38,7 @@
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle2.0_token.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle_api_key.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle_client.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/reference/gargle_last_response.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle_map_cli.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.html</loc></url>
@@ -48,7 +49,6 @@
 <url><loc>https://gargle.r-lib.org/dev/reference/index.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/init_AuthState.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/internal-assets.html</loc></url>
-<url><loc>https://gargle.r-lib.org/dev/reference/internal-last-response.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/oauth_app_from_json.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/oauth_external_token.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/reference/request_develop.html</loc></url>

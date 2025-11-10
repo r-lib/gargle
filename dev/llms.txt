@@ -1,0 +1,253 @@
+# gargle
+
+The goal of gargle is to take some of the agonizing pain out of working
+with Google APIs. This includes functions and classes for handling
+common credential types and for preparing, executing, and processing
+HTTP requests.
+
+The target user of gargle is an *R package author* who is wrapping one
+of the ~250 Google APIs listed in the [APIs
+Explorer](https://developers.google.com/apis-explorer). gargle aims to
+play roughly the same role as [Google’s official client
+libraries](https://developers.google.com/api-client-library/), but for
+R. gargle may also be useful to useRs making direct calls to Google
+APIs, who are prepared to navigate the details of low-level API access.
+
+gargle’s functionality falls into two main domains:
+
+- **Auth.** The
+  [`token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md)
+  function calls a series of concrete credential-fetching functions to
+  obtain a valid access token (or it quietly dies trying).
+  - This covers explicit service accounts, application default
+    credentials, Google Compute Engine, (experimentally) workload
+    identity federation, and the standard OAuth2 browser flow.
+  - gargle offers the `Gargle2.0` class, which extends
+    [`httr::Token2.0`](https://httr.r-lib.org/reference/Token-class.html).
+    It is the default class for user OAuth 2.0 credentials. There are
+    two main differences from
+    [`httr::Token2.0`](https://httr.r-lib.org/reference/Token-class.html):
+    greater emphasis on the user’s email (e.g. Google identity) and
+    default token caching is at the user level.
+- **Requests and responses**. A family of functions helps to prepare
+  HTTP requests, (possibly with reference to an API spec derived from a
+  Discovery Document), make requests, and process the response.
+
+See the [articles](https://gargle.r-lib.org/articles/) for holistic
+advice on how to use gargle.
+
+## Installation
+
+You can install the released version of gargle from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("gargle")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("r-lib/gargle")
+```
+
+## Basic usage
+
+gargle is a low-level package and does not do anything visibly exciting
+on its own. But here’s a bit of usage in an interactive scenario where a
+user confirms they want to use a specific Google identity and loads an
+OAuth2 token.
+
+``` r
+library(gargle)
+
+token <- token_fetch()
+#> The gargle package is requesting access to your Google account.
+#> Enter '1' to start a new auth process or select a pre-authorized account.
+#> 1: Send me to the browser for a new auth process.
+#> 2: janedoe_personal@gmail.com
+#> 3: janedoe@example.com
+#> Selection: 2
+
+token
+#> ── <Token (via gargle)> ─────────────────────────────────────────────────────
+#> oauth_endpoint: google
+#>            app: gargle-clio
+#>          email: janedoe_personal@gmail.com
+#>         scopes: ...userinfo.email
+#>    credentials: access_token, expires_in, refresh_token, scope, token_type, id_token
+```
+
+Here’s an example of using request and response helpers to make a
+one-off request to the [Web Fonts Developer
+API](https://developers.google.com/fonts/docs/developer_api). We show
+the most popular web font families served by Google Fonts.
+
+``` r
+library(gargle)
+
+req <- request_build(
+  method = "GET",
+  path = "webfonts/v1/webfonts",
+  params = list(
+    sort = "popularity"
+  ),
+  key = gargle_api_key(),
+  base_url = "https://www.googleapis.com"
+)
+resp <- request_make(req)
+out <- response_process(resp)
+
+out <- out[["items"]][1:8]
+sort(vapply(out, function(x) x[["family"]], character(1)))
+#> [1] "Inter"          "Lato"           "Material Icons" "Montserrat"    
+#> [5] "Noto Sans JP"   "Open Sans"      "Poppins"        "Roboto"
+```
+
+Please note that the ‘gargle’ project is released with a [Contributor
+Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
+
+[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+
+# Package index
+
+## Fetching credentials
+
+Load an existing token or obtain a new one
+
+- [`token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md)
+  : Fetch a token for the given scopes
+- [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
+  : Load Application Default Credentials
+- [`credentials_byo_oauth2()`](https://gargle.r-lib.org/dev/reference/credentials_byo_oauth2.md)
+  : Load a user-provided token
+- [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md)
+  **\[experimental\]** : Get a token for an external account
+- [`credentials_gce()`](https://gargle.r-lib.org/dev/reference/credentials_gce.md)
+  : Get a token from the Google metadata server
+- [`credentials_service_account()`](https://gargle.r-lib.org/dev/reference/credentials_service_account.md)
+  : Load a service account token
+- [`credentials_user_oauth2()`](https://gargle.r-lib.org/dev/reference/credentials_user_oauth2.md)
+  : Get an OAuth token for a user
+- [`gargle_oauth_sitrep()`](https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.md)
+  : OAuth token situation report
+- [`cred_funs_list()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`cred_funs_add()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`cred_funs_set()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`cred_funs_clear()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`cred_funs_list_default()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`cred_funs_set_default()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`local_cred_funs()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  [`with_cred_funs()`](https://gargle.r-lib.org/dev/reference/cred_funs.md)
+  : Credential function registry
+- [`gargle_oauth_client_from_json()`](https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.md)
+  [`gargle_oauth_client()`](https://gargle.r-lib.org/dev/reference/gargle_oauth_client_from_json.md)
+  : Create an OAuth client for Google
+- [`gargle_oauth_email()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oob_default()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oauth_client_type()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`local_gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`with_gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  : Options consulted by gargle
+- [`token_userinfo()`](https://gargle.r-lib.org/dev/reference/token-info.md)
+  [`token_email()`](https://gargle.r-lib.org/dev/reference/token-info.md)
+  [`token_tokeninfo()`](https://gargle.r-lib.org/dev/reference/token-info.md)
+  : Get info from a token
+- [`gce_instance_service_accounts()`](https://gargle.r-lib.org/dev/reference/gce_instance_service_accounts.md)
+  : List all service accounts available on this GCE instance
+- [`secret_encrypt_json()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  [`secret_decrypt_json()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  [`secret_make_key()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  [`secret_write_rds()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  [`secret_read_rds()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  [`secret_has_key()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
+  : Encrypt/decrypt JSON or an R object
+
+## Requests and responses
+
+Helpers for forming HTTP requests and processing the response
+
+- [`request_develop()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
+  [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
+  : Build a Google API request
+- [`request_make()`](https://gargle.r-lib.org/dev/reference/request_make.md)
+  : Make a Google API request
+- [`request_retry()`](https://gargle.r-lib.org/dev/reference/request_retry.md)
+  : Make a Google API request, repeatedly
+- [`response_process()`](https://gargle.r-lib.org/dev/reference/response_process.md)
+  [`response_as_json()`](https://gargle.r-lib.org/dev/reference/response_process.md)
+  [`gargle_error_message()`](https://gargle.r-lib.org/dev/reference/response_process.md)
+  : Process a Google API response
+- [`field_mask()`](https://gargle.r-lib.org/dev/reference/field_mask.md)
+  : Generate a field mask
+
+## Classes
+
+Classes to represent a token or auth state and their constructors
+
+- [`Gargle-class`](https://gargle.r-lib.org/dev/reference/Gargle-class.md)
+  [`Gargle2.0`](https://gargle.r-lib.org/dev/reference/Gargle-class.md)
+  : OAuth2 token objects specific to Google APIs
+- [`gargle2.0_token()`](https://gargle.r-lib.org/dev/reference/gargle2.0_token.md)
+  : Generate a gargle token
+- [`AuthState-class`](https://gargle.r-lib.org/dev/reference/AuthState-class.md)
+  [`AuthState`](https://gargle.r-lib.org/dev/reference/AuthState-class.md)
+  : Authorization state
+- [`init_AuthState()`](https://gargle.r-lib.org/dev/reference/init_AuthState.md)
+  : Create an AuthState
+
+## Options
+
+- [`gargle_oauth_email()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oob_default()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_oauth_client_type()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`local_gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  [`with_gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+  : Options consulted by gargle
+
+## Demo assets
+
+Assets to aid experimentation during development (not for production
+use!)
+
+- [`gargle_api_key()`](https://gargle.r-lib.org/dev/reference/gargle_api_key.md)
+  : API key for demonstration purposes
+
+# Articles
+
+### For users of packages that use gargle for auth
+
+- [Non-interactive
+  auth](https://gargle.r-lib.org/dev/articles/non-interactive-auth.md):
+- [Troubleshooting gargle
+  auth](https://gargle.r-lib.org/dev/articles/troubleshooting.md):
+- [Auth when using R from the
+  browser](https://gargle.r-lib.org/dev/articles/auth-from-web.md):
+- [How to get your own API
+  credentials](https://gargle.r-lib.org/dev/articles/get-api-credentials.md):
+
+### For package developers and advanced users
+
+- [How gargle gets
+  tokens](https://gargle.r-lib.org/dev/articles/how-gargle-gets-tokens.md):
+- [How to use gargle for auth in a client
+  package](https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.md):
+- [Transition from OAuth app to OAuth
+  client](https://gargle.r-lib.org/dev/articles/oauth-client-not-app.md):
+- [Managing tokens
+  securely](https://gargle.r-lib.org/dev/articles/managing-tokens-securely.md):
+- [Request helper
+  functions](https://gargle.r-lib.org/dev/articles/request-helper-functions.md):
+
+### Gargle development
+
+Internal development notes
+
+- [Google Compute
+  Engine](https://gargle.r-lib.org/dev/articles/google-compute-engine.md):

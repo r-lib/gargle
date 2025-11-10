@@ -251,7 +251,7 @@ might see this in the browser, while R is waiting to receive input:</p>
 Error 401: deleted_client
 The OAuth client was deleted.</code></pre>
 <p>It might look something like this:</p>
-<p><img src="deleted_client.png" alt="Screenshot with the following text: 'Google', 'Authorization Error', 'Error 401: deleted_client', 'The OAuth client was deleted.'" width="400px"></p>
+<p><img src="deleted_client.png" class="r-plt" alt="Screenshot with the following text: 'Google', 'Authorization Error', 'Error 401: deleted_client', 'The OAuth client was deleted.'" width="400px"></p>
 <p>As of gargle version v1.1.0, we’re trying harder to recognize this
 specific problem and to provide a more detailed and actionable error
 message:</p>
@@ -318,7 +318,7 @@ e.g. an HTTP status &gt;= 400.</p>
 <span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lr</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu"><a href="../reference/internal-last-response.html">gargle_last_response</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">lr</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">:::</span><span class="fu"><a href="../reference/gargle_last_response.html">gargle_last_response</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"gargle-last-response-"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">lr</span>, <span class="va">tmp</span><span class="op">)</span></span>
 <span><span class="co"># you could share this .rds file with a colleague or the gargle maintainer</span></span>
@@ -345,7 +345,7 @@ e.g. an HTTP status &gt;= 400.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>

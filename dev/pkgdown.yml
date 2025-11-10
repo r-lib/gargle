@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   auth-from-web: auth-from-web.html
@@ -12,7 +12,7 @@ articles:
   oauth-client-not-app: oauth-client-not-app.html
   request-helper-functions: request-helper-functions.html
   troubleshooting: troubleshooting.html
-last_built: 2025-11-06T21:17Z
+last_built: 2025-11-10T20:48Z
 urls:
   reference: https://gargle.r-lib.org/reference
   article: https://gargle.r-lib.org/articles
