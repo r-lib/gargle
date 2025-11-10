@@ -19,8 +19,7 @@ recent response or an empty list if unavailable.
 }
 \description{
 These functions give access to the most recent response processed by
-\code{\link[=response_process]{response_process()}} (if the argument \code{remember = TRUE}, which is the
-default). They can be useful for \emph{post mortem} analysis of puzzling or
-failed API interactions.
+\code{\link[=response_process]{response_process(..., remember = TRUE)}}. They can be
+useful for \emph{post mortem} analysis of puzzling or failed API interactions.
 }
 \keyword{internal}

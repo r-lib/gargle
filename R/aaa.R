@@ -17,9 +17,8 @@ gargle_env$last_response <- list()
 #' Access the last response
 #'
 #' These functions give access to the most recent response processed by
-#' [response_process()] (if the argument `remember = TRUE`, which is the
-#' default). They can be useful for *post mortem* analysis of puzzling or
-#' failed API interactions.
+#' [`response_process(..., remember = TRUE)`][response_process()]. They can be
+#' useful for *post mortem* analysis of puzzling or failed API interactions.
 #'
 #' @returns
 #'   * `gargle_last_response()` returns the most recent [httr::response()]
@@ -29,13 +28,12 @@ gargle_env$last_response <- list()
 #'
 #' @keywords internal
 #' @export
-#' @rdname internal-last-response
 gargle_last_response <- function() {
   gargle_env$last_response
 }
 
 #' @export
-#' @rdname internal-last-response
+#' @rdname gargle_last_response
 gargle_last_content <- function() {
   resp <- gargle_last_response()
   if (inherits(resp, "response")) {
