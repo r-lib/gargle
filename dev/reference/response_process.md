@@ -36,6 +36,7 @@ If `process_response()` results in an error, a redacted version of the
 response_process(
   resp,
   error_message = gargle_error_message,
+  error_class = NULL,
   remember = TRUE,
   call = caller_env()
 )
@@ -56,6 +57,12 @@ gargle_error_message(resp, call = caller_env())
 
   Function that produces an informative error message from the primary
   input, `resp`. It must return a character vector.
+
+- error_class:
+
+  Optional character vector of error classes to add to the condition
+  object. These classes are prepended to gargle's default classes
+  (`"gargle_error_request_failed"` and `"http_error_{status_code}"`).
 
 - remember:
 

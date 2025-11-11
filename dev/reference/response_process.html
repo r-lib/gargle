@@ -112,6 +112,7 @@ input is returned in the condition (auth tokens are removed).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">response_process</span><span class="op">(</span></span>
 <span>  <span class="va">resp</span>,</span>
 <span>  error_message <span class="op">=</span> <span class="va">gargle_error_message</span>,</span>
+<span>  error_class <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  remember <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  call <span class="op">=</span> <span class="fu">caller_env</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -132,6 +133,12 @@ input is returned in the condition (auth tokens are removed).</p>
 <dt id="arg-error-message">error_message<a class="anchor" aria-label="anchor" href="#arg-error-message"></a></dt>
 <dd><p>Function that produces an informative error message from
 the primary input, <code>resp</code>. It must return a character vector.</p></dd>
+
+
+<dt id="arg-error-class">error_class<a class="anchor" aria-label="anchor" href="#arg-error-class"></a></dt>
+<dd><p>Optional character vector of error classes to add to the
+condition object. These classes are prepended to gargle's default classes
+(<code>"gargle_error_request_failed"</code> and <code>"http_error_{status_code}"</code>).</p></dd>
 
 
 <dt id="arg-remember">remember<a class="anchor" aria-label="anchor" href="#arg-remember"></a></dt>
