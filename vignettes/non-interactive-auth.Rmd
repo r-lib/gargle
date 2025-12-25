@@ -68,6 +68,20 @@ drive_auth(email = "*@example.com")
 
 At the end of this article, this scenario is explained in detail, if you want to understand why this works.
 
+
+## Sidebar 3: I am doing this from Posit Workbench
+
+The previous examples assumed you are working "locally", for example on a laptop running RStudio desktop (or other IDE).
+
+If you are developing in an online environment, for example Posit Workbench, you have to make one additional modification to the workflow.  In this case add this addition line to your options:
+
+``` {r}
+# default on Posit Workbench, but needed for Connect)
+options(gargle_oauth_client_type = "web")
+```
+
+Then follow the all the other instructions in this guide.
+
 ## Embrace credentials available in certain cloud settings
 
 In certain cloud computing contexts, a service account token may be ambiently available (or you can arrange for that to be true).
