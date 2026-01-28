@@ -169,8 +169,8 @@ content) is a special case returning <code>TRUE</code>.</p>
 response internally, for <em>post hoc</em> examination. The stored response is
 literally just the most recent <code>resp</code> input, but with auth tokens redacted.
 It can be accessed via <code><a href="gargle_last_response.html">gargle_last_response()</a></code>. A companion function
-<code><a href="gargle_last_response.html">gargle_last_content()</a></code> returns the just the parsed content, which is
-probably the most useful form for <em>post mortem</em> analysis.</p>
+<code><a href="gargle_last_response.html">gargle_last_content()</a></code> returns just the parsed content, which is probably
+the most useful form for <em>post mortem</em> analysis.</p>
 <p>The <code>response_as_json()</code> helper is exported only as an aid to maintainers who
 wish to use their own <code>error_message</code> function, instead of gargle's built-in
 <code>gargle_error_message()</code>. When implementing a custom <code>error_message</code>

@@ -99,8 +99,8 @@ tokens redacted. It can be accessed via
 [`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md).
 A companion function
 [`gargle_last_content()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
-returns the just the parsed content, which is probably the most useful
-form for *post mortem* analysis.
+returns just the parsed content, which is probably the most useful form
+for *post mortem* analysis.
 
 The `response_as_json()` helper is exported only as an aid to
 maintainers who wish to use their own `error_message` function, instead

@@ -7,11 +7,8 @@
   [`gargle_last_content()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
   are newly exported.
 
-- In vignettes, convert all `{r eval=FALSE}` chunks to plain `r` chunks
-  to prevent any chance of vignette code evaluation while maintaining R
-  syntax highlighting
-  ([\#301](https://github.com/r-lib/gargle/issues/301),
-  [@tanho63](https://github.com/tanho63))
+- `response_process(error_class =)` is a new optional argument to add a
+  subclass to any error thrown while processing a response.
 
 ## gargle 1.6.0
 
