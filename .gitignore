@@ -8,3 +8,4 @@ internal
 .httr-oauth
 notes/*.html
 **/.quarto/
+.claude/*.local.json
