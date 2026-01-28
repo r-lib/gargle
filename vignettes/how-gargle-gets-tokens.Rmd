@@ -7,7 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -31,7 +32,8 @@ This vignette might also be useful to the user of a wrapper package who needs to
 It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens.
 We give a few design suggestions here and cover this in more depth in `vignette("gargle-auth-in-client-package")`.
 
-```{r setup}
+```{r}
+#| label: setup
 library(gargle)
 ```
 
@@ -45,7 +47,8 @@ The objective of `token_fetch()` is to allow package developers to take responsi
 
 The signature of `token_fetch()` is very simple and, therefore, not very informative:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes, ...)
 ```
 
@@ -75,7 +78,8 @@ Read more in the docs for `gargle_verbosity()`.
 The first function tried is `credentials_byo_oauth2()`.
 Here's how a call to `token_fetch()` might work:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(token = <TOKEN2.0>)
 
 credentials_byo_oauth2(
@@ -97,7 +101,8 @@ If `token` is not provided or if it doesn't satisfy these requirements, we fail 
 The next function tried is `credentials_service_account()`.
 Here's how a call to `token_fetch()` with service account inputs plays out:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes = <SCOPES>, path = "/path/to/your/service-account.json")
 
 # credentials_byo_oauth2() fails because no `token`,
@@ -135,7 +140,8 @@ If your service account token requests fail with "Bad Request" inside a containe
 The next function tried is `credentials_external_account()`.
 Here's how a call to `token_fetch()` with an external account inputs plays out:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes = <SCOPES>, path = "/path/to/your/external-account.json")
 
 # credentials_byo_oauth2() fails because no `token`,
@@ -168,7 +174,8 @@ Here is some Google documentation about workload identity federation and the spe
 The next function tried is `credentials_app_default()`.
 Here's how a call to `token_fetch()` might work:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes = <SCOPES>)
 
 # credentials_byo_oauth2() fails because no `token`,
@@ -186,7 +193,8 @@ The credentials themselves are conventional service account, external account, o
  The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started, such as the [`gcloud` command line tool](https://docs.cloud.google.com/sdk/gcloud).
 A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable.
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 ${GOOGLE_APPLICATION_CREDENTIALS}
 ${CLOUDSDK_CONFIG}/application_default_credentials.json
 
@@ -220,7 +228,8 @@ The JSON configuration for an external account is not actually sensitive and thi
 The next function tried is `credentials_gce()`.
 Here's how a call to `token_fetch()` might work:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes = <SCOPES>)
 # or perhaps
 token_fetch(scopes = <SCOPES>, service_account = <SERVICE_ACCOUNT>)
@@ -251,7 +260,8 @@ If this seems to happening to you and it's not what you want, see the last secti
 The next and final function tried is `credentials_user_oauth2()`.
 Here's how a call to `token_fetch()` might work:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 token_fetch(scopes = <SCOPES>)
 
 # credentials_byo_oauth2() fails because no `token`,
@@ -279,7 +289,8 @@ Per the Google User Data Policy <https://developers.google.com/terms/api-service
 The wrapper package would presumably also declare itself as the package requesting a token (this is used in messages).
 So here's how a call to `token_fetch()` and `credentials_user_oauth2()` might look when initiated from `THINGY_auth()`, a function in the fictional thingyr wrapper package:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 # user initiates auth or does something that triggers it indirectly
 THINGY_auth()
 
@@ -308,7 +319,8 @@ First, we define "suitable", i.e. what it means to find a matching token in the 
 `credentials_user_oauth2()` is a thin wrapper around `gargle2.0_token()` which is the constructor for the `gargle::Gargle2.0` class used to hold an OAuth2 token.
 And that call might look something like this (simplified for communication purposes):
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 gargle2.0_token(
   email   = gargle_oauth_email(),
   app     = thingy_app(),
@@ -323,7 +335,8 @@ By default `email` is `NA`, so we might find one or more tokens that have the ne
 In that case, gargle reveals the `email` associated with the matching token(s) and asks the user for explicit instructions about how to proceed.
 That looks something like this:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 The thingyr package is requesting access to your Google account.
 Enter '1' to start a new auth process or select a pre-authorized account.
 1: Send me to the browser for a new auth process.
@@ -337,7 +350,8 @@ If none of the tokens has the right scopes and client (or if the user declines t
 
 A user can reduce the need for interaction by passing the target `email` to `thingy_auth()`:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 thingy_auth(email = "janedoe_work@gmail.com")
 ```
 
@@ -348,7 +362,8 @@ The elevated status of `email` for `gargle::Gargle2.0` tokens is motivated by th
 This is one of the main motivations for `gargle::Gargle2.0`, which extends `httr::Token2.0`.
 The `gargle::Gargle2.0` class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via `gargle_oauth_cache()` and the output looks something like this:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 gargle_oauth_sitrep()
 #> 14 tokens found in this gargle OAuth cache:
 #> ~/Library/Caches/gargle
@@ -388,7 +403,8 @@ Let's say you want to prevent `token_fetch()` from even trying one specific auth
 You can remove a specific credential function from the registry.
 Here's how to do this for the scenario described above, where you want to skip GCE-specific auth:
 
-```{r eval = FALSE}
+```{r}
+#| eval: false
 gargle::cred_funs_add(credentials_gce = NULL)
 ```
 

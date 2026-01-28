@@ -7,14 +7,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 library(gargle)
 ```
 
@@ -163,7 +165,8 @@ Here are the changes you probably need to make in your package:
 
 Here's how `googledrive::drive_auth_configure()` and `googledrive::drive_oauth_client()` looked before and after the transition:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 # BEFORE
 drive_auth_configure <- function(app, path, api_key) {
   # not showing this code
@@ -202,7 +205,8 @@ drive_oauth_app <- function() {
 The approach above follows various conventions explained in `vignette("communicate", package = "lifecycle")`.
 If you also choose to use the lifecycle package to assist in this process, `usethis::use_lifecycle()` function does some helpful one-time setup in your package:
 
-```{r eval = FALSE}
+```{r}
+#| eval: false
 usethis::use_lifecycle()
 ```
 
@@ -228,7 +232,8 @@ Here are the changes you probably need to make in your package:
   these are intended for eventual use by `gargle::credentials_user_oauth2()`.
   Here's a sketch of how this looks in `googledrive::drive_auth()`:
   
-    ```{r eval = FALSE}
+    ```{r}
+    #| eval: false
     drive_auth <- function(...) {
       # code not shown
       cred <- gargle::token_fetch(

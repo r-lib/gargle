@@ -7,7 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -22,7 +23,8 @@ This vignette explains the purpose and usage of:
   
 The target audience is someone writing an R package to wrap a Google API.
 
-```{r setup}
+```{r}
+#| label: setup
 library(gargle)
 ```
 
@@ -123,7 +125,8 @@ sheets.spreadsheets.sheets.copyTo
 
 Retrieve the metadata for one endpoint by name, e.g.:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 .endpoints[["drive.files.create"]]
 ```
 
@@ -133,7 +136,8 @@ That info can be passed along to `request_develop(endpoint, params, base_url)`, 
 
 Here's the model used in googledrive. There is a low-level request helper, `googledrive::request_generate()`, that is used to form every request in the package. It is exported as part of a low-level API for expert use, but most users will never know it exists.
 
-```{r eval = FALSE}
+```{r}
+#| eval: false
 # googledrive::
 request_generate <- function(endpoint = character(),
                              params = list(),
@@ -178,7 +182,8 @@ The output of `gargle::request_build()` specifies an HTTP request.
 
 `gargle::request_make()` can be used to actually execute it.
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 # gargle::
 request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
@@ -205,7 +210,8 @@ request_make <- function(x, ..., user_agent = gargle_user_agent()) {
 
 In googledrive we have a thin wrapper around this that injects the googledrive user agent:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 # googledrive::
 request_make <- function(x, ...) {
   gargle::request_make(x, ..., user_agent = drive_ua())
@@ -218,18 +224,27 @@ request_make <- function(x, ...) {
 
 Properties of an endpoint
 
-```{r asis = TRUE, echo = FALSE, comment = NA}
+```{r}
+#| asis: true
+#| echo: false
+#| comment: NA
 cat(readLines(fs::path(ddi_dir, "method-properties-humane.txt")), sep = "\n")
 ```
 
 API-wide endpoint parameters (taken from Discovery API but, empirically, are shared with other APIs):
 
-```{r asis = TRUE, echo = FALSE, comment = NA}
+```{r}
+#| asis: true
+#| echo: false
+#| comment: NA
 cat(readLines(fs::path(ddi_dir, "api-wide-parameters-humane.txt")), sep = "\n")
 ```
 
 Properties of an endpoint parameters:
 
-```{r asis = TRUE, echo = FALSE, comment = NA}
+```{r}
+#| asis: true
+#| echo: false
+#| comment: NA
 cat(readLines(fs::path(ddi_dir, "parameter-properties-humane.txt")), sep = "\n")
 ```
