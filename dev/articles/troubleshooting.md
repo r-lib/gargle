@@ -238,11 +238,12 @@ as a service account token.
 By default,
 [`gargle::response_process()`](https://gargle.r-lib.org/dev/reference/response_process.md)
 stores the most recently processed response in an internal environment.
-You can access this response with the nonexported helper
-`gargle:::gargle_last_response()`. Prior to storage, a few parts of the
-response are redacted or deleted, such as the access token and the
-handle. These are either sensitive (the token) or useless (the handle)
-and they have more downside than upside for downstream debugging use.
+You can access this response with
+[`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md).
+Prior to storage, a few parts of the response are redacted or deleted,
+such as the access token and the handle. These are either sensitive (the
+token) or useless (the handle) and they have more downside than upside
+for downstream debugging use.
 
 Here’s an example of accessing the most recent response and writing it
 to file, which could be shared with someone else for debugging. The
@@ -265,7 +266,7 @@ req <- request_build(
 resp <- request_make(req)
 out <- response_process(resp)
 
-lr <- gargle:::gargle_last_response()
+lr <- gargle_last_response()
 tmp <- tempfile("gargle-last-response-")
 saveRDS(lr, tmp)
 # you could share this .rds file with a colleague or the gargle maintainer

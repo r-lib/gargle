@@ -368,100 +368,100 @@ googledrive user agent:</p>
 <p><em>derived from the Discovery Document for the Discovery
 Service</em></p>
 <p>Properties of an endpoint</p>
-<pre><code>description             string  Description of this method.
-etagRequired            boolean Whether this method requires an ETag to be
-                                specified. The ETag is sent as an HTTP If-
-                                Match or If-None-Match header.
-httpMethod              string  HTTP method used by this method.
-id                      string  A unique ID for this method. This property
-                                can be used to match methods between
-                                different versions of Discovery.
-mediaUpload             object  Media upload parameters.
-parameterOrder          array   Ordered list of required parameters, serves
-                                as a hint to clients on how to structure
-                                their method signatures. The array is ordered
-                                such that the "most-significant" parameter
-                                appears first.
-parameters              object  Details for all parameters in this method.
-path                    string  The URI path of this REST method. Should
-                                be used in conjunction with the basePath
-                                property at the api-level.
-request                 object  The schema for the request.
-response                object  The schema for the response.
-scopes                  array   OAuth 2.0 scopes applicable to this method.
-supportsMediaDownload   boolean Whether this method supports media downloads.
-supportsMediaUpload     boolean Whether this method supports media uploads.
-supportsSubscription    boolean Whether this method supports subscriptions.
-useMediaDownloadService boolean Indicates that downloads from this method
-                                should use the download service URL (i.e.
-                                "/download"). Only applies if the method
-                                supports media download.</code></pre>
+<pre><code>NA description             string  Description of this method.
+NA etagRequired            boolean Whether this method requires an ETag to be
+NA                                 specified. The ETag is sent as an HTTP If-
+NA                                 Match or If-None-Match header.
+NA httpMethod              string  HTTP method used by this method.
+NA id                      string  A unique ID for this method. This property
+NA                                 can be used to match methods between
+NA                                 different versions of Discovery.
+NA mediaUpload             object  Media upload parameters.
+NA parameterOrder          array   Ordered list of required parameters, serves
+NA                                 as a hint to clients on how to structure
+NA                                 their method signatures. The array is ordered
+NA                                 such that the "most-significant" parameter
+NA                                 appears first.
+NA parameters              object  Details for all parameters in this method.
+NA path                    string  The URI path of this REST method. Should
+NA                                 be used in conjunction with the basePath
+NA                                 property at the api-level.
+NA request                 object  The schema for the request.
+NA response                object  The schema for the response.
+NA scopes                  array   OAuth 2.0 scopes applicable to this method.
+NA supportsMediaDownload   boolean Whether this method supports media downloads.
+NA supportsMediaUpload     boolean Whether this method supports media uploads.
+NA supportsSubscription    boolean Whether this method supports subscriptions.
+NA useMediaDownloadService boolean Indicates that downloads from this method
+NA                                 should use the download service URL (i.e.
+NA                                 "/download"). Only applies if the method
+NA                                 supports media download.</code></pre>
 <p>API-wide endpoint parameters (taken from Discovery API but,
 empirically, are shared with other APIs):</p>
-<pre><code>alt         string  Data format for the response.
-fields      string  Selector specifying which fields to include
-                    in a partial response.
-key         string  API key. Your API key identifies your project
-                    and provides you with API access, quota, and
-                    reports. Required unless you provide an OAuth
-                    2.0 token.
-oauth_token string  OAuth 2.0 token for the current user.
-prettyPrint boolean Returns response with indentations and line
-                    breaks.
-quotaUser   string  An opaque string that represents a user
-                    for quota purposes. Must not exceed 40
-                    characters.
-userIp      string  Deprecated. Please use quotaUser instead.</code></pre>
+<pre><code>NA alt         string  Data format for the response.
+NA fields      string  Selector specifying which fields to include
+NA                     in a partial response.
+NA key         string  API key. Your API key identifies your project
+NA                     and provides you with API access, quota, and
+NA                     reports. Required unless you provide an OAuth
+NA                     2.0 token.
+NA oauth_token string  OAuth 2.0 token for the current user.
+NA prettyPrint boolean Returns response with indentations and line
+NA                     breaks.
+NA quotaUser   string  An opaque string that represents a user
+NA                     for quota purposes. Must not exceed 40
+NA                     characters.
+NA userIp      string  Deprecated. Please use quotaUser instead.</code></pre>
 <p>Properties of an endpoint parameters:</p>
-<pre><code>$ref                 string  A reference to another schema. The value of
-                             this property is the "id" of another schema.
-additionalProperties NULL    If this is a schema for an object, this
-                             property is the schema for any additional
-                             properties with dynamic keys on this object.
-annotations          object  Additional information about this property.
-default              string  The default value of this property (if one
-                             exists).
-description          string  A description of this object.
-enum                 array   Values this parameter may take (if it is an
-                             enum).
-enumDescriptions     array   The descriptions for the enums. Each position
-                             maps to the corresponding value in the "enum"
-                             array.
-format               string  An additional regular expression or key that
-                             helps constrain the value. For more details
-                             see: http://tools.ietf.org/html/draft-zyp-
-                             json-schema-03#section-5.23
-id                   string  Unique identifier for this schema.
-items                NULL    If this is a schema for an array, this
-                             property is the schema for each element in
-                             the array.
-location             string  Whether this parameter goes in the query or
-                             the path for REST requests.
-maximum              string  The maximum value of this parameter.
-minimum              string  The minimum value of this parameter.
-pattern              string  The regular expression this parameter must
-                             conform to. Uses Java 6 regex format: http://
-                             docs.oracle.com/javase/6/docs/api/java/util/
-                             regex/Pattern.html
-properties           object  If this is a schema for an object, list the
-                             schema for each property of this object.
-readOnly             boolean The value is read-only, generated by the
-                             service. The value cannot be modified by the
-                             client. If the value is included in a POST,
-                             PUT, or PATCH request, it is ignored by the
-                             service.
-repeated             boolean Whether this parameter may appear multiple
-                             times.
-required             boolean Whether the parameter is required.
-type                 string  The value type for this schema. A list
-                             of values can be found here: http://
-                             tools.ietf.org/html/draft-zyp-json-
-                             schema-03#section-5.1
-variant              object  In a variant data type, the value of
-                             one property is used to determine how to
-                             interpret the entire entity. Its value must
-                             exist in a map of descriminant values to
-                             schema names.</code></pre>
+<pre><code>NA $ref                 string  A reference to another schema. The value of
+NA                              this property is the "id" of another schema.
+NA additionalProperties NULL    If this is a schema for an object, this
+NA                              property is the schema for any additional
+NA                              properties with dynamic keys on this object.
+NA annotations          object  Additional information about this property.
+NA default              string  The default value of this property (if one
+NA                              exists).
+NA description          string  A description of this object.
+NA enum                 array   Values this parameter may take (if it is an
+NA                              enum).
+NA enumDescriptions     array   The descriptions for the enums. Each position
+NA                              maps to the corresponding value in the "enum"
+NA                              array.
+NA format               string  An additional regular expression or key that
+NA                              helps constrain the value. For more details
+NA                              see: http://tools.ietf.org/html/draft-zyp-
+NA                              json-schema-03#section-5.23
+NA id                   string  Unique identifier for this schema.
+NA items                NULL    If this is a schema for an array, this
+NA                              property is the schema for each element in
+NA                              the array.
+NA location             string  Whether this parameter goes in the query or
+NA                              the path for REST requests.
+NA maximum              string  The maximum value of this parameter.
+NA minimum              string  The minimum value of this parameter.
+NA pattern              string  The regular expression this parameter must
+NA                              conform to. Uses Java 6 regex format: http://
+NA                              docs.oracle.com/javase/6/docs/api/java/util/
+NA                              regex/Pattern.html
+NA properties           object  If this is a schema for an object, list the
+NA                              schema for each property of this object.
+NA readOnly             boolean The value is read-only, generated by the
+NA                              service. The value cannot be modified by the
+NA                              client. If the value is included in a POST,
+NA                              PUT, or PATCH request, it is ignored by the
+NA                              service.
+NA repeated             boolean Whether this parameter may appear multiple
+NA                              times.
+NA required             boolean Whether the parameter is required.
+NA type                 string  The value type for this schema. A list
+NA                              of values can be found here: http://
+NA                              tools.ietf.org/html/draft-zyp-json-
+NA                              schema-03#section-5.1
+NA variant              object  In a variant data type, the value of
+NA                              one property is used to determine how to
+NA                              interpret the entire entity. Its value must
+NA                              exist in a map of descriminant values to
+NA                              schema names.</code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
