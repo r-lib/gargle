@@ -189,7 +189,7 @@ google_client <- gargle::gargle_oauth_client_from_json(
   path = "/path/to/the/JSON/that/was/downloaded/from/gcp/console.json",
   name = "acme-corp-google-client"
 )
-drive_auth_configure(app = google_client)
+drive_auth_configure(client = google_client)
 
 # now any new OAuth tokens are obtained with the configured client
 ```
