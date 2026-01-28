@@ -36,7 +36,7 @@ an \code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 Loads credentials from a file identified via a search strategy known as
 Application Default Credentials (ADC). The hope is to make auth "just work"
 for someone working on Google-provided infrastructure or who has used Google
-tooling to get started, such as the \href{https://cloud.google.com/sdk/gcloud}{\code{gcloud} command line tool}.
+tooling to get started, such as the \href{https://docs.cloud.google.com/sdk/gcloud}{\code{gcloud} command line tool}.
 
 A sequence of paths is consulted, which we describe here, with some abuse of
 notation. ALL_CAPS represents the value of an environment variable and \verb{\%||\%}
@@ -63,8 +63,8 @@ credentials_app_default()
 }
 \seealso{
 \itemize{
-\item \url{https://cloud.google.com/docs/authentication#adc}
-\item \url{https://cloud.google.com/sdk/docs/}
+\item \url{https://docs.cloud.google.com/docs/authentication}
+\item \url{https://docs.cloud.google.com/sdk/docs}
 }
 
 Other credential functions: 

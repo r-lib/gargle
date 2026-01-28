@@ -110,12 +110,12 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 sort(vapply(out, function(x) x[["family"]], character(1)))
-#> [1] "Inter"          "Lato"           "Material Icons" "Montserrat"    
-#> [5] "Noto Sans JP"   "Open Sans"      "Poppins"        "Roboto"
+#> [1] "Google Sans"  "Inter"        "Lato"         "Montserrat"   "Noto Sans JP"
+#> [6] "Open Sans"    "Poppins"      "Roboto"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
 Code of Conduct](https://gargle.r-lib.org/CODE_OF_CONDUCT.html). By
 contributing to this project, you agree to abide by its terms.
 
-[Privacy policy](https://www.tidyverse.org/google_privacy_policy)
+[Privacy policy](https://tidyverse.org/google_privacy_policy/)

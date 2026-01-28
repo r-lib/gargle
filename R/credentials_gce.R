@@ -52,18 +52,18 @@
 #' providers is workload identity federation, which is implemented in
 #' [credentials_external_account()].
 #'
-#' <https://cloud.google.com/compute/docs/access/service-accounts>
+#' <https://docs.cloud.google.com/compute/docs/access/service-accounts>
 #'
-#' <https://cloud.google.com/iam/docs/best-practices-service-accounts>
+#' <https://docs.cloud.google.com/iam/docs/best-practices-service-accounts>
 #'
 #' How to attach a service account to a resource:
 #' <https://cloud.google.com/iam/docs/impersonating-service-accounts#attaching-to-resources>
 #'
-#' <https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity>
+#' <https://docs.cloud.google.com/kubernetes-engine/docs/concepts/workload-identity>
 #'
-#' <https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity>
+#' <https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity>
 #'
-#' <https://cloud.google.com/compute/docs/metadata/overview>
+#' <https://docs.cloud.google.com/compute/docs/metadata/overview>
 #'
 #' @return A [GceToken()] or `NULL`.
 #' @family credential functions

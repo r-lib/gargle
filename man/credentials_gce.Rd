@@ -80,18 +80,18 @@ A related auth flow that can be used on certain non-Google cloud
 providers is workload identity federation, which is implemented in
 \code{\link[=credentials_external_account]{credentials_external_account()}}.
 
-\url{https://cloud.google.com/compute/docs/access/service-accounts}
+\url{https://docs.cloud.google.com/compute/docs/access/service-accounts}
 
-\url{https://cloud.google.com/iam/docs/best-practices-service-accounts}
+\url{https://docs.cloud.google.com/iam/docs/best-practices-service-accounts}
 
 How to attach a service account to a resource:
 \url{https://cloud.google.com/iam/docs/impersonating-service-accounts#attaching-to-resources}
 
-\url{https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity}
+\url{https://docs.cloud.google.com/kubernetes-engine/docs/concepts/workload-identity}
 
-\url{https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity}
+\url{https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity}
 
-\url{https://cloud.google.com/compute/docs/metadata/overview}
+\url{https://docs.cloud.google.com/compute/docs/metadata/overview}
 
 Other credential functions: 
 \code{\link{credentials_app_default}()},

@@ -14,11 +14,11 @@ incorporated into the package's requests for tokens and can control the
 inclusion of tokens in requests to the target API.
 \itemize{
 \item \code{api_key} is the simplest way to associate a request with a specific
-Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
+Google Cloud Platform \href{https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy}{project}.
 A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 with an API key, but this is the exception.
 \item \code{client} is an OAuth client ID (and secret) associated with a specific
-Google Cloud Platform \href{https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects}{project}.
+Google Cloud Platform \href{https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy}{project}.
 This is used in the OAuth flow, in which an authenticated user authorizes
 the client to access or manipulate data on their behalf.
 \item \code{auth_active} reflects whether outgoing requests will be authorized by an

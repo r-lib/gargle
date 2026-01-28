@@ -108,9 +108,9 @@ gargle::request_retry(req)
 \seealso{
 \itemize{
 \item \url{https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/}
-\item \url{https://tech.channable.com/posts/2020-02-05-opnieuw.html}
+\item \verb{https://www.channable.com/tech/opnieuw-a-simple-and-intuitive-retrying-library-for-python}
 \item \url{https://github.com/channable/opnieuw}
-\item \url{https://cloud.google.com/storage/docs/retry-strategy}
+\item \url{https://docs.cloud.google.com/storage/docs/retry-strategy}
 \item \url{https://www.rfc-editor.org/rfc/rfc7231#section-7.1.3}
 \item \url{https://developers.google.com/sheets/api/limits}
 \item \url{https://googleapis.dev/python/google-api-core/latest/retry.html}

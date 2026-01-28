@@ -81,9 +81,9 @@
 #'
 #' @seealso
 #' * <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>
-#' * <https://tech.channable.com/posts/2020-02-05-opnieuw.html>
+#' * `https://www.channable.com/tech/opnieuw-a-simple-and-intuitive-retrying-library-for-python`
 #' * <https://github.com/channable/opnieuw>
-#' * <https://cloud.google.com/storage/docs/retry-strategy>
+#' * <https://docs.cloud.google.com/storage/docs/retry-strategy>
 #' * <https://www.rfc-editor.org/rfc/rfc7231#section-7.1.3>
 #' * <https://developers.google.com/sheets/api/limits>
 #' * <https://googleapis.dev/python/google-api-core/latest/retry.html>
