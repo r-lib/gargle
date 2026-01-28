@@ -26,8 +26,8 @@
 #' response internally, for *post hoc* examination. The stored response is
 #' literally just the most recent `resp` input, but with auth tokens redacted.
 #' It can be accessed via [gargle_last_response()]. A companion function
-#' [gargle_last_content()] returns the just the parsed content, which is
-#' probably the most useful form for *post mortem* analysis.
+#' [gargle_last_content()] returns just the parsed content, which is probably
+#' the most useful form for *post mortem* analysis.
 #'
 #' The `response_as_json()` helper is exported only as an aid to maintainers who
 #' wish to use their own `error_message` function, instead of gargle's built-in
