@@ -18,7 +18,7 @@
 #'   * Status code in the 100s (information) or 300s (redirection). These are
 #'     unexpected.
 #'
-#' If `process_response()` results in an error, a redacted version of the `resp`
+#' If `response_process()` results in an error, a redacted version of the `resp`
 #' input is returned in the condition (auth tokens are removed).
 #'
 #' @details

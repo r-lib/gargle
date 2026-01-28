@@ -70,7 +70,7 @@ create a useful message for all variants we know about.
 unexpected.
 }
 
-If \code{process_response()} results in an error, a redacted version of the \code{resp}
+If \code{response_process()} results in an error, a redacted version of the \code{resp}
 input is returned in the condition (auth tokens are removed).
 }
 \details{
