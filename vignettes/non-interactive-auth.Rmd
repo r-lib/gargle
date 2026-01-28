@@ -7,6 +7,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 Here we describe how to do auth with a package that uses gargle, without requiring any user interaction.
 This comes up in a wide array of contexts, ranging from simple rendering of a local R Markdown document to deploying a data product on a remote server.
 
