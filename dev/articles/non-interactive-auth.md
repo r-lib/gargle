@@ -102,7 +102,7 @@ should consider Google’s own documentation to be definitive, but we’ll
 try to give a useful summary here and to explain how gargle works with
 GCE:
 
-<https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances>
+<https://docs.cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances>
 
 A Google Cloud Platform (GCP) project generally has a GCE default
 service account and, by default, a new GCE instance runs as that service
@@ -176,7 +176,7 @@ or
 
 Here we discuss how gargle’s GCE auth can work for a related service,
 Google Kubernetes Engine (GKE), using [Workload
-Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
+Identity](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
 This is more complicated that direct usage of GCE and some extra
 configuration is needed to make a service account’s metadata available
 for the GKE instance to discover. GKE is the underlying technology
@@ -189,7 +189,7 @@ other places, if possible, since it eliminates the use of a file that
 holds the service key, which is a potential security risk.
 
 1.  Following the [Workload Identity
-    docs](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity),
+    docs](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity),
     you create a service account as normal and give it permissions and
     scopes needed to, say, upload to BigQuery. Imagine that
     `my-service-key@my-project.iam.gserviceaccount.com` has the
@@ -226,7 +226,7 @@ Airflow, you can pass them in using the Python code
 `GKEStartPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')`.
 Documentation around `GKEStartPodOperator()` within Cloud Composer can
 be found
-[here](https://cloud.google.com/composer/docs/composer-2/use-gke-operator).
+[here](https://docs.cloud.google.com/composer/docs/composer-2/use-gke-operator).
 
 5.  In order for the R function `gargle::gce_credentials()` do the right
     thing, you need to do two things:

@@ -730,9 +730,9 @@ CRAN release: 2019-06-11
 
 - All built-in API credentials have been rotated and are stored
   internally in a way that reinforces appropriate use. There is a new
-  [Privacy policy](https://www.tidyverse.org/google_privacy_policy/) as
-  well as a [policy for authors of packages or other
-  applications](https://www.tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications).
+  [Privacy policy](https://tidyverse.org/google_privacy_policy/) as well
+  as a [policy for authors of packages or other
+  applications](https://tidyverse.org/google_privacy_policy/#policies-for-authors-of-packages-or-other-applications).
   This is related to a process to get the gargle project verified, which
   affects the OAuth2 capabilities and the consent screen.
 

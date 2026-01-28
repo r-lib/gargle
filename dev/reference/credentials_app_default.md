@@ -4,7 +4,7 @@ Loads credentials from a file identified via a search strategy known as
 Application Default Credentials (ADC). The hope is to make auth "just
 work" for someone working on Google-provided infrastructure or who has
 used Google tooling to get started, such as the [`gcloud` command line
-tool](https://cloud.google.com/sdk/gcloud).
+tool](https://docs.cloud.google.com/sdk/gcloud).
 
 A sequence of paths is consulted, which we describe here, with some
 abuse of notation. ALL_CAPS represents the value of an environment
@@ -72,9 +72,9 @@ a [`WifToken`](https://gargle.r-lib.org/dev/reference/WifToken.md), an
 
 ## See also
 
-- <https://cloud.google.com/docs/authentication#adc>
+- <https://docs.cloud.google.com/docs/authentication>
 
-- <https://cloud.google.com/sdk/docs/>
+- <https://docs.cloud.google.com/sdk/docs>
 
 Other credential functions:
 [`credentials_byo_oauth2()`](https://gargle.r-lib.org/dev/reference/credentials_byo_oauth2.md),

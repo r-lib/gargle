@@ -10,13 +10,13 @@ control the inclusion of tokens in requests to the target API.
 
 - `api_key` is the simplest way to associate a request with a specific
   Google Cloud Platform
-  [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
+  [project](https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy).
   A few calls to certain APIs, e.g. reading a public Sheet, can succeed
   with an API key, but this is the exception.
 
 - `client` is an OAuth client ID (and secret) associated with a specific
   Google Cloud Platform
-  [project](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects).
+  [project](https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy).
   This is used in the OAuth flow, in which an authenticated user
   authorizes the client to access or manipulate data on their behalf.
 

@@ -110,11 +110,11 @@ a wrapper package that makes requests to a Google API.</p>
 packages that relies on an <code>AuthState</code> object. This state can then be
 incorporated into the package's requests for tokens and can control the
 inclusion of tokens in requests to the target API.</p><ul><li><p><code>api_key</code> is the simplest way to associate a request with a specific
-Google Cloud Platform <a href="https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects" class="external-link">project</a>.
+Google Cloud Platform <a href="https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" class="external-link">project</a>.
 A few calls to certain APIs, e.g. reading a public Sheet, can succeed
 with an API key, but this is the exception.</p></li>
 <li><p><code>client</code> is an OAuth client ID (and secret) associated with a specific
-Google Cloud Platform <a href="https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy#projects" class="external-link">project</a>.
+Google Cloud Platform <a href="https://docs.cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy" class="external-link">project</a>.
 This is used in the OAuth flow, in which an authenticated user authorizes
 the client to access or manipulate data on their behalf.</p></li>
 <li><p><code>auth_active</code> reflects whether outgoing requests will be authorized by an

@@ -88,18 +88,18 @@ A related auth flow that can be used on certain non-Google cloud
 providers is workload identity federation, which is implemented in
 [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md).
 
-<https://cloud.google.com/compute/docs/access/service-accounts>
+<https://docs.cloud.google.com/compute/docs/access/service-accounts>
 
-<https://cloud.google.com/iam/docs/best-practices-service-accounts>
+<https://docs.cloud.google.com/iam/docs/best-practices-service-accounts>
 
 How to attach a service account to a resource:
 <https://cloud.google.com/iam/docs/impersonating-service-accounts#attaching-to-resources>
 
-<https://cloud.google.com/kubernetes-engine/docs/concepts/workload-identity>
+<https://docs.cloud.google.com/kubernetes-engine/docs/concepts/workload-identity>
 
-<https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity>
+<https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity>
 
-<https://cloud.google.com/compute/docs/metadata/overview>
+<https://docs.cloud.google.com/compute/docs/metadata/overview>
 
 Other credential functions:
 [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md),

@@ -222,10 +222,10 @@ URIs.
   OOB from Google’s point-of-view.
 
 The built-in OAuth client used for pseudo-OOB by tidyverse packages
-redirects to <https://www.tidyverse.org/google-callback/>. This is a
-static landing page that does not collect any data and exists solely to
-give the interactive R user a way to convey the authorization token back
-to the waiting R process and thereby complete the auth process.
+redirects to <https://tidyverse.org/google-callback/>. This is a static
+landing page that does not collect any data and exists solely to give
+the interactive R user a way to convey the authorization token back to
+the waiting R process and thereby complete the auth process.
 
 ### More details about the deprecation of conventional OOB
 

@@ -185,7 +185,7 @@ literally, or on another Google Cloud product built on top of GCE. You
 should consider Google’s own documentation to be definitive, but we’ll
 try to give a useful summary here and to explain how gargle works with
 GCE:</p>
-<p><a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" class="external-link uri">https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></p>
+<p><a href="https://docs.cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" class="external-link uri">https://docs.cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></p>
 <p>A Google Cloud Platform (GCP) project generally has a GCE default
 service account and, by default, a new GCE instance runs as that service
 account. (If you wish, you can use a <em>different</em> service account
@@ -245,7 +245,7 @@ explicit or implicit auth happens:</p>
 <h3 id="workload-identity-on-google-kubernetes-engine-gke">Workload Identity on Google Kubernetes Engine (GKE)<a class="anchor" aria-label="anchor" href="#workload-identity-on-google-kubernetes-engine-gke"></a>
 </h3>
 <p>Here we discuss how gargle’s GCE auth can work for a related service,
-Google Kubernetes Engine (GKE), using <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
+Google Kubernetes Engine (GKE), using <a href="https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
 Identity</a>. This is more complicated that direct usage of GCE and some
 extra configuration is needed to make a service account’s metadata
 available for the GKE instance to discover. GKE is the underlying
@@ -255,7 +255,7 @@ also applies to R docker files being called in that environment.</p>
 and other places, if possible, since it eliminates the use of a file
 that holds the service key, which is a potential security risk.</p>
 <ol style="list-style-type: decimal">
-<li>Following the <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
+<li>Following the <a href="https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
 Identity docs</a>, you create a service account as normal and give it
 permissions and scopes needed to, say, upload to BigQuery. Imagine that
 <code>my-service-key@my-project.iam.gserviceaccount.com</code> has the
@@ -286,7 +286,7 @@ of Kubernetes you created in step 1, and assign it an annotation:</li>
 Airflow, you can pass them in using the Python code
 <code>GKEStartPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')</code>.
 Documentation around <code>GKEStartPodOperator()</code> within Cloud
-Composer can be found <a href="https://cloud.google.com/composer/docs/composer-2/use-gke-operator" class="external-link">here</a>.</p>
+Composer can be found <a href="https://docs.cloud.google.com/composer/docs/composer-2/use-gke-operator" class="external-link">here</a>.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>In order for the R function <code>gargle::gce_credentials()</code>
 do the right thing, you need to do two things:</li>

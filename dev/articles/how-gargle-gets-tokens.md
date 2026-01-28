@@ -269,7 +269,7 @@ credentials_app_default(
 [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
 loads credentials from a file identified via a search strategy known as
 [Application Default Credentials
-(ADC)](https://cloud.google.com/docs/authentication#adc). The
+(ADC)](https://docs.cloud.google.com/docs/authentication). The
 credentials themselves are conventional service account, external
 account, or user credentials that happen to be stored in a pre-ordained
 location and format.
@@ -277,7 +277,7 @@ location and format.
 The hope is to make auth “just work” for someone working on
 Google-provided infrastructure or who has used Google tooling to get
 started, such as the [`gcloud` command line
-tool](https://cloud.google.com/sdk/gcloud). A sequence of paths is
+tool](https://docs.cloud.google.com/sdk/gcloud). A sequence of paths is
 consulted, which we describe here, with some abuse of notation. ALL_CAPS
 represents the value of an environment variable.
 
@@ -301,11 +301,10 @@ credential, the requested `scopes` must also meet certain criteria. Note
 that this will NOT work for OAuth2 credentials initiated by gargle,
 which are stored on disk in `.rds` files. The storage of OAuth2 user
 credentials as JSON is unique to certain Google tools – possibly just
-the [`gcloud`
-CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login)
-– and should probably be regarded as deprecated. It is recommended to
-use ADC with a service account or workload identity federation. If this
-quest is unsuccessful, we fail and
+the [`gcloud` CLI](https://docs.cloud.google.com/sdk/gcloud) – and
+should probably be regarded as deprecated. It is recommended to use ADC
+with a service account or workload identity federation. If this quest is
+unsuccessful, we fail and
 [`token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md)’s
 execution moves on to the next function in the registry.
 
