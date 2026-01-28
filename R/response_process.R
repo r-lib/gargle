@@ -341,8 +341,8 @@ reveal_detail <- function(x) {
       map_chr(
         c(
           "Error details of type '{type}' may not be fully revealed.",
-          "Workaround: use `gargle:::gargle_last_response()` or \\
-           `gargle:::gargle_last_content()` to inspect error payload \\
+          "Workaround: use `gargle_last_response()` or \\
+           `gargle_last_content()` to inspect error payload \\
            yourself.",
           "Consider opening an issue at \\
            <https://github.com/r-lib/gargle/issues.>"

@@ -213,7 +213,7 @@ Better yet, upgrade to a more robust strategy for [non-interactive auth](https:/
 ## How to inspect the last response
 
 By default, `gargle::response_process()` stores the most recently processed response in an internal environment.
-You can access this response with the nonexported helper `gargle:::gargle_last_response()`.
+You can access this response with `gargle_last_response()`.
 Prior to storage, a few parts of the response are redacted or deleted, such as the access token and the handle.
 These are either sensitive (the token) or useless (the handle) and they have more downside than upside for downstream debugging use.
 
@@ -245,7 +245,7 @@ req <- request_build(
 resp <- request_make(req)
 out <- response_process(resp)
 
-lr <- gargle:::gargle_last_response()
+lr <- gargle_last_response()
 tmp <- tempfile("gargle-last-response-")
 saveRDS(lr, tmp)
 # you could share this .rds file with a colleague or the gargle maintainer
