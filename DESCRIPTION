@@ -1,6 +1,6 @@
 Package: gargle
 Title: Utilities for Working with Google APIs
-Version: 1.6.1
+Version: 1.6.1.9000
 Authors@R: c(
     person("Jennifer", "Bryan", , "jenny@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6983-2759")),
