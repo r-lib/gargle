@@ -2,6 +2,10 @@
 
 ## gargle (development version)
 
+## gargle 1.6.1
+
+CRAN release: 2026-01-29
+
 - [`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
   and
   [`gargle_last_content()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
