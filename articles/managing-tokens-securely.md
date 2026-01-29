@@ -75,7 +75,7 @@ to yourself! We reveal it here as part of the exposition.
 ``` r
 key <- secret_make_key()
 key
-#> [1] "Uvhiccimky26vmG-biAcdg"
+#> [1] "K9HjL74PGoTSYrRgfy5m8Q"
 ```
 
 [`gargle::secret_make_key()`](https://gargle.r-lib.org/reference/gargle_secret.md)
@@ -87,7 +87,7 @@ is a copy of
 Combine the key name and value to form a line like this in your
 user-level `.Renviron` file:
 
-    SOMETHING_KEY=Uvhiccimky26vmG-biAcdg
+    SOMETHING_KEY=K9HjL74PGoTSYrRgfy5m8Q
 
 `usethis::edit_r_environ()` can help create or open this file. I
 **strongly recommend** using the user-level `.Renviron`, as opposed to
@@ -109,7 +109,7 @@ check that the key is setup correctly locally:
 
 ``` r
 Sys.getenv("SOMETHING_KEY")
-#> [1] "Uvhiccimky26vmG-biAcdg"
+#> [1] "K9HjL74PGoTSYrRgfy5m8Q"
 ```
 
 This [`Sys.getenv()`](https://rdrr.io/r/base/Sys.getenv.html) call is
