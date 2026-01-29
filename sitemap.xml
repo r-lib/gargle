@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://gargle.r-lib.org/404.html</loc></url>
+<url><loc>https://gargle.r-lib.org/CLAUDE.html</loc></url>
 <url><loc>https://gargle.r-lib.org/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://gargle.r-lib.org/CONTRIBUTING.html</loc></url>
 <url><loc>https://gargle.r-lib.org/ISSUE_TEMPLATE.html</loc></url>
@@ -38,6 +39,7 @@
 <url><loc>https://gargle.r-lib.org/reference/gargle2.0_token.html</loc></url>
 <url><loc>https://gargle.r-lib.org/reference/gargle_api_key.html</loc></url>
 <url><loc>https://gargle.r-lib.org/reference/gargle_client.html</loc></url>
+<url><loc>https://gargle.r-lib.org/reference/gargle_last_response.html</loc></url>
 <url><loc>https://gargle.r-lib.org/reference/gargle_map_cli.html</loc></url>
 <url><loc>https://gargle.r-lib.org/reference/gargle_oauth_client_from_json.html</loc></url>
 <url><loc>https://gargle.r-lib.org/reference/gargle_oauth_sitrep.html</loc></url>

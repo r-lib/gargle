@@ -13,7 +13,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="How gargle gets tokens">
-<script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>How gargle gets tokens</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.0/vignettes/how-gargle-gets-tokens.Rmd" class="external-link"><code>vignettes/how-gargle-gets-tokens.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/how-gargle-gets-tokens.Rmd" class="external-link"><code>vignettes/how-gargle-gets-tokens.Rmd</code></a></small>
       <div class="d-none name"><code>how-gargle-gets-tokens.Rmd</code></div>
     </div>
 
@@ -300,16 +300,16 @@ Here’s how a call to <code><a href="../reference/token_fetch.html">token_fetch
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="at">scopes =</span> <span class="sc">&lt;</span>SCOPES<span class="sc">&gt;</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>)</span></code></pre></div>
 <p><code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code> loads credentials from a file
-identified via a search strategy known as <a href="https://cloud.google.com/docs/authentication#adc" class="external-link">Application
+identified via a search strategy known as <a href="https://docs.cloud.google.com/docs/authentication" class="external-link">Application
 Default Credentials (ADC)</a>. The credentials themselves are
 conventional service account, external account, or user credentials that
 happen to be stored in a pre-ordained location and format.</p>
 <p>The hope is to make auth “just work” for someone working on
 Google-provided infrastructure or who has used Google tooling to get
-started, such as the <a href="https://cloud.google.com/sdk/gcloud" class="external-link"><code>gcloud</code> command
-line tool</a>. A sequence of paths is consulted, which we describe here,
-with some abuse of notation. ALL_CAPS represents the value of an
-environment variable.</p>
+started, such as the <a href="https://docs.cloud.google.com/sdk/gcloud" class="external-link"><code>gcloud</code>
+command line tool</a>. A sequence of paths is consulted, which we
+describe here, with some abuse of notation. ALL_CAPS represents the
+value of an environment variable.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="sc">$</span>{GOOGLE_APPLICATION_CREDENTIALS}</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="sc">$</span>{CLOUDSDK_CONFIG}<span class="sc">/</span>application_default_credentials.json</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
@@ -327,7 +327,7 @@ credential, the requested <code>scopes</code> must also meet certain
 criteria. Note that this will NOT work for OAuth2 credentials initiated
 by gargle, which are stored on disk in <code>.rds</code> files. The
 storage of OAuth2 user credentials as JSON is unique to certain Google
-tools – possibly just the <a href="https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login" class="external-link"><code>gcloud</code>
+tools – possibly just the <a href="https://docs.cloud.google.com/sdk/gcloud" class="external-link"><code>gcloud</code>
 CLI</a> – and should probably be regarded as deprecated. It is
 recommended to use ADC with a service account or workload identity
 federation. If this quest is unsuccessful, we fail and
@@ -556,7 +556,7 @@ even make narrowly scoped changes to the registry with
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>

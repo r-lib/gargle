@@ -13,7 +13,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Non-interactive auth">
-<script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="gargle.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <h1>Non-interactive auth</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.0/vignettes/non-interactive-auth.Rmd" class="external-link"><code>vignettes/non-interactive-auth.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/non-interactive-auth.Rmd" class="external-link"><code>vignettes/non-interactive-auth.Rmd</code></a></small>
       <div class="d-none name"><code>non-interactive-auth.Rmd</code></div>
     </div>
 
@@ -184,7 +184,7 @@ literally, or on another Google Cloud product built on top of GCE. You
 should consider Google’s own documentation to be definitive, but we’ll
 try to give a useful summary here and to explain how gargle works with
 GCE:</p>
-<p><a href="https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" class="external-link uri">https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></p>
+<p><a href="https://docs.cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances" class="external-link uri">https://docs.cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances</a></p>
 <p>A Google Cloud Platform (GCP) project generally has a GCE default
 service account and, by default, a new GCE instance runs as that service
 account. (If you wish, you can use a <em>different</em> service account
@@ -200,12 +200,16 @@ general, most wrapper packages will indeed be asking for specific scopes
 relevant to the API they access. Consider the signature of
 <code>googledrive::drive_auth()</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">email</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">path</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                       <span class="va">scopes</span> <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
-<span>                       <span class="va">cache</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">use_oob</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                       <span class="va">token</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span> <span class="va">...</span> <span class="op">}</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">email</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_email</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">path</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">scopes</span> <span class="op">=</span> <span class="st">"https://www.googleapis.com/auth/drive"</span>,</span>
+<span>  <span class="va">cache</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oauth_cache</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">use_oob</span> <span class="op">=</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/gargle_options.html">gargle_oob_default</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">token</span> <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>The googledrive package asks for a token with <code>"drive"</code>
 scope, by default. This brings up one big gotcha when using packages
 like googledrive or googlesheets4 on GCE.</p>
@@ -240,7 +244,7 @@ explicit or implicit auth happens:</p>
 <h3 id="workload-identity-on-google-kubernetes-engine-gke">Workload Identity on Google Kubernetes Engine (GKE)<a class="anchor" aria-label="anchor" href="#workload-identity-on-google-kubernetes-engine-gke"></a>
 </h3>
 <p>Here we discuss how gargle’s GCE auth can work for a related service,
-Google Kubernetes Engine (GKE), using <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
+Google Kubernetes Engine (GKE), using <a href="https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
 Identity</a>. This is more complicated that direct usage of GCE and some
 extra configuration is needed to make a service account’s metadata
 available for the GKE instance to discover. GKE is the underlying
@@ -250,7 +254,7 @@ also applies to R docker files being called in that environment.</p>
 and other places, if possible, since it eliminates the use of a file
 that holds the service key, which is a potential security risk.</p>
 <ol style="list-style-type: decimal">
-<li>Following the <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
+<li>Following the <a href="https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity" class="external-link">Workload
 Identity docs</a>, you create a service account as normal and give it
 permissions and scopes needed to, say, upload to BigQuery. Imagine that
 <code>my-service-key@my-project.iam.gserviceaccount.com</code> has the
@@ -281,7 +285,7 @@ of Kubernetes you created in step 1, and assign it an annotation:</li>
 Airflow, you can pass them in using the Python code
 <code>GKEStartPodOperator(...., namespace='my-namespace', service_account_name='bq-service-account')</code>.
 Documentation around <code>GKEStartPodOperator()</code> within Cloud
-Composer can be found <a href="https://cloud.google.com/composer/docs/composer-2/use-gke-operator" class="external-link">here</a>.</p>
+Composer can be found <a href="https://docs.cloud.google.com/composer/docs/composer-2/use-gke-operator" class="external-link">here</a>.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>In order for the R function <code>gargle::gce_credentials()</code>
 do the right thing, you need to do two things:</li>
@@ -299,7 +303,9 @@ can see.</li>
 container:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle.gce.use_ip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/credentials_gce.html">credentials_gce</a></span><span class="op">(</span><span class="st">"my-service-key@my-project.iam.gserviceaccount.com"</span><span class="op">)</span></span>
+<span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/credentials_gce.html">credentials_gce</a></span><span class="op">(</span></span>
+<span>  <span class="st">"my-service-key@my-project.iam.gserviceaccount.com"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># ... do authenticated stuff with the token t ...</span></span></code></pre></div>
 <p>Let’s assume that PKG is an R package that implements gargle auth in
 the standard way, such as bigrquery or googledrive. At the time of
@@ -400,7 +406,7 @@ the auth function:</li>
 <span>  scopes <span class="op">=</span> <span class="va">...</span>,</span>
 <span>  subject <span class="op">=</span> <span class="st">"user@example.com"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu">googledrive</span><span class="fu">::</span><span class="fu">dive_auth</span><span class="op">(</span>token <span class="op">=</span> <span class="va">t</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">googledrive</span><span class="fu">::</span><span class="fu">drive_auth</span><span class="op">(</span>token <span class="op">=</span> <span class="va">t</span><span class="op">)</span></span></code></pre></div>
 <p>If delegation of domain-wide authority is impossible or unappealing,
 you must use an OAuth user token, as described below.</p>
 </div>
@@ -653,7 +659,7 @@ the mismatch.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>
