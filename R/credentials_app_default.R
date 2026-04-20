@@ -240,7 +240,7 @@ fetch_impersonated_service_account_access_token <- function(
   req <- list(
     method = "POST",
     url = impersonation_url,
-    body = rlang::compact(list(
+    body = compact(list(
       scope = scope,
       delegates = delegates
     )),
