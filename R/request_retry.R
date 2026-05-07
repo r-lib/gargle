@@ -119,6 +119,10 @@ request_retry <- function(
     wait_info <- backoff(tries_made, resp, base = b, per_user_failures)
     wait_time <- wait_info$wait_time
 
+    if (sheets_per_user_quota_exhaustion(resp)) {
+      per_user_failures <- per_user_failures + 1
+    }
+
     announce_retryable_failure(resp, tries_made, wait_info)
 
     # n = progress updates per second, which is really about the spinner
@@ -133,11 +137,7 @@ request_retry <- function(
     }
 
     resp <- request_make(...)
-
     tries_made <- tries_made + 1
-    if (sheets_per_user_quota_exhaustion(resp)) {
-      per_user_failures <- per_user_failures + 1
-    }
   }
 
   if (tries_made > 1) {
@@ -219,6 +219,10 @@ retry_after_header <- function(resp) {
 # targets the most common quota problem, which is the per user per minute quota
 # from the Sheets API
 sheets_per_user_quota_exhaustion <- function(resp) {
+  code <- httr::status_code(resp)
+  if (code < 400) {
+    return(FALSE)
+  }
   msg <- gargle_error_message(resp)
   # the structure of this error and the wording of this message have changed
   # over time
