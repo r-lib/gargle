@@ -154,6 +154,18 @@ gargle_error_message <- function(resp, call = caller_env()) {
     return(gargle_html_error_message(resp))
   }
 
+  # I don't expect non-JSON content here and yet I've seen some CI failures
+  # that sure suggest that has happened. Can't repro locally.
+  if (!grepl("^application/json", type)) {
+    return(c(
+      httr::http_status(resp)$message,
+      "x" = gargle_map_cli(
+        type,
+        "Expected content type {.field application/json}, not {.field <<x>>}."
+      )
+    ))
+  }
+
   content <- response_as_json(resp, call = call)
   error <- content[["error"]]
 
