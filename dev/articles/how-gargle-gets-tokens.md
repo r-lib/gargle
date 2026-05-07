@@ -29,6 +29,7 @@ design suggestions here and cover this in more depth in
 [`vignette("gargle-auth-in-client-package")`](https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.md).
 
 ``` r
+
 library(gargle)
 ```
 
@@ -54,6 +55,7 @@ The signature of
 is very simple and, therefore, not very informative:
 
 ``` r
+
 token_fetch(scopes, ...)
 ```
 
@@ -69,6 +71,7 @@ This gives a sense of the credential functions and reflects the order in
 which they are called:
 
 ``` r
+
 writeLines(names(cred_funs_list()))
 #> credentials_byo_oauth2
 #> credentials_service_account
@@ -486,6 +489,7 @@ A user can reduce the need for interaction by passing the target `email`
 to `thingy_auth()`:
 
 ``` r
+
 thingy_auth(email = "janedoe_work@gmail.com")
 ```
 
@@ -510,6 +514,7 @@ project-level. An overview of the current OAuth cache is available via
 and the output looks something like this:
 
 ``` r
+
 gargle_oauth_sitrep()
 #> 14 tokens found in this gargle OAuth cache:
 #> ~/Library/Caches/gargle
@@ -539,6 +544,7 @@ Recall that you can get an overview of the credential functions that
 works through like so:
 
 ``` r
+
 writeLines(names(cred_funs_list()))
 #> credentials_byo_oauth2
 #> credentials_service_account
@@ -565,6 +571,7 @@ credential function from the registry. Here’s how to do this for the
 scenario described above, where you want to skip GCE-specific auth:
 
 ``` r
+
 gargle::cred_funs_add(credentials_gce = NULL)
 ```
 

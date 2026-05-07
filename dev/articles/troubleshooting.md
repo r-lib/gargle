@@ -1,6 +1,7 @@
 # Troubleshooting gargle auth
 
 ``` r
+
 library(gargle)
 ```
 
@@ -12,6 +13,7 @@ There is a package-wide option that controls gargle’s verbosity:
 reveals the current value:
 
 ``` r
+
 gargle_verbosity()
 #> [1] "info"
 ```
@@ -29,6 +31,7 @@ as gargle tries various auth methods in succession, most of which will
 often fail.
 
 ``` r
+
 # save current value
 op <- options(gargle_verbosity = "debug")
 
@@ -45,6 +48,7 @@ and
 [`local_gargle_verbosity()`](https://gargle.r-lib.org/dev/reference/gargle_options.md).
 
 ``` r
+
 gargle_verbosity()
 #> [1] "info"
 
@@ -88,6 +92,7 @@ for someone who has accepted the default OAuth cache location and has
 played with several APIs via gargle-using packages.
 
 ``` r
+
 gargle_oauth_sitrep()
 #' > 14 tokens found in this gargle OAuth cache:
 #' '~/Library/Caches/gargle'
@@ -169,6 +174,7 @@ will have to upgrade.*
 The solution is to update the package in question, e.g. googlesheets4:
 
 ``` r
+
 install.packages("googlesheets4")
 ```
 
@@ -252,6 +258,7 @@ error. But this process works the same even if in the case of an error,
 e.g. an HTTP status \>= 400.
 
 ``` r
+
 library(gargle)
 
 req <- request_build(

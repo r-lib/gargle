@@ -1,6 +1,7 @@
 # Google Compute Engine
 
 ``` r
+
 library(gargle)
 ```
 
@@ -34,6 +35,7 @@ I have done the required setup for this package:
 Having done this setup, this is how attaching the package looks:
 
 ``` r
+
 library(googleComputeEngineR)
 #> ✔ Setting scopes to https://www.googleapis.com/auth/cloud-platform
 #> ✔ Successfully auto-authenticated via /path/to/that/json/mentioned/above.json
@@ -50,6 +52,7 @@ is the default, recommended scope for both contexts.)
 You can see your current instances with `gce_list_instances()`:
 
 ``` r
+
 gce_list_instances()
 #> ==Google Compute Engine Instance List==
 #>                        name   machineType     status       zone     externalIP   creationTimestamp
@@ -67,6 +70,7 @@ and have several VMs that are currently stopped.
 Here’s my basic way of creating a VM:
 
 ``` r
+
 vm <- gce_vm(
   template = "rstudio",
   name = "cerebral-lion",
@@ -82,6 +86,7 @@ I can no longer remember why I settled on
 Here’s what you’ll see:
 
 ``` r
+
 #> ── ## VM Template: ' rstudio' running at http://{IP_ADDRESS} ─────────────────────────────────────────────────────
 #> ℹ 2023-04-13 12:03:05 > On first boot, wait a few minutes for docker container to install before logging in.
 #> ==Google Compute Engine Instance==
@@ -109,6 +114,7 @@ You can then log in to RStudio Server at the given `{IP_ADDRESS}`.
 Helpful snippets for getting that on the clipboard:
 
 ``` r
+
 # if you, e.g., just created `vm`
 paste0("http://", gce_get_external_ip(vm)) |>
   clipr::write_clip()
@@ -123,6 +129,7 @@ choices for the associated service account and scopes. It’s actually as
 if you had done:
 
 ``` r
+
 gce_vm(
   ...,
   serviceAccounts = list(
@@ -145,6 +152,7 @@ address). First, for my current exploration, I want to install gargle
 from a specific branch:
 
 ``` r
+
 install.packages("pak")
 pak::pak("r-lib/gargle@gce-improvements")
 ```
@@ -152,6 +160,7 @@ pak::pak("r-lib/gargle@gce-improvements")
 Now attach gargle and set verbosity level to `"debug"`.
 
 ``` r
+
 library(gargle)
 local_gargle_verbosity("debug")
 ```
@@ -159,6 +168,7 @@ local_gargle_verbosity("debug")
 Let’s look at the service accounts available to this running instance:
 
 ``` r
+
 gce_instance_service_accounts()
 #>                                     name                                  email aliases
 #> 1 {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} default
@@ -181,6 +191,7 @@ Let’s get a token with
 and inspect it.
 
 ``` r
+
 t <- token_fetch()
 #> trying `token_fetch()`
 #> ...
@@ -205,6 +216,7 @@ What if we want to do something with the Google Drive API and we request
 that scope?
 
 ``` r
+
 t <- token_fetch(c(
   "https://www.googleapis.com/auth/cloud-platform",
   "https://www.googleapis.com/auth/drive"
@@ -245,6 +257,7 @@ And, indeed, this lack of an explicit Drive scope means that, e.g., the
 googledrive package can’t do operations that require auth:
 
 ``` r
+
 library(googledrive)
 drive_find()
 #> attempt to access internal gargle data from: googledrive
@@ -275,6 +288,7 @@ then you’ll have to start over if you’ve, e.g., installed dev packages
 or downloaded/created any files.
 
 ``` r
+
 gce_vm_suspend("cerebral-lion")
 gce_vm_resume("cerebral-lion")
 gce_vm_stop("cerebral-lion")
@@ -284,6 +298,7 @@ It’s a good idea to check that you’ve done whatever you intended with
 the instance. Check its status here:
 
 ``` r
+
 gce_list_instances()
 #> ==Google Compute Engine Instance List==
 #>                        name   machineType     status       zone     externalIP   creationTimestamp
@@ -305,6 +320,7 @@ I’m overlooking that there’s already a way to do this). Further reading:
 <https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances#changeserviceaccountandscopes>.
 
 ``` r
+
 vm <- gce_vm(
   template = "rstudio",
   name = "trustful-bull",
@@ -330,6 +346,7 @@ shows that we have, in fact, managed to change the `scopes` available to
 the default service account:
 
 ``` r
+
 gce_instance_service_accounts()
 #>                                     name                                  email aliases
 #> 1 {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} {EMAIL_OF_THE_DEFAULT_SERVICE_ACCOUNT} default
@@ -343,6 +360,7 @@ We see this in actual tokens as well. Note that we get `"drive"` scope
 *even if we don’t ask for it*.
 
 ``` r
+
 t <- token_fetch()
 #> trying `token_fetch()`
 #> ...
@@ -366,6 +384,7 @@ And, as one would expect, it’s now possible to work with the googledrive
 package.
 
 ``` r
+
 library(googledrive)
 drive_find()
 #> # A dribble: 0 × 3

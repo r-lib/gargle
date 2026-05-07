@@ -106,6 +106,7 @@ return
 Standard workflow:
 
 ``` r
+
 # 1. Develop (validate params against API spec)
 req <- request_develop(endpoint = ..., params = ...)
 

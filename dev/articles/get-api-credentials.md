@@ -111,6 +111,7 @@ For example, in googlesheets4, one would use
 downstream requests, i.e. after a call to `googlesheets4::gs4_deauth()`:
 
 ``` r
+
 library(googlesheets4)
 
 gs4_auth_configure(api_key = "YOUR_API_KEY_GOES_HERE")
@@ -183,6 +184,7 @@ package. For example, in googledrive, one would use
 `googledrive::drive_auth_configure()` to do this:
 
 ``` r
+
 library(googledrive)
 
 google_client <- gargle::gargle_oauth_client_from_json(
@@ -258,6 +260,7 @@ You could provide the token’s filepath to a wrapper package’s main auth
 function, e.g.:
 
 ``` r
+
 # googledrive
 drive_auth(path = "/path/to/your/service-account-token.json")
 ```

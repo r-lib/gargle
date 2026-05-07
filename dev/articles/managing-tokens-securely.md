@@ -30,6 +30,7 @@ This mostly uses functions inlined from the httr2
 on.
 
 ``` r
+
 library(gargle)
 ```
 
@@ -63,6 +64,7 @@ You don’t need to store this name as a variable. We’re only doing so
 because it makes this exposition easier.
 
 ``` r
+
 key_name <- "SOMETHING_KEY"
 ```
 
@@ -73,9 +75,10 @@ In real life, you should keep the output of
 to yourself! We reveal it here as part of the exposition.
 
 ``` r
+
 key <- secret_make_key()
 key
-#> [1] "EluCVfhioAJybRCpACmSGA"
+#> [1] "1Q9D27Ic4SwtAj0JF2zmNw"
 ```
 
 [`gargle::secret_make_key()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
@@ -87,7 +90,7 @@ is a copy of
 Combine the key name and value to form a line like this in your
 user-level `.Renviron` file:
 
-    SOMETHING_KEY=EluCVfhioAJybRCpACmSGA
+    SOMETHING_KEY=1Q9D27Ic4SwtAj0JF2zmNw
 
 `usethis::edit_r_environ()` can help create or open this file. I
 **strongly recommend** using the user-level `.Renviron`, as opposed to
@@ -108,8 +111,9 @@ In an interactive session, you can call
 check that the key is setup correctly locally:
 
 ``` r
+
 Sys.getenv("SOMETHING_KEY")
-#> [1] "EluCVfhioAJybRCpACmSGA"
+#> [1] "1Q9D27Ic4SwtAj0JF2zmNw"
 ```
 
 This [`Sys.getenv()`](https://rdrr.io/r/base/Sys.getenv.html) call is
@@ -149,6 +153,7 @@ downloaded for a service account managed via the [Google API / Cloud
 Platform console](https://console.cloud.google.com/project):
 
 ``` r
+
 secret_encrypt_json(
   json = "~/some/place/where/I/keep/secret/stuff/googledrive-testing.json",
   path = "inst/secret/googledrive-testing.json",
@@ -191,6 +196,7 @@ placed inside the `.secrets/` directory of a project, e.g. a Shiny app
 intended for deployment.
 
 ``` r
+
 library(googlesheets4)
 
 dir.create(".secrets")
@@ -271,6 +277,7 @@ would use
 to decrypt that token and direct googledrive to use it:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(
@@ -290,6 +297,7 @@ you would use
 to decrypt that token and direct googlesheets4 to use it:
 
 ``` r
+
 library(googlesheets4)
 
 gs4_auth(token = gargle::secret_read_rds(
@@ -337,6 +345,7 @@ is skipped. That behaviour is implemented in the internal helper
 `secret_get_key()`, which looks something like this:
 
 ``` r
+
 secret_get_key <- function(envvar) {
   key <- Sys.getenv(envvar)
   
@@ -358,6 +367,7 @@ defined as when `is_testing()` returns `TRUE`. The `is_testing()` helper
 is defined like so:
 
 ``` r
+
 is_testing <- function() {
   identical(Sys.getenv("TESTTHAT"), "true")
 }

@@ -122,6 +122,7 @@ opportunity to specify non-default values of certain parameters. Here’s
 how you could request OOB auth, using googledrive as an example:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(use_oob = TRUE)
@@ -137,6 +138,7 @@ project, the best way to express this is to set the
 `"gargle_oob_default"` option.
 
 ``` r
+
 options(gargle_oob_default = TRUE)
 ```
 
@@ -175,6 +177,7 @@ and an “installed” client otherwise. If you need to explicitly request a
 `"gargle_oauth_client_type"`:
 
 ``` r
+
 options(gargle_oauth_client_type = "web")
 ```
 

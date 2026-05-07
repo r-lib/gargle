@@ -10,6 +10,7 @@ The target audience is someone writing an R package to wrap a Google
 API.
 
 ``` r
+
 library(gargle)
 ```
 
@@ -130,6 +131,7 @@ the ingest of a Discovery Document. You can find these files in the
 gargle installation like so:
 
 ``` r
+
 ddi_dir <- system.file("discovery-doc-ingest", package = "gargle")
 list.files(ddi_dir)
 #>  [1] "api-wide-parameter-names.txt"   
@@ -186,6 +188,7 @@ list. Examples of some `id`s from the Drive and Sheets APIs:
 Retrieve the metadata for one endpoint by name, e.g.:
 
 ``` r
+
 .endpoints[["drive.files.create"]]
 ```
 
@@ -202,6 +205,7 @@ request in the package. It is exported as part of a low-level API for
 expert use, but most users will never know it exists.
 
 ``` r
+
 # googledrive::
 request_generate <- function(endpoint = character(),
                              params = list(),
@@ -264,6 +268,7 @@ specifies an HTTP request.
 can be used to actually execute it.
 
 ``` r
+
 # gargle::
 request_make <- function(x, ..., user_agent = gargle_user_agent()) {
   stopifnot(is.character(x$method))
@@ -295,6 +300,7 @@ In googledrive we have a thin wrapper around this that injects the
 googledrive user agent:
 
 ``` r
+
 # googledrive::
 request_make <- function(x, ...) {
   gargle::request_make(x, ..., user_agent = drive_ua())

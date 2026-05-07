@@ -60,6 +60,7 @@ interactive session and then, in your code, give gargle permission to
 use a token it finds in the cache. These sorts of commands achieve that:
 
 ``` r
+
 # Approach #1: use an option.
 # Either specify the user:
 options(gargle_oauth_email = "jenny@example.com")
@@ -122,6 +123,7 @@ asking for specific scopes relevant to the API they access. Consider the
 signature of `googledrive::drive_auth()`:
 
 ``` r
+
 drive_auth <- function(
   email = gargle::gargle_oauth_email(),
   path = NULL,
@@ -163,6 +165,7 @@ from the set of auth functions tried by
 by executing this command before any explicit or implicit auth happens:
 
 ``` r
+
 # removes `credentials_gce()` from gargle's registry
 gargle::cred_funs_add(credentials_gce = NULL)
 ```
@@ -242,6 +245,7 @@ be found
 Here is example code that you might execute in your Docker container:
 
 ``` r
+
 options(gargle.gce.use_ip = TRUE)
 t <- gargle::credentials_gce(
   "my-service-key@my-project.iam.gserviceaccount.com"
@@ -259,6 +263,7 @@ directly and pass that token to `PKG_auth()`: Here’s an example of how
 that might look:
 
 ``` r
+
 library(PKG)
 
 options(gargle.gce.use_ip = TRUE)
@@ -298,6 +303,7 @@ service account, but it will require more explicit effort.
 Example using googledrive:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(path = "/path/to/your/service-account-token.json")
@@ -344,6 +350,7 @@ Some details:
   and then pass that token to the auth function:
 
 ``` r
+
 t <- gargle::credentials_service_account(
   path = "/path/to/your/service-account-token.json",
   scopes = ...,
@@ -380,6 +387,7 @@ output about the execution of
 [`gargle::token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md):
 
 ``` r
+
 options(gargle_verbosity = "debug")
 ```
 
@@ -395,6 +403,7 @@ can provide it directly to the `token` argument of the main auth
 function. Example using googledrive:
 
 ``` r
+
 library(googledrive)
 
 my_oauth_token <- # some process that results in the token you want to use
@@ -408,6 +417,7 @@ and provide as the `token` argument to the wrapper’s auth function.
 Example using googledrive:
 
 ``` r
+
 # googledrive
 drive_auth(token = readRDS("/path/to/your/oauth-token.rds"))
 ```
@@ -448,6 +458,7 @@ interactively, do the auth dance, and allow gargle to store the token in
 its cache.
 
 ``` r
+
 library(googledrive)
 
 # do anything that triggers auth
@@ -478,6 +489,7 @@ This sets an option that allows gargle to use cached tokens whenever
 there’s a unique match:
 
 ``` r
+
 options(gargle_oauth_email = TRUE)
 ```
 
@@ -485,6 +497,7 @@ This sets an option to use tokens associated with a specific email
 address:
 
 ``` r
+
 options(gargle_oauth_email = "jenny@example.com")
 ```
 
@@ -492,6 +505,7 @@ This sets an option to use tokens associated with an email address with
 a specific domain:
 
 ``` r
+
 options(gargle_oauth_email = "*@example.com")
 ```
 
@@ -499,6 +513,7 @@ This gets a token *right now* and allows the use of a matching token,
 using googledrive as an example:
 
 ``` r
+
 drive_auth(email = TRUE)
 ```
 
@@ -506,6 +521,7 @@ This gets a token *right now*, for the user with a specific email
 address:
 
 ``` r
+
 drive_auth(email = "jenny@example.com")
 ```
 
@@ -513,6 +529,7 @@ This gets a token *right now*, first checking the cache for a token
 associated with a specific domain:
 
 ``` r
+
 drive_auth(email = "*@example.com")
 ```
 
@@ -526,6 +543,7 @@ sure it’s cached in a (hidden) directory of the current project. Using
 googledrive as an example:
 
 ``` r
+
 library(googledrive)
 
 # designate project-specific cache
@@ -547,6 +565,7 @@ Another way to accomplish the same setup is to specify the desired cache
 location directly in the call to the auth function:
 
 ``` r
+
 library(googledrive)
 
 # trigger auth on purpose --> store a token in the specified cache
@@ -558,6 +577,7 @@ and pre-authorize the use of a suitable token discovered there.
 Continuing the googledrive example:
 
 ``` r
+
 library(googledrive)
 
 options(
@@ -582,6 +602,7 @@ specifying the associated email. This is handy if there’s a reason to
 have more than one token in the cache.
 
 ``` r
+
 library(googledrive)
 
 options(
@@ -597,6 +618,7 @@ Here’s another variation where we specify the necessary info directly in
 an auth call, instead of in options:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(cache = ".secrets", email = TRUE)
@@ -609,6 +631,7 @@ Here’s one last variation that’s applicable when the local cache could
 contain multiple tokens:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(cache = ".secrets", email = "jenny@example.com")
@@ -626,6 +649,7 @@ output about the execution of
 [`gargle::token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md):
 
 ``` r
+
 options(gargle_verbosity = "debug")
 ```
 

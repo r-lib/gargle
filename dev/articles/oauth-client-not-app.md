@@ -1,6 +1,7 @@
 # Transition from OAuth app to OAuth client
 
 ``` r
+
 library(gargle)
 ```
 
@@ -85,6 +86,7 @@ gargle ships with JSON files for two non-functional OAuth clients, just
 to make this all more concrete:
 
 ``` r
+
 (path_to_installed_client <- system.file(
   "extdata", "client_secret_installed.googleusercontent.com.json",
   package = "gargle"
@@ -189,6 +191,7 @@ Here’s how `googledrive::drive_auth_configure()` and
 transition:
 
 ``` r
+
 # BEFORE
 drive_auth_configure <- function(app, path, api_key) {
   # not showing this code
@@ -231,6 +234,7 @@ process, `usethis::use_lifecycle()` function does some helpful one-time
 setup in your package:
 
 ``` r
+
 usethis::use_lifecycle()
 ```
 

@@ -42,12 +42,14 @@ You can install the released version of gargle from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
+
 install.packages("gargle")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("r-lib/gargle")
 ```
@@ -60,6 +62,7 @@ user confirms they want to use a specific Google identity and loads an
 OAuth2 token.
 
 ``` r
+
 library(gargle)
 
 token <- token_fetch()
@@ -85,6 +88,7 @@ API](https://developers.google.com/fonts/docs/developer_api). We show
 the most popular web font families served by Google Fonts.
 
 ``` r
+
 library(gargle)
 
 req <- request_build(
