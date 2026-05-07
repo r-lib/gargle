@@ -19,7 +19,10 @@ test_that("token_*() functions work", {
 
   expect_match(email, "^gargle-testing@.*[.]iam[.]gserviceaccount[.]com")
   expect_equal(email, tokeninfo$email)
-  expect_true(
-    "https://www.googleapis.com/auth/userinfo.email" %in% tokeninfo$scope
-  )
+  # I believe `scope` to be a "space separated list of scopes"
+  expect_true(grepl(
+    "https://www.googleapis.com/auth/userinfo.email",
+    tokeninfo$scope,
+    fixed = TRUE
+  ))
 })
