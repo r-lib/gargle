@@ -91,6 +91,9 @@ with_gargle_verbosity <- function(level, code) {
 }
 
 gargle_debug <- function(text, .envir = caller_env()) {
+  otel_span_add_events(
+    cli::cli_fmt(cli::cli_bullets(text, .envir = .envir))
+  )
   if (gargle_verbosity() == "debug") {
     cli::cli_div(theme = gargle_theme())
     cli::cli_bullets(text, .envir = .envir)
