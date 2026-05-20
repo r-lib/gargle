@@ -135,6 +135,7 @@ request_retry <- function(
       Sys.sleep(1 / n)
       cli::cli_progress_update()
     }
+    cli::cli_progress_done()
 
     resp <- request_make(...)
     tries_made <- tries_made + 1
