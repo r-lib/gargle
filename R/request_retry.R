@@ -116,12 +116,12 @@ request_retry <- function(
   )
 
   while (we_should_retry(tries_made, max_tries_total, resp)) {
-    wait_info <- backoff(tries_made, resp, base = b, per_user_failures)
-    wait_time <- wait_info$wait_time
-
     if (sheets_per_user_quota_exhaustion(resp)) {
       per_user_failures <- per_user_failures + 1
     }
+
+    wait_info <- backoff(tries_made, resp, base = b, per_user_failures)
+    wait_time <- wait_info$wait_time
 
     announce_retryable_failure(resp, tries_made, wait_info)
 
@@ -187,7 +187,7 @@ backoff <- function(
     )
   }
 
-  if (sheets_per_user_quota_exhaustion(resp) && per_user_failures < 1) {
+  if (sheets_per_user_quota_exhaustion(resp) && per_user_failures <= 1) {
     # 60s plus 1s and some jitter, for some wiggle
     wait_time <- 60 + 1 + stats::runif(1)
     wait_rationale <- "fixed 60 second wait for first per user quota exhaustion"
