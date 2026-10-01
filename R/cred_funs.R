@@ -122,7 +122,7 @@ cred_funs_set <- function(funs, ls = deprecated()) {
       what = "cred_funs_set(ls)",
       with = "cred_funs_set(funs)",
     )
-    funs = ls
+    funs <- ls
   }
 
   cred_funs_check(funs, allow_null = FALSE)
