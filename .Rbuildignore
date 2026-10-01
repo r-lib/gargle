@@ -25,5 +25,5 @@
 ^\.quarto$
 ^[.]?air[.]toml$
 ^\.vscode$
-^CLAUDE\.md$
 ^\.claude/*$
+^AGENTS\.md$
