@@ -109,7 +109,7 @@ jsonlite::prettify(scan(path_to_installed_client, what = character()))
 #> 
 (client <- gargle_oauth_client_from_json(path_to_installed_client))
 #> <gargle_oauth_client>
-#> name: a_project_d1c5a8066d2cbe48e8d94514dd286163
+#> name: a_project_59aa1797ab7ac4667a77617c3400999c
 #> id: abc.apps.googleusercontent.com
 #> secret: <REDACTED>
 #> type: installed
@@ -139,7 +139,7 @@ jsonlite::prettify(scan(path_to_web_client, what = character()))
 #> 
 (client <- gargle_oauth_client_from_json(path_to_web_client))
 #> <gargle_oauth_client>
-#> name: a_project_d1c5a8066d2cbe48e8d94514dd286163
+#> name: a_project_59aa1797ab7ac4667a77617c3400999c
 #> id: abc.apps.googleusercontent.com
 #> secret: <REDACTED>
 #> type: web
