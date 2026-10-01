@@ -54,7 +54,7 @@
         "https://example.com/aaa/bbb/v"))
     Message
       <gargle_oauth_client>
-      name: 7f82e05dfbeb26a264621f1482a14e25
+      name: b3ea4179ca5dd88e1c65ac7ba1ac352c
       id: ID
       secret: <REDACTED>
       type: web
