@@ -51,60 +51,18 @@
 
 <div class="section level2">
 <h2 id="this-package">This package<a class="anchor" aria-label="anchor" href="#this-package"></a></h2>
-<p><strong>gargle</strong> provides infrastructure for R packages that wrap Google APIs. It handles authentication, credential management, and HTTP request/response processing.</p>
-<p><strong>Target Users:</strong> R package authors wrapping Google APIs (e.g., googledrive, googlesheets4, bigrquery). May also be used directly by users making low-level API calls.</p>
-<p><strong>Two Main Domains:</strong> 1. <strong>Authentication:</strong> Multi-method credential fetching (OAuth2, service accounts, GCE metadata, workload identity federation, application default credentials) 2. <strong>HTTP:</strong> Request preparation, execution, response processing, error handling, and retry logic</p>
-<div class="section level3">
-<h3 id="key-technical-details">Key Technical Details<a class="anchor" aria-label="anchor" href="#key-technical-details"></a></h3>
-<p><strong>Core Classes</strong></p>
-<ul><li><p><strong><code>Gargle2.0</code></strong> (R6, in <code>R/Gargle-class.R</code>): OAuth2 token class extending <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>. Key differences: email-based cache keys, user-level caching, per-file cache storage. Methods: <code>initialize()</code>, <code>hash()</code>, <code>cache()</code>, <code>load_from_cache()</code>, <code>refresh()</code>, <code>init_credentials()</code>.</p></li>
-<li><p><strong><code>AuthState</code></strong> (R6, in <code>R/AuthState-class.R</code>): Session-scoped auth manager for client packages. Holds package name, OAuth client, API key, auth_active flag, and current credential. Methods: <code>set_client()</code>, <code>set_api_key()</code>, <code>set_auth_active()</code>, <code>set_cred()</code>, <code>get_cred()</code>, <code>has_cred()</code>.</p></li>
-<li><p><strong><code>gargle_oauth_client</code></strong> (S3 list, in <code>R/gargle_oauth_client.R</code>): OAuth application representation. Fields: id, secret, redirect_uris, type (“web” or “installed”), name. Created via <code><a href="reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> or <code><a href="reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>.</p></li>
-</ul><p><strong>Credential Function Registry</strong></p>
-<p>All auth flows go through <code><a href="reference/token_fetch.html">token_fetch()</a></code> which tries registered credential functions in order until one succeeds. Default order (tried first to last): 1. <code><a href="reference/credentials_byo_oauth2.html">credentials_byo_oauth2()</a></code> - Bring-your-own token 2. <code><a href="reference/credentials_service_account.html">credentials_service_account()</a></code> - Service account JSON 3. <code><a href="reference/credentials_external_account.html">credentials_external_account()</a></code> - Workload identity federation 4. <code><a href="reference/credentials_app_default.html">credentials_app_default()</a></code> - Google Application Default Credentials 5. <code><a href="reference/credentials_gce.html">credentials_gce()</a></code> - GCE metadata server 6. <code><a href="reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> - Interactive OAuth browser flow</p>
-<p>Modify registry with <code><a href="reference/cred_funs.html">cred_funs_add()</a></code>, <code><a href="reference/cred_funs.html">cred_funs_set()</a></code>, <code><a href="reference/cred_funs.html">cred_funs_set_default()</a></code>, or temporarily with <code><a href="reference/cred_funs.html">local_cred_funs()</a></code>/<code><a href="reference/cred_funs.html">with_cred_funs()</a></code>. All credential functions must have signature <code>function(scopes, ...)</code> and return <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token</a></code> or <code>NULL</code>.</p>
-<p><strong>Request/Response Pattern</strong></p>
-<p>Standard workflow:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># 1. Develop (validate params against API spec)</span></span>
-<span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_develop.html">request_develop</a></span><span class="op">(</span>endpoint <span class="op">=</span> <span class="va">...</span>, params <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Build (substitute params, add auth)</span></span>
-<span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_develop.html">request_build</a></span><span class="op">(</span><span class="va">method</span>, <span class="va">path</span>, <span class="va">params</span>, token <span class="op">=</span> <span class="va">token</span>, key <span class="op">=</span> <span class="va">api_key</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 3. Make HTTP call</span></span>
-<span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span>, encode <span class="op">=</span> <span class="st">"json"</span>, user_agent <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 4. Process response (parse JSON or throw informative error)</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span>, error_message <span class="op">=</span> <span class="va">gargle_error_message</span><span class="op">)</span></span></code></pre></div>
-<p>For automatic retries with exponential backoff, use <code><a href="reference/request_retry.html">request_retry()</a></code> instead of <code><a href="reference/request_make.html">request_make()</a></code>. Retries on status codes: 408, 429, 500, 502, 503.</p>
-<p><strong>Token Cache</strong></p>
-<ul><li>Location: <code>~/.R/gargle/gargle-oauth/</code> (XDG-compliant via rappdirs)</li>
-<li>File naming: <code>{parent_hash}_{email}.json</code>
-</li>
-<li>Parent hash: hash of endpoint + client + scopes</li>
-<li>Email-based lookup enables multi-identity support</li>
-<li>Functions: <code>cache_establish()</code>, <code>token_into_cache()</code>, <code>token_from_cache()</code>
-</li>
-</ul><p><strong>Configuration</strong></p>
-<p>Uses <code><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption()</a></code> pattern with wrapper functions: - <code><a href="reference/gargle_options.html">gargle_oauth_email()</a></code> - Target Google identity - <code><a href="reference/gargle_options.html">gargle_oauth_cache()</a></code> - Cache location (NA = auto-detect) - <code><a href="reference/gargle_options.html">gargle_oob_default()</a></code> - Out-of-band auth default - <code><a href="reference/gargle_options.html">gargle_oauth_client_type()</a></code> - “web” or “installed”</p>
-<p><strong>Global State</strong></p>
-<p><code>gargle_env</code> (in <code>R/gargle-package.R</code>) holds: - <code>$cred_funs</code> - Credential function registry - <code>$last_response</code> - Most recent API response (debugging)</p>
-<p><strong>Hosted Environment Detection</strong></p>
-<p>Automatically uses pseudo-OOB flow on RStudio Server, Posit Workbench/Cloud, and Google Colaboratory.</p>
-<p><strong>File Organization</strong></p>
-<p>Key files by domain: - <strong>Auth classes:</strong> <code>Gargle-class.R</code>, <code>AuthState-class.R</code> - <strong>OAuth infrastructure:</strong> <code>oauth-init.R</code>, <code>oauth-cache.R</code>, <code>oauth-refresh.R</code> - <strong>Credentials:</strong> <code>credentials_user_oauth2.R</code>, <code>credentials_service_account.R</code>, <code>credentials_gce.R</code>, <code>credentials_external_account.R</code>, <code>credentials_app_default.R</code>, <code>credentials_byo_oauth2.R</code> - <strong>Registry:</strong> <code>cred_funs.R</code>, <code>token_fetch.R</code> - <strong>HTTP:</strong> <code>request_develop.R</code>, <code>request_make.R</code>, <code>request_retry.R</code>, <code>response_process.R</code> - <strong>Config:</strong> <code>gargle-package.R</code> (defines <code>gargle_env</code> and option accessors) - <strong>Client management:</strong> <code>gargle_oauth_client.R</code> - <strong>Utilities:</strong> <code>secret.R</code> (encryption), <code>utils-ui.R</code> (CLI), <code>token-info.R</code></p>
-<p><strong>Client Package Pattern</strong></p>
-<p>Wrapper packages typically: 1. Initialize <code>AuthState</code> in <code>.onLoad()</code> with package-specific client and API key 2. Call <code><a href="reference/token_fetch.html">token_fetch()</a></code> to get credentials 3. Use <code><a href="reference/request_develop.html">request_build()</a></code> + <code><a href="reference/request_make.html">request_make()</a></code> + <code><a href="reference/response_process.html">response_process()</a></code> for API calls 4. Provide user-facing auth functions that wrap <code><a href="reference/token_fetch.html">token_fetch()</a></code> and update the <code>AuthState</code></p>
-<p>See vignettes for detailed guidance on wrapping Google APIs.</p>
-</div>
-</div>
+<p>gargle is infrastructure for R packages that wrap Google APIs: auth, plus HTTP request/response helpers. See <code>README.md</code> and the vignettes for the big picture.</p>
+<p>Things that aren’t obvious from the code:</p>
+<ul><li>httr is superseded. <code>R/oauth-init.R</code> is adapted from httr, and <code>Gargle2.0</code> extends <code><a href="https://httr.r-lib.org/reference/Token-class.html" class="external-link">httr::Token2.0</a></code>. Fix problems in gargle rather than upstream, and keep the list of divergences from httr at the top of <code>R/oauth-init.R</code> current.</li>
+<li>The conventional OOB flow (<code>use_oob = TRUE</code> with a non-<code>"web"</code> client) is legacy and deliberately left alone. It only works for an OAuth client in testing mode.</li>
+<li>Signal errors with <code>gargle_abort()</code>.</li>
+</ul></div>
 <div class="section level2">
 <h2 id="package-development">Package development<a class="anchor" aria-label="anchor" href="#package-development"></a></h2>
 <div class="section level3">
 <h3 id="key-commands">Key commands<a class="anchor" aria-label="anchor" href="#key-commands"></a></h3>
 <p>(All these functions have been optimized for agentic use, so they can be called directly without other arguments.)</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Executing code</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">code</span></span>
