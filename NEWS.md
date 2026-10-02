@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* The default (loopback) OAuth flow now verifies that the `state` returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.
+
 # gargle 1.6.1
 
 * `gargle_last_response()` and `gargle_last_content()` are newly exported.
