@@ -65,3 +65,17 @@ test_that("We keep looking for credentials on error", {
 
   expect_equal(1, token_fetch(c()))
 })
+
+test_that("Caught conditions are logged, even with curly braces", {
+  withr::defer(cred_funs_set_default())
+  local_gargle_verbosity("debug")
+
+  creds_noisy_failure <- function(scopes, ...) {
+    warning("careful {now}")
+    abort(c("no {creds}", i = "a hint"))
+  }
+  cred_funs_set(list(failure = creds_noisy_failure, always = creds_always))
+
+  expect_snapshot(out <- token_fetch())
+  expect_equal(out, 1)
+})

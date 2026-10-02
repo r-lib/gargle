@@ -255,7 +255,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
       n_show = 10
     )
   )
-  message
+  escape_braces(message)
 }
 
 redact_response <- function(resp) {
@@ -388,18 +388,4 @@ gargle_html_error_message <- function(resp) {
       "Or execute {.code <<x>>} to view it in your browser."
     )
   )
-}
-
-# Google APIs might return error messages containing curly braces, e.g.
-# "metadata.quota_unit: 1/min/{project}/{user}"
-# This can cause problems when eventually process by cli::cli_abort(), e.g.
-# Error:
-# ! ! Could not evaluate cli `{}` expression: `project`.
-# Caused by error in `eval(expr, envir = envir)`:
-# ! object 'project' not found
-# So we need to escape them by doubling them, so they are taken literally.
-# Seen by me and by a user:
-# https://github.com/tidyverse/googlesheets4/issues/319
-escape_braces <- function(msg) {
-  gsub("([{}])", "\\1\\1", msg)
 }

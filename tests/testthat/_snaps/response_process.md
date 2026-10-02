@@ -185,3 +185,17 @@
       i See 'VOLATILE_FILE_PATH' for the html error content.
       i Or execute `browseURL("VOLATILE_FILE_PATH")` to view it in your browser.
 
+# Curly braces in error message are taken literally (Drive)
+
+    Code
+      response_process(resp)
+    Condition
+      Error:
+      ! Client error: (404) Not Found
+      File not found: {fileId}.
+      * domain: global
+      * reason: notFound
+      * message: File not found: {fileId}.
+      * locationType: parameter
+      * location: fileId
+

@@ -115,6 +115,21 @@ test_that("Request to bad URL (tokeninfo, HTML content)", {
   )
 })
 
+# https://github.com/tidyverse/googlesheets4/issues/319
+test_that("Curly braces in error message are taken literally (Drive)", {
+  rds_file <- test_path(
+    "fixtures",
+    "drive-files-get-nonexistent-file-id_404.rds"
+  )
+  resp <- readRDS(rds_file)
+  resp$content <- charToRaw(gsub(
+    "NOPE_NOT_A_GOOD_ID",
+    "{fileId}",
+    rawToChar(resp$content)
+  ))
+  expect_snapshot(response_process(resp), error = TRUE)
+})
+
 # error_class parameter ----
 test_that("error_class parameter adds custom classes", {
   rds_file <- test_path(

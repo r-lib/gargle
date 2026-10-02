@@ -347,3 +347,18 @@ pkg_url_bug <- function(pkg) {
 
   NULL
 }
+
+# Text we don't control, such as error messages from Google APIs or caught
+# conditions, might contain curly braces, e.g.
+# "metadata.quota_unit: 1/min/{project}/{user}"
+# This can cause problems when eventually process by cli::cli_abort(), e.g.
+# Error:
+# ! ! Could not evaluate cli `{}` expression: `project`.
+# Caused by error in `eval(expr, envir = envir)`:
+# ! object 'project' not found
+# So we need to escape them by doubling them, so they are taken literally.
+# Seen by me and by a user:
+# https://github.com/tidyverse/googlesheets4/issues/319
+escape_braces <- function(msg) {
+  gsub("([{}])", "\\1\\1", msg)
+}

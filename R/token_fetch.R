@@ -26,13 +26,19 @@ token_fetch <- function(scopes = NULL, ...) {
     token <- NULL
     token <- tryCatch(
       error = function(e) {
-        gargle_debug(c("Error caught by {.fun token_fetch}:", e$message))
+        gargle_debug(c(
+          "Error caught by {.fun token_fetch}:",
+          escape_braces(conditionMessage(e))
+        ))
         NULL
       },
       withCallingHandlers(
         f(scopes, ...),
         warning = function(e) {
-          gargle_debug(c("Warning caught by {.fun token_fetch}:", e$message))
+          gargle_debug(c(
+            "Warning caught by {.fun token_fetch}:",
+            escape_braces(conditionMessage(e))
+          ))
         }
       )
     )
