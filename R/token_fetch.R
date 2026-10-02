@@ -21,6 +21,7 @@
 #' token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
 #' }
 token_fetch <- function(scopes = NULL, ...) {
+  gargle_span <- otel_local_active_span("token fetch")
   gargle_debug("trying {.fun token_fetch}")
   for (f in gargle_env$cred_funs) {
     token <- NULL

@@ -38,6 +38,8 @@ Suggests:
     covr,
     httpuv,
     knitr,
+    otel,
+    otelsdk,
     rmarkdown,
     sodium,
     spelling,
