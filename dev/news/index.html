@@ -50,7 +50,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
-</div>
+<ul><li>The default (loopback) OAuth flow now verifies that the <code>state</code> returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.1" id="gargle-161">gargle 1.6.1<a class="anchor" aria-label="anchor" href="#gargle-161"></a></h2><p class="text-muted">CRAN release: 2026-01-29</p>
 <ul><li><p><code><a href="../reference/gargle_last_response.html">gargle_last_response()</a></code> and <code><a href="../reference/gargle_last_response.html">gargle_last_content()</a></code> are newly exported.</p></li>
