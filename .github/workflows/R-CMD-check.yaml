@@ -50,7 +50,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          extra-repositories: https://cloudyr.r-universe.dev
+          extra-repositories: https://cloudyr.github.io/drat
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
