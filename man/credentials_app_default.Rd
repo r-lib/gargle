@@ -29,8 +29,9 @@ scope, so this scope must be enabled for the service account, along with
 any other \code{scopes} being requested.}
 }
 \value{
-An \code{\link[httr:Token-class]{httr::TokenServiceAccount}}, a \code{\link{WifToken}},
-an \code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
+An \code{\link[httr:Token-class]{httr::TokenServiceAccount}}, an impersonated
+service account token, a \code{\link{WifToken}}, an
+\code{\link[httr:Token-class]{httr::Token2.0}} or \code{NULL}.
 }
 \description{
 Loads credentials from a file identified via a search strategy known as
@@ -51,10 +52,11 @@ CLOUDSDK_CONFIG/application_default_credentials.json
 }\if{html}{\out{</div>}}
 
 If the above search successfully identifies a JSON file, it is parsed and
-ingested as a service account, an external account ("workload identity
-federation"), or a user account. Literally, if the JSON describes a service
-account, we call \code{\link[=credentials_service_account]{credentials_service_account()}} and if it describes an
-external account, we call \code{\link[=credentials_external_account]{credentials_external_account()}}.
+ingested as a service account, an impersonated service account, an external
+account ("workload identity federation"), or a user account. Literally, if
+the JSON describes a service account, we call \code{\link[=credentials_service_account]{credentials_service_account()}}
+and if it describes an external account, we call
+\code{\link[=credentials_external_account]{credentials_external_account()}}.
 }
 \examples{
 \dontrun{
