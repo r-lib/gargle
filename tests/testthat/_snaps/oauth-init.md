@@ -38,3 +38,55 @@
       Error in `check_oob()`:
       ! Out-of-band auth only works in an interactive session.
 
+# check_oauth_redirect() requires matching state, checked first
+
+    Code
+      check_oauth_redirect(list(code = "abc", state = "nope"), "xyz")
+    Condition
+      Error:
+      ! OAuth `state` did not match.
+      i The authorization response may not be from the request that gargle initiated. Please try again.
+
+---
+
+    Code
+      check_oauth_redirect(list(code = "abc"), "xyz")
+    Condition
+      Error:
+      ! OAuth `state` did not match.
+      i The authorization response may not be from the request that gargle initiated. Please try again.
+
+---
+
+    Code
+      check_oauth_redirect(list(error = "access_denied", state = "nope"), "xyz")
+    Condition
+      Error:
+      ! OAuth `state` did not match.
+      i The authorization response may not be from the request that gargle initiated. Please try again.
+
+# check_oauth_redirect() reports an error or missing code
+
+    Code
+      check_oauth_redirect(list(error = "access_denied", state = "xyz"), "xyz")
+    Condition
+      Error:
+      ! OAuth authorization failed: "access_denied".
+
+---
+
+    Code
+      check_oauth_redirect(list(state = "xyz"), "xyz")
+    Condition
+      Error:
+      ! OAuth authorization response did not include an authorization code.
+
+# loopback flow checks the redirect
+
+    Code
+      oauth_authorize("https://example.org", state = "nope")
+    Condition
+      Error in `oauth_authorize()`:
+      ! OAuth `state` did not match.
+      i The authorization response may not be from the request that gargle initiated. Please try again.
+

@@ -10,6 +10,9 @@
 #   exchange *with state*, by calling the new function
 #   oauth_exchanger_with_state().
 # - Added: oauth_exchanger_with_state()
+# - Added: check_oauth_redirect(). Verifies the `state` (and checks for an
+#   error or missing code) in the redirect, for both the loopback and
+#   pseudo-OOB flows. httr::oauth_listener() does not verify `state`.
 # - Added: csrf_token(). Used to create the `state` token (example of a
 #   cross-site request forgery token). Switched one existing use of
 #   httr:::nonce() to this, now that I can.
@@ -132,8 +135,15 @@ oauth_authorize <- function(url, oob = FALSE, client_type = NA, state = NULL) {
       httr::oauth_exchanger(url)$code
     }
   } else {
-    httr::oauth_listener(url)$code
+    info <- oauth_listener(url)
+    check_oauth_redirect(info, state)
+    info$code
   }
+}
+
+# thin wrapper, so tests can mock the browser + local webserver dance
+oauth_listener <- function(url) {
+  httr::oauth_listener(url)
 }
 
 oauth_exchanger_with_state <- function(request_url, state) {
@@ -141,10 +151,38 @@ oauth_exchanger_with_state <- function(request_url, state) {
 
   info_enc <- trimws(readline("Enter authorization code: "))
   info <- jsonlite::fromJSON(rawToChar(openssl::base64_decode(info_enc)))
-  if (!identical(info$state, state)) {
-    stop("state did not match")
-  }
+  check_oauth_redirect(info, state)
   list(code = info$code)
+}
+
+# `info` is the parsed query string of the redirect from the authorization
+# server. Verify `state` first, so that nothing else in an unverified redirect
+# is acted upon (or echoed back to the user).
+# https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2
+check_oauth_redirect <- function(info, state, call = caller_env()) {
+  if (!identical(info$state, state)) {
+    gargle_abort(
+      c(
+        "OAuth {.arg state} did not match.",
+        "i" = "The authorization response may not be from the request \\
+               that gargle initiated. Please try again."
+      ),
+      call = call
+    )
+  }
+  if (!is.null(info$error)) {
+    gargle_abort(
+      "OAuth authorization failed: {.val {info$error}}.",
+      call = call
+    )
+  }
+  if (!is_string(info$code) || !nzchar(info$code)) {
+    gargle_abort(
+      "OAuth authorization response did not include an authorization code.",
+      call = call
+    )
+  }
+  invisible(info)
 }
 
 check_oob <- function(use_oob, oob_value = NULL) {
