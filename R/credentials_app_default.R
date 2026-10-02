@@ -67,7 +67,7 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/cloud-platform.readonly"
     )
-    if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
+    if (!is.null(scopes) && !all(scopes %in% valid_scopes)) {
       return(NULL)
     }
     gargle_debug("ADC cred type: {.val authorized_user}")
