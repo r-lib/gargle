@@ -84,7 +84,18 @@ init_oauth2.0 <- function(
 
       state <- csrf_token()
     } else {
-      # conventional oob
+      # Conventional OOB auth has effectively been blocked by Google since 2022:
+      # https://developers.google.com/identity/protocols/oauth2/resources/oob-migration
+      #
+      # In particular, gargle's own clients can never reach this flow, since
+      # they have publishing status "In Production".
+      #
+      # This flow is only reachable with a user-supplied client with "Testing"
+      # status. We leave this flow in gargle to support this specific, narrow
+      # use case.
+      #
+      # No `state`, deliberately: the user pastes the authorization code into
+      # R by hand, so there's no redirect for an attacker to forge.
       state <- NULL
     }
   } else {
