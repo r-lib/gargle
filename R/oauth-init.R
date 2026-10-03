@@ -16,6 +16,12 @@
 # - Added: csrf_token(). Used to create the `state` token (example of a
 #   cross-site request forgery token). Switched one existing use of
 #   httr:::nonce() to this, now that I can.
+# - Added: PKCE (RFC 7636) in the loopback and pseudo-OOB flows, via
+#   pkce_verifier() and pkce_challenge(). init_oauth2.0() puts
+#   `code_challenge` on the authorize URL and sends `code_verifier` to the
+#   token endpoint. Not used for conventional OOB (legacy, left alone).
+# - Added: oauth_access_token(), a thin wrapper around
+#   httr::oauth2.0_access_token(), so tests can mock the token exchange.
 # - The internal helper check_scope() got inlined (it was a mix of a checker
 #   and a processor).
 # - The internal helper check_oob() got modified to use gargle conventions.
@@ -58,6 +64,8 @@ init_oauth2.0 <- function(
     NA
   }
 
+  code_verifier <- NULL
+
   if (use_oob) {
     redirect_uri <- oob_value %||% "urn:ietf:wg:oauth:2.0:oob"
 
@@ -83,6 +91,7 @@ init_oauth2.0 <- function(
       query_authorize_extra[["prompt"]] <- "consent"
 
       state <- csrf_token()
+      code_verifier <- pkce_verifier()
     } else {
       # Conventional OOB auth has effectively been blocked by Google since 2022:
       # https://developers.google.com/identity/protocols/oauth2/resources/oob-migration
@@ -101,6 +110,15 @@ init_oauth2.0 <- function(
   } else {
     redirect_uri <- httr::oauth_callback()
     state <- csrf_token()
+    code_verifier <- pkce_verifier()
+  }
+
+  # PKCE: https://developers.google.com/identity/protocols/oauth2/native-app
+  # Google documents PKCE for installed apps. We use it for pseudo-OOB as well,
+  # since the "web" client's secret also ships with the package.
+  if (!is.null(code_verifier)) {
+    query_authorize_extra[["code_challenge"]] <- pkce_challenge(code_verifier)
+    query_authorize_extra[["code_challenge_method"]] <- "S256"
   }
 
   authorize_url <- httr::oauth2.0_authorize_url(
@@ -119,12 +137,37 @@ init_oauth2.0 <- function(
   )
 
   # Use authorisation code to get (temporary) access token
+  oauth_access_token(
+    endpoint,
+    client,
+    code = code,
+    user_params = if (!is.null(code_verifier)) {
+      list(code_verifier = code_verifier)
+    },
+    redirect_uri = redirect_uri
+  )
+}
+
+# thin wrapper, so tests can inspect the token request
+oauth_access_token <- function(endpoint, client, code, user_params, ...) {
   httr::oauth2.0_access_token(
     endpoint,
     client,
     code = code,
-    redirect_uri = redirect_uri
+    user_params = user_params,
+    ...
   )
+}
+
+# https://datatracker.ietf.org/doc/html/rfc7636#section-4.1
+# 32 random bytes give a 43-character verifier, the minimum allowed.
+pkce_verifier <- function(n_bytes = 32) {
+  base64_url_encode(openssl::rand_bytes(n_bytes))
+}
+
+# https://datatracker.ietf.org/doc/html/rfc7636#section-4.2
+pkce_challenge <- function(verifier) {
+  base64_url_encode(openssl::sha256(charToRaw(verifier)))
 }
 
 # https://developers.google.com/identity/protocols/oauth2/openid-connect#createxsrftoken
