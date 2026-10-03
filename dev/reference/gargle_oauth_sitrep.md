@@ -14,8 +14,17 @@ Get a human-oriented overview of the existing gargle OAuth tokens:
 
   - Scopes
 
-  - Hash (actually, just the first 7 characters) Mostly useful for the
-    development of gargle and client packages.
+  - Hash (actually, just the first 7 characters)
+
+This is the most direct way to find out where gargle's OAuth cache is
+(see
+[`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+for more about the cache location). The `filepath` column of the
+returned data frame makes it easy to delete specific tokens, e.g.:
+
+    dat <- gargle_oauth_sitrep()
+    # delete all cached tokens for one Google identity
+    unlink(dat$filepath[dat$email == "jane@example.com"])
 
 ## Usage
 
@@ -34,7 +43,7 @@ gargle_oauth_sitrep(cache = NULL)
 ## Value
 
 A data frame with one row per cached token, invisibly. Note this data
-frame may contain more columns than it seems, e.g. the `filepath` column
+frame contains more columns than it seems, e.g. the `filepath` column
 isn't printed by default.
 
 ## Examples

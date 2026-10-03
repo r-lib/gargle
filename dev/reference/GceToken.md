@@ -1,11 +1,5 @@
 # Token for use on Google Compute Engine instances
 
-Token for use on Google Compute Engine instances
-
-Token for use on Google Compute Engine instances
-
-## Details
-
 This class uses the metadata service available on GCE VMs to fetch
 access tokens. Not intended for direct use. See
 [`credentials_gce()`](https://gargle.r-lib.org/dev/reference/credentials_gce.md)
@@ -21,7 +15,7 @@ instead.
 
 ### Public methods
 
-- [`GceToken$new()`](#method-GceToken-new)
+- [`GceToken$new()`](#method-GceToken-initialize)
 
 - [`GceToken$init_credentials()`](#method-GceToken-init_credentials)
 
@@ -50,7 +44,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `GceToken$new()`
 
 Get an access for a GCE service account.
 
@@ -70,7 +64,7 @@ A GceToken.
 
 ------------------------------------------------------------------------
 
-### Method `init_credentials()`
+### `GceToken$init_credentials()`
 
 Request an access token.
 
@@ -80,7 +74,7 @@ Request an access token.
 
 ------------------------------------------------------------------------
 
-### Method `refresh()`
+### `GceToken$refresh()`
 
 Refreshes the token. In this case, that just means "ask again for an
 access token".
@@ -91,7 +85,7 @@ access token".
 
 ------------------------------------------------------------------------
 
-### Method `can_refresh()`
+### `GceToken$can_refresh()`
 
 Placeholder implementation of required method. Returns `TRUE`.
 
@@ -101,7 +95,7 @@ Placeholder implementation of required method. Returns `TRUE`.
 
 ------------------------------------------------------------------------
 
-### Method [`format()`](https://rdrr.io/r/base/format.html)
+### `GceToken$format()`
 
 Format a `GceToken()`.
 
@@ -117,7 +111,7 @@ Format a `GceToken()`.
 
 ------------------------------------------------------------------------
 
-### Method [`print()`](https://rdrr.io/r/base/print.html)
+### `GceToken$print()`
 
 Print a `GceToken()`.
 
@@ -133,7 +127,7 @@ Print a `GceToken()`.
 
 ------------------------------------------------------------------------
 
-### Method `cache()`
+### `GceToken$cache()`
 
 Placeholder implementation of required method.
 
@@ -143,7 +137,7 @@ Placeholder implementation of required method.
 
 ------------------------------------------------------------------------
 
-### Method `load_from_cache()`
+### `GceToken$load_from_cache()`
 
 Placeholder implementation of required method.
 
@@ -153,7 +147,7 @@ Placeholder implementation of required method.
 
 ------------------------------------------------------------------------
 
-### Method `revoke()`
+### `GceToken$revoke()`
 
 Placeholder implementation of required method.
 
@@ -163,7 +157,7 @@ Placeholder implementation of required method.
 
 ------------------------------------------------------------------------
 
-### Method `validate()`
+### `GceToken$validate()`
 
 Placeholder implementation of required method
 
@@ -173,7 +167,7 @@ Placeholder implementation of required method
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `GceToken$clone()`
 
 The objects of this class are cloneable with this method.
 

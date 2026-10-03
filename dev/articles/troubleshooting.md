@@ -94,11 +94,11 @@ played with several APIs via gargle-using packages.
 ``` r
 
 gargle_oauth_sitrep()
-#' > 14 tokens found in this gargle OAuth cache:
+#' 14 tokens found in this gargle OAuth cache:
 #' '~/Library/Caches/gargle'
 #'
-#' email                         app         scope                          hash...
-#' ----------------------------- ----------- ------------------------------ ----------
+#' email                         client      scopes                         hash...
+#' _____________________________ ___________ ______________________________ __________
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
 #' stella@example.org            gargle-demo ...drive                       4281945...
@@ -115,11 +115,15 @@ gargle_oauth_sitrep()
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
 
+The default cache location varies by operating system; see
+[`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+for more details.
+
 It is relatively harmless to delete the folder serving as the OAuth
 cache. Or, if you have reason to believe one specific cached token is
-causing you pain, you could delete a specific token (an `.rds` file)
-from the cache. OAuth user tokens are meant to be perishable and
-replaceable.
+causing you pain, you could delete a specific token (which is just an
+`.rds` file) from the cache. OAuth user tokens are meant to be
+perishable and replaceable.
 
 If you choose to delete your cache (or a specific token), here is the
 fallout you can expect:

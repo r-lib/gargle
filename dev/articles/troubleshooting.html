@@ -159,11 +159,11 @@ someone who has accepted the default OAuth cache location and has played
 with several APIs via gargle-using packages.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#' &gt; 14 tokens found in this gargle OAuth cache:</span></span>
+<span><span class="co">#' 14 tokens found in this gargle OAuth cache:</span></span>
 <span><span class="co">#' '~/Library/Caches/gargle'</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' email                         app         scope                          hash...</span></span>
-<span><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></span>
+<span><span class="co">#' email                         client      scopes                         hash...</span></span>
+<span><span class="co">#' _____________________________ ___________ ______________________________ __________</span></span>
 <span><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></span>
 <span><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></span>
 <span><span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span></span>
@@ -178,9 +178,11 @@ with several APIs via gargle-using packages.</p>
 <span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span></span>
 <span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span></span>
 <span><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></span></code></pre></div>
+<p>The default cache location varies by operating system; see
+<code><a href="../reference/gargle_options.html">gargle_oauth_cache()</a></code> for more details.</p>
 <p>It is relatively harmless to delete the folder serving as the OAuth
 cache. Or, if you have reason to believe one specific cached token is
-causing you pain, you could delete a specific token (an
+causing you pain, you could delete a specific token (which is just an
 <code>.rds</code> file) from the cache. OAuth user tokens are meant to
 be perishable and replaceable.</p>
 <p>If you choose to delete your cache (or a specific token), here is the

@@ -138,23 +138,23 @@ fetching functions).</p></li>
 <dd><p>Package name.</p></dd>
 
 
-<dt><code>client</code></dt>
+    <dt><code>client</code></dt>
 <dd><p>An OAuth client.</p></dd>
 
 
-<dt><code>app</code></dt>
+    <dt><code>app</code></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>client</code> instead.</p></dd>
 
 
-<dt><code>api_key</code></dt>
+    <dt><code>api_key</code></dt>
 <dd><p>An API key.</p></dd>
 
 
-<dt><code>auth_active</code></dt>
+    <dt><code>auth_active</code></dt>
 <dd><p>Logical, indicating whether auth is active.</p></dd>
 
 
-<dt><code>cred</code></dt>
+    <dt><code>cred</code></dt>
 <dd><p>Credentials.</p></dd>
 
 
@@ -165,8 +165,7 @@ fetching functions).</p></li>
 
 <div class="section">
 <h3 id="public-methods">Public methods<a class="anchor" aria-label="anchor" href="#public-methods"></a></h3>
-
-<ul><li><p><a href="#method-AuthState-new"><code>AuthState$new()</code></a></p></li>
+<p></p><ul><li><p><a href="#method-AuthState-initialize"><code>AuthState$new()</code></a></p></li>
 <li><p><a href="#method-AuthState-format"><code>AuthState$format()</code></a></p></li>
 <li><p><a href="#method-AuthState-set_client"><code>AuthState$set_client()</code></a></p></li>
 <li><p><a href="#method-AuthState-set_app"><code>AuthState$set_app()</code></a></p></li>
@@ -177,8 +176,8 @@ fetching functions).</p></li>
 <li><p><a href="#method-AuthState-get_cred"><code>AuthState$get_cred()</code></a></p></li>
 <li><p><a href="#method-AuthState-has_cred"><code>AuthState$has_cred()</code></a></p></li>
 <li><p><a href="#method-AuthState-clone"><code>AuthState$clone()</code></a></p></li>
-</ul></div><p></p><hr><a id="method-AuthState-new"></a><div class="section">
-<h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
+</ul></div><p></p><hr><a id="method-AuthState-initialize"></a><div class="section">
+<h3 id="authstate-new-"><code>AuthState$new()</code><a class="anchor" aria-label="anchor" href="#authstate-new-"></a></h3>
 <p>Create a new AuthState</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/AuthState-class.html">AuthState</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
@@ -189,50 +188,41 @@ fetching functions).</p></li>
 <span>  cred <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  app <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>package</code></dt>
 <dd><p>Package name.</p></dd>
 
-
-<dt><code>client</code></dt>
+      <dt><code>client</code></dt>
 <dd><p>An OAuth client.</p></dd>
 
-
-<dt><code>api_key</code></dt>
+      <dt><code>api_key</code></dt>
 <dd><p>An API key.</p></dd>
 
-
-<dt><code>auth_active</code></dt>
+      <dt><code>auth_active</code></dt>
 <dd><p>Logical, indicating whether auth is active.</p></dd>
 
-
-<dt><code>cred</code></dt>
+      <dt><code>cred</code></dt>
 <dd><p>Credentials.</p></dd>
 
-
-<dt><code>app</code></dt>
+      <dt><code>app</code></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>client</code> instead.</p></dd>
 
 
 </dl><p></p></div>
-</div>
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h4>
 <p>For more details on the parameters, see <code><a href="init_AuthState.html">init_AuthState()</a></code></p>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-AuthState-format"></a><div class="section">
-<h3 id="method-format-">Method <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code><a class="anchor" aria-label="anchor" href="#method-format-"></a></h3>
+<p></p><hr><a id="method-AuthState-format"></a><div class="section">
+<h3 id="authstate-format-"><code>AuthState$format()</code><a class="anchor" aria-label="anchor" href="#authstate-format-"></a></h3>
 <p>Format an AuthState</p><div class="section">
 <h4 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">format</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>...</code></dt>
 <dd><p>Not used.</p></dd>
@@ -241,14 +231,14 @@ fetching functions).</p></li>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-set_client"></a><div class="section">
-<h3 id="method-set-client-">Method <code>set_client()</code><a class="anchor" aria-label="anchor" href="#method-set-client-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-set_client"></a><div class="section">
+<h3 id="authstate-set-client-"><code>AuthState$set_client()</code><a class="anchor" aria-label="anchor" href="#authstate-set-client-"></a></h3>
 <p>Set the OAuth client</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_client</span><span class="op">(</span><span class="va">client</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>client</code></dt>
 <dd><p>An OAuth client.</p></dd>
@@ -257,15 +247,15 @@ fetching functions).</p></li>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-set_app"></a><div class="section">
-<h3 id="method-set-app-">Method <code>set_app()</code><a class="anchor" aria-label="anchor" href="#method-set-app-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-set_app"></a><div class="section">
+<h3 id="authstate-set-app-"><code>AuthState$set_app()</code><a class="anchor" aria-label="anchor" href="#authstate-set-app-"></a></h3>
 <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Deprecated method to set
 the OAuth client</p><div class="section">
 <h4 id="usage-3">Usage<a class="anchor" aria-label="anchor" href="#usage-3"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_app</span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>app</code></dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Use <code>client</code> instead.</p></dd>
@@ -274,14 +264,14 @@ the OAuth client</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-set_api_key"></a><div class="section">
-<h3 id="method-set-api-key-">Method <code>set_api_key()</code><a class="anchor" aria-label="anchor" href="#method-set-api-key-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-set_api_key"></a><div class="section">
+<h3 id="authstate-set-api-key-"><code>AuthState$set_api_key()</code><a class="anchor" aria-label="anchor" href="#authstate-set-api-key-"></a></h3>
 <p>Set the API key</p><div class="section">
 <h4 id="usage-4">Usage<a class="anchor" aria-label="anchor" href="#usage-4"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_api_key</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>An API key.</p></dd>
@@ -290,14 +280,14 @@ the OAuth client</p><div class="section">
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-set_auth_active"></a><div class="section">
-<h3 id="method-set-auth-active-">Method <code>set_auth_active()</code><a class="anchor" aria-label="anchor" href="#method-set-auth-active-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-set_auth_active"></a><div class="section">
+<h3 id="authstate-set-auth-active-"><code>AuthState$set_auth_active()</code><a class="anchor" aria-label="anchor" href="#authstate-set-auth-active-"></a></h3>
 <p>Set whether auth is (in)active</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_auth_active</span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-5">Arguments<a class="anchor" aria-label="anchor" href="#arguments-5"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>value</code></dt>
 <dd><p>Logical, indicating whether to send requests authorized with
@@ -307,14 +297,14 @@ user credentials.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-set_cred"></a><div class="section">
-<h3 id="method-set-cred-">Method <code>set_cred()</code><a class="anchor" aria-label="anchor" href="#method-set-cred-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-set_cred"></a><div class="section">
+<h3 id="authstate-set-cred-"><code>AuthState$set_cred()</code><a class="anchor" aria-label="anchor" href="#authstate-set-cred-"></a></h3>
 <p>Set credentials</p><div class="section">
 <h4 id="usage-6">Usage<a class="anchor" aria-label="anchor" href="#usage-6"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">set_cred</span><span class="op">(</span><span class="va">cred</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-6">Arguments<a class="anchor" aria-label="anchor" href="#arguments-6"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>cred</code></dt>
 <dd><p>User credentials.</p></dd>
@@ -323,38 +313,41 @@ user credentials.</p></dd>
 </dl><p></p></div>
 </div>
 
-</div><p></p><hr><a id="method-AuthState-clear_cred"></a><div class="section">
-<h3 id="method-clear-cred-">Method <code>clear_cred()</code><a class="anchor" aria-label="anchor" href="#method-clear-cred-"></a></h3>
+</div>
+
+<p></p><hr><a id="method-AuthState-clear_cred"></a><div class="section">
+<h3 id="authstate-clear-cred-"><code>AuthState$clear_cred()</code><a class="anchor" aria-label="anchor" href="#authstate-clear-cred-"></a></h3>
 <p>Clear credentials</p><div class="section">
 <h4 id="usage-7">Usage<a class="anchor" aria-label="anchor" href="#usage-7"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">clear_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-AuthState-get_cred"></a><div class="section">
-<h3 id="method-get-cred-">Method <code>get_cred()</code><a class="anchor" aria-label="anchor" href="#method-get-cred-"></a></h3>
+<p></p><hr><a id="method-AuthState-get_cred"></a><div class="section">
+<h3 id="authstate-get-cred-"><code>AuthState$get_cred()</code><a class="anchor" aria-label="anchor" href="#authstate-get-cred-"></a></h3>
 <p>Get credentials</p><div class="section">
 <h4 id="usage-8">Usage<a class="anchor" aria-label="anchor" href="#usage-8"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">get_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-AuthState-has_cred"></a><div class="section">
-<h3 id="method-has-cred-">Method <code>has_cred()</code><a class="anchor" aria-label="anchor" href="#method-has-cred-"></a></h3>
+<p></p><hr><a id="method-AuthState-has_cred"></a><div class="section">
+<h3 id="authstate-has-cred-"><code>AuthState$has_cred()</code><a class="anchor" aria-label="anchor" href="#authstate-has-cred-"></a></h3>
 <p>Report if we have credentials</p><div class="section">
 <h4 id="usage-9">Usage<a class="anchor" aria-label="anchor" href="#usage-9"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">has_cred</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+</div>
 
-</div><p></p><hr><a id="method-AuthState-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p></p><hr><a id="method-AuthState-clone"></a><div class="section">
+<h3 id="authstate-clone-"><code>AuthState$clone()</code><a class="anchor" aria-label="anchor" href="#authstate-clone-"></a></h3>
 <p>The objects of this class are cloneable with this method.</p><div class="section">
 <h4 id="usage-10">Usage<a class="anchor" aria-label="anchor" href="#usage-10"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">AuthState</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
-</div>
-
-<div class="section">
+</div><p></p><div class="section">
 <h4 id="arguments-7">Arguments<a class="anchor" aria-label="anchor" href="#arguments-7"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
@@ -364,6 +357,7 @@ user credentials.</p></dd>
 </div>
 
 </div>
+
 
     </div>
 

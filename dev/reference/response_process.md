@@ -51,7 +51,7 @@ gargle_error_message(resp, call = caller_env())
 - resp:
 
   Object of class `response` from
-  [httr::httr](https://httr.r-lib.org/reference/httr-package.html).
+  [httr](https://httr.r-lib.org/reference/httr-package.html).
 
 - error_message:
 

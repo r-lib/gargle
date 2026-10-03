@@ -1,11 +1,5 @@
 # Token for use with workload identity federation
 
-Token for use with workload identity federation
-
-Token for use with workload identity federation
-
-## Details
-
 Not intended for direct use. See
 [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md)
 instead.
@@ -20,7 +14,7 @@ instead.
 
 ### Public methods
 
-- [`WifToken$new()`](#method-WifToken-new)
+- [`WifToken$new()`](#method-WifToken-initialize)
 
 - [`WifToken$init_credentials()`](#method-WifToken-init_credentials)
 
@@ -49,7 +43,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `WifToken$new()`
 
 Get a token via workload identity federation
 
@@ -69,7 +63,7 @@ A WifToken.
 
 ------------------------------------------------------------------------
 
-### Method `init_credentials()`
+### `WifToken$init_credentials()`
 
 Enact the actual token exchange for workload identity federation.
 
@@ -79,7 +73,7 @@ Enact the actual token exchange for workload identity federation.
 
 ------------------------------------------------------------------------
 
-### Method `refresh()`
+### `WifToken$refresh()`
 
 Refreshes the token, which means re-doing the entire token flow in this
 case.
@@ -90,7 +84,7 @@ case.
 
 ------------------------------------------------------------------------
 
-### Method [`format()`](https://rdrr.io/r/base/format.html)
+### `WifToken$format()`
 
 Format a `WifToken()`.
 
@@ -106,7 +100,7 @@ Format a `WifToken()`.
 
 ------------------------------------------------------------------------
 
-### Method [`print()`](https://rdrr.io/r/base/print.html)
+### `WifToken$print()`
 
 Print a `WifToken()`.
 
@@ -122,7 +116,7 @@ Print a `WifToken()`.
 
 ------------------------------------------------------------------------
 
-### Method `can_refresh()`
+### `WifToken$can_refresh()`
 
 Placeholder implementation of required method. Returns `TRUE`.
 
@@ -132,7 +126,7 @@ Placeholder implementation of required method. Returns `TRUE`.
 
 ------------------------------------------------------------------------
 
-### Method `cache()`
+### `WifToken$cache()`
 
 Placeholder implementation of required method. Returns self.
 
@@ -142,7 +136,7 @@ Placeholder implementation of required method. Returns self.
 
 ------------------------------------------------------------------------
 
-### Method `load_from_cache()`
+### `WifToken$load_from_cache()`
 
 Placeholder implementation of required method. Returns self.
 
@@ -152,7 +146,7 @@ Placeholder implementation of required method. Returns self.
 
 ------------------------------------------------------------------------
 
-### Method `validate()`
+### `WifToken$validate()`
 
 Placeholder implementation of required method.
 
@@ -162,7 +156,7 @@ Placeholder implementation of required method.
 
 ------------------------------------------------------------------------
 
-### Method `revoke()`
+### `WifToken$revoke()`
 
 Placeholder implementation of required method.
 
@@ -172,7 +166,7 @@ Placeholder implementation of required method.
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `WifToken$clone()`
 
 The objects of this class are cloneable with this method.
 

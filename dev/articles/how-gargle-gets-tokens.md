@@ -510,17 +510,17 @@ The
 [`gargle::Gargle2.0`](https://gargle.r-lib.org/dev/reference/Gargle-class.md)
 class also defaults to a user-level token cache, as opposed to
 project-level. An overview of the current OAuth cache is available via
-[`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+[`gargle_oauth_sitrep()`](https://gargle.r-lib.org/dev/reference/gargle_oauth_sitrep.md)
 and the output looks something like this:
 
 ``` r
 
 gargle_oauth_sitrep()
-#> 14 tokens found in this gargle OAuth cache:
-#> ~/Library/Caches/gargle
+#' 14 tokens found in this gargle OAuth cache:
+#' '~/Library/Caches/gargle'
 #'
-#' email                         app         scopes                         hash...
-#' ----------------------------- ----------- ------------------------------ ----------
+#' email                         client      scopes                         hash...
+#' _____________________________ ___________ ______________________________ __________
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
 #' stella@example.org            gargle-demo ...drive                       4281945...
@@ -536,6 +536,10 @@ gargle_oauth_sitrep()
 #' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
+
+The default cache location varies by operating system; see
+[`gargle_oauth_cache()`](https://gargle.r-lib.org/dev/reference/gargle_options.md)
+for more details.
 
 ## Manipulate the credential function registry
 

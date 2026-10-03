@@ -50,7 +50,7 @@ Key differences with `Token2.0`:
 
 ### Public methods
 
-- [`Gargle2.0$new()`](#method-Gargle2.0-new)
+- [`Gargle2.0$new()`](#method-Gargle2.0-initialize)
 
 - [`Gargle2.0$format()`](#method-Gargle2.0-format)
 
@@ -77,7 +77,7 @@ Inherited methods
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `Gargle2.0$new()`
 
 Create a Gargle2.0 token
 
@@ -138,7 +138,7 @@ A Gargle2.0 token.
 
 ------------------------------------------------------------------------
 
-### Method [`format()`](https://rdrr.io/r/base/format.html)
+### `Gargle2.0$format()`
 
 Format a Gargle2.0 token
 
@@ -154,7 +154,7 @@ Format a Gargle2.0 token
 
 ------------------------------------------------------------------------
 
-### Method [`print()`](https://rdrr.io/r/base/print.html)
+### `Gargle2.0$print()`
 
 Print a Gargle2.0 token
 
@@ -170,7 +170,7 @@ Print a Gargle2.0 token
 
 ------------------------------------------------------------------------
 
-### Method `hash()`
+### `Gargle2.0$hash()`
 
 Generate the email-augmented hash of a Gargle2.0 token
 
@@ -180,7 +180,7 @@ Generate the email-augmented hash of a Gargle2.0 token
 
 ------------------------------------------------------------------------
 
-### Method `cache()`
+### `Gargle2.0$cache()`
 
 Put a Gargle2.0 token into the cache
 
@@ -190,7 +190,7 @@ Put a Gargle2.0 token into the cache
 
 ------------------------------------------------------------------------
 
-### Method `load_from_cache()`
+### `Gargle2.0$load_from_cache()`
 
 (Attempt to) get a Gargle2.0 token from the cache
 
@@ -200,7 +200,7 @@ Put a Gargle2.0 token into the cache
 
 ------------------------------------------------------------------------
 
-### Method `refresh()`
+### `Gargle2.0$refresh()`
 
 (Attempt to) refresh a Gargle2.0 token
 
@@ -210,7 +210,7 @@ Put a Gargle2.0 token into the cache
 
 ------------------------------------------------------------------------
 
-### Method `init_credentials()`
+### `Gargle2.0$init_credentials()`
 
 Initiate a new Gargle2.0 token
 
@@ -220,7 +220,7 @@ Initiate a new Gargle2.0 token
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `Gargle2.0$clone()`
 
 The objects of this class are cloneable with this method.
 

@@ -32,7 +32,7 @@ request_retry(..., max_tries_total = 5, max_total_wait_time_in_seconds = 100)
 ## Value
 
 Object of class `response` from
-[httr::httr](https://httr.r-lib.org/reference/httr-package.html).
+[httr](https://httr.r-lib.org/reference/httr-package.html).
 
 ## Details
 

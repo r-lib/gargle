@@ -22,6 +22,9 @@ Useful links:
 
 Authors:
 
+- Jennifer Bryan <jenny@posit.co>
+  ([ORCID](https://orcid.org/0000-0002-6983-2759))
+
 - Craig Citro <craigcitro@google.com>
 
 - Hadley Wickham <hadley@posit.co>

@@ -16,7 +16,7 @@ A `gargle_oauth_client` consists of:
   Cloud Platform Console](https://console.cloud.google.com).
 
 A `gargle_oauth_client` is an adaptation of httr's
-[`httr::oauth_app()`](https://httr.r-lib.org/reference/oauth_app.html)
+[`oauth_app()`](https://httr.r-lib.org/reference/oauth_app.html)
 (currently) and httr2's `oauth_client()` (which gargle will migrate to
 in the future).
 

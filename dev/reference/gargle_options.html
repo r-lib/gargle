@@ -152,9 +152,16 @@ the vignette <code><a href="../articles/auth-from-web.html">vignette("auth-from-
 
 <p><code>gargle_oauth_cache()</code> returns the option named "gargle_oauth_cache",
 defaulting to <code>NA</code>. If defined, the option must be set to a logical value or
-a string. <code>TRUE</code> means to cache using the default user-level cache file,
-<code>~/.R/gargle/gargle-oauth</code>, <code>FALSE</code> means don't cache, and <code>NA</code> means to
-guess using some sensible heuristics.</p>
+a string:</p><ul><li><p><code>TRUE</code> means to cache tokens in the default user-level cache directory,
+given by <code>rappdirs::user_cache_dir("gargle")</code>.</p></li>
+<li><p><code>FALSE</code> means don't cache.</p></li>
+<li><p>A string is interpreted as the path to a folder to use as the cache.</p></li>
+</ul><p>The <code>NA</code> default means the default cache directory is used, if it already
+exists. Otherwise, in an interactive session, gargle asks the user for
+permission to create the cache. The outcome of this is stored in the
+"gargle_oauth_cache" option as <code>TRUE</code> or <code>FALSE</code> for the rest of the session.</p>
+<p>Use <code><a href="gargle_oauth_sitrep.html">gargle_oauth_sitrep()</a></code> to see exactly where the cache is and which
+tokens it holds.</p>
     </div>
     <div class="section level2">
     <h2 id="gargle-oauth-client-type"><code>gargle_oauth_client_type</code><a class="anchor" aria-label="anchor" href="#gargle-oauth-client-type"></a></h2>
