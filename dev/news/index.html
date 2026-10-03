@@ -50,7 +50,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
-<ul><li>The default (loopback) OAuth flow now verifies that the <code>state</code> returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.</li>
+<ul><li><p>gargle’s unexported, legacy secret management functions (deprecated in gargle 1.5.0, June 2023) have been removed: <code>secret_pw_name()</code>, <code>secret_pw_gen()</code>, <code>secret_pw_exists()</code>, <code>secret_pw_get()</code>, <code>secret_can_decrypt()</code>, <code>secret_read()</code>, and <code>secret_write()</code>. The sodium package is no longer a suggested dependency. Use the exported <code>secret_*()</code> functions instead, as described in <code>vignette("managing-tokens-securely")</code>.</p></li>
+<li><p>The default (loopback) OAuth flow now verifies that the <code>state</code> returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.1" id="gargle-161">gargle 1.6.1<a class="anchor" aria-label="anchor" href="#gargle-161"></a></h2><p class="text-muted">CRAN release: 2026-01-29</p>
