@@ -39,7 +39,6 @@ Suggests:
     httpuv,
     knitr,
     rmarkdown,
-    sodium,
     spelling,
     testthat (>= 3.1.7)
 VignetteBuilder:
