@@ -36,18 +36,3 @@ test_that("as_key() error", {
     as_key(pi)
   )
 })
-
-# gargle's older deprecated secret_ functions ----
-test_that("older secret functions are deprecated", {
-  withr::local_options(lifecycle_verbosity = "warning")
-  withr::local_envvar(FAKEPKG_PASSWORD = "fake_password")
-
-  expect_snapshot(secret_pw_name("pkg"))
-  expect_snapshot(absorb_it <- secret_pw_gen())
-
-  expect_snapshot(secret_pw_exists("fakePKG"))
-  expect_snapshot(absorb_it <- secret_pw_get("fakePKG"))
-  expect_snapshot(secret_can_decrypt("fakePKG"))
-
-  # leaving secret_write, secret_read untested
-})
