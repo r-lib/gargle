@@ -20,7 +20,7 @@ An OAuth client, produced by \code{\link[=gargle_oauth_client]{gargle_oauth_clie
 }
 \description{
 Invisibly returns an instance of
-\code{\link[=gargle_oauth_client]{gargle_oauth_client}} that can be used to test drive
+\code{\link{gargle_oauth_client}} that can be used to test drive
 gargle before obtaining your own client ID and secret. This OAuth client may
 be deleted or rotated at any time. There are no guarantees about which APIs
 are enabled. DO NOT USE THIS IN A PACKAGE or for anything other than

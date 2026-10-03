@@ -169,8 +169,8 @@ vapply(out$results, function(x) x$name, character(1))
 }
 }
 \seealso{
-Other requests and responses: 
-\code{\link{request_make}()},
-\code{\link{response_process}()}
+Other requests and responses:
+\code{\link[=request_make]{request_make()}},
+\code{\link[=response_process]{response_process()}}
 }
 \concept{requests and responses}

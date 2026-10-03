@@ -19,7 +19,7 @@ response_as_json(resp, call = caller_env())
 gargle_error_message(resp, call = caller_env())
 }
 \arguments{
-\item{resp}{Object of class \code{response} from \link[httr:httr-package]{httr::httr}.}
+\item{resp}{Object of class \code{response} from \link[httr:httr]{httr}.}
 
 \item{error_message}{Function that produces an informative error message from
 the primary input, \code{resp}. It must return a character vector.}
@@ -114,8 +114,8 @@ response_process(resp)
 }
 }
 \seealso{
-Other requests and responses: 
-\code{\link{request_develop}()},
-\code{\link{request_make}()}
+Other requests and responses:
+\code{\link[=request_develop]{request_develop()}},
+\code{\link[=request_make]{request_make()}}
 }
 \concept{requests and responses}

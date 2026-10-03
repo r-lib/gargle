@@ -31,7 +31,7 @@ gargle will still accept an "OAuth app" created with \code{\link[httr:oauth_app]
 \item{package}{Name of the package requesting a token. Used in messages.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=gargle2.0_token]{gargle2.0_token}}
+  Arguments passed on to \code{\link{gargle2.0_token}}
   \describe{
     \item{\code{email}}{Optional. If specified, \code{email} can take several different
 forms:
@@ -112,12 +112,12 @@ credentials_user_oauth2(scopes, client)
 }
 }
 \seealso{
-Other credential functions: 
-\code{\link{credentials_app_default}()},
-\code{\link{credentials_byo_oauth2}()},
-\code{\link{credentials_external_account}()},
-\code{\link{credentials_gce}()},
-\code{\link{credentials_service_account}()},
-\code{\link{token_fetch}()}
+Other credential functions:
+\code{\link[=credentials_app_default]{credentials_app_default()}},
+\code{\link[=credentials_byo_oauth2]{credentials_byo_oauth2()}},
+\code{\link[=credentials_external_account]{credentials_external_account()}},
+\code{\link[=credentials_gce]{credentials_gce()}},
+\code{\link[=credentials_service_account]{credentials_service_account()}},
+\code{\link[=token_fetch]{token_fetch()}}
 }
 \concept{credential functions}

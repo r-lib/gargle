@@ -85,9 +85,19 @@ gargle_oob_default <- function() {
 #' @section `gargle_oauth_cache`:
 #' `gargle_oauth_cache()` returns the option named "gargle_oauth_cache",
 #' defaulting to `NA`. If defined, the option must be set to a logical value or
-#' a string. `TRUE` means to cache using the default user-level cache file,
-#' `~/.R/gargle/gargle-oauth`, `FALSE` means don't cache, and `NA` means to
-#' guess using some sensible heuristics.
+#' a string:
+#'   * `TRUE` means to cache tokens in the default user-level cache directory,
+#'     given by `rappdirs::user_cache_dir("gargle")`.
+#'   * `FALSE` means don't cache.
+#'   * A string is interpreted as the path to a folder to use as the cache.
+#'
+#' The `NA` default means the default cache directory is used, if it already
+#' exists. Otherwise, in an interactive session, gargle asks the user for
+#' permission to create the cache. The outcome of this is stored in the
+#' "gargle_oauth_cache" option as `TRUE` or `FALSE` for the rest of the session.
+#'
+#' Use [gargle_oauth_sitrep()] to see exactly where the cache is and which
+#' tokens it holds.
 gargle_oauth_cache <- function() {
   getOption("gargle_oauth_cache", default = NA)
 }

@@ -12,7 +12,7 @@ gargle_oauth_sitrep(cache = NULL)
 }
 \value{
 A data frame with one row per cached token, invisibly. Note this data
-frame may contain more columns than it seems, e.g. the \code{filepath} column
+frame contains more columns than it seems, e.g. the \code{filepath} column
 isn't printed by default.
 }
 \description{
@@ -26,9 +26,18 @@ Get a human-oriented overview of the existing gargle OAuth tokens:
 \item OAuth client (actually, just its nickname)
 \item Scopes
 \item Hash (actually, just the first 7 characters)
-Mostly useful for the development of gargle and client packages.
 }
 }
+
+This is the most direct way to find out where gargle's OAuth cache is (see
+\code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}} for more about the cache location). The \code{filepath}
+column of the returned data frame makes it easy to delete specific tokens,
+e.g.:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{dat <- gargle_oauth_sitrep()
+# delete all cached tokens for one Google identity
+unlink(dat$filepath[dat$email == "jane@example.com"])
+}\if{html}{\out{</div>}}
 }
 \examples{
 gargle_oauth_sitrep()

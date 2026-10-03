@@ -57,12 +57,12 @@ Additional reading on delegation of domain-wide authority:
 \item \url{https://developers.google.com/identity/protocols/oauth2/service-account#delegatingauthority}
 }
 
-Other credential functions: 
-\code{\link{credentials_app_default}()},
-\code{\link{credentials_byo_oauth2}()},
-\code{\link{credentials_external_account}()},
-\code{\link{credentials_gce}()},
-\code{\link{credentials_user_oauth2}()},
-\code{\link{token_fetch}()}
+Other credential functions:
+\code{\link[=credentials_app_default]{credentials_app_default()}},
+\code{\link[=credentials_byo_oauth2]{credentials_byo_oauth2()}},
+\code{\link[=credentials_external_account]{credentials_external_account()}},
+\code{\link[=credentials_gce]{credentials_gce()}},
+\code{\link[=credentials_user_oauth2]{credentials_user_oauth2()}},
+\code{\link[=token_fetch]{token_fetch()}}
 }
 \concept{credential functions}

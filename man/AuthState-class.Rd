@@ -37,225 +37,241 @@ An \code{AuthState} should be created through the constructor function
 \code{\link[=init_AuthState]{init_AuthState()}}, which has more details on the arguments.
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{package}}{Package name.}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{package}}{Package name.}
 
-\item{\code{client}}{An OAuth client.}
+    \item{\code{client}}{An OAuth client.}
 
-\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
+    \item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
 
-\item{\code{api_key}}{An API key.}
+    \item{\code{api_key}}{An API key.}
 
-\item{\code{auth_active}}{Logical, indicating whether auth is active.}
+    \item{\code{auth_active}}{Logical, indicating whether auth is active.}
 
-\item{\code{cred}}{Credentials.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{cred}}{Credentials.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-AuthState-new}{\code{AuthState$new()}}
-\item \href{#method-AuthState-format}{\code{AuthState$format()}}
-\item \href{#method-AuthState-set_client}{\code{AuthState$set_client()}}
-\item \href{#method-AuthState-set_app}{\code{AuthState$set_app()}}
-\item \href{#method-AuthState-set_api_key}{\code{AuthState$set_api_key()}}
-\item \href{#method-AuthState-set_auth_active}{\code{AuthState$set_auth_active()}}
-\item \href{#method-AuthState-set_cred}{\code{AuthState$set_cred()}}
-\item \href{#method-AuthState-clear_cred}{\code{AuthState$clear_cred()}}
-\item \href{#method-AuthState-get_cred}{\code{AuthState$get_cred()}}
-\item \href{#method-AuthState-has_cred}{\code{AuthState$has_cred()}}
-\item \href{#method-AuthState-clone}{\code{AuthState$clone()}}
-}
+  \itemize{
+    \item \href{#method-AuthState-initialize}{\code{AuthState$new()}}
+    \item \href{#method-AuthState-format}{\code{AuthState$format()}}
+    \item \href{#method-AuthState-set_client}{\code{AuthState$set_client()}}
+    \item \href{#method-AuthState-set_app}{\code{AuthState$set_app()}}
+    \item \href{#method-AuthState-set_api_key}{\code{AuthState$set_api_key()}}
+    \item \href{#method-AuthState-set_auth_active}{\code{AuthState$set_auth_active()}}
+    \item \href{#method-AuthState-set_cred}{\code{AuthState$set_cred()}}
+    \item \href{#method-AuthState-clear_cred}{\code{AuthState$clear_cred()}}
+    \item \href{#method-AuthState-get_cred}{\code{AuthState$get_cred()}}
+    \item \href{#method-AuthState-has_cred}{\code{AuthState$has_cred()}}
+    \item \href{#method-AuthState-clone}{\code{AuthState$clone()}}
+  }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-AuthState-new"></a>}}
-\if{latex}{\out{\hypertarget{method-AuthState-new}{}}}
-\subsection{Method \code{new()}}{
-Create a new AuthState
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$new(
+\if{html}{\out{<a id="method-AuthState-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-AuthState-initialize}{}}}
+\subsection{\code{AuthState$new()}}{
+  Create a new AuthState
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$new(
   package = NA_character_,
   client = NULL,
   api_key = NULL,
   auth_active = TRUE,
   cred = NULL,
   app = deprecated()
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{package}}{Package name.}
+      \item{\code{client}}{An OAuth client.}
+      \item{\code{api_key}}{An API key.}
+      \item{\code{auth_active}}{Logical, indicating whether auth is active.}
+      \item{\code{cred}}{Credentials.}
+      \item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    For more details on the parameters, see \code{\link[=init_AuthState]{init_AuthState()}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{package}}{Package name.}
-
-\item{\code{client}}{An OAuth client.}
-
-\item{\code{api_key}}{An API key.}
-
-\item{\code{auth_active}}{Logical, indicating whether auth is active.}
-
-\item{\code{cred}}{Credentials.}
-
-\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-For more details on the parameters, see \code{\link[=init_AuthState]{init_AuthState()}}
-}
-
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-format"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-format}{}}}
-\subsection{Method \code{format()}}{
-Format an AuthState
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$format(...)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$format()}}{
+  Format an AuthState
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$format(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Not used.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Not used.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_client"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_client}{}}}
-\subsection{Method \code{set_client()}}{
-Set the OAuth client
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_client(client)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$set_client()}}{
+  Set the OAuth client
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$set_client(client)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{client}}{An OAuth client.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{client}}{An OAuth client.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_app"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_app}{}}}
-\subsection{Method \code{set_app()}}{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated method to set
+\subsection{\code{AuthState$set_app()}}{
+  \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Deprecated method to set
 the OAuth client
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_app(app)}\if{html}{\out{</div>}}
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$set_app(app)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_api_key"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_api_key}{}}}
-\subsection{Method \code{set_api_key()}}{
-Set the API key
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_api_key(value)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$set_api_key()}}{
+  Set the API key
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$set_api_key(value)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{value}}{An API key.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{value}}{An API key.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_auth_active"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_auth_active}{}}}
-\subsection{Method \code{set_auth_active()}}{
-Set whether auth is (in)active
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_auth_active(value)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$set_auth_active()}}{
+  Set whether auth is (in)active
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$set_auth_active(value)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{value}}{Logical, indicating whether to send requests authorized with
+user credentials.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{value}}{Logical, indicating whether to send requests authorized with
-user credentials.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-set_cred"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-set_cred}{}}}
-\subsection{Method \code{set_cred()}}{
-Set credentials
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$set_cred(cred)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$set_cred()}}{
+  Set credentials
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$set_cred(cred)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{cred}}{User credentials.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{cred}}{User credentials.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-clear_cred"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-clear_cred}{}}}
-\subsection{Method \code{clear_cred()}}{
-Clear credentials
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$clear_cred()}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$clear_cred()}}{
+  Clear credentials
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$clear_cred()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-get_cred"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-get_cred}{}}}
-\subsection{Method \code{get_cred()}}{
-Get credentials
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$get_cred()}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$get_cred()}}{
+  Get credentials
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$get_cred()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-has_cred"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-has_cred}{}}}
-\subsection{Method \code{has_cred()}}{
-Report if we have credentials
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$has_cred()}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$has_cred()}}{
+  Report if we have credentials
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$has_cred()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-AuthState-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-AuthState-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{AuthState$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{AuthState$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{AuthState$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

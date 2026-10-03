@@ -16,7 +16,7 @@ dedicate to waiting, summed across all tries. This is a technical upper
 bound and actual cumulative waiting will be less.}
 }
 \value{
-Object of class \code{response} from \link[httr:httr-package]{httr::httr}.
+Object of class \code{response} from \link[httr:httr]{httr}.
 }
 \description{
 Intended primarily for internal use in client packages that provide

@@ -39,12 +39,12 @@ token_fetch(scopes = "https://www.googleapis.com/auth/userinfo.email")
 \code{\link[=cred_funs_list]{cred_funs_list()}} reveals the current registry of
 credential-fetching functions, in order.
 
-Other credential functions: 
-\code{\link{credentials_app_default}()},
-\code{\link{credentials_byo_oauth2}()},
-\code{\link{credentials_external_account}()},
-\code{\link{credentials_gce}()},
-\code{\link{credentials_service_account}()},
-\code{\link{credentials_user_oauth2}()}
+Other credential functions:
+\code{\link[=credentials_app_default]{credentials_app_default()}},
+\code{\link[=credentials_byo_oauth2]{credentials_byo_oauth2()}},
+\code{\link[=credentials_external_account]{credentials_external_account()}},
+\code{\link[=credentials_gce]{credentials_gce()}},
+\code{\link[=credentials_service_account]{credentials_service_account()}},
+\code{\link[=credentials_user_oauth2]{credentials_user_oauth2()}}
 }
 \concept{credential functions}

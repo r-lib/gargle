@@ -33,7 +33,7 @@ in doubt, a client package should have an internal function that extends
 package's name and version.}
 }
 \value{
-Object of class \code{response} from \link[httr:httr-package]{httr::httr}.
+Object of class \code{response} from \link[httr:httr]{httr}.
 }
 \description{
 Intended primarily for internal use in client packages that provide
@@ -59,8 +59,8 @@ gargle::request_make(req)
 }
 }
 \seealso{
-Other requests and responses: 
-\code{\link{request_develop}()},
-\code{\link{response_process}()}
+Other requests and responses:
+\code{\link[=request_develop]{request_develop()}},
+\code{\link[=response_process]{response_process()}}
 }
 \concept{requests and responses}

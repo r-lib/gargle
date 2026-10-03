@@ -29,47 +29,46 @@ components of a list, which is typically serialized to \code{./.httr-oauth}.
 \code{\link[httr:Token]{httr::Token}} -> \code{\link[httr:Token2.0]{httr::Token2.0}} -> \code{Gargle2.0}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{email}}{Email associated with the token.}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{email}}{Email associated with the token.}
 
-\item{\code{package}}{Name of the package requesting a token. Used in messages.}
+    \item{\code{package}}{Name of the package requesting a token. Used in messages.}
 
-\item{\code{client}}{An OAuth client.}
-}
-\if{html}{\out{</div>}}
+    \item{\code{client}}{An OAuth client.}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-Gargle2.0-new}{\code{Gargle2.0$new()}}
-\item \href{#method-Gargle2.0-format}{\code{Gargle2.0$format()}}
-\item \href{#method-Gargle2.0-print}{\code{Gargle2.0$print()}}
-\item \href{#method-Gargle2.0-hash}{\code{Gargle2.0$hash()}}
-\item \href{#method-Gargle2.0-cache}{\code{Gargle2.0$cache()}}
-\item \href{#method-Gargle2.0-load_from_cache}{\code{Gargle2.0$load_from_cache()}}
-\item \href{#method-Gargle2.0-refresh}{\code{Gargle2.0$refresh()}}
-\item \href{#method-Gargle2.0-init_credentials}{\code{Gargle2.0$init_credentials()}}
-\item \href{#method-Gargle2.0-clone}{\code{Gargle2.0$clone()}}
+  \itemize{
+    \item \href{#method-Gargle2.0-initialize}{\code{Gargle2.0$new()}}
+    \item \href{#method-Gargle2.0-format}{\code{Gargle2.0$format()}}
+    \item \href{#method-Gargle2.0-print}{\code{Gargle2.0$print()}}
+    \item \href{#method-Gargle2.0-hash}{\code{Gargle2.0$hash()}}
+    \item \href{#method-Gargle2.0-cache}{\code{Gargle2.0$cache()}}
+    \item \href{#method-Gargle2.0-load_from_cache}{\code{Gargle2.0$load_from_cache()}}
+    \item \href{#method-Gargle2.0-refresh}{\code{Gargle2.0$refresh()}}
+    \item \href{#method-Gargle2.0-init_credentials}{\code{Gargle2.0$init_credentials()}}
+    \item \href{#method-Gargle2.0-clone}{\code{Gargle2.0$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="can_refresh"><a href='../../httr/html/Token2.0.html#method-Token2.0-can_refresh'><code>httr::Token2.0$can_refresh()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="revoke"><a href='../../httr/html/Token2.0.html#method-Token2.0-revoke'><code>httr::Token2.0$revoke()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-Token2.0-sign'><code>httr::Token2.0$sign()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href='../../httr/html/Token2.0.html#method-Token2.0-validate'><code>httr::Token2.0$validate()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="can_refresh"><a href='../../httr/html/Token2.0.html#method-Token2.0-can_refresh'><code>httr::Token2.0$can_refresh()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="revoke"><a href='../../httr/html/Token2.0.html#method-Token2.0-revoke'><code>httr::Token2.0$revoke()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="sign"><a href='../../httr/html/Token2.0.html#method-Token2.0-sign'><code>httr::Token2.0$sign()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="httr" data-topic="Token2.0" data-id="validate"><a href='../../httr/html/Token2.0.html#method-Token2.0-validate'><code>httr::Token2.0$validate()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-Gargle2.0-new"></a>}}
-\if{latex}{\out{\hypertarget{method-Gargle2.0-new}{}}}
-\subsection{Method \code{new()}}{
-Create a Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$new(
+\if{html}{\out{<a id="method-Gargle2.0-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-Gargle2.0-initialize}{}}}
+\subsection{\code{Gargle2.0$new()}}{
+  Create a Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$new(
   email = gargle_oauth_email(),
   client = gargle_client(),
   package = "gargle",
@@ -77,138 +76,149 @@ Create a Gargle2.0 token
   params = list(),
   cache_path = gargle_oauth_cache(),
   app = deprecated()
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{email}}{Optional email address. See \code{\link[=gargle2.0_token]{gargle2.0_token()}} for full
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{email}}{Optional email address. See \code{\link[=gargle2.0_token]{gargle2.0_token()}} for full
 details.}
-
-\item{\code{client}}{An OAuth consumer application.}
-
-\item{\code{package}}{Name of the package requesting a token. Used in messages.}
-
-\item{\code{credentials}}{Exists largely for testing purposes.}
-
-\item{\code{params}}{A list of parameters for the internal function
+      \item{\code{client}}{An OAuth consumer application.}
+      \item{\code{package}}{Name of the package requesting a token. Used in messages.}
+      \item{\code{credentials}}{Exists largely for testing purposes.}
+      \item{\code{params}}{A list of parameters for the internal function
 \code{init_oauth2.0()}, which is a modified version of \code{\link[httr:init_oauth2.0]{httr::init_oauth2.0()}}.
 gargle actively uses \code{scope} and \code{use_oob}, but does not use \code{user_params},
 \code{type}, \code{as_header} (hard-wired to \code{TRUE}), \code{use_basic_auth} (accept
 default of \code{use_basic_auth = FALSE}), \code{config_init}, or
 \code{client_credentials}.}
-
-\item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
+      \item{\code{cache_path}}{Specifies the OAuth token cache. Read more in
 \code{\link[=gargle_oauth_cache]{gargle_oauth_cache()}}.}
+      \item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A Gargle2.0 token.
+  }
+}
 
-\item{\code{app}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Use \code{client} instead.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A Gargle2.0 token.
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-format"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-format}{}}}
-\subsection{Method \code{format()}}{
-Format a Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$format(...)}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$format()}}{
+  Format a Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$format(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Not used.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Not used.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-print"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-print}{}}}
-\subsection{Method \code{print()}}{
-Print a Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$print(...)}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$print()}}{
+  Print a Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$print(...)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{...}}{Not used.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{...}}{Not used.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-hash"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-hash}{}}}
-\subsection{Method \code{hash()}}{
-Generate the email-augmented hash of a Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$hash()}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$hash()}}{
+  Generate the email-augmented hash of a Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$hash()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-cache"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-cache}{}}}
-\subsection{Method \code{cache()}}{
-Put a Gargle2.0 token into the cache
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$cache()}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$cache()}}{
+  Put a Gargle2.0 token into the cache
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$cache()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-load_from_cache"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-load_from_cache}{}}}
-\subsection{Method \code{load_from_cache()}}{
-(Attempt to) get a Gargle2.0 token from the cache
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$load_from_cache()}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$load_from_cache()}}{
+  (Attempt to) get a Gargle2.0 token from the cache
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$load_from_cache()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-refresh"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-refresh}{}}}
-\subsection{Method \code{refresh()}}{
-(Attempt to) refresh a Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$refresh()}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$refresh()}}{
+  (Attempt to) refresh a Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$refresh()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-init_credentials"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-init_credentials}{}}}
-\subsection{Method \code{init_credentials()}}{
-Initiate a new Gargle2.0 token
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$init_credentials()}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$init_credentials()}}{
+  Initiate a new Gargle2.0 token
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$init_credentials()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Gargle2.0-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-Gargle2.0-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Gargle2.0$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{Gargle2.0$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{Gargle2.0$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

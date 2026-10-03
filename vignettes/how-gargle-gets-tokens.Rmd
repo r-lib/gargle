@@ -360,16 +360,16 @@ A value of `email = TRUE`, passed directly or via the option, is an alternative 
 
 The elevated status of `email` for `gargle::Gargle2.0` tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs.
 This is one of the main motivations for `gargle::Gargle2.0`, which extends `httr::Token2.0`.
-The `gargle::Gargle2.0` class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via `gargle_oauth_cache()` and the output looks something like this:
+The `gargle::Gargle2.0` class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via `gargle_oauth_sitrep()` and the output looks something like this:
 
 ```{r}
 #| eval: false
 gargle_oauth_sitrep()
-#> 14 tokens found in this gargle OAuth cache:
-#> ~/Library/Caches/gargle
+#' 14 tokens found in this gargle OAuth cache:
+#' '~/Library/Caches/gargle'
 #'
-#' email                         app         scopes                         hash...
-#' ----------------------------- ----------- ------------------------------ ----------
+#' email                         client      scopes                         hash...
+#' _____________________________ ___________ ______________________________ __________
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
 #' stella@example.org            gargle-demo ...drive                       4281945...
@@ -385,6 +385,8 @@ gargle_oauth_sitrep()
 #' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
+
+The default cache location varies by operating system; see `gargle_oauth_cache()` for more details.
 
 ## Manipulate the credential function registry
 

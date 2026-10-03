@@ -84,9 +84,21 @@ the vignette \code{vignette("auth-from-web")}.
 
 \code{gargle_oauth_cache()} returns the option named "gargle_oauth_cache",
 defaulting to \code{NA}. If defined, the option must be set to a logical value or
-a string. \code{TRUE} means to cache using the default user-level cache file,
-\verb{~/.R/gargle/gargle-oauth}, \code{FALSE} means don't cache, and \code{NA} means to
-guess using some sensible heuristics.
+a string:
+\itemize{
+\item \code{TRUE} means to cache tokens in the default user-level cache directory,
+given by \code{rappdirs::user_cache_dir("gargle")}.
+\item \code{FALSE} means don't cache.
+\item A string is interpreted as the path to a folder to use as the cache.
+}
+
+The \code{NA} default means the default cache directory is used, if it already
+exists. Otherwise, in an interactive session, gargle asks the user for
+permission to create the cache. The outcome of this is stored in the
+"gargle_oauth_cache" option as \code{TRUE} or \code{FALSE} for the rest of the session.
+
+Use \code{\link[=gargle_oauth_sitrep]{gargle_oauth_sitrep()}} to see exactly where the cache is and which
+tokens it holds.
 }
 
 \section{\code{gargle_oauth_client_type}}{

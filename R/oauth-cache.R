@@ -356,6 +356,8 @@ match2 <- function(needle, haystack) {
 
 #' OAuth token situation report
 #'
+#' @description
+
 #' Get a human-oriented overview of the existing gargle OAuth tokens:
 #'   * Filepath of the current cache
 #'   * Number of tokens found there
@@ -364,12 +366,22 @@ match2 <- function(needle, haystack) {
 #'     - OAuth client (actually, just its nickname)
 #'     - Scopes
 #'     - Hash (actually, just the first 7 characters)
-#' Mostly useful for the development of gargle and client packages.
+#'
+#' This is the most direct way to find out where gargle's OAuth cache is (see
+#' [gargle_oauth_cache()] for more about the cache location). The `filepath`
+#' column of the returned data frame makes it easy to delete specific tokens,
+#' e.g.:
+#'
+#' ```
+#' dat <- gargle_oauth_sitrep()
+#' # delete all cached tokens for one Google identity
+#' unlink(dat$filepath[dat$email == "jane@example.com"])
+#' ```
 #'
 #' @inheritParams gargle2.0_token
 #'
 #' @return A data frame with one row per cached token, invisibly. Note this data
-#'   frame may contain more columns than it seems, e.g. the `filepath` column
+#'   frame contains more columns than it seems, e.g. the `filepath` column
 #'   isn't printed by default.
 #' @export
 #'
