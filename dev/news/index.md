@@ -16,6 +16,11 @@
   now errors immediately with a clear message, instead of failing later
   with an HTTP 400.
 
+- The default (loopback) and pseudo-OOB OAuth flows now use PKCE (Proof
+  Key for Code Exchange, RFC 7636), which ties the authorization code to
+  the R session that requested it, so an intercepted code can’t be
+  exchanged for tokens by anyone else.
+
 ## gargle 1.6.1
 
 CRAN release: 2026-01-29
