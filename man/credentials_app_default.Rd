@@ -4,7 +4,11 @@
 \alias{credentials_app_default}
 \title{Load Application Default Credentials}
 \usage{
-credentials_app_default(scopes = NULL, ..., subject = NULL)
+credentials_app_default(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  ...,
+  subject = NULL
+)
 }
 \arguments{
 \item{scopes}{A character vector of scopes to request. Pick from those listed
