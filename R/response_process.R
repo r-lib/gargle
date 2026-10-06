@@ -259,8 +259,12 @@ gargle_error_message <- function(resp, call = caller_env()) {
 }
 
 redact_response <- function(resp) {
-  resp$request$auth_token <- "<REDACTED>"
-  resp$request$headers["Authorization"] <- "<REDACTED>"
+  if (!is.null(resp$request$auth_token)) {
+    resp$request$auth_token <- "<REDACTED>"
+  }
+  header_names <- tolower(names(resp$request$headers))
+  is_secret <- header_names %in% c("authorization", "x-goog-api-key")
+  resp$request$headers[is_secret] <- "<REDACTED>"
   resp$handle <- NULL
   resp
 }

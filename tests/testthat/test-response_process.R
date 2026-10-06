@@ -174,3 +174,31 @@ test_that("RPC codes can be looked up (or not)", {
   )
   expect_null(rpc_description("MATCHES_NOTHING"))
 })
+
+test_that("redact_response() redacts the API key of a key request", {
+  resp <- readRDS(test_path("fixtures", "books-volumes-list-api-key_200.rds"))
+  out <- redact_response(resp)
+  expect_equal(
+    out$request$headers,
+    c(
+      Accept = resp$request$headers[["Accept"]],
+      `X-goog-api-key` = "<REDACTED>"
+    )
+  )
+  expect_null(out$request$auth_token)
+  expect_null(out$handle)
+})
+
+test_that("redact_response() redacts the token of a token request", {
+  resp <- readRDS(test_path("fixtures", "userinfo-service-account_200.rds"))
+  out <- redact_response(resp)
+  expect_equal(
+    out$request$headers,
+    c(
+      Accept = resp$request$headers[["Accept"]],
+      Authorization = "<REDACTED>"
+    )
+  )
+  expect_equal(out$request$auth_token, "<REDACTED>")
+  expect_null(out$handle)
+})
