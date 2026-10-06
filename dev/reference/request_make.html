@@ -3,6 +3,7 @@
 high-level wrappers for users. request_make() does relatively little:
 Calls an HTTP method.
 Adds a user agent.
+Adds any headers, such as the API key header added by request_build().
 Enforces &quot;json&quot; as the default for encode. This differs from httr's
 default behaviour, but aligns better with Google APIs.
 
@@ -12,6 +13,7 @@ processed with response_process()."><meta property="og:description" content="Int
 high-level wrappers for users. request_make() does relatively little:
 Calls an HTTP method.
 Adds a user agent.
+Adds any headers, such as the API key header added by request_build().
 Enforces &quot;json&quot; as the default for encode. This differs from httr's
 default behaviour, but aligns better with Google APIs.
 
@@ -71,6 +73,7 @@ processed with response_process()."><meta name="robots" content="noindex"><scrip
     <p>Intended primarily for internal use in client packages that provide
 high-level wrappers for users. <code>request_make()</code> does relatively little:</p><ul><li><p>Calls an HTTP method.</p></li>
 <li><p>Adds a user agent.</p></li>
+<li><p>Adds any <code>headers</code>, such as the API key header added by <code><a href="request_develop.html">request_build()</a></code>.</p></li>
 <li><p>Enforces <code>"json"</code> as the default for <code>encode</code>. This differs from httr's
 default behaviour, but aligns better with Google APIs.</p></li>
 </ul><p>Typically the input is created with <code><a href="request_develop.html">request_build()</a></code> and the output is
@@ -89,7 +92,7 @@ processed with <code><a href="response_process.html">response_process()</a></cod
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>List. Holds the components for an HTTP request, presumably created
 with <code><a href="request_develop.html">request_develop()</a></code> or <code><a href="request_develop.html">request_build()</a></code>. Must contain a <code>method</code> and
-<code>url</code>. If present, <code>body</code> and <code>token</code> are used.</p></dd>
+<code>url</code>. If present, <code>body</code>, <code>token</code>, and <code>headers</code> are used.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

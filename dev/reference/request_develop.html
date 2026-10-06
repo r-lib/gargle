@@ -125,17 +125,18 @@ by <code>request_build()</code>, using named parameters found in <code>params</c
 see Google's document Credentials, access, security, and identity
 (<code>https://support.google.com/googleapi/answer/6158857?hl=en&amp;ref_topic=7013279</code>).
 A key can be passed as a named component of <code>params</code>, but note that the
-formal argument <code>key</code> will clobber it, if non-<code>NULL</code>.</p></dd>
+formal argument <code>key</code> will clobber it, if non-<code>NULL</code>. Either way, the <code>key</code>
+is sent in the <code>X-goog-api-key</code> request header in order to keep it out of
+the URL.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p><code>request_develop()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code>, <code>params</code>,
 <code>body</code>, and <code>base_url</code>.</p>
-<p><code>request_build()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>path</code>
-(post-substitution), <code>query</code> (the input <code>params</code> not used in URL
-substitution), <code>body</code>, <code>token</code>, <code>url</code> (the full URL, post-substitution,
-including the query).</p>
+<p><code>request_build()</code>: <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with components <code>method</code>, <code>url</code> (the full URL,
+post-substitution, including the query), <code>body</code>, <code>token</code>, and <code>headers</code> (a
+named character vector holding the <code>X-goog-api-key</code> header, or <code>NULL</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="request-develop-"><code>request_develop()</code><a class="anchor" aria-label="anchor" href="#request-develop-"></a></h2>
@@ -162,9 +163,12 @@ specific to any particular Google API or endpoint.</p><ul><li><p>Use with the ou
 <li><p><code>params</code> are used for variable substitution in <code>path</code>. Leftover <code>params</code>
 that are not bound by the <code>path</code> template automatically become HTTP
 query parameters.</p></li>
-<li><p>Adds an API key to the query iff <code>token = NULL</code> and removes the API key
-otherwise. Client packages should generally pass their own API key in, but
-note that <code><a href="gargle_api_key.html">gargle_api_key()</a></code> is available for small-scale experimentation.</p></li>
+<li><p>Adds an API key, in the <code>X-goog-api-key</code> header, if and only if <code>token = NULL</code> and removes the API key otherwise. Client packages should
+generally pass their own API key in, but note that <code><a href="gargle_api_key.html">gargle_api_key()</a></code> is
+available for small-scale experimentation.</p></li>
+<li><p>Client packages should send the request with <code><a href="request_make.html">request_make()</a></code> or
+<code><a href="request_retry.html">request_retry()</a></code>, which apply the <code>headers</code>. Code that makes its own
+HTTP call with only the <code>url</code> won't send the API key.</p></li>
 </ul><p>See <code>googledrive::generate_request()</code> for an example of usage in a client
 package. googledrive has an internal list of selected endpoints, derived from
 the Drive API Discovery Document
@@ -219,27 +223,50 @@ functions use <code>googledrive::generate_request()</code> under the hood.</p>
 <span class="r-in"><span>  token <span class="op">=</span> <span class="st">"PRETEND_I_AM_A_TOKEN"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">req</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with no previous knowledge of the endpoint and no token</span></span></span>
-<span class="r-in"><span><span class="co"># use an API key for which the Places API is enabled!</span></span></span>
-<span class="r-in"><span><span class="va">API_KEY</span> <span class="op">&lt;-</span> <span class="st">"1234567890"</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># get restaurants close to a location in Vancouver, BC</span></span></span>
+<span class="r-in"><span><span class="co"># find books by Hadley Wickham with the Books API,</span></span></span>
+<span class="r-in"><span><span class="co"># using gargle's demo API key (for which the Books API is enabled)</span></span></span>
 <span class="r-in"><span><span class="va">req</span> <span class="op">&lt;-</span> <span class="fu">request_build</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  method <span class="op">=</span> <span class="st">"GET"</span>,</span></span>
-<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"maps/api/place/nearbysearch/json"</span>,</span></span>
+<span class="r-in"><span>  path <span class="op">=</span> <span class="st">"books/v1/volumes"</span>,</span></span>
 <span class="r-in"><span>  params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    location <span class="op">=</span> <span class="st">"49.268682,-123.167117"</span>,</span></span>
-<span class="r-in"><span>    radius <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>    type <span class="op">=</span> <span class="st">"restaurant"</span></span></span>
+<span class="r-in"><span>    q <span class="op">=</span> <span class="st">"inauthor:Hadley Wickham"</span>,</span></span>
+<span class="r-in"><span>    maxResults <span class="op">=</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  key <span class="op">=</span> <span class="va">API_KEY</span>,</span></span>
-<span class="r-in"><span>  base_url <span class="op">=</span> <span class="st">"https://maps.googleapis.com"</span></span></span>
+<span class="r-in"><span>  key <span class="op">=</span> <span class="fu"><a href="gargle_api_key.html">gargle_api_key</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">results</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">name</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="va">books</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">items</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">volumeInfo</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">title</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  authors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/toString.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">authors</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/toString.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">publishedDate</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         title</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  R Packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          R for Data Science</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     ggplot2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  Advanced R</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Advanced R, Second Edition</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  R Packages</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7             Mastering Shiny</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          R for Data Science</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9             Mastering Shiny</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       Advanced R Solutions</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     authors       date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            Hadley Wickham, Jennifer Bryan 2023-06-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                         Hadley Wickham, Garrett Grolemund 2016-12-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                            Hadley Wickham 2016-06-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                            Hadley Wickham    2020-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                            Hadley Wickham 2019-05-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            Hadley Wickham 2015-04-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                            Hadley Wickham 2021-04-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund 2023-06-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                            Hadley Wickham 2021-04-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10            Malte Grosser, Henning Bumann, Hadley Wickham 2021-08-23</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

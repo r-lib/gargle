@@ -2,6 +2,12 @@
 
 ## gargle (development version)
 
+- [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
+  now places an API key in the `X-goog-api-key` request header instead
+  of the URL query. When gargle stores a response, for
+  [`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
+  or in a request error, it now redacts the `X-goog-api-key` header.
+
 - gargle’s unexported, legacy secret management functions (deprecated in
   gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`,
   `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`,

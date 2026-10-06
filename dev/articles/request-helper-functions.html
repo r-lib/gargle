@@ -183,7 +183,7 @@ HTTP request.</p>
 <ul>
 <li>Typically consumes the output of <code><a href="../reference/request_develop.html">request_build()</a></code>,
 although that is not required. However, if you have enough info to form
-a <code><a href="../reference/request_make.html">request_make()</a></code> request, you would probably just make the
+a <code><a href="../reference/request_make.html">request_make()</a></code> call, you would probably just make the
 <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> call yourself.</li>
 <li>Consults <code>x$method</code> to determine which
 <code><a href="https://httr.r-lib.org/reference/VERB.html" class="external-link">httr::VERB()</a></code> to call, then calls it with the rest of
@@ -278,10 +278,12 @@ form every request in the package. It is exported as part of a low-level
 API for expert use, but most users will never know it exists.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive::</span></span>
-<span><span class="va">request_generate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">endpoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                             <span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                             <span class="va">key</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>                             <span class="va">token</span> <span class="op">=</span> <span class="fu">drive_token</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="va">request_generate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
+<span>  <span class="va">endpoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">params</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">key</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">token</span> <span class="op">=</span> <span class="fu">drive_token</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ept</span> <span class="op">&lt;-</span> <span class="va">.endpoints</span><span class="op">[[</span><span class="va">endpoint</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">ept</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu">stop_glue</span><span class="op">(</span><span class="st">"\nEndpoint not recognized:\n  * {endpoint}"</span><span class="op">)</span></span>
@@ -335,10 +337,10 @@ it.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">is.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">method</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">method</span> <span class="op">&lt;-</span> <span class="kw"><a href="https://rdrr.io/r/base/switch.html" class="external-link">switch</a></span><span class="op">(</span></span>
 <span>    <span class="va">x</span><span class="op">$</span><span class="va">method</span>,</span>
-<span>    GET    <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">GET</a></span>,</span>
-<span>    POST   <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/POST.html" class="external-link">POST</a></span>,</span>
-<span>    PATCH  <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/PATCH.html" class="external-link">PATCH</a></span>,</span>
-<span>    PUT    <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/PUT.html" class="external-link">PUT</a></span>,</span>
+<span>    GET <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/GET.html" class="external-link">GET</a></span>,</span>
+<span>    POST <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/POST.html" class="external-link">POST</a></span>,</span>
+<span>    PATCH <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/PATCH.html" class="external-link">PATCH</a></span>,</span>
+<span>    PUT <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/PUT.html" class="external-link">PUT</a></span>,</span>
 <span>    DELETE <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="va"><a href="https://httr.r-lib.org/reference/DELETE.html" class="external-link">DELETE</a></span>,</span>
 <span>    <span class="fu">abort</span><span class="op">(</span><span class="fu">glue</span><span class="op">(</span><span class="st">"Not a recognized HTTP method: {bt(x$method)}"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>

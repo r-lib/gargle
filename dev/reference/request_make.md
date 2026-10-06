@@ -7,6 +7,9 @@ high-level wrappers for users. `request_make()` does relatively little:
 
 - Adds a user agent.
 
+- Adds any `headers`, such as the API key header added by
+  [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md).
+
 - Enforces `"json"` as the default for `encode`. This differs from
   httr's default behaviour, but aligns better with Google APIs.
 
@@ -30,8 +33,8 @@ request_make(x, ..., encode = "json", user_agent = gargle_user_agent())
   [`request_develop()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
   or
   [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md).
-  Must contain a `method` and `url`. If present, `body` and `token` are
-  used.
+  Must contain a `method` and `url`. If present, `body`, `token`, and
+  `headers` are used.
 
 - ...:
 
