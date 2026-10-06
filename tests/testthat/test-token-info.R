@@ -26,3 +26,26 @@ test_that("token_*() functions work", {
     fixed = TRUE
   ))
 })
+
+test_that("token_tokeninfo() does not eagerly refresh impersonated service account tokens", {
+  refreshed <- FALSE
+  token <- structure(
+    list(
+      refresh = function() {
+        refreshed <<- TRUE
+      }
+    ),
+    class = c("ImpersonatedServiceAccountToken", "Token2.0", "Token")
+  )
+
+  local_mocked_bindings(
+    request_build = function(...) list(),
+    request_make = function(...) {
+      structure(list(status_code = 200), class = "response")
+    },
+    response_process = function(...) list(scope = character())
+  )
+
+  expect_no_error(token_tokeninfo(token))
+  expect_false(refreshed)
+})
