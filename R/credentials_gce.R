@@ -176,7 +176,9 @@ GceToken <- R6::R6Class(
       req <- request_build(
         method = "GET",
         path = "oauth2/v3/tokeninfo",
-        params = list(access_token = token$access_token),
+        token = httr::add_headers(
+          Authorization = paste("Bearer", token$access_token)
+        ),
         base_url = "https://www.googleapis.com"
       )
       resp <- request_make(req)
