@@ -9,7 +9,7 @@ request_make(x, ..., encode = "json", user_agent = gargle_user_agent())
 \arguments{
 \item{x}{List. Holds the components for an HTTP request, presumably created
 with \code{\link[=request_develop]{request_develop()}} or \code{\link[=request_build]{request_build()}}. Must contain a \code{method} and
-\code{url}. If present, \code{body} and \code{token} are used.}
+\code{url}. If present, \code{body}, \code{token}, and \code{headers} are used.}
 
 \item{...}{Optional arguments passed through to the HTTP method. Currently
 neither gargle nor httr checks that all are used, so be aware that unused
@@ -41,6 +41,7 @@ high-level wrappers for users. \code{request_make()} does relatively little:
 \itemize{
 \item Calls an HTTP method.
 \item Adds a user agent.
+\item Adds any \code{headers}, such as the API key header added by \code{\link[=request_build]{request_build()}}.
 \item Enforces \code{"json"} as the default for \code{encode}. This differs from httr's
 default behaviour, but aligns better with Google APIs.
 }

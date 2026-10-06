@@ -5,6 +5,7 @@
 #' high-level wrappers for users. `request_make()` does relatively little:
 #' * Calls an HTTP method.
 #' * Adds a user agent.
+#' * Adds any `headers`, such as the API key header added by [request_build()].
 #' * Enforces `"json"` as the default for `encode`. This differs from httr's
 #'   default behaviour, but aligns better with Google APIs.
 #'
@@ -13,7 +14,7 @@
 #'
 #' @param x List. Holds the components for an HTTP request, presumably created
 #'   with [request_develop()] or [request_build()]. Must contain a `method` and
-#'   `url`. If present, `body` and `token` are used.
+#'   `url`. If present, `body`, `token`, and `headers` are used.
 #' @param user_agent A user agent string, prepared by [httr::user_agent()]. When
 #'   in doubt, a client package should have an internal function that extends
 #'   `gargle_user_agent()` by prepending its return value with the client
@@ -55,6 +56,7 @@ request_make <- function(
     url = x$url,
     body = x$body,
     x$token,
+    httr::add_headers(.headers = x$headers),
     encode = encode,
     user_agent,
     ...

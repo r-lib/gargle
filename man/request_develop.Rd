@@ -50,16 +50,17 @@ by \code{request_build()}, using named parameters found in \code{params}.}
 see Google's document Credentials, access, security, and identity
 (\verb{https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279}).
 A key can be passed as a named component of \code{params}, but note that the
-formal argument \code{key} will clobber it, if non-\code{NULL}.}
+formal argument \code{key} will clobber it, if non-\code{NULL}. Either way, the \code{key}
+is sent in the \code{X-goog-api-key} request header in order to keep it out of
+the URL.}
 }
 \value{
 \code{request_develop()}: \code{list()} with components \code{method}, \code{path}, \code{params},
 \code{body}, and \code{base_url}.
 
-\code{request_build()}: \code{list()} with components \code{method}, \code{path}
-(post-substitution), \code{query} (the input \code{params} not used in URL
-substitution), \code{body}, \code{token}, \code{url} (the full URL, post-substitution,
-including the query).
+\code{request_build()}: \code{list()} with components \code{method}, \code{url} (the full URL,
+post-substitution, including the query), \code{body}, \code{token}, and \code{headers} (a
+named character vector holding the \code{X-goog-api-key} header, or \code{NULL}).
 }
 \description{
 Intended primarily for internal use in client packages that provide
@@ -94,9 +95,12 @@ specific to any particular Google API or endpoint.
 \item \code{params} are used for variable substitution in \code{path}. Leftover \code{params}
 that are not bound by the \code{path} template automatically become HTTP
 query parameters.
-\item Adds an API key to the query iff \code{token = NULL} and removes the API key
-otherwise. Client packages should generally pass their own API key in, but
-note that \code{\link[=gargle_api_key]{gargle_api_key()}} is available for small-scale experimentation.
+\item Adds an API key, in the \code{X-goog-api-key} header, if and only if \code{token = NULL} and removes the API key otherwise. Client packages should
+generally pass their own API key in, but note that \code{\link[=gargle_api_key]{gargle_api_key()}} is
+available for small-scale experimentation.
+\item Client packages should send the request with \code{\link[=request_make]{request_make()}} or
+\code{\link[=request_retry]{request_retry()}}, which apply the \code{headers}. Code that makes its own
+HTTP call with only the \code{url} won't send the API key.
 }
 
 See \code{googledrive::generate_request()} for an example of usage in a client
@@ -146,27 +150,30 @@ req <- request_build(
   token = "PRETEND_I_AM_A_TOKEN"
 )
 req
+}
 
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true")) withAutoprint(\{ # examplesIf}
 # Example with no previous knowledge of the endpoint and no token
-# use an API key for which the Places API is enabled!
-API_KEY <- "1234567890"
-
-# get restaurants close to a location in Vancouver, BC
+# find books by Hadley Wickham with the Books API,
+# using gargle's demo API key (for which the Books API is enabled)
 req <- request_build(
   method = "GET",
-  path = "maps/api/place/nearbysearch/json",
+  path = "books/v1/volumes",
   params = list(
-    location = "49.268682,-123.167117",
-    radius = 100,
-    type = "restaurant"
+    q = "inauthor:Hadley Wickham",
+    maxResults = 10
   ),
-  key = API_KEY,
-  base_url = "https://maps.googleapis.com"
+  key = gargle_api_key()
 )
 resp <- request_make(req)
 out <- response_process(resp)
-vapply(out$results, function(x) x$name, character(1))
-}
+books <- lapply(out$items, \(x) x$volumeInfo)
+data.frame(
+  title = vapply(books, \(x) x$title, character(1)),
+  authors = vapply(books, \(x) toString(x$authors), character(1)),
+  date = vapply(books, \(x) toString(x$publishedDate), character(1))
+)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other requests and responses:

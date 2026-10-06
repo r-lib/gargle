@@ -65,17 +65,30 @@ test_that("request_build() suppresses API key if token is non-NULL", {
     key = "explicit key",
     token = httr::config(token = "token!")
   )
-  expect_false(grepl("key", req$url))
+  expect_no_match(req$url, "key")
+  expect_null(req$headers)
 })
 
-test_that("request_build() adds key, if available when token = NULL", {
-  req <- request_build(key = "abc", token = NULL)
-  expect_match(req$url, "key=abc")
-  req <- request_build(params = list(key = "abc"), token = NULL)
-  expect_match(req$url, "key=abc")
+test_that("request_build() sends key in a header, not the URL, when token = NULL", {
+  req <- request_build(path = "/{a}", key = "abc", params = list(a = "A"))
+  expect_equal(req$url, "https://www.googleapis.com/A")
+  expect_equal(req$headers, c("X-goog-api-key" = "abc"))
+
+  req <- request_build(
+    path = "/{a}",
+    params = list(a = "A", key = "abc", c = "C")
+  )
+  expect_equal(req$url, "https://www.googleapis.com/A?c=C")
+  expect_equal(req$headers, c("X-goog-api-key" = "abc"))
 })
 
 test_that("request_build(): explicit API key > key in params", {
   req <- request_build(key = "abc", params = list(key = "def"), token = NULL)
-  expect_match(req$url, "key=abc")
+  expect_no_match(req$url, "key")
+  expect_equal(req$headers, c("X-goog-api-key" = "abc"))
+})
+
+test_that("request_build() sends no key header when there is no key", {
+  req <- request_build(token = NULL)
+  expect_null(req$headers)
 })

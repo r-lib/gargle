@@ -24,7 +24,9 @@
 #'   see Google's document Credentials, access, security, and identity
 #'   (`https://support.google.com/googleapi/answer/6158857?hl=en&ref_topic=7013279`).
 #'    A key can be passed as a named component of `params`, but note that the
-#'   formal argument `key` will clobber it, if non-`NULL`.
+#'   formal argument `key` will clobber it, if non-`NULL`. Either way, the `key`
+#'   is sent in the `X-goog-api-key` request header in order to keep it out of
+#'   the URL.
 #' @param token Token, ready for inclusion in a request, i.e. prepared with
 #'   [httr::config()].
 #'
@@ -50,9 +52,13 @@
 #'   - `params` are used for variable substitution in `path`. Leftover `params`
 #'     that are not bound by the `path` template automatically become HTTP
 #'     query parameters.
-#'   - Adds an API key to the query iff `token = NULL` and removes the API key
-#'   otherwise. Client packages should generally pass their own API key in, but
-#'   note that [gargle_api_key()] is available for small-scale experimentation.
+#'   - Adds an API key, in the `X-goog-api-key` header, if and only if `token =
+#'     NULL` and removes the API key otherwise. Client packages should
+#'     generally pass their own API key in, but note that [gargle_api_key()] is
+#'     available for small-scale experimentation.
+#'   - Client packages should send the request with [request_make()] or
+#'     [request_retry()], which apply the `headers`. Code that makes its own
+#'     HTTP call with only the `url` won't send the API key.
 #'
 #' See `googledrive::generate_request()` for an example of usage in a client
 #' package. googledrive has an internal list of selected endpoints, derived from
@@ -64,14 +70,13 @@
 #' googledrive-managed API key and some logic about Team Drives. All user-facing
 #' functions use `googledrive::generate_request()` under the hood.
 #'
-#' @return
+#' @returns
 #' `request_develop()`: `list()` with components `method`, `path`, `params`,
 #' `body`, and `base_url`.
 #'
-#' `request_build()`: `list()` with components `method`, `path`
-#' (post-substitution), `query` (the input `params` not used in URL
-#' substitution), `body`, `token`, `url` (the full URL, post-substitution,
-#' including the query).
+#' `request_build()`: `list()` with components `method`, `url` (the full URL,
+#' post-substitution, including the query), `body`, `token`, and `headers` (a
+#' named character vector holding the `X-goog-api-key` header, or `NULL`).
 #'
 #' @export
 #' @family requests and responses
@@ -111,27 +116,29 @@
 #'   token = "PRETEND_I_AM_A_TOKEN"
 #' )
 #' req
+#' }
 #'
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true")
 #' # Example with no previous knowledge of the endpoint and no token
-#' # use an API key for which the Places API is enabled!
-#' API_KEY <- "1234567890"
-#'
-#' # get restaurants close to a location in Vancouver, BC
+#' # find books by Hadley Wickham with the Books API,
+#' # using gargle's demo API key (for which the Books API is enabled)
 #' req <- request_build(
 #'   method = "GET",
-#'   path = "maps/api/place/nearbysearch/json",
+#'   path = "books/v1/volumes",
 #'   params = list(
-#'     location = "49.268682,-123.167117",
-#'     radius = 100,
-#'     type = "restaurant"
+#'     q = "inauthor:Hadley Wickham",
+#'     maxResults = 10
 #'   ),
-#'   key = API_KEY,
-#'   base_url = "https://maps.googleapis.com"
+#'   key = gargle_api_key()
 #' )
 #' resp <- request_make(req)
 #' out <- response_process(resp)
-#' vapply(out$results, function(x) x$name, character(1))
-#' }
+#' books <- lapply(out$items, \(x) x$volumeInfo)
+#' data.frame(
+#'   title = vapply(books, \(x) x$title, character(1)),
+#'   authors = vapply(books, \(x) toString(x$authors), character(1)),
+#'   date = vapply(books, \(x) toString(x$publishedDate), character(1))
+#' )
 request_develop <- function(
   endpoint,
   params = list(),
@@ -171,10 +178,11 @@ request_build <- function(
   query_params <- params[query_param_names]
 
   ## send a token or a key, but never both
-  query_params$key <- if (is.null(token)) {
-    key %||% query_params$key
-  } else {
-    NULL
+  ## the key goes in a header, not the URL, to keep it out of printed URLs
+  key <- key %||% query_params$key
+  query_params$key <- NULL
+  headers <- if (is.null(token) && !is.null(key)) {
+    c("X-goog-api-key" = key)
   }
 
   out <- list(
@@ -185,7 +193,8 @@ request_build <- function(
       query = query_params
     ),
     body = body,
-    token = token
+    token = token,
+    headers = headers
   )
   out
 }
