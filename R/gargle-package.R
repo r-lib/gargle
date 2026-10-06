@@ -1,6 +1,13 @@
 #' @keywords internal
 "_PACKAGE"
 
+# gargle's R6 calls are at the top level and R CMD check doesn't detect such
+# usage, so this reference prevents a NOTE about an unused import.
+# Function is never called.
+ignore_unused_imports <- function() {
+  R6::R6Class
+}
+
 # The following block is used by usethis to automatically manage
 # roxygen namespace tags. Modify with care!
 ## usethis namespace: start

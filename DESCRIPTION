@@ -27,6 +27,7 @@ Imports:
     jsonlite,
     lifecycle (>= 0.2.0),
     openssl,
+    R6,
     rappdirs,
     rlang (>= 1.1.0),
     stats,
@@ -44,8 +45,8 @@ Suggests:
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.0
