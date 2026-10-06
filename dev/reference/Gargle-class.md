@@ -70,10 +70,10 @@ Key differences with `Token2.0`:
 
 Inherited methods
 
-- [`httr::Token2.0$can_refresh()`](https://gargle.r-lib.org/httr/html/Token2.0.html#method-Token2.0-can_refresh)
-- [`httr::Token2.0$revoke()`](https://gargle.r-lib.org/httr/html/Token2.0.html#method-Token2.0-revoke)
-- [`httr::Token2.0$sign()`](https://gargle.r-lib.org/httr/html/Token2.0.html#method-Token2.0-sign)
-- [`httr::Token2.0$validate()`](https://gargle.r-lib.org/httr/html/Token2.0.html#method-Token2.0-validate)
+- [`httr::Token2.0$can_refresh()`](https://httr.r-lib.org/reference/Token-class.html#method-can_refresh)
+- [`httr::Token2.0$revoke()`](https://httr.r-lib.org/reference/Token-class.html#method-revoke)
+- [`httr::Token2.0$sign()`](https://httr.r-lib.org/reference/Token-class.html#method-sign)
+- [`httr::Token2.0$validate()`](https://httr.r-lib.org/reference/Token-class.html#method-validate)
 
 ------------------------------------------------------------------------
 

@@ -39,8 +39,8 @@ instead.
 
 Inherited methods
 
-- [`httr::Token$hash()`](https://gargle.r-lib.org/httr/html/Token.html#method-Token-hash)
-- [`httr::Token2.0$sign()`](https://gargle.r-lib.org/httr/html/Token2.0.html#method-Token2.0-sign)
+- [`httr::Token$hash()`](https://httr.r-lib.org/reference/Token-class.html#method-hash)
+- [`httr::Token2.0$sign()`](https://httr.r-lib.org/reference/Token-class.html#method-sign)
 
 ------------------------------------------------------------------------
 

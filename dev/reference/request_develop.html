@@ -239,34 +239,19 @@ functions use <code>googledrive::generate_request()</code> under the hood.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">resp</span> <span class="op">&lt;-</span> <span class="fu"><a href="request_make.html">request_make</a></span><span class="op">(</span><span class="va">req</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="response_process.html">response_process</a></span><span class="op">(</span><span class="va">resp</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> Server error: (503) Service Unavailable</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> Service temporarily unavailable.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> message: Service temporarily unavailable.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> domain: global</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> reason: backendFailed</span>
 <span class="r-in"><span><span class="va">books</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">items</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">volumeInfo</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'out' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">title</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  authors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/toString.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">authors</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span><span class="op">(</span><span class="va">books</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/toString.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">publishedDate</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         title</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  R Packages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          R for Data Science</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                     ggplot2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  Advanced R</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  Advanced R, Second Edition</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                  R Packages</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7             Mastering Shiny</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          R for Data Science</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9             Mastering Shiny</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       Advanced R Solutions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                     authors       date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                            Hadley Wickham, Jennifer Bryan 2023-06-14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                         Hadley Wickham, Garrett Grolemund 2016-12-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                                            Hadley Wickham 2016-06-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                                            Hadley Wickham    2020-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                                            Hadley Wickham 2019-05-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6                                            Hadley Wickham 2015-04-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7                                            Hadley Wickham 2021-04-29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund 2023-06-08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9                                            Hadley Wickham 2021-04-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10            Malte Grosser, Henning Bumann, Hadley Wickham 2021-08-23</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'books' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
