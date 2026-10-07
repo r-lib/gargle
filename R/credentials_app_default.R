@@ -45,10 +45,15 @@
 #' \dontrun{
 #' credentials_app_default()
 #' }
-credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
+credentials_app_default <- function(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  ...,
+  subject = NULL
+) {
   gargle_debug("trying {.fun credentials_app_default}")
-  # In general, application default credentials only include the cloud-platform
-  # scope.
+  # For a service account or external account, gargle mints the token, so
+  # `scopes` are genuinely requested. For user credentials, see below.
+  scopes <- scopes %||% "https://www.googleapis.com/auth/cloud-platform"
   path <- credentials_app_default_path()
   if (!file_exists(path)) {
     return(NULL)
@@ -57,36 +62,24 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
 
   info <- jsonlite::fromJSON(path, simplifyVector = FALSE)
   if (info$type == "authorized_user") {
-    # In the case of *user* credentials stored as the application default, only
-    # the cloud-platform scope will be included. This means we need our scopes to
-    # be *implied* by the cloud-platform scope, which is hard to validate;
-    # instead, we just approximate.
+    # gargle is NOT in control of the scopes for user credentials. The file
+    # holds a refresh token minted elsewhere, usually by
+    # `gcloud auth application-default login`. Its scopes were fixed then and
+    # aren't recorded in the file. So `scopes` can't be requested here; it only
+    # decides whether to use this token at all. We assume gcloud's default
+    # grant, which includes cloud-platform, and accept only scopes that
+    # cloud-platform plausibly covers. This is an approximation: a user who
+    # ran gcloud with `--scopes` may hold a token that's wrongly rejected.
     valid_scopes <- c(
-      "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/bigquery",
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/cloud-platform.readonly"
     )
-    if (is.null(scopes) || !all(scopes %in% valid_scopes)) {
+    if (!all(scopes %in% valid_scopes)) {
       return(NULL)
     }
     gargle_debug("ADC cred type: {.val authorized_user}")
-    app <- httr::oauth_app(
-      "google",
-      info$client_id,
-      secret = info$client_secret
-    )
-    scope <- "https://www.googleapis.com/auth/cloud.platform"
-    token <- httr::Token2.0$new(
-      endpoint = gargle_oauth_endpoint(),
-      app = app,
-      credentials = list(refresh_token = info$refresh_token),
-      # ADC is already cached.
-      cache_path = FALSE,
-      params = list(scope = scope, as_header = TRUE)
-    )
-    token$refresh()
-    token
+    adc_user_token(info)
   } else if (info$type == "service_account") {
     gargle_debug("ADC cred type: {.val service_account}")
     credentials_service_account(scopes, path = path, subject = subject)
@@ -94,6 +87,29 @@ credentials_app_default <- function(scopes = NULL, ..., subject = NULL) {
     gargle_debug("ADC cred type: {.val external_account}")
     credentials_external_account(scopes, path = path)
   }
+}
+
+adc_user_token <- function(info) {
+  app <- httr::oauth_app(
+    "google",
+    info$client_id,
+    secret = info$client_secret
+  )
+  token <- httr::Token2.0$new(
+    endpoint = gargle_oauth_endpoint(),
+    app = app,
+    credentials = list(refresh_token = info$refresh_token),
+    # ADC is already cached.
+    cache_path = FALSE,
+    # This scope is only a label recording our assumption. Refreshing doesn't
+    # send a scope, so the access token gets whatever was originally granted.
+    params = list(
+      scope = "https://www.googleapis.com/auth/cloud-platform",
+      as_header = TRUE
+    )
+  )
+  token$refresh()
+  token
 }
 
 credentials_app_default_path <- function() {

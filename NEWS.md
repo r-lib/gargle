@@ -1,5 +1,7 @@
 # gargle (development version)
 
+* `credentials_app_default()` now defaults to `scopes = "https://www.googleapis.com/auth/cloud-platform"`, and `scopes = NULL` means the same thing. Previously, calling `credentials_app_default()` without scopes returned `NULL` for user credentials (e.g. from `gcloud auth application-default login`) and for an external account, and requested only the email scope for a service account (#229, #252, @aebrahim).
+
 * `request_build()` now places an API key in the `X-goog-api-key` request header instead of the URL query. When gargle stores a response, for `gargle_last_response()` or in a request error, it now redacts the `X-goog-api-key` header.
 
 * gargle's unexported, legacy secret management functions (deprecated in gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`, `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`, `secret_can_decrypt()`, `secret_read()`, and `secret_write()`. The sodium package is no longer a suggested dependency. Use the exported `secret_*()` functions instead, as described in `vignette("managing-tokens-securely")`.

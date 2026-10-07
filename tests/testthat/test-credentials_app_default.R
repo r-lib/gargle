@@ -1,3 +1,15 @@
+test_that("credentials_app_default() uses user creds by default, not for drive", {
+  path <- withr::local_tempfile(fileext = ".json")
+  jsonlite::write_json(list(type = "authorized_user"), path, auto_unbox = TRUE)
+  withr::local_envvar(GOOGLE_APPLICATION_CREDENTIALS = path)
+  local_mocked_bindings(adc_user_token = function(info) "user token")
+
+  expect_equal(credentials_app_default(), "user token")
+  expect_null(
+    credentials_app_default(scopes = "https://www.googleapis.com/auth/drive")
+  )
+})
+
 test_that("credentials_app_default_path(), default, non-Windows", {
   withr::local_envvar(c(
     GOOGLE_APPLICATION_CREDENTIALS = NA,
