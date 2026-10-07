@@ -76,9 +76,9 @@ credentials_gce()
 }
 }
 \seealso{
-A related auth flow that can be used on certain non-Google cloud
-providers is workload identity federation, which is implemented in
-\code{\link[=credentials_external_account]{credentials_external_account()}}.
+A related auth flow that can be used on certain non-Google
+platforms, such as AWS or GitHub Actions, is workload identity federation,
+which is implemented in \code{\link[=credentials_external_account]{credentials_external_account()}}.
 
 \url{https://docs.cloud.google.com/compute/docs/access/service-accounts}
 

@@ -207,11 +207,26 @@ PKG_auth(token = t)
 # ... do authenticated stuff...
 ```
 
-### AWS
+### Workload identity federation (AWS, GitHub Actions)
 
-Keyless auth is even possible from non-Google cloud platforms, using [Workload identity federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation).
+Keyless auth is even possible from non-Google platforms, using [workload identity federation](https://cloud.google.com/iam/docs/configuring-workload-identity-federation).
+This is implemented in the experimental function `credentials_external_account()`, which supports AWS and configurations where the subject token comes from a URL or a file.
 
-This is implemented in the experimental function `credentials_external_account()`, which currently only supports AWS.
+The most common use is probably GitHub Actions.
+The [`google-github-actions/auth`](https://github.com/google-github-actions/auth) action writes a configuration file and sets `GOOGLE_APPLICATION_CREDENTIALS`, so later steps in the job can authenticate with no further setup, via Application Default Credentials.
+gargle currently requires service account impersonation, so you must specify `service_account` as well as `workload_identity_provider`:
+
+```yaml
+permissions:
+  id-token: write
+
+steps:
+  - uses: google-github-actions/auth@v2
+    with:
+      workload_identity_provider: projects/123456/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+      service_account: my-sa@my-project.iam.gserviceaccount.com
+  # ... set up R, then run code that uses, e.g., bigrquery or googledrive
+```
 
 ## Provide a service account token directly
 
