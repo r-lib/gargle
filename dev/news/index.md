@@ -2,6 +2,18 @@
 
 ## gargle (development version)
 
+- [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
+  now defaults to
+  `scopes = "https://www.googleapis.com/auth/cloud-platform"`, and
+  `scopes = NULL` means the same thing. Previously, calling
+  [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
+  without scopes returned `NULL` for user credentials (e.g. from
+  `gcloud auth application-default login`) and for an external account,
+  and requested only the email scope for a service account
+  ([\#229](https://github.com/r-lib/gargle/issues/229),
+  [\#252](https://github.com/r-lib/gargle/issues/252),
+  [@aebrahim](https://github.com/aebrahim)).
+
 - [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
   now places an API key in the `X-goog-api-key` request header instead
   of the URL query. When gargle stores a response, for
