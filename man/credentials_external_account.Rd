@@ -39,17 +39,25 @@ A \code{\link[=WifToken]{WifToken()}} or \code{NULL}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-Workload identity federation is a new (as of April 2021) keyless
-authentication mechanism that allows applications running on a non-Google
-Cloud platform, such as AWS, to access Google Cloud resources without using a
+Workload identity federation is a keyless authentication mechanism that
+allows applications running on a non-Google Cloud platform, such as AWS or
+GitHub Actions, to access Google Cloud resources without using a
 conventional service account token. This eliminates the dilemma of how to
 safely manage service account credential files.
 
-Unlike service accounts, the configuration file for workload identity
-federation contains no secrets. Instead, it holds non-sensitive metadata.
-The external application obtains the needed sensitive data "on-the-fly" from
-the running instance. The combined data is then used to obtain a so-called
-subject token from the external identity provider, such as AWS. This is then
+Unlike a service account key, the configuration for workload identity
+federation is not a long-lived secret that you need to store and protect.
+What the configuration looks like depends on the platform.
+\itemize{
+\item On AWS, it's a file of non-sensitive metadata that you download once and
+keep on the instance; the sensitive data is obtained "on-the-fly" at run
+time.
+\item On GitHub Actions, the configuration file is written fresh for each job
+and contains only a short-lived credential.
+}
+
+The configuration is used to obtain a so-called subject token from the
+external identity provider, such as AWS or GitHub. The subject token is then
 sent to Google's Security Token Service API, in exchange for a very
 short-lived federated access token. Finally, the federated access token is
 sent to Google's Service Account Credentials API, in exchange for a
@@ -57,12 +65,34 @@ short-lived GCP access token. This access token allows the external
 application to impersonate a service account and inherit the permissions of
 the service account to access GCP resources.
 
-This feature is still experimental in gargle and \strong{currently only supports
-AWS}. It also requires installation of the suggested packages
-\pkg{aws.signature} and \pkg{aws.ec2metadata}. Workload identity federation
-\strong{can} be used with other platforms, such as Microsoft Azure or any
-identity provider that supports OpenID Connect. If you would like gargle to
-support this token flow for additional platforms, please \href{https://github.com/r-lib/gargle/issues}{open an issue on GitHub} and describe your use case.
+This feature is still experimental in gargle. The \code{credential_source} in
+the configuration determines how the subject token is obtained and gargle
+supports these types:
+\itemize{
+\item AWS (\code{"environment_id": "aws1"}). This only works when running on an EC2
+instance and requires the suggested packages \pkg{aws.signature} and
+\pkg{aws.ec2metadata}.
+\item URL-sourced credentials (\code{"url"}). The subject token is fetched from a
+URL, with optional request \code{headers}. The
+\href{https://github.com/google-github-actions/auth}{\code{google-github-actions/auth}}
+action writes this type of configuration for GitHub Actions and points
+the \code{GOOGLE_APPLICATION_CREDENTIALS} environment variable at it. That
+means that, in a workflow that runs this action, \code{\link[=token_fetch]{token_fetch()}} (and,
+therefore, the auth functions of client packages) can discover and use
+the credentials via \code{\link[=credentials_app_default]{credentials_app_default()}}.
+\item File-sourced credentials (\code{"file"}). The subject token is read from a
+local file.
+}
+
+For URL- and file-sourced credentials, the subject token is either the
+entire response or file (\code{"format": {"type": "text"}}, the default) or a
+field in a JSON object (\verb{"format": \{"type": "json", "subject_token_field_name": "..."\}}).
+
+gargle does not support executable-sourced credentials. The configuration
+must include \code{service_account_impersonation_url}, i.e. gargle does not yet
+support direct workload identity federation, without service account
+impersonation. If you would like gargle to support additional variations
+of this token flow, please \href{https://github.com/r-lib/gargle/issues}{open an issue on GitHub} and describe your use case.
 }
 \examples{
 \dontrun{
@@ -70,12 +100,14 @@ credentials_external_account()
 }
 }
 \seealso{
-There is substantial setup necessary, both on the GCP and AWS side,
-to use this authentication method. These two links provide, respectively,
-a high-level overview and step-by-step instructions.
+There is substantial setup necessary, both on the GCP side and on
+the external platform, to use this authentication method. These links
+provide, respectively, a high-level overview, step-by-step instructions,
+and Google's specification for the configuration file.
 \itemize{
 \item \url{https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/}
 \item \url{https://cloud.google.com/iam/docs/configuring-workload-identity-federation}
+\item \url{https://google.aip.dev/auth/4117}
 }
 
 Other credential functions:
