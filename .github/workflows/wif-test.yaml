@@ -47,10 +47,24 @@ jobs:
           print(class(token))
           print(gargle::token_email(token))
 
+      # Like a client package, e.g. bigrquery
+      - name: Fetch a token via ADC with an explicit scope
+        shell: Rscript {0}
+        run: |
+          options(gargle_verbosity = "debug")
+          token <- gargle::token_fetch(
+            scopes = "https://www.googleapis.com/auth/bigquery"
+          )
+          print(class(token))
+          print(token$params$scope)
+          print(gargle::token_email(token))
+
       - name: Call credentials_external_account() directly
         shell: Rscript {0}
         run: |
           options(gargle_verbosity = "debug")
-          token <- gargle::credentials_external_account()
+          token <- gargle::credentials_external_account(
+            path = Sys.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+          )
           print(class(token))
           print(gargle::token_email(token))
