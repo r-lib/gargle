@@ -4,11 +4,11 @@
 
 #' `r lifecycle::badge('experimental')`
 
-#' Workload identity federation is a keyless authentication mechanism that
-#' allows applications running on a non-Google Cloud platform, such as AWS or
-#' GitHub Actions, to access Google Cloud resources without using a
-#' conventional service account token. This eliminates the dilemma of how to
-#' safely manage service account credential files.
+#' Workload identity federation lets applications running outside Google
+#' Cloud, such as on AWS or GitHub Actions, access Google Cloud resources by
+#' using a federated identity instead of a service account key. This
+#' eliminates the dilemma of how to safely manage service account credential
+#' files.
 #'
 
 #'  Unlike a service account key, the configuration for workload identity
@@ -76,10 +76,11 @@
 #'   explicitly. See [credentials_app_default()] for more.
 #'
 
-#' @seealso There is substantial setup necessary, both on the GCP side and on
-#'   the external platform, to use this authentication method. These links
-#'   provide, respectively, a high-level overview, step-by-step instructions,
-#'   and Google's specification for the configuration file.
+#' @seealso Most of the setup for this authentication method happens on the
+#'   GCP side; the external platform typically needs little or no
+#'   configuration. These links provide, respectively, a high-level overview,
+#'   step-by-step instructions, and Google's specification for the
+#'   configuration file.
 
 #' * <https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/>
 
