@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-If you are working with R in a web-based context, such as [RStudio Server](https://posit.co/download/rstudio-server/), [Posit Cloud](https://posit.cloud/), [Posit Workbench](https://posit.co/products/enterprise/workbench/), or [Google Colaboratory](https://colab.research.google.com/), your experience of browser-based auth flows will be different from those using R on their local machine.
+If you are working with R in a web-based context, such as [RStudio Server](https://docs.posit.co/ide/user/#rstudio-server-oss-downloads), [Posit Cloud](https://posit.cloud/), [Posit Workbench](https://posit.co/products/enterprise/workbench), or [Google Colaboratory](https://colab.research.google.com/), your experience of browser-based auth flows will be different from those using R on their local machine.
 You need to use **out-of-band authentication**, sometimes denoted "oob" or "OOB".
 After the usual auth dance, instead of seeing "authentication successful, return to R!", you are presented with an authorization code to copy and paste back into your R session.
 For folks who are running R on their local machine, this final exchange can be done automagically, using a temporary local webserver, but that is not possible for those accessing a remote R session through the browser.
@@ -293,4 +293,4 @@ The normal, non-OOB auth web flow should work again now.
 
 ## Further reading
 
-If you're working on a data product that will be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [Posit Connect](https://posit.co/products/enterprise/connect/)), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in `vignette("non-interactive-auth")`.
+If you're working on a data product that will be deployed (for example on [shinyapps.io](https://www.shinyapps.io) or [Posit Connect](https://posit.co/products/enterprise/connect)), you will also need to consider how the deployed content will authenticate non-interactively, which is covered in `vignette("non-interactive-auth")`.
