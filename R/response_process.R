@@ -218,7 +218,7 @@ gargle_error_message <- function(resp, call = caller_env()) {
     # Remove the localized message from error details, regardless
     # Currently ignoring the locale info, because it seems hard to reliably
     # compare to something returned by Sys.getlocale()
-    types <- map_chr(error_details, function(x) x[["@type"]])
+    types <- map_chr(error_details, \(x) x[["@type"]])
     lm_index <- match("type.googleapis.com/google.rpc.LocalizedMessage", types)
     localized_message <- error_details[[lm_index]][["message"]]
     if (!is.na(lm_index)) {
@@ -367,7 +367,7 @@ reveal_detail <- function(x) {
         # this needs to be an anonymous function (as opposed to naked `glue`)
         # in order to capture the value of `type`
         # good write-up in https://stackoverflow.com/a/75247635
-        function(x) glue(x)
+        \(x) glue(x)
       )
     )
   )

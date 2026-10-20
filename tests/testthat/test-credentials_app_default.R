@@ -2,7 +2,7 @@ test_that("credentials_app_default() uses user creds by default, not for drive",
   path <- withr::local_tempfile(fileext = ".json")
   jsonlite::write_json(list(type = "authorized_user"), path, auto_unbox = TRUE)
   withr::local_envvar(GOOGLE_APPLICATION_CREDENTIALS = path)
-  local_mocked_bindings(adc_user_token = function(info) "user token")
+  local_mocked_bindings(adc_user_token = \(info) "user token")
 
   expect_equal(credentials_app_default(), "user token")
   expect_null(
@@ -17,7 +17,7 @@ test_that("credentials_app_default_path(), default, non-Windows", {
     APPDATA = NA,
     SystemDrive = NA
   ))
-  local_mocked_bindings(is_windows = function() FALSE)
+  local_mocked_bindings(is_windows = \() FALSE)
   expect_equal(
     credentials_app_default_path(),
     path_home(".config", "gcloud", "application_default_credentials.json")
@@ -31,7 +31,7 @@ test_that("credentials_app_default_path(), default, Windows", {
     APPDATA = NA,
     SystemDrive = NA
   ))
-  local_mocked_bindings(is_windows = function() TRUE)
+  local_mocked_bindings(is_windows = \() TRUE)
   expect_equal(
     credentials_app_default_path(),
     path("C:", "gcloud", "application_default_credentials.json")
@@ -45,7 +45,7 @@ test_that("credentials_app_default_path(), system drive, Windows", {
     APPDATA = NA,
     SystemDrive = "D:"
   ))
-  local_mocked_bindings(is_windows = function() TRUE)
+  local_mocked_bindings(is_windows = \() TRUE)
   expect_equal(
     credentials_app_default_path(),
     path("D:", "gcloud", "application_default_credentials.json")
@@ -59,7 +59,7 @@ test_that("credentials_app_default_path(), APPDATA env var, Windows", {
     APPDATA = path("D:", "AppData"),
     SystemDrive = "D:"
   ))
-  local_mocked_bindings(is_windows = function() TRUE)
+  local_mocked_bindings(is_windows = \() TRUE)
   expect_equal(
     credentials_app_default_path(),
     path("D:", "AppData", "gcloud", "application_default_credentials.json")

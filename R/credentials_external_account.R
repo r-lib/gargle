@@ -310,7 +310,7 @@ init_oauth_external_account <- function(params) {
 external_account_info <- function(path) {
   info <- tryCatch(
     jsonlite::fromJSON(path, simplifyVector = FALSE),
-    error = function(e) NULL
+    error = \(e) NULL
   )
   if (!identical(info[["type"]], "external_account")) {
     gargle_debug("JSON does not appear to represent an external account")

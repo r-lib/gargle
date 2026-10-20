@@ -120,7 +120,7 @@ test_that("pseudo-OOB flow uses PKCE", {
 
 test_that("loopback flow checks the redirect", {
   local_mocked_bindings(
-    oauth_listener = function(url) list(code = "abc", state = "xyz")
+    oauth_listener = \(url) list(code = "abc", state = "xyz")
   )
   expect_equal(oauth_authorize("https://example.org", state = "xyz"), "abc")
   expect_snapshot(

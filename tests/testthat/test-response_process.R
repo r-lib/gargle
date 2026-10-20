@@ -47,7 +47,7 @@ test_that("HTML error is offered as a file", {
   resp <- readRDS(rds_file)
   err <- tryCatch(
     response_process(resp),
-    gargle_error_request_failed = function(e) e
+    gargle_error_request_failed = \(e) e
   )
   regex <- "[^'\" \\t\\n\\r]+gargle-unexpected-html-error-\\S+[.]html"
   m <- gregexpr(regex, err$body, perl = TRUE)
@@ -141,7 +141,7 @@ test_that("error_class parameter adds custom classes", {
   # Without error_class, we get default classes
   err <- tryCatch(
     response_process(resp),
-    gargle_error_request_failed = function(e) e
+    gargle_error_request_failed = \(e) e
   )
   klass <- class(err)
   expect_equal(
@@ -151,7 +151,7 @@ test_that("error_class parameter adds custom classes", {
 
   err_custom <- tryCatch(
     response_process(resp, error_class = c("custom_error1", "custom_error2")),
-    custom_error1 = function(e) e
+    custom_error1 = \(e) e
   )
   klass <- class(err_custom)
   expect_equal(

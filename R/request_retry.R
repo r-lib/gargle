@@ -252,7 +252,7 @@ announce_retryable_failure <- function(resp, tries_made, wait_info) {
       # oops is defined in response_process.R
       oops$RPC[[match(status_code, oops$HTTP)]]
     },
-    error = function(e) NULL
+    error = \(e) NULL
   )
   status_extra <- glue(": {status_rpc}") %||% ""
   if (sheets_per_user_quota_exhaustion(resp)) {

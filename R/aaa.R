@@ -39,7 +39,7 @@ gargle_last_content <- function() {
   if (inherits(resp, "response")) {
     tryCatch(
       response_as_json(resp),
-      gargle_error_request_failed = function(e) e$message
+      gargle_error_request_failed = \(e) e$message
     )
   } else {
     list()

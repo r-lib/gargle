@@ -9,7 +9,7 @@ test_that("cache_establish() insists on sensible input", {
 test_that("`cache = TRUE` uses default cache path", {
   local_mocked_bindings(
     ## we don't want to actually initialize a cache
-    cache_create = function(path) NULL
+    cache_create = \(path) NULL
   )
   expect_equal(cache_establish(TRUE), gargle_default_oauth_cache_path())
 })
@@ -21,8 +21,8 @@ test_that("`cache = FALSE` does nothing", {
 test_that("`cache = NA` is like `cache = FALSE` if cache not available", {
   local_mocked_bindings(
     # we want no existing cache to be found, be it current or legacy
-    gargle_default_oauth_cache_path = function() file_temp(),
-    cache_allowed = function(path) FALSE
+    gargle_default_oauth_cache_path = \() file_temp(),
+    cache_allowed = \(path) FALSE
   )
   expect_equal(cache_establish(NA), cache_establish(FALSE))
 })
@@ -56,8 +56,8 @@ test_that("default is to consult and set the oauth cache option", {
   withr::local_options(list(gargle_oauth_cache = NA))
   local_mocked_bindings(
     # we want no existing cache to be found, be it current or legacy
-    gargle_default_oauth_cache_path = function() file_temp(),
-    cache_allowed = function(path) FALSE
+    gargle_default_oauth_cache_path = \() file_temp(),
+    cache_allowed = \(path) FALSE
   )
 
   expect_equal(getOption("gargle_oauth_cache"), NA)
