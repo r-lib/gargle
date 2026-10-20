@@ -84,7 +84,7 @@
 #' * `https://www.channable.com/tech/opnieuw-a-simple-and-intuitive-retrying-library-for-python`
 #' * <https://github.com/channable/opnieuw>
 #' * <https://docs.cloud.google.com/storage/docs/retry-strategy>
-#' * <https://www.rfc-editor.org/rfc/rfc7231#section-7.1.3>
+#' * <https://www.rfc-editor.org/info/rfc7231/#section-7.1.3>
 #' * <https://developers.google.com/sheets/api/limits>
 #' * <https://googleapis.dev/python/google-api-core/latest/retry.html>
 #'
@@ -252,7 +252,7 @@ announce_retryable_failure <- function(resp, tries_made, wait_info) {
       # oops is defined in response_process.R
       oops$RPC[[match(status_code, oops$HTTP)]]
     },
-    error = function(e) NULL
+    error = \(e) NULL
   )
   status_extra <- glue(": {status_rpc}") %||% ""
   if (sheets_per_user_quota_exhaustion(resp)) {

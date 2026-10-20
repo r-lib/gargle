@@ -147,7 +147,7 @@ request_develop <- function(
   check_params(params, endpoint$parameters, endpoint$id)
   in_body <- vapply(
     endpoint$parameters,
-    function(x) x$location == "body",
+    \(x) x$location == "body",
     logical(1)
   )
   body_param_names <- names(endpoint$parameters[in_body])
@@ -203,7 +203,7 @@ request_build <- function(
 ##   * error if required params are missing
 ##   * error for unknown params
 check_params <- function(provided, spec, id, call = caller_env()) {
-  required <- Filter(function(x) isTRUE(x$required), spec)
+  required <- Filter(\(x) isTRUE(x$required), spec)
   missing <- setdiff(names(required), names(provided))
   if (length(missing)) {
     gargle_abort_bad_params(missing, reason = "missing", id, call = call)

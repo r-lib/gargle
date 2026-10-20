@@ -99,7 +99,7 @@ cache_load <- function(path) {
   names(files) <- path_file(files)
   tokens <- map(files, readRDS)
 
-  hashes <- map_chr(tokens, function(t) t$hash())
+  hashes <- map_chr(tokens, \(t) t$hash())
 
   mismatch <- names(hashes) != hashes
   if (any(mismatch)) {
@@ -288,7 +288,7 @@ token_match <- function(candidate, existing, package = "gargle") {
       emails <- extract_email(existing)
       emails_fmt <- lapply(
         emails,
-        function(x) cli::format_inline("{.email {x}}")
+        \(x) cli::format_inline("{.email {x}}")
       )
       msg <- c(
         "i" = "Suitable tokens found in the cache, associated with these \\
@@ -418,11 +418,11 @@ gargle_oauth_dat <- function(cache = NULL) {
   nms <- names(tokens)
   hash <- mask_email(nms)
   email <- extract_email(nms)
-  client <- map_chr(tokens, function(t) t$client$name %||% t$app$appname)
-  scopes <- map(tokens, function(t) t$params$scope)
+  client <- map_chr(tokens, \(t) t$client$name %||% t$app$appname)
+  scopes <- map(tokens, \(t) t$params$scope)
   email_scope <- "https://www.googleapis.com/auth/userinfo.email"
-  scopes <- map(scopes, function(s) s[s != email_scope])
-  scopes <- map_chr(scopes, function(s) commapse(base_scope(s)))
+  scopes <- map(scopes, \(s) s[s != email_scope])
+  scopes <- map_chr(scopes, \(s) commapse(base_scope(s)))
 
   structure(
     data.frame(

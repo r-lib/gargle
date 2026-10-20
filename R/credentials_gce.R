@@ -357,8 +357,8 @@ gce_instance_service_accounts <- function() {
   data.frame(
     name = names(raw$email),
     email = unlist(raw$email),
-    aliases = map_chr(raw$aliases, function(x) glue_collapse(x, sep = ",")),
-    scopes = map_chr(raw$scopes, function(x) glue_collapse(x, sep = ",")),
+    aliases = map_chr(raw$aliases, \(x) glue_collapse(x, sep = ",")),
+    scopes = map_chr(raw$scopes, \(x) glue_collapse(x, sep = ",")),
     stringsAsFactors = FALSE,
     row.names = NULL
   )

@@ -18,6 +18,9 @@ ignore_unused_imports <- function() {
 #' @importFrom glue glue_data
 #' @importFrom lifecycle deprecated
 ## usethis namespace: end
+
+## mockable bindings: start
+## mockable bindings: end
 NULL
 
 #' Options consulted by gargle

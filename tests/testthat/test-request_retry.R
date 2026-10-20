@@ -122,7 +122,7 @@ test_that("backoff() obeys obvious bounds from min_wait and max_wait", {
   backoff_time_only <- function(...) backoff(...)$wait_time
 
   # raw wait_times in U[0,1], therefore all become min_wait + U[0,1]
-  local_mocked_bindings(gargle_error_message = function(...) "oops")
+  local_mocked_bindings(gargle_error_message = \(...) "oops")
 
   suppressMessages(
     wait_times <- vapply(
@@ -162,7 +162,7 @@ test_that("backoff() honors Retry-After header", {
       class = "response"
     )
   }
-  local_mocked_bindings(gargle_error_message = function(...) "oops")
+  local_mocked_bindings(gargle_error_message = \(...) "oops")
 
   # play with capitalization and character vs numeric
   suppressMessages(

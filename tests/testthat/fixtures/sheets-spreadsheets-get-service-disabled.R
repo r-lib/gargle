@@ -18,7 +18,7 @@ content_before <- jsonlite::fromJSON(content_before, simplifyVector = FALSE)
 id <- content_before$error$details[[1]]$metadata$containerInfo
 redacted_content <- rapply(
   content_before,
-  function(x) gsub(id, "1234567890", x),
+  \(x) gsub(id, "1234567890", x),
   classes = "character",
   how = "replace"
 )

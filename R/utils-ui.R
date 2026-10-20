@@ -6,7 +6,7 @@ gargle_theme <- function() {
     # use of color made me want to do this
     ".bullets .bullet-*" = list(
       "text-exdent" = 2,
-      before = function(x) paste0(cli::symbol$bullet, " ")
+      before = \(x) paste0(cli::symbol$bullet, " ")
     )
   )
 }

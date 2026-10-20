@@ -91,7 +91,7 @@ check_is_service_account <- function(path, hint, call = caller_env()) {
 
   info <- tryCatch(
     jsonlite::fromJSON(path, simplifyVector = FALSE),
-    error = function(e) NULL
+    error = \(e) NULL
   )
 
   if (is.null(info) || !identical(info[["type"]], "service_account")) {
