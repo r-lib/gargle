@@ -256,25 +256,35 @@ out:</p>
 <p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> implements something
 called <em>workload identity federation</em> and is available to
 applications running on specific non-Google Cloud platforms. At the time
-of writing, gargle only supports AWS, but this could be expanded to
-other providers, such as Azure, if there is a documented need.</p>
+of writing, gargle supports AWS and configurations where the subject
+token is obtained from a URL or a file. The URL case includes GitHub
+Actions, via the <a href="https://github.com/google-github-actions/auth" class="external-link"><code>google-github-actions/auth</code></a>
+action. In GitHub Actions, you typically don’t provide
+<code>path</code>, so <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s call to
+<code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> returns <code>NULL</code>
+and the configuration is found by <code><a href="../reference/credentials_app_default.html">credentials_app_default()</a></code>
+instead, via <code>GOOGLE_APPLICATION_CREDENTIALS</code>.</p>
 <p>Similar to <code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>, the
 <code>path</code> is treated as a JSON representation of the account’s
 configuration and it’s probably a file path. However, in contrast to
-<code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>, this JSON only contains
-non-sensitive metadata, which is, indeed, the main point of this flow.
-The secrets needed to complete auth are obtained “on-the-fly” from,
-e.g., the running EC2 instance.</p>
+<code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code>, this JSON is not a
+long-lived secret, which is, indeed, the main point of this flow. On
+AWS, the file contains only non-sensitive metadata and the secrets
+needed to complete auth are obtained “on-the-fly” from the running EC2
+instance. On GitHub Actions, the file is written fresh for each job and
+contains only a short-lived credential.</p>
 <p><code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code> will fail for many
 reasons: there is no named <code>path</code> argument, the JSON at
-<code>path</code> can’t be parsed as configuration for an external AWS
-account, we don’t appear to running on AWS, suggested packages for AWS
+<code>path</code> can’t be parsed as configuration for an external
+account, the configuration uses an unsupported credential source or
+lacks a service account impersonation URL, the configuration is for AWS
+but we don’t appear to be running on AWS, suggested packages for AWS
 functionality are not installed, or the workload identity pool is
 misconfigured. If any of that happens, we fail and
 <code><a href="../reference/token_fetch.html">token_fetch()</a></code>’s execution moves on to the next function in
 the registry.</p>
-<p>Here is some Google documentation about workload identity federation
-and the specifics for AWS:</p>
+<p>Here is some Google documentation about workload identity
+federation:</p>
 <ul>
 <li>Blog post: <a href="https://cloud.google.com/blog/products/identity-security/enable-keyless-access-to-gcp-with-workload-identity-federation/" class="external-link">Keyless
 API authentication — Better cloud security through workload identity
@@ -344,8 +354,9 @@ called with only the <code>scopes</code> argument specified.</li>
 <p>Again, remember that the JSON key file for a conventional service
 account must be managed securely and should NOT live in a directory that
 syncs to the cloud. The JSON configuration for an external account is
-not actually sensitive and this is one of the benefits of this flow, but
-it’s only available in a very narrow set of circumstances.</p>
+not a long-lived secret, which is one of the benefits of this flow, but
+it’s only available in certain circumstances, such as on AWS or GitHub
+Actions.</p>
 </div>
 <div class="section level2">
 <h2 id="credentials_gce">

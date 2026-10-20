@@ -84,8 +84,9 @@ A [`GceToken()`](https://gargle.r-lib.org/dev/reference/GceToken.md) or
 
 ## See also
 
-A related auth flow that can be used on certain non-Google cloud
-providers is workload identity federation, which is implemented in
+A related auth flow that can be used on certain non-Google platforms,
+such as AWS or GitHub Actions, is workload identity federation, which is
+implemented in
 [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md).
 
 <https://docs.cloud.google.com/compute/docs/access/service-accounts>

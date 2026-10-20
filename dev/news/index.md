@@ -14,6 +14,16 @@
   [\#252](https://github.com/r-lib/gargle/issues/252),
   [@aebrahim](https://github.com/aebrahim)).
 
+- [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md)
+  now supports workload identity federation configurations whose
+  credential source is a URL or a file, in addition to AWS. This means
+  that
+  [`token_fetch()`](https://gargle.r-lib.org/dev/reference/token_fetch.md)
+  and Application Default Credentials work in GitHub Actions workflows
+  that use the `google-github-actions/auth` action with a
+  `service_account`
+  ([\#199](https://github.com/r-lib/gargle/issues/199)).
+
 - [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
   now places an API key in the `X-goog-api-key` request header instead
   of the URL query. When gargle stores a response, for

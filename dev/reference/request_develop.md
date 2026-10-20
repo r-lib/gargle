@@ -207,24 +207,24 @@ data.frame(
 )
 #>                         title
 #> 1                  R Packages
-#> 2          R for Data Science
-#> 3                     ggplot2
-#> 4                  Advanced R
-#> 5  Advanced R, Second Edition
-#> 6                  R Packages
+#> 2  Advanced R, Second Edition
+#> 3          R for Data Science
+#> 4          R for Data Science
+#> 5                     ggplot2
+#> 6                  Advanced R
 #> 7             Mastering Shiny
-#> 8          R for Data Science
-#> 9             Mastering Shiny
-#> 10       Advanced R Solutions
+#> 8                  R Packages
+#> 9                     ggplot2
+#> 10            Mastering Shiny
 #>                                                     authors       date
 #> 1                            Hadley Wickham, Jennifer Bryan 2023-06-14
-#> 2                         Hadley Wickham, Garrett Grolemund 2016-12-12
-#> 3                                            Hadley Wickham 2016-06-08
-#> 4                                            Hadley Wickham    2020-12
-#> 5                                            Hadley Wickham 2019-05-24
-#> 6                                            Hadley Wickham 2015-04-13
+#> 2                                            Hadley Wickham 2019-05-24
+#> 3  Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund 2023-06-08
+#> 4                         Hadley Wickham, Garrett Grolemund 2016-12-12
+#> 5                                            Hadley Wickham 2016-06-08
+#> 6                                            Hadley Wickham    2020-12
 #> 7                                            Hadley Wickham 2021-04-29
-#> 8  Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund 2023-06-08
-#> 9                                            Hadley Wickham 2021-04-13
-#> 10            Malte Grosser, Henning Bumann, Hadley Wickham 2021-08-23
+#> 8                                            Hadley Wickham 2015-04-13
+#> 9                                            Hadley Wickham 2016-06-16
+#> 10                                           Hadley Wickham 2021-04-13
 ```
