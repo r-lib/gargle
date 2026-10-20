@@ -1,8 +1,12 @@
-# Temporary workflow to exercise workload identity federation (PR #321).
-# Remove before merging.
+# Exercises workload identity federation (URL-sourced credentials, via
+# google-github-actions/auth), using the gargle-wif GCP project. The provider
+# only trusts r-lib/gargle. Runs weekly on the default branch, or manually, e.g.:
+# gh workflow run wif-test.yaml --ref <branch>
 on:
-  pull_request:
   workflow_dispatch:
+  schedule:
+    # Mondays, 09:17 UTC (off the hour, when GitHub's scheduler is busiest)
+    - cron: "17 9 * * 1"
 
 name: wif-test
 
