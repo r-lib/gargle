@@ -48,9 +48,9 @@
 #' @inheritParams token_fetch
 #' @param service_account Name of the GCE service account to use.
 #'
-#' @seealso A related auth flow that can be used on certain non-Google cloud
-#' providers is workload identity federation, which is implemented in
-#' [credentials_external_account()].
+#' @seealso A related auth flow that can be used on certain non-Google
+#' platforms, such as AWS or GitHub Actions, is workload identity federation,
+#' which is implemented in [credentials_external_account()].
 #'
 #' <https://docs.cloud.google.com/compute/docs/access/service-accounts>
 #'
