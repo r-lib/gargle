@@ -1,5 +1,6 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- README.md is generated from README.qmd. Please edit that file -->
 
 # gargle
 
@@ -110,8 +111,8 @@ out <- response_process(resp)
 
 out <- out[["items"]][1:8]
 sort(vapply(out, function(x) x[["family"]], character(1)))
-#> [1] "Google Sans"  "Inter"        "Lato"         "Montserrat"   "Noto Sans JP"
-#> [6] "Open Sans"    "Poppins"      "Roboto"
+#> [1] "Arimo"          "Google Sans"    "Inter"          "Material Icons"
+#> [5] "Montserrat"     "Open Sans"      "Poppins"        "Roboto"
 ```
 
 Please note that the ‘gargle’ project is released with a [Contributor
