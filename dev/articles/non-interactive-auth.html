@@ -122,7 +122,7 @@ you, skip this section.</p>
 <p>Let’s identify a specific type of project: it is developed in one
 place, with interactivity – such as your local computer – and then
 deployed elsewhere, where it must run without further interaction – such
-as on <a href="https://posit.co/products/enterprise/connect/" class="external-link">Posit
+as on <a href="https://posit.co/products/enterprise/connect" class="external-link">Posit
 Connect</a> or <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a>. In
 this context, it may make sense to depart from gargle’s default
 behaviour, which is to store tokens outside the project, and to embed
@@ -248,8 +248,9 @@ Google Kubernetes Engine (GKE), using <a href="https://docs.cloud.google.com/kub
 Identity</a>. This is more complicated that direct usage of GCE and some
 extra configuration is needed to make a service account’s metadata
 available for the GKE instance to discover. GKE is the underlying
-technology behind Google’s managed Airflow service, <a href="https://cloud.google.com/composer" class="external-link">Cloud Composer</a>, so this
-also applies to R docker files being called in that environment.</p>
+technology behind Google’s managed Airflow service, <a href="https://cloud.google.com/products/managed-service-for-apache-airflow" class="external-link">Cloud
+Composer</a>, so this also applies to R docker files being called in
+that environment.</p>
 <p>Workload Identity is the recommended way to do authentication on GKE
 and other places, if possible, since it eliminates the use of a file
 that holds the service key, which is a potential security risk.</p>

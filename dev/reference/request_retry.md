@@ -118,7 +118,7 @@ cases:
 
 - <https://docs.cloud.google.com/storage/docs/retry-strategy>
 
-- <https://www.rfc-editor.org/rfc/rfc7231#section-7.1.3>
+- <https://www.rfc-editor.org/info/rfc7231/#section-7.1.3>
 
 - <https://developers.google.com/sheets/api/limits>
 

@@ -38,7 +38,7 @@ skip this section.
 Let’s identify a specific type of project: it is developed in one place,
 with interactivity – such as your local computer – and then deployed
 elsewhere, where it must run without further interaction – such as on
-[Posit Connect](https://posit.co/products/enterprise/connect/) or
+[Posit Connect](https://posit.co/products/enterprise/connect) or
 [shinyapps.io](https://www.shinyapps.io). In this context, it may make
 sense to depart from gargle’s default behaviour, which is to store
 tokens outside the project, and to embed them in the project instead. An
@@ -183,8 +183,8 @@ This is more complicated that direct usage of GCE and some extra
 configuration is needed to make a service account’s metadata available
 for the GKE instance to discover. GKE is the underlying technology
 behind Google’s managed Airflow service, [Cloud
-Composer](https://cloud.google.com/composer), so this also applies to R
-docker files being called in that environment.
+Composer](https://cloud.google.com/products/managed-service-for-apache-airflow),
+so this also applies to R docker files being called in that environment.
 
 Workload Identity is the recommended way to do authentication on GKE and
 other places, if possible, since it eliminates the use of a file that

@@ -214,8 +214,8 @@ data.frame(
 #> 6                  Advanced R
 #> 7             Mastering Shiny
 #> 8                  R Packages
-#> 9                     ggplot2
-#> 10            Mastering Shiny
+#> 9             Mastering Shiny
+#> 10                    ggplot2
 #>                                                     authors       date
 #> 1                            Hadley Wickham, Jennifer Bryan 2023-06-14
 #> 2                                            Hadley Wickham 2019-05-24
@@ -225,6 +225,6 @@ data.frame(
 #> 6                                            Hadley Wickham    2020-12
 #> 7                                            Hadley Wickham 2021-04-29
 #> 8                                            Hadley Wickham 2015-04-13
-#> 9                                            Hadley Wickham 2016-06-16
-#> 10                                           Hadley Wickham 2021-04-13
+#> 9                                            Hadley Wickham 2021-04-13
+#> 10                                           Hadley Wickham 2016-06-16
 ```

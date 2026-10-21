@@ -1,9 +1,9 @@
 # Auth when using R from the browser
 
 If you are working with R in a web-based context, such as [RStudio
-Server](https://posit.co/download/rstudio-server/), [Posit
-Cloud](https://posit.cloud/), [Posit
-Workbench](https://posit.co/products/enterprise/workbench/), or [Google
+Server](https://docs.posit.co/ide/user/#rstudio-server-oss-downloads),
+[Posit Cloud](https://posit.cloud/), [Posit
+Workbench](https://posit.co/products/enterprise/workbench), or [Google
 Colaboratory](https://colab.research.google.com/), your experience of
 browser-based auth flows will be different from those using R on their
 local machine. You need to use **out-of-band authentication**, sometimes
@@ -291,7 +291,7 @@ The normal, non-OOB auth web flow should work again now.
 
 If you’re working on a data product that will be deployed (for example
 on [shinyapps.io](https://www.shinyapps.io) or [Posit
-Connect](https://posit.co/products/enterprise/connect/)), you will also
+Connect](https://posit.co/products/enterprise/connect)), you will also
 need to consider how the deployed content will authenticate
 non-interactively, which is covered in
 [`vignette("non-interactive-auth")`](https://gargle.r-lib.org/dev/articles/non-interactive-auth.md).
