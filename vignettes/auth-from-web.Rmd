@@ -197,6 +197,11 @@ If you need to explicitly request a "web" client in some other setting, you can 
 options(gargle_oauth_client_type = "web")
 ```
 
+A cached token is only (re-)discovered if gargle searches the cache with the same OAuth client that was used to obtain the token.
+So, if a token is obtained in one place and used in another, you may need to set this option.
+For example, deployed code on Posit Connect that uses a cached token obtained on Posit Workbench needs `gargle_oauth_client_type = "web"`.
+Read more in `vignette("non-interactive-auth")`.
+
 Users who configure their own OAuth client will need to be intentional when choosing the client type, depending on where the code is running.
 
 On the R side, it is recommended to setup an OAuth client using `gargle_oauth_client_from_json()`, which allows the client type (`"installed"` vs. `"web"`) to be detected programmatically from the downloaded JSON.
