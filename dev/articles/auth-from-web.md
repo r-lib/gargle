@@ -181,6 +181,14 @@ and an “installed” client otherwise. If you need to explicitly request a
 options(gargle_oauth_client_type = "web")
 ```
 
+A cached token is only (re-)discovered if gargle searches the cache with
+the same OAuth client that was used to obtain the token. So, if a token
+is obtained in one place and used in another, you may need to set this
+option. For example, deployed code on Posit Connect that uses a cached
+token obtained on Posit Workbench needs
+`gargle_oauth_client_type = "web"`. Read more in
+[`vignette("non-interactive-auth")`](https://gargle.r-lib.org/dev/articles/non-interactive-auth.md).
+
 Users who configure their own OAuth client will need to be intentional
 when choosing the client type, depending on where the code is running.
 

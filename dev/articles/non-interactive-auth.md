@@ -39,8 +39,8 @@ Let’s identify a specific type of project: it is developed in one place,
 with interactivity – such as your local computer – and then deployed
 elsewhere, where it must run without further interaction – such as on
 [Posit Connect](https://posit.co/products/enterprise/connect) or
-[shinyapps.io](https://www.shinyapps.io). In this context, it may make
-sense to depart from gargle’s default behaviour, which is to store
+[Connect Cloud](https://connect.posit.cloud). In this context, it may
+make sense to depart from gargle’s default behaviour, which is to store
 tokens outside the project, and to embed them in the project instead. An
 example at the end of this vignette demonstrates the use of a
 project-level OAuth cache. A service account token could also be stored
@@ -306,11 +306,13 @@ steps:
 
 ## Provide a service account token directly
 
-When two computers are talking to each other, possibly with no human
-involvement, the most appropriate type of token to use is a service
-account token. If you’re not working in cloud context with automatic
-access to a service account (see previous section), you can still use a
-service account, but it will require more explicit effort.
+If you’re not in one of the settings described above, where a service
+account identity is available without a key, you can still use a service
+account by downloading its key, i.e. a JSON file of credentials. Google
+discourages this, because a service account key is a long-lived secret
+that you must store and protect, and it’s increasingly common for
+organizations to block key creation altogether. If you can and do use a
+key, here’s how:
 
 1.  Create a service account and then download its credentials as a JSON
     file. This is described in
@@ -682,4 +684,61 @@ request with respect to user’s email, scopes, and OAuth client (client
 ID or key and secret). By design, these settings have very low
 visibility, because we usually want to use the defaults. If your token
 is not being discovered, consider if any of these fields might explain
-the mismatch.
+the mismatch. The OAuth client is an especially sneaky source of
+mismatch when the token is obtained in one place and used in another, as
+explained next.
+
+### OAuth client type: where the token is obtained vs. where it’s used
+
+A cached token is only (re-)discovered if gargle searches the cache with
+the same OAuth client that was used to obtain the token. This can go
+wrong when a token is obtained in one place and used in another, if you
+rely on a built-in OAuth client, such as the tidyverse client used by
+googledrive, googlesheets4, and bigrquery. The built-in client is a
+“web” client on RStudio Server, Posit Workbench, Posit Cloud, and Google
+Colaboratory and an “installed” client everywhere else
+([`vignette("auth-from-web")`](https://gargle.r-lib.org/dev/articles/auth-from-web.md)
+explains why).
+
+Here’s a concrete example: you obtain a token on Posit Workbench, which
+uses the “web” client, and deploy your project to Posit Connect. On
+Connect, by default, the deployed code searches the cache with the
+“installed” client. The token is right there in `.secrets/`, but a token
+created with the “web” client is not considered a match for the
+“installed” client, so non-interactive auth fails. If you set
+`options(gargle_verbosity = "debug")`, you’ll see the token listed among
+those found in the cache, but it isn’t selected.
+
+The fix is to set `gargle_oauth_client_type` in the deployed code, so it
+searches the cache with the same type of client that was used to obtain
+the token:
+
+``` r
+
+library(googledrive)
+
+options(
+  gargle_oauth_cache = ".secrets",
+  gargle_oauth_email = TRUE,
+  # the token was obtained on Posit Workbench, which uses a "web" client
+  gargle_oauth_client_type = "web"
+)
+
+# now use googledrive with no need for explicit auth
+drive_find(n_max = 5)
+```
+
+Set this option where the token is *used*, i.e. on Connect. It makes no
+difference on Workbench, where “web” is already the default. In the
+reverse situation, e.g. a token obtained on your laptop and used in a
+scheduled job on Workbench, set `gargle_oauth_client_type = "installed"`
+in the code that runs on Workbench.
+
+There are two ways to avoid this issue altogether:
+
+- Configure your own OAuth client, e.g. with `drive_auth_configure()`,
+  and do so in both places. Then the same client is used everywhere.
+- Provide the token directly, as described in [Provide an OAuth token
+  directly](#provide-an-oauth-token-directly). A token provided this way
+  is used as is, without any cache lookup, and it can be refreshed
+  regardless of where it was obtained.

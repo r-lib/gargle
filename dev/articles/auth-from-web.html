@@ -294,6 +294,13 @@ and an “installed” client otherwise. If you need to explicitly request a
 <code>"gargle_oauth_client_type"</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_client_type <span class="op">=</span> <span class="st">"web"</span><span class="op">)</span></span></code></pre></div>
+<p>A cached token is only (re-)discovered if gargle searches the cache
+with the same OAuth client that was used to obtain the token. So, if a
+token is obtained in one place and used in another, you may need to set
+this option. For example, deployed code on Posit Connect that uses a
+cached token obtained on Posit Workbench needs
+<code>gargle_oauth_client_type = "web"</code>. Read more in
+<code><a href="../articles/non-interactive-auth.html">vignette("non-interactive-auth")</a></code>.</p>
 <p>Users who configure their own OAuth client will need to be
 intentional when choosing the client type, depending on where the code
 is running.</p>
