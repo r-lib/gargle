@@ -1,38 +1,11 @@
 # Deploy a document that uses an encrypted user token
 
-This article works through one specific non-interactive auth scenario: a
-Quarto document, deployed to [Posit
-Connect](https://posit.co/products/enterprise/connect/), that uses
-googlesheets4 to read a Google Sheet as a specific user.
+This is a complete example of a Quarto document, deployed to Posit
+Connect, that uses googlesheets4 to read a Google Sheet as a specific
+user. It applies the approach for an encrypted user token described in
+[`vignette("articles/managing-tokens-securely")`](https://gargle.r-lib.org/dev/articles/managing-tokens-securely.md).
 
-The strategy is to obtain an OAuth user token once, interactively,
-encrypt it, and store it in the project. The deployed document decrypts
-the token and passes it directly to googlesheets4. This is the “Provide
-an OAuth token directly” approach from
-[`vignette("non-interactive-auth")`](https://gargle.r-lib.org/dev/articles/non-interactive-auth.md),
-combined with the encryption helpers described in
-`vignette("managing-tokens-securely")`. Although the example uses
-googlesheets4, the same approach works with any package that implements
-gargle auth in the standard way, such as googledrive or bigrquery.
-
-## Prerequisite: an encryption key
-
-You need an encryption key stored in an environment variable, both
-locally and on Connect. The example uses an environment variable named
-`GARGLE_DEPLOY_DEMO_KEY`, but the name is up to you, as long as you use
-it consistently. You can generate a suitable key with
-[`gargle::secret_make_key()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md).
-Locally, you might define the environment variable in your user-level
-`.Renviron` file, which you can open with `usethis::edit_r_environ()`.
-Restart R so the new environment variable is available.
-
-## One-time setup
-
-The script below, `token-setup.R`, obtains a token for the intended
-user, encrypts it, and writes it to `.secrets/gs4-read-only-token.rds`.
-You run it once (or occasionally, if you need to replace the token),
-interactively, in the project. `token-setup.R` does not run in the
-deployed setting and does not need to be deployed at all.
+`token-setup.R` runs once, interactively, and is not deployed:
 
 ``` r
 
@@ -92,13 +65,11 @@ readRDS(".secrets/gs4-read-only-token.rds")
 # THE TOKEN SETUP IS DONE!
 ```
 
-## The deployed document
-
-Here is the complete source of the deployed document,
-`read-google-sheet-byo-encrypted-user-token.qmd`. It decrypts the stored
-token and provides it to `gs4_auth()` via the `token` argument. If the
-decryption key isn’t available, the document still renders, but no code
-is evaluated.
+The deployed document lists the encrypted token in `resource_files`. The
+`GARGLE_DEPLOY_DEMO_KEY` environment variable must also be defined on
+Connect, with the same value as locally. Since the token is passed
+directly via `token =`, there is no cache lookup and it doesn’t matter
+whether the token was obtained with a “web” or “installed” OAuth client.
 
 ```` markdown
 ---
@@ -168,48 +139,3 @@ dat <- read_sheet(
 dat
 ```
 ````
-
-## Deployment checklist
-
-- Include the encrypted token file in the deployment. Here that’s done
-  by listing `.secrets/gs4-read-only-token.rds` under `resource_files`
-  in the document’s YAML header.
-- Define the decryption environment variable on Connect, in the
-  content’s *Vars* settings, with the same name and the same value as
-  the one you used locally to encrypt the token.
-
-## Why this approach works
-
-Two things commonly go wrong when a deployed product relies on a token
-that was cached during development, and this approach sidesteps both.
-
-There’s no cache matching. When a token is passed via `token =`, it’s
-handled by
-[`credentials_byo_oauth2()`](https://gargle.r-lib.org/dev/reference/credentials_byo_oauth2.md)
-and used as is. There’s no search of an OAuth cache, so nothing needs to
-match with respect to email, scopes, or OAuth client, and you don’t need
-to set options such as `gargle_oauth_email` or `gargle_oauth_cache` in
-the deployed document.
-
-The OAuth client type doesn’t matter. The built-in tidyverse OAuth
-client is a “web” client on, e.g., Posit Workbench and an “installed”
-client on, e.g., Connect, which can cause a cached token to go
-undiscovered (see the section on OAuth client type in
-[`vignette("non-interactive-auth")`](https://gargle.r-lib.org/dev/articles/non-interactive-auth.md)).
-That distinction only affects which client is used to look up a token in
-the cache or to obtain a new one. A token provided directly carries its
-own OAuth client with it, and refreshing the token only involves that
-client’s ID and secret, plus the refresh token. So the token can be
-refreshed on Connect, regardless of where it was obtained.
-
-## Limitations
-
-This approach keeps working for as long as the token’s refresh token
-remains valid. Google may invalidate a refresh token for various
-reasons, for example, if the user revokes access, if the token goes
-unused for six months, or after seven days if it was obtained with an
-OAuth client whose consent screen is in testing mode. If that happens,
-the deployed document can decrypt the token but can’t refresh it, which
-is why the auth call is wrapped in
-[`try()`](https://rdrr.io/r/base/try.html). The fix is to re-run the
-one-time setup and redeploy.
