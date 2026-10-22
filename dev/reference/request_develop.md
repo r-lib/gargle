@@ -199,17 +199,32 @@ req <- request_build(
 )
 resp <- request_make(req)
 out <- response_process(resp)
-#> Error: Server error: (503) Service Unavailable
-#> Service temporarily unavailable.
-#> • message: Service temporarily unavailable.
-#> • domain: global
-#> • reason: backendFailed
 books <- lapply(out$items, \(x) x$volumeInfo)
-#> Error: object 'out' not found
 data.frame(
   title = vapply(books, \(x) x$title, character(1)),
   authors = vapply(books, \(x) toString(x$authors), character(1)),
   date = vapply(books, \(x) toString(x$publishedDate), character(1))
 )
-#> Error: object 'books' not found
+#>                         title
+#> 1                  R Packages
+#> 2  Advanced R, Second Edition
+#> 3          R for Data Science
+#> 4          R for Data Science
+#> 5                  R Packages
+#> 6                     ggplot2
+#> 7                  Advanced R
+#> 8             Mastering Shiny
+#> 9                     ggplot2
+#> 10            Mastering Shiny
+#>                                                     authors       date
+#> 1                            Hadley Wickham, Jennifer Bryan 2023-06-14
+#> 2                                            Hadley Wickham 2019-05-24
+#> 3  Hadley Wickham, Mine Çetinkaya-Rundel, Garrett Grolemund 2023-06-08
+#> 4                         Hadley Wickham, Garrett Grolemund 2016-12-12
+#> 5                               Hadley Wickham, Jenny Bryan 2023-07-31
+#> 6                                            Hadley Wickham 2016-06-08
+#> 7                                            Hadley Wickham    2020-12
+#> 8                                            Hadley Wickham 2021-04-29
+#> 9                                            Hadley Wickham 2016-06-16
+#> 10                                           Hadley Wickham 2021-04-13
 ```
