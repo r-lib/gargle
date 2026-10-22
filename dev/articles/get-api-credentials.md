@@ -250,7 +250,7 @@ use a service account token.
 
 Authors of wrapper packages can use the symmetric encryption strategy
 described in [Managing tokens
-securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html)
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html)
 to use this token on remote servers, such as continuous integration
 services like GitHub Actions. Note that workload identity federation may
 also be an option on GitHub Actions, if you are able and willing to do

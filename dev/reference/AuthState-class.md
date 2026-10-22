@@ -3,10 +3,12 @@
 An `AuthState` object manages an authorization state, typically on
 behalf of a wrapper package that makes requests to a Google API.
 
-The `vignette("gargle-auth-in-client-package)` describes a design for
-wrapper packages that relies on an `AuthState` object. This state can
-then be incorporated into the package's requests for tokens and can
-control the inclusion of tokens in requests to the target API.
+The
+[`vignette("gargle-auth-in-client-package")`](https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.md)
+describes a design for wrapper packages that relies on an `AuthState`
+object. This state can then be incorporated into the package's requests
+for tokens and can control the inclusion of tokens in requests to the
+target API.
 
 - `api_key` is the simplest way to associate a request with a specific
   Google Cloud Platform

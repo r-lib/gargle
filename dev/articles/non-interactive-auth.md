@@ -48,10 +48,11 @@ in the project.
 
 When you embed tokens in the project and deploy, remember, that, by
 default, they are no more secure or hidden than the other source files
-in the project. `vignette("managing-tokens-securely")` describes a
-method for embedding an encrypted token in the project, which is an
-extra level of care needed if you want to access credentials within,
-e.g., a continuous integration service, such as GitHub Actions.
+in the project. The article [Managing tokens
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html)
+describes a method for embedding an encrypted token in the project,
+which is an extra level of care needed if you want to access credentials
+within, e.g., a continuous integration service, such as GitHub Actions.
 
 ## Sidebar 2: I just want my `.Rmd` to render
 
@@ -331,8 +332,8 @@ drive_auth(path = "/path/to/your/service-account-token.json")
 ```
 
 If this code is running on, e.g., a continuous integration service and
-you need to use an encrypted token, see
-`vignette("managing-tokens-securely")`.
+you need to use an encrypted token, see [Managing tokens
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
 For certain APIs, service accounts are inherently awkward, because you
 often want to do things *on behalf of a specific user*. Gmail is a good

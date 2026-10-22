@@ -7,6 +7,7 @@
 <url><loc>https://gargle.r-lib.org/dev/LICENSE.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/SUPPORT.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/articles/auth-from-web.html</loc></url>
+<url><loc>https://gargle.r-lib.org/dev/articles/deploy-encrypted-user-token.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/articles/gargle-auth-in-client-package.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/articles/get-api-credentials.html</loc></url>
 <url><loc>https://gargle.r-lib.org/dev/articles/google-compute-engine.html</loc></url>

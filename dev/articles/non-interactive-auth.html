@@ -40,6 +40,7 @@
 <li><a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a></li>
     <li><a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a></li>
+    <li><a class="dropdown-item" href="../articles/deploy-encrypted-user-token.html">Deploy a document that uses an encrypted user token</a></li>
     <li><a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -131,11 +132,11 @@ demonstrates the use of a project-level OAuth cache. A service account
 token could also be stored in the project.</p>
 <p>When you embed tokens in the project and deploy, remember, that, by
 default, they are no more secure or hidden than the other source files
-in the project. <code>vignette("managing-tokens-securely")</code>
-describes a method for embedding an encrypted token in the project,
-which is an extra level of care needed if you want to access credentials
-within, e.g., a continuous integration service, such as GitHub
-Actions.</p>
+in the project. The article <a href="https://gargle.r-lib.org/articles/managing-tokens-securely.html">Managing
+tokens securely</a> describes a method for embedding an encrypted token
+in the project, which is an extra level of care needed if you want to
+access credentials within, e.g., a continuous integration service, such
+as GitHub Actions.</p>
 </div>
 <div class="section level2">
 <h2 id="sidebar-2-i-just-want-my--rmd-to-render">Sidebar 2: I just want my <code>.Rmd</code> to render<a class="anchor" aria-label="anchor" href="#sidebar-2-i-just-want-my--rmd-to-render"></a>
@@ -376,8 +377,8 @@ provide the path to this JSON file.</li>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/your/service-account-token.json"</span><span class="op">)</span></span></code></pre></div>
 <p>If this code is running on, e.g., a continuous integration service
-and you need to use an encrypted token, see
-<code>vignette("managing-tokens-securely")</code>.</p>
+and you need to use an encrypted token, see <a href="https://gargle.r-lib.org/articles/managing-tokens-securely.html">Managing
+tokens securely</a>.</p>
 <p>For certain APIs, service accounts are inherently awkward, because
 you often want to do things <em>on behalf of a specific user</em>. Gmail
 is a good example. If you are sending email programmatically, you

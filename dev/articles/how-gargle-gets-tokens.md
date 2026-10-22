@@ -184,7 +184,7 @@ The JSON key file must be managed securely. In particular, it should not
 be kept in, e.g., a GitHub repository (unless it is encrypted). The
 encryption strategy used by gargle and other packages is described in
 the article [Managing tokens
-securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
 Note that fetching a token for a service account requires a reasonably
 accurate system clock. This is of particular importance for users

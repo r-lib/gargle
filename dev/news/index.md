@@ -35,8 +35,8 @@
   `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`,
   `secret_can_decrypt()`, `secret_read()`, and `secret_write()`. The
   sodium package is no longer a suggested dependency. Use the exported
-  `secret_*()` functions instead, as described in
-  `vignette("managing-tokens-securely")`.
+  `secret_*()` functions instead, as described in [Managing tokens
+  securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
 - The default (loopback) OAuth flow now verifies that the `state`
   returned with the authorization code matches the one gargle sent, as
@@ -106,8 +106,9 @@ CRAN release: 2023-06-10
 
 - gargle’s existing unexported `secret_*()` functions are deprecated, in
   favor of new, exported `secret_*()` functions that are built on or
-  inlined from httr2. The `vignette("managing-tokens-securely")` is
-  updated to reflect the new, recommended strategy for encrypting
+  inlined from httr2. The article [Managing tokens
+  securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html)
+  is updated to reflect the new, recommended strategy for encrypting
   secrets.
 
   - [`secret_encrypt_json()`](https://gargle.r-lib.org/dev/reference/gargle_secret.md)
