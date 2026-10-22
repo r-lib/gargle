@@ -6,7 +6,7 @@
 
 * `request_build()` now places an API key in the `X-goog-api-key` request header instead of the URL query. When gargle stores a response, for `gargle_last_response()` or in a request error, it now redacts the `X-goog-api-key` header.
 
-* gargle's unexported, legacy secret management functions (deprecated in gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`, `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`, `secret_can_decrypt()`, `secret_read()`, and `secret_write()`. The sodium package is no longer a suggested dependency. Use the exported `secret_*()` functions instead, as described in `vignette("managing-tokens-securely")`.
+* gargle's unexported, legacy secret management functions (deprecated in gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`, `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`, `secret_can_decrypt()`, `secret_read()`, and `secret_write()`. The sodium package is no longer a suggested dependency. Use the exported `secret_*()` functions instead, as described in [Managing tokens securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
 * The default (loopback) OAuth flow now verifies that the `state` returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.
 
@@ -47,8 +47,9 @@
 
 * gargle's existing unexported `secret_*()` functions are deprecated, in favor
   of new, exported `secret_*()` functions that are built on or inlined from
-  httr2. The `vignette("managing-tokens-securely")` is updated to reflect the
-  new, recommended strategy for encrypting secrets.
+  httr2. The article [Managing tokens
+  securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html) is
+  updated to reflect the new, recommended strategy for encrypting secrets.
   - `secret_encrypt_json()` / `secret_decrypt_json()` are new gargle-specific
     functions.
   - `secret_write_rds()` / `secret_read_rds()`, `secret_make_key()`, and

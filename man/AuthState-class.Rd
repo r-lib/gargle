@@ -8,7 +8,7 @@
 An \code{AuthState} object manages an authorization state, typically on behalf of
 a wrapper package that makes requests to a Google API.
 
-The \verb{vignette("gargle-auth-in-client-package)} describes a design for wrapper
+The \code{vignette("gargle-auth-in-client-package")} describes a design for wrapper
 packages that relies on an \code{AuthState} object. This state can then be
 incorporated into the package's requests for tokens and can control the
 inclusion of tokens in requests to the target API.

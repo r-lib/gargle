@@ -61,7 +61,7 @@ init_AuthState <- function(
 #' a wrapper package that makes requests to a Google API.
 #'
 
-#' The `vignette("gargle-auth-in-client-package)` describes a design for wrapper
+#' The `vignette("gargle-auth-in-client-package")` describes a design for wrapper
 #' packages that relies on an `AuthState` object. This state can then be
 #' incorporated into the package's requests for tokens and can control the
 #' inclusion of tokens in requests to the target API.
