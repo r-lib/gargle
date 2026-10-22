@@ -260,6 +260,8 @@ gs4_auth(token = gargle::secret_read_rds(
 ))
 ```
 
+For a complete example, see `vignette("articles/deploy-encrypted-user-token")`.
+
 ### Anticipating decryption failure
 
 The snippets above are great when they work, i.e. when `"SOMETHING_KEY"` is available for decryption.

@@ -63,6 +63,7 @@ articles:
   - non-interactive-auth
   - troubleshooting
   - auth-from-web
+  - articles/deploy-encrypted-user-token
   - get-api-credentials
 
 - title: For package developers and advanced users
@@ -77,4 +78,3 @@ articles:
   desc: Internal development notes
   contents:
   - articles/google-compute-engine
-
