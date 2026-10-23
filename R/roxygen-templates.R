@@ -24,6 +24,8 @@
 #   lifecycle badge
 # - `PREFIX_auth_configure_params() crosslinks to
 #   `gargle::gargle_oauth_client_from_json()` which requires gargle (>= 1.3.0)
+# 2026-10: `PREFIX_auth_configure_params()` no longer documents `app`. Client
+# packages are expected to have removed `app` from `PREFIX_auth_configure()`.
 
 glue_data_lines <- function(.data, lines, ..., .envir = caller_env()) {
   # work around name collision of `.x` of map_chr() vs. of glue_data()
@@ -269,9 +271,7 @@ PREFIX_auth_configure_params <- function(.has_api_key = TRUE) {
     "@inheritParams gargle::gargle_oauth_client_from_json",
     if (.has_api_key) {
       "@param api_key API key."
-    },
-    "@param app `r lifecycle::badge('deprecated')` Replaced by the `client`",
-    "argument."
+    }
   )
 }
 

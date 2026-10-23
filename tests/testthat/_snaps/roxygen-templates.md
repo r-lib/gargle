@@ -171,8 +171,6 @@
       preferred to specify the client with JSON, using the `path` argument.
       @inheritParams gargle::gargle_oauth_client_from_json
       @param api_key API key.
-      @param app `r lifecycle::badge('deprecated')` Replaced by the `client`
-      argument.
 
 # PREFIX_auth_configure_return()
 
