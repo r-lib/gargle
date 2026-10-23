@@ -38,6 +38,14 @@
   `secret_*()` functions instead, as described in [Managing tokens
   securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
+- The unexported roxygen helper `PREFIX_auth_configure_params()` no
+  longer documents the `app` argument (documented as deprecated in favor
+  of `client` since gargle 1.4.0). Packages that use this helper should
+  remove `app` from `PKG_auth_configure()` before re-documenting.
+  [`vignette("oauth-client-not-app")`](https://gargle.r-lib.org/dev/articles/oauth-client-not-app.md)
+  is now a checklist for wrapper packages finishing the transition from
+  OAuth “app” to “client”.
+
 - The default (loopback) OAuth flow now verifies that the `state`
   returned with the authorization code matches the one gargle sent, as
   the pseudo-OOB flow already did. If the user denies consent, gargle
