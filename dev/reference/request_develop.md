@@ -211,8 +211,8 @@ data.frame(
 #> 3  Advanced R, Second Edition
 #> 4          R for Data Science
 #> 5                     ggplot2
-#> 6                  Advanced R
-#> 7             Mastering Shiny
+#> 6             Mastering Shiny
+#> 7                  Advanced R
 #> 8                  R Packages
 #> 9                     ggplot2
 #> 10            Mastering Shiny
@@ -222,8 +222,8 @@ data.frame(
 #> 3                                            Hadley Wickham 2019-05-24
 #> 4                         Hadley Wickham, Garrett Grolemund 2016-12-12
 #> 5                                            Hadley Wickham 2016-06-08
-#> 6                                            Hadley Wickham    2020-12
-#> 7                                            Hadley Wickham 2021-04-29
+#> 6                                            Hadley Wickham 2021-04-29
+#> 7                                            Hadley Wickham    2020-12
 #> 8                                            Hadley Wickham 2015-04-13
 #> 9                                            Hadley Wickham 2016-06-16
 #> 10                                           Hadley Wickham 2021-04-13
