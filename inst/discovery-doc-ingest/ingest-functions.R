@@ -128,11 +128,12 @@ read_discovery_document <- function(path) {
 #' dd <- read_discovery_document(drive)
 #' ee <- get_raw_methods(dd)
 get_raw_methods <- function(dd) {
-  dd |>
+  methods <- dd |>
     pluck("resources") |>
     map("methods") |>
-    flatten() |>
-    set_names(map_chr(., "id"))
+    compact() |>
+    list_flatten()
+  set_names(methods, map_chr(methods, "id"))
 }
 
 #' Groom method properties
