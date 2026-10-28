@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.6.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="gargle-development-version">gargle (development version)<a class="anchor" aria-label="anchor" href="#gargle-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.7.0" id="gargle-170">gargle 1.7.0<a class="anchor" aria-label="anchor" href="#gargle-170"></a></h2>
 <ul><li><p>The default (loopback) OAuth flow now verifies that the <code>state</code> returned with the authorization code matches the one gargle sent, as the pseudo-OOB flow already did. If the user denies consent, gargle now errors immediately with a clear message, instead of failing later with an HTTP 400.</p></li>
 <li><p>The default (loopback) and pseudo-OOB OAuth flows now use PKCE (Proof Key for Code Exchange, RFC 7636), which ties the authorization code to the R session that requested it, so an intercepted code can’t be exchanged for tokens by anyone else.</p></li>
 <li><p><code><a href="../reference/request_develop.html">request_build()</a></code> now places an API key in the <code>X-goog-api-key</code> request header instead of the URL query. When gargle stores a response, for <code><a href="../reference/gargle_last_response.html">gargle_last_response()</a></code> or in a request error, it now redacts the <code>X-goog-api-key</code> header.</p></li>
