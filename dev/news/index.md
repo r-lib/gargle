@@ -2,17 +2,22 @@
 
 ## gargle (development version)
 
-- [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
-  now defaults to
-  `scopes = "https://www.googleapis.com/auth/cloud-platform"`, and
-  `scopes = NULL` means the same thing. Previously, calling
-  [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
-  without scopes returned `NULL` for user credentials (e.g. from
-  `gcloud auth application-default login`) and for an external account,
-  and requested only the email scope for a service account
-  ([\#229](https://github.com/r-lib/gargle/issues/229),
-  [\#252](https://github.com/r-lib/gargle/issues/252),
-  [@aebrahim](https://github.com/aebrahim)).
+- The default (loopback) OAuth flow now verifies that the `state`
+  returned with the authorization code matches the one gargle sent, as
+  the pseudo-OOB flow already did. If the user denies consent, gargle
+  now errors immediately with a clear message, instead of failing later
+  with an HTTP 400.
+
+- The default (loopback) and pseudo-OOB OAuth flows now use PKCE (Proof
+  Key for Code Exchange, RFC 7636), which ties the authorization code to
+  the R session that requested it, so an intercepted code can’t be
+  exchanged for tokens by anyone else.
+
+- [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
+  now places an API key in the `X-goog-api-key` request header instead
+  of the URL query. When gargle stores a response, for
+  [`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
+  or in a request error, it now redacts the `X-goog-api-key` header.
 
 - [`credentials_external_account()`](https://gargle.r-lib.org/dev/reference/credentials_external_account.md)
   now supports workload identity federation configurations whose
@@ -24,11 +29,17 @@
   `service_account`
   ([\#199](https://github.com/r-lib/gargle/issues/199)).
 
-- [`request_build()`](https://gargle.r-lib.org/dev/reference/request_develop.md)
-  now places an API key in the `X-goog-api-key` request header instead
-  of the URL query. When gargle stores a response, for
-  [`gargle_last_response()`](https://gargle.r-lib.org/dev/reference/gargle_last_response.md)
-  or in a request error, it now redacts the `X-goog-api-key` header.
+- [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
+  now defaults to
+  `scopes = "https://www.googleapis.com/auth/cloud-platform"`, and
+  `scopes = NULL` means the same thing. Previously, calling
+  [`credentials_app_default()`](https://gargle.r-lib.org/dev/reference/credentials_app_default.md)
+  without scopes returned `NULL` for user credentials (e.g. from
+  `gcloud auth application-default login`) and for an external account,
+  and requested only the email scope for a service account
+  ([\#229](https://github.com/r-lib/gargle/issues/229),
+  [\#252](https://github.com/r-lib/gargle/issues/252),
+  [@aebrahim](https://github.com/aebrahim)).
 
 - gargle’s unexported, legacy secret management functions (deprecated in
   gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`,
@@ -45,17 +56,6 @@
   [`vignette("oauth-client-not-app")`](https://gargle.r-lib.org/dev/articles/oauth-client-not-app.md)
   is now a checklist for wrapper packages finishing the transition from
   OAuth “app” to “client”.
-
-- The default (loopback) OAuth flow now verifies that the `state`
-  returned with the authorization code matches the one gargle sent, as
-  the pseudo-OOB flow already did. If the user denies consent, gargle
-  now errors immediately with a clear message, instead of failing later
-  with an HTTP 400.
-
-- The default (loopback) and pseudo-OOB OAuth flows now use PKCE (Proof
-  Key for Code Exchange, RFC 7636), which ties the authorization code to
-  the R session that requested it, so an intercepted code can’t be
-  exchanged for tokens by anyone else.
 
 ## gargle 1.6.1
 
