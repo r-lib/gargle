@@ -29,7 +29,11 @@ and if it describes an external account, we call
 ## Usage
 
 ``` r
-credentials_app_default(scopes = NULL, ..., subject = NULL)
+credentials_app_default(
+  scopes = "https://www.googleapis.com/auth/cloud-platform",
+  ...,
+  subject = NULL
+)
 ```
 
 ## Arguments

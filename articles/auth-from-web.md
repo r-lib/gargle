@@ -1,9 +1,9 @@
 # Auth when using R from the browser
 
 If you are working with R in a web-based context, such as [RStudio
-Server](https://posit.co/download/rstudio-server/), [Posit
-Cloud](https://posit.cloud/), [Posit
-Workbench](https://posit.co/products/enterprise/workbench/), or [Google
+Server](https://docs.posit.co/ide/user/#rstudio-server-oss-downloads),
+[Posit Cloud](https://posit.cloud/), [Posit
+Workbench](https://posit.co/products/enterprise/workbench), or [Google
 Colaboratory](https://colab.research.google.com/), your experience of
 browser-based auth flows will be different from those using R on their
 local machine. You need to use **out-of-band authentication**, sometimes
@@ -122,6 +122,7 @@ opportunity to specify non-default values of certain parameters. Here’s
 how you could request OOB auth, using googledrive as an example:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(use_oob = TRUE)
@@ -137,6 +138,7 @@ project, the best way to express this is to set the
 `"gargle_oob_default"` option.
 
 ``` r
+
 options(gargle_oob_default = TRUE)
 ```
 
@@ -175,8 +177,17 @@ and an “installed” client otherwise. If you need to explicitly request a
 `"gargle_oauth_client_type"`:
 
 ``` r
+
 options(gargle_oauth_client_type = "web")
 ```
+
+A cached token is only (re-)discovered if gargle searches the cache with
+the same OAuth client that was used to obtain the token. So, if a token
+is obtained in one place and used in another, you may need to set this
+option. For example, deployed code on Posit Connect that uses a cached
+token obtained on Posit Workbench needs
+`gargle_oauth_client_type = "web"`. Read more in
+[`vignette("non-interactive-auth")`](https://gargle.r-lib.org/articles/non-interactive-auth.md).
 
 Users who configure their own OAuth client will need to be intentional
 when choosing the client type, depending on where the code is running.
@@ -288,7 +299,7 @@ The normal, non-OOB auth web flow should work again now.
 
 If you’re working on a data product that will be deployed (for example
 on [shinyapps.io](https://www.shinyapps.io) or [Posit
-Connect](https://posit.co/products/enterprise/connect/)), you will also
+Connect](https://posit.co/products/enterprise/connect)), you will also
 need to consider how the deployed content will authenticate
 non-interactively, which is covered in
 [`vignette("non-interactive-auth")`](https://gargle.r-lib.org/articles/non-interactive-auth.md).

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Troubleshooting gargle auth • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
 <li><a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a></li>
     <li><a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a></li>
+    <li><a class="dropdown-item" href="../articles/deploy-encrypted-user-token.html">Deploy a document that uses an encrypted user token</a></li>
     <li><a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -76,7 +77,7 @@
       <h1>Troubleshooting gargle auth</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.1/vignettes/troubleshooting.Rmd" class="external-link"><code>vignettes/troubleshooting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/troubleshooting.Rmd" class="external-link"><code>vignettes/troubleshooting.Rmd</code></a></small>
       <div class="d-none name"><code>troubleshooting.Rmd</code></div>
     </div>
 
@@ -158,11 +159,11 @@ someone who has accepted the default OAuth cache location and has played
 with several APIs via gargle-using packages.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gargle_oauth_sitrep.html">gargle_oauth_sitrep</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#' &gt; 14 tokens found in this gargle OAuth cache:</span></span>
+<span><span class="co">#' 14 tokens found in this gargle OAuth cache:</span></span>
 <span><span class="co">#' '~/Library/Caches/gargle'</span></span>
 <span><span class="co">#'</span></span>
-<span><span class="co">#' email                         app         scope                          hash...</span></span>
-<span><span class="co">#' ----------------------------- ----------- ------------------------------ ----------</span></span>
+<span><span class="co">#' email                         client      scopes                         hash...</span></span>
+<span><span class="co">#' _____________________________ ___________ ______________________________ __________</span></span>
 <span><span class="co">#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...</span></span>
 <span><span class="co">#' buzzy@example.org             gargle-demo                                15acf95...</span></span>
 <span><span class="co">#' stella@example.org            gargle-demo ...drive                       4281945...</span></span>
@@ -177,9 +178,11 @@ with several APIs via gargle-using packages.</p>
 <span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...</span></span>
 <span><span class="co">#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...</span></span>
 <span><span class="co">#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...</span></span></code></pre></div>
+<p>The default cache location varies by operating system; see
+<code><a href="../reference/gargle_options.html">gargle_oauth_cache()</a></code> for more details.</p>
 <p>It is relatively harmless to delete the folder serving as the OAuth
 cache. Or, if you have reason to believe one specific cached token is
-causing you pain, you could delete a specific token (an
+causing you pain, you could delete a specific token (which is just an
 <code>.rds</code> file) from the cache. OAuth user tokens are meant to
 be perishable and replaceable.</p>
 <p>If you choose to delete your cache (or a specific token), here is the
@@ -343,7 +346,7 @@ e.g. an HTTP status &gt;= 400.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>

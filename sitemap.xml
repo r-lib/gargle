@@ -1,6 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://gargle.r-lib.org/404.html</loc></url>
-<url><loc>https://gargle.r-lib.org/CLAUDE.html</loc></url>
+<url><loc>https://gargle.r-lib.org/AGENTS.html</loc></url>
 <url><loc>https://gargle.r-lib.org/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://gargle.r-lib.org/CONTRIBUTING.html</loc></url>
 <url><loc>https://gargle.r-lib.org/ISSUE_TEMPLATE.html</loc></url>
@@ -8,6 +8,7 @@
 <url><loc>https://gargle.r-lib.org/LICENSE.html</loc></url>
 <url><loc>https://gargle.r-lib.org/SUPPORT.html</loc></url>
 <url><loc>https://gargle.r-lib.org/articles/auth-from-web.html</loc></url>
+<url><loc>https://gargle.r-lib.org/articles/deploy-encrypted-user-token.html</loc></url>
 <url><loc>https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html</loc></url>
 <url><loc>https://gargle.r-lib.org/articles/get-api-credentials.html</loc></url>
 <url><loc>https://gargle.r-lib.org/articles/google-compute-engine.html</loc></url>

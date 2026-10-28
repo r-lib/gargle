@@ -1,5 +1,62 @@
 # Changelog
 
+## gargle 1.7.0
+
+- The default (loopback) OAuth flow now verifies that the `state`
+  returned with the authorization code matches the one gargle sent, as
+  the pseudo-OOB flow already did. If the user denies consent, gargle
+  now errors immediately with a clear message, instead of failing later
+  with an HTTP 400.
+
+- The default (loopback) and pseudo-OOB OAuth flows now use PKCE (Proof
+  Key for Code Exchange, RFC 7636), which ties the authorization code to
+  the R session that requested it, so an intercepted code can’t be
+  exchanged for tokens by anyone else.
+
+- [`request_build()`](https://gargle.r-lib.org/reference/request_develop.md)
+  now places an API key in the `X-goog-api-key` request header instead
+  of the URL query. When gargle stores a response, for
+  [`gargle_last_response()`](https://gargle.r-lib.org/reference/gargle_last_response.md)
+  or in a request error, it now redacts the `X-goog-api-key` header.
+
+- [`credentials_external_account()`](https://gargle.r-lib.org/reference/credentials_external_account.md)
+  now supports workload identity federation configurations whose
+  credential source is a URL or a file, in addition to AWS. This means
+  that
+  [`token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.md)
+  and Application Default Credentials work in GitHub Actions workflows
+  that use the `google-github-actions/auth` action with a
+  `service_account`
+  ([\#199](https://github.com/r-lib/gargle/issues/199)).
+
+- [`credentials_app_default()`](https://gargle.r-lib.org/reference/credentials_app_default.md)
+  now defaults to
+  `scopes = "https://www.googleapis.com/auth/cloud-platform"`, and
+  `scopes = NULL` means the same thing. Previously, calling
+  [`credentials_app_default()`](https://gargle.r-lib.org/reference/credentials_app_default.md)
+  without scopes returned `NULL` for user credentials (e.g. from
+  `gcloud auth application-default login`) and for an external account,
+  and requested only the email scope for a service account
+  ([\#229](https://github.com/r-lib/gargle/issues/229),
+  [\#252](https://github.com/r-lib/gargle/issues/252),
+  [@aebrahim](https://github.com/aebrahim)).
+
+- gargle’s unexported, legacy secret management functions (deprecated in
+  gargle 1.5.0, June 2023) have been removed: `secret_pw_name()`,
+  `secret_pw_gen()`, `secret_pw_exists()`, `secret_pw_get()`,
+  `secret_can_decrypt()`, `secret_read()`, and `secret_write()`. The
+  sodium package is no longer a suggested dependency. Use the exported
+  `secret_*()` functions instead, as described in [Managing tokens
+  securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
+
+- The unexported roxygen helper `PREFIX_auth_configure_params()` no
+  longer documents the `app` argument (documented as deprecated in favor
+  of `client` since gargle 1.4.0). Packages that use this helper should
+  remove `app` from `PKG_auth_configure()` before re-documenting.
+  [`vignette("oauth-client-not-app")`](https://gargle.r-lib.org/articles/oauth-client-not-app.md)
+  is now a checklist for wrapper packages finishing the transition from
+  OAuth “app” to “client”.
+
 ## gargle 1.6.1
 
 CRAN release: 2026-01-29
@@ -57,8 +114,9 @@ CRAN release: 2023-06-10
 
 - gargle’s existing unexported `secret_*()` functions are deprecated, in
   favor of new, exported `secret_*()` functions that are built on or
-  inlined from httr2. The `vignette("managing-tokens-securely")` is
-  updated to reflect the new, recommended strategy for encrypting
+  inlined from httr2. The article [Managing tokens
+  securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html)
+  is updated to reflect the new, recommended strategy for encrypting
   secrets.
 
   - [`secret_encrypt_json()`](https://gargle.r-lib.org/reference/gargle_secret.md)

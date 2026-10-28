@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Non-interactive auth • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
 <li><a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a></li>
     <li><a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a></li>
+    <li><a class="dropdown-item" href="../articles/deploy-encrypted-user-token.html">Deploy a document that uses an encrypted user token</a></li>
     <li><a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -76,7 +77,7 @@
       <h1>Non-interactive auth</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.1/vignettes/non-interactive-auth.Rmd" class="external-link"><code>vignettes/non-interactive-auth.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/non-interactive-auth.Rmd" class="external-link"><code>vignettes/non-interactive-auth.Rmd</code></a></small>
       <div class="d-none name"><code>non-interactive-auth.Rmd</code></div>
     </div>
 
@@ -121,20 +122,20 @@ you, skip this section.</p>
 <p>Let’s identify a specific type of project: it is developed in one
 place, with interactivity – such as your local computer – and then
 deployed elsewhere, where it must run without further interaction – such
-as on <a href="https://posit.co/products/enterprise/connect/" class="external-link">Posit
-Connect</a> or <a href="https://www.shinyapps.io" class="external-link">shinyapps.io</a>. In
-this context, it may make sense to depart from gargle’s default
+as on <a href="https://posit.co/products/enterprise/connect" class="external-link">Posit
+Connect</a> or <a href="https://connect.posit.cloud" class="external-link">Connect Cloud</a>.
+In this context, it may make sense to depart from gargle’s default
 behaviour, which is to store tokens outside the project, and to embed
 them in the project instead. An example at the end of this vignette
 demonstrates the use of a project-level OAuth cache. A service account
 token could also be stored in the project.</p>
 <p>When you embed tokens in the project and deploy, remember, that, by
 default, they are no more secure or hidden than the other source files
-in the project. <code>vignette("managing-tokens-securely")</code>
-describes a method for embedding an encrypted token in the project,
-which is an extra level of care needed if you want to access credentials
-within, e.g., a continuous integration service, such as GitHub
-Actions.</p>
+in the project. The article <a href="https://gargle.r-lib.org/articles/managing-tokens-securely.html">Managing
+tokens securely</a> describes a method for embedding an encrypted token
+in the project, which is an extra level of care needed if you want to
+access credentials within, e.g., a continuous integration service, such
+as GitHub Actions.</p>
 </div>
 <div class="section level2">
 <h2 id="sidebar-2-i-just-want-my--rmd-to-render">Sidebar 2: I just want my <code>.Rmd</code> to render<a class="anchor" aria-label="anchor" href="#sidebar-2-i-just-want-my--rmd-to-render"></a>
@@ -171,11 +172,10 @@ ambiently available (or you can arrange for that to be true). Think
 about it: if your workload is running on Google Compute Engine (GCE),
 it’s already “inside the Google house”. It seems like there should be a
 way to avoid another round of auth and that is indeed the case.</p>
-<p>Another advantage of these cloud auth workflows is that there is
-never any need to download and carefully manage a file that contains
-sensitive information. This is why they are often described as
-“keyless”. If you <em>can</em> use one of these methods, you should
-seriously consider doing so.</p>
+<p>Another advantage of these cloud auth workflows is that there is no
+service account key to download and carefully manage. If you
+<em>can</em> use one of these methods, you should seriously consider
+doing so.</p>
 <div class="section level3">
 <h3 id="google-compute-engine">Google Compute Engine<a class="anchor" aria-label="anchor" href="#google-compute-engine"></a>
 </h3>
@@ -248,8 +248,9 @@ Google Kubernetes Engine (GKE), using <a href="https://docs.cloud.google.com/kub
 Identity</a>. This is more complicated that direct usage of GCE and some
 extra configuration is needed to make a service account’s metadata
 available for the GKE instance to discover. GKE is the underlying
-technology behind Google’s managed Airflow service, <a href="https://cloud.google.com/composer" class="external-link">Cloud Composer</a>, so this
-also applies to R docker files being called in that environment.</p>
+technology behind Google’s managed Airflow service, <a href="https://cloud.google.com/products/managed-service-for-apache-airflow" class="external-link">Cloud
+Composer</a>, so this also applies to R docker files being called in
+that environment.</p>
 <p>Workload Identity is the recommended way to do authentication on GKE
 and other places, if possible, since it eliminates the use of a file
 that holds the service key, which is a potential security risk.</p>
@@ -326,24 +327,42 @@ need to use a non-<code>default</code> service account, you need to call
 <span><span class="co"># ... do authenticated stuff...</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="aws">AWS<a class="anchor" aria-label="anchor" href="#aws"></a>
+<h3 id="workload-identity-federation-aws-github-actions">Workload identity federation (AWS, GitHub Actions)<a class="anchor" aria-label="anchor" href="#workload-identity-federation-aws-github-actions"></a>
 </h3>
-<p>Keyless auth is even possible from non-Google cloud platforms, using
-<a href="https://cloud.google.com/iam/docs/configuring-workload-identity-federation" class="external-link">Workload
-identity federation</a>.</p>
-<p>This is implemented in the experimental function
-<code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code>, which currently only
-supports AWS.</p>
+<p>Auth without a service account key is even possible from non-Google
+platforms, using <a href="https://cloud.google.com/iam/docs/configuring-workload-identity-federation" class="external-link">workload
+identity federation</a>. This is implemented in the experimental
+function <code><a href="../reference/credentials_external_account.html">credentials_external_account()</a></code>, which supports AWS
+and configurations where the subject token comes from a URL or a
+file.</p>
+<p>The most common use is probably GitHub Actions. The <a href="https://github.com/google-github-actions/auth" class="external-link"><code>google-github-actions/auth</code></a>
+action writes a configuration file and sets
+<code>GOOGLE_APPLICATION_CREDENTIALS</code>, so later steps in the job
+can authenticate with no further setup, via Application Default
+Credentials. gargle currently requires service account impersonation, so
+you must specify <code>service_account</code> as well as
+<code>workload_identity_provider</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">permissions</span><span class="kw">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="at">  </span><span class="fu">id-token</span><span class="kw">:</span><span class="at"> write</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">steps</span><span class="kw">:</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> google-github-actions/auth@v3</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="at">    </span><span class="fu">with</span><span class="kw">:</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="at">      </span><span class="fu">workload_identity_provider</span><span class="kw">:</span><span class="at"> projects/123456/locations/global/workloadIdentityPools/my-pool/providers/my-provider</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="at">      </span><span class="fu">service_account</span><span class="kw">:</span><span class="at"> my-sa@my-project.iam.gserviceaccount.com</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">  # ... set up R, then run code that uses, e.g., bigrquery or googledrive</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="provide-a-service-account-token-directly">Provide a service account token directly<a class="anchor" aria-label="anchor" href="#provide-a-service-account-token-directly"></a>
 </h2>
-<p>When two computers are talking to each other, possibly with no human
-involvement, the most appropriate type of token to use is a service
-account token. If you’re not working in cloud context with automatic
-access to a service account (see previous section), you can still use a
-service account, but it will require more explicit effort.</p>
+<p>If you’re not in one of the settings described above, where a service
+account identity is available without a key, you can still use a service
+account by downloading its key, i.e. a JSON file of credentials. Google
+discourages this, because a service account key is a long-lived secret
+that you must store and protect, and it’s increasingly common for
+organizations to block key creation altogether. If you can and do use a
+key, here’s how:</p>
 <ol style="list-style-type: decimal">
 <li>Create a service account and then download its credentials as a JSON
 file. This is described in <code><a href="../articles/get-api-credentials.html">vignette("get-api-credentials")</a></code>,
@@ -352,13 +371,13 @@ specifically in the <em>Service account token</em> section.</li>
 provide the path to this JSON file.</li>
 </ol>
 <p>Example using googledrive:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/path/to/your/service-account-token.json"</span><span class="op">)</span></span></code></pre></div>
 <p>If this code is running on, e.g., a continuous integration service
-and you need to use an encrypted token, see
-<code>vignette("managing-tokens-securely")</code>.</p>
+and you need to use an encrypted token, see <a href="https://gargle.r-lib.org/articles/managing-tokens-securely.html">Managing
+tokens securely</a>.</p>
 <p>For certain APIs, service accounts are inherently awkward, because
 you often want to do things <em>on behalf of a specific user</em>. Gmail
 is a good example. If you are sending email programmatically, you
@@ -400,7 +419,7 @@ get a token with an explicit call to, e.g.,
 <code><a href="../reference/credentials_service_account.html">credentials_service_account()</a></code> and then pass that token to
 the auth function:</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/credentials_service_account.html">credentials_service_account</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="st">"/path/to/your/service-account-token.json"</span>,</span>
 <span>  scopes <span class="op">=</span> <span class="va">...</span>,</span>
@@ -429,7 +448,7 @@ discovered upon first need.</p>
 <p>For troubleshooting purposes, you can set a gargle option to see
 verbose output about the execution of
 <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></span></code></pre></div>
 <p>withr-style convenience helpers also exist:
 <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and
@@ -441,7 +460,7 @@ verbose output about the execution of
 <p>If you somehow have the OAuth token you want to use as an R object,
 you can provide it directly to the <code>token</code> argument of the
 main auth function. Example using googledrive:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">my_oauth_token</span> <span class="op">&lt;-</span> <span class="co"># some process that results in the token you want to use</span></span>
@@ -451,7 +470,7 @@ main auth function. Example using googledrive:</p>
 token you want to use, you could use <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS()</a></code> to read it
 and provide as the <code>token</code> argument to the wrapper’s auth
 function. Example using googledrive:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># googledrive</span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>token <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"/path/to/your/oauth-token.rds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>How would you know this filepath? That requires some attention to the
@@ -485,7 +504,7 @@ that convey the range of what’s possible.</p>
 <p><strong>Step 1</strong>: Get that first token. You must run your code
 at least once, interactively, do the auth dance, and allow gargle to
 store the token in its cache.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># do anything that triggers auth</span></span>
@@ -522,27 +541,27 @@ and <code>bob@example.com</code>
 </ul>
 <p>This sets an option that allows gargle to use cached tokens whenever
 there’s a unique match:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This sets an option to use tokens associated with a specific email
 address:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This sets an option to use tokens associated with an email address
 with a specific domain:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_oauth_email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em> and allows the use of a matching
 token, using googledrive as an example:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em>, for the user with a specific
 email address:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span></code></pre></div>
 <p>This gets a token <em>right now</em>, first checking the cache for a
 token associated with a specific domain:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">drive_auth</span><span class="op">(</span>email <span class="op">=</span> <span class="st">"*@example.com"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -553,7 +572,7 @@ project-level OAuth cache. This is good for deployed data products.</p>
 <p><strong>Step 1</strong>: Obtain the token intended for
 non-interactive use and make sure it’s cached in a (hidden) directory of
 the current project. Using googledrive as an example:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># designate project-specific cache</span></span>
@@ -570,7 +589,7 @@ the current project. Using googledrive as an example:</p>
 <p>Do this setup once per project.</p>
 <p>Another way to accomplish the same setup is to specify the desired
 cache location directly in the call to the auth function:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># trigger auth on purpose --&gt; store a token in the specified cache</span></span>
@@ -578,7 +597,7 @@ cache location directly in the call to the auth function:</p>
 <p><strong>Step 2</strong>: In all downstream use, announce the location
 of the cache and pre-authorize the use of a suitable token discovered
 there. Continuing the googledrive example:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
@@ -599,7 +618,7 @@ accomplish this in a startup file, e.g. project-level
 <p>Here’s a variation where we say which token to use by explicitly
 specifying the associated email. This is handy if there’s a reason to
 have more than one token in the cache.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
@@ -611,7 +630,7 @@ have more than one token in the cache.</p>
 <span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s another variation where we specify the necessary info directly
 in an auth call, instead of in options:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -620,7 +639,7 @@ in an auth call, instead of in options:</p>
 <span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s one last variation that’s applicable when the local cache
 could contain multiple tokens:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">drive_auth</span><span class="op">(</span>cache <span class="op">=</span> <span class="st">".secrets"</span>, email <span class="op">=</span> <span class="st">"jenny@example.com"</span><span class="op">)</span></span>
@@ -633,7 +652,7 @@ things more robust.</p>
 <p>For troubleshooting purposes, you can set a gargle option to see
 verbose output about the execution of
 <code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>gargle_verbosity <span class="op">=</span> <span class="st">"debug"</span><span class="op">)</span></span></code></pre></div>
 <p>withr-style convenience helpers also exist:
 <code><a href="../reference/gargle_options.html">with_gargle_verbosity()</a></code> and
@@ -643,7 +662,61 @@ current request with respect to user’s email, scopes, and OAuth client
 (client ID or key and secret). By design, these settings have very low
 visibility, because we usually want to use the defaults. If your token
 is not being discovered, consider if any of these fields might explain
-the mismatch.</p>
+the mismatch. The OAuth client is an especially sneaky source of
+mismatch when the token is obtained in one place and used in another, as
+explained next.</p>
+</div>
+<div class="section level3">
+<h3 id="oauth-client-type-where-the-token-is-obtained-vs--where-its-used">OAuth client type: where the token is obtained vs. where it’s
+used<a class="anchor" aria-label="anchor" href="#oauth-client-type-where-the-token-is-obtained-vs--where-its-used"></a>
+</h3>
+<p>A cached token is only (re-)discovered if gargle searches the cache
+with the same OAuth client that was used to obtain the token. This can
+go wrong when a token is obtained in one place and used in another, if
+you rely on a built-in OAuth client, such as the tidyverse client used
+by googledrive, googlesheets4, and bigrquery. The built-in client is a
+“web” client on RStudio Server, Posit Workbench, Posit Cloud, and Google
+Colaboratory and an “installed” client everywhere else
+(<code><a href="../articles/auth-from-web.html">vignette("auth-from-web")</a></code> explains why).</p>
+<p>Here’s a concrete example: you obtain a token on Posit Workbench,
+which uses the “web” client, and deploy your project to Posit Connect.
+On Connect, by default, the deployed code searches the cache with the
+“installed” client. The token is right there in <code>.secrets/</code>,
+but a token created with the “web” client is not considered a match for
+the “installed” client, so non-interactive auth fails. If you set
+<code>options(gargle_verbosity = "debug")</code>, you’ll see the token
+listed among those found in the cache, but it isn’t selected.</p>
+<p>The fix is to set <code>gargle_oauth_client_type</code> in the
+deployed code, so it searches the cache with the same type of client
+that was used to obtain the token:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://googledrive.tidyverse.org" class="external-link">googledrive</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
+<span>  gargle_oauth_cache <span class="op">=</span> <span class="st">".secrets"</span>,</span>
+<span>  gargle_oauth_email <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="co"># the token was obtained on Posit Workbench, which uses a "web" client</span></span>
+<span>  gargle_oauth_client_type <span class="op">=</span> <span class="st">"web"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># now use googledrive with no need for explicit auth</span></span>
+<span><span class="fu">drive_find</span><span class="op">(</span>n_max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<p>Set this option where the token is <em>used</em>, i.e. on Connect. It
+makes no difference on Workbench, where “web” is already the default. In
+the reverse situation, e.g. a token obtained on your laptop and used in
+a scheduled job on Workbench, set
+<code>gargle_oauth_client_type = "installed"</code> in the code that
+runs on Workbench.</p>
+<p>There are two ways to avoid this issue altogether:</p>
+<ul>
+<li>Configure your own OAuth client, e.g. with
+<code>drive_auth_configure()</code>, and do so in both places. Then the
+same client is used everywhere.</li>
+<li>Provide the token directly, as described in <a href="#provide-an-oauth-token-directly">Provide an OAuth token
+directly</a>. A token provided this way is used as is, without any cache
+lookup, and it can be refreshed regardless of where it was
+obtained.</li>
+</ul>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -659,7 +732,7 @@ the mismatch.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>

@@ -3,10 +3,12 @@
 An `AuthState` object manages an authorization state, typically on
 behalf of a wrapper package that makes requests to a Google API.
 
-The `vignette("gargle-auth-in-client-package)` describes a design for
-wrapper packages that relies on an `AuthState` object. This state can
-then be incorporated into the package's requests for tokens and can
-control the inclusion of tokens in requests to the target API.
+The
+[`vignette("gargle-auth-in-client-package")`](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.md)
+describes a design for wrapper packages that relies on an `AuthState`
+object. This state can then be incorporated into the package's requests
+for tokens and can control the inclusion of tokens in requests to the
+target API.
 
 - `api_key` is the simplest way to associate a request with a specific
   Google Cloud Platform
@@ -68,7 +70,7 @@ which has more details on the arguments.
 
 ### Public methods
 
-- [`AuthState$new()`](#method-AuthState-new)
+- [`AuthState$new()`](#method-AuthState-initialize)
 
 - [`AuthState$format()`](#method-AuthState-format)
 
@@ -92,7 +94,7 @@ which has more details on the arguments.
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `AuthState$new()`
 
 Create a new AuthState
 
@@ -140,7 +142,7 @@ For more details on the parameters, see
 
 ------------------------------------------------------------------------
 
-### Method [`format()`](https://rdrr.io/r/base/format.html)
+### `AuthState$format()`
 
 Format an AuthState
 
@@ -156,7 +158,7 @@ Format an AuthState
 
 ------------------------------------------------------------------------
 
-### Method `set_client()`
+### `AuthState$set_client()`
 
 Set the OAuth client
 
@@ -172,7 +174,7 @@ Set the OAuth client
 
 ------------------------------------------------------------------------
 
-### Method `set_app()`
+### `AuthState$set_app()`
 
 **\[deprecated\]** Deprecated method to set the OAuth client
 
@@ -188,7 +190,7 @@ Set the OAuth client
 
 ------------------------------------------------------------------------
 
-### Method `set_api_key()`
+### `AuthState$set_api_key()`
 
 Set the API key
 
@@ -204,7 +206,7 @@ Set the API key
 
 ------------------------------------------------------------------------
 
-### Method `set_auth_active()`
+### `AuthState$set_auth_active()`
 
 Set whether auth is (in)active
 
@@ -221,7 +223,7 @@ Set whether auth is (in)active
 
 ------------------------------------------------------------------------
 
-### Method `set_cred()`
+### `AuthState$set_cred()`
 
 Set credentials
 
@@ -237,7 +239,7 @@ Set credentials
 
 ------------------------------------------------------------------------
 
-### Method `clear_cred()`
+### `AuthState$clear_cred()`
 
 Clear credentials
 
@@ -247,7 +249,7 @@ Clear credentials
 
 ------------------------------------------------------------------------
 
-### Method `get_cred()`
+### `AuthState$get_cred()`
 
 Get credentials
 
@@ -257,7 +259,7 @@ Get credentials
 
 ------------------------------------------------------------------------
 
-### Method `has_cred()`
+### `AuthState$has_cred()`
 
 Report if we have credentials
 
@@ -267,7 +269,7 @@ Report if we have credentials
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `AuthState$clone()`
 
 The objects of this class are cloneable with this method.
 

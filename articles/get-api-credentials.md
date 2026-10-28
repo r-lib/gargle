@@ -111,6 +111,7 @@ For example, in googlesheets4, one would use
 downstream requests, i.e. after a call to `googlesheets4::gs4_deauth()`:
 
 ``` r
+
 library(googlesheets4)
 
 gs4_auth_configure(api_key = "YOUR_API_KEY_GOES_HERE")
@@ -183,6 +184,7 @@ package. For example, in googledrive, one would use
 `googledrive::drive_auth_configure()` to do this:
 
 ``` r
+
 library(googledrive)
 
 google_client <- gargle::gargle_oauth_client_from_json(
@@ -197,10 +199,10 @@ drive_auth_configure(client = google_client)
 ## Service account token
 
 For a long time, the recommended way to make authorized requests to an
-API in a non-interactive context was to use a service account token. As
-of April 2021, an alternative exists – workload identity federation –
-which is available to applications running on specific non-Google Cloud
-platforms, such as AWS. If you **can** use workload identity federation,
+API in a non-interactive context was to use a service account token. An
+alternative exists – workload identity federation – which is available
+to applications running on specific non-Google Cloud platforms, such as
+AWS or GitHub Actions. If you **can** use workload identity federation,
 you probably should (see the next section). But for those who can’t,
 here we outline the use of a conventional service account.
 
@@ -248,9 +250,11 @@ use a service account token.
 
 Authors of wrapper packages can use the symmetric encryption strategy
 described in [Managing tokens
-securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html)
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html)
 to use this token on remote servers, such as continuous integration
-services like GitHub Actions.
+services like GitHub Actions. Note that workload identity federation may
+also be an option on GitHub Actions, if you are able and willing to do
+the necessary setup (see below).
 
 ### What does a user do with a service account token?
 
@@ -258,6 +262,7 @@ You could provide the token’s filepath to a wrapper package’s main auth
 function, e.g.:
 
 ``` r
+
 # googledrive
 drive_auth(path = "/path/to/your/service-account-token.json")
 ```
@@ -270,30 +275,41 @@ search strategy.
 
 ## Workload identity federation
 
-Workload identity federation is a new (as of April 2021) keyless
-authentication mechanism that allows applications running on a
-non-Google Cloud platform, such as AWS, to access Google Cloud resources
-without using a conventional service account token. This eliminates the
-dilemma of how to safely manage service account credential files.
+Workload identity federation lets applications running outside Google
+Cloud, such as on AWS or GitHub Actions, access Google Cloud resources
+by using a federated identity instead of a service account key. This
+eliminates the dilemma of how to safely manage service account
+credential files.
 
-Unlike service accounts, the configuration file for workload identity
-federation contains no secrets. Instead, it holds non-sensitive
-metadata. The external application obtains the needed sensitive data
-“on-the-fly” from the running instance. The combined data is then used
-for a token exchange that ultimately yields a short-lived GCP access
-token. This access token allows the external application to impersonate
-a service account and inherit the permissions of the service account to
-access GCP resources.
+Unlike a service account key, the configuration for workload identity
+federation is not a long-lived secret that you need to store and
+protect. On AWS, it’s a file of non-sensitive metadata that you download
+once and keep on the instance; the sensitive data is obtained
+“on-the-fly” at run time. On GitHub Actions, the configuration file is
+written fresh for each job and contains only a short-lived credential.
+The configuration is used for a token exchange that ultimately yields a
+short-lived GCP access token. This access token allows the external
+application to impersonate a service account and inherit the permissions
+of the service account to access GCP resources.
 
 So what’s not to love? Well, first, this auth flow is only available if
-your code is running on AWS, Azure, or another platform that supports
-the OpenID Connect protocol. Second, there’s a non-trivial amount of
-pre-configuration necessary on both ends. But once that is done, you can
-download a configuration file that makes auth work automagically with
-gargle.
+your code is running on AWS, Azure, GitHub Actions, or another platform
+that supports the OpenID Connect protocol. Second, there’s a non-trivial
+amount of configuration to do on the GCP side. But once that is done,
+auth can work automagically with gargle: on AWS, you download a
+configuration file; on GitHub Actions, the `google-github-actions/auth`
+action writes one for you.
 
-This feature is still experimental in gargle and **currently only
-supports AWS**. For more, see the documentation for
+This feature is still experimental in gargle. It supports AWS, as well
+as configurations where the subject token comes from a URL or a file.
+GitHub Actions is an important example of the URL case: the
+[`google-github-actions/auth`](https://github.com/google-github-actions/auth)
+action writes a configuration file and points the
+`GOOGLE_APPLICATION_CREDENTIALS` environment variable at it, so gargle
+can discover it automatically. gargle currently requires that the
+configuration uses service account impersonation. In GitHub Actions,
+this means you must give the action a `service_account`. For more, see
+the documentation for
 [`credentials_external_account()`](https://gargle.r-lib.org/reference/credentials_external_account.md).
 Like conventional service account tokens, workload identity federation
 is a great fit for the Application Default Credentials strategy for

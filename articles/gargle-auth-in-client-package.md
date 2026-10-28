@@ -79,12 +79,14 @@ to hold the auth state. In googledrive, the main auth file defines a
 placeholder `.auth` object:
 
 ``` r
+
 .auth <- NULL
 ```
 
 The actual initialization happens in `.onLoad()`:
 
 ``` r
+
 .onLoad <- function(libname, pkgname) {
   utils::assignInMyNamespace(
     ".auth",
@@ -123,6 +125,7 @@ Exported auth helpers, `drive_oauth_client()` and
 support users who want to (or must) take that level of control.
 
 ``` r
+
 library(googledrive)
 
 # first: download the OAuth client as a JSON file
@@ -165,6 +168,7 @@ The user can provide their own API key via
 in the `api_key` field of the `.auth` auth state.
 
 ``` r
+
 library(googledrive)
 
 drive_auth_configure(api_key = "123456789")
@@ -198,6 +202,7 @@ called indirectly upon first need, but a user can also call it
 proactively in order to specify their target `email`:
 
 ``` r
+
 # googledrive::
 drive_auth(email = "janedoe_work@gmail.com")
 ```
@@ -218,6 +223,7 @@ do.
 Here’s a reminder of the signature of `googledrive::drive_auth()`:
 
 ``` r
+
 # googledrive::
 drive_auth <- function(email = gargle::gargle_oauth_email(),
                        path = NULL,
@@ -234,6 +240,7 @@ to guard against inadvertent file modification, they might opt for the
 `drive.readonly` scope.
 
 ``` r
+
 # googledrive::
 drive_auth(scopes = "https://www.googleapis.com/auth/drive.readonly")
 ```
@@ -323,6 +330,7 @@ documents these gargle functions.
 which is defined like so:
 
 ``` r
+
 # googledrive::
 drive_token <- function() {
   if (isFALSE(.auth$auth_active)) {
@@ -338,6 +346,7 @@ drive_token <- function() {
 where `drive_has_token()` in a helper defined as:
 
 ``` r
+
 # googledrive::
 drive_has_token <- function() {
   inherits(.auth$cred, "Token2.0")
@@ -363,6 +372,7 @@ googledrive is also sufficient for operations available in
 googlesheets4. You could use a shared token like so:
 
 ``` r
+
 library(googledrive)
 library(googlesheets4)
 
@@ -458,6 +468,7 @@ already a suitable token on hand. Here is a sketch of how a user could
 switch identities during a session, possibly non-interactive:
 
 ``` r
+
 library(googledrive)
 
 drive_auth(email = "janedoe_work@gmail.com")

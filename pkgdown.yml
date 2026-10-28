@@ -1,8 +1,9 @@
-pandoc: 3.1.11
-pkgdown: 2.2.0
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   auth-from-web: auth-from-web.html
+  articles/deploy-encrypted-user-token: deploy-encrypted-user-token.html
   gargle-auth-in-client-package: gargle-auth-in-client-package.html
   get-api-credentials: get-api-credentials.html
   articles/google-compute-engine: google-compute-engine.html
@@ -12,7 +13,7 @@ articles:
   oauth-client-not-app: oauth-client-not-app.html
   request-helper-functions: request-helper-functions.html
   troubleshooting: troubleshooting.html
-last_built: 2026-01-29T15:37Z
+last_built: 2026-10-28T20:10Z
 urls:
   reference: https://gargle.r-lib.org/reference
   article: https://gargle.r-lib.org/articles

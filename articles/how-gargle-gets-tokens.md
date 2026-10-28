@@ -29,6 +29,7 @@ design suggestions here and cover this in more depth in
 [`vignette("gargle-auth-in-client-package")`](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.md).
 
 ``` r
+
 library(gargle)
 ```
 
@@ -54,6 +55,7 @@ The signature of
 very simple and, therefore, not very informative:
 
 ``` r
+
 token_fetch(scopes, ...)
 ```
 
@@ -69,6 +71,7 @@ This gives a sense of the credential functions and reflects the order in
 which they are called:
 
 ``` r
+
 writeLines(names(cred_funs_list()))
 #> credentials_byo_oauth2
 #> credentials_service_account
@@ -181,7 +184,7 @@ The JSON key file must be managed securely. In particular, it should not
 be kept in, e.g., a GitHub repository (unless it is encrypted). The
 encryption strategy used by gargle and other packages is described in
 the article [Managing tokens
-securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+securely](https://gargle.r-lib.org/articles/managing-tokens-securely.html).
 
 Note that fetching a token for a service account requires a reasonably
 accurate system clock. This is of particular importance for users
@@ -215,30 +218,41 @@ credentials_external_account(
 [`credentials_external_account()`](https://gargle.r-lib.org/reference/credentials_external_account.md)
 implements something called *workload identity federation* and is
 available to applications running on specific non-Google Cloud
-platforms. At the time of writing, gargle only supports AWS, but this
-could be expanded to other providers, such as Azure, if there is a
-documented need.
+platforms. At the time of writing, gargle supports AWS and
+configurations where the subject token is obtained from a URL or a file.
+The URL case includes GitHub Actions, via the
+[`google-github-actions/auth`](https://github.com/google-github-actions/auth)
+action. In GitHub Actions, you typically don’t provide `path`, so
+[`token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.md)’s
+call to
+[`credentials_external_account()`](https://gargle.r-lib.org/reference/credentials_external_account.md)
+returns `NULL` and the configuration is found by
+[`credentials_app_default()`](https://gargle.r-lib.org/reference/credentials_app_default.md)
+instead, via `GOOGLE_APPLICATION_CREDENTIALS`.
 
 Similar to
 [`credentials_service_account()`](https://gargle.r-lib.org/reference/credentials_service_account.md),
 the `path` is treated as a JSON representation of the account’s
 configuration and it’s probably a file path. However, in contrast to
 [`credentials_service_account()`](https://gargle.r-lib.org/reference/credentials_service_account.md),
-this JSON only contains non-sensitive metadata, which is, indeed, the
-main point of this flow. The secrets needed to complete auth are
-obtained “on-the-fly” from, e.g., the running EC2 instance.
+this JSON is not a long-lived secret, which is, indeed, the main point
+of this flow. On AWS, the file contains only non-sensitive metadata and
+the secrets needed to complete auth are obtained “on-the-fly” from the
+running EC2 instance. On GitHub Actions, the file is written fresh for
+each job and contains only a short-lived credential.
 
 [`credentials_external_account()`](https://gargle.r-lib.org/reference/credentials_external_account.md)
 will fail for many reasons: there is no named `path` argument, the JSON
-at `path` can’t be parsed as configuration for an external AWS account,
-we don’t appear to running on AWS, suggested packages for AWS
-functionality are not installed, or the workload identity pool is
-misconfigured. If any of that happens, we fail and
+at `path` can’t be parsed as configuration for an external account, the
+configuration uses an unsupported credential source or lacks a service
+account impersonation URL, the configuration is for AWS but we don’t
+appear to be running on AWS, suggested packages for AWS functionality
+are not installed, or the workload identity pool is misconfigured. If
+any of that happens, we fail and
 [`token_fetch()`](https://gargle.r-lib.org/reference/token_fetch.md)’s
 execution moves on to the next function in the registry.
 
-Here is some Google documentation about workload identity federation and
-the specifics for AWS:
+Here is some Google documentation about workload identity federation:
 
 - Blog post: [Keyless API authentication — Better cloud security through
   workload identity federation, no service account keys
@@ -319,8 +333,9 @@ The main takeaway lesson:
 Again, remember that the JSON key file for a conventional service
 account must be managed securely and should NOT live in a directory that
 syncs to the cloud. The JSON configuration for an external account is
-not actually sensitive and this is one of the benefits of this flow, but
-it’s only available in a very narrow set of circumstances.
+not a long-lived secret, which is one of the benefits of this flow, but
+it’s only available in certain circumstances, such as on AWS or GitHub
+Actions.
 
 ## `credentials_gce()`
 
@@ -485,6 +500,7 @@ A user can reduce the need for interaction by passing the target `email`
 to `thingy_auth()`:
 
 ``` r
+
 thingy_auth(email = "janedoe_work@gmail.com")
 ```
 
@@ -505,16 +521,17 @@ The
 [`gargle::Gargle2.0`](https://gargle.r-lib.org/reference/Gargle-class.md)
 class also defaults to a user-level token cache, as opposed to
 project-level. An overview of the current OAuth cache is available via
-[`gargle_oauth_cache()`](https://gargle.r-lib.org/reference/gargle_options.md)
+[`gargle_oauth_sitrep()`](https://gargle.r-lib.org/reference/gargle_oauth_sitrep.md)
 and the output looks something like this:
 
 ``` r
+
 gargle_oauth_sitrep()
-#> 14 tokens found in this gargle OAuth cache:
-#> ~/Library/Caches/gargle
+#' 14 tokens found in this gargle OAuth cache:
+#' '~/Library/Caches/gargle'
 #'
-#' email                         app         scopes                         hash...
-#' ----------------------------- ----------- ------------------------------ ----------
+#' email                         client      scopes                         hash...
+#' _____________________________ ___________ ______________________________ __________
 #' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
 #' buzzy@example.org             gargle-demo                                15acf95...
 #' stella@example.org            gargle-demo ...drive                       4281945...
@@ -531,6 +548,10 @@ gargle_oauth_sitrep()
 #' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
 ```
 
+The default cache location varies by operating system; see
+[`gargle_oauth_cache()`](https://gargle.r-lib.org/reference/gargle_options.md)
+for more details.
+
 ## Manipulate the credential function registry
 
 Recall that you can get an overview of the credential functions that
@@ -538,6 +559,7 @@ Recall that you can get an overview of the credential functions that
 works through like so:
 
 ``` r
+
 writeLines(names(cred_funs_list()))
 #> credentials_byo_oauth2
 #> credentials_service_account
@@ -564,6 +586,7 @@ credential function from the registry. Here’s how to do this for the
 scenario described above, where you want to skip GCE-specific auth:
 
 ``` r
+
 gargle::cred_funs_add(credentials_gce = NULL)
 ```
 

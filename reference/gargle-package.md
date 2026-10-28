@@ -22,6 +22,9 @@ Useful links:
 
 Authors:
 
+- Jennifer Bryan <jenny@posit.co>
+  ([ORCID](https://orcid.org/0000-0002-6983-2759))
+
 - Craig Citro <craigcitro@google.com>
 
 - Hadley Wickham <hadley@posit.co>
@@ -31,4 +34,5 @@ Other contributors:
 
 - Google Inc \[copyright holder\]
 
-- Posit Software, PBC \[copyright holder, funder\]
+- Posit Software, PBC ([ROR](https://ror.org/03wc8by49)) \[copyright
+  holder, funder\]

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Transition from OAuth app to OAuth client • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
 <li><a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a></li>
     <li><a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a></li>
+    <li><a class="dropdown-item" href="../articles/deploy-encrypted-user-token.html">Deploy a document that uses an encrypted user token</a></li>
     <li><a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -76,7 +77,7 @@
       <h1>Transition from OAuth app to OAuth client</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.1/vignettes/oauth-client-not-app.Rmd" class="external-link"><code>vignettes/oauth-client-not-app.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/oauth-client-not-app.Rmd" class="external-link"><code>vignettes/oauth-client-not-app.Rmd</code></a></small>
       <div class="d-none name"><code>oauth-client-not-app.Rmd</code></div>
     </div>
 
@@ -84,326 +85,202 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gargle.r-lib.org">gargle</a></span><span class="op">)</span></span></code></pre></div>
-<p>Over the course of several releases (v1.3.0, v1.4.0, and v1.5.0),
-gargle has shifted to using an OAuth <strong>client</strong> in the user
-flow facilitated by <code><a href="../reference/credentials_user_oauth2.html">gargle::credentials_user_oauth2()</a></code>,
-instead the previous OAuth “app”. This is a more than just a vocabulary
-change (but it is also a vocabulary change). This vignette explains what
-actually changed and how wrapper packages should adjust.</p>
-<div class="section level2">
-<h2 id="why-change-was-needed">Why change was needed<a class="anchor" aria-label="anchor" href="#why-change-was-needed"></a>
-</h2>
-<p>In 2022, Google partially deprecated the out-of-band (OOB) OAuth
-flow. The OOB flow is used by R users who are working with Google APIs
-and who use R in the browser, such as via RStudio Server, Posit
-Workbench, Posit Cloud, or Google Colaboratory.</p>
-<p>Conventional OOB auth <strong>still works</strong> under certain
-conditions, for example, if the OAuth client is associated with a GCP
-project that is in testing mode or that is internal to a Google
-Workspace. But conventional OOB is no longer supported for projects that
-serve external users that are in production mode. In particular, this
-means that conventional OOB is no longer supported for the GCP project
-that has historically made auth “just work” for casual users of packages
-such as googledrive, googlesheets4, and bigrquery. The default OAuth
-client used by these package no longer works with conventional OOB.</p>
-<p>In response, as of v1.3.0, gargle implements a new variant of OOB,
-called <strong>pseudo-OOB</strong>, to continue to provide a
-user-friendly auth flow for googledrive/googlesheets4/bigrquery on
-RStudio Server/Posit Workbench/Posit Cloud/Google Colaboratory. The
-pseudo-OOB flow is also available for other developers to use. This flow
-is triggered when <code>use_oob = TRUE</code> (an existing convention in
-gargle and gargle-using packages) <strong>and</strong> the configured
-OAuth client is of the <em>web</em> type (when creating an OAuth client,
-this is called the “Web application” type).</p>
-<style>
-  table {
-    border-collapse: collapse;
-    border-style: none;
-  }
-  
-  .empty-cell {
-    border: none;
-    background-color: transparent;
-  }
-  
-  table thead {
-    background-color: transparent;
-  }
-  
-  table th, table td {
-    border-style: solid;
-  }
-</style>
-<table class="table">
-<thead>
-<tr>
-<th class="empty-cell"></th>
-      <th class="empty-cell"></th>
-      <th colspan="2"><verb>use_oob</verb></th>
-    </tr>
-<tr>
-<th class="empty-cell"></th>
-      <th class="empty-cell"></th>
-      <th>FALSE</th>
-      <th>TRUE</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-<th rowspan="2">client type</th>
-      <th>installed</th>
-      <td>use httpuv to spin up<br> a temporary web server</td>
-      <td>conventional OOB</td>
-    </tr>
-<tr>
-<th>web</th>
-      <td>--not possible--</td>
-      <td>pseudo-OOB</td>
-    </tr>
-</tbody>
-</table>
-<p>In the past, gargle basically assumed that every OAuth client was of
-the <em>installed</em> type (when creating an OAuth client, this is
-called the “Desktop app” type). Therefore, the introduction of
-pseudo-OOB meant that gargle had to learn about different OAuth client
-types (web vs. installed). And that didn’t play well with
-<code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>, which gargle had been using to store the
-client ID and secret.</p>
-<p>That’s why there is a new S3 class,
-<code>"gargle_oauth_client"</code>, with a constructor of the same name.
-Since more information is now necessary to instantiate a client
-(e.g. its type and, potentially, redirect URIs), the recommended way to
-create a client is to provide JSON downloaded from the GCP console to
-<code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>.</p>
-<p>Since we had to introduce a new S3 class and supporting functions, we
-also took this chance to make the vocabulary pivot from “OAuth app” to
-“OAuth client”. Google’s documentation has always talked about the
-“OAuth client”, so this is more natural. This vocabulary is also more
-future-facing, anticipating the day when gargle might shift from httr to
-httr2, which uses <code>httr2:oauth_client()</code>. As a bridging
-measure, the <code>"gargle_oauth_client"</code> class currently inherits
-from httr’s <code>"oauth_app"</code>, but this probably won’t be true in
-the long-term.</p>
-<div class="section level3">
-<h3 id="how-to-instantiate-an-oauth-client-in-r">How to instantiate an OAuth client in R<a class="anchor" aria-label="anchor" href="#how-to-instantiate-an-oauth-client-in-r"></a>
-</h3>
-<p>If you do auth via gargle, here are some recommended changes:</p>
+<p>In 2023, over the course of versions 1.3.0, 1.4.0, and 1.5.0, gargle
+switched from an OAuth “app” to an OAuth <strong>client</strong> in the
+user flow facilitated by <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. gargle
+introduced client-based functions, arguments, and fields and deprecated
+the app-based ones, while keeping them working.</p>
+<p>That transition is now wrapping up, in two stages:</p>
 <ol style="list-style-type: decimal">
-<li>Stop using <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code> or
-<code><a href="../reference/oauth_app_from_json.html">gargle::oauth_app_from_json()</a></code> to instantiate an OAuth
-client.</li>
-<li>Start using <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code> (strongly
-recommended) or <code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code> instead.</li>
+<li>Wrapper packages remove their own deprecated <code>app</code>
+interfaces, such as the <code>app</code> argument of
+<code>PKG_auth_configure()</code> and the <code>PKG_oauth_app()</code>
+function, and stop using gargle’s deprecated <code>app</code>
+interfaces. The tidyverse and r-lib packages that wrap Google APIs are
+doing this now.</li>
+<li>A future version of gargle removes its own deprecated
+<code>app</code> arguments, methods, and functions.</li>
 </ol>
-<p>This advice applies to anything you do inside your package and also
-to what you encourage and document for your users.</p>
-<p>gargle ships with JSON files for two non-functional OAuth clients,
-just to make this all more concrete:</p>
+<p>This vignette is a checklist for maintainers of wrapper packages. A
+package that satisfies every item is ready for both stages.</p>
+<div class="section level2">
+<h2 id="background">Background<a class="anchor" aria-label="anchor" href="#background"></a>
+</h2>
+<p>In 2022, Google partially deprecated the conventional out-of-band
+(OOB) OAuth flow, which is how many people authenticate when they use R
+in a browser, e.g., on Posit Workbench or Google Colaboratory. In
+response, gargle 1.3.0 introduced a new flow, pseudo-OOB, that needs to
+know the type of the OAuth client (“installed” or “web”) and its
+redirect URIs. <code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code>, which gargle had been
+using to store a client’s ID and secret, has no place for this
+information, so gargle introduced a new S3 class,
+<code>"gargle_oauth_client"</code>. We also took the chance to adopt the
+term “OAuth client”, which is what Google’s documentation has always
+used (and what httr2 uses, in <code><a href="https://httr2.r-lib.org/reference/oauth_client.html" class="external-link">httr2::oauth_client()</a></code>). For
+now, the <code>"gargle_oauth_client"</code> class also inherits from
+httr’s <code>"oauth_app"</code> class, but don’t rely on that.</p>
+<p>See <code><a href="../articles/auth-from-web.html">vignette("auth-from-web")</a></code> for more about
+conventional OOB, pseudo-OOB, and client types.</p>
+</div>
+<div class="section level2">
+<h2 id="checklist-for-wrapper-packages">Checklist for wrapper packages<a class="anchor" aria-label="anchor" href="#checklist-for-wrapper-packages"></a>
+</h2>
+<p>The examples below come from googledrive, whose prefix is
+<code>drive</code>. They assume the design laid out in
+<code><a href="../articles/gargle-auth-in-client-package.html">vignette("gargle-auth-in-client-package")</a></code>, in which an
+internal <code>AuthState</code> object named <code>.auth</code> manages
+the package’s auth state.</p>
+<div class="section level3">
+<h3 id="create-oauth-clients-with-gargle">Create OAuth clients with gargle<a class="anchor" aria-label="anchor" href="#create-oauth-clients-with-gargle"></a>
+</h3>
+<p>Create an OAuth client with
+<code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code> (strongly recommended) or
+<code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client()</a></code>. Don’t use
+<code><a href="https://httr.r-lib.org/reference/oauth_app.html" class="external-link">httr::oauth_app()</a></code> or the deprecated
+<code><a href="../reference/oauth_app_from_json.html">oauth_app_from_json()</a></code>. Likewise, use
+<code><a href="../reference/gargle_client.html">gargle_client()</a></code>, not the deprecated
+<code><a href="../reference/oauth_app_from_json.html">gargle_app()</a></code>, and, in a tidyverse package, use
+<code><a href="../reference/internal-assets.html">tidyverse_client()</a></code>, not the deprecated
+<code><a href="../reference/internal-assets.html">tidyverse_app()</a></code>. This applies to your package’s code and to
+what you show your users in examples and documentation.</p>
+<p>The JSON downloaded from Google Cloud Console records the client’s
+type and redirect URIs, which is why it’s the preferred way to create a
+client. gargle ships with JSON for a non-functional client of each type.
+Here’s the “web” one:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">path_to_installed_client</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
-<span>  <span class="st">"extdata"</span>, <span class="st">"client_secret_installed.googleusercontent.com.json"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"gargle"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/gargle/extdata/client_secret_installed.googleusercontent.com.json"</span></span>
-<span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/prettify.html" class="external-link">prettify</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scan.html" class="external-link">scan</a></span><span class="op">(</span><span class="va">path_to_installed_client</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     "installed": {</span></span>
-<span><span class="co">#&gt;         "client_id": "abc.apps.googleusercontent.com",</span></span>
-<span><span class="co">#&gt;         "project_id": "a_project",</span></span>
-<span><span class="co">#&gt;         "auth_uri": "https://accounts.google.com/o/oauth2/auth",</span></span>
-<span><span class="co">#&gt;         "token_uri": "https://accounts.google.com/o/oauth2/token",</span></span>
-<span><span class="co">#&gt;         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",</span></span>
-<span><span class="co">#&gt;         "client_secret": "ssshh-i-am-a-secret",</span></span>
-<span><span class="co">#&gt;         "redirect_uris": [</span></span>
-<span><span class="co">#&gt;             "http://localhost"</span></span>
-<span><span class="co">#&gt;         ]</span></span>
-<span><span class="co">#&gt;     }</span></span>
-<span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="op">(</span><span class="va">client</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json</a></span><span class="op">(</span><span class="va">path_to_installed_client</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">&lt;gargle_oauth_client&gt;</span></span></span>
-<span><span class="co">#&gt; name: a_project_d1c5a8066d2cbe48e8d94514dd286163</span></span>
-<span><span class="co">#&gt; id: abc.apps.googleusercontent.com</span></span>
-<span><span class="co">#&gt; secret: <span style="color: #555555;">&lt;REDACTED&gt;</span></span></span>
-<span><span class="co">#&gt; type: installed</span></span>
-<span><span class="co">#&gt; redirect_uris: http://localhost</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">client</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "gargle_oauth_client" "oauth_app"</span></span>
-<span></span>
-<span><span class="op">(</span><span class="va">path_to_web_client</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
 <span>  <span class="st">"extdata"</span>, <span class="st">"client_secret_web.googleusercontent.com.json"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"gargle"</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/home/runner/work/_temp/Library/gargle/extdata/client_secret_web.googleusercontent.com.json"</span></span>
-<span><span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/jsonlite/reference/prettify.html" class="external-link">prettify</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scan.html" class="external-link">scan</a></span><span class="op">(</span><span class="va">path_to_web_client</span>, what <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     "web": {</span></span>
-<span><span class="co">#&gt;         "client_id": "abc.apps.googleusercontent.com",</span></span>
-<span><span class="co">#&gt;         "project_id": "a_project",</span></span>
-<span><span class="co">#&gt;         "auth_uri": "https://accounts.google.com/o/oauth2/auth",</span></span>
-<span><span class="co">#&gt;         "token_uri": "https://accounts.google.com/o/oauth2/token",</span></span>
-<span><span class="co">#&gt;         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",</span></span>
-<span><span class="co">#&gt;         "client_secret": "ssshh-i-am-a-secret",</span></span>
-<span><span class="co">#&gt;         "redirect_uris": [</span></span>
-<span><span class="co">#&gt;             "https://www.tidyverse.org/google-callback/"</span></span>
-<span><span class="co">#&gt;         ]</span></span>
-<span><span class="co">#&gt;     }</span></span>
-<span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="op">(</span><span class="va">client</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json</a></span><span class="op">(</span><span class="va">path_to_web_client</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">client</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">&lt;gargle_oauth_client&gt;</span></span></span>
-<span><span class="co">#&gt; name: a_project_d1c5a8066d2cbe48e8d94514dd286163</span></span>
+<span><span class="co">#&gt; name: a_project_59aa1797ab7ac4667a77617c3400999c</span></span>
 <span><span class="co">#&gt; id: abc.apps.googleusercontent.com</span></span>
 <span><span class="co">#&gt; secret: <span style="color: #555555;">&lt;REDACTED&gt;</span></span></span>
 <span><span class="co">#&gt; type: web</span></span>
 <span><span class="co">#&gt; redirect_uris: https://www.tidyverse.org/google-callback/</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">client</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "gargle_oauth_client" "oauth_app"</span></span></code></pre></div>
-<p>Notice the difference in the JSON for the installed vs. web client.
-Note the class of the <code>client</code> object, the new
-<code>type</code> field, and the <code>redirect_uris</code>.</p>
+<p>The “installed” one is
+<code>client_secret_installed.googleusercontent.com.json</code>, in the
+same folder.</p>
 </div>
+<div class="section level3">
+<h3 id="use-the-client-interfaces-of-authstate">Use the <code>client</code> interfaces of
+<code>AuthState</code><a class="anchor" aria-label="anchor" href="#use-the-client-interfaces-of-authstate"></a>
+</h3>
+<ul>
+<li>Create the auth state with <code>init_AuthState(client = )</code>,
+not <code>init_AuthState(app = )</code>.</li>
+<li>Set the client with <code>.auth$set_client()</code>, not
+<code>.auth$set_app()</code>.</li>
+<li>Get the client from <code>.auth$client</code>, not
+<code>.auth$app</code>. The <code>app</code> field exists only for
+backwards compatibility and <code>$set_client()</code> doesn’t update
+it.</li>
+</ul>
 </div>
-<div class="section level2">
-<h2 id="authstate-class">
-<code>AuthState</code> class<a class="anchor" aria-label="anchor" href="#authstate-class"></a>
-</h2>
-<p>There are two gargle classes that are impacted by the
-OAuth-app-to-client switch: <code>AuthState</code> and
-<code>Gargle2.0</code>. We cover <code>AuthState</code> here and
-<code>Gargle2.0</code> in the next section.</p>
-<p>If a wrapper package follows the design laid out in
-<code><a href="../articles/gargle-auth-in-client-package.html">vignette("gargle-auth-in-client-package")</a></code>, it will use an
-instance of <code>AuthState</code> to manage the package’s auth state.
-Let’s assume that internal object is named <code>.auth</code>, which it
-usually is. Here are the changes you need to know about in
-<code>AuthState</code>:</p>
-<ul>
-<li>The <code>app</code> field is deprecated, in favor of a new field
-<code>client</code>. If you request <code>.auth$app</code>, there will
-be a deprecation message and the <code>client</code> field is
-returned.</li>
-<li>The <code>$set_app()</code> method is deprecated, in favor of a new
-<code>$set_client()</code> method. If you call
-<code>.auth$set_app()</code>, there will be a deprecation message and
-the input is used, instead, to set the <code>client</code> field.</li>
-<li>The <code>app</code> argument of the <code><a href="../reference/init_AuthState.html">init_AuthState()</a></code>
-constructor is deprecated in favor of the new <code>client</code>
-argument. If you call <code>init_AuthState(app = x)</code>, there will
-be a deprecation message and the input <code>x</code> is used as the
-<code>client</code> argument instead.</li>
-</ul>
-<p>Here are the changes you probably need to make in your package:</p>
-<ul>
-<li>The first argument of the user-facing function,
-<code>PKG_auth_configure()</code>, should become <code>client</code>
-(which is new). Move the existing <code>app</code> argument to the last
-position and deprecate it.</li>
-<li>Deprecate <code>PKG_oauth_app()</code> (the function to reveal the
-user’s configured OAuth client).</li>
-<li>Introduce <code>PKG_oauth_client()</code> to replace
-<code>PKG_oauth_app()</code>.</li>
-</ul>
-<p>Here’s how <code>googledrive::drive_auth_configure()</code> and
-<code>googledrive::drive_oauth_client()</code> looked before and after
-the transition:</p>
+<div class="section level3">
+<h3 id="pass-client-to-gargles-token-functions">Pass <code>client</code> to gargle’s token functions<a class="anchor" aria-label="anchor" href="#pass-client-to-gargles-token-functions"></a>
+</h3>
+<p>Inside <code>PKG_auth()</code>, you presumably call
+<code><a href="../reference/token_fetch.html">token_fetch()</a></code>. Pass the OAuth client as
+<code>client</code>, not <code>app</code>. Neither is a formal argument
+of <code><a href="../reference/token_fetch.html">token_fetch()</a></code>; it’s passed along to
+<code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>. Here’s a sketch of
+<code>googledrive::drive_auth()</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># BEFORE</span></span>
-<span><span class="va">drive_auth_configure</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">app</span>, <span class="va">path</span>, <span class="va">api_key</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co"># not showing this code</span></span>
-<span>  <span class="va">.auth</span><span class="op">$</span><span class="fu">set_app</span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
-<span>  <span class="co"># more code we're not showing</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">drive_oauth_app</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">.auth</span><span class="op">$</span><span class="va">app</span></span>
-<span></span>
-<span><span class="co"># AFTER</span></span>
-<span><span class="va">drive_auth_configure</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">client</span>, <span class="va">path</span>, <span class="va">api_key</span>, <span class="va">app</span> <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">is_present</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">deprecate_warn</a></span><span class="op">(</span></span>
-<span>      <span class="st">"2.1.0"</span>,</span>
-<span>      <span class="st">"drive_auth_configure(app)"</span>,</span>
-<span>      <span class="st">"drive_auth_configure(client)"</span></span>
-<span>    <span class="op">)</span></span>
-<span>    <span class="fu">drive_auth_configure</span><span class="op">(</span>client <span class="op">=</span> <span class="va">app</span>, path <span class="op">=</span> <span class="va">path</span>, api_key <span class="op">=</span> <span class="va">api_key</span><span class="op">)</span></span>
-<span>  <span class="op">}</span> </span>
-<span>  </span>
-<span>  <span class="co"># not showing this code</span></span>
-<span>  <span class="va">.auth</span><span class="op">$</span><span class="fu">set_client</span><span class="op">(</span><span class="va">client</span><span class="op">)</span></span>
-<span>  <span class="co"># more code we're not showing</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">drive_oauth_client</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">.auth</span><span class="op">$</span><span class="va">client</span></span>
-<span></span>
-<span><span class="va">drive_oauth_app</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html" class="external-link">deprecate_warn</a></span><span class="op">(</span></span>
-<span>    <span class="st">"2.1.0"</span>, <span class="st">"drive_oauth_app()"</span>, <span class="st">"drive_oauth_client()"</span></span>
+<code class="sourceCode R"><span><span class="va">drive_auth</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># code not shown</span></span>
+<span>  <span class="va">cred</span> <span class="op">&lt;-</span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/token_fetch.html">token_fetch</a></span><span class="op">(</span></span>
+<span>    scopes <span class="op">=</span> <span class="va">scopes</span>,</span>
+<span>    client <span class="op">=</span> <span class="fu">drive_oauth_client</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/Control.html" class="external-link">%||%</a></span> <span class="fu">gargle</span><span class="fu">::</span><span class="fu"><a href="../reference/internal-assets.html">tidyverse_client</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    email <span class="op">=</span> <span class="va">email</span>,</span>
+<span>    path <span class="op">=</span> <span class="va">path</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"googledrive"</span>,</span>
+<span>    cache <span class="op">=</span> <span class="va">cache</span>,</span>
+<span>    use_oob <span class="op">=</span> <span class="va">use_oob</span>,</span>
+<span>    token <span class="op">=</span> <span class="va">token</span></span>
 <span>  <span class="op">)</span></span>
-<span>  <span class="fu">drive_oauth_client</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="co"># code not shown</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The approach above follows various conventions explained in
-<code><a href="https://lifecycle.r-lib.org/articles/communicate.html" class="external-link">vignette("communicate", package = "lifecycle")</a></code>. If you also
-choose to use the lifecycle package to assist in this process,
-<code>usethis::use_lifecycle()</code> function does some helpful
-one-time setup in your package:</p>
+<p>If you call <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code> or
+<code><a href="../reference/gargle2.0_token.html">gargle2.0_token()</a></code> directly, use their <code>client</code>
+argument, not <code>app</code>.</p>
+</div>
+<div class="section level3">
+<h3 id="finish-the-user-facing-functions">Finish the user-facing functions<a class="anchor" aria-label="anchor" href="#finish-the-user-facing-functions"></a>
+</h3>
+<p><code>PKG_auth_configure()</code> should take <code>client</code> as
+its first argument and should have no <code>app</code> argument.
+<code>PKG_oauth_client()</code> reveals the user’s configured client and
+<code>PKG_oauth_app()</code> should not exist.</p>
+<p>If your package deprecated <code>app</code> and
+<code>PKG_oauth_app()</code> during the transition, it’s time to remove
+them, along with the <code>lifecycle::is_present(app)</code> branch in
+<code>PKG_auth_configure()</code>. Mention the removal in
+<code>NEWS.md</code>. Here’s how this looks in googledrive:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">use_lifecycle</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>The roxygen documentation helpers in gargle assume
-<code>PKG_auth_configure()</code> is adapted as shown above:</p>
+<code class="sourceCode R"><span><span class="va">drive_auth_configure</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">client</span>, <span class="va">path</span>, <span class="va">api_key</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># code not shown</span></span>
+<span>  <span class="va">.auth</span><span class="op">$</span><span class="fu">set_client</span><span class="op">(</span><span class="va">client</span><span class="op">)</span></span>
+<span>  <span class="co"># code not shown</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">drive_oauth_client</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="va">.auth</span><span class="op">$</span><span class="va">client</span></span></code></pre></div>
+<p>If your package still has <code>app</code> as the main argument of
+<code>PKG_auth_configure()</code>, you can’t remove it right away,
+because your users may be relying on it. Introduce <code>client</code>
+and <code>PKG_oauth_client()</code> and deprecate <code>app</code> and
+<code>PKG_oauth_app()</code> for at least one release, following the
+conventions in
+<code><a href="https://lifecycle.r-lib.org/articles/communicate.html" class="external-link">vignette("communicate", package = "lifecycle")</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="re-document-with-current-gargle">Re-document with current gargle<a class="anchor" aria-label="anchor" href="#re-document-with-current-gargle"></a>
+</h3>
+<p>gargle has unexported roxygen helpers that generate standard
+documentation for auth functions, e.g.,
+<code>#' @eval gargle:::PREFIX_auth_configure_params()</code>. In
+current gargle:</p>
 <ul>
 <li>
 <code>PREFIX_auth_configure_description()</code> crosslinks to
-<code>PREFIX_oauth_client()</code> now, not
+<code>PREFIX_oauth_client()</code>, not
 <code>PREFIX_oauth_app()</code>.</li>
 <li>
 <code>PREFIX_auth_configure_params()</code> documents the
-<code>client</code> argument</li>
+<code>client</code> argument and crosslinks to
+<code><a href="../reference/gargle_oauth_client_from_json.html">gargle_oauth_client_from_json()</a></code>, which requires gargle
+(&gt;= 1.3.0).</li>
 <li>
-<code>PREFIX_auth_configure_params()</code> uses a lifecycle badge
-and text to communicate that <code>app</code> is deprecated.</li>
-<li>
-<code>PREFIX_auth_configure_params()</code> crosslinks to
-<code><a href="../reference/gargle_oauth_client_from_json.html">gargle::gargle_oauth_client_from_json()</a></code> which requires
-gargle (&gt;= 1.3.0)</li>
+<code>PREFIX_auth_configure_params()</code> does not document
+<code>app</code>.</li>
 </ul>
+<p>These helpers run when you re-document, so the gargle version
+installed at that moment is what matters. Re-document with current
+gargle after you remove <code>app</code> from
+<code>PKG_auth_configure()</code>. An older gargle documents
+<code>app</code>, which leads to an <code>R CMD check</code> warning
+about a documented argument that’s not in the function’s usage.</p>
+</div>
 </div>
 <div class="section level2">
-<h2 id="gargle2-0-class">
-<code>Gargle2.0</code> class<a class="anchor" aria-label="anchor" href="#gargle2-0-class"></a>
+<h2 id="whats-next-in-gargle">What’s next in gargle<a class="anchor" aria-label="anchor" href="#whats-next-in-gargle"></a>
 </h2>
-<p><code>Gargle2.0</code> is the second gargle class that is impacted by
-the OAuth-app-to-client switch.</p>
-<p>Here are the changes you probably need to make in your package:</p>
+<p>Once wrapper packages have made these changes, a future version of
+gargle will remove its own deprecated <code>app</code> interfaces:</p>
 <ul>
+<li>The <code>app</code> argument of <code><a href="../reference/init_AuthState.html">init_AuthState()</a></code>,
+<code>AuthState$new()</code>, <code><a href="../reference/credentials_user_oauth2.html">credentials_user_oauth2()</a></code>,
+<code><a href="../reference/gargle2.0_token.html">gargle2.0_token()</a></code>, and <code>Gargle2.0$new()</code>.</li>
+<li>The <code>app</code> field and the <code>$set_app()</code> method of
+<code>AuthState</code>.</li>
 <li>
-<p>Inside <code>PKG_auth()</code>, you presumably call
-<code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>. If you are passing
-<code>app = &lt;SOMETHING&gt;</code>, change that to
-<code>client = &lt;SOMETHING&gt;</code>. Neither <code>app</code> nor
-<code>client</code> are formal arguments of
-<code><a href="../reference/token_fetch.html">gargle::token_fetch()</a></code>, instead, these are intended for
-eventual use by <code><a href="../reference/credentials_user_oauth2.html">gargle::credentials_user_oauth2()</a></code>. Here’s a
-sketch of how this looks in <code>googledrive::drive_auth()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>drive_auth <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="co"># code not shown</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  cred <span class="ot">&lt;-</span> gargle<span class="sc">::</span><span class="fu">token_fetch</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="at">scopes =</span> scopes,</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="co"># app = drive_oauth_client() %||% &lt;BUILT_IN_DEFAULT_CLIENT&gt;,   # BEFORE</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="at">client =</span> <span class="fu">drive_oauth_client</span>() <span class="sc">%||%</span> <span class="er">&lt;</span>BUILT_IN_DEFAULT_CLIENT<span class="sc">&gt;</span>,  <span class="co"># AFTER</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="at">email =</span> email,</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="at">path =</span> path,</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>    <span class="at">package =</span> <span class="st">"googledrive"</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>    <span class="at">cache =</span> cache,</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="at">use_oob =</span> use_oob,</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="at">token =</span> token</span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  )</span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="co"># code not shown</span></span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>}</span></code></pre></div>
-</li>
-<li><p>If you ever call <code><a href="../reference/credentials_user_oauth2.html">gargle::credentials_user_oauth2()</a></code>
-directly, use the new <code>client</code> argument instead of the
-deprecated <code>app</code> argument.</p></li>
+<code><a href="../reference/oauth_app_from_json.html">oauth_app_from_json()</a></code>, <code><a href="../reference/oauth_app_from_json.html">gargle_app()</a></code>, and
+<code><a href="../reference/internal-assets.html">tidyverse_app()</a></code>.</li>
 </ul>
+<p>A package that satisfies the checklist above won’t be affected.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -418,7 +295,7 @@ deprecated <code>app</code> argument.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>

@@ -8,6 +8,8 @@
   auth](https://gargle.r-lib.org/articles/troubleshooting.md):
 - [Auth when using R from the
   browser](https://gargle.r-lib.org/articles/auth-from-web.md):
+- [Deploy a document that uses an encrypted user
+  token](https://gargle.r-lib.org/articles/deploy-encrypted-user-token.md):
 - [How to get your own API
   credentials](https://gargle.r-lib.org/articles/get-api-credentials.md):
 

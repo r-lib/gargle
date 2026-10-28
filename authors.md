@@ -14,19 +14,20 @@
 
 - **[![Posit](https://www.tidyverse.org/posit-logo.svg)](https://www.posit.co)**.
   Copyright holder, funder.
+  [![ROR](https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg)](https://ror.org/03wc8by49)
 
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/r-lib/gargle/blob/v1.6.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/r-lib/gargle/blob/main/DESCRIPTION)
 
 Bryan J, Citro C, Wickham H (2026). *gargle: Utilities for Working with
-Google APIs*. R package version 1.6.1, <https://gargle.r-lib.org>.
+Google APIs*. R package version 1.7.0, <https://gargle.r-lib.org>.
 
     @Manual{,
       title = {gargle: Utilities for Working with Google APIs},
       author = {Jennifer Bryan and Craig Citro and Hadley Wickham},
       year = {2026},
-      note = {R package version 1.6.1},
+      note = {R package version 1.7.0},
       url = {https://gargle.r-lib.org},
     }

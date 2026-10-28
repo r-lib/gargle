@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Managing tokens securely • gargle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gargle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
 <li><a class="dropdown-item" href="../articles/non-interactive-auth.html">Non-interactive auth</a></li>
     <li><a class="dropdown-item" href="../articles/troubleshooting.html">Troubleshooting gargle auth</a></li>
     <li><a class="dropdown-item" href="../articles/auth-from-web.html">Auth when using R from the browser</a></li>
+    <li><a class="dropdown-item" href="../articles/deploy-encrypted-user-token.html">Deploy a document that uses an encrypted user token</a></li>
     <li><a class="dropdown-item" href="../articles/get-api-credentials.html">How to get your own API credentials</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -76,7 +77,7 @@
       <h1>Managing tokens securely</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/v1.6.1/vignettes/articles/managing-tokens-securely.Rmd" class="external-link"><code>vignettes/articles/managing-tokens-securely.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-lib/gargle/blob/main/vignettes/articles/managing-tokens-securely.Rmd" class="external-link"><code>vignettes/articles/managing-tokens-securely.Rmd</code></a></small>
       <div class="d-none name"><code>managing-tokens-securely.Rmd</code></div>
     </div>
 
@@ -155,7 +156,7 @@ the exposition.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gargle_secret.html">secret_make_key</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">key</span></span>
-<span><span class="co">#&gt; [1] "K9HjL74PGoTSYrRgfy5m8Q"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "kZeb2JjuMTlFNdGYtBHqIA"</span></span></code></pre></div>
 <p><code><a href="../reference/gargle_secret.html">gargle::secret_make_key()</a></code> is a copy of
 <code><a href="https://httr2.r-lib.org/reference/secrets.html" class="external-link">httr2::secret_make_key()</a></code>.</p>
 </div>
@@ -164,7 +165,7 @@ the exposition.</p>
 </h3>
 <p>Combine the key name and value to form a line like this in your
 user-level <code>.Renviron</code> file:</p>
-<pre><code><span><span class="va">SOMETHING_KEY</span><span class="op">=</span><span class="va">K9HjL74PGoTSYrRgfy5m8Q</span></span></code></pre>
+<pre><code><span><span class="va">SOMETHING_KEY</span><span class="op">=</span><span class="va">kZeb2JjuMTlFNdGYtBHqIA</span></span></code></pre>
 <p><code>usethis::edit_r_environ()</code> can help create or open this
 file. I <strong>strongly recommend</strong> using the user-level
 <code>.Renviron</code>, as opposed to project-level, because this makes
@@ -181,7 +182,7 @@ environment variable to take effect.</p>
 do a quick check that the key is setup correctly locally:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"SOMETHING_KEY"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "K9HjL74PGoTSYrRgfy5m8Q"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "kZeb2JjuMTlFNdGYtBHqIA"</span></span></code></pre></div>
 <p>This <code><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv()</a></code> call is <strong>exactly</strong> the
 sort of thing you should be very careful about doing in a deployed
 setting, where the result could up in a (semi-)public log file.</p>
@@ -356,6 +357,8 @@ direct googlesheets4 to use it:</p>
 <span>  <span class="st">".secrets/gs4-token.rds"</span>,</span>
 <span>  key <span class="op">=</span> <span class="st">"SOMETHING_KEY"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>For a complete example, see
+<code><a href="../articles/deploy-encrypted-user-token.html">vignette("articles/deploy-encrypted-user-token")</a></code>.</p>
 </div>
 </div>
 <div class="section level3">
@@ -401,7 +404,7 @@ like this:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">secret_get_key</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">envvar</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="va">envvar</span><span class="op">)</span></span>
-<span>  </span>
+<span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">key</span>, <span class="st">""</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="fu">is_testing</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">msg</span> <span class="op">&lt;-</span> <span class="fu">glue</span><span class="op">(</span><span class="st">"Env var {envvar} not defined."</span><span class="op">)</span></span>
@@ -494,7 +497,7 @@ specifically the “Symmetric encryption” section.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>
